@@ -488,30 +488,40 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchGuest frmsearchGuest = new frmSearchGuest(App.User, EnumProgram.Outhouse);
-      frmsearchGuest.Owner = this;
-      frmsearchGuest.ShowInTaskbar = false;
-      //Si ya se cerro la ventana
-      //Valida que haya sido un OK y no un Cancel
-      frmsearchGuest.ShowDialog();
-      if (!frmsearchGuest.cancel)
+      try
       {
-        var guest = frmsearchGuest.lstGuestAdd[0];
-        guest.guls = App.User.LeadSource.lsID;
-        guest.guBookCanc = false;
-        guest.guloInvit = App.User.LeadSource.lsID;
-        guest.gulsOriginal = App.User.LeadSource.lsID;
-
-        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
-        //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
-        //se realizo, es decir ni se guardo el Guest ni el Log
-        if (BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
+        var frmsearchGuest = new frmSearchGuest(App.User, EnumProgram.Outhouse)
         {
-          //De no ser así informamos que no se guardo la información por algun motivo
-          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-            MessageBoxImage.Error, "Information can not keep");
+          Owner = this,
+          ShowInTaskbar = false
+        };
+        //Si ya se cerro la ventana
+        //Valida que haya sido un OK y no un Cancel
+        frmsearchGuest.ShowDialog();
+        if (!frmsearchGuest.cancel)
+        {
+          var guest = frmsearchGuest.lstGuestAdd[0];
+          guest.guls = App.User.LeadSource.lsID;
+          guest.guBookCanc = false;
+          guest.guloInvit = App.User.LeadSource.lsID;
+          guest.gulsOriginal = App.User.LeadSource.lsID;
+
+          //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+          //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+          //se realizo, es decir ni se guardo el Guest ni el Log
+          if (BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
+          {
+            //De no ser así informamos que no se guardo la información por algun motivo
+            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+              MessageBoxImage.Error, "Information can not keep");
+          }
         }
       }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+    
     }
     #endregion
 

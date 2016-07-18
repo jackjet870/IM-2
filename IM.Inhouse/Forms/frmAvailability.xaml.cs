@@ -268,30 +268,37 @@ namespace IM.Inhouse
     #region btnSave_Click
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      if (Validate())
-      {               
-        //guardamos la informacion de disponibilidad
-        _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte) 0;
-        _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
-        _guest.guAvail = chkguAvail.IsChecked.Value;
-        _guest.guPRAvail = txtguPRAvail.Text;
+      try
+      {
+        if (Validate())
+        {
+          //guardamos la informacion de disponibilidad
+          _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
+          _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
+          _guest.guAvail = chkguAvail.IsChecked.Value;
+          _guest.guPRAvail = txtguPRAvail.Text;
 
-        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
-        //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
-        //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
-        //_wasSaved que es el que indica que se guardo el Avail.
-        if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
-        {
-          _wasSaved = true;
-        }   
-        else
-        {
-          //De no ser así informamos que no se guardo la información por algun motivo
-          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-            MessageBoxImage.Error, "Information can not keep");
-        }    
-        Close();        
+          //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+          //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+          //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
+          //_wasSaved que es el que indica que se guardo el Avail.
+          if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
+          {
+            _wasSaved = true;
+          }
+          else
+          {
+            //De no ser así informamos que no se guardo la información por algun motivo
+            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+              MessageBoxImage.Error, "Information can not keep");
+          }
+          Close();
+        }
       }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }    
     }
     #endregion
 
@@ -307,7 +314,7 @@ namespace IM.Inhouse
     #region btnEdit_Click
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin();
+      frmLogin log = new frmLogin(switchLoginUserMode:true);
       if (App.User.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);

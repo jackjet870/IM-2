@@ -634,7 +634,7 @@ namespace IM.BusinessRules.BR
           try
           {
             //Guardamos los cambios en el Guest
-            dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+            dbContext.Entry(guest).State = EntityState.Modified;
 
             //Guardamos el Log del guest
             dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
@@ -646,7 +646,7 @@ namespace IM.BusinessRules.BR
           catch
           {
             transaction.Rollback();
-            return 0;
+            throw;
           }
         }
       }
@@ -690,10 +690,10 @@ namespace IM.BusinessRules.BR
               return respuesta;
             }
             catch
-            {
+            {   
               transaction.Rollback();
-              return 0;
-            }
+              throw;
+            }          
           }
         }
       });

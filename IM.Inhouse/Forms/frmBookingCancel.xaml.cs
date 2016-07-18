@@ -68,27 +68,32 @@ namespace IM.Inhouse.Forms
     /// <history>[jorcanche] 30/03/2016</history>
     private void ValidateSave()
     {
-      //Invertimos el valor del Check si cancelo o lo descancelo
-      _cancelado = chkguBookCanc.IsChecked = !chkguBookCanc.IsChecked.Value;
-      //Guardamos el BookCanceled
-      _guest.guBookCanc = _cancelado.Value;
-      
-      //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
-      //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
-      //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
-      //_wasSaved que es el que indica que se guardo el Avail.
-      if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.peID) == 0)
+      try
       {
-        //De no ser así informamos que no se guardo la información por algun motivo
-        UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-          MessageBoxImage.Error, "Information can not keep");
-        //Regresamos el Valor a como estaba
+        //Invertimos el valor del Check si cancelo o lo descancelo
         _cancelado = chkguBookCanc.IsChecked = !chkguBookCanc.IsChecked.Value;
-      }
-      this.Close();
+        //Guardamos el BookCanceled
+        _guest.guBookCanc = _cancelado.Value;
 
-      //BRGuests.SaveGuest(_guest);
-      //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.peID);
+        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+        //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+        //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
+        //_wasSaved que es el que indica que se guardo el Avail.
+        if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.peID) == 0)
+        {
+          //De no ser así informamos que no se guardo la información por algun motivo
+          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+            MessageBoxImage.Error, "Information can not keep");
+          //Regresamos el Valor a como estaba
+          _cancelado = chkguBookCanc.IsChecked = !chkguBookCanc.IsChecked.Value;
+        }
+        this.Close();  
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+     
     }
     #endregion
 

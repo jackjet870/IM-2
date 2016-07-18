@@ -3,13 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:local="clr-namespace:IM.Inhouse.Forms"
-        xmlns:model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmPRNotes"
+        xmlns:local="clr-namespace:IM.Inhouse.Forms"  
+        xmlns:model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmPRNotes" KeyDown="FrmPRNotes_OnKeyDown"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Title="PR Notes" ShowInTaskbar="False" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
-        <Style TargetType="{x:Type TextBox}">
+        <Style TargetType= "TextBox">
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="23"/>
+            
+
         </Style>
         <Style TargetType="ComboBox">
             <Style.Triggers>
@@ -31,7 +34,7 @@
     </Window.Resources>
     <Grid Background="Beige">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -40,8 +43,8 @@
         </Grid.RowDefinitions>
 
         <!--#region Informacion del Guest -->
-        <GroupBox Grid.Row="0" Header="Guest" Padding="15,0" Margin="10,5,10,10" BorderBrush="Black" BorderThickness="1" Background="Bisque">
-            <StackPanel Orientation="Horizontal">
+        <GroupBox Grid.Row="0" Header="Guest" Padding="15,0"  Margin="10,5,10,10" BorderBrush="Black" BorderThickness="1" Background="Bisque">
+            <StackPanel Orientation="Horizontal" >
                 <StackPanel Margin="5">
                     <TextBlock><Run Text="GUID"/></TextBlock>
                     <TextBox x:Name="txtguID" IsReadOnly="True" Width="95"/>
@@ -56,11 +59,11 @@
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock><Run Text="Arrival"/></TextBlock>
-                    <TextBox IsReadOnly="True" Width="74"   x:Name="txtguCheckInD" />
+                    <TextBox IsReadOnly="True" Width="79"    x:Name="txtguCheckInD" />
                 </StackPanel>
                 <StackPanel Margin="5" >
                     <TextBlock><Run Text="Departure"/></TextBlock>
-                    <TextBox IsReadOnly="True" Width="74" x:Name="txtguCheckOutD"/>
+                    <TextBox IsReadOnly="True" Width="79" x:Name="txtguCheckOutD"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -71,7 +74,8 @@
             <DataGrid Height="230" Width="700" BorderBrush="Black" Background="Bisque" CanUserAddRows="False" IsReadOnly="true"
                       SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="Gainsboro"  AlternationCount="2" 
                       x:Name="dgNotes" RowDetailsVisibilityMode="VisibleWhenSelected"  ItemsSource="{Binding}"  
-                      EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick">
+                      EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick"
+                      SelectedCellsChanged="DgNotes_OnSelectedCellsChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="pnDTColumn" Width="auto" Header="Date / Time" Binding="{Binding Date}" />
                     <DataGridTextColumn x:Name="pnguColumn" Width="auto" Header="PR" Binding="{Binding PR}" />
@@ -98,11 +102,11 @@
             <StackPanel  Orientation="Vertical">
                 <StackPanel Margin="2" Orientation="Horizontal" >
                     <TextBlock Margin="0,0,5,0"><Run Text="Date / Time:"/></TextBlock>
-                    <TextBox x:Name="txtpnDT" Width="300" IsReadOnly="True" />
+                    <TextBox x:Name="txtpnDT"  Width="300" IsReadOnly="True" />
                 </StackPanel>
                 <StackPanel Margin="2" Orientation="Horizontal" >
                     <TextBlock Margin="0,0,50,0"><Run Text="PR:"/></TextBlock>
-                    <TextBox x:Name="txtpnPR" LostFocus="txtpnPR_LostFocus" Margin="0,0,10,0" Width="85" />
+                    <TextBox x:Name="txtpnPR"  LostFocus="txtpnPR_LostFocus" MaxLength="10" Margin="0,0,10,0" Width="85" />
                     <ComboBox x:Name="cbopnPR" Width="205"  DisplayMemberPath="peN" SelectedValuePath="peID" SelectionChanged="cbopnPR_SelectionChanged"/>
                 </StackPanel>
                 <StackPanel Margin="2" Orientation="Horizontal" >

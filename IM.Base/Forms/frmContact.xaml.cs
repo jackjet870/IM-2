@@ -87,7 +87,7 @@ namespace IM.Base.Forms
     /// </historyy>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, EnumLoginType.Normal, changePassword: false, autoSign: false);
+      var log = new frmLogin(switchLoginUserMode:true);
       if (_userPrimero.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
@@ -210,7 +210,7 @@ namespace IM.Base.Forms
     private async void LoadContact()
     {
       cboguPRInfo.ItemsSource = await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
-      var guest = await BRGuests.GetGuest(_guestID);
+      var guest = await BRGuests.GetGuest(_guestID);      
       if (guest.guInfoD.HasValue)
       {
         txtguInfoD.Text = guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
@@ -230,36 +230,41 @@ namespace IM.Base.Forms
 
     #region btnSave_Click
     private async void btnSave_Click(object sender, RoutedEventArgs e)
-    {      
-      if (Validate())
+    {
+      try
       {
-        //guardamos la informacion de contacto
-        _guest.guloInfo = _userLoguedo.User.peID;
-        _guest.guPRInfo = txtguPRInfo.Text;
-        _guest.guInfoD = Convert.ToDateTime(txtguInfoD.Text).Date;
-        _guest.guInfo = true;     
+        if (Validate())
+        {
+          //guardamos la informacion de contacto
+          _guest.guloInfo = _userLoguedo.User.peID;
+          _guest.guPRInfo = txtguPRInfo.Text;
+          _guest.guInfoD = Convert.ToDateTime(txtguInfoD.Text).Date;
+          _guest.guInfo = true;
 
-        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest y de igual forma los moviemientos de este (SaveGuestMovement).
-        //Si hubo un erro al ejecutar el metodo SaveGuestContact nos devolvera 0, indicando que ningun paso 
-        //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
-        //_wasSaved que es la que indica que se guardo el Avail.
-        if (await BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
-            EnumGuestsMovementsType.Contact,Environment.MachineName,ComputerHelper.GetIpMachine()) != 0)
-        {
-          //Modificamos las variable indicando que si se guardo la variable
-          _wasSave = true;
-          chkguInfo.IsChecked = true;
+          //Enviamos los parametros para que guarde los cambios del guest y el log del Guest y de igual forma los moviemientos de este (SaveGuestMovement).
+          //Si hubo un erro al ejecutar el metodo SaveGuestContact nos devolvera 0, indicando que ningun paso 
+          //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
+          //_wasSaved que es la que indica que se guardo el Avail.
+          if (await BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
+              EnumGuestsMovementsType.Contact, Environment.MachineName, ComputerHelper.GetIpMachine()) != 0)
+          {
+            //Modificamos las variable indicando que si se guardo la variable
+            _wasSave = true;
+            chkguInfo.IsChecked = true;
+          }
+          else
+          {
+            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+              MessageBoxImage.Error, "Information can not keep");
+          }
+          Close();
         }
-        else
-        {
-          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-            MessageBoxImage.Error, "Information can not keep");
-        }
-        Close();
       }
-      //BRGuests.SaveGuest(_guest);        
-      //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
-      //BRGuests.SaveGuestMovement(_guestID, EnumGuestsMovementsType.Contact, _user.User.peID, Environment.MachineName.ToString(), GetIPMachine());
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      } 
+         
     }
     #endregion
 

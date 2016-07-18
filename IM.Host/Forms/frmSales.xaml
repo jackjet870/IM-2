@@ -109,7 +109,7 @@
                 </Grid.RowDefinitions>
                 <Button x:Name="btnGeneral" Content="General" Grid.Column="0" Grid.Row="0" Click="btnGeneral_Click"/>
                 <Button x:Name="btnSalesmen" Content="Salesmen" Grid.Column="1" Grid.Row="0" Click="btnSalesmen_Click"/>
-                <Grid Background="Bisque" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="0" x:Name="gGeneral" >
+                <Grid Background="Bisque" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="1" x:Name="gGeneral" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  />
                         <ColumnDefinition />
@@ -126,20 +126,20 @@
                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1" Margin="5">
                         <StackPanel>
                             <TextBlock x:Name="lblsaID" Text="Sale ID"/>
-                            <TextBox x:Name="txtsaID" MaxLength="4" Text="{Binding saID}" Width="80"/>
+                            <TextBox x:Name="txtsaID" MaxLength="4" Text="{Binding saID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsaMembershipNum" Text="Membership #" />
-                            <TextBox x:Name="txtsaMembershipNum" Text="{Binding saMembershipNum}" Width="80"/>
+                            <TextBox x:Name="txtsaMembershipNum" Text="{Binding saMembershipNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsaD" Text="Sale Date"/>
-                            <TextBox x:Name="txtsaD" Width="70" Text="{Binding saD, StringFormat=dd/MM/yyyy}"/>
+                            <TextBox x:Name="txtsaD" Width="70" Text="{Binding saD, StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <Border Background="Beige" x:Name="fraProcessable" BorderBrush="Black" BorderThickness="2" Margin="5"  >
                             <StackPanel>
                                 <CheckBox x:Name="chksaProc" IsChecked="{Binding saProc}" Content="Processable" Margin="5" FontSize="12" />
-                                <TextBox x:Name="txtsaProcD" Margin="5" Width="70" Text="{Binding saProcD,StringFormat=dd/MM/yyyy}" />
+                                <TextBox x:Name="txtsaProcD" Margin="5" Width="70" Text="{Binding saProcD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </Border>
                         <Border BorderBrush="Black" x:Name="fraCancelled"  BorderThickness="2" Margin="5">
@@ -149,14 +149,14 @@
                             </StackPanel>
                         </Border>
                         <Border BorderBrush="Black" BorderThickness="2" Margin="5">
-                            <CheckBox x:Name="chksaByPhone" IsChecked="{Binding saByPhone}" Content="Phone Sale" Margin="5" VerticalAlignment="Center" />
+                            <CheckBox x:Name="chksaByPhone" IsChecked="{Binding saByPhone, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Phone Sale" Margin="5" VerticalAlignment="Center" />
                         </Border>
                         <TextBlock x:Name="lblOutOfPending" Text="Out of Pending" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Margin="5">
                         <StackPanel>
                             <TextBlock x:Name="lblsagu" Text="GUID" />
-                            <TextBox x:Name="txtsagu" Text="{Binding sagu, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Width="80" LostFocus="Txtsagu_OnLostFocus"/>
+                            <TextBox x:Name="txtsagu" Text="{Binding sagu, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="Txtsagu_OnKeyDown" Width="80" LostFocus="Txtsagu_OnLostFocus" LostKeyboardFocus="Txtsagu_OnLostKeyboardFocus" TextChanged="txtsagu_TextChanged"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblGuestNameCaption" Text="Guest Name" />
@@ -238,11 +238,11 @@
                             <TextBox x:Name="txtsaOverPack" Text="{Binding saOverPack, StringFormat = '${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <GroupBox x:Name="grbPayments" Header="Payments" Margin="40,0,0,0" Background="Beige">
-                            <DataGrid CellEditEnding="dgpayment_CellEditEnding" RowEditEnding="Dgpayment_OnRowEditEnding" BeginningEdit="dgpayment_BeginningEdit"  x:Name="dgpayment" Margin="5" ItemsSource="{Binding}" Height="75" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False"
+                            <DataGrid CellEditEnding="dgpayment_CellEditEnding" RowEditEnding="Dgpayment_OnRowEditEnding" BeginningEdit="dgpayment_BeginningEdit"  x:Name="dgpayment" Margin="5" ItemsSource="{Binding }" Height="75" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False"
                                        CanUserDeleteRows="false" BorderBrush="Black" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="True" RowHeaderWidth="0">
                                 <DataGrid.Columns>
-                                    <DataGridComboBoxColumn x:Name="paptColumn" Width="AUTO" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt}"/>
-                                    <DataGridComboBoxColumn x:Name="paccColumn" Width="AUTO" Header="Credit Card"  SelectedValuePath="ccID" DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc}"/>
+                                    <DataGridComboBoxColumn x:Name="paptColumn" Width="AUTO" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged }"/>
+                                    <DataGridComboBoxColumn x:Name="paccColumn" Width="AUTO" Header="Credit Card"  SelectedValuePath="ccID"  DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc,  Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsVisible, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                                     <DataGridTextColumn x:Name="pasaColumn" Visibility="Collapsed" Header="pasa" Binding="{Binding pasa}"/>
                                 </DataGrid.Columns>
                             </DataGrid>

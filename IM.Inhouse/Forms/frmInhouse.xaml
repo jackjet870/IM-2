@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:classes="clr-namespace:IM.Inhouse.Classes"
         x:Class="IM.Inhouse.Forms.frmInhouse"
-         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d"
-        Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"              
+        mc:Ignorable="d"  Closing="FrmInhouse_OnClosing"
+      Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
         <CollectionViewSource x:Key="GuestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="GuestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestAvailable }, CreateList=True}"/>
@@ -367,7 +367,7 @@
                         <DataGridTemplateColumn x:Name="guGroupColumn" IsReadOnly="False" Header="Grp" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guGroup}" Click="chkGuestsGroupsArrivals_Click" HorizontalAlignment="Center" />
+                                    <CheckBox Name="CheckBoxGuestGrups"  IsChecked="{Binding guGroup}" Click="chkGuestsGroupsArrivals_Click" HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -392,8 +392,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="False" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guLWColumn" IsReadOnly="False" Binding="{Binding guLW}" Header="LW" Width="auto"/>
+                        
+                        <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="True" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guLWColumn" IsReadOnly="True" Binding="{Binding guLW}" Header="LW" Visibility="Collapsed" Width="0"/>
                         <DataGridCheckBoxColumn x:Name="guPRNoteColumn" IsReadOnly="False" Binding="{Binding guPRNote}"   Header="Notes" Width="auto" Visibility="Hidden"/>
                         <DataGridTemplateColumn x:Name="notesColumn" IsReadOnly="True" Header="Notes" Width="auto"  >
                             <DataGridTemplateColumn.CellTemplate>
@@ -531,7 +532,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guShowColumn1" IsReadOnly="True" Binding="{Binding guShow}" Header="Sh" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guLWColumn1" IsReadOnly="True" Binding="{Binding guLW}" Header="LW" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guLWColumn1" IsReadOnly="True" Binding="{Binding guLW}" Header="LW" Visibility="Collapsed" Width="0"/>
                         <DataGridCheckBoxColumn x:Name="guPRNoteColumn1" IsReadOnly="True" Binding="{Binding guPRNote,  NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" Header="Notes" Width="auto" Visibility="Hidden"/>
                         <!--<DataGridTextColumn x:Name="notesColumn1" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>-->
                         <DataGridTemplateColumn x:Name="notesColumn1" IsReadOnly="True" Header="Notes" Width="auto" >
@@ -664,8 +665,8 @@
                         <DataGridTextColumn x:Name="guCompanyColumn2" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
                         <DataGridTextColumn x:Name="guMembershipNumColumn2" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto"/>
                         <DataGridTextColumn x:Name="mtNColumn2" IsReadOnly="True" Binding="{Binding mtN}" Header="M Type" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guShowColumn2" IsReadOnly="false" Binding="{Binding guShow}" Header="Sh" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guTourColumn" IsReadOnly="false" Binding="{Binding guTour}" Header="Tour" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guShowColumn2" IsReadOnly="True" Binding="{Binding guShow}" Header="Sh" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guTourColumn" IsReadOnly="True" Binding="{Binding guTour}" Header="Tour" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guBookCancColumn2" IsReadOnly="false" Header="C.Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -674,7 +675,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guSaleColumn" IsReadOnly="false" Binding="{Binding guSale}" Header="Sale" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guLWColumn2" IsReadOnly="false" Binding="{Binding guLW}" Header="LW" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guLWColumn2" IsReadOnly="false" Binding="{Binding guLW}" Header="LW" Visibility="Collapsed" Width="0"/>
                         <DataGridCheckBoxColumn x:Name="guPRNoteColumn2" IsReadOnly="False" Binding="{Binding guPRNote}" Header="Notes" Width="auto" Visibility="Hidden"/>
                         <!--<DataGridTextColumn x:Name="notesColumn2" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>-->
                         <DataGridTemplateColumn x:Name="notesColumn2" IsReadOnly="True" Header="Notes" Width="auto" >
@@ -816,7 +817,7 @@
                         </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guShowColumn3" Binding="{Binding guShow}" Header="Sh" Width="auto" IsReadOnly="True"/>
                         <DataGridCheckBoxColumn x:Name="guSaleColumn1" Binding="{Binding guSale}" Header="Sale" Width="auto" IsReadOnly="True"/>
-                        <DataGridCheckBoxColumn x:Name="guLWColumn3" Binding="{Binding guLW}" Header="LW" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guLWColumn3" Binding="{Binding guLW}" Header="LW" Visibility="Collapsed" Width="0" IsReadOnly="True"/>
                         <DataGridCheckBoxColumn x:Name="guPRNoteColumn3" Binding="{Binding guPRNote}" Header="Notes" Width="auto" IsReadOnly="True" Visibility="Hidden"/>
                         <!-- <DataGridTextColumn x:Name="notesColumn3" Binding="{Binding Notes}" Header="Notes" Width="auto" IsReadOnly="True"/>-->
                         <DataGridTemplateColumn x:Name="notesColumn3" IsReadOnly="True" Header="Notes" Width="auto" >

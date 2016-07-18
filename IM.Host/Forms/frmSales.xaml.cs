@@ -10,6 +10,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using IM.Model.Helpers;
 using IM.BusinessRules.BRIC;
 
@@ -80,7 +81,7 @@ namespace IM.Host.Forms
       InitializeComponent();
       typeSale = EnumSale.Sale;
       gprCriteria.Visibility = typeSale == EnumSale.Sale ? Visibility.Collapsed : Visibility.Visible;
-      _guId = guId = 7751984;
+      _guId = guId = 7754745;
     }
 
     #endregion
@@ -122,6 +123,7 @@ namespace IM.Host.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      UIHelper.SetUpControls(new Sale(), this);
       LoadCombosPayment();
       //Cargamos los ComboBox
       LoadPr();
@@ -253,7 +255,7 @@ namespace IM.Host.Forms
       SetMode(Enums.EnumMode.modDisplay);
       //Cargamos el detalle de la venta
       //de la primera venta que aparece en el grid
-      LoadRecord();
+      await LoadRecord();
     }
 
     #endregion
@@ -359,15 +361,17 @@ namespace IM.Host.Forms
     {
       if (guestId == null) return;
       var guest = await BRGuests.GetGuest((int) guestId);
-      if (guest != null)
+      if (guest != null && guestId != 0)
       {
         lblGuestName.Text = $"{guest.guLastName1} {guest.guFirstName1}";
       }
       else
       {
-        _sale.sagu = null;
+        txtsagu.Text = "0";
+        txtsagu.SelectAll();
+        txtsagu.Focus();
         lblGuestName.Text = string.Empty;
-        UIHelper.ShowMessage("Guest not found");
+        UIHelper.ShowMessage("Guest not found");        
       }
     }
 
@@ -513,8 +517,8 @@ namespace IM.Host.Forms
         txtChangedBy.Text = txtPwd.Password = string.Empty;
       }
       //no permitimos modificar la ventana si es de una fecha cerrada
-      bool closen = !IsClosed();
-      blnEnable = (blnEnable && closen);
+      var closen = !IsClosed();
+      blnEnable = blnEnable && closen;
       //deshabilitamos los datos generales
       EnabledGeneral(false);
       //Vendedores
@@ -541,17 +545,17 @@ namespace IM.Host.Forms
         txtsaComments.IsEnabled = true;
       }
       //Si la venta es de una fecha cerrada
-      if (!(mode == Enums.EnumMode.modDisplay) && IsClosed())
+      if (mode != Enums.EnumMode.modDisplay && IsClosed())
       {
         //Permitimos modificar la venta para marcarla como procesabel o para desmarcarla de procesable 
         // si su fecha de cancelacion no esta en una fecha cerrada
-        if (!chksaProc.IsChecked.Value || !difdate(txtsaProcD.Text, _CloseD))
+        if (chksaProc.IsChecked != null && (!chksaProc.IsChecked.Value || !difdate(txtsaProcD.Text, _CloseD)))
         {
           fraProcessable.IsEnabled = true;
         }
         //Permitimos modificar la venta para cancelarla o para descancelarla
         //si su fecha de cancelacion no esta en una fecha cerrada
-        if (!chksaCancel.IsChecked.Value || !difdate(txtsaCancelD.Text, _CloseD))
+        if (chksaCancel.IsChecked != null && (!chksaCancel.IsChecked.Value || !difdate(txtsaCancelD.Text, _CloseD)))
         {
           //fraCancelled.IsEnabled = true;
           chksaCancel.IsEnabled = true;
@@ -742,11 +746,11 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche]  created 28062016
     /// </history>
-    private void grdSale_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private async void grdSale_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       if (btnClose.IsEnabled)
       {
-        LoadRecord();
+        await LoadRecord();
       }
     }
 
@@ -1242,6 +1246,12 @@ namespace IM.Host.Forms
         txtsagu.Focus();
         return false;
       }
+      if (_sale.sagu==0)
+      {
+        //UIHelper.ShowMessage("Guest not found");
+        txtsagu.Focus();
+        return false;        
+      }
       //Validamos la sala de ventas
       if (string.IsNullOrEmpty(txtsasr.Text))
       {
@@ -1302,11 +1312,7 @@ namespace IM.Host.Forms
         return false;
       }
       //validamos los pagos
-      if (!ValidatePagos())
-      {
-        return false;
-      }
-      return true;
+      return ValidatePagos();
     }
 
     #endregion
@@ -1526,6 +1532,7 @@ namespace IM.Host.Forms
       await BRSalesSalesmen.UpdateGuestSalesmen(_sale.sagu, _sale.saID);
 
       //Si cambio de guest ID      
+
       if (_oldSale.sagu != _sale.sagu)
       {
         //marcamos como venta el guest Id Nuevo
@@ -1949,16 +1956,16 @@ namespace IM.Host.Forms
     /// </history>
     private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (e.Column.Header.ToString() != "Payment Type") return;
-      var cbo = (ComboBox) e.EditingElement;
-      if (cbo.SelectedValue == null) return;
-      var papt = cbo.SelectedValue.ToString();
-      // if (papt == string.Empty) return;
-      var firstOrDefault = _payments.FirstOrDefault(pay => pay.papt == papt);
-      if (firstOrDefault == null) return;
-      UIHelper.ShowMessage("Payment Type must not be repeated");
-      cbo.SelectedIndex = -1;
-      e.Cancel = true;
+      //if (e.Column.Header.ToString() != "Payment Type") return;
+      //var cbo = (ComboBox) e.EditingElement;
+      //if (cbo.SelectedValue == null) return;
+      //var papt = cbo.SelectedValue.ToString();
+      //// if (papt == string.Empty) return;
+      //var firstOrDefault = _payments.FirstOrDefault(pay => pay.papt == papt);
+      //if (firstOrDefault == null) return;
+      //UIHelper.ShowMessage("Payment Type must not be repeated");
+      //cbo.SelectedIndex = -1;
+      //e.Cancel = true;
     }
 
     #region dgpayment_BeginningEdit
@@ -1971,9 +1978,9 @@ namespace IM.Host.Forms
     /// </history>
     private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      if (e.Column.SortMemberPath != "pacc") return;
-      var payment = (Payment) e.Row.Item;
-      e.Cancel = payment.papt != "CC";
+      //if (e.Column.SortMemberPath != "pacc") return;
+      //var payment = (Payment) e.Row.Item;
+      //e.Cancel = payment.papt != "CC";
     }
 
     #endregion
@@ -1986,7 +1993,25 @@ namespace IM.Host.Forms
     /// </history>
     private void Txtsagu_OnLostFocus(object sender, RoutedEventArgs e)
     {          
-      GetGuestName(_sale.sagu);
+      GetGuestName(_sale.sagu);      
+    }
+
+    private void txtsagu_TextChanged(object sender, TextChangedEventArgs e)
+    {
+     
+    }
+
+    private void Txtsagu_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+      //if (_sale.sagu == 0)
+      //{
+      //  txtsagu.Focus();
+      //}
+    }
+
+    private void Txtsagu_OnKeyDown(object sender, KeyEventArgs e)
+    {
+    
     }
   }
 }

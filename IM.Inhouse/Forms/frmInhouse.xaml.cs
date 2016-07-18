@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,8 +21,11 @@ using System.Threading.Tasks;
 namespace IM.Inhouse.Forms
 {
   /// <summary>
-  /// Interaction logic for frmRegister.xaml
-  /// /// </summary>
+  /// Formulario para la gestion de los Huespedes
+  /// </summary>
+  /// <history>
+  /// [jorcanche] created 15/03/2016
+  /// </history>
   public partial class frmInhouse : Window
   {
     #region Atributos
@@ -78,7 +82,9 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Metodo que sirve para carga los DataGrid's segun su estado de Visibilidad
     /// </summary>
-    ///<history>[jorcanche] 15/03/2016 </history>
+    ///<history>
+    /// [jorcanche] 15/03/2016 created
+    ///</history>
     private async void LoadGrid()
     {
       var serverDate = BRHelpers.GetServerDate();
@@ -280,9 +286,9 @@ namespace IM.Inhouse.Forms
       int nColumn = dg.CurrentCell.Column.DisplayIndex;
       Type t = items.GetType();
       //Validamos
-      if (items != null && ValidateCheckIn((bool)t.GetProperty("guCheckIn").GetValue(items),        
-                                          (DateTime)t.GetProperty("guCheckInD").GetValue(items),
-                                          (DateTime)t.GetProperty("guCheckOutD").GetValue(items)))
+      if (ValidateCheckIn((bool)t.GetProperty("guCheckIn").GetValue(items),        
+        (DateTime)t.GetProperty("guCheckInD").GetValue(items),
+        (DateTime)t.GetProperty("guCheckOutD").GetValue(items)))
       {
         #region Updated DataGrid
         var guestGuum = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
@@ -298,8 +304,8 @@ namespace IM.Inhouse.Forms
         #region Save DataBase
         var editGuest = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         editGuest.guCheckIn = true;
-        editGuest.guAvail = guum.Equals(0) ? true : false;
-        BRGuests.SaveGuest(editGuest);
+        editGuest.guAvail = guum.Equals(0);
+        await BRGuests.SaveGuest(editGuest);
         #endregion
         GridHelper.SelectRow(dg, nIndex, nColumn);
         //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox     
@@ -521,27 +527,6 @@ namespace IM.Inhouse.Forms
 
     #endregion
 
-    #region ShowbtnWitGifts
-
-    /// <summary>
-    /// Muestra u oculta el Boton Pre/Gifts
-    /// </summary>
-    /// <param name="show"> true muestra | false oculta</param>
-    /// <history>
-    /// [ecanul] 19/04/2016 Created
-    /// </history>
-    void ShowbtnWitGifts(bool show)
-    {
-      if (show)
-        colGifts.Width = new GridLength(1, GridUnitType.Star);
-      else
-        colGifts.Width = new GridLength(0);
-    }
-
-    async
-
-    #endregion
-
     #region CreateExcelReport
 
     /// <summary>
@@ -551,8 +536,8 @@ namespace IM.Inhouse.Forms
     /// <param name="WithGifts">Opcional true = PremanifestWithGifts | false reporte comun</param>
     /// [ecanul] 18/04/2016 Created
     /// [ecanul] 19/04/2016 Modificated Agregada funcionalidad para Aviables, Premanifest y Premanifest With Gifts
-    /// </history>
-    void CreateExcelReport(bool WithGifts = false)
+    /// </history> 
+    private async void CreateExcelReport(bool WithGifts = false)
     {
       bool hasData = false;
       switch (_screen)
@@ -690,7 +675,7 @@ namespace IM.Inhouse.Forms
         win.Activate();
         return;
       }
-      win = new frmNotices();
+      win = new frmNotices {Owner = this};
       win.Show();
     }
 
@@ -719,7 +704,7 @@ namespace IM.Inhouse.Forms
         }
       }
       _markets = selectedItems.Count == 0 ? "ALL" : _markets;
-      StaStart("Load Guest´s by Markets: " + _markets);
+      StaStart($"Loading {_screen} by Markets: {_markets}...");
       LoadGrid();
     }
 
@@ -861,7 +846,7 @@ namespace IM.Inhouse.Forms
         prnote.ShowInTaskbar = false;
         prnote.ShowDialog(); 
           
-        if (prnote._saveNote)
+        if (prnote.SaveNote)
         {
           dgGuestArrival.SelectedItems.OfType<ObjGuestArrival>().ToList().ForEach(item => item.guPRNote = true);
           dgGuestArrival.Items.Refresh();
@@ -900,7 +885,7 @@ namespace IM.Inhouse.Forms
     #region chkGuestsGroupsArrivals_Clic
 
     private async void chkGuestsGroupsArrivals_Click(object sender, RoutedEventArgs e)
-    {
+    {      
       bool show = true;
       bool group = false;
       frmGuestsGroups frmGgGu;
@@ -914,7 +899,6 @@ namespace IM.Inhouse.Forms
 
       action = EnumAction.None;
       guID = itema.guID;
-      group = itema.guGroup;
       if (itema.guGroup) //Si tiene Group
       {
         gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
@@ -947,6 +931,7 @@ namespace IM.Inhouse.Forms
               break;
             case MessageBoxResult.Cancel: //Cancela
               show = false;
+              chk.IsChecked = false;
               break;
           }
           MessageBoxCustomHelper.ReturnToCommonMessageBox();
@@ -969,20 +954,28 @@ namespace IM.Inhouse.Forms
 
     private void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-      var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
-      if (string.IsNullOrEmpty(guest?.gulsOriginal) || string.IsNullOrEmpty(guest.guHReservID)) return;
-      //obtenemos los datos del reporte del servicio de Wire PR
-      var reservation = WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
-      if (reservation == null)
-        UIHelper.ShowMessage("Reservation not found", MessageBoxImage.Error);
-      else
+      try
       {
-        var rpt = new rptReservation();
-        var reporte = new List<RptReservationOrigos> { reservation };
-        rpt.SetDataSource(reporte);
-        var frmViewer = new frmViewer(rpt);
-        frmViewer.ShowDialog();
+        var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
+        if (string.IsNullOrEmpty(guest?.gulsOriginal) || string.IsNullOrEmpty(guest.guHReservID)) return;
+        //obtenemos los datos del reporte del servicio de Wire PR
+        var reservation = WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
+        if (reservation == null)
+          UIHelper.ShowMessage("Reservation not found", MessageBoxImage.Error);
+        else
+        {
+          var rpt = new rptReservation();
+          var reporte = new List<RptReservationOrigos> { reservation };
+          rpt.SetDataSource(reporte);
+          var frmViewer = new frmViewer(rpt);
+          frmViewer.ShowDialog();
+        }
       }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+     
     }
 
     #endregion
@@ -1053,7 +1046,7 @@ namespace IM.Inhouse.Forms
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
         prnote.ShowDialog();
-        if (prnote._saveNote)
+        if (prnote.SaveNote)
         {
           dgGuestAvailable.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
           dgGuestAvailable.Items.Refresh();
@@ -1143,6 +1136,7 @@ namespace IM.Inhouse.Forms
               break;
             case MessageBoxResult.Cancel: //Cancela
               show = false;
+              chk.IsChecked = false;
               break;
           }
           MessageBoxCustomHelper.ReturnToCommonMessageBox();
@@ -1224,7 +1218,7 @@ namespace IM.Inhouse.Forms
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
         prnote.ShowDialog();
-        if (prnote._saveNote)
+        if (prnote.SaveNote)
         {
           dgGuestPremanifest.SelectedItems.OfType<ObjGuestPremanifest>().ToList().ForEach(item => item.guPRNote = true);
           dgGuestPremanifest.Items.Refresh();
@@ -1310,6 +1304,7 @@ namespace IM.Inhouse.Forms
               break;
             case MessageBoxResult.Cancel: //Cancela
               show = false;
+              chk.IsChecked = false;
               break;
           }
           MessageBoxCustomHelper.ReturnToCommonMessageBox();
@@ -1394,7 +1389,7 @@ namespace IM.Inhouse.Forms
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
         prnote.ShowDialog();
-        if (prnote._saveNote)
+        if (prnote.SaveNote)
         {
           guestSearchedDataGrid.SelectedItems.OfType<ObjGuestSearched>().ToList().ForEach(item => item.guPRNote = true);
           guestSearchedDataGrid.Items.Refresh();
@@ -1490,6 +1485,7 @@ namespace IM.Inhouse.Forms
               break;
             case MessageBoxResult.Cancel: //Cancela
               show = false;
+              chk.IsChecked = false;
               break;
           }
           MessageBoxCustomHelper.ReturnToCommonMessageBox();
@@ -1510,6 +1506,12 @@ namespace IM.Inhouse.Forms
 
     #region dg_SelectionChanged
 
+    /// <summary>
+    /// Actualiza el conteo de los registros del Data Grid
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 14/07/2016
+    /// </history>
     private void dg_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var dg = sender as DataGrid;
@@ -1631,16 +1633,21 @@ namespace IM.Inhouse.Forms
       CreateExcelReport(true);
     }
 
+    /// <summary>
+    /// Actualiza la variable global _serverDate y carga los controles
+    /// </summary>
+    ///<history>
+    /// [jorcanche] created 17/07/2016
+    /// </history>
     private async void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {      
       if (!IsInitialized) return;
       if (dtpDate.Text == string.Empty) dtpDate.Value = _serverDate;
       if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;      
-      //BusyIndicator.IsBusy = true;
+      StaStart($"Loading {_screen}...");
       _serverDate = dtpDate.Value.Value;
       txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, App.User.Location.loID);
       LoadGrid();
-      dtpDate.Focus();
     }
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
@@ -1679,9 +1686,7 @@ namespace IM.Inhouse.Forms
       StaStart("Loading Arrival...");
       EnabledCtrls(true, true, true, true);
       _screen = EnumScreen.Arrivals; // DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
-      LoadGrid();
-      //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
-      ShowbtnWitGifts(false);
+      LoadGrid();      
     }
 
     #endregion
@@ -1699,7 +1704,6 @@ namespace IM.Inhouse.Forms
       _screen = EnumScreen.Availables;// DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
       LoadGrid();
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
-      ShowbtnWitGifts(false);
     }
 
     #endregion
@@ -1716,7 +1720,6 @@ namespace IM.Inhouse.Forms
       _screen = EnumScreen.Premanifest;// DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
       LoadGrid();
       //Muestra el boton btnWitGifts que exporta el reporte Premanifest WithGifts
-      ShowbtnWitGifts(true);
     }
     #endregion
 
@@ -1750,30 +1753,27 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void btnSearchGuest_Click(object sender, RoutedEventArgs e)
     {
-      StaStart("loading Searcheds...");
+      StaStart("loading Searched...");
       //StaStart("loading Searched...");
-      frmSearchGuests SearchGuests = new frmSearchGuests();
-      SearchGuests.Owner = this;
+      var searchGuests = new frmSearchGuests {Owner = this};
       //Validamos que se halla cerrado la ventana 
       StaEnd();
-      SearchGuests.ShowDialog();
+      searchGuests.ShowDialog();
       //Validamos que le halla dado aceptar y no Cerrar ventana.
-      if (!SearchGuests._Cancel)
-      {
-        StaStart("loading Searched...");
+      if (!searchGuests._Cancel)
+      {     
         //Traemos los Datos
-        _guestDateTo = SearchGuests._dateTo;
-        _guestdateFrom = SearchGuests._dateFrom;
-        _guestGuid = SearchGuests._guestID;
-        _guestName = SearchGuests._name;
-        _guestRoom = SearchGuests._room;
-        _guestReservation = SearchGuests._reservation;
+        _guestDateTo = searchGuests._dateTo;
+        _guestdateFrom = searchGuests._dateFrom;
+        _guestGuid = searchGuests._guestID;
+        _guestName = searchGuests._name;
+        _guestRoom = searchGuests._room;
+        _guestReservation = searchGuests._reservation;
         //Manipulamos los controlos 
         EnabledCtrls(false, false, false, false, false, false);
         _screen = EnumScreen.Search;
+        StaStart("loading Searched...");
         LoadGrid();
-        //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
-        ShowbtnWitGifts(false);
       }
     }
 
@@ -1788,7 +1788,7 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion
-
+    
     #region ChkInvit_Click
 
     private async void ChkInvit_Click(object sender, RoutedEventArgs e)
@@ -1825,6 +1825,12 @@ namespace IM.Inhouse.Forms
 
     #region Window_KeyDown
 
+    /// <summary>
+    /// Actualiza el status bar
+    /// </summary>
+    ///<hystory>
+    /// [jorcanche] created 14/07/2016
+    /// </hystory>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Capital)
@@ -1843,9 +1849,22 @@ namespace IM.Inhouse.Forms
 
     #endregion
 
-   
+    #region FrmInhouse_OnClosing
+    /// <summary>
+    /// Cierra todas las ventanas 
+    /// </summary>
+    ///<history>
+    /// [jorcanche] created 14/07/2016
+    /// </history>
+    private void FrmInhouse_OnClosing(object sender, CancelEventArgs e)
+    {
+      Application.Current.Shutdown();
+    }
+    #endregion
 
     #endregion
-  
+
+
+
   }
 }

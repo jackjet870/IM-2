@@ -2,6 +2,12 @@
 
 namespace IM.Base.Helpers
 {
+  /// <summary>
+  /// Clase para informacion sobre la red
+  /// </summary>
+  /// <history>
+  /// [jorcanche] created 16/07/2016
+  /// </history>
   public class ComputerHelper
   {
     /// <summary>
