@@ -158,8 +158,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo Personnel</returns>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [vku] 13/Jul/2016 Modified. Agregué Include Personnel_Liner
     /// </history>
-    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null)
+    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null,bool blnLiner=false)
     {
       List<Personnel> lstPersonnel = await Task.Run(() =>
         {
@@ -172,6 +173,11 @@ namespace IM.BusinessRules.BR
           {
               bool blnStatus = Convert.ToBoolean(nStatus);
               query = query.Where(pe => pe.peA == blnStatus);
+            }
+
+            if(blnLiner)
+            {
+              query = query.Include(pe => pe.Personnel_Liner);
             }
 
             if (personnel != null)

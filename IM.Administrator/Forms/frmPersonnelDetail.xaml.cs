@@ -531,14 +531,14 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 20/06/2016
     /// </history>
-    private void cmbpePlaceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void cmbpePlaceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       switch (personnel.pepo)
       {
         case "GS":
         case "OPC":
           {
-            List<TeamGuestServices> lstTeamguestService = BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = personnel.pePlaceID });
+            List<TeamGuestServices> lstTeamguestService = await BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = personnel.pePlaceID });
             cmbpeTeamType.ItemsSource = lstTeamguestService;
             cmbpeTeamType.SelectedValuePath = "tgID";
             cmbpeTeamType.DisplayMemberPath = "tgN";

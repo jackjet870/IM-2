@@ -29,6 +29,9 @@ namespace IM.Administrator.Forms
     public string strHotelGroup = "";
     public string strArea = "";
     #endregion
+    #region teamPRs
+    public string sLocation = "";//Location by TeamPR para cuando se abra desde teamPR's
+    #endregion
     #endregion
 
     public frmSearch()
@@ -222,7 +225,18 @@ namespace IM.Administrator.Forms
             txtID.MaxLength = 3;
             txtID.PreviewTextInput += TextBoxHelper.ByteTextInput;
             break;
-          } 
+          }
+        #endregion
+
+        #region TeamsPRs
+        case EnumWindow.TeamsPRs:
+          {
+            cmbLocation.Visibility = Visibility.Visible;
+            lblTLocation.Visibility = Visibility.Visible;
+            loadLocations();
+            cmbLocation.SelectedValue = sLocation;
+          }
+          break;
           #endregion
       }
 
@@ -406,7 +420,19 @@ namespace IM.Administrator.Forms
             Close();
             break;
           }
-        #endregion        
+        #endregion
+        #region TeamPRs
+        case EnumWindow.TeamsPRs:
+          {
+            if(cmbLocation.SelectedValue != null)
+            {
+              sLocation = cmbLocation.SelectedValue.ToString();
+            }
+            DialogResult = true;
+            Close();
+            break;
+          }
+          #endregion
       }
     }
     #endregion
@@ -434,6 +460,29 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+    #endregion
+
+    #region TeamPRs
+    /// <summary>
+    ///   Llena el combobox de locations relacionados a TeamsGuestServices cuando se abre desde teamPRs
+    /// </summary>
+    /// <history>
+    ///   [vku] 18/Jul/2016 Created
+    /// </history>
+    protected async void loadLocations()
+    {
+      try
+      {
+        List<object> lstLocations = await BRLocations.GetLocationByTeamGuestService();
+        cmbLocation.ItemsSource = lstLocations;
+        cmbLocation.SelectedValuePath = "loID";
+        cmbLocation.DisplayMemberPath = "loN";
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "TeamsPRs");
+      }
+    }
     #endregion
     #endregion
   }

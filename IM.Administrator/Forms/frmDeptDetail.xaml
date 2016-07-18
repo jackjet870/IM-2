@@ -39,30 +39,15 @@
             <DataGrid.Columns>
                 <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" SelectedValuePath="peID"
                                          SelectedValueBinding="{Binding peID}" DisplayMemberPath="peN"  Header="Personnel" >
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">                            
+                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Personnel-Concat}"/>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style TargetType="ComboBox">
-                            <Setter Property="IsEditable" Value="True"/>
-                            <Setter Property="ItemTemplate">
-                                <Setter.Value>
-                                    <DataTemplate>
-                                        <Border Margin="0,4,0,0">
-                                            <Grid >
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding peN}"/>
-                                                <TextBlock  Text="{Binding peID}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="TextSearch.TextPath" Value="peN"/>
+                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Personnel-Concat}"/>
                         </Style>
                     </DataGridComboBoxColumn.EditingElementStyle>                    
                 </DataGridComboBoxColumn>

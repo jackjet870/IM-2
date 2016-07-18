@@ -157,6 +157,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add("frmPosts", "Posts", "Posts.png");
         lstMenu.Add("frmPostsLog", "Posts Log", "Log.ico");
         lstMenu.Add("frmTeamsLog", "Teams Log", "Log.ico");
+        lstMenu.Add("frmTeamsPRs", "Teams PR´s", "PR.png");
       }
       #endregion
 

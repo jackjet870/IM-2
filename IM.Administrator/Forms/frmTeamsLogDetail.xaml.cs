@@ -247,7 +247,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 27/04/2016
     /// </history>
-    private void cmbtlPlaceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void cmbtlPlaceID_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       switch(teamLog.tlTeamType)
       {
@@ -260,7 +260,7 @@ namespace IM.Administrator.Forms
           {
             cmbtlTeam.SelectedValuePath = "tgID";
             cmbtlTeam.DisplayMemberPath = "tgN";
-            List<TeamGuestServices> lstTeamsGuestServices = BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = teamLog.tlPlaceID });
+            List<TeamGuestServices> lstTeamsGuestServices = await BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = teamLog.tlPlaceID });
             cmbtlTeam.ItemsSource = lstTeamsGuestServices;
             break;
           }

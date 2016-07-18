@@ -118,7 +118,30 @@ namespace IM.BusinessRules.BR
         }
       });
       return nRes;
-    } 
+    }
+    #endregion
+
+    #region GetProgramByLocation
+    /// <summary>
+    ///  Obtiene el programa de una locacion
+    /// </summary>
+    /// <param name="strLocation">Clave de la locación</param>
+    /// <history>
+    ///   [vku] 14/Jul/2016 Created
+    /// </history>
+    public static string GetProgramByLocation(string strLocation)
+    {
+      string program = string.Empty;
+        using(var dbContex = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var query = from lo in dbContex.Locations
+                      join ls in dbContex.LeadSources on lo.lols equals ls.lsID
+                      where lo.loID == strLocation
+                      select ls.lspg;
+          program = query.FirstOrDefault().ToString();
+        }
+      return program;
+    }
     #endregion
   }
 }

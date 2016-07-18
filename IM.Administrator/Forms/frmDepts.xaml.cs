@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmDeptDetail frmDeptDetail = new frmDeptDetail();
       frmDeptDetail.Owner = this;
-      frmDeptDetail.enumMode = EnumMode.edit;
+      frmDeptDetail.enumMode = EnumMode.add;
       if(frmDeptDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmDeptDetail.dept))//Valida que cumpla con los filtros actuales
