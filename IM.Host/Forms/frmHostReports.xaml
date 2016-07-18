@@ -59,7 +59,7 @@
         <!--#region btnPrintSR-->
         <Button Name="btnPrintSR" Grid.Column="1" Grid.Row="3" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" Click="lstHostReports_Select" Margin="5">
             <StackPanel Orientation="Horizontal">
-                <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                 <AccessText Text="_Print"></AccessText>
             </StackPanel>
         </Button>

@@ -368,8 +368,8 @@ namespace IM.Administrator.Forms
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Agencies), (int)EnumPermisionLevel.Special);
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Contracts), (int)EnumPermisionLevel.Special);
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Currencies), (int)EnumPermisionLevel.Special);
-        AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.FolioInvitationsOuthouse), (int)EnumPermisionLevel.Special);
-        AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.FolioCXC), (int)EnumPermisionLevel.Special);
+        AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.FoliosInvitationsOuthouse), (int)EnumPermisionLevel.Special);
+        AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.FoliosCxC), (int)EnumPermisionLevel.Special);
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Gifts), (int)EnumPermisionLevel.Special);
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Languages), (int)EnumPermisionLevel.Special);
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Locations), (int)EnumPermisionLevel.Special);

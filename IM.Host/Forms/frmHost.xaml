@@ -79,7 +79,7 @@
             <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnExcel_Click">
               <StackPanel>
                 <Viewbox Width="24" Stretch="Uniform" >
-                  <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 </Viewbox>
                 <TextBlock Text="Print" HorizontalAlignment="Center"/>
               </StackPanel>
@@ -126,7 +126,7 @@
             </Button>
             <Button x:Name="btnAssistance" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnAssistance_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Assistance.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Assistance" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>

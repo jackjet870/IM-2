@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Base.Interfaces;
 using IM.Base.Forms;
 using IM.Model;
 using IM.Host.Forms;
@@ -17,7 +16,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Data;
 using IM.Base.Reports;
-using System.ComponentModel;
 using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
@@ -28,7 +26,7 @@ namespace IM.Host
   /// Interaction logic for frmHost.xaml
   /// </summary>
   /// 
-  public partial class frmHost : Window, IMetodosPublicos
+  public partial class frmHost : Window
   {
     private DateTime? _dtpCurrent = null;
     public static DateTime _dtpServerDate = new DateTime();

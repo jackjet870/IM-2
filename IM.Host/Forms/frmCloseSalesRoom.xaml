@@ -55,7 +55,7 @@
         </StackPanel>
         <Button x:Name="btnLog" Margin="342,222,342,22" VerticalAlignment="Center" Height="30" Click="btnLog_Click">
             <StackPanel Orientation="Horizontal">
-                <Image Source="pack://application:,,,/IM.Base;component/Images/Log.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Log.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Log" HorizontalAlignment="Center" FontSize="16" Margin="10,0,0,0"/>
             </StackPanel>
         </Button>

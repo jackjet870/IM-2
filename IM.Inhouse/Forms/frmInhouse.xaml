@@ -92,13 +92,13 @@
                     </Button>
                     <Button x:Name="btnPrint" Grid.Column="2"  Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPrint_Click" HorizontalAlignment="Left" Margin="0,2,0,1">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnGrouos" Grid.Column="4" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnGrouos_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Guests.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Guests.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Groups" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -110,7 +110,7 @@
                     </Button>
                     <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnAssistance_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Assist" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -122,13 +122,13 @@
                     </Button>
                     <Button x:Name="btnExtInvit" Grid.Column="8" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnExtInvit_Click" HorizontalAlignment="Left" Margin="0,2" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnWithGifts" Grid.Column="9"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Gift/Reprt" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                         <Button.Style>

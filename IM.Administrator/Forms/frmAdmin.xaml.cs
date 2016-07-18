@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model.Enums;
 using IM.Base.Helpers;
+using IM.Model.Classes;
 
 namespace IM.Administrator.Forms
 {
@@ -37,224 +37,219 @@ namespace IM.Administrator.Forms
     {      
       status.Visibility = Visibility.Visible;
       lblUser.Content = App.User.User.peN;
-      var lstMenu = new List<object>();
-      #region Sales permision
+      var lstMenu = new ItemsList();
+
+      #region Sales Permision
       if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Assitances Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistancesStatus" });
-        lstMenu.Add(new { nombre = "Credit Card Types", img = "pack://application:,,,/IM.Base;component/Images/Credit_Cards.png", form = "frmCreditCardTypes" });
+        lstMenu.Add("frmAssistancesStatus", "Assitances Status", "Assistance.ico");
+        lstMenu.Add("frmCreditCardTypes", "Credit Card Types", "Credit_Cards.png");
+        lstMenu.Add("frmEfficiencyTypes", "Efficiency Types", "Positioning.png");
+        lstMenu.Add("frmPaymentPlaces", "Payment Places", "Money.ico");
+        lstMenu.Add("frmPeriods", "Periods", "IconDate.png");
+        lstMenu.Add("frmSourcePayments", "Sources Payments", "Money.ico");
+        lstMenu.Add("frmPaymentTypes", "Payment Types", "Payment.png");
       }
       #endregion
 
-      #region HostInvitations Permision
+      #region Host Invitations Permision
       if (App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });
-        lstMenu.Add(new { nombre = "Guest Status Types", img = "pack://application:,,,/IM.Base;component/Images/Guests.ico", form = "frmGuestStatusTypes" });
+        lstMenu.Add("frmChargeTo", "Charge To", "Charge_To.png");
+        lstMenu.Add("frmGuestStatusTypes", "Guest Status Types", "Guests.ico");
       }
       #endregion
 
       #region Contracts Permision
       if (App.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" });
+        lstMenu.Add("frmContracts", "Contracts", "Contract.ico");
       }
       #endregion
 
-      #region Agencies permision
+      #region Agencies Permision
       if (App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico", form = "frmAgencies" });
-        lstMenu.Add(new { nombre = "Countries", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmCountries" });
-        lstMenu.Add(new { nombre = "Reps", img = "pack://application:,,,/IM.Base;component/Images/Rep.png", form = "frmReps" });
-        lstMenu.Add(new { nombre = "Markets", img = "pack://application:,,,/IM.Base;component/Images/Market.png", form = "frmMarkets" });
-        lstMenu.Add(new { nombre = "Segments By Agency", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsByAgency" });
-        lstMenu.Add(new { nombre = "Segments By Lead Source", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsByLeadSource" });
-        lstMenu.Add(new { nombre = "Segments Categories", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsCategories" });
+        lstMenu.Add("frmAgencies", "Agencies", "Airplane.ico");
+        lstMenu.Add("frmCountries", "Countries", "World.ico");
+        lstMenu.Add("frmReps", "Reps", "Rep.png");
+        lstMenu.Add("frmMarkets", "Markets", "Market.png");
+        lstMenu.Add("frmSegmentsByAgency", "Segments By Agency", "Segments.png");
+        lstMenu.Add("frmSegmentsByLeadSource", "Segments By Lead Source", "Segments.png");
+        lstMenu.Add("frmSegmentsCategories", "Segments Categories", "Segments.png");
       }
       #endregion
 
       #region Currencies Permision
       if (App.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
+        lstMenu.Add("frmCurrencies", "Currencies", "currency.png");
       }
       #endregion
 
-      #region Sales Permision
-      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
+      #region Folios CxC Permission
+      if (App.User.HasPermission(EnumPermission.FoliosCxC, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
-        lstMenu.Add(new { nombre = "Payment Places", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmPaymentPlaces" });
-        lstMenu.Add(new { nombre = "Periods", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmPeriods" });
-        lstMenu.Add(new { nombre = "Sources Payments", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmSourcePayments" });
+        lstMenu.Add("frmFoliosCXC", "Folios CxC", "Reports.ico");
+        lstMenu.Add("frmFoliosCxCPR", "Folios CxC By PR", "Reports.ico");
       }
       #endregion
 
-      #region Folios CxC
-      if (App.User.HasPermission(EnumPermission.FolioCXC, EnumPermisionLevel.ReadOnly))
+      #region Folio Invitations OutHouse Permission
+      if (App.User.HasPermission(EnumPermission.FoliosInvitationsOuthouse, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Folios CXC", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosCXC" });
-        lstMenu.Add(new { nombre = "Folios CxC By PR", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosCxCPR" });                
+        lstMenu.Add("frmFoliosInvitationsOuthouse", "Folios Invitations Outhouse", "Reports.ico");
+        lstMenu.Add("frmReasonCancellationFolios", "Reason for Cancellation of Folios", "Forbidden.png");
+        lstMenu.Add("frmFoliosInvitationsOuthouseByPR", "Folios Invitations Outhouse by PR", "Reports.ico");
       }
       #endregion
 
-      #region Folio InvitationsOutHouse
-      if (App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse, EnumPermisionLevel.ReadOnly))
-      {
-        lstMenu.Add(new { nombre = "Folios Invitations Outhouse", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosInvitationsOuthouse" });
-        lstMenu.Add(new { nombre = "Reason for Cancellation of Folios", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmReasonCancellationFolios" });
-        lstMenu.Add(new { nombre = "Folios Invitations Outhouse by PR", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosInvitationsOuthouseByPR" });        
-      }
-      #endregion
-
-      #region Gifts
+      #region Gifts Permission
       if (App.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Gifts Categories", img = "pack://application:,,,/IM.Base;component/Images/GiftCategory.png", form = "frmGiftsCategories" });
-        lstMenu.Add(new { nombre = "Products", img = "pack://application:,,,/IM.Base;component/Images/Product.ico", form = "frmProducts" });
-        //lstMenu.Add(new { nombre = "Gifts", img = "pack://application:,,,/IM.Base;component/Images/Gift.png", form = "frmGifts" });
+        lstMenu.Add("frmGiftsCategories", "Gifts Categories", "GiftCategory.png");
+        lstMenu.Add("frmProducts", "Products", "Product.ico");
+        //lstMenu.Add("frmGifts", "Gifts", "Gift.png");
       }
       #endregion
 
-      #region Locations
+      #region Locations Permission
       if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" });
-        lstMenu.Add(new { nombre = "Hotels", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotels" });
-        lstMenu.Add(new { nombre = "Locations", img = "pack://application:,,,/IM.Base;component/Images/locations.png", form = "frmLocations" });
-        lstMenu.Add(new { nombre = "Regions", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmRegions" });
-        lstMenu.Add(new { nombre = "Sales Room", img = "pack://application:,,,/IM.Base;component/Images/Sales_Room.png", form = "frmSalesRooms" });
-        lstMenu.Add(new { nombre = "Hotel Groups", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotelGroups" });
-        lstMenu.Add(new { nombre = "Lead Sources", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmLeadSources" });
-        lstMenu.Add(new { nombre = "Programs", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPrograms" });
-        lstMenu.Add(new { nombre = "Zones", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmZones" });
+        lstMenu.Add("frmAreas", "Areas", "World.ico");
+        lstMenu.Add("frmHotels", "Hotels", "Hotel.png");
+        lstMenu.Add("frmLocations", "Locations", "Locations.png");
+        lstMenu.Add("frmRegions", "Regions", "World.ico");
+        lstMenu.Add("frmSalesRooms", "Sales Rooms", "Sales_Room.png");
+        lstMenu.Add("frmHotelGroups", "Hotel Groups", "Hotel.png");
+        lstMenu.Add("frmLeadSources", "Lead Sources", "Lead_Sources.png");
+        lstMenu.Add("frmPrograms", "Programs", "Lead_Sources.png");
+        lstMenu.Add("frmZones", "Zones", "Lead_Sources.png");
       }
       #endregion
 
-      #region Languages
+      #region Languages Permission
       if (App.User.HasPermission(EnumPermission.Languages,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Languages", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmLanguages" });
+        lstMenu.Add("frmLanguages", "Languages", "World.ico");
       }
       #endregion
 
-      #region Marital Status
-      if(App.User.HasPermission(EnumPermission.MaritalStatus,EnumPermisionLevel.ReadOnly))
+      #region Marital Status Permission
+      if (App.User.HasPermission(EnumPermission.MaritalStatus,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Marital Status", img = "pack://application:,,,/IM.Base;component/Images/Marital_Status.png", form = "frmMaritalStatus" });
+        lstMenu.Add("frmMaritalStatus", "Marital Status", "Marital_Status.png");
       }
       #endregion
 
-      #region Motives
-      if(App.User.HasPermission(EnumPermission.Motives,EnumPermisionLevel.ReadOnly))
+      #region Motives Permission
+      if (App.User.HasPermission(EnumPermission.Motives,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Not Booking Motives", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmNotBookingMotives" });
-        lstMenu.Add(new { nombre = "Under Payment  Motives", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmUnderPaymentMotives" });
-        lstMenu.Add(new { nombre = "Unavailable  Motives", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmUnavailableMotives" });
+        lstMenu.Add("frmNotBookingMotives", "Not Booking Motives", "DateTime_Forbidden.png");
+        lstMenu.Add("frmUnderPaymentMotives", "Under Payment  Motives", "Forbidden.png");
+        lstMenu.Add("frmUnavailableMotives", "Unavailable  Motives", "Forbidden.png");
       }
       #endregion
 
-      #region Teams
-      if(App.User.HasPermission(EnumPermission.Teams,EnumPermisionLevel.ReadOnly))
+      #region Teams Permission
+      if (App.User.HasPermission(EnumPermission.Teams,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Posts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmPosts" });
-        lstMenu.Add(new { nombre = "Posts Log", img = "pack://application:,,,/IM.Base;component/Images/Log.ico", form = "frmPostsLog" });
-        lstMenu.Add(new { nombre = "Teams Log", img = "pack://application:,,,/IM.Base;component/Images/Log.ico", form = "frmTeamsLog" });
+        lstMenu.Add("frmPosts", "Posts", "Posts.png");
+        lstMenu.Add("frmPostsLog", "Posts Log", "Log.ico");
+        lstMenu.Add("frmTeamsLog", "Teams Log", "Log.ico");
       }
       #endregion
 
-      #region Catalogos para Tipo Administrador
+      #region Administrator Role
       if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
-        lstMenu.Add(new { nombre = "Computers", img = "pack://application:,,,/IM.Base;component/Images/computer.png", form = "frmComputers" });
-        lstMenu.Add(new { nombre = "Configuration", img = "pack://application:,,,/IM.Base;component/Images/Configuration.ico", form = "frmConfigurationDetails" });
-        lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
-        lstMenu.Add(new { nombre = "Close Invitation", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmCloseInvitation" });
-        lstMenu.Add(new { nombre = "Meal Ticket Types", img = "pack://application:,,,/IM.Base;component/Images/Cofee.png", form = "frmMealTicketsTypes" });
-        lstMenu.Add(new { nombre = "Membership Types", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipTypes" });
-        lstMenu.Add(new { nombre = "Membership Groups", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipGroups" });
-        lstMenu.Add(new { nombre = "Permissions", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissions" });
-        lstMenu.Add(new { nombre = "Permissions Levels", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissionsLevels" });
-        lstMenu.Add(new { nombre = "Place Types", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPlaceTypes" });
-        lstMenu.Add(new { nombre = "Rate Types", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmRateTypes" });
-        lstMenu.Add(new { nombre = "Reimpresion Motives", img = "pack://application:,,,/IM.Base;component/Images/Printer.png", form = "frmReimpresionMotives" });
-        lstMenu.Add(new { nombre = "Roles", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmRoles" });
-        lstMenu.Add(new { nombre = "Room Types", img = "pack://application:,,,/IM.Base;component/Images/Bedroom.png", form = "frmRoomTypes" });
-        lstMenu.Add(new { nombre = "Sale Types", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmSaleTypes" });
-        lstMenu.Add(new { nombre = "Score Rules Concepts", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesConcepts" });
-        lstMenu.Add(new { nombre = "Score Rules Types", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesTypes" });
-        lstMenu.Add(new { nombre = "Score Rules", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRules" });
-        lstMenu.Add(new { nombre = "Score Rules By Lead Source", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesByLeadSource" });
-        lstMenu.Add(new { nombre = "Show Programs", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowPrograms" });
-        lstMenu.Add(new { nombre = "Clubs", img = "pack://application:,,,/IM.Base;component/Images/Member.ico", form = "frmClubs" });
-        lstMenu.Add(new { nombre = "Depts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmDepts" });
-        lstMenu.Add(new { nombre = "Shows Programs Categories", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowProgramsCategories" });
+        lstMenu.Add("frmComputers", "Computers", "Computer.png");
+        lstMenu.Add("frmConfigurationDetails", "Configuration", "Configuration.ico");
+        lstMenu.Add("frmDesks", "Desks", "desk.png");
+        lstMenu.Add("frmCloseInvitation", "Close Invitation", "DateTime_Forbidden.png");
+        lstMenu.Add("frmMealTicketsTypes", "Meal Ticket Types", "Cofee.png");
+        lstMenu.Add("frmMembershipTypes", "Membership Types", "Member.ico");
+        lstMenu.Add("frmMembershipGroups", "Membership Groups", "Member.ico");
+        lstMenu.Add("frmPermissions", "Permissions", "Police.ico");
+        lstMenu.Add("frmPermissionsLevels", "Permissions Levels", "Police.ico");
+        lstMenu.Add("frmPlaceTypes", "Place Types", "Lead_Sources.png");
+        lstMenu.Add("frmRateTypes", "Rate Types", "Reports.ico");
+        lstMenu.Add("frmReimpresionMotives", "Reimpresion Motives", "Printer.png");
+        lstMenu.Add("frmRoles", "Roles", "Posts.png");
+        lstMenu.Add("frmRoomTypes", "Room Types", "Bedroom.png");
+        lstMenu.Add("frmSaleTypes", "Sale Types", "Money.ico");
+        lstMenu.Add("frmScoreRulesConcepts", "Score Rules Concepts", "Score.gif");
+        lstMenu.Add("frmScoreRulesTypes", "Score Rules Types", "Score.gif");
+        lstMenu.Add("frmScoreRules", "Score Rules", "Score.gif");
+        lstMenu.Add("frmScoreRulesByLeadSource", "Score Rules By Lead Source", "Score.gif");
+        lstMenu.Add("frmShowPrograms", "Show Programs", "Catalog.ico");
+        lstMenu.Add("frmClubs", "Clubs", "Member.ico");
+        lstMenu.Add("frmDepts", "Depts", "Posts.png");
+        lstMenu.Add("frmShowProgramsCategories", "Shows Programs Categories", "Catalog.ico");
+        lstMenu.Add("frmPaymentSchemas", "Payment Schemas", "Payment.png");
+        lstMenu.Add("frmRefundTypes", "Refund Types", "Money_Bag.png");
+        lstMenu.Add("frmBanks", "Banks", "Money.ico");
       }
       #endregion
 
-      #region catalogo tipo Secretary
+      #region Secretary Role
       if(App.User.HasRole(EnumRole.Secretary))
       {
-        lstMenu.Add(new { nombre = "Sales Amount Ranges", img = "pack://application:,,,/IM.Base;component/Images/Money_Bag.png", form = "frmSalesAmountRanges" });
-        lstMenu.Add(new { nombre = "Goals", img = "pack://application:,,,/IM.Base;component/Images/Goal.png", form = "frmGoals" });
-        lstMenu.Add(new { nombre = "Locations Categories", img = "pack://application:,,,/IM.Base;component/Images/locations.png", form = "frmLocationsCategories" });
+        lstMenu.Add("frmSalesAmountRanges", "Sales Amount Ranges", "Money_Bag.png");
+        lstMenu.Add("frmGoals", "Goals", "Goal.png");
+        lstMenu.Add("frmLocationsCategories", "Locations Categories", "Locations.png");
       }
       #endregion
 
-      #region TourTimes
+      #region Tour Times Permission
       if(App.User.HasPermission(EnumPermission.TourTimes,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Tour Times Schemas", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimesSchemas" });
-        lstMenu.Add(new { nombre = "Tour Times", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimes" });
+        lstMenu.Add("frmTourTimesSchemas", "Tour Times Schemas", "IconDate.png");
+        lstMenu.Add("frmTourTimes", "Tour Times", "IconDate.png");
       }
       #endregion
 
-      #region Catalogos Default
-      lstMenu.Add(new { nombre = "Payment Schemas", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentSchemas" });
-      lstMenu.Add(new { nombre = "Payment Types", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentTypes" });
-      lstMenu.Add(new { nombre = "Refund Types", img = "pack://application:,,,/IM.Base;component/Images/Money_Bag.png", form = "frmRefundTypes" });
-      lstMenu.Add(new { nombre = "Banks", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmBanks" });
-      #endregion
-
-      #region Warehouses
+      #region Warehouses Permission
       if (App.User.HasPermission(EnumPermission.Warehouses,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Warehouses", img = "pack://application:,,,/IM.Base;component/Images/Warehouse.png", form = "frmWarehouses" });
+        lstMenu.Add("frmWarehouses", "Warehouses", "Warehouse.png");
       }
       #endregion
 
-      #region Wholesalers
-      if(App.User.HasPermission(EnumPermission.WholeSalers,EnumPermisionLevel.ReadOnly))
+      #region Wholesalers Permission
+      if (App.User.HasPermission(EnumPermission.WholeSalers,EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Wholesalers", img = "pack://application:,,,/IM.Base;component/Images/shopping_cart.png", form = "frmWholesalers" });
+        lstMenu.Add("frmWholesalers", "Wholesalers", "shopping_cart.png");
       }
       #endregion
 
-      #region Personnel
+      #region Personnel Permission
       if (App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Personnel", img = "pack://application:,,,/IM.Base;component/Images/Personnel.png", form = "frmPersonnel" });
+        lstMenu.Add("frmPersonnel", "Personnel", "Personnel.png");
       }
 
       #endregion
-      #region sort list
-      //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
-      //view.SortDescriptions.Add(new System.ComponentModel.SortDescription("nombre", System.ComponentModel.ListSortDirection.Ascending));
-      lstMenu.Sort((x, y) => string.Compare(x.GetType().GetProperty("nombre").GetValue(x, null).ToString(), y.GetType().GetProperty("nombre").GetValue(y, null).ToString()));
 
-      #endregion
+      // ordenamos la lista
+      lstMenu.Sort((x, y) => string.Compare(x.Name, y.Name));
+
       lstMenuAdm.ItemsSource = lstMenu;
+
+      // seleccionamos por default el catalogo de Personnel
       int nIndex = 0;
-      var personnelCatalog=lstMenu.Where(item => item.GetType().GetProperty("form").GetValue(item,null).ToString().Trim() == "frmPersonnel").FirstOrDefault();      
-      if(personnelCatalog!=null)
+      Item personnelCatalog = lstMenu.Where(item => item.Id == "frmPersonnel").FirstOrDefault();      
+      if(personnelCatalog != null)
       {        
         nIndex = lstMenu.IndexOf(personnelCatalog);
       }
       lstMenuAdm.SelectedIndex = nIndex;
+
       lstMenuAdm.Focus();
       status.Visibility = Visibility.Collapsed;
-      StatusBarReg.Content = lstMenuAdm.Items.Count + " Items.";
+
+      // indicamos el numero de catalogos
+      StatusBarReg.Content = $"{lstMenuAdm.Items.Count} Catalogs.";
     }
 
     #endregion
@@ -265,11 +260,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     private void OpenWindow()
     {
-      dynamic item = lstMenuAdm.SelectedItem;//Obtenemos el seleccionado de la lista
-      string strNombreForm = "IM.Administrator.Forms." + item.form;//Obtenemos el nombre del formulario
+      Item item = (Item)lstMenuAdm.SelectedItem;//Obtenemos el seleccionado de la lista
+      string strNombreForm = $"IM.Administrator.Forms.{item.Id}";//Obtenemos el nombre del formulario
 
       //Verificar si la ventana está abierta
-      Window wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == item.form).FirstOrDefault();
+      Window wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == item.Id).FirstOrDefault();
 
       if (wd == null)//Se crea la ventana
       {
@@ -283,7 +278,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          string sNombre = item.nombre;
+          string sNombre = item.Name;
           MessageBox.Show("could not show the window " + sNombre);
         }
       }

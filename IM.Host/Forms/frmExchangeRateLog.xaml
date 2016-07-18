@@ -21,7 +21,7 @@
             <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
                 <Button ToolTip="Print log." Name="btnPrint" Click="btnPrint_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" />
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" />
                         <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
                     </StackPanel>
                 </Button>

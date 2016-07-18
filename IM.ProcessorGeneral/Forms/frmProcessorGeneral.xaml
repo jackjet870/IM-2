@@ -84,7 +84,7 @@
             </Grid.ColumnDefinitions>
             <Button Name="btnPrintSR" Grid.Column="1" VerticalAlignment="Center" Click="btnPrintSR_Click">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                     <AccessText Text="_Print"></AccessText>
                 </StackPanel>
             </Button>
@@ -139,7 +139,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Name="btnPrintLS" Grid.Column="1" VerticalAlignment="Center" Click="btnPrintLS_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                         <AccessText Text="_Print"></AccessText>
                     </StackPanel>
                 </Button>
@@ -179,7 +179,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Name="btnPrintGral" Grid.Column="1" VerticalAlignment="Center" Click="btnPrintGral_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                         <AccessText Text="_Print"></AccessText>
                     </StackPanel>
                 </Button>

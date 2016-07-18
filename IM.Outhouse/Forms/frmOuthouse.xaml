@@ -61,7 +61,7 @@
                     </Button>
                     <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPrint_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -85,7 +85,7 @@
                     </Button>
                     <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=btnOptions}" Click="btnAssistance_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Assist" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>

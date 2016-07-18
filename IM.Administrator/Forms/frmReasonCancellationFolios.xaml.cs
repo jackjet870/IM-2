@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse, EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.FoliosInvitationsOuthouse, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadReasonCancellationFolios();
     } 

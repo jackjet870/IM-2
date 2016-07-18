@@ -144,7 +144,6 @@
     </Compile>
     <Compile Include="Helpers\ExecuteCommandHelper.cs" />
     <Compile Include="Helpers\LanguageHelper.cs" />
-    <Compile Include="Classes\Parametros.cs" />
     <Compile Include="Forms\frmSearchGuest.xaml.cs">
       <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
@@ -159,9 +158,6 @@
     </Compile>
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmConsultaBase.xaml.cs">
-      <DependentUpon>frmConsultaBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmInvitationBase.xaml.cs">
       <DependentUpon>frmInvitationBase.xaml</DependentUpon>
@@ -192,7 +188,6 @@
     <Compile Include="Helpers\UIRichTextBoxHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Helpers\WindowsHelper.cs" />
-    <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Language\ResLanguage.Designer.cs">
       <DependentUpon>ResLanguage.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -247,7 +242,6 @@
     <Resource Include="Images\Layout.png" />
     <Resource Include="Images\Login.png" />
     <Resource Include="Images\Preview.png" />
-    <Resource Include="Images\Printer.png" />
     <Resource Include="Images\Refresh.png" />
     <Resource Include="Images\Report.png" />
     <Resource Include="Images\User.png" />
@@ -305,10 +299,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\frmConsultaBase.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Forms\frmInvitationBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -351,21 +341,13 @@
     <Resource Include="Images\Time.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Airplane.ico" />
-    <Resource Include="Images\Assistance.ico" />
     <Resource Include="Images\btnEdit.png" />
     <Resource Include="Images\btnSearch.png" />
     <Resource Include="Images\button_add.png" />
     <Resource Include="Images\button_cancel.png" />
     <Resource Include="Images\button_delete.png" />
-    <Resource Include="Images\Charge_To.png" />
-    <Resource Include="Images\Contract.ico" />
-    <Resource Include="Images\Credit_Cards.png" />
-    <Resource Include="Images\currency.png" />
-    <Resource Include="Images\World.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Reports.ico" />
     <Resource Include="Images\DaysOff.png" />
   </ItemGroup>
   <ItemGroup>
@@ -391,50 +373,11 @@
     <Resource Include="Images\ExchangeRate.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Log.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Computer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\desk.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Positioning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\GiftCategory.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Note.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Guests.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Hotel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Locations.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Marital_Status.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sales_Room.png" />
-    <Resource Include="Images\Rep.png" />
     <Resource Include="Images\Down.png" />
     <Resource Include="Images\Up.png" />
-    <Resource Include="Images\Money_Bag.png" />
-    <Resource Include="Images\Forbidden.png" />
-    <Resource Include="Images\Posts.png" />
-    <Resource Include="Images\Lead_Sources.png" />
-    <Resource Include="Images\Police.ico" />
-    <Resource Include="Images\IconDate.png" />
-    <Resource Include="Images\Payment.png" />
-    <Resource Include="Images\Money.ico" />
-    <Resource Include="Images\DateTime_Forbidden.png" />
-    <Resource Include="Images\Bedroom.png" />
     <Resource Include="Images\Find.png" />
     <Resource Include="Images\Change.ico" />
     <Resource Include="Images\Search.ico" />
@@ -444,12 +387,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Nota.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Cofee.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Member.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language\ResLanguage.resx">
@@ -492,31 +429,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Score.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Catalog.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Warehouse.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Goal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Market.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Product.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Configuration.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Segments.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\sort.png" />
@@ -525,16 +438,7 @@
     <Resource Include="Images\disk.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\shopping_cart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Personnel.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Pay.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Gift.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

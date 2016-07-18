@@ -1,6 +1,5 @@
 ﻿using IM.Base.Helpers;
 using IM.Base.Forms;
-using IM.Launcher.Classes;
 using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using IM.Model.Helpers;
+using IM.Model.Classes;
 
 namespace IM.Launcher.Forms
 {
@@ -55,7 +56,7 @@ namespace IM.Launcher.Forms
       AssemblyName name = new AssemblyName(thisApp.FullName);
 
       lblVersion.Content = "Launcher v" + name.Version;
-      lsbLauncher.ItemsSource = BuildLauncher();
+      lsbLauncher.ItemsSource = CreateMenu();
     }
     #endregion
 
@@ -113,8 +114,8 @@ namespace IM.Launcher.Forms
     {
       if (lsbLauncher.SelectedItem != null)
       {
-        var item = (ListItemLauncher)lsbLauncher.SelectedItem;
-        CallingExe((EnumMenu)item.Orden);
+        Item item = (Item)lsbLauncher.SelectedItem;
+        CallingExe(EnumToListHelper.StringToEnum<EnumMenu>(item.Id));
       }
     }
     #endregion
@@ -130,8 +131,8 @@ namespace IM.Launcher.Forms
     {
       if (e.Key == Key.Enter && lsbLauncher.SelectedItem != null)
       {
-        var item = (ListItemLauncher)lsbLauncher.SelectedItem;
-        CallingExe((EnumMenu)item.Orden);
+        Item item = (Item)lsbLauncher.SelectedItem;
+        CallingExe(EnumToListHelper.StringToEnum<EnumMenu>(item.Id));
       }
     }
     #endregion
@@ -140,26 +141,41 @@ namespace IM.Launcher.Forms
 
     #region Metodos privados
 
-    #region BuildLauncher
-    private IEnumerable<ListItemLauncher> BuildLauncher()
+    #region CreateMenu
+    /// <summary>
+    /// Construye la lista de opciones con las que contará el menú
+    /// </summary>
+    /// <history>
+    /// [wtorres] 11/Abr/2016 Modified. Ahora genera la lista en base al enumerado EnumMenu
+    /// [vku]     06/Jun/2016 Modified. Se cambia el boton PrinteroConfig a SystemConfig
+    /// [wtorres] 15/Jul/2016 Modified. Ahora genera una lista de ItemsList en lugar de una lista de ListItemLauncher
+    /// </history>
+    private ItemsList CreateMenu()
     {
-      var lstNames = new ConfigButton().ListOfButtons();
-      ListItemLauncher itemLauncher;
-      var lstItemLauncher = new List<ListItemLauncher>();
+      var lstMenu = new ItemsList();
 
-      string pathImages = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Images\\");
+      lstMenu.Add(EnumMenu.Inhouse);
+      lstMenu.Add(EnumMenu.Assignment);
+      lstMenu.Add(EnumMenu.MailOuts);
+      lstMenu.Add(EnumMenu.Outhouse);
+      lstMenu.Add(EnumMenu.Host);
+      lstMenu.Add(EnumMenu.InventoryMovs);
+      lstMenu.Add(EnumMenu.ProcessorGRAL);
+      lstMenu.Add(EnumMenu.ProcessorINH);
+      lstMenu.Add(EnumMenu.ProcessorOUT);
+      lstMenu.Add(EnumMenu.ProcessorSales);
+      lstMenu.Add(EnumMenu.PRStatistics);
+      lstMenu.Add(EnumMenu.Graph);
+      lstMenu.Add(EnumMenu.GuestsByPR);
+      lstMenu.Add(EnumMenu.SalesByPR);
+      lstMenu.Add(EnumMenu.SalesByLiner);
+      lstMenu.Add(EnumMenu.SalesByCloser);
+      lstMenu.Add(EnumMenu.Administrator);
+      lstMenu.Add(EnumMenu.MailOutsConfig);
+      lstMenu.Add(EnumMenu.InvitationsConfig);
+      lstMenu.Add(EnumMenu.SystemConfig);
 
-      foreach (var item in lstNames)
-      {
-        itemLauncher = new ListItemLauncher();
-        itemLauncher.Orden = item.Key;
-        itemLauncher.Descripcion = item.Value;
-        itemLauncher.UriImage = String.Format("{0}{1}.png", pathImages, ((EnumMenu)item.Key).ToString());
-        itemLauncher.Image = new BitmapImage(new Uri(itemLauncher.UriImage));
-        lstItemLauncher.Add(itemLauncher);
-      }
-
-      return lstItemLauncher;
+      return lstMenu;
     }
     #endregion
 

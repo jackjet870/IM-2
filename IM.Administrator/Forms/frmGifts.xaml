@@ -43,7 +43,7 @@
             </Button>
             <Button Name="btnLog" ToolTip="Open Log." Click="btnLog_Click" IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/log.ico" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Log.ico" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Log"/>
                 </StackPanel>
             </Button>

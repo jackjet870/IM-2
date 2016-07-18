@@ -50,13 +50,13 @@
             </Button>
             <Button Name="btnTeamLog" ToolTip="Open Teams Log." Click="btnTeamLo_Click" IsEnabled="False" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/log.ico" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Log.ico" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Teams Log"/>
                 </StackPanel>
             </Button>
             <Button Name="btnPostLog" ToolTip="Open Posts Log." Click="btnPostLog_Click" IsEnabled="False" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/log.ico" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Log.ico" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Post Log"/>
                 </StackPanel>
             </Button>

@@ -211,7 +211,137 @@
   <ItemGroup>
     <Resource Include="Images\GExit.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Administrator.png" />
+    <Resource Include="Images\Assignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Graph.png" />
+    <Resource Include="Images\GuestsByPR.png" />
+    <Resource Include="Images\Host.png" />
+    <Resource Include="Images\InHouse.png" />
+    <Resource Include="Images\InventoryMovs.png" />
+    <Resource Include="Images\InvitationsConfig.png" />
+    <Resource Include="Images\MailOuts.png" />
+    <Resource Include="Images\MailOutsConfig.png" />
+    <Resource Include="Images\Outhouse.png" />
+    <Resource Include="Images\ProcessorGRAL.png" />
+    <Resource Include="Images\ProcessorINH.png" />
+    <Resource Include="Images\ProcessorOUT.png" />
+    <Resource Include="Images\ProcessorSales.png" />
+    <Resource Include="Images\PRStatistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SalesByCloser.png" />
+    <Resource Include="Images\SalesByLiner.png" />
+    <Resource Include="Images\SalesByPR.png" />
+    <Resource Include="Images\SystemConfig.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Airplane.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Assistance.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Credit_Cards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Positioning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Money.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IconDate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Payment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Charge_To.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Guests.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Contract.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Market.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Rep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Segments.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\World.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Reports.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Product.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\currency.png" />
+    <Resource Include="Images\Forbidden.png" />
+    <Resource Include="Images\Gift.png" />
+    <Resource Include="Images\GiftCategory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Hotel.png" />
+    <Resource Include="Images\Locations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales_Room.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DateTime_Forbidden.png" />
+    <Resource Include="Images\Lead_Sources.png" />
+    <Resource Include="Images\Log.ico" />
+    <Resource Include="Images\Marital_Status.png" />
+    <Resource Include="Images\Posts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Computer.png" />
+    <Resource Include="Images\Configuration.ico" />
+    <Resource Include="Images\desk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cofee.png" />
+    <Resource Include="Images\Member.ico" />
+    <Resource Include="Images\Police.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Bedroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Score.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Catalog.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Money_Bag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Goal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warehouse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\shopping_cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Personnel.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

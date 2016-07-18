@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.FolioCXC, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.FoliosCxC, Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadFoliosCXC();
     }

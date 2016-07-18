@@ -26,7 +26,7 @@
         </StackPanel>
         <!--#endregion-->
         <!--#region List Menu-->
-        <ListView Grid.Row="1" Name="lstMenuAdm" TextSearch.TextPath="nombre" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10" KeyDown="lstMenuAdm_KeyDown"  MouseDoubleClick="lstMenuAdm_MouseDoubleClick">
+        <ListView Grid.Row="1" Name="lstMenuAdm" TextSearch.TextPath="Name" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10" KeyDown="lstMenuAdm_KeyDown"  MouseDoubleClick="lstMenuAdm_MouseDoubleClick">
             <ListView.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray">
                 </SolidColorBrush>
@@ -38,10 +38,10 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Name="btnMenu" Uid="{Binding form}" Height="80" Width="80" Background="Transparent"  BorderBrush="Transparent" BorderThickness="0">
+                    <Border Name="btnMenu" Uid="{Binding Id}" Height="80" Width="100" Background="Transparent"  BorderBrush="Transparent" BorderThickness="0">
                         <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Image Width="32" Height="32" Source="{Binding img}" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                            <TextBlock Name="txtMenu" Text="{Binding nombre}" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <Image Width="32" Height="32" Source="{Binding ImageUrl}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            <TextBlock Name="txtMenu" Text="{Binding Name}" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

@@ -256,7 +256,7 @@
                                 <DataTemplate >
                                     <Button x:Name="btnPay"  Style="{StaticResource  ResourceKey=styleVisibilityButton}" Click="Button_Click">
                                         <StackPanel>
-                                            <Image Source="pack://application:,,,/IM.Base;component/Images/Payment.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Payment.png" Width="16" Height="16" HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
@@ -295,7 +295,7 @@
                                 <DataTemplate >
                                     <Button x:Name="btnLog" Click="Button_Click" Style="{StaticResource  ResourceKey=styleVisibilityButton}">
                                         <StackPanel>
-                                            <Image Source="pack://application:,,,/IM.Base;component/Images/Log.ico" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Log.ico" Width="16" Height="16" HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
