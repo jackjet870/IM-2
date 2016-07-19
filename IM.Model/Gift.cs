@@ -17,6 +17,12 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Gift()
         {
+            this.gigc = "ITEMS";
+            this.giInven = true;
+            this.giO = 10000;
+            this.giCountInPackage = true;
+            this.giCountInCancelledReceipts = true;
+            this.giQty = 1;
             this.GiftsInventories = new HashSet<GiftInventory>();
             this.GiftsLogs = new HashSet<GiftLog>();
             this.GiftsPackagesItems = new HashSet<GiftPackageItem>();

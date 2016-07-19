@@ -6214,5 +6214,38 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByCloser>("USP_IM_RptStatisticsByCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
         }
+    
+        public virtual ObjectResult<RptStatisticsByExitCloser> USP_IM_RptStatisticsByExitCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByExitCloser>("USP_IM_RptStatisticsByExitCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
+        }
     }
 }

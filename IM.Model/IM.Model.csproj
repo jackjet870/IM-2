@@ -1141,6 +1141,9 @@
     <Compile Include="RptStatisticsByCloser.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptStatisticsByExitCloser.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptStatisticsByLocation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
