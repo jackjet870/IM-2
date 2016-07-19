@@ -6344,6 +6344,11 @@
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetMealTicketByFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="meID" Type="int" Mode="In" />
+          <Parameter Name="Folio" Type="int" Mode="In" />
+          <Parameter Name="Authorized" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetNotices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -17968,6 +17973,11 @@
             <Parameter Name="Programs" Mode="In" Type="String" />
             <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetMealTicketByFolio" ReturnType="Collection(IMModel.MealTicketData)">
+            <Parameter Name="meID" Mode="In" Type="Int32" />
+            <Parameter Name="Folio" Mode="In" Type="Int32" />
+            <Parameter Name="Authorized" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22648,6 +22658,25 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="MealTicketData">
+          <Property Type="String" Name="meType" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="myN" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="megu" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="meD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="mepe" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Authorized" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="meFolio" Nullable="false" />
+          <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
+          <Property Type="Int32" Name="meAdults" Nullable="false" />
+          <Property Type="Int32" Name="meMinors" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="SalesRoomID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SalesRoomName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="raN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="REFERENCE" Nullable="false" MaxLength="138" />
+          <Property Type="String" Name="REFERENCENAME" Nullable="false" MaxLength="60" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30525,6 +30554,29 @@
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetMealTicketByFolio" FunctionName="IMModel.Store.USP_OR_GetMealTicketByFolio">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.MealTicketData">
+                <ScalarProperty Name="meType" ColumnName="meType" />
+                <ScalarProperty Name="myN" ColumnName="myN" />
+                <ScalarProperty Name="megu" ColumnName="megu" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="meD" ColumnName="meD" />
+                <ScalarProperty Name="mepe" ColumnName="mepe" />
+                <ScalarProperty Name="Authorized" ColumnName="Authorized" />
+                <ScalarProperty Name="meFolio" ColumnName="meFolio" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="meAdults" ColumnName="meAdults" />
+                <ScalarProperty Name="meMinors" ColumnName="meMinors" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
+                <ScalarProperty Name="SalesRoomName" ColumnName="SalesRoomName" />
+                <ScalarProperty Name="raN" ColumnName="raN" />
+                <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
+                <ScalarProperty Name="REFERENCENAME" ColumnName="REFERENCENAME" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

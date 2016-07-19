@@ -6247,5 +6247,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByExitCloser>("USP_IM_RptStatisticsByExitCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
         }
+    
+        public virtual ObjectResult<MealTicketData> USP_OR_GetMealTicketByFolio(Nullable<int> meID, Nullable<int> folio, string authorized)
+        {
+            var meIDParameter = meID.HasValue ?
+                new ObjectParameter("meID", meID) :
+                new ObjectParameter("meID", typeof(int));
+    
+            var folioParameter = folio.HasValue ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(int));
+    
+            var authorizedParameter = authorized != null ?
+                new ObjectParameter("Authorized", authorized) :
+                new ObjectParameter("Authorized", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MealTicketData>("USP_OR_GetMealTicketByFolio", meIDParameter, folioParameter, authorizedParameter);
+        }
     }
 }
