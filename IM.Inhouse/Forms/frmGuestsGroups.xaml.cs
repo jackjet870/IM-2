@@ -21,9 +21,9 @@ namespace IM.Inhouse.Forms
     int _groupID, _guestID, _guestIDToAdd;
     DateTime _date;
     EnumAction _enumAction;
-    GuestsGroup _guestsGroup;
+    public GuestsGroup _guestsGroup = new GuestsGroup();
     GuestsGroup _oldGuestsGroup = new GuestsGroup();
-    Guest _guest;
+    public Guest _guest = new Guest();
     List<GuestsGroup> _lstGuestsGroups;
     List<Guest> _lstGuest;
     List<Guest> _lstGuestTemp;
@@ -44,60 +44,10 @@ namespace IM.Inhouse.Forms
     /// </history>
     bool ValidateGroupSelected()
     {
-      bool valido = false;
-      List<GuestsGroup> guestGroup = dtgGuestsGroup.SelectedItems.OfType<GuestsGroup>().ToList();
-      if (guestGroup.Count != 0)
+      bool valido = false;      
+      if (dtgGuestsGroup.SelectedItems.Count != 0)
         valido = true;
       return valido;
-    }
-
-    #endregion
-    
-    #region CreateWhere
-
-    /// <summary>
-    /// Llena datos para crear la clausula Where.
-    /// </summary>
-    /// <param name="where">Clausula WHERE si ya se tiene predefinida (Experimental)</param>
-    /// <history>[ECNUL] 28-03-2016 Created</history>
-    void CreateWhere(string where = "")
-    {
-      _guest = new Guest();
-      _guestsGroup = new GuestsGroup();
-      if (where == "")//Si no se envia una clausula Where
-      {
-        if (txtSearchGroupID.Text != "") //Si tiene un id el campo de GroupID
-          _guestsGroup.gxID = Convert.ToInt32(txtSearchGroupID.Text.Trim());
-        else //Si esta vacio  GroupID
-        {
-          //Busca por nombre del grupo
-          if (txtSearchGroupDescription.Text != "")
-            _guestsGroup.gxN = txtSearchGroupDescription.Text;
-          //Busca por la clave del Huesped
-          else if (txtSearchGuestID.Text != "")
-            _guest.guID = Convert.ToInt32(txtSearchGuestID.Text.Trim());
-          else if (txtSearchGuestName.Text != "")
-          {// Busca por nombre o apellido del cliente
-            _guest.guLastName1 = txtSearchGuestName.Text;
-            _guest.guFirstName1 = txtSearchGuestName.Text;
-            _guest.guLastname2 = txtSearchGuestName.Text;
-            _guest.guFirstName2 = txtSearchGuestName.Text;
-          }
-          _guest.guCheckInD = dtpGuestStart.SelectedDate.Value;
-          //En realidad tambien debe ser en guCheckInD pero es para ser usada en un between que se usa el siguiente campo tipo fecha
-          _guest.guCheckOutD = dtpGuestEnd.SelectedDate.Value;
-        }
-        //El join es estatico... se hace desde el BR
-      }
-      else //Si se envia algo en el where
-      {//Se intuye si se manda algo en el Where es una cadena cualquiera AUN ASI se crea un Switch Case para futuras modificaciones
-        switch (where)
-        {
-          case "0": //Solo para tener la esrtructura de la tabla
-            _guest.guID = 0;
-            break;
-        }
-      }
     }
 
     #endregion
@@ -114,15 +64,11 @@ namespace IM.Inhouse.Forms
     private async void LoadGrdGuestsGroups()
     {
       StaStart("Loading Groups...");
-      CreateWhere();
       _lstGuestsGroups = await BRGuestsGroups.GetGuestsGroups(_guest, _guestsGroup);
-      if (_lstGuestsGroups.Count != 0)
-        dtgGuestsGroup.ItemsSource = _lstGuestsGroups;
+      dtgGuestsGroup.ItemsSource = _lstGuestsGroups;
 
-      if (dtgGuestsGroup.Items.Count == 1)
-        StatusBarReg.Content = dtgGuestsGroup.Items.Count + " Group";
-      else
-        StatusBarReg.Content = dtgGuestsGroup.Items.Count + " Groups";
+      string s = dtgGuestsGroup.Items.Count == 1 ? "Group" : "Groups";
+      StatusBarReg.Content = $"{dtgGuestsGroup.Items.Count} {s}";
       StaEnd();
     }
 
@@ -136,10 +82,10 @@ namespace IM.Inhouse.Forms
     /// <history>[ECANUL] 30-03-2016 Created</history>
     void ClearControls()
     {
-      txtSearchGroupID.Text = "";
-      txtSearchGroupDescription.Text = "";
-      txtSearchGuestID.Text = "";
-      txtSearchGuestName.Text = "";
+      txtgxID.Text = "";
+      txtgxN.Text = "";
+      txtguID.Text = "";
+      txtguLastName1.Text = "";
       txtID.Text = "";
       txtDescription.Text = "";
     }
@@ -251,7 +197,7 @@ namespace IM.Inhouse.Forms
           //txtID.Text = groupID.ToString();
           if (_groupID != 0)
           {
-            txtSearchGroupID.Text = _groupID.ToString();
+            txtgxID.Text = _groupID.ToString();
             LoadGrdGuestsGroups();
             LoadGuestsGroupsInfo();
             dtgGuestGroupIntegrants.IsEnabled = true;
@@ -357,7 +303,6 @@ namespace IM.Inhouse.Forms
       frmSearchGuest frmSGuest = new frmSearchGuest(App.User,EnumProgram.Inhouse);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
-      //frmSGuest._lstGuests = new List<Guest>();
       frmSGuest.lstGuestAdd = new List<Guest>();
 
       if (_lstGuest == null) //Solo se abre desde el boton y se da new group
@@ -398,7 +343,6 @@ namespace IM.Inhouse.Forms
         dtgGuestGroupIntegrants.ItemsSource = _lstGuestTemp;
 
         lblIntegrants.Content = "Integrants: " + _lstGuestTemp.Count;
-
       }
     }
 
@@ -475,7 +419,19 @@ namespace IM.Inhouse.Forms
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      LoadGrdGuestsGroups();
+      if (dtpGuestStart.SelectedDate != null)
+        if (dtpGuestEnd.SelectedDate != null)
+          LoadGrdGuestsGroups();
+        else
+        {
+          UIHelper.ShowMessage("Select a End Date", MessageBoxImage.Asterisk, "Inhouse");
+          dtpGuestEnd.Focus();
+        }
+      else
+      {
+        UIHelper.ShowMessage("Select a Start Date", MessageBoxImage.Asterisk, "Inhouse");
+        dtpGuestStart.Focus();
+      }
     }
 
     private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -534,6 +490,11 @@ namespace IM.Inhouse.Forms
     {
       try
       {
+        if(dtgGuestGroupIntegrants.Items.Count <= 1)
+        {
+          UIHelper.ShowMessage("Specify at least 2 integrants", MessageBoxImage.Error);
+          return;
+        }
         List<Guest> lstGuests = (List<Guest>)dtgGuestGroupIntegrants.ItemsSource;
         _guestsGroup = new GuestsGroup();
         //Si no ha especificado un nombre de grupo
@@ -576,15 +537,32 @@ namespace IM.Inhouse.Forms
       }
     }
 
+    private void dtpGuestStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    {
+      DateHelper.ValidateValueDate(sender);
+    }
+
+    private void dtpGuestEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    {
+      DateHelper.ValidateValueDate(sender);
+    }
+
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
 
+      UIHelper.SetUpControls(new GuestsGroup(), grdGroupInfo, blnCharacters: true);
+      UIHelper.SetUpControls(new Guest(), grdGuestInfo, blnCharacters: true);
+
+      grdGroupInfo.DataContext = _guestsGroup;
+      grdGuestInfo.DataContext = _guest;
+
       if (_enumAction == EnumAction.None)
       {
-        txtSearchGroupID.Text = _groupID.ToString();
+        txtgxID.Text = _groupID.ToString();
       }
       switch (_enumAction)
       {
@@ -610,9 +588,9 @@ namespace IM.Inhouse.Forms
       else
         btnEdit.Visibility = Visibility.Hidden;
       //Fecha Inicial
-      dtpGuestStart.SelectedDate = _date.AddDays(-7);
+      _guest.guCheckInD = _date.AddDays(-7);
       //Fecha Final
-      dtpGuestEnd.SelectedDate = _date;
+      _guest.guCheckOutD = _date;
       //se impide modificar datos si esta en modo solo lectura
       if (App.Current.Properties.IsReadOnly)
       {
@@ -621,7 +599,7 @@ namespace IM.Inhouse.Forms
         btnDelete.IsEnabled = false;
       }
       CaseLoad();
-      txtSearchGroupID.Text = "";
+      txtgxID.Text = "";
     }
 
     private void Window_KeyDown(object sender, KeyEventArgs e)

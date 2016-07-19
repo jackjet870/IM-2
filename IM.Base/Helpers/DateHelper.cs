@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Globalization;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
-
+using System.Windows.Controls;
+using System.Windows;
 
 namespace IM.Base.Helpers
 {
@@ -425,7 +426,31 @@ namespace IM.Base.Helpers
       }
 
       return Tuple.Create(dtmStart, dtmEnd);
-    } 
+    }
+    #endregion
+
+    #region ValidateValueDate
+    /// <summary>
+    /// Valida que sea correcta la fecha proporcionada
+    /// </summary>
+    /// <param name="sender">Objeto de tipo DataPicker</param>
+    /// <history>
+    ///   [jorcanche] 17/03/2016 Created
+    ///   [ecanul] 19/07/2016 Modified, Movio de frmSearchGuest A DateHelpper, Deja de usar El MessageBox.Show, ahora usa UIHelper.ShowMessage
+    /// </history>
+    public static void ValidateValueDate(object sender)
+    {
+      //Obtener el valor actual del que tiene el dtpDate
+      var picker = sender as DatePicker;
+      if (!picker.SelectedDate.HasValue)
+      {
+        //Cuando el usuario ingresa una fecha invalida
+        UIHelper.ShowMessage("Date invalidates", MessageBoxImage.Exclamation, "Specify the Date");
+        //MessageBox.Show("", "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        //Y le asignamos la fecha del servidor (la actual hora actual)
+        picker.SelectedDate = BRHelpers.GetServerDate();
+      }
+    }
     #endregion
   }
 }

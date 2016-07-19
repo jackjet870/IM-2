@@ -78,8 +78,8 @@
                       ItemsSource="{Binding Source={StaticResource assistanceDataViewSource}}"
                       Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" >
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="aspeColumn" Width=".7*" Header="ID" Binding="{Binding aspe}"/>
-                    <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="2*"/>
+                    <DataGridTextColumn x:Name="aspeColumn" Width=".7*" Header="ID" Binding="{Binding aspe}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="2*" IsReadOnly="True" />
                     <!--lunes-->
                     <!--REVISAR -->
                     <DataGridComboBoxColumn x:Name="cmbasMonday" SelectedValueBinding="{Binding asMonday}" 
@@ -122,51 +122,7 @@
                                               ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
                                               Width="*">
                     </DataGridComboBoxColumn>
-                    <DataGridTextColumn x:Name="asNumColumn" Width="SizeToHeader" Header="Assistances" Binding="{Binding asNum}"/>
-<!--
-                    <DataGridComboBoxColumn x:Name="cmbasMonday" SelectedValueBinding="{Binding asMonday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="atID" Header="Monday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}">
-                    </DataGridComboBoxColumn>
-                    -Martes
-                    <DataGridComboBoxColumn x:Name="cmbasTuesday" SelectedItemBinding="{Binding asTuesday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asTuesday}" Header="Tuestay" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asTuesday}">
-                    </DataGridComboBoxColumn>
-                    -Miercoles-
-                    <DataGridComboBoxColumn x:Name="cmbasWednesday" SelectedItemBinding="{Binding asWednesday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asWednesday}" Header="Wednesday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asWednesday}">
-                    </DataGridComboBoxColumn>
-                   -Jueve-
-                    <DataGridComboBoxColumn x:Name="cmbasThursday" SelectedItemBinding="{Binding asThursday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asThursday}" Header="Thursday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asThursday}">
-                    </DataGridComboBoxColumn>
-                    -Viernes-
-                    <DataGridComboBoxColumn x:Name="cmbasFriday" SelectedItemBinding="{Binding asFriday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asFriday}" Header="Friday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asFriday}">
-                    </DataGridComboBoxColumn>
-                   -Sabado
-                    <DataGridComboBoxColumn x:Name="cmbasSaturday" SelectedItemBinding="{Binding asSaturday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asSaturday}" Header="Saturday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asSaturday}">
-                    </DataGridComboBoxColumn>
-                    -Domingo-
-                    <DataGridComboBoxColumn x:Name="cmbasSunday" SelectedItemBinding="{Binding asSunday}" 
-                                              DisplayMemberPath="atN" SelectedValuePath="{Binding asSunday}" Header="Sunday" 
-                                              ItemsSource="{Binding Source={StaticResource assistanceStatusViewSource}}" 
-                                              Width="*" TextBinding="{Binding asSunday}">
-                    </DataGridComboBoxColumn>
-                    <DataGridTextColumn x:Name="asNumColumn" Width="SizeToHeader" Header="Assistances" Binding="{Binding asNum}"/>
-                    -->
-
+                    <DataGridTextColumn x:Name="asNumColumn" Width="SizeToHeader" Header="Assistances" Binding="{Binding asNum}" IsReadOnly="True"/>
 
                     <DataGridTemplateColumn x:Name="asEndDColumn" Width="SizeToHeader" Header="as End D"  Visibility="Hidden">
                         <DataGridTemplateColumn.CellTemplate>

@@ -26,7 +26,9 @@
             </Grid.ColumnDefinitions>
             <!--#region Grid-->
             <Grid x:Name="grdContent" Grid.Column="0" DataContext="{StaticResource personnelDayOffViewSource}">
-                <DataGrid x:Name="dtgpersonnelDayOff" Margin="0,0,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" MouseDoubleClick="dtgpersonnelDayOff_MouseDoubleClick">
+                <DataGrid x:Name="dtgpersonnelDayOff" Margin="0,0,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" SelectionMode="Single"
+                          RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" 
+                          MouseDoubleClick="dtgpersonnelDayOff_MouseDoubleClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="dopeColumn" Binding="{Binding dope}" Header="ID" Width=".5*" />
                         <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="2*" />

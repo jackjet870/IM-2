@@ -62,7 +62,7 @@ namespace IM.BusinessRules.BR
             }
             else
             {
-              if (guestsGroup.gxN != "" && guestsGroup.gxN != null)//Si envian el nombre del grupo
+              if (!string.IsNullOrEmpty(guestsGroup.gxN))//Si envian el nombre del grupo
               {
                 lstGuestsGroups = (from gu in dbContext.Guests
                                    from ggi in gu.GuestsGroups
@@ -82,14 +82,16 @@ namespace IM.BusinessRules.BR
                                    && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
                                    select gg).Distinct().ToList();
               }
-              else if (guest.guLastName1 != "" && guest.guLastName1 != null) //Si se manda Last o First name 1 o 2 (Solo se valida 1 porque en caso de tener 1, se tiene los 4
+            //Si se manda Last o First name 1 o 2 (Solo se valida LastName1 porque es el unico que recibe informacuion de la interfaz
+              else if (!string.IsNullOrEmpty( guest.guLastName1)) 
               {
                 lstGuestsGroups = (from gu in dbContext.Guests
                                    from ggi in gu.GuestsGroups
                                    join gg in dbContext.GuestsGroups
                                    on ggi.gxID equals gg.gxID
-                                   where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
-                                   || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2)
+                                   //se usa solo guLastName1 por que es el campo en el que se manda todo el texto
+                                   where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guLastName1)
+                                   || gu.guLastname2.Contains(guest.guLastName1) || gu.guFirstName2.Contains(guest.guLastName1)
                                    && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
                                    select gg).Distinct().ToList();
               }

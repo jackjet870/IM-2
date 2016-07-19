@@ -203,8 +203,8 @@ namespace IM.Base.Forms
             _listAssistData.Add(assistance);
           });
           _isNew = true;
-          assistanceDataDataGrid.ItemsSource = _listAssistData;
         }
+        assistanceDataDataGrid.ItemsSource = _listAssistData;
       }
       StaEnd();
     }
@@ -396,6 +396,10 @@ namespace IM.Base.Forms
         format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
         MessageBox.Show("Generated Report", "Generated", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+      }
+      else
+      {
+        UIHelper.ShowMessage("There is no Information to generate the report", MessageBoxImage.Exclamation, "Save the data");
       }
       StaEnd();
       btnToExcel.IsEnabled = true;

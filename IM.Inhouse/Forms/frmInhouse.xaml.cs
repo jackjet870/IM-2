@@ -1784,6 +1784,7 @@ namespace IM.Inhouse.Forms
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
       frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User);
+      frmAssistance.Owner = this;
       frmAssistance.ShowDialog();
     }
 

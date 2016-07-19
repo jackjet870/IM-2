@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmGuestsGroups"
         mc:Ignorable="d"
-        Title="Guests Groups"  Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="Guests Groups"  Height="650" Width="800" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button" x:Key="btnOptions">
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -35,7 +35,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
+
         <!--#region Search-->
         <Grid Grid.Row="0" x:Name="grdCriteria" Margin="5,15,5,15">
             <Grid.ColumnDefinitions>
@@ -55,9 +55,9 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="txdGroup" VerticalAlignment="Center" Text="Group" Grid.Row="0" Margin="20,0,0,0"/>
                 <Label x:Name="lblGroupID" Content="ID" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                <TextBox x:Name="txtSearchGroupID" VerticalAlignment="Center" Margin="5,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="txtgxID" Text="{Binding gxID}" VerticalAlignment="Center" Margin="5,0,5,0" Grid.Row="2" Grid.Column="0"/>
                 <Label x:Name="lblGroupDescription" Content="Description" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="txtSearchGroupDescription" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="txtgxN" Text="{Binding gxN}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
             </Grid>
             <Grid Grid.Column="1" x:Name="grdGuestInfo">
                 <Grid.RowDefinitions>
@@ -73,13 +73,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="txdGuest" VerticalAlignment="Center" Text="Guest" Grid.Row="0" Margin="20,0,0,0"/>
                 <Label x:Name="lblGuestID" Content="ID" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                <TextBox x:Name="txtSearchGuestID" VerticalAlignment="Center" Margin="5,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="txtguID" Text="{Binding guID}" VerticalAlignment="Center" Margin="5,0,5,0" Grid.Row="2" Grid.Column="0"/>
                 <Label x:Name="lblGuestName" Content="Name" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="txtSearchGuestName" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="txtguLastName1" Text="{Binding guLastName1}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
                 <Label x:Name="lblGuestDateFrom" Content="Arrival Date From" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2"/>
-                <DatePicker x:Name="dtpGuestStart" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2"/>
+                <DatePicker x:Name="dtpGuestStart" SelectedDate="{Binding guCheckInD}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" SelectedDateChanged="dtpGuestStart_SelectedDateChanged"/>
                 <Label x:Name="lblGuestDateTo" Content="Arrival Date To" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3"/>
-                <DatePicker x:Name="dtpGuestEnd" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3"/>
+                <DatePicker x:Name="dtpGuestEnd" SelectedDate="{Binding guCheckOutD}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" SelectedDateChanged="dtpGuestEnd_SelectedDateChanged"/>
             </Grid>
 
             <Grid Grid.Column="2" x:Name="grdSearch">
@@ -88,11 +88,11 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height=".7*"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btnSearch" Content="Search" VerticalAlignment="Center" Margin="5,0,5,0" Grid.Row="1" Click="btnSearch_Click"/>
+                <Button x:Name="btnSearch" Content="Search" VerticalAlignment="Bottom" Margin="5,0,5,3" Grid.Row="1" Click="btnSearch_Click"/>
             </Grid>
         </Grid>
-        <!--#endregion--> 
-        
+        <!--#endregion-->
+
         <!--#region Boddy-->
         <Grid x:Name="grdBody" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -121,8 +121,8 @@
                 <Grid x:Name="grdGuestData" Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height=".5*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height=".5*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -176,7 +176,7 @@
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
-        
+
         <!--#region buttons-->
         <Grid x:Name="grdButtons" Grid.Row="2">
             <Grid.RowDefinitions>
@@ -196,7 +196,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnShow" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Content="Show" Click="btnShow_Click"/>
+            <Button x:Name="btnShow" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Content="Show" Click="btnShow_Click" Visibility="Hidden"/>
             <Button x:Name="btnAdd" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="5" Content="Add" Click="btnAdd_Click"/>
             <Button x:Name="btnEdit" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="6" Content="Edit" Click="btnEdit_Click"/>
             <Button x:Name="btnDelete" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="7" Content="Delete"/>
@@ -204,7 +204,7 @@
             <Button x:Name="btnCancel" Margin="5,5,5,5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="9" Content="Cancel" Click="btnCancel_Click"/>
         </Grid>
         <!--#endregion-->
-        
+
         <!--#region Status Bar-->
         <Grid Grid.Row="3">
             <StatusBar x:Name="stbStatusBar">
