@@ -61,7 +61,7 @@
                     <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
                     <ComboBox x:Name="cbxPersonnel" TextSearch.TextPath="peID" 
                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                              ItemTemplate="{StaticResource cbx-Personnel-img}"/>
+                              ItemTemplate="{StaticResource cbx-Personnel-img}" Width="300" Height="Auto"/>
 
                     <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">

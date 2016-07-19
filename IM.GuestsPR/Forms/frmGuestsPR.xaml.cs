@@ -47,7 +47,7 @@ namespace IM.GuestsPR.Forms
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
       //Agregamos login del usuario en la interfaz
-      setNewUserLogin();
+      SetNewUserLogin();     
     }
     /// <summary>
     /// Evento que se lanza cuando realizamos la consulta boton Search
@@ -57,48 +57,9 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
-      {
-        if (cbxPersonnel?.SelectedValue != null)
-        {
-          StaStart("Loading data...");
-          imgButtonOk.IsEnabled = false;
-          filtersBool = new List<bool>();
-          var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
-          var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
-          #region Check Filter for Report
-          filtersReport = new List<Tuple<string, string>>();
-
-          filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
-          filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
-          filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
-          filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
-          filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
-          filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
-          filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
-
-          filtersBool.Add(chkAssign.IsChecked ?? false);
-          filtersBool.Add(chkContact.IsChecked ?? false);
-          filtersBool.Add(chkFollowUp.IsChecked ?? false);
-          filtersBool.Add(chkInvitation.IsChecked ?? false);
-          filtersBool.Add(chkShows.IsChecked ?? false);
-          filtersBool.Add(chkWithSale.IsChecked ?? false);
-          filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
-          #endregion
-          DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
-        }
-        else
-        {
-          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
-          cbxPersonnel.Focus();
-        }
-      }
-      else
-      {
-        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
-        dtpkFrom.Focus();
-      }
+      GetGuestByPR();
     }
+
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
     /// </summary>
@@ -227,7 +188,7 @@ namespace IM.GuestsPR.Forms
           data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
           cbxPersonnel.ItemsSource = data;
         }
-        setNewUserLogin();
+        SetNewUserLogin();
         StaEnd();
       }
       catch (Exception ex)
@@ -252,6 +213,7 @@ namespace IM.GuestsPR.Forms
     {
       try
       {
+        StaStart("Loading data...");
         var data = await BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters);
         if (data.Count > 0)
         {
@@ -381,7 +343,7 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 19/Mar/2016 Created
     /// </history>
-    public void setNewUserLogin()
+    public void SetNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
@@ -435,9 +397,75 @@ namespace IM.GuestsPR.Forms
     {
       var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
       var index = lstPS.FindIndex(x => x.peID.Equals(user));
-      cbxPersonnel.SelectedIndex = index != -1 ? index : 0;
+      if (index != -1)
+      {
+        cbxPersonnel.SelectedIndex = index;
+      }
+      else
+      {
+        cbxPersonnel.SelectedItem = null;
+      }
+       
+      GetGuestByPR();
     }
 
+    /// <summary>
+    /// Trae los Guest del PR seleccionado.
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/07/2016  Created.
+    /// </history>
+    private void GetGuestByPR()
+    {
+      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+      {
+        if (cbxPersonnel?.SelectedValue != null)
+        {
+
+          if (chkAssign?.IsChecked == true || chkContact?.IsChecked == true || chkFollowUp?.IsChecked == true || chkInvitation?.IsChecked == true || chkShows?.IsChecked == true)
+          {            
+            imgButtonOk.IsEnabled = false;
+            filtersBool = new List<bool>();
+            var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+            var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+            #region Check Filter for Report
+            filtersReport = new List<Tuple<string, string>>();
+
+            filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+            filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
+            filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
+            filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
+            filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
+            filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
+            filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
+
+            filtersBool.Add(chkAssign.IsChecked ?? false);
+            filtersBool.Add(chkContact.IsChecked ?? false);
+            filtersBool.Add(chkFollowUp.IsChecked ?? false);
+            filtersBool.Add(chkInvitation.IsChecked ?? false);
+            filtersBool.Add(chkShows.IsChecked ?? false);
+            filtersBool.Add(chkWithSale.IsChecked ?? false);
+            filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
+            #endregion
+            DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
+          }
+          else
+          {
+            UIHelper.ShowMessage("Please specify at least one of the following 5 options: Assign, Contact, Follow Up, Invit, Show", MessageBoxImage.Warning);
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+          cbxPersonnel.Focus();
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+        dtpkFrom.Focus();
+      }
+    }
     #endregion
   }
 }
