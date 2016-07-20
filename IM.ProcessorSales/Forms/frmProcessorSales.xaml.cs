@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using IM.Base.Helpers;
 using System.Linq;
@@ -36,7 +35,7 @@ namespace IM.ProcessorSales.Forms
     //Archivo de configuracion
     private IniFileHelper _iniFieldHelper;
     //Detalles de los filtros
-    private bool _multiDate, _onlyOnRegister, _allPrograms, _allSegments, _allSalesRoom;
+    private bool _multiDate, _onlyOnRegister, _allSalesRoom;
     //Listado de reportes
     private EnumRptRoomSales _rptRoomSales;
     private EnumRptSalesRoomAndSalesman _rptSalesman;
@@ -47,7 +46,7 @@ namespace IM.ProcessorSales.Forms
     //Filtros para los reportes
     public EnumBasedOnArrival basedOnArrival;
     public EnumQuinellas quinellas;
-    public string salesRoom;
+    public string _salesRoom;
 
     public ClsFilter _clsFilter;
 
@@ -107,9 +106,9 @@ namespace IM.ProcessorSales.Forms
       //carga las fechas desde el archivo de configuracion
       _clsFilter.DtmStart = _iniFieldHelper.readDate(FilterDate, "DateStart", _clsFilter.DtmStart);
       _clsFilter.DtmEnd = _iniFieldHelper.readDate(FilterDate, "DateEnd", _clsFilter.DtmEnd);
-      salesRoom = _iniFieldHelper.ReadText(FilterDate, "SalesRoom", string.Empty);
-      if (!string.IsNullOrEmpty(salesRoom))
-        _clsFilter.LstSalesRooms.Add(salesRoom);
+      _salesRoom = _iniFieldHelper.ReadText(FilterDate, "SalesRoom", string.Empty);
+      if (!string.IsNullOrEmpty(_salesRoom))
+        _clsFilter.LstSalesRooms.Add(_salesRoom);
     }
     #endregion
 
@@ -164,8 +163,6 @@ namespace IM.ProcessorSales.Forms
       SetUpIniField();
       //roles de vendedores
       _clsFilter.LstEnumRole.AddRange(new[] { EnumRole.PR, EnumRole.Liner, EnumRole.Closer, EnumRole.ExitCloser });
-      //segmentos y programas
-      _allSegments = _allPrograms = true;
     }
 
     #endregion
@@ -351,7 +348,18 @@ namespace IM.ProcessorSales.Forms
             if (list.Any())
               file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
+          #endregion
+
+          #region Stats by Exit Closer
+          case EnumRptRoomSales.StatsByExitCloser:
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByExitCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
+              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+            if (list.Any())
+              file = Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+            break;
             #endregion
+
+
 
         }
 
@@ -441,8 +449,13 @@ namespace IM.ProcessorSales.Forms
               file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
+          #region Stats by Exit Closer
           case EnumRptSalesRoomAndSalesman.StatsByExitCloser:
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByExitCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
+            if (list.Any())
+              file = Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
+            #endregion
           case EnumRptSalesRoomAndSalesman.StatsByFtb:
             break;
           case EnumRptSalesRoomAndSalesman.StatsByFtbAndLocations:
@@ -509,41 +522,41 @@ namespace IM.ProcessorSales.Forms
         case EnumRptRoomSales.StatsBySegmentsCategoriesOwn:
         case EnumRptRoomSales.StatsByFtbAndLocatios:
         case EnumRptRoomSales.StatsByFtbAndLocatiosCategories:
-          _frmFilter.ConfigurarFomulario(salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
+          _frmFilter.ConfigurarFomulario(_salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
         case EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges:
           //Se usa para indicar que no se mostrara el filtro de datos y que las fechas se usaran las que tenga el grid
           _multiDate = true;
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, groupByTeams: _clsFilter.BlnGroupedByTeams, shGroupsByTeams: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, shAllSalesmen: true, blnSalesRoom: false, shMultiDateRanges: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, groupByTeams: _clsFilter.BlnGroupedByTeams, shGroupsByTeams: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, shAllSalesmen: true, blnSalesRoom: false, shMultiDateRanges: true);
           break;
         case EnumRptRoomSales.StatsByFtb:
         case EnumRptRoomSales.StatsByCloser:
         case EnumRptRoomSales.StatsByExitCloser:
-          _frmFilter.ConfigurarFomulario(salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnSegments: true, blnAllSegments: _allSegments, blnPrograms: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnSegments: true, blnAllSegments: true, blnPrograms: true);
           break;
         case EnumRptRoomSales.DailySales:
           _onlyOnRegister = false;
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, isGoal: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, isGoal: true);
           break;
         case EnumRptRoomSales.ConcerntrateDailySales:
-          _frmFilter.ConfigurarFomulario(salesRoom, blnSalesRoom: false, shConcentrate: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, blnSalesRoom: false, shConcentrate: true);
           break;
         case EnumRptRoomSales.EfficiencyWeekly:
-          _frmFilter.ConfigurarFomulario(salesRoom, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Weekly, shWeeks: true, onePeriod: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Weekly, shWeeks: true, onePeriod: true);
           break;
         case EnumRptRoomSales.StatsByLocation:
         case EnumRptRoomSales.StatsByLocationAndSalesRoom:
           _onlyOnRegister = false;
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
         case EnumRptRoomSales.StatsByLocationMonthly:
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly, onePeriod: true); //queda pendiente blnoneperiod Obliga a que siempre sea de mes en mes
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly, onePeriod: true); //queda pendiente blnoneperiod Obliga a que siempre sea de mes en mes
           break;
         case EnumRptRoomSales.SalesByLocationMonthly:
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly);
           break;
         default:
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
       }
       _frmFilter.ShowDialog();
@@ -570,10 +583,10 @@ namespace IM.ProcessorSales.Forms
       switch (_rptSalesman)
       {
         case EnumRptSalesRoomAndSalesman.Manifest:
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, isBySalesman: true, shRoles: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, isBySalesman: true, shRoles: true);
           break;
         default:
-          _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, isBySalesman: true);
+          _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, isBySalesman: true);
           break;
       }
       _frmFilter.ShowDialog();

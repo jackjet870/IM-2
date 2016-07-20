@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table;
 using OfficeOpenXml.Table.PivotTable;
 
 namespace IM.ProcessorSales.Classes
@@ -851,6 +848,69 @@ namespace IM.ProcessorSales.Classes
       };
     }
     #endregion RptStatisticsByCloserGroupedByTeams
+
+    #region RptStatisticsByExitCloser
+    /// <summary>
+    /// Formato para el reporte StatisticsByExitCloser
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 18/07/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> RptStatisticsByExitCloser()
+    {
+      return new List<ExcelFormatTable>
+      {
+        
+        new ExcelFormatTable{Title = "SalesAmountRange", PropertyName = "SalesAmountRange", Order = 1, Axis = ePivotFieldAxis.Column, Format = EnumFormatTypeExcel.Currency},
+
+        new ExcelFormatTable { Title = "SalemanType", PropertyName = "SalemanType", Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 1 },
+
+        new ExcelFormatTable {Title = "ID", PropertyName = "SalemanID", Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Salesman Name", PropertyName = "SalemanName", Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "VOL", PropertyName  = "SalesAmount", Order = 3, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Currency, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "OPP", PropertyName  = "OPP", Order = 4, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "UPS", PropertyName  = "UPS", Order = 5, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},        
+        new ExcelFormatTable {Title = "Sales", PropertyName  = "Sales", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "Total", PropertyName  = "SalesTotal", Order = 7, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+
+        new ExcelFormatTable { Title = "EFF", PropertyName  = "Efficiency", Order = 8, Format = EnumFormatTypeExcel.Currency, Formula = "IF([UPS] =0,0, [SalesAmount]/[UPS])", IsCalculated = true},
+        new ExcelFormatTable { Title = "C%",PropertyName  = "ClosingFactor", Order = 9, Format = EnumFormatTypeExcel.Percent, Formula = "IF([UPS] =0,0,[SalesTotal]/[UPS])", IsCalculated = true},
+        new ExcelFormatTable { Title = "AV/S", PropertyName  = "SaleAverage", Order = 10, Format = EnumFormatTypeExcel.Currency, Formula = "IF([SalesTotal] =0,0,[SalesAmount]/[SalesTotal])",IsCalculated = true}
+      };
+    }
+    #endregion RptStatisticsByExitCloser
+
+    #region RptStatisticsByExitCloserGroupedByTeams
+    /// <summary>
+    /// Formato para el reporte StatisticsByExitCloser agrupado por Teams
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 18/07/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> RptStatisticsByExitCloserGroupedByTeams()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "SalesAmountRange", PropertyName = "SalesAmountRange", Order = 1, Axis = ePivotFieldAxis.Column, Format = EnumFormatTypeExcel.Currency},
+
+        new ExcelFormatTable { Title = "SalemanType", PropertyName = "SalemanType", Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 1},
+        new ExcelFormatTable {Title = "Team", PropertyName = "Team",  Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 2},
+        new ExcelFormatTable {Title = "Status", PropertyName = "SalesmanStatus",  Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 3},
+
+        new ExcelFormatTable {Title = "ID", PropertyName = "SalemanID", Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Salesman Name", PropertyName = "SalemanName", Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "VOL", PropertyName  = "SalesAmount", Order = 3, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Currency, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "OPP", PropertyName  = "OPP", Order = 4, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "UPS", PropertyName  = "UPS", Order = 5, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "Sales", PropertyName  = "Sales", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+        new ExcelFormatTable {Title = "Total", PropertyName  = "SalesTotal", Order = 7, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.DecimalNumber, SubTotalFunctions = eSubTotalFunctions.Sum},
+
+        new ExcelFormatTable { Title = "EFF", PropertyName  = "Efficiency", Order = 8, Format = EnumFormatTypeExcel.Currency, Formula = "IF([UPS] =0,0, [SalesAmount]/[UPS])", IsCalculated = true},
+        new ExcelFormatTable { Title = "C%",PropertyName  = "ClosingFactor", Order = 9, Format = EnumFormatTypeExcel.Percent, Formula = "IF([UPS] =0,0,[SalesTotal]/[UPS])", IsCalculated = true},
+        new ExcelFormatTable { Title = "AV/S", PropertyName  = "SaleAverage", Order = 10, Format = EnumFormatTypeExcel.Currency, Formula = "IF([SalesTotal] =0,0,[SalesAmount]/[SalesTotal])",IsCalculated = true}        
+      };
+    }
+    #endregion RptStatisticsByExitCloserGroupedByTeams
 
     #endregion
   }

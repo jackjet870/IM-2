@@ -9,7 +9,7 @@ using IM.Model.Enums;
 
 namespace IM.ProcessorSales.Classes
 {
-  public class Reports
+  public static class Reports
   {
     #region Reports By Sales Room
 
@@ -388,7 +388,7 @@ namespace IM.ProcessorSales.Classes
     /// </history>
     internal static FileInfo RptStatisticsBySegments(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsBySegments> lstReport, bool groupedByTeams)
     {
-      var lstReportAux = new List<dynamic>(); ;
+      var lstReportAux = new List<dynamic>(); 
       if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
@@ -438,7 +438,7 @@ namespace IM.ProcessorSales.Classes
     /// </history>
     internal static FileInfo RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
     {
-      var lstReportAux = new List<dynamic>(); ;
+      var lstReportAux = new List<dynamic>(); 
       if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
@@ -476,6 +476,66 @@ namespace IM.ProcessorSales.Classes
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByCloserGroupedByTeams() : FormatReport.RptStatisticsByCloser(),true,showRowHeaders:true, fileFullPath: fileFullPath);
     }
     #endregion RptStatisticsByCloser
+
+    #region RptStatisticsByExitCloser
+
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptStatisticsByExitCloser
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="groupedByTeams">Agrupado por equipos</param>
+    /// <history>
+    ///  [aalcocer] 18/07/2016 Created
+    /// </history>
+    internal static FileInfo RptStatisticsByExitCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByExitCloser> lstReport, bool groupedByTeams)
+    {
+      var lstReportAux = new List<dynamic>(); 
+      if (groupedByTeams)
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          Team = c.TeamN + "   " + c.TeamLeaderN,
+          c.SalesmanStatus,
+          c.SalemanType,
+          c.SalemanID,
+          c.SalemanName,
+          c.SalesAmount,
+          c.OPP,
+          c.UPS,
+          c.SalesAmountRange,
+          c.Sales,
+          c.SalesTotal,
+          c.Efficiency,
+          c.ClosingFactor,
+          c.SaleAverage
+        }));
+      }
+      else
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          c.SalemanType,
+          c.SalemanID,
+          c.SalemanName,
+          c.SalesAmount,
+          c.OPP,
+          c.UPS,
+          c.SalesAmountRange,
+          c.Sales,
+          c.SalesTotal,
+          c.Efficiency,
+          c.ClosingFactor,
+          c.SaleAverage
+        }));
+      }
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByExitCloserGroupedByTeams() : FormatReport.RptStatisticsByExitCloser(),blnShowSubtotal:true, blnRowGrandTotal:true, fileFullPath: fileFullPath);
+    }
+    #endregion RptStatisticsByExitCloser
 
     #endregion
   }

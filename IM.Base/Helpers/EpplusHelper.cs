@@ -1422,7 +1422,7 @@ namespace IM.Base.Helpers
                     }
                     else
                       //Obtenemos la formula.
-                      range.Formula = GetFormula(formatTable, format.Formula, rowNumber);
+                      range.Formula = GetFormula(formatTableColumns, format.Formula, rowNumber);
                   }
                 }
                 var firstSubtotalColumn = formatTable.First(c => c.SubTotalFunctions != eSubTotalFunctions.None || c.Formula != null).Order;
