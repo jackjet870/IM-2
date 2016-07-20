@@ -6264,5 +6264,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MealTicketData>("USP_OR_GetMealTicketByFolio", meIDParameter, folioParameter, authorizedParameter);
         }
+    
+        public virtual int USP_OR_SaveGiftLog(string gift, Nullable<short> hoursDif, string changedBy)
+        {
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGiftLog", giftParameter, hoursDifParameter, changedByParameter);
+        }
     }
 }

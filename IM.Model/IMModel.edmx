@@ -7296,6 +7296,11 @@
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SaveGiftLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+          <Parameter Name="HoursDif" Type="smallint" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_SaveGiftsReceiptLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
@@ -17977,6 +17982,11 @@
             <Parameter Name="meID" Mode="In" Type="Int32" />
             <Parameter Name="Folio" Mode="In" Type="Int32" />
             <Parameter Name="Authorized" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGiftLog">
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="HoursDif" Mode="In" Type="Int16" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -30580,6 +30590,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGiftLog" FunctionName="IMModel.Store.USP_OR_SaveGiftLog" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
