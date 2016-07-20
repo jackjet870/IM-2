@@ -436,19 +436,17 @@ namespace IM.Base.Helpers
     /// <param name="sender">Objeto de tipo DataPicker</param>
     /// <history>
     ///   [jorcanche] 17/03/2016 Created
-    ///   [ecanul] 19/07/2016 Modified, Movio de frmSearchGuest A DateHelpper, Deja de usar El MessageBox.Show, ahora usa UIHelper.ShowMessage
+    ///   [ecanul] 19/07/2016 Modified, Movi de frmSearchGuest A DateHelpper, Deja de usar El MessageBox.Show, ahora usa UIHelper.ShowMessage
+    ///   [ecanul] 20/07/2016 Modified. Modifique el texto del mensaje, ahora recibe un DatePicker en vez de un object
     /// </history>
-    public static void ValidateValueDate(object sender)
+    public static void ValidateValueDate(DatePicker sender)
     {
-      //Obtener el valor actual del que tiene el dtpDate
-      var picker = sender as DatePicker;
-      if (!picker.SelectedDate.HasValue)
+      if (!sender.SelectedDate.HasValue)
       {
         //Cuando el usuario ingresa una fecha invalida
-        UIHelper.ShowMessage("Date invalidates", MessageBoxImage.Exclamation, "Specify the Date");
-        //MessageBox.Show("", "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Invalid date", MessageBoxImage.Exclamation, "Specify the Date");
         //Y le asignamos la fecha del servidor (la actual hora actual)
-        picker.SelectedDate = BRHelpers.GetServerDate();
+        sender.SelectedDate = BRHelpers.GetServerDate();
       }
     }
     #endregion

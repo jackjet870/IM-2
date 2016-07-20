@@ -539,12 +539,12 @@ namespace IM.Inhouse.Forms
 
     private void dtpGuestStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      DateHelper.ValidateValueDate(sender);
+      DateHelper.ValidateValueDate((DatePicker)sender);
     }
 
     private void dtpGuestEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      DateHelper.ValidateValueDate(sender);
+      DateHelper.ValidateValueDate((DatePicker)sender);
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

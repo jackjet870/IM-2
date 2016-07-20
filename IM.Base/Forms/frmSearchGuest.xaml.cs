@@ -234,7 +234,7 @@ namespace IM.Base.Forms
     /// </history>
     private void dtpTo_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      DateHelper.ValidateValueDate(sender);
+      DateHelper.ValidateValueDate((DatePicker)sender);
     }
     #endregion
 
@@ -245,7 +245,7 @@ namespace IM.Base.Forms
     /// </history>
     private void dtpFrom_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      DateHelper.ValidateValueDate(sender);
+      DateHelper.ValidateValueDate((DatePicker)sender);
     }
     #endregion
 
