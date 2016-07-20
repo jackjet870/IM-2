@@ -1,8 +1,12 @@
-﻿using IM.Base.Helpers;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -394,6 +398,55 @@ namespace IM.Host.Forms
         txtID.Text = "";
         txtFolio.Text = "";
       }
+    }
+    #endregion
+
+    #region btnPrint_Click
+    /// <summary>
+    /// Imprime el reporte RefundsLetter
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/Jul/2016 Created
+    /// </history>
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      var Refund = grdRefund.SelectedItem as DepositsRefund;
+      if (Refund != null)
+      {
+        var RptRefundLetter = await BRDepositsRefund.GetRptRefundLetter(Refund.drID);
+        if (RptRefundLetter.Any())
+        {
+          var objRptRefundletter = RptRefundLetter[0].Cast<RptRefundLetter>().FirstOrDefault();
+          var reportText = await BRReportsTexts.GetReportTexts("RefundLetter", objRptRefundletter.gula);
+
+          var header = reportText[0].reText
+            .Replace("[SaleRoom]", objRptRefundletter.SaleRoom)
+            .Replace("[RefundDate]", objRptRefundletter.RefundDate.ToString())
+            .Replace("[RefundID]", objRptRefundletter.RefundID.ToString())
+            .Replace("[RefundFolio]", objRptRefundletter.RefundFolio.ToString())
+            .Replace("[GuestID]", objRptRefundletter.GuestID.ToString())
+            .Replace("[OutInvt]", objRptRefundletter.OutInvt)
+            .Replace("[GuestNames]", objRptRefundletter.GuestNames)
+            .Replace("[TotalAmount]", objRptRefundletter.TotalAmount.ToString("#,##0.00"))
+            .Replace("[PRName]", objRptRefundletter.PRName);
+          var footer = reportText[1].reText;
+
+          var crptRefundLetter = new Reports.RptRefundLetter();
+          crptRefundLetter.Database.Tables[0].SetDataSource(ObjectHelper.ObjectToList(objRptRefundletter));
+          crptRefundLetter.Database.Tables[1].SetDataSource(ObjectHelper.ObjectToList(new Classes.objReportText { Header = header, Footer = footer }));
+          crptRefundLetter.Subreports[0].SetDataSource(RptRefundLetter[1].Cast<RptRefundLetter_BookingDeposit>().ToList());
+
+          CrystalReportHelper.SetLanguage(crptRefundLetter, objRptRefundletter.gula);
+
+          //(crptRefundLetter.ReportDefinition.ReportObjects["txtHeader"] as FieldObject).ObjectFormat. = header;
+          //(crptRefundLetter.ReportDefinition.ReportObjects["txtFooter"] as FieldObject).Text = footer;
+
+          var frmReportViewer = new frmViewer(crptRefundLetter);
+          frmReportViewer.Show();
+        }
+      }
+      else
+        UIHelper.ShowMessage("Select a Refund from the list.");
     } 
     #endregion
   }

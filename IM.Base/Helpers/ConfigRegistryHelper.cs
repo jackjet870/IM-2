@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace IM.Base.Helpers
 {
-  public static class ConfigRegistry
+  public static class ConfigRegistryHelper
   {
     private const string ReportsPath = "ReportsPath";
 
@@ -72,8 +72,8 @@ namespace IM.Base.Helpers
     }
 
     #endregion
-
-
+            
+    #region GetReportsPath
     /// <summary>
     /// Obtiene la ruta de reportes
     /// </summary>
@@ -86,9 +86,25 @@ namespace IM.Base.Helpers
       string _reportsPath = null;
       if (ExistReportsPath())
       {
-        _reportsPath = (string) GetUrlConfigRegistry().GetValue(ReportsPath);
+        _reportsPath = (string)GetUrlConfigRegistry().GetValue(ReportsPath);
       }
       return _reportsPath;
     }
+    #endregion
+
+    #region GetConfiguredPrinter
+    /// <summary>
+    /// Obtiene la impresora configurada.
+    /// </summary>
+    /// <returns>string || NULL si la ruta no existe</returns>
+    /// <history>
+    ///   [edgrodriguez] 16/Jul/2016 Created
+    /// </history>
+    public static string GetConfiguredPrinter(string Printer)
+    {
+      var value = GetUrlConfigRegistry().GetValue(Printer);
+      return value?.ToString();
+    }
+    #endregion
   }
 }

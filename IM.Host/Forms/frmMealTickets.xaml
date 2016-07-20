@@ -45,7 +45,7 @@
         <Separator HorizontalAlignment="Left" Height="12" Margin="10,262,0,0" VerticalAlignment="Top" Width="845"/>
         <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="657,282,0,0" VerticalAlignment="Top" Width="75" Click="btnAdd_Click"/>
         <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="768,282,0,0" VerticalAlignment="Top" Width="75" Click="btnClose_Click"/>
-        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="40,282,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="40,282,0,0" VerticalAlignment="Top" Width="75" Click="btnPrint_Click"/>
         <CheckBox x:Name="chkTicket" Content="Con o Sin Ticket" HorizontalAlignment="Left" Margin="305,285,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
         <DataGrid x:Name="dgMealTicket" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,88,10,57" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" >
             <DataGrid.Resources>

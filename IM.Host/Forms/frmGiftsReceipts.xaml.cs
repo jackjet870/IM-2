@@ -2426,6 +2426,7 @@ namespace IM.Host.Forms
     /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [edgrodriguez] 12/Jul/2016 Modified. Se agrego el proceso de impresion del recibo de regalo.
     /// </history>
     private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
@@ -2445,15 +2446,25 @@ namespace IM.Host.Forms
 
         // actualizamos el motivo de reimpresion
         await BRReimpresionMotives.UpdateReimpresionMotive(Convert.ToInt32(txtgrID.Text), iMotive);
+        ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text));
       }
       else
       {
         // actualizamos el contador de reimpresion
         await BRReimpresionMotives.UpdateReimpresionNumber(Convert.ToInt32(txtgrID.Text));
+        ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text));
       }
 
       // guardamos el historico del recibos de regalos
       await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), App.User.User.peID);
+
+      if ((Convert.ToDecimal(txtgrCxCGifts.Text) + Convert.ToDecimal(txtgrCxCAdj.Text)) != 0 ||
+        Convert.ToDecimal(txtgrCxCPRDeposit.Text) > 0 || Convert.ToDecimal(txtgrCxCTaxiOut.Text) > 0)
+      {
+        ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text), true);
+
+      }
+
     }
     #endregion
 

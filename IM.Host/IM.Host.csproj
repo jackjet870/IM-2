@@ -44,6 +44,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -115,7 +121,10 @@
     <Compile Include="Classes\GiftsExchange.cs" />
     <Compile Include="Classes\GiftsReceiptsPacks.cs" />
     <Compile Include="Classes\GiftsReceiptsPayments.cs" />
+    <Compile Include="Classes\objMealTicketsIM.cs" />
+    <Compile Include="Classes\objRptGiftsReceiptIM.cs" />
     <Compile Include="Classes\ReceiptsGifts.cs" />
+    <Compile Include="Classes\RptDepositRefundIM.cs" />
     <Compile Include="Classes\SalesSalesmen.cs" />
     <Compile Include="Enums\enumMode.cs" />
     <Compile Include="Enums\EnumOpenBy.cs" />
@@ -168,10 +177,40 @@
     <Compile Include="Forms\frmSalesSalesmen.xaml.cs">
       <DependentUpon>frmSalesSalesmen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reports\RptBookingDeposits.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RptBookingDeposits.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\rptGiftsReceipt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptGiftsReceipt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\RptGiftsReceipt_Gifts.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RptGiftsReceipt_Gifts.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGiftsReceipt_ProductLegends.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGiftsReceipt_ProductLegends.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\RptMealTicket.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RptMealTicket.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\RptRefundLetter.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RptRefundLetter.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Forms\frmAddExchangeRate.xaml">
@@ -359,11 +398,34 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptBookingDeposits.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptBookingDeposits.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptGiftsReceipt.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptGiftsReceipt.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptGiftsReceipt_Gifts.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptGiftsReceipt_Gifts.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGiftsReceipt_ProductLegends.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGiftsReceipt_ProductLegends.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptMealTicket.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptMealTicket.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptRefundLetter.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptRefundLetter.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\IM.Host.Classes.objRptGiftsReceiptIM.datasource" />
+    <None Include="Properties\DataSources\IM.Host.Classes.objRptGiftsReceipt_GiftsIM.datasource" />
+    <None Include="Properties\DataSources\IM.Host.Classes.objRptGiftsReceipt_ProductLegendsIM.datasource" />
     <None Include="Properties\DataSources\IM.Host.Classes.SaleMan.datasource" />
     <None Include="Properties\DataSources\IM.Model.Agency.datasource" />
     <None Include="Properties\DataSources\IM.Model.BookingDeposit.datasource" />

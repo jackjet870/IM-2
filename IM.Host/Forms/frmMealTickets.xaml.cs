@@ -7,6 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model.Helpers;
+using System.Linq;
+using IM.Base.Helpers;
+using System.Collections.Generic;
 
 namespace IM.Host.Forms
 {
@@ -104,7 +107,7 @@ namespace IM.Host.Forms
           AdjustsControlsAndColumns();
           break;
       }
-    } 
+    }
     #endregion
 
     #region btnClose_Click
@@ -119,7 +122,7 @@ namespace IM.Host.Forms
     private void btnClose_Click(object sender, RoutedEventArgs e)
     {
       Close();
-    } 
+    }
     #endregion
 
     #region btnSearch_Click
@@ -163,7 +166,7 @@ namespace IM.Host.Forms
 
       // Realizamos la busqueda con los parametros ingresados!
       _dsMealTicket.Source = BRMealTickets.GetMealTickets(_mealTicket, _folio, _rateType, _dtpFrom, _dtpTo);
-    } 
+    }
     #endregion
 
     #region btnAdd_Click
@@ -230,7 +233,7 @@ namespace IM.Host.Forms
         }
 
       }
-    } 
+    }
     #endregion
 
     #region Row KeyDown
@@ -304,7 +307,7 @@ namespace IM.Host.Forms
           controlColumnVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Visible);
         }
       }
-    } 
+    }
     #endregion
 
     #region controlColumnVisibility
@@ -342,8 +345,63 @@ namespace IM.Host.Forms
       mepeColumn.Visibility = Visibility.Hidden;
       meagColumn.Visibility = Visibility.Hidden;
       merepColumn.Visibility = Visibility.Hidden;
-    } 
+    }
     #endregion
 
+    /// <summary>
+    /// Imprime el ticket de comida.
+    /// </summary>
+    ///  <history>
+    /// [edgrodriguez] 15/07/2016 Created
+    /// </history>
+    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    { 
+      (_dsMealTicket.Source as List<MealTicket>)
+        .Where(c => !c.mePrinted)
+        .ToList().ForEach(async c =>
+        {
+          var mT = await BRMealTicketFolios.GetMealTicket(c.meID, Convert.ToInt32(c.meFolios), $"{App.User.User.peID} - {App.User.User.peN}");
+          if (mT != null)
+          {
+            StringHelper.Items = new List<string>();
+            LanguageHelper.IDLanguage = mT.gula;
+            if (!string.IsNullOrEmpty(mT.raN))
+              StringHelper.Items.Add(mT.raN.PadCenter());
+            StringHelper.Items.Add($"{((char)27)}{((char)97)}1");//Centrado
+            StringHelper.Items.Add("PALACE ELITE");
+            StringHelper.Items.Add("VALE POR 1 BUFFET");
+            StringHelper.Items.Add(mT.myN);
+            StringHelper.Items.Add("\r\n");
+            StringHelper.Items.Add($"{((char)27)}{((char)97)}0");//Izquierda
+            if (!string.IsNullOrEmpty(mT.REFERENCE))
+            {
+              StringHelper.Items.Add(mT.REFERENCE);
+              StringHelper.Items.Add(mT.REFERENCENAME);
+            }
+            else
+            {
+              StringHelper.Items.Add($"Guest ID: {mT.guID}");
+              StringHelper.Items.Add($"{LanguageHelper.GetMessage("msgLblNameMT")}: { mT.Name}");
+            }
+            StringHelper.Items.Add($"{LanguageHelper.GetMessage("msgLblAdults")}: {mT.meAdults} {LanguageHelper.GetMessage("msgLblMinors")}: {mT.meMinors}");
+            StringHelper.Items.Add($"{LanguageHelper.GetMessage("msgLblDate")}: {mT.meD.ToShortDateString()}");
+            StringHelper.Items.Add($"{LanguageHelper.GetMessage("msgLblAuthorizedBy")}: {mT.Authorized}");
+            StringHelper.Items.Add($"SalesRoom: {mT.SalesRoomID} - {mT.SalesRoomName}");
+            StringHelper.Items.Add($"\r\n");
+            StringHelper.Items.Add($"{((char)27)}{((char)97)}2");//Derecha
+            StringHelper.Items.Add($"Folio: {mT.meFolio}");
+            StringHelper.Items.Add($"{((char)27)}{((char)97)}1");
+            StringHelper.Items.Add($"{LanguageHelper.GetMessage("msgLblDate")}: {DateTime.Today.ToString("dd/MM/yyyy h:mm:ss tt")}");
+            StringHelper.Items.Add("\r\n");
+            StringHelper.Items.Add($"{((char)29)}VB{((char)1)}");
+            if (PrinterHelper.SendStringToPrinter(StringHelper.ToTicketString()))
+            {
+              c.mePrinted = true;
+              BRMealTickets.UpdateMealTicket(c);
+              dgMealTicket.Items.Refresh();
+            }
+          }
+        });
+    }
   }
 }

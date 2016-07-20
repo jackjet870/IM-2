@@ -2,6 +2,7 @@
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
@@ -208,5 +209,54 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    public static async Task<int> SaveGiftReceiptAuthorized(GiftsReceipt giftsReceipt)
+    {
+      int nRes = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Entry(giftsReceipt).State = System.Data.Entity.EntityState.Modified;
+          return dbContext.SaveChanges();
+        }
+      });
+      return nRes;
+    }
+
+    #region getRptGiftsReceipt
+    /// <summary>
+    /// Obtiene la informacion para el repote GiftReceipt del Modulo Host.
+    /// </summary>
+    /// <param name="receiptID"> ID del recibo. </param>
+    /// <param name="isCharge"> 0. Si no es cargo.
+    ///  1. Si es cargo. </param>
+    /// <returns> List of IEnumerable </returns>
+    /// <history>
+    /// [edgrodriguez] 12/Jul/2016 Created
+    /// </history>
+    public static async Task<List<IEnumerable>> GetRptGiftsReceipt(int receiptID, bool isCharge = false)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var results = dbContext.USP_OR_RptGiftsReceipt(receiptID, isCharge);
+          if (isCharge)
+          {
+            return results
+            .MultipleResults()
+            .With<RptGiftsReceipt>()
+            .GetValues();
+          }
+          else
+            return results
+            .MultipleResults()
+            .With<RptGiftsReceipt>()
+            .With<RptGiftsReceipt_Gifts>()
+            .With<RptGiftsReceipt_ProductLegends>()
+            .GetValues();
+        }
+      });
+    } 
+    #endregion
   }
 }

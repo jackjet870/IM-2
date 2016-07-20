@@ -83,5 +83,17 @@ namespace IM.Base.Helpers
       }
       return list;
     }
+
+    /// <summary>
+    /// Devuelve el mensaje en el que se encuentra actualmente el CurrentUICulture segun el enumerado que esta recibiendo
+    /// </summary>
+    /// <param name="msg">Enumerado que desea que devuelva</param>
+    /// <history>
+    /// [edgrodriguez]  created  13/07/2016
+    /// </history>
+    public static string GetMessage(string field)
+    {
+      return ResLanguage.ResourceManager.GetString(field);
+    }
   }
 }

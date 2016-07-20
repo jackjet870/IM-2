@@ -1,4 +1,6 @@
-﻿using IM.Base.Helpers;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.ReportAppServer.Controllers;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Forms;
 using IM.Model;
@@ -6,6 +8,7 @@ using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -1477,5 +1480,48 @@ namespace IM.Host.Classes
     }
     #endregion
 
+    /// <summary>
+    /// Muestra en pantalla el Reporte del Recibo de regalo.
+    /// </summary>
+    /// <param name="receipID"></param>
+    /// <param name="isCharge"></param>
+    /// <history>
+    /// [edgrodriguez] 12/Jul/2016 Created
+    /// </history>
+    public static async void printReceiptGift(int receipID, bool isCharge = false)
+    {
+      var receipt = await BRGiftsReceipts.GetRptGiftsReceipt(receipID, isCharge);
+      var giftRcpt = (receipt[0] as List<RptGiftsReceipt>).Select(c => new objRptGiftsReceiptIM(c)).FirstOrDefault();
+      var giftRcpt_Gifts = (receipt.Any() && receipt.Count > 1) ? (receipt[1] as List<RptGiftsReceipt_Gifts>).Select(c => new objRptGiftsReceipt_GiftsIM(c)).ToList() : null;
+      var giftRcpt_ProdLegends = (receipt.Any() && receipt.Count > 1) ? (receipt[2] as List<RptGiftsReceipt_ProductLegends>).Select(c => new objRptGiftsReceipt_ProductLegendsIM(c)).ToList() : null;
+
+      var rptGiftReceipt = new Reports.rptGiftsReceipt();
+
+      rptGiftReceipt.Database.Tables[0].SetDataSource(IM.Model.Helpers.ObjectHelper.ObjectToList(giftRcpt));
+
+      if (!isCharge)
+      {
+        rptGiftReceipt.Subreports[0].SetDataSource(giftRcpt_Gifts);
+        rptGiftReceipt.Subreports[1].SetDataSource(giftRcpt_ProdLegends);
+      }
+
+      //Cambiamos el lenguaje de las etiquetas.
+      CrystalReportHelper.SetLanguage(rptGiftReceipt, giftRcpt.gula);
+
+      //Oculatamos la seccion de Charge
+      rptGiftReceipt.SetParameterValue("isCharge", isCharge);
+      //Cambiamos el titulo del reporte.Segun lenguaje o si es un cargo.
+      rptGiftReceipt.SetParameterValue("msgLblCoupon", ((isCharge) ? "Chargeback Voucher" : LanguageHelper.GetMessage(EnumMessage.msgLblCoupon)));
+
+      //Si es reimpresion reemplazamos los campos clave.
+      if (giftRcpt.grReimpresion > 1)
+      {
+        var msgReimpresion = LanguageHelper.GetMessage(EnumMessage.msglblReimpresion);
+        msgReimpresion = (string.IsNullOrEmpty(msgReimpresion)) ? "" : msgReimpresion.Replace("[grReimpresion]", giftRcpt.grReimpresion.ToString()).Replace("[rmN]", giftRcpt.rmN?.ToString() ?? "");
+        (rptGiftReceipt.ReportDefinition.ReportObjects["msglblReimpresion"] as TextObject).Text = msgReimpresion;
+      }
+
+      CrystalReportHelper.ShowReport(rptGiftReceipt, $"{((isCharge) ? "Chargeback Voucher" : "Gifts Receipt")} {giftRcpt.grID}", PrintDevice: EnumPrintDevice.pdPrinter);
+    }
   }
 }

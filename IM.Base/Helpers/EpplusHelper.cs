@@ -3030,7 +3030,7 @@ namespace IM.Base.Helpers
     {
       var suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
 
-      string outputDir = ConfigRegistry.GetReportsPath();
+      string outputDir = ConfigRegistryHelper.GetReportsPath();
       int count = 1;
 
       string fullPath = $@"{outputDir}\{suggestedName}.xlsx";

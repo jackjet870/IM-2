@@ -228,21 +228,13 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [lchairez] 05/Feb/2016 Created
+    /// [edgrodriguez] 16/Jul/2016 Modified. Se optimizo el codigo.
     /// </history>
     private void SelectedPrinterLoaded()
     {
-      RegistryKey configuration = ConfigRegistry.GetUrlConfigRegistry();
-
-      if (configuration == null)
-        return;
-      if (configuration.GetValue("PrintInvit") == null && configuration.GetValue("PrintMealTicket") == null)
-        return;
-
-      string printInvit = configuration.GetValue("PrintInvit").ToString();
-      string printMealTicket = configuration.GetValue("PrintMealTicket").ToString();
-
-      cmbPrinterInvitation.SelectedValue = printInvit;
-      cmbPrinterMeal.SelectedValue = printMealTicket;
+      RegistryKey configuration = ConfigRegistryHelper.GetUrlConfigRegistry();
+      cmbPrinterInvitation.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintInvit");
+      cmbPrinterMeal.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintMealTicket");
     }
     #endregion
 
@@ -255,7 +247,7 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadReportsPath()
     {
-      FileName = ConfigRegistry.GetReportsPath();
+      FileName = ConfigRegistryHelper.GetReportsPath();
      }
     #endregion
 

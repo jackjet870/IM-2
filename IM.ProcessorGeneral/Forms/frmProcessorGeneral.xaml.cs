@@ -93,7 +93,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptSalesRooms_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -112,7 +112,7 @@ namespace IM.ProcessorGeneral.Forms
     {
       if (e.Key != Key.Enter) return;
 
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -137,7 +137,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptLeadSource_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -158,7 +158,7 @@ namespace IM.ProcessorGeneral.Forms
     {
       if (e.Key != Key.Enter) return;
 
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -185,7 +185,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptGeneral_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -205,7 +205,7 @@ namespace IM.ProcessorGeneral.Forms
     {
       if (e.Key != Key.Enter) return;
 
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -283,7 +283,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintSR_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -302,7 +302,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintLS_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -322,7 +322,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintGral_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -1794,7 +1794,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
