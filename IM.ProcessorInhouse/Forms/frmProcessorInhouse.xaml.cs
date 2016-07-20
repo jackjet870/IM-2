@@ -155,7 +155,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdrptPR.CurrentItem)) PrepareReportByPR();
@@ -176,7 +176,7 @@ namespace IM.ProcessorInhouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
 
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
@@ -196,7 +196,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
 
       if (sender.Equals(btnPrintLS)) PrepareReportByLeadSource();
       else if (sender.Equals(btnPrintPR)) PrepareReportByPR();
@@ -216,7 +216,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
 
       _frmReportQueue.Show();
       if (_frmReportQueue.WindowState == WindowState.Minimized) _frmReportQueue.WindowState = WindowState.Normal;

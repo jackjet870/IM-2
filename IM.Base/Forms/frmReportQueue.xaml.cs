@@ -118,9 +118,9 @@ namespace IM.Base.Forms
     /// </history>
     private void BtnOpenFolder_OnClick(object sender, RoutedEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
+      if (ConfigRegistryHelper.ExistReportsPath())
       {
-        string outputDir = ConfigRegistry.GetReportsPath();
+        string outputDir = ConfigRegistryHelper.GetReportsPath();
         Process.Start(outputDir);
       }
       else

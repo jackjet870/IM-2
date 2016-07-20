@@ -655,7 +655,7 @@ namespace IM.ProcessorSales.Forms
     /// <param name="type">0 grid | 1 boton</param>
     private void LoadFilter(object obj, int type)
     {
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
 
       if (type == 0) //de Grid
       {
@@ -843,7 +843,7 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
 
       _frmReportQueue.Show();
       if (_frmReportQueue.WindowState == WindowState.Minimized) _frmReportQueue.WindowState = WindowState.Normal;

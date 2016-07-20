@@ -155,7 +155,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
           <Button x:Name="btnNew" Content="New" Margin="10,0" Width="50" Click="btnNew_Click" Height="20" VerticalAlignment="Top"/>
           <Button x:Name="btnSave" Content="Save" Margin="10,0" Width="50"/>
-          <Button x:Name="btnPrint" Content="Print" Margin="10,0" Width="50"/>
+          <Button x:Name="btnPrint" Content="Print" Margin="10,0" Width="50" Click="btnPrint_Click"/>
           <Button x:Name="btnCancel" Content="Cancel" Margin="10,0" Width="50" Click="btnCancel_Click"/>
           <Button x:Name="btnClose" Content="Close" Margin="10,0" Width="50" Click="btnClose_Click"/>
         </StackPanel>

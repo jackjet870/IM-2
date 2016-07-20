@@ -146,6 +146,7 @@
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRReimpresionMotives.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />
+    <Compile Include="BR\BRReportsTexts.cs" />
     <Compile Include="BR\BRRoles.cs" />
     <Compile Include="BR\BRRoomCharges.cs" />
     <Compile Include="BR\BRRoomTypes.cs" />

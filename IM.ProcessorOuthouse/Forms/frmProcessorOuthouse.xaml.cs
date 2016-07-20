@@ -1626,7 +1626,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -1680,7 +1680,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
@@ -1701,7 +1701,7 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-      else if (!ConfigRegistry.ExistReportsPath())
+      else if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
       }
