@@ -295,7 +295,7 @@
                     <DataTemplate>
                       <WrapPanel>
                         <Viewbox Width="16" Stretch="Uniform" >
-                          <Image Source="pack://application:,,,/IM.Host;component/Images/BGiftPack.png"/>
+                          <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
                         </Viewbox>
                         <TextBlock/>
                         <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>

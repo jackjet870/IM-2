@@ -66,7 +66,7 @@
             </Button>
             <Button x:Name="btnSales" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnSales_Click" >
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Host;component/Images/BGlobalSales.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Sales.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Global Sales" HorizontalAlignment="Center" />
               </StackPanel>
             </Button>
@@ -86,13 +86,13 @@
           </Button>-->
             <Button x:Name="btnMealTickets" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnMealTickets_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Host;component/Images/BMealTicket.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/MealTicket.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Meal Tickets" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
             <Button x:Name="btnGiftsReceipts" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnGiftsReceipts_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Host;component/Images/BGiftReceipt.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/GiftsReceipt.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Gifts Receipts" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
@@ -107,14 +107,14 @@
             <Button x:Name="btnDepositRefund" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnDepositRefund_Click" >
               <StackPanel>
                 <Viewbox Width="21" Stretch="Uniform" >
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BDepositRefund.png" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/DepositsRefund.png" HorizontalAlignment="Center"/>
                 </Viewbox>
                 <TextBlock Text="Deposits Refund" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
             <Button x:Name="btnCloseSalesRoom" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnCloseSalesRoom_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Host;component/Images/BCloseSalesRoom.png" Width="Auto" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Lock.png" Width="Auto" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Close Sales Room" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
@@ -171,25 +171,25 @@
             <StackPanel Orientation="Horizontal" Margin="3">
               <Button x:Name="btnTransfer" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnTransfer_Click" >
                 <StackPanel>
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BTransfer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Transfer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Transfer..." HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>
               <Button x:Name="btnInvitationOutside" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnInvitationOutside_Click" >
                 <StackPanel>
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BInvitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Invitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Out. Inv." HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>
               <Button x:Name="btnInvitationInhouse" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnInvitationInhouse_Click" >
                 <StackPanel>
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BInvitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Invitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Inh. Inv." HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>
               <Button x:Name="btnInvitationExternal" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnInvitationExternal_Click" >
                 <StackPanel>
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BInvitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Invitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Inh. Ext." HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>
@@ -199,7 +199,7 @@
             <StackPanel Orientation="Horizontal" Margin="3">
               <Button x:Name="btnGuests" HorizontalAlignment="Left" Margin="2" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnGuests_Click" >
                 <StackPanel>
-                  <Image Source="pack://application:,,,/IM.Host;component/Images/BSearchGuest.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/SearchGuest.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Guest Search" HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>

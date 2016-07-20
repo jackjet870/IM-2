@@ -24,7 +24,7 @@
         <!--#region Gift-->
         <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2" VerticalAlignment="Center">
           <Viewbox Width="16" Stretch="Uniform" >
-            <Image Source="pack://application:,,,/IM.Host;component/Images/BGiftPack.png"/>
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
           </Viewbox>
           <TextBlock  Text="{Binding giID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
         </StackPanel>
@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
                   <Viewbox Grid.Column="0" Width="16" Stretch="Uniform">
-                    <Image Source="pack://application:,,,/IM.Host;component/Images/BGift.png"/>
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BGift.png"/>
                   </Viewbox>
                   <TextBlock  Text="{Binding}" FontWeight="Bold" TextAlignment="Justify" VerticalAlignment="Center" FontSize="9" Grid.Column="1"/>
                 </Grid>
@@ -70,7 +70,7 @@
         <!--#region Gift-->
         <StackPanel Margin="5" VerticalAlignment="Center" Orientation="Horizontal">
           <Viewbox Width="16" Stretch="Uniform" >
-            <Image Source="pack://application:,,,/IM.Host;component/Images/BGiftPack.png"/>
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
           </Viewbox>
           <TextBlock  Text="{Binding giN}" FontWeight="Bold" TextAlignment="Justify" FontSize="10" />
         </StackPanel>
