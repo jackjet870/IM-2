@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add("frmComputers", "Computers", "Computer.png");
         lstMenu.Add("frmConfigurationDetails", "Configuration", "Configuration.ico");
-        lstMenu.Add("frmDesks", "Desks", "desk.png");
+        lstMenu.Add("frmDesks", "Desks", "Desk.png");
         lstMenu.Add("frmCloseInvitation", "Close Invitation", "DateTime_Forbidden.png");
         lstMenu.Add("frmMealTicketsTypes", "Meal Ticket Types", "Cofee.png");
         lstMenu.Add("frmMembershipTypes", "Membership Types", "Member.ico");

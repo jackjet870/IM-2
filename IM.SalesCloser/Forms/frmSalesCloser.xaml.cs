@@ -123,6 +123,7 @@ namespace IM.SalesCloser.Forms
     private void imgButtonAbout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       frmAbout formAbout = new frmAbout();
+      formAbout.Owner = this;
       formAbout.ShowDialog();
     }
     /// <summary>

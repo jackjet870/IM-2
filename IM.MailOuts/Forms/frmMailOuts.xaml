@@ -49,7 +49,7 @@
                 <StackPanel x:Name="grdOpciones" Orientation="Horizontal">
                     <Button x:Name="btnReload" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Click="btnReload_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" Width="24" Height="24" HorizontalAlignment="Center" />
                             <TextBlock Text="Reload" />
                         </StackPanel>
                     </Button>
@@ -65,15 +65,9 @@
                             <TextBlock Text="Preview" />
                         </StackPanel>
                     </Button>
-                    <!--<Button x:Name="btnLayout" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Background="White">
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Layout.png" Width="24" Height="24" HorizontalAlignment="Center" />
-                            <TextBlock Text="Layouts" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Button>-->
                     <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnAbout_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center" />
                             <TextBlock Text="About" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
@@ -94,19 +88,16 @@
                     <StackPanel>
                         <Button x:Name="btnAssign" Margin="5,5,0,0" VerticalAlignment="Top" Width="80" Background="White" Click="btnAssign_Click">
                             <StackPanel Orientation="Horizontal">
-                                <!--<Image Source="Images/About.png"  HorizontalAlignment="Left" Height="12" ></Image>-->
                                 <TextBlock Text="Assign" HorizontalAlignment="Right" />
                             </StackPanel>
                         </Button>
                         <Button x:Name="btnClearAll" Margin="5,3,0,0" VerticalAlignment="Top" Width="80" Background="White" Click="btnClearAll_Click">
                             <StackPanel Orientation="Horizontal">
-                                <!--<Image Source="Images/About.png" Height="12" HorizontalAlignment="Left" ></Image>-->
                                 <TextBlock Text="Clear all" HorizontalAlignment="Right" />
                             </StackPanel>
                         </Button>
                         <Button x:Name="btnClear" Margin="5,3,0,0" VerticalAlignment="Top"  Background="White" Click="btnClear_Click">
                             <StackPanel Orientation="Horizontal">
-                                <!--<Image Source="Images/About.png" HorizontalAlignment="Left" Height="12"  />-->
                                 <TextBlock Text="Clear" HorizontalAlignment="Left" />
                             </StackPanel>
                         </Button>
@@ -125,7 +116,7 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Base;component/Images/User.png" Width="48" Height="48" />
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Styles;component/Images/User.png" Width="48" Height="48" />
                     <TextBlock Grid.Column="1" Grid.Row="0" x:Name="txtUser" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Width="220"><Run Text="NOMBRE DEL USUARIO" /></TextBlock>
                     <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtLocation" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="NOMBRE LOCACION" /></TextBlock>
                 </Grid>
@@ -218,7 +209,7 @@
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Hidden" />
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Hidden" />
                     <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                 </StackPanel>
             </StatusBarItem>

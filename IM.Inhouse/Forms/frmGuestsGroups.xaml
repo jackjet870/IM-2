@@ -138,15 +138,6 @@
                     <DataGrid x:Name="dtgGuestGroupIntegrants" CanUserAddRows="True"  AutoGenerateColumns="False"
                               Margin="0,0,0,0" DataContext="{Binding lstGuest}" >
                         <DataGrid.Columns>
-                            <!--<DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        Click=""
-                                        <Image x:Name="btnAddGuest" Source="pack://application:,,,/IM.Base;component/Images/Find.png" Width="10" Height="10" Visibility="Hidden">                                            
-                                        </Image>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>-->
                             <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="ID" Binding="{Binding guID}" IsReadOnly="True" />
                             <DataGridTextColumn x:Name="guLastName1Column" Width="1*" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
                             <DataGridTextColumn x:Name="guFirstName1Column" Width="1*" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
@@ -166,7 +157,7 @@
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnAddGuest" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}" Click="btnAddGuest_Click" Visibility="Collapsed" >
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" >
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Find.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Find.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Find Guest" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -214,7 +205,7 @@
                 <Separator />
                 <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
                         <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                     </StackPanel>
                 </StatusBarItem>

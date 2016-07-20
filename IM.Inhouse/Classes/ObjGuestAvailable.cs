@@ -29,11 +29,11 @@ namespace IM.Inhouse.Classes
     }
     public string SourceImage
     {
-      get { return (guPRNote ? "pack://application:,,,/IM.Base;component/Images/Note.ico" : string.Empty); }
+      get { return (guPRNote ? "pack://application:,,,/IM.Styles;component/Images/Note.ico" : string.Empty); }
     }
     public string EquityColumn
     {
-      get { return (string.IsNullOrEmpty(guMembershipNum) ? string.Empty : "pack://application:,,,/IM.Base;component/Images/Reporte.ico"); }
+      get { return (string.IsNullOrEmpty(guMembershipNum) ? string.Empty : "pack://application:,,,/IM.Styles;component/Images/Report.ico"); }
     }
   }
 }

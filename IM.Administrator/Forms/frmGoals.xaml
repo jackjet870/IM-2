@@ -14,7 +14,7 @@
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="3" x:Name="status" HorizontalAlignment="Center" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="16" Width="16" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="16" Width="16" />
                     <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                 </StackPanel>
             </StatusBarItem>
@@ -25,13 +25,13 @@
         <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
             <Button ToolTip="Save changes." Name="btnSave" Click="btnSave_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Add.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Save"/>
                 </StackPanel>
             </Button>
             <Button ToolTip="Show and Edit." Name="btnShow" IsEnabled="True" Click="btnShow_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnEdit.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Edit.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Show"/>
                 </StackPanel>
             </Button>

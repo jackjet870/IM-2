@@ -14,7 +14,7 @@
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="3" x:Name="status" HorizontalAlignment="Center" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="16" Width="16" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="16" Width="16" />
                     <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                 </StackPanel>
             </StatusBarItem>
@@ -25,31 +25,31 @@
         <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
             <Button ToolTip="Edit." Name="btnEdit" Click="btnEdit_Click">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnedit.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Edit.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Edit"/>
                 </StackPanel>
             </Button>
             <Button ToolTip="Save changes." Name="btnSave" IsEnabled="False" Click="btnSave_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/disk.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Save.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Save"/>
                 </StackPanel>
             </Button>
             <Button Name="btnUp" ToolTip="Up." IsEnabled="False" Click="btnUp_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/up.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Up.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Up"/>
                 </StackPanel>
             </Button>
             <Button Name="btnDown" ToolTip="Down." IsEnabled="False" Click="btnDown_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Down.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Down.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Down"/>
                 </StackPanel>
             </Button>
             <Button Name="btnCancel" ToolTip="Cancel." IsEnabled="False" Click="btnCancel_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/button_cancel.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Cancel.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Cancel"/>
                 </StackPanel>
             </Button>

@@ -236,17 +236,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\About.png" />
-    <Resource Include="Images\Date.png" />
-    <Resource Include="Images\IM.png" />
-    <Resource Include="Images\Layout.png" />
-    <Resource Include="Images\Login.png" />
-    <Resource Include="Images\Preview.png" />
-    <Resource Include="Images\Refresh.png" />
-    <Resource Include="Images\Report.png" />
-    <Resource Include="Images\User.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Forms\frmAssistance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -335,25 +324,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Time.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\btnEdit.png" />
-    <Resource Include="Images\btnSearch.png" />
-    <Resource Include="Images\button_add.png" />
-    <Resource Include="Images\button_cancel.png" />
-    <Resource Include="Images\button_delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\DaysOff.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Link.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitAdditionalGuest.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitBookingDeposit.datasource" />
@@ -367,26 +337,6 @@
     <None Include="Properties\DataSources\IM.Model.GuestStatusType.datasource" />
     <None Include="Properties\DataSources\IM.Model.PaymentPlace.datasource" />
     <None Include="Properties\DataSources\IM.Model.PaymentType.datasource" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\CloseSalesRoom.png" />
-    <Resource Include="Images\ExchangeRate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Note.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Down.png" />
-    <Resource Include="Images\Up.png" />
-    <Resource Include="Images\Find.png" />
-    <Resource Include="Images\Change.ico" />
-    <Resource Include="Images\Search.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Reporte.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Nota.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language\ResLanguage.resx">
@@ -430,15 +380,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\sort.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\disk.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Pay.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

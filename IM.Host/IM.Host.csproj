@@ -159,9 +159,6 @@
     <Compile Include="Forms\frmSearchGeneral.xaml.cs">
       <DependentUpon>frmSearchGeneral.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmSearchSelfGen.xaml.cs">
-      <DependentUpon>frmSearchSelfGen.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
@@ -315,10 +312,6 @@
     <Page Include="Forms\frmSearchGeneral.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmSearchSelfGen.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\frmSalesSalesmen.xaml">
       <SubType>Designer</SubType>

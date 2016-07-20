@@ -28,7 +28,7 @@
         <!--#region  Botones-->
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,0,6" HorizontalAlignment="Left">
-                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>

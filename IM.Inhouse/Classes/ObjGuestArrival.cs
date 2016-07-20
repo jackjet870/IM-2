@@ -34,16 +34,16 @@ namespace IM.Inhouse.Classes
     //Atributo que se utiliza cuando se cargan el DataGrid y me  agrega la imagen si la guPRNote esta en verdadero 
     public string SourceImage
     {
-      get { return (guPRNote ? "pack://application:,,,/IM.Base;component/Images/Nota.ico" : string.Empty); }
+      get { return (guPRNote ? "pack://application:,,,/IM.Styles;component/Images/Note.ico" : string.Empty); }
     }
 
     public string EquityColumn
     {
-      get { return (string.IsNullOrEmpty(guMembershipNum)? string.Empty:"pack://application:,,,/IM.Base;component/Images/Reporte.ico" ); }
+      get { return (string.IsNullOrEmpty(guMembershipNum)? string.Empty:"pack://application:,,,/IM.Styles;component/Images/Report.ico" ); }
     }
     public string ReservacionImage
     {
-      get { return (string.IsNullOrEmpty(guHReservID) ? string.Empty : "pack://application:,,,/IM.Base;component/Images/Reporte.ico"); }
+      get { return (string.IsNullOrEmpty(guHReservID) ? string.Empty : "pack://application:,,,/IM.Base;component/Images/Report.ico"); }
     }
   }
 }

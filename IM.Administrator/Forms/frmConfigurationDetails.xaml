@@ -51,7 +51,7 @@
         </Grid>
         <!--#region Botones-->
         <StackPanel Name="skpStatus" HorizontalAlignment="Left" Height="29" Margin="10,3,0,0" Visibility="Visible" VerticalAlignment="Top" Width="71" Grid.Row="1">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>
         <Button x:Name="btnAccept" Content="_Accept" HorizontalAlignment="Left" Margin="438,3,0,0" Grid.Row="1" VerticalAlignment="Top" Width="60" Height="30" Visibility="Hidden" Click="btnAccept_Click"/>

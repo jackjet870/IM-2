@@ -60,7 +60,7 @@
           <StackPanel Orientation="Horizontal" x:Name="grdOpciones" VerticalAlignment="Top">
             <Button x:Name="btnExchangeRate" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnExchangeRate_Click" >
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Base;component/Images/ExchangeRate.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/ExchangeRate.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Exchange Rate" HorizontalAlignment="Center" />
               </StackPanel>
             </Button>
@@ -70,12 +70,6 @@
                 <TextBlock Text="Global Sales" HorizontalAlignment="Center" />
               </StackPanel>
             </Button>
-            <!--<Button x:Name="btnExcel" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnExcel_Click" >
-            <StackPanel>
-              <Image Source="pack://application:,,,/IM.Base;component/Images/ExchangeRate.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-              <TextBlock Text="Excel" HorizontalAlignment="Center" />
-            </StackPanel>
-          </Button>-->
             <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnExcel_Click">
               <StackPanel>
                 <Viewbox Width="24" Stretch="Uniform" >
@@ -105,7 +99,7 @@
             <Button x:Name="btnCxCAuthorization" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnCxCAuthorization_Click" >
               <StackPanel>
                 <Viewbox Width="20" Stretch="Uniform">
-                  <Image Source="pack://application:,,,/IM.Base;component/Images/Pay.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Pay.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
                 </Viewbox>
                 <TextBlock Text="CxC Auth." HorizontalAlignment="Center"/>
               </StackPanel>
@@ -132,19 +126,19 @@
             </Button>
             <Button x:Name="btnDaysOff" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnDaysOff_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/DaysOff.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Days Off" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
             <Button x:Name="btnReports" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnReport_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Base;component/Images/Report.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Reports" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
             <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnAbout_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="About" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
@@ -160,7 +154,7 @@
               <RowDefinition/>
               <RowDefinition/>
             </Grid.RowDefinitions>
-            <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Base;component/Images/User.png" Width="48" Height="48"/>
+            <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Styles;component/Images/User.png" Width="48" Height="48"/>
             <TextBlock Grid.Column="1" Grid.Row="0" x:Name="txtUser" Text="USER NAME" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Width="220"/>
             <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtSalesRoom" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="NOMBRE SALES ROOM"/></TextBlock>
 
@@ -216,7 +210,7 @@
         <!--#region Fila 2 Columna 3-->
         <Button x:Name="btnLogin" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,80,0" VerticalAlignment="Center" Width="88" Background="White" Click="btnLogin_Click">
           <StackPanel Orientation="Horizontal">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/Login.png" Width="24" Height="24" HorizontalAlignment="Center"/>
             <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" FontWeight="Bold"/>
           </StackPanel>
         </Button>

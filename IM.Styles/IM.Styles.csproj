@@ -308,7 +308,6 @@
   <ItemGroup>
     <Resource Include="Images\Computer.png" />
     <Resource Include="Images\Configuration.ico" />
-    <Resource Include="Images\desk.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Cofee.png" />
@@ -344,6 +343,84 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\PR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\About.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Desk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Change.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DaysOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Search.png" />
+    <Resource Include="Images\Time.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ExchangeRate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Details.ico" />
+    <Resource Include="Images\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Note.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Pay.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Report.ico" />
+    <Resource Include="Images\Reports.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\User.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

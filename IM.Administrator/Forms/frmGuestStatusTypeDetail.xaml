@@ -42,7 +42,7 @@
         <CheckBox Name="chkAllTour" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding gsAllowTourDisc}" Height="13" IsEnabled="False">Allow discount tour </CheckBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Name="skpStatus" Visibility="Collapsed" Margin="0,0,0,7" HorizontalAlignment="Left">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Saving Data..."/>
         </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>

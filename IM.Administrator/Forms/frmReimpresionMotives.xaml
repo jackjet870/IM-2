@@ -14,7 +14,7 @@
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="3" x:Name="status" HorizontalAlignment="Center" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="16" Width="16" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="16" Width="16" />
                     <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                 </StackPanel>
             </StatusBarItem>
@@ -25,19 +25,19 @@
         <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
             <Button ToolTip="Refresh list" Name="btnRef" Click="btnRef_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
             <Button ToolTip="Create new Reimpresion Motive" Name="btnAdd" Click="btnAdd_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Add.png" />
                     <AccessText Text="_Add" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <Button Name="btnSearch" ToolTip="Search Reimpresion Motives" Click="btnSearch_Click" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Search"/>
                 </StackPanel>
             </Button>

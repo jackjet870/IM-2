@@ -45,7 +45,7 @@
         <CheckBox Name="chkFly" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Center" IsChecked="{Binding loFlyers}"  Height="13" IsEnabled="False">Flyers</CheckBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,0,0,7" HorizontalAlignment="Left">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="8" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>

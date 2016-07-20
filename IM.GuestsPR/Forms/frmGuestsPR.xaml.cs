@@ -98,6 +98,7 @@ namespace IM.GuestsPR.Forms
     private void imgButtonAbout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var formAbout = new frmAbout();
+      formAbout.Owner = this;
       formAbout.ShowDialog();
     }
     /// <summary>

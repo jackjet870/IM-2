@@ -69,7 +69,7 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="25" Grid.Column="2" Click="btnAbout_Click">
           <StackPanel Orientation="Horizontal">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/about.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="15" Height="15" HorizontalAlignment="Left"/>
             <TextBlock Text="About" HorizontalAlignment="Right"/>
           </StackPanel>
         </Button>

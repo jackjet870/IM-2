@@ -33,7 +33,7 @@
         <ComboBox Name="cmbDesk" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="dkN" SelectedValuePath="dkID" SelectedValue="{Binding cpdk}"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,0,5" HorizontalAlignment="Left">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>

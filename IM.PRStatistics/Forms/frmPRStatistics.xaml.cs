@@ -131,6 +131,7 @@ namespace IM.PRStatistics.Forms
     private void imgButtonAbout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       frmAbout frmAbout = new frmAbout();
+      frmAbout.Owner = this;
       frmAbout.ShowDialog();
     }
     /// <summary>

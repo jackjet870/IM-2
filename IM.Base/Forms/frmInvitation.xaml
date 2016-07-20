@@ -699,7 +699,7 @@
                                                     <DataGridTemplateColumn Header="Search" Width="55">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Image Name="imgSearchGuest" Source="../Images/Search.ico"  Height="15"  />
+                                                                <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15"  />
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
                                                     </DataGridTemplateColumn>
@@ -709,7 +709,7 @@
                                                     <DataGridTemplateColumn Width="55">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Image Name="imgDetails" Source="../Images/Layout.png"  Height="15" />
+                                                                <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
                                                     </DataGridTemplateColumn>
@@ -756,7 +756,7 @@
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
                     <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>
             </StatusBarItem>

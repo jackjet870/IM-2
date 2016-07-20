@@ -80,13 +80,13 @@
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnRefresh" Grid.Column="1" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnRefresh_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Refresh" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -104,7 +104,7 @@
                     </Button>
                     <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=BtnOptions}" Click="btnAbout_Click" HorizontalAlignment="Right" Width="46">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="About" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -116,7 +116,7 @@
                     </Button>
                     <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnDaysOff_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
@@ -160,7 +160,7 @@
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
                 <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" >
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/IM.Base;component/Images/Search.ico" Width="20" />
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.ico" Width="20" />
                         <TextBlock Text="Search Guest" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
@@ -234,7 +234,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Base;component/Images/User.png" Width="37" Height="50"/>
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Styles;component/Images/User.png" Width="37" Height="50"/>
                     <TextBlock Grid.Column="1" Grid.Row="0" x:Name="txtUser" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">USUARIO</TextBlock>
                     <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtLocation" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">NOMBRE LOCACION</TextBlock>
                     <TextBlock Grid.Column="1" Grid.Row="2" x:Name="txtOccupancy" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">OCCUPANCY 0:00%</TextBlock>
@@ -868,7 +868,7 @@
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0" >
                 <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="17"  Visibility="Hidden" />
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="17"  Visibility="Hidden" />
                     <TextBlock x:Name="lblStatusBarMessage"  FontSize="12" VerticalAlignment="Center" Margin="12,0,0,0" />
                 </StackPanel>
             </StatusBarItem>

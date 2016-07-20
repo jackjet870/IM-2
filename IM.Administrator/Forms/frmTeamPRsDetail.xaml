@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" Closing="Window_Closing" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        mc:Ignorable="d"  WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.png" ResizeMode="CanResize"
+        mc:Ignorable="d"  WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
         Title="Team PR's Detail" Height="707" Width="690" DataContext="{Binding team}" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2">
         <Grid.RowDefinitions>
@@ -93,7 +93,7 @@
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="3" x:Name="status" Visibility="Visible">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="16" Width="16" />
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="16" Width="16" />
                     <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                 </StackPanel>
             </StatusBarItem>

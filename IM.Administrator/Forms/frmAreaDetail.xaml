@@ -32,7 +32,7 @@
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Name="skpStatus" Visibility="Hidden" Margin="0,0,0,7" HorizontalAlignment="Left">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />

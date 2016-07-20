@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="15*"/>
             </Grid.ColumnDefinitions>
             <ComboBox Name="cmbCalTyp" Grid.Column="0" Height="27" VerticalAlignment="Top" DisplayMemberPath="caN" SelectedValuePath="caID" SelectedValue="{Binding ctCalcType}" IsEnabled="False"/>
-            <Image Height="27" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Top" Source="pack://application:,,,/IM.Base;component/Images/About.png" ToolTipService.ShowDuration="60000">
+            <Image Height="27" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Top" Source="pack://application:,,,/IM.Styles;component/Images/About.png" ToolTipService.ShowDuration="60000">
                 <Image.ToolTip>
                     <StackPanel Width="250">
                         <TextBlock FontWeight="Bold" FontSize="14">Calculation types</TextBlock>                        

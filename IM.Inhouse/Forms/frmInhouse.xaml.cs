@@ -1609,7 +1609,7 @@ namespace IM.Inhouse.Forms
     private void btnAbout_Click(object sender, RoutedEventArgs e)
     {
       frmAbout formAbout = new frmAbout();
-      formAbout.ShowInTaskbar = false;
+      formAbout.Owner = this;
       formAbout.ShowDialog();
     }
 

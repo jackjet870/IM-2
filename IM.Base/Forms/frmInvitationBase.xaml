@@ -63,7 +63,7 @@
                                         <ColumnDefinition Width="40"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Width="32" Source="../Images/User.png" Margin="2"/>
+                                    <Image Grid.Column="0" Width="32" Source="pack://application:,,,/IM.Styles;component/Images/User.png" Margin="2"/>
                                     <Label Grid.Column="1" Name="lblUser" VerticalAlignment="Center" Foreground="Black" FontWeight="Bold"/>
                                 </Grid>
                             </GroupBox>
@@ -710,7 +710,7 @@
                                 <DataGridTemplateColumn Header="Search" Width="55">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Name="imgSearchGuest" Source="../Images/Search.ico"  Height="15" MouseLeftButtonDown="imgSearchGuest_MouseLeftButtonDown" />
+                                            <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15" MouseLeftButtonDown="imgSearchGuest_MouseLeftButtonDown" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -720,7 +720,7 @@
                                 <DataGridTemplateColumn Width="55">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Name="imgDetails" Source="../Images/Layout.png"  Height="15" MouseLeftButtonDown="imgDetails_MouseLeftButtonDown" />
+                                            <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" MouseLeftButtonDown="imgDetails_MouseLeftButtonDown" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
