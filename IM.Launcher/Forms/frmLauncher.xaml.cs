@@ -251,7 +251,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.InvitConfig.exe", path));
           break;
         case EnumMenu.SystemConfig:
-          var system = new SystemCfg();
+          var system = new frmSystemCfg();
           system.Owner = this;
           system.ShowDialog();
           break;

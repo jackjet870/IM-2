@@ -16,7 +16,7 @@ namespace IM.Base.Forms
   /// [lchairez] 05/Feb/2016 Created
   /// [vku] 06/Jun/2016 Modified. Renombre el formulario a SystemCfg
   /// </history>
-  public partial class SystemCfg : Window
+  public partial class frmSystemCfg : Window
   {
 
     #region Atributo
@@ -30,7 +30,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region Constructor
-    public SystemCfg(
+    public frmSystemCfg(
       EnumConfiguration enumConfiguration = EnumConfiguration.None
       )
     {

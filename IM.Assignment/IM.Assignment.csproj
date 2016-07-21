@@ -81,6 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\clsFormatTable.cs" />
+    <Compile Include="Classes\clsReports.cs" />
     <Compile Include="Forms\frmAssignment.xaml.cs">
       <DependentUpon>frmAssignment.xaml</DependentUpon>
       <SubType>Code</SubType>
