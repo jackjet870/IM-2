@@ -78,7 +78,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <CheckBox x:Name="chkMonday" Content="Monday" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                        <CheckBox x:Name="chkTuestday" Content="Tuestday" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkTuestday" Content="Tuesday" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkWednesday" Content="Wednesday" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkThursday" Content="Thursday" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkFriday" Content="Friday" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
@@ -99,7 +99,7 @@
                     <Button x:Name="btnShow" Content="Show" Grid.Column="0" Click="btnShow_Click" Height="40" VerticalAlignment="Top" />
                     <Button x:Name="btnEdit" Content="Edit" Grid.Column="2" IsEnabled="False" Click="btnEdit_Click"/>
                     <Button x:Name="btnSave" Content="Save" Grid.Column="3" IsEnabled="False" Click="btnSave_Click"/>
-                    <Button x:Name="btnCalcel" Content="Calcel" Grid.Column="4" IsEnabled="False" Click="btnCalcel_Click"/>
+                    <Button x:Name="btnCalcel" Content="Cancel" Grid.Column="4" IsEnabled="False" Click="btnCalcel_Click"/>
                 </Grid>
                 <!--#endregion Buttons-->
             </Grid>
