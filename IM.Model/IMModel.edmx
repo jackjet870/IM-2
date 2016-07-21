@@ -1616,6 +1616,14 @@
           <Property Name="rcfN" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="rcfA" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="RefundTypeFolios">
+          <Key>
+            <PropertyRef Name="rtfrf" />
+            <PropertyRef Name="rtfFolio" />
+          </Key>
+          <Property Name="rtfrf" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="rtfFolio" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="RefundTypes">
           <Key>
             <PropertyRef Name="rfID" />
@@ -4695,6 +4703,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RefundTypeFolios_RefundTypes">
+          <End Role="RefundTypes" Type="Self.RefundTypes" Multiplicity="1" />
+          <End Role="RefundTypeFolios" Type="Self.RefundTypeFolios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RefundTypes">
+              <PropertyRef Name="rfID" />
+            </Principal>
+            <Dependent Role="RefundTypeFolios">
+              <PropertyRef Name="rtfrf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ReportsTexts_Languages">
           <End Role="Languages" Type="Self.Languages" Multiplicity="1" />
           <End Role="ReportsTexts" Type="Self.ReportsTexts" Multiplicity="*" />
@@ -6031,6 +6051,17 @@
           <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
           <Parameter Name="Segments" Type="varchar" Mode="In" />
           <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeAllSalesmen" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptStatisticsByFTB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+          <Parameter Name="Segments" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="ByLocations" Type="bit" Mode="In" />
+          <Parameter Name="ByLocationsCategories" Type="bit" Mode="In" />
           <Parameter Name="IncludeAllSalesmen" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_IM_RptStatisticsBySegments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -7688,6 +7719,7 @@
           <EntitySet Name="Programs" EntityType="Self.Programs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RateTypes" EntityType="Self.RateTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReasonCancellationFolios" EntityType="Self.ReasonCancellationFolios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RefundTypeFolios" EntityType="Self.RefundTypeFolios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Regions" EntityType="Self.Regions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReimpresionMotives" EntityType="Self.ReimpresionMotives" Schema="dbo" store:Type="Tables" />
@@ -8570,6 +8602,10 @@
           <AssociationSet Name="FK_ProductsLegends_Products" Association="Self.FK_ProductsLegends_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductsLegends" EntitySet="ProductsLegends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RefundTypeFolios_RefundTypes" Association="Self.FK_RefundTypeFolios_RefundTypes">
+            <End Role="RefundTypes" EntitySet="RefundTypes" />
+            <End Role="RefundTypeFolios" EntitySet="RefundTypeFolios" />
           </AssociationSet>
           <AssociationSet Name="FK_ReportsTexts_Languages" Association="Self.FK_ReportsTexts_Languages">
             <End Role="Languages" EntitySet="Languages" />
@@ -10885,6 +10921,7 @@
           <Property Name="rfN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="rfA" Type="Boolean" />
           <NavigationProperty Name="DepositsRefunds" Relationship="Self.fk_drrf" FromRole="RefundTypes" ToRole="DepositsRefund" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="RefundTypeFolios" Relationship="IMModel.FK_RefundTypeFolios_RefundTypes" FromRole="RefundType" ToRole="RefundTypeFolio" />
         </EntityType>
         <EntityType Name="Region">
           <Key>
@@ -17988,6 +18025,22 @@
             <Parameter Name="HoursDif" Mode="In" Type="Int16" />
             <Parameter Name="ChangedBy" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="RefundTypesFolios" EntityType="IMModel.RefundTypeFolio" />
+          <AssociationSet Name="FK_RefundTypeFolios_RefundTypes" Association="IMModel.FK_RefundTypeFolios_RefundTypes">
+            <End Role="RefundType" EntitySet="RefundTypes" />
+            <End Role="RefundTypeFolio" EntitySet="RefundTypesFolios" />
+          </AssociationSet>
+          <FunctionImport Name="USP_IM_RptStatisticsByFTB" ReturnType="Collection(IMModel.RptStatisticsByFTB)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+            <Parameter Name="Segments" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="ByLocations" Mode="In" Type="Boolean" />
+            <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
+            <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22687,6 +22740,47 @@
           <Property Type="String" Name="raN" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="REFERENCE" Nullable="false" MaxLength="138" />
           <Property Type="String" Name="REFERENCENAME" Nullable="false" MaxLength="60" />
+        </ComplexType>
+        <EntityType Name="RefundTypeFolio">
+          <Key>
+            <PropertyRef Name="rtfrf" />
+            <PropertyRef Name="rtfFolio" />
+          </Key>
+          <Property Name="rtfrf" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="rtfFolio" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RefundType" Relationship="IMModel.FK_RefundTypeFolios_RefundTypes" FromRole="RefundTypeFolio" ToRole="RefundType" />
+        </EntityType>
+        <Association Name="FK_RefundTypeFolios_RefundTypes">
+          <End Type="IMModel.RefundType" Role="RefundType" Multiplicity="1" />
+          <End Type="IMModel.RefundTypeFolio" Role="RefundTypeFolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RefundType">
+              <PropertyRef Name="rfID" />
+            </Principal>
+            <Dependent Role="RefundTypeFolio">
+              <PropertyRef Name="rtfrf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="RptStatisticsByFTB">
+          <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Locations" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="SalemanTypeN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PostName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="OPP" Nullable="true" />
+          <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesRegular" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30591,6 +30685,38 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_SaveGiftLog" FunctionName="IMModel.Store.USP_OR_SaveGiftLog" />
+          <EntitySetMapping Name="RefundTypesFolios">
+            <EntityTypeMapping TypeName="IMModel.RefundTypeFolio">
+              <MappingFragment StoreEntitySet="RefundTypeFolios">
+                <ScalarProperty Name="rtfFolio" ColumnName="rtfFolio" />
+                <ScalarProperty Name="rtfrf" ColumnName="rtfrf" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptStatisticsByFTB" FunctionName="IMModel.Store.USP_IM_RptStatisticsByFTB" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptStatisticsByFTB">
+                <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
+                <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
+                <ScalarProperty Name="Locations" ColumnName="Locations" />
+                <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />
+                <ScalarProperty Name="SalemanTypeN" ColumnName="SalemanTypeN" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
+                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
+                <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="OPP" ColumnName="OPP" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="SalesRegular" ColumnName="SalesRegular" />
+                <ScalarProperty Name="SalesExit" ColumnName="SalesExit" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
