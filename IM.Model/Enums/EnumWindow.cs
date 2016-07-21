@@ -11,6 +11,7 @@
     FoliosCxC,
     FoliosInvitationOuthouse,
     MealTicketTypes,
-    DefaultByte
+    DefaultByte,
+    TeamsPRs
   }
 }

@@ -182,6 +182,7 @@ namespace IM.Model
         public virtual DbSet<Zone> Zones { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
+        public virtual DbSet<RefundTypeFolio> RefundTypesFolios { get; set; }
     
         public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
         {
@@ -6171,6 +6172,156 @@ namespace IM.Model
                 new ObjectParameter("Gift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuestPromotion", receiptParameter, giftParameter);
+        }
+    
+        public virtual ObjectResult<RptRefundLetter> USP_OR_RptRefundLetter(Nullable<int> refundID)
+        {
+            var refundIDParameter = refundID.HasValue ?
+                new ObjectParameter("RefundID", refundID) :
+                new ObjectParameter("RefundID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptRefundLetter>("USP_OR_RptRefundLetter", refundIDParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByCloser> USP_IM_RptStatisticsByCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByCloser>("USP_IM_RptStatisticsByCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByExitCloser> USP_IM_RptStatisticsByExitCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByExitCloser>("USP_IM_RptStatisticsByExitCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
+        }
+    
+        public virtual ObjectResult<MealTicketData> USP_OR_GetMealTicketByFolio(Nullable<int> meID, Nullable<int> folio, string authorized)
+        {
+            var meIDParameter = meID.HasValue ?
+                new ObjectParameter("meID", meID) :
+                new ObjectParameter("meID", typeof(int));
+    
+            var folioParameter = folio.HasValue ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(int));
+    
+            var authorizedParameter = authorized != null ?
+                new ObjectParameter("Authorized", authorized) :
+                new ObjectParameter("Authorized", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MealTicketData>("USP_OR_GetMealTicketByFolio", meIDParameter, folioParameter, authorizedParameter);
+        }
+    
+        public virtual int USP_OR_SaveGiftLog(string gift, Nullable<short> hoursDif, string changedBy)
+        {
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGiftLog", giftParameter, hoursDifParameter, changedByParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByFTB> USP_IM_RptStatisticsByFTB(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> byLocations, Nullable<bool> byLocationsCategories, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var byLocationsParameter = byLocations.HasValue ?
+                new ObjectParameter("ByLocations", byLocations) :
+                new ObjectParameter("ByLocations", typeof(bool));
+    
+            var byLocationsCategoriesParameter = byLocationsCategories.HasValue ?
+                new ObjectParameter("ByLocationsCategories", byLocationsCategories) :
+                new ObjectParameter("ByLocationsCategories", typeof(bool));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTB>("USP_IM_RptStatisticsByFTB", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, byLocationsParameter, byLocationsCategoriesParameter, includeAllSalesmenParameter);
         }
     }
 }

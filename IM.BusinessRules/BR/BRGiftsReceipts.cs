@@ -2,6 +2,7 @@
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
@@ -40,6 +41,8 @@ namespace IM.BusinessRules.BR
         {
           // Obtenemos los GiftsReceiptShort del Stored correspondiente con los campos correspondientes
           List<GiftsReceiptsShort> lstShort = new List<GiftsReceiptsShort>();
+
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGiftsReceipts_Timeout;
           lstShort = dbContext.USP_OR_GetGiftsReceipts(guestID, salesRoom, receipt, folio, dateFrom, dateTo, name, reservation).ToList();
 
           // Recorremos la lista resultado y contruimos la lista a enviar. 
@@ -62,13 +65,19 @@ namespace IM.BusinessRules.BR
     /// <returns> Gifts Receipt </returns>
     /// <history>
     /// [vipacheco] 06/04/2016 Created
+    /// [vipacheco] 07/Julio/2016 Modified --> se agrego asincronia
     /// </history>
-    public static GiftsReceipt GetGiftReceipt(int GiftReceiptID)
+    public async static Task<GiftsReceipt> GetGiftReceipt(int GiftReceiptID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      GiftsReceipt giftReceipt = new GiftsReceipt();
+      await Task.Run(() =>
       {
-        return dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          giftReceipt = dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
+        }
+      });
+      return giftReceipt;
     }
     #endregion
 
@@ -104,18 +113,24 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 2/Mayo/2016 Created
+    /// [vipacheco] 07/Julio/2016 Modified --> Se agregó asincronia
     /// </history>
-    public static int SaveGiftReceipt(GiftsReceipt giftReceipt)
+    public async static Task<int> SaveGiftReceipt(GiftsReceipt giftReceipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      int result = 0;
+      await Task.Run(() =>
       {
-        // Guardamos el Gift Receipt Nuevo
-        dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
-        dbContext.SaveChanges();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          // Guardamos el Gift Receipt Nuevo
+          dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
+          dbContext.SaveChanges();
 
-        return giftReceipt.grID; // Obtenemos el ID del nuevo Gift Receipt
-      }
+          result = giftReceipt.grID; // Obtenemos el ID del nuevo Gift Receipt
+        }
+      });
 
+      return result;
     }
     #endregion
 
@@ -194,7 +209,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    public async Task<int> SaveGiftReceiptAuthorized(GiftsReceipt giftsReceipt)
+    public static async Task<int> SaveGiftReceiptAuthorized(GiftsReceipt giftsReceipt)
     {
       int nRes = await Task.Run(() =>
       {
@@ -206,5 +221,42 @@ namespace IM.BusinessRules.BR
       });
       return nRes;
     }
+
+    #region getRptGiftsReceipt
+    /// <summary>
+    /// Obtiene la informacion para el repote GiftReceipt del Modulo Host.
+    /// </summary>
+    /// <param name="receiptID"> ID del recibo. </param>
+    /// <param name="isCharge"> 0. Si no es cargo.
+    ///  1. Si es cargo. </param>
+    /// <returns> List of IEnumerable </returns>
+    /// <history>
+    /// [edgrodriguez] 12/Jul/2016 Created
+    /// </history>
+    public static async Task<List<IEnumerable>> GetRptGiftsReceipt(int receiptID, bool isCharge = false)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var results = dbContext.USP_OR_RptGiftsReceipt(receiptID, isCharge);
+          if (isCharge)
+          {
+            return results
+            .MultipleResults()
+            .With<RptGiftsReceipt>()
+            .GetValues();
+          }
+          else
+            return results
+            .MultipleResults()
+            .With<RptGiftsReceipt>()
+            .With<RptGiftsReceipt_Gifts>()
+            .With<RptGiftsReceipt_ProductLegends>()
+            .GetValues();
+        }
+      });
+    } 
+    #endregion
   }
 }

@@ -8,39 +8,39 @@
         Title="Launcher" Height="390" Width="700" ResizeMode="NoResize" ShowInTaskbar="True"
         Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing">
 
-    <Window.Resources>
-        <Style TargetType="{x:Type ListBox}">
-            <Setter Property="ItemTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <StackPanel Margin="5" Height="70" Width="100">
-                            <Image Source="{Binding Image}" Stretch="Fill" Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                            <TextBlock Margin="2" Text="{Binding Path=Descripcion}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        </Style>
-    </Window.Resources>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+  <Window.Resources>
+    <Style TargetType="{x:Type ListBox}">
+      <Setter Property="ItemTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <StackPanel Margin="5" Height="70" Width="100">
+              <Image Source="{Binding ImageUrl}" Stretch="Fill" Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+              <TextBlock Margin="2" Text="{Binding Path=Name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="ItemsPanel">
+        <Setter.Value>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+  </Window.Resources>
 
-        <Label Name="lblVersion" HorizontalAlignment="Center" VerticalAlignment="Center">VERSION </Label>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="1" Name="lsbLauncher" TextSearch.TextPath="Descripcion" Background="SkyBlue" MouseDoubleClick="lsbLauncher_MouseDoubleClick" KeyDown="lsbLauncher_KeyDown">
-        </ListBox>
+    <Label Name="lblVersion" HorizontalAlignment="Center" VerticalAlignment="Center">VERSION</Label>
 
-    </Grid>
+    <ListBox Grid.Row="1" Name="lsbLauncher" TextSearch.TextPath="Name" Background="SkyBlue" MouseDoubleClick="lsbLauncher_MouseDoubleClick" KeyDown="lsbLauncher_KeyDown">
+    </ListBox>
+
+  </Grid>
 </Window>

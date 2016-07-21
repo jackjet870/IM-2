@@ -1,6 +1,7 @@
 ﻿using IM.Model;
 using IM.Model.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,8 +42,32 @@ namespace IM.BusinessRules.BR
       });
 
       return lstDepositsRefund;
-    } 
+    }
     #endregion
 
+    #region GetDepositsRefund
+    /// <summary>
+    /// Obtiene el reporte Refund Letter
+    /// </summary>
+    /// <returns> List of IEnumerable. </returns>
+    /// <history>
+    /// [edgrodriguez] 14/Jul/2016 Created
+    /// </history>
+    public async static Task<List<IEnumerable>> GetRptRefundLetter(int RefundID)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+           var lstRptDepositLetter=dbContext.USP_OR_RptRefundLetter(RefundID)
+          .MultipleResults()
+          .With<RptRefundLetter>()
+          .With<RptRefundLetter_BookingDeposit>()
+          .GetValues();
+          return ((lstRptDepositLetter[0] as List<RptRefundLetter>).Any()) ? lstRptDepositLetter : new List<IEnumerable>();
+        }
+      });
+    }
+    #endregion
   }
 }

@@ -134,6 +134,7 @@ namespace IM.BusinessRules.BR
     /// Obtiene un personal dada su clave
     /// </summary>
     /// <param name="id">Clave</param>
+    /// <param name="role">gb</param>
     /// <history>
     /// [jorcanche]  12/Mar/2016 Created
     /// [wtorres]    05/Jul/2016 Modified. Correccion de error. Estaba devolviendo null para personal que no tenia roles
@@ -142,8 +143,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        return dbContext.Personnels.
-          FirstOrDefault(p => p.peID == id && (role == "ALL" || p.Roles.Count() > 0));
+        return dbContext.Personnels.FirstOrDefault(p => p.peID == id && (role == "ALL" || p.Roles.Any(r => r.roID == role)));
       }
     }
 
@@ -158,8 +158,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo Personnel</returns>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [vku] 13/Jul/2016 Modified. Agregué Include Personnel_Liner
     /// </history>
-    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null)
+    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null,bool blnLiner=false)
     {
       List<Personnel> lstPersonnel = await Task.Run(() =>
         {
@@ -172,6 +173,11 @@ namespace IM.BusinessRules.BR
           {
               bool blnStatus = Convert.ToBoolean(nStatus);
               query = query.Where(pe => pe.peA == blnStatus);
+            }
+
+            if(blnLiner)
+            {
+              query = query.Include(pe => pe.Personnel_Liner);
             }
 
             if (personnel != null)
@@ -523,7 +529,8 @@ namespace IM.BusinessRules.BR
           }
         });
       return personnelStatistics;
-    } 
+    }
     #endregion
+   
   }
 }

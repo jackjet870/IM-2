@@ -151,21 +151,42 @@ namespace IM.BusinessRules.BR
     /// <hitory>
     /// [jorcanche] 20/05/2016
     /// </hitory>
-    public static async Task<Sale> GetSalesbyId(int saId = 0, string memebershipNum = "")
+    public static async Task<Sale> GetSalesbyId(int? saId = 0, string memebershipNum = "")
     {
-      var sale = new Sale();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from gu in dbContext.Sales select gu;
           if (!string.IsNullOrEmpty(memebershipNum))
-            return sale = (query.Where(x => x.saMembershipNum == memebershipNum)).FirstOrDefault();
+            return (query.Where(x => x.saMembershipNum == memebershipNum)).FirstOrDefault();
 
-          return sale = (query.Where(x => x.saID == saId)).FirstOrDefault();
+          return (query.Where(x => x.saID == saId)).FirstOrDefault();
+        }
+      });      
+    }
+
+    #endregion
+
+    #region GetMembershipType
+
+    /// <summary>
+    ///Obtiene el tipo de una membresia
+    /// </summary>   
+    /// <param name="memebershipNum">numero de membresia</param>
+    /// <returns>La fecha dse cierre DateTime</returns>
+    /// <hitory>
+    /// [jorcanche] 20/05/2016
+    /// </hitory>
+    public static async Task<string> GetMembershipType (string memebershipNum = "")
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return  (from gu in dbContext.Sales where gu.saMembershipNum == memebershipNum select gu.samtGlobal).FirstOrDefault();         
         }
       });
-      return sale;
     }
     #endregion
 
@@ -176,17 +197,20 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="stId"></param>
     /// <returns>Una lista de Tipo de ventas</returns>
-    /// <hitory>
+    /// <history>
     /// [jorcanche] 20/05/2016
-    /// </hitory>
-    public static List<SaleType> GetSalesTypes(string stId)
+    /// </history>
+    public static async Task<List<SaleType>> GetSalesTypes(string stId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return (from gu in dbContext.SaleTypes
-                where gu.stA == true && gu.stID == stId
-                select gu).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return (from gu in dbContext.SaleTypes
+            where gu.stA && gu.stID == stId
+            select gu).ToList();
+        }
+      });
     }
     #endregion
 
@@ -262,15 +286,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  creted 28062016
     /// </history>
-    public static int SaveChangedSale(Sale sale)
+    public static  async Task<int> SaveChangedSale(Sale sale)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var personel = dbContext.Personnels.First();
-        sale.Personnel_LinerCaptain1 = personel;
-        dbContext.Entry(sale).State = System.Data.Entity.EntityState.Modified;
-        return dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var personel = dbContext.Personnels.First();
+          sale.Personnel_LinerCaptain1 = personel;
+          dbContext.Entry(sale).State = System.Data.Entity.EntityState.Modified;
+          return dbContext.SaveChanges();
+        }
+      });
     }
     #endregion
 
@@ -284,12 +311,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  created 01072016
     /// </history>
-    public static void SaveSaleLog(int? sale, short hoursDif, string changedBy)
+    public static async Task<int> SaveSaleLog(int? sale, short hoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.USP_OR_SaveSaleLog(sale, hoursDif, changedBy);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_SaveSaleLog(sale, hoursDif, changedBy);
+        }
+      });
     }
     #endregion
 
@@ -370,13 +400,21 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  creted 28062016
     /// </history>
-    public static List<ValidationData> ValidateSale(string changedBy, string password, Nullable<int> sale, string membershipNumber, Nullable<int> guest, string saleType, string salesRoom, string location, string pR1, string pR2, string pR3, string pRCaptain1, string pRCaptain2, string pRCaptain3, string liner1, string liner2, string linerCaptain, string closer1, string closer2, string closer3, string closerCaptain, string exit1, string exit2, string podium, string vLO)
+    public static async Task<ValidationData> ValidateSale(string changedBy, string password, int? sale, string membershipNumber, int? guest, string saleType, string salesRoom, string location, string pR1, string pR2, string pR3, string pRCaptain1, string pRCaptain2, string pRCaptain3, string liner1, string liner2, string linerCaptain, string closer1, string closer2, string closer3, string closerCaptain, string exit1, string exit2, string podium, string vLO)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_ValidateSale(changedBy, password, sale, membershipNumber, guest, saleType, salesRoom, location, pR1, pR2, pR3, pRCaptain1, pRCaptain2, pRCaptain3, liner1, liner2, linerCaptain, closer1, closer2, closer3, closerCaptain, exit1, exit2, podium, vLO).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return
+            dbContext.USP_OR_ValidateSale(changedBy, password, sale, membershipNumber, guest, saleType, salesRoom,
+              location, pR1, pR2, pR3, pRCaptain1, pRCaptain2, pRCaptain3, liner1, liner2, linerCaptain, closer1,
+              closer2, closer3, closerCaptain, exit1, exit2, podium, vLO).FirstOrDefault();
+        }
+      });
     }
     #endregion
+
+
   }
 }

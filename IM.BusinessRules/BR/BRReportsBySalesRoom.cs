@@ -853,7 +853,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_Timeout;
           var lstManifestRange = dbContext.USP_IM_RptManifestRange(dtmStart, dtmEnd, salesRooms, EnumToListHelper.GetEnumDescription(program)).ToList();
           return lstManifestRange;
         }
@@ -882,7 +882,7 @@ namespace IM.BusinessRules.BR
         var lstManifestRange = new List<IEnumerable>();
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_Timeout;
            lstManifestRange = dbContext.USP_IM_RptManifestByLSRange(dtmStart, dtmEnd, salesRooms)
           .MultipleResults()
           .With<RptManifestByLSRange>()
@@ -1648,6 +1648,72 @@ namespace IM.BusinessRules.BR
     }
     #endregion GetStatsBySegment
 
+    #region GetStatisticsByCloser
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por Closer
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="segments">Claves de segmentos</param>
+    /// <param name="program">Programs</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByCloser"></list></returns>
+    /// <history>
+    ///   [aalcocer] 13/07/2016 Created
+    /// </history>
+    public static async Task<List<RptStatisticsByCloser>> GetStatisticsByCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
+    {
+      var result = new List<RptStatisticsByCloser>();
+
+      if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion GetStatisticsByCloser
+
+    #region GetStatisticsByExitCloser
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por Exit Closer
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="segments">Claves de segmentos</param>
+    /// <param name="program">Programs</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByExitCloser"></list></returns>
+    /// <history>
+    ///   [aalcocer] 18/07/2016 Created
+    /// </history>
+    public static async Task<List<RptStatisticsByExitCloser>> GetStatisticsByExitCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
+    {
+      var result = new List<RptStatisticsByExitCloser>();
+
+      if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptStatisticsByExitCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion GetStatisticsByExitCloser
+
     #endregion Processor Sales
 
 
@@ -1674,5 +1740,6 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion
+
   }
 }

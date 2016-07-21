@@ -5,6 +5,7 @@ using IM.Model;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Windows;
 
 namespace IM.BusinessRules.BR
 {
@@ -26,6 +27,7 @@ namespace IM.BusinessRules.BR
     {
       List<CreditCardType> lstCreditsCard = await Task.Run(() =>
         {
+         
           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from cct in dbContext.CreditCardTypes select cct;

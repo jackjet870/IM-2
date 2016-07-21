@@ -18,7 +18,7 @@
       <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="USP_OR_RptPRStats" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">180</Value>
+      <Value Profile="(Default)">300</Value>
     </Setting>
     <Setting Name="UPS_OR_RptProductionBySalesRoom_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
@@ -173,10 +173,10 @@
     <Setting Name="USP_OR_GraphProductionByPR_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
-    <Setting Name="USP_OR_GetGiftsReceipts" Type="System.Int32" Scope="User">
+    <Setting Name="USP_OR_GetGiftsReceipts_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>
     </Setting>
-    <Setting Name="USP_IM_RptManifestRange_TimeOut" Type="System.Int32" Scope="User">
+    <Setting Name="USP_IM_RptManifestRange_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_GetPersonnelStatistics" Type="System.Int32" Scope="User">
@@ -186,6 +186,9 @@
       <Value Profile="(Default)">180</Value>
     </Setting>
     <Setting Name="USP_OR_GetGuestsByPR" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="USP_OR_Occupation" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>
     </Setting>
   </Settings>

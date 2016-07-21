@@ -25,10 +25,10 @@ namespace IM.Base.Forms
     /// <history>
     /// [jorcanche] 20/06/2016 created
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Title = $"IM Guest Movements - Guest ID {_guestID}";
-      var movement = BRGuests.GetGuestMovement(_guestID);
+      var movement = await BRGuests.GetGuestMovement(_guestID);
       guestMovementsDataGrid.ItemsSource = movement;
     } 
     #endregion

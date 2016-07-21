@@ -37,34 +37,6 @@ namespace IM.BusinessRules.BR
 
     #endregion GetGifts
 
-    #region GetGifts
-
-    /// <summary>
-    /// Obtiene todos los gifts activos
-    /// </summary>
-    /// <param name="status"></param>
-    /// <returns> Lista de entidades GIFT</returns>
-    /// <history>
-    /// [vipacheco] 22/Abril/2016 Created
-    /// [vipacheco] 27/Junio/2016 Modified --> Se agrego sincronia y el order by de los resultados
-    /// </history>
-    public async static Task<List<Gift>> GetGifts(int status)
-    {
-      List<Gift> lstResult = new List<Gift>();
-      await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          bool _status = Convert.ToBoolean(status);
-          lstResult = dbContext.Gifts.Where(x => x.giA == _status).OrderBy(o => o.giN).ToList();
-        }
-      });
-
-      return lstResult;
-    }
-
-    #endregion GetGifts
-
     #region GetGiftsByGuest
 
     /// <summary>
@@ -357,7 +329,8 @@ namespace IM.BusinessRules.BR
       {
         var query = from a in dbContext.Gifts
                     where a.giA == true
-                    select new {
+                    select new
+                    {
                                 giID = a.giID,
                                 giN = a.giN,
                                 Visibility = a.giPack ? true : false,

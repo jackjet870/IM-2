@@ -20,12 +20,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 08/04/2016 Created
     /// </history>
-    public static List<GiftsReceiptPaymentShort> GetGiftsReceiptPaymentsShort(int receipt)
+    public async static Task<List<GiftsReceiptPaymentShort>> GetGiftsReceiptPaymentsShort(int receipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<GiftsReceiptPaymentShort> lstResult = new List<GiftsReceiptPaymentShort>();
+
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGiftsReceiptPayments(receipt).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          lstResult = dbContext.USP_OR_GetGiftsReceiptPayments(receipt).ToList();
+        }
+      });
+
+      return lstResult;
     }
     #endregion
 

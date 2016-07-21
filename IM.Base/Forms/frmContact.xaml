@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Base.Forms"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        xmlns:local="clr-namespace:IM.Base.Forms"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
      Title="Contact" Height="315" Width="459.623" Loaded="Window_Loaded" Background="Beige">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,8 +22,8 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label x:Name="lblguPRInfo" Margin="15,12,0,0" Content="PR:" FontSize="17"/>
-            <TextBox x:Name="txtguPRInfo" Margin="31,12,0,0" FontSize="16" Height="30" Width="131" LostFocus="txtguPRInfo_LostFocus"/>
-            <ComboBox x:Name="cboguPRInfo" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" Width="205" Height="29" SelectionChanged="cboguPRInfo_SelectionChanged"  IsReadOnly="True" IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
+            <TextBox x:Name="txtguPRInfo" Margin="31,12,0,0" FontSize="16" Height="30" Width="131" Text="{Binding guPRInfo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" LostFocus="txtguPRInfo_LostFocus"/>
+            <ComboBox x:Name="cboguPRInfo" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" Width="205" Height="29" SelectionChanged="cboguPRInfo_SelectionChanged" Text="{Binding guPRInfo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
         </StackPanel>
         <StackPanel Grid.Row="3" >
             <CheckBox x:Name="chkguInfo" Margin="15,12,0,22" FontSize="19" Content="Contact" IsEnabled="False"/>

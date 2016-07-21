@@ -174,10 +174,13 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="obj">Objeto a validar las propiedades</param>
     /// <param name="ui">Contenedor donde va a buscar controles</param>
+    /// <param name="enumMode">Modo en el que se abrió la ventana</param>
+    /// <param name="blnCharacters">true. bloquea caracters especiales</param>
     /// <history>
     /// [emoguel] created 08/04/2016
+    /// [emoguel] modified 11/07/2016
     /// </history>
-    public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview)
+    public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false)
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
 
@@ -203,6 +206,10 @@ namespace IM.Base.Helpers
                 {
                   facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
                   txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
+                  if(blnCharacters)
+                  {
+                    txt.PreviewTextInput += TextBoxHelper.TextInputSpecialCharacters;
+                  }
                   break;
                 }
               #endregion

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d"
         Title="Search Guest" Background="Beige"  Width="808" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Label">
@@ -69,7 +69,7 @@
 
         <!--#region gridGuests-->
         
-            <DataGrid Grid.Row="1" x:Name="dtgGuests" FontSize="13"  AutoGenerateColumns="False" Background="Bisque" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False" Margin="5,0,5,0" >
+            <DataGrid Grid.Row="1" x:Name="dtgGuests" FontSize="13"  AutoGenerateColumns="False" Background="Bisque" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False" Margin="5,0,5,0" MouseDoubleClick="dtgGuests_MouseDoubleClick" >
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="guIDColumn" Width="auto" Header="GUID" Binding="{Binding guID}" IsReadOnly="True" />
                     <DataGridTextColumn x:Name="guLastName1Column" Width="auto" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
@@ -110,7 +110,7 @@
                 <Separator />
                 <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
                         <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                     </StackPanel>
                 </StatusBarItem>

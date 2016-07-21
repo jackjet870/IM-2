@@ -8,6 +8,7 @@ namespace IM.Model.Helpers
 {
   public static class EnumToListHelper
   {
+    #region GetEnumDescription
     /// <summary>
     /// Método para obtener su atributo Descripcion, y retornarlo como
     /// una cadena de texto.
@@ -32,7 +33,9 @@ namespace IM.Model.Helpers
       else
         return value.ToString();
     }
+    #endregion
 
+    #region GetList
     /// <summary>
     /// Metodo para obtener Un diccionario a traves de un Enum con descripcion
     /// </summary>
@@ -45,19 +48,23 @@ namespace IM.Model.Helpers
     {
       return Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToDictionary(x => x, x => GetEnumDescription(x));
     }
+    #endregion
 
+    #region StringToEnum
     /// <summary>
     /// Metodo para convertir un String con el valor de un enum a Enum
     /// </summary>
     /// <typeparam name="T">Tipo de Enumerado</typeparam>
     /// <param name="value">String con el valor a convertir</param>
     /// <history>
-    /// [ecanul] 19/04/2016 Created
+    /// [ecanul]   19/Abr/2016 Created
+    /// [wtorres]  16/Jul/2016 Modified. En lugar de usar T, ahora se usa TEnum
     /// </history>
-    public static T StringToEnum<T>(this string value, bool ignoreCase = true)
+    public static TEnum StringToEnum<TEnum>(this string value, bool ignoreCase = true)
     {
-      return (T)Enum.Parse(typeof(T), value, ignoreCase);
-    }
+      return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
+    } 
+    #endregion
 
     #region EnumListToString
     /// <summary>

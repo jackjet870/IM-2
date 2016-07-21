@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 Title="Error" Height="438.455" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True">
   <Grid>
-    <Image Source="../Images/Error.png" Margin="10,10,0,0" Height="81" VerticalAlignment="Top" HorizontalAlignment="Left" Width="68"/>
+    <Image Source="pack://application:,,,/IM.Styles;component/Images/Error.png" Margin="10,10,0,0" Height="81" VerticalAlignment="Top" HorizontalAlignment="Left" Width="68"/>
     <Label Content="Has happened an error in the application." FontSize="16" FontWeight="Bold" Margin="100,21,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     <Label Content="Would you like to continue?" FontSize="16" FontWeight="Bold" Margin="100,59,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     <Label Content="Message:" Margin="10,102,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
@@ -14,7 +14,7 @@
     <TextBox x:Name="txtStackTrace" Margin="10,239,10,55" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True"/>
     <Button x:Name="btnInnerException" Height="40" Margin="0,0,180,10" Background="White" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btnInnerException_Click" Width="131" >
       <StackPanel Orientation="Horizontal">
-        <Image Source="/IM.Base;component/Images/Link.png" Width="24" Height="24"/>
+        <Image Source="pack://application:,,,/IM.Styles;component/Images/Link.png" Width="24" Height="24"/>
         <TextBlock Text="Inner Exception" VerticalAlignment="Center"/>
       </StackPanel>
     </Button>

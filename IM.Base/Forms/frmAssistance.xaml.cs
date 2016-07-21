@@ -12,7 +12,6 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using OfficeOpenXml.Style;
 using IM.Base.Classes;
-using System.Data.Entity;
 
 namespace IM.Base.Forms
 {
@@ -203,8 +202,8 @@ namespace IM.Base.Forms
             _listAssistData.Add(assistance);
           });
           _isNew = true;
-          assistanceDataDataGrid.ItemsSource = _listAssistData;
         }
+        assistanceDataDataGrid.ItemsSource = _listAssistData;
       }
       StaEnd();
     }
@@ -369,8 +368,12 @@ namespace IM.Base.Forms
     {
       StaStart("Loading assistances Excel...");
       btnToExcel.IsEnabled = false;
+      //Si tiene LeadSource se toma este de preferencia
+      if (user.LeadSource != null)
+        filters.Add(Tuple.Create("Lead Sourse", user.LeadSource.lsID));
+      else
+        filters.Add(Tuple.Create("Sales Room", user.SalesRoom.srID));
 
-      filters.Add(Tuple.Create("Lead Sourse", user.LeadSource.lsID));
       _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
       if (_listAssistData.Count > 0)
       {
@@ -397,10 +400,30 @@ namespace IM.Base.Forms
         EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
         MessageBox.Show("Generated Report", "Generated", MessageBoxButton.OK, MessageBoxImage.Exclamation);
       }
+      else
+      {
+        UIHelper.ShowMessage("There is no Information to generate the report", MessageBoxImage.Exclamation, "Save the data");
+      }
       StaEnd();
       btnToExcel.IsEnabled = true;
     }
-    #endregion Eventos del Formulario
 
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.Key)
+      {
+        case Key.Capital:
+          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+          break;
+        case Key.Insert:
+          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+          break;
+        case Key.NumLock:
+          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+          break;
+      }
+    }
+
+    #endregion Eventos del Formulario
   }
 }

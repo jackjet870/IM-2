@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Base.Helpers
 {
@@ -116,7 +116,7 @@ namespace IM.Base.Helpers
         }
         else
         {
-          if(control is ComboBox)
+          if (control is ComboBox)
           {
             value = ((ComboBox)control).Text;
           }
@@ -160,7 +160,7 @@ namespace IM.Base.Helpers
       else if (!ValidateRequired(ptxtPwd, "Specify your password."))
       {
         ptxtPwd.Focus();
-        return false;    
+        return false;
       }
       return true;
     }
@@ -176,21 +176,29 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 01/04/2016
     /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
+    /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// </history>
-    public static string ValidateForm(UIElement container, string strForm)
+    public static string ValidateForm(UIElement container, string strForm, bool validateVisible = true)
     {
-      string strMsj = "";      
+      string strMsj = "";
       List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
       foreach (Control control in lstControls)
-      {        
+      {
         #region TextBox
         if (control is TextBox)//Si es Textbox
         {
           TextBox txt = (TextBox)control;
-          if (txt.IsVisible && string.IsNullOrWhiteSpace(txt.Text))
+
+          if (validateVisible)
           {
-            strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
+            if (txt.IsVisible && string.IsNullOrWhiteSpace(txt.Text))
+              strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
+          }
+          else
+          {
+            if (!validateVisible && string.IsNullOrWhiteSpace(txt.Text))
+              strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
           }
         }
         #endregion
@@ -199,9 +207,15 @@ namespace IM.Base.Helpers
         else if (control is ComboBox)
         {
           ComboBox cmb = (ComboBox)control;
-          if (cmb.IsVisible && cmb.SelectedIndex < 0)
+          if (validateVisible)
           {
-            strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
+            if (cmb.IsVisible && cmb.SelectedIndex < 0)
+              strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
+          }
+          else
+          {
+            if (cmb.SelectedIndex < 0)
+              strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
           }
         }
         #endregion
@@ -210,14 +224,35 @@ namespace IM.Base.Helpers
         else if (control is PasswordBox)
         {
           PasswordBox pwd = (PasswordBox)control;
-          if (pwd.IsVisible && string.IsNullOrWhiteSpace(pwd.Password))
+          if (validateVisible)
           {
-            strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
+            if (pwd.IsVisible && string.IsNullOrWhiteSpace(pwd.Password))
+              strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
+          }
+          else 
+          {
+            if (string.IsNullOrWhiteSpace(pwd.Password))
+              strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
           }
         }
         #endregion
+
+        else if (control is DateTimePicker)
+        {
+          DateTimePicker dtp = (DateTimePicker)control;
+          if (validateVisible)
+          {
+            if (dtp.IsVisible && string.IsNullOrWhiteSpace(dtp.Text))
+              strMsj += "Specify the " + strForm + " " + dtp.Tag.ToString() + ". \n";
+          }
+          else
+          {
+            if (string.IsNullOrWhiteSpace(dtp.Text))
+              strMsj += "Specify the " + strForm + " " + dtp.Tag.ToString() + ". \n";
+          }
+        }
       }
-      if (strMsj!="")//Mandamos el foco al primer campo
+      if (strMsj != "")//Mandamos el foco al primer campo
       {
         lstControls.FirstOrDefault().Focus();
       }
@@ -294,5 +329,27 @@ namespace IM.Base.Helpers
       }
     }
     #endregion
+
+    /// <summary>
+    /// Valida que el texto no contenga los caracteres de una lista
+    /// </summary>
+    /// <param name="text">texto a validar</param>
+    /// <history>
+    /// [emoguel] created 11/07/2016
+    /// </history>
+    /// <returns>True. No contiene los caracteres | false. Si contiene los caracteres</returns>
+    public static bool validateCharacters(string text)
+    {
+      bool _blnValid = true;
+      List<string> lstCharacters = new List<string> { "", "%", "'","-","_" };
+      text.ToCharArray().ToList().ForEach(c => {
+        if (lstCharacters.Contains(c.ToString()))
+        {
+          _blnValid = false;
+          return;
+        }
+      });
+      return _blnValid;
+    }
   }
 }

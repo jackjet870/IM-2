@@ -36,6 +36,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -45,8 +51,8 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -75,15 +81,36 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\CommonCatObject.cs" />
     <Compile Include="Classes\InvitationGiftCustom.cs" />
+    <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />
     <Compile Include="Forms\frmGuestsMovements.xaml.cs">
@@ -93,10 +120,12 @@
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\GiftType.cs" />
-    <Compile Include="Forms\SystemCfg.xaml.cs">
-      <DependentUpon>SystemCfg.xaml</DependentUpon>
+    <Compile Include="Forms\frmSystemCfg.xaml.cs">
+      <DependentUpon>frmSystemCfg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ConfigRegistry.cs" />
+    <Compile Include="Helpers\ConfigRegistryHelper.cs" />
+    <Compile Include="Helpers\CrystalReportHelper.cs" />
+    <Compile Include="Helpers\PrinterHelper.cs" />
     <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
     <Compile Include="Classes\objInvitBookingDeposit.cs" />
@@ -124,7 +153,6 @@
     </Compile>
     <Compile Include="Helpers\ExecuteCommandHelper.cs" />
     <Compile Include="Helpers\LanguageHelper.cs" />
-    <Compile Include="Classes\Parametros.cs" />
     <Compile Include="Forms\frmSearchGuest.xaml.cs">
       <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
@@ -140,9 +168,6 @@
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmConsultaBase.xaml.cs">
-      <DependentUpon>frmConsultaBase.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmInvitationBase.xaml.cs">
       <DependentUpon>frmInvitationBase.xaml</DependentUpon>
     </Compile>
@@ -157,6 +182,7 @@
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
@@ -172,7 +198,6 @@
     <Compile Include="Helpers\UIRichTextBoxHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Helpers\WindowsHelper.cs" />
-    <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Language\ResLanguage.Designer.cs">
       <DependentUpon>ResLanguage.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -219,19 +244,6 @@
       <DependentUpon>rptInvitationGuests.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\About.png" />
-    <Resource Include="Images\Date.png" />
-    <Resource Include="Images\IM.ico" />
-    <Resource Include="Images\IM.png" />
-    <Resource Include="Images\Layout.png" />
-    <Resource Include="Images\Login.png" />
-    <Resource Include="Images\Preview.png" />
-    <Resource Include="Images\Printer.png" />
-    <Resource Include="Images\Refresh.png" />
-    <Resource Include="Images\Report.png" />
-    <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\frmAssistance.xaml">
@@ -286,10 +298,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\frmConsultaBase.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Forms\frmInvitationBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -306,7 +314,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\SystemCfg.xaml">
+    <Page Include="Forms\frmSystemCfg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -326,33 +334,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Time.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Airplane.ico" />
-    <Resource Include="Images\Assistance.ico" />
-    <Resource Include="Images\btnEdit.png" />
-    <Resource Include="Images\btnSearch.png" />
-    <Resource Include="Images\button_add.png" />
-    <Resource Include="Images\button_cancel.png" />
-    <Resource Include="Images\button_delete.png" />
-    <Resource Include="Images\Charge_To.png" />
-    <Resource Include="Images\Contract.ico" />
-    <Resource Include="Images\Credit_Cards.png" />
-    <Resource Include="Images\currency.png" />
-    <Resource Include="Images\World.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Reports.ico" />
-    <Resource Include="Images\DaysOff.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Link.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitAdditionalGuest.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitBookingDeposit.datasource" />
@@ -366,71 +347,6 @@
     <None Include="Properties\DataSources\IM.Model.GuestStatusType.datasource" />
     <None Include="Properties\DataSources\IM.Model.PaymentPlace.datasource" />
     <None Include="Properties\DataSources\IM.Model.PaymentType.datasource" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\CloseSalesRoom.png" />
-    <Resource Include="Images\ExchangeRate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Log.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Computer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\desk.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Positioning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\GiftCategory.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Note.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Guests.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Hotel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Locations.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Marital_Status.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sales_Room.png" />
-    <Resource Include="Images\Rep.png" />
-    <Resource Include="Images\Down.png" />
-    <Resource Include="Images\Up.png" />
-    <Resource Include="Images\Money_Bag.png" />
-    <Resource Include="Images\Forbidden.png" />
-    <Resource Include="Images\Posts.png" />
-    <Resource Include="Images\Lead_Sources.png" />
-    <Resource Include="Images\Police.ico" />
-    <Resource Include="Images\IconDate.png" />
-    <Resource Include="Images\Payment.png" />
-    <Resource Include="Images\Money.ico" />
-    <Resource Include="Images\DateTime_Forbidden.png" />
-    <Resource Include="Images\Bedroom.png" />
-    <Resource Include="Images\Find.png" />
-    <Resource Include="Images\Change.ico" />
-    <Resource Include="Images\Search.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Reporte.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Nota.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Cofee.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Member.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Language\ResLanguage.resx">
@@ -473,49 +389,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Score.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Catalog.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Warehouse.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Goal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Market.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Product.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Configuration.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Segments.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\sort.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\disk.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\shopping_cart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Personnel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Pay.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Gift.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -58,7 +58,16 @@ namespace IM.Base.Classes
     public ObservableCollection<GuestCreditCard> GuestCreditCardList => _guestCreditCardList;
     private ObservableCollection<Guest> _aditionalGuestList;
     public ObservableCollection<Guest> AditionalGuestList => _aditionalGuestList;
-    public List<InvitationGift> InvitationGiftListOld { get; private set; }
+    private Guest _guestObj;
+    public Guest GuestObj
+    {
+      get { return _guestObj; }
+      set
+      {
+        SetField(ref _guestObj, value);
+      }
+    }
+
     #endregion
 
     public CommonCatObject(UserData user, int guId, EnumInvitationMode invitationType = EnumInvitationMode.modAdd)
@@ -81,10 +90,12 @@ namespace IM.Base.Classes
 
       if (invitationType == EnumInvitationMode.modAdd)
       {
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGiftCustom>(), "InvitationGiftList");
+        //Asignamos 
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGiftCustom>(), "InvitationGiftList"); 
         SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), "BookingDepositList");
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), "GuestCreditCardList");
         SetField(ref _aditionalGuestList, new ObservableCollection<Guest>(), "AditionalGuestList");
+        SetField(ref _guestObj, new Guest(), "Guest");
       }
       else
       {

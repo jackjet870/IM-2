@@ -25,6 +25,7 @@ namespace IM.Base.Helpers
     /// [emoguel] created 15/03/2016
     /// [emoguel] modified 23/03/2016 Se agregó la validacion HasItems
     /// [michan] modified 28/04/2016 Se agregó el parametro de la columna a seleccionar
+    /// [emoguel] modified Se agregó para cambiar el campo de busqueda
     /// </history>
     public static void SelectRow(DataGrid grid, int nIndex, int? column = 0,bool blnEdit=false)
     {
@@ -33,12 +34,15 @@ namespace IM.Base.Helpers
         grid.Focus();
         grid.SelectedIndex = nIndex;
         if (grid.SelectedItem != null)
-        {
+        { 
           grid.ScrollIntoView(grid.Items[nIndex]);
-          grid.UpdateLayout();
-          grid.ScrollIntoView(grid.SelectedItem);
           grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[column.Value]);
-          if(blnEdit)
+          //Se cambia el campo de busqueda
+          if (grid.CurrentCell != null)
+          {
+            grid.Resources["SearchField"] = grid.CurrentColumn.SortMemberPath;
+          }
+          if (blnEdit)
           {
             grid.BeginEdit();
           }
@@ -259,7 +263,7 @@ namespace IM.Base.Helpers
       message = NamePlural + " must not be repeated.\r\n" + NameSingular + " repetead is ";
 
       string RepeatFields = "";
-      Grid.IsReadOnly = true;
+      //Grid.IsReadOnly = true;
 
       // recorremos las filas
       foreach (var _Grid in Grid.Items)
@@ -276,7 +280,7 @@ namespace IM.Base.Helpers
             Type typeTemp = _GridTemp.GetType();
             var propertyTemp = typeTemp.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
 
-            if (i != j) // Para evitar que sea el mismo row
+            if (propertyTemp.Count > 0 &&  i != j) // Para evitar que sea el mismo row
             {
               // recorremos los campos que forman la llave primaria
               foreach (string field in Fields)
@@ -301,7 +305,7 @@ namespace IM.Base.Helpers
           i++;
         }
       }
-      Grid.IsReadOnly = false;
+      //Grid.IsReadOnly = false;
 
       return false;
     }
@@ -365,7 +369,7 @@ namespace IM.Base.Helpers
     public static void ValidateEditNumber(ref int pNumber, ref bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
-      if (pNumber != 0)
+      if (pNumber >= 0)
       {
         // si se desea validar los limites
         if (pValidateBounds)
@@ -392,8 +396,6 @@ namespace IM.Base.Helpers
         else
           pNumber = pLowerBound;
       }
-
-
 
     } 
     #endregion

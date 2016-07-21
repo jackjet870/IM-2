@@ -57,6 +57,30 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\RichTextBoxToolBar.cs" />
@@ -88,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\styDatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styDateTimePicker-TK.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +166,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -188,9 +217,6 @@
     <Resource Include="Images\RError.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\IM-ico.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\WKey.png" />
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +240,239 @@
   <ItemGroup>
     <Resource Include="Images\GExit.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Administrator.png" />
+    <Resource Include="Images\Assignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Graph.png" />
+    <Resource Include="Images\GuestsByPR.png" />
+    <Resource Include="Images\Host.png" />
+    <Resource Include="Images\InHouse.png" />
+    <Resource Include="Images\InventoryMovs.png" />
+    <Resource Include="Images\InvitationsConfig.png" />
+    <Resource Include="Images\MailOuts.png" />
+    <Resource Include="Images\MailOutsConfig.png" />
+    <Resource Include="Images\Outhouse.png" />
+    <Resource Include="Images\ProcessorGRAL.png" />
+    <Resource Include="Images\ProcessorINH.png" />
+    <Resource Include="Images\ProcessorOUT.png" />
+    <Resource Include="Images\ProcessorSales.png" />
+    <Resource Include="Images\PRStatistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SalesByCloser.png" />
+    <Resource Include="Images\SalesByLiner.png" />
+    <Resource Include="Images\SalesByPR.png" />
+    <Resource Include="Images\SystemConfig.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Airplane.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Assistance.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Credit_Cards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Positioning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Money.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IconDate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Payment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Charge_To.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Guests.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Contract.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Market.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Rep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Segments.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\World.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Reports.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Product.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\currency.png" />
+    <Resource Include="Images\Forbidden.png" />
+    <Resource Include="Images\Gift.png" />
+    <Resource Include="Images\GiftCategory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Hotel.png" />
+    <Resource Include="Images\Locations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales_Room.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DateTime_Forbidden.png" />
+    <Resource Include="Images\Lead_Sources.png" />
+    <Resource Include="Images\Log.ico" />
+    <Resource Include="Images\Marital_Status.png" />
+    <Resource Include="Images\Posts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Computer.png" />
+    <Resource Include="Images\Configuration.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cofee.png" />
+    <Resource Include="Images\Member.ico" />
+    <Resource Include="Images\Police.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Bedroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Score.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Catalog.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Money_Bag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Goal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warehouse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\shopping_cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Personnel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\About.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Desk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Change.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DaysOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Search.png" />
+    <Resource Include="Images\Time.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ExchangeRate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Details.ico" />
+    <Resource Include="Images\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Note.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Pay.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Report.ico" />
+    <Resource Include="Images\Reports.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Closed.png" />
+    <Resource Include="Images\ClosedWrap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BGift.png" />
+    <Resource Include="Images\BGiftPack.png" />
+    <Resource Include="Images\DepositsRefund.png" />
+    <Resource Include="Images\GiftsReceipt.png" />
+    <Resource Include="Images\Invitation.png" />
+    <Resource Include="Images\Lock.png" />
+    <Resource Include="Images\MealTicket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\OpenWrap.png" />
+    <Resource Include="Images\Sales.png" />
+    <Resource Include="Images\SearchGuest.png" />
+    <Resource Include="Images\Transfer.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Invitation" 
         d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="SingleBorderWindow"
-        ShowInTaskbar="False" Loaded="Window_Loaded" DataContext="{Binding CatalogList}">
+        ShowInTaskbar="False" Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary >
             <CollectionViewSource x:Key="giftList" Source="{Binding Gifts}" />
@@ -138,11 +138,11 @@
                                             <StackPanel Name="stkGuid" Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="GUID" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGuid" Width="100" Text="{Binding GuestObj.guID}"/>
+                                                    <TextBox Name="txtguID" Width="100" Text="{Binding GuestObj.guID, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
                                                     <TextBlock Text="Rsrv. Num." TextAlignment="Center"/>
-                                                    <TextBox Name="txtReservationNumber" Width="100" Text="{Binding GuestObj.guHReservID}"/>
+                                                    <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <Border x:Name="imgSearch" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
                                                     <StackPanel Orientation="Horizontal">
@@ -154,19 +154,19 @@
                                                 </Border>
                                                 <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
                                                     <TextBlock Text="Out Invit." TextAlignment="Center"/>
-                                                    <TextBox Name="txtOutInvitation" Width="100" Text="{Binding GuestObj.guHReservID}"/>
+                                                    <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding GuestObj.guOutInvitNum, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkRebookRef" VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Rebook Ref." TextAlignment="Center"/>
-                                                    <TextBox Name="txtRebookRef" Width="100" Text="{Binding GuestObj.guRef}"/>
+                                                    <TextBox Name="txtguRef" Width="100" Text="{Binding GuestObj.guRef, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" >
                                                     <TextBlock Text="Date" TextAlignment="Center"/>
-                                                    <TextBox Name="txtDate" Width="100" Text="{Binding GuestObj.guInvitD, StringFormat={}{'dd/MM/yyy'}}"/>
+                                                    <TextBox Name="txtguInvitD" Width="100" Text="{Binding GuestObj.guInvitD, Mode=TwoWay, StringFormat={}{'dd/MM/yyy'}}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Time" TextAlignment="Center"/>
-                                                    <TextBox Name="txtTime" Width="100" Text="{Binding GuestObj.guInvitT, StringFormat={}{'hh:mm'}}"/>
+                                                    <TextBox Name="txtguInvitT" Width="100" Text="{Binding GuestObj.guInvitT, Mode=TwoWay, StringFormat={}{'hh:mm'}}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -176,25 +176,27 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel  VerticalAlignment="Center" >
                                                         <TextBlock Text="Quiniella" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkQuiniella" HorizontalAlignment="Center" 
-                                                                  IsChecked="{Binding GuestObj.guQuinella}"/>
+                                                        <CheckBox Name="chkguQuinella" HorizontalAlignment="Center" 
+                                                                  IsChecked="{Binding GuestObj.guQuinella, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Show" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkShow" HorizontalAlignment="Center"
-                                                                  IsChecked="{Binding GuestObj.guShow}"/>
+                                                        <CheckBox Name="chkguShow" HorizontalAlignment="Center"
+                                                                  IsChecked="{Binding GuestObj.guShow, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Interval" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkInterval" HorizontalAlignment="Center"
-                                                                  IsChecked="{Binding GuestObj.guInterval}"/>
+                                                        <CheckBox Name="chkguInterval" HorizontalAlignment="Center"
+                                                                  IsChecked="{Binding GuestObj.guInterval, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Language" TextAlignment="Center"/>
                                                         <ComboBox Name="cmbLanguage" Width="120"  TextSearch.TextPath="laID"
                                                                   ItemsSource="{Binding Languages}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Languages-Concat}"
-                                                                  ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="guID"
+                                                                  SelectedValue="{Binding GuestObj.gula, Mode=OneWayToSource}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -212,15 +214,15 @@
                                         <StackPanel Name="stkProfileOpera" Orientation="Horizontal">
                                             <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="ID" TextAlignment="Center"/>
-                                                <TextBox Name="txtIDOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera}"/>
+                                                <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera, Mode=TwoWay}" MaxLength="15"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center" Margin="3">
                                                 <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtLastNameOpera" Width="100" Text="{Binding GuestObj.guLastNameOriginal}"/>
+                                                <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding GuestObj.guLastNameOriginal, Mode=TwoWay}" MaxLength="65"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtFirstNameOpera" Width="100" Text="{Binding GuestObj.guFirstNameOriginal}"/>
+                                                <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding GuestObj.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -236,30 +238,32 @@
                                         <StackPanel Name="stkGuest1" Orientation="Horizontal">
                                             <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtLastNameGuest1" Width="100"/>
+                                                <TextBox Name="txtguLastName1" Width="100" Text="{Binding GuestObj.guLastName1, Mode=TwoWay}" MaxLength="65"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtFirstNameGuest1" Width="100"/>
+                                                <TextBox Name="txtguFirstName1" Width="100" Text="{Binding GuestObj.guFirstName1, Mode=TwoWay}" MaxLength="40"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="Age" TextAlignment="Center"/>
-                                                <TextBox Name="txtAgeGuest1" Width="50"/>
+                                                <TextBox Name="txtguAge1" Width="50" Text="{Binding GuestObj.guAge1, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest1" Width="100" TextSearch.TextPath="msID"
+                                                <ComboBox Name="cbogums1" Width="100" TextSearch.TextPath="msID"
                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
-                                                          ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
+                                                          ToolTip="{Binding Path=SelectedItem.msN, RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="msID"
+                                                          SelectedValue="{Binding GuestObj.gums1,Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                <TextBox Name="txtOcuppationGuest1" Width="100"/>
+                                                <TextBox Name="txtguOccup1" Width="100" Text="{Binding GuestObj.guOccup1, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Email" TextAlignment="Center"/>
-                                                <TextBox Name="txtEmailGuest1" Width="100"/>
+                                                <TextBox Name="txtguEmail1" Width="100" Text="{Binding GuestObj.guEmail1, Mode=TwoWay}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -275,30 +279,32 @@
                                         <StackPanel Name="stkGuest2" Orientation="Horizontal">
                                             <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtLastNameGuest2" Width="100"/>
+                                                <TextBox Name="txtguLastName2" Width="100" Text="{Binding GuestObj.guLastName2, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtFirstNameGuest2" Width="100"/>
+                                                <TextBox Name="txtguFirstName2" Width="100" Text="{Binding GuestObj.guFirstName2, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="Age" TextAlignment="Center"/>
-                                                <TextBox Name="txtAgeGuest2" Width="50"/>
+                                                <TextBox Name="txtguAge2" Width="50" Text="{Binding GuestObj.guAge2, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest2" Width="100" TextSearch.TextPath="msID"
-                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
+                                                <ComboBox Name="cbogums2" Width="100" TextSearch.TextPath="msID"
+                                                          ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
-                                                          ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
+                                                          ToolTip="{Binding Path=SelectedItem.msN, RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="msID"
+                                                          SelectedValue="{Binding GuestObj.gums2, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                <TextBox Name="txtOcuppationGuest2" Width="100"/>
+                                                <TextBox Name="txtguOccup2" Width="100" Text="{Binding GuestObj.guOccup2, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Email" TextAlignment="Center"/>
-                                                <TextBox Name="txtEmailGuest2" Width="100"/>
+                                                <TextBox Name="txtguEmail2" Width="100" Text="{Binding GuestObj.guEmail2, Mode=TwoWay}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -333,11 +339,13 @@
                                                 <TextBlock Text="PR Contact" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left" >
-                                                        <TextBlock Text="{Binding ElementName=cmbPRContract, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
+                                                        <TextBlock Text="{Binding ElementName=cmbPRContact, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
                                                         <ComboBox Name="cmbPRContact" Width="200"  TextSearch.TextPath="peID" 
                                                                   ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Personnel-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID"
+                                                                  SelectedValue="{Binding GuestObj.guPRInfo, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -349,7 +357,9 @@
                                                         <ComboBox Name="cmbPR" Width="200"  TextSearch.TextPath="peID" 
                                                                   ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Personnel-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID"
+                                                                  SelectedValue="{Binding GuestObj.guPRInvit1, Mode=TwoWay}"/>
 
                                                     </StackPanel>
                                                 </StackPanel>
@@ -365,7 +375,9 @@
                                                         <ComboBox Name="cmbSalesRooms" Width="200"  TextSearch.TextPath="srID" 
                                                                   ItemsSource="{Binding SalesRoom}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-SaleRoom-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="srID"
+                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -377,34 +389,36 @@
                                                         <ComboBox Name="cmbLocation" Width="200"  TextSearch.TextPath="loID" 
                                                                   ItemsSource="{Binding Locations}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Location-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="loID"
+                                                                  SelectedValue="{Binding GuestObj.guloInvit, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
                                             <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                            <CheckBox Name="chkBeforeIO" Content="Before In &amp; Out" Margin="0,5"/>
-                                            <DatePicker Name="dtpBookDate" Width="120" />
+                                            <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay}"/>
+                                            <DatePicker Name="dtpBookDate" Width="120" SelectedDate="{Binding GuestObj.guBookD, Mode=TwoWay}"/>
                                             <TextBlock Text="Time" Margin="0,5"/>
-                                            <ComboBox Name="cbxBookTime" Width="120"  Style="{StaticResource cbx-General}" />
-                                            <CheckBox Name="chkDirect" Content="Direct"/>
+                                            <ComboBox Name="cbxBookTime" Width="120"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.BookTimes, Mode=TwoWay}" />
+                                            <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay}"/>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
                                             <TextBlock Text="Reschedule Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                             <StackPanel Orientation="Horizontal" >
                                                 <StackPanel Name="stkRescheduleDate">
                                                     <TextBlock Text="Reschedule Date" Margin="0,5"/>
-                                                    <DatePicker Name="dtpRescheduleDate" Width="120"/>
+                                                    <DatePicker Name="dtpRescheduleDate" Width="120" SelectedDate="{Binding GuestObj.guReschD, Mode=TwoWay}"/>
                                                     <TextBlock Text="Time" Margin="0,5"/>
-                                                    <ComboBox Name="cbxReschudeleTime" Width="120" Style="{StaticResource cbx-General}"/>
+                                                    <ComboBox Name="cbxReschudeleTime" Width="120" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.ReschTimes, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkFlightNumber" Margin="5,0">
                                                     <TextBlock Text="Flight Number" Margin="0,5"/>
-                                                    <TextBox Name="txtFlightNumber" Width="120"/>
+                                                    <TextBox Name="txtguFlight" Width="120" Text="{Binding GuestObj.guFlight, Mode=TwoWay}"/>
                                                 </StackPanel>
                                             </StackPanel>
-                                            <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5"/>
+                                            <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding GuestObj.guResch, Mode=TwoWay}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Viewbox>
@@ -431,7 +445,7 @@
 
                                             <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
                                                 <TextBlock Text="Comments"/>
-                                                <TextBox Name="txtOtherInfoComments"/>
+                                                <TextBox Name="txtguExtraInfo" Text="{Binding GuestObj.guExtraInfo, Mode=TwoWay}"/>
                                             </StackPanel>
 
                                             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
@@ -439,14 +453,16 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="Room #" Margin="0,5" />
-                                                        <TextBox Name="txtOtherInfoRoomNum" Width="50"/>
+                                                        <TextBox Name="txtguRoomNum" Width="50" Text="{Binding GuestObj.guRoomNum, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.hoID, StringFormat='Hotel ID: {0}'}" Margin="0,5"/>
                                                         <ComboBox Name="cmbOtherInfoHotel" Width="200" TextSearch.TextPath="hoID" 
                                                                   ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Hotel-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="hoID"
+                                                                  SelectedValue="{Binding GuestObj.guHotel, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -458,7 +474,9 @@
                                                         <ComboBox Name="cmbOtherInfoAgency" Width="200" TextSearch.TextPath="agID"  
                                                                   ItemsSource="{Binding Agencies}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Agency-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="agID"
+                                                                  SelectedValue="{Binding GuestObj.guag, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -470,7 +488,9 @@
                                                         <ComboBox Name="cmbOtherInfoCountry" Width="200" TextSearch.TextPath="coN"
                                                                   ItemsSource="{Binding Countries}" Style="{StaticResource cbx-General}" 
                                                                   ItemTemplate="{StaticResource cbx-Country-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"/>
+                                                                  ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="coID"
+                                                                  SelectedValue="{Binding GuestObj.guco, Mode=TwoWay}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -479,15 +499,15 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="Pax" Margin="0,5"/>
-                                                        <TextBox Name="txtOtherInfoPax" Width="50" Text="{Binding guDepositTwisted, StringFormat={}{0:n2}}"/>
+                                                        <TextBox Name="txtguPax" Width="50" Text="{Binding GuestObj.guPax, Mode=TwoWay, StringFormat={}{0:n2}}"/>
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="Arrival" Margin="0,5"/>
-                                                        <DatePicker Name="dtpOtherInfoArrivalD" Width="120"/>
+                                                        <DatePicker Name="dtpOtherInfoArrivalD" Width="120" SelectedDate="{Binding GuestObj.guCheckInD, Mode=TwoWay, StringFormat={}{0:}}"/>
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="Departure" Margin="0,5"/>
-                                                        <DatePicker Name="dtpOtherInfoDepartureD" Width="120"/>
+                                                        <DatePicker Name="dtpOtherInfoDepartureD" Width="120" SelectedDate="{Binding GuestObj.guCheckOutD, Mode=TwoWay, StringFormat={}{0:}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -520,11 +540,13 @@
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel HorizontalAlignment="Left">
-                                                <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.gsID, StringFormat='SalesRoom ID: {0}'}" Margin="0,5"/>
+                                                <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.gsID, StringFormat='Guest Status ID: {0}'}" Margin="0,5"/>
                                                 <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
                                                           ItemsSource="{Binding GuestStatusTypes}" Style="{StaticResource cbx-General}"
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
-                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"/>
+                                                          ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="gsID"
+                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -538,37 +560,47 @@
                                     <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel>
-                                            <DataGrid Name="dtg" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList}" 
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" CanUserSortColumns="False"
-                                                       SelectionMode="Single"  RowEditEnding="dtgGifts_RowEditEnding" CellEditEnding="dtgGifts_CellEditEnding_1"
-                                                      >
+                                            <DataGrid Name="dtgGifts" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList}" 
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" 
+                                                      CanUserSortColumns="False" SelectionMode="Single" RowValidationErrorTemplate="{x:Null}"
+                                                      PreparingCellForEdit="dtgGifts_PreparingCellForEdit" CellEditEnding="dtgGifts_CellEditEnding" 
+                                                      RowEditEnding="dtgGifts_RowEditEnding" SelectedCellsChanged="dtgGifts_SelectedCellsChanged">
+
                                                 <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Qty" 
+
+                                                    <DataGridTextColumn Header="Qty"
                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
-                                                                        Binding="{Binding IgQtyCustom, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged , ValidatesOnDataErrors=True}"/>
+                                                                        Binding="{Binding IgQty, Mode=TwoWay , ValidatesOnDataErrors=True}">
+                                                    </DataGridTextColumn>
                                                     <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
-                                                                            SelectedValueBinding="{Binding IggiCustom, Mode=TwoWay}"
+                                                                            SelectedValueBinding="{Binding IggiCustom, Mode=TwoWay, ValidatesOnExceptions=True}"
                                                                             DisplayMemberPath="giN" 
                                                                             SelectedValuePath="giID"
                                                                             ItemsSource="{Binding Source={StaticResource giftList}}" />
+
                                                     <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
-                                                                        Binding="{Binding IgAdultsCustom, Mode=TwoWay}"/>
-                                                    <DataGridTextColumn Header="Minors" Binding="{Binding igMinors}"/>
+                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
+                                                                        Binding="{Binding IgAdults, Mode=TwoWay, ValidatesOnDataErrors=True}">
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn Header="Minors"
+                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
+                                                                        Binding="{Binding IgMinors, Mode=TwoWay, ValidatesOnDataErrors=True}">
+                                                    </DataGridTextColumn>
                                                     <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults}"/>
                                                 </DataGrid.Columns>
                                             </DataGrid>
                                             <StackPanel Orientation="Horizontal" Margin="0,5">
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Max Auth" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftMaxAuth" Width="100" Text="{Binding Path=k ,StringFormat={}{0:C}}" IsReadOnly="True"/>
+                                                    <TextBox Name="txtGiftMaxAuth" Width="100" Text="{Binding InvitationGiftList.MaxAuth, Mode=TwoWay, StringFormat={}{0:C2}}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0">
                                                     <TextBlock Text="Total Cost" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalCost" Width="100" Text="{Binding Path=k ,StringFormat={}{0:C}}" IsReadOnly="True"/>
+                                                    <TextBox Name="txtGiftTotalCost" Width="100" Text="{Binding InvitationGiftList.TotalCost, Mode=TwoWay, StringFormat={}{0:C2}}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Total Price" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalPrice" Width="100" Text="{Binding Path=k ,StringFormat={}{0:C}}" IsReadOnly="True"/>
+                                                    <TextBox Name="txtGiftTotalPrice" Width="100" Text="{Binding InvitationGiftList.TotalPrice, Mode=TwoWay, StringFormat={}{0:C2}}" IsReadOnly="True"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -629,28 +661,34 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel>
                                                     <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
-                                                    <TextBox Name="txtBurned" Width="120" />
+                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}}" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
                                                     <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
                                                               ItemsSource="{Binding Currencies}" Style="{StaticResource cbx-General}" 
                                                               ItemTemplate="{StaticResource cbx-Currency-Concat}"
-                                                               ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}" />
+                                                              ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="cuID"
+                                                              SelectedValue="{Binding GuestObj.gucu, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Payment Type" TextAlignment="Center" Margin="0,5"/>
                                                     <ComboBox Name="cmbPaymentType" Width="200"  TextSearch.TextPath="ptN"
                                                               ItemsSource="{Binding PaymentTypes}" Style="{StaticResource cbx-General}"
                                                               ItemTemplate="{StaticResource cbx-PaymentType-Concat}"
-                                                              ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"/>
+                                                              ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="ptID"
+                                                              SelectedValue="{Binding GuestObj.gupt, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Resorts" TextAlignment="Center" Margin="0,5"/>
                                                     <ComboBox Name="cmbResorts" Width="200"  TextSearch.TextPath="hoID"
                                                               ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
                                                               ItemTemplate="{StaticResource cbx-Hotel-img}"
-                                                              ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"/>
+                                                              ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="hoID"
+                                                              SelectedValue="{Binding GuestObj.guHotelB, Mode=TwoWay}"/>
 
                                                 </StackPanel>
                                             </StackPanel>
@@ -668,7 +706,7 @@
                                         <StackPanel>
                                             <StackPanel Name="stkCcCompany">
                                                 <TextBlock Text="CC Company"/>
-                                                <TextBox Name="txtCcCompany"/>
+                                                <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding CreditCardList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
@@ -699,7 +737,7 @@
                                                     <DataGridTemplateColumn Header="Search" Width="55">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Image Name="imgSearchGuest" Source="../Images/Search.ico"  Height="15"  />
+                                                                <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15"  />
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
                                                     </DataGridTemplateColumn>
@@ -709,7 +747,7 @@
                                                     <DataGridTemplateColumn Width="55">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Image Name="imgDetails" Source="../Images/Layout.png"  Height="15" />
+                                                                <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
                                                     </DataGridTemplateColumn>
@@ -729,11 +767,11 @@
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel Name="stkRoomsQty" VerticalAlignment="Center">
                                                 <TextBlock Text="Rooms Quantity" TextAlignment="Left"/>
-                                                <TextBox Name="txtRoomsQuantity" Width="100"/>
+                                                <TextBox Name="txtguRoomsQty" Width="100" Text="{Binding GuestObj.guRoomsQty, Mode=TwoWay}"/>
                                             </StackPanel>
                                             <StackPanel Name="stkElectronicPurse" VerticalAlignment="Center" Margin="3,0">
                                                 <TextBlock Text="Electronic Purse Acount" TextAlignment="Left"/>
-                                                <TextBox Name="txtepAcount" Width="100"/>
+                                                <TextBox Name="txtguAccountGiftsCard" Width="100" Text="{Binding GuestObj.guAccountGiftsCard, Mode=TwoWay}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -756,7 +794,7 @@
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
                     <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>
             </StatusBarItem>

@@ -30,7 +30,7 @@ namespace IM.BusinessRules.BR
         result = dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max();
         return 1;
       }
-    } 
+    }
     #endregion
 
     #region UpdateMealTicketFolio
@@ -50,6 +50,26 @@ namespace IM.BusinessRules.BR
       {
         dbContext.USP_OR_UpdateMealTicketFolio(SR, MType, strNewFolio, RType);
       }
+    }
+    #endregion
+
+    #region getMealTicket
+    /// <summary>
+    /// Obtiene el ticket de comida por folio.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 18/07/2016 Created
+    /// </history>
+    public static async Task<MealTicketData> GetMealTicket(int meID,int folio, string authorized)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var mealTicket = dbContext.USP_OR_GetMealTicketByFolio(meID, folio, authorized).FirstOrDefault();
+          return mealTicket;
+        }
+      });
     }
     #endregion
 

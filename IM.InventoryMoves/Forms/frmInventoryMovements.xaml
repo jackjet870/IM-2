@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
-        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown">
   <Window.Resources>
     <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
     <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
@@ -69,7 +69,7 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="25" Grid.Column="2" Click="btnAbout_Click">
           <StackPanel Orientation="Horizontal">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/about.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="15" Height="15" HorizontalAlignment="Left"/>
             <TextBlock Text="About" HorizontalAlignment="Right"/>
           </StackPanel>
         </Button>

@@ -31,6 +31,8 @@ namespace IM.Styles.UserControls
     public event EventHandler eTextCenter;
     public event EventHandler eTextRight;
     public event EventHandler eColorPick;
+
+    public event EventHandler koko;
     #endregion
 
     public ToolBarRtfStyle()
@@ -38,6 +40,10 @@ namespace IM.Styles.UserControls
       InitializeComponent();
     }
 
+    private void imooo(object sender, SelectedCellsChangedEventArgs e)
+    {
+      koko.Invoke(this, e);
+    }
     #region Eventos Normales
     /// <summary>
     /// Delega el evento LoadRTF

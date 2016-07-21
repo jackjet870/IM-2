@@ -218,6 +218,7 @@ namespace IM.InventoryMovements
     private void btnAbout_Click(object sender, RoutedEventArgs e)
     {
       frmAbout frmAbout = new frmAbout();
+      frmAbout.Owner = this;
       frmAbout.ShowDialog();
     }
 

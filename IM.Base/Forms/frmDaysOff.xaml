@@ -26,7 +26,9 @@
             </Grid.ColumnDefinitions>
             <!--#region Grid-->
             <Grid x:Name="grdContent" Grid.Column="0" DataContext="{StaticResource personnelDayOffViewSource}">
-                <DataGrid x:Name="dtgpersonnelDayOff" Margin="0,0,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" MouseDoubleClick="dtgpersonnelDayOff_MouseDoubleClick">
+                <DataGrid x:Name="dtgpersonnelDayOff" Margin="0,0,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" SelectionMode="Single"
+                          RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" 
+                          MouseDoubleClick="dtgpersonnelDayOff_MouseDoubleClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="dopeColumn" Binding="{Binding dope}" Header="ID" Width=".5*" />
                         <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="2*" />
@@ -76,7 +78,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <CheckBox x:Name="chkMonday" Content="Monday" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                        <CheckBox x:Name="chkTuestday" Content="Tuestday" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkTuestday" Content="Tuesday" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkWednesday" Content="Wednesday" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkThursday" Content="Thursday" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         <CheckBox x:Name="chkFriday" Content="Friday" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
@@ -97,7 +99,7 @@
                     <Button x:Name="btnShow" Content="Show" Grid.Column="0" Click="btnShow_Click" Height="40" VerticalAlignment="Top" />
                     <Button x:Name="btnEdit" Content="Edit" Grid.Column="2" IsEnabled="False" Click="btnEdit_Click"/>
                     <Button x:Name="btnSave" Content="Save" Grid.Column="3" IsEnabled="False" Click="btnSave_Click"/>
-                    <Button x:Name="btnCalcel" Content="Calcel" Grid.Column="4" IsEnabled="False" Click="btnCalcel_Click"/>
+                    <Button x:Name="btnCalcel" Content="Cancel" Grid.Column="4" IsEnabled="False" Click="btnCalcel_Click"/>
                 </Grid>
                 <!--#endregion Buttons-->
             </Grid>
@@ -117,7 +119,7 @@
                 <Separator />
                 <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
                         <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                     </StackPanel>
                 </StatusBarItem>

@@ -3,7 +3,6 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
@@ -18,13 +17,17 @@ namespace IM.BusinessRules.BR
     /// <param name="date">Fecha currente</param>
     /// <history>
     /// [jorcanche] created 18/04/2016 Created
+    /// [jorcanche] se agrego asincronia 08/07/2016 
     /// </history>
-    public static List<NoticeShort> GetNotices(string leadSource, Nullable<System.DateTime> date)
+    public static async Task<List<NoticeShort>> GetNotices(string leadSource, DateTime? date)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetNotices(leadSource, date).ToList();        
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetNotices(leadSource, date).ToList();
+        }
+      });
     }
     #endregion
 

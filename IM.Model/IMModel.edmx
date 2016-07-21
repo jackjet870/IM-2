@@ -1616,6 +1616,14 @@
           <Property Name="rcfN" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="rcfA" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="RefundTypeFolios">
+          <Key>
+            <PropertyRef Name="rtfrf" />
+            <PropertyRef Name="rtfFolio" />
+          </Key>
+          <Property Name="rtfrf" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="rtfFolio" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="RefundTypes">
           <Key>
             <PropertyRef Name="rfID" />
@@ -4695,6 +4703,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RefundTypeFolios_RefundTypes">
+          <End Role="RefundTypes" Type="Self.RefundTypes" Multiplicity="1" />
+          <End Role="RefundTypeFolios" Type="Self.RefundTypeFolios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RefundTypes">
+              <PropertyRef Name="rfID" />
+            </Principal>
+            <Dependent Role="RefundTypeFolios">
+              <PropertyRef Name="rtfrf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ReportsTexts_Languages">
           <End Role="Languages" Type="Self.Languages" Multiplicity="1" />
           <End Role="ReportsTexts" Type="Self.ReportsTexts" Multiplicity="*" />
@@ -6015,6 +6035,35 @@
           <Parameter Name="Program" Type="varchar" Mode="In" />
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptStatisticsByCloser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+          <Parameter Name="Segments" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeAllSalesmen" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptStatisticsByExitCloser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+          <Parameter Name="Segments" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeAllSalesmen" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptStatisticsByFTB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+          <Parameter Name="Segments" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="ByLocations" Type="bit" Mode="In" />
+          <Parameter Name="ByLocationsCategories" Type="bit" Mode="In" />
+          <Parameter Name="IncludeAllSalesmen" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptStatisticsBySegments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DatesFrom" Type="varchar(max)" Mode="In" />
           <Parameter Name="DatesTo" Type="varchar(max)" Mode="In" />
@@ -6325,6 +6374,11 @@
         </Function>
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetMealTicketByFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="meID" Type="int" Mode="In" />
+          <Parameter Name="Folio" Type="int" Mode="In" />
+          <Parameter Name="Authorized" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetNotices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
@@ -7195,6 +7249,9 @@
           <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="Markets" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptRefundLetter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RefundID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptRepsPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -7267,6 +7324,11 @@
         <Function Name="USP_OR_SaveExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="HoursDif" Type="smallint" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_SaveGiftLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
@@ -7657,6 +7719,7 @@
           <EntitySet Name="Programs" EntityType="Self.Programs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RateTypes" EntityType="Self.RateTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReasonCancellationFolios" EntityType="Self.ReasonCancellationFolios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RefundTypeFolios" EntityType="Self.RefundTypeFolios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Regions" EntityType="Self.Regions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReimpresionMotives" EntityType="Self.ReimpresionMotives" Schema="dbo" store:Type="Tables" />
@@ -8540,6 +8603,10 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductsLegends" EntitySet="ProductsLegends" />
           </AssociationSet>
+          <AssociationSet Name="FK_RefundTypeFolios_RefundTypes" Association="Self.FK_RefundTypeFolios_RefundTypes">
+            <End Role="RefundTypes" EntitySet="RefundTypes" />
+            <End Role="RefundTypeFolios" EntitySet="RefundTypeFolios" />
+          </AssociationSet>
           <AssociationSet Name="FK_ReportsTexts_Languages" Association="Self.FK_ReportsTexts_Languages">
             <End Role="Languages" EntitySet="Languages" />
             <End Role="ReportsTexts" EntitySet="ReportsTexts" />
@@ -9339,19 +9406,19 @@
           <Property Name="giPrice3" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="giPrice4" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="giPack" Type="Boolean" Nullable="false" />
-          <Property Name="gigc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="giInven" Type="Boolean" Nullable="false" />
+          <Property Name="gigc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="ITEMS" />
+          <Property Name="giInven" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="giA" Type="Boolean" Nullable="false" />
           <Property Name="giWFolio" Type="Boolean" Nullable="false" />
           <Property Name="giWPax" Type="Boolean" Nullable="false" />
-          <Property Name="giO" Type="Int32" Nullable="false" />
+          <Property Name="giO" Type="Int32" Nullable="false" DefaultValue="10000" />
           <Property Name="giUnpack" Type="Boolean" Nullable="false" />
           <Property Name="giMaxQty" Type="Int32" Nullable="false" />
           <Property Name="giMonetary" Type="Boolean" Nullable="false" />
           <Property Name="giAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="giProductGiftsCard" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="giCountInPackage" Type="Boolean" Nullable="false" />
-          <Property Name="giCountInCancelledReceipts" Type="Boolean" Nullable="false" />
+          <Property Name="giCountInPackage" Type="Boolean" Nullable="false" DefaultValue="true" />
+          <Property Name="giCountInCancelledReceipts" Type="Boolean" Nullable="false" DefaultValue="true" />
           <Property Name="gipr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="giPVPPromotion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="giWCost" Type="Boolean" Nullable="false" />
@@ -9362,7 +9429,7 @@
           <Property Name="giSale" Type="Boolean" Nullable="false" />
           <Property Name="giPriceMinor" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="giPriceExtraAdult" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="giQty" Type="Int32" Nullable="false" />
+          <Property Name="giQty" Type="Int32" Nullable="false" DefaultValue="1" />
           <Property Name="giDiscount" Type="Boolean" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Gifts_Products" FromRole="Gifts" ToRole="Products" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsInventories" Relationship="Self.FK_GiftsInventory_Gifts" FromRole="Gifts" ToRole="GiftsInventory" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -10664,7 +10731,7 @@
           <NavigationProperty Name="Configuration_Boss" Relationship="Self.FK_osConfig_Personnel_Boss" FromRole="Personnel" ToRole="osConfig" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PersonnelAccess" Relationship="Self.FK_PersLSSR_Personnel" FromRole="Personnel" ToRole="PersLSSR" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnel_Liners" Relationship="Self.FK_Personnel_Personnel_Liner" FromRole="Personnel" ToRole="Personnel1" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Personnel_Liner" Relationship="Self.FK_Personnel_Personnel_Liner" FromRole="Personnel1" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Personnel_Liner" Relationship="Self.FK_Personnel_Personnel_Liner" FromRole="Personnel1" ToRole="Personnel" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PersonnelPermissions" Relationship="Self.FK_PersonnelPermissions_Personnel" FromRole="Personnel" ToRole="PersonnelPermissions" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PostsLogs" Relationship="Self.FK_PostsLog_Personnel" FromRole="Personnel" ToRole="PostsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PostsLogs_ChangedBy" Relationship="Self.FK_PostsLog_Personnel_ChangedBy" FromRole="Personnel" ToRole="PostsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -10854,6 +10921,7 @@
           <Property Name="rfN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="rfA" Type="Boolean" />
           <NavigationProperty Name="DepositsRefunds" Relationship="Self.fk_drrf" FromRole="RefundTypes" ToRole="DepositsRefund" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="RefundTypeFolios" Relationship="IMModel.FK_RefundTypeFolios_RefundTypes" FromRole="RefundType" ToRole="RefundTypeFolio" />
         </EntityType>
         <EntityType Name="Region">
           <Key>
@@ -17924,6 +17992,55 @@
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
             <Parameter Name="Gift" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptRefundLetter">
+            <ReturnType Type="Collection(IMModel.RptRefundLetter)"/>
+            <ReturnType Type="Collection(IMModel.RptRefundLetter_BookingDeposit)"/>
+            <Parameter Name="RefundID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptStatisticsByCloser" ReturnType="Collection(IMModel.RptStatisticsByCloser)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+            <Parameter Name="Segments" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptStatisticsByExitCloser" ReturnType="Collection(IMModel.RptStatisticsByExitCloser)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+            <Parameter Name="Segments" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetMealTicketByFolio" ReturnType="Collection(IMModel.MealTicketData)">
+            <Parameter Name="meID" Mode="In" Type="Int32" />
+            <Parameter Name="Folio" Mode="In" Type="Int32" />
+            <Parameter Name="Authorized" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGiftLog">
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="HoursDif" Mode="In" Type="Int16" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="RefundTypesFolios" EntityType="IMModel.RefundTypeFolio" />
+          <AssociationSet Name="FK_RefundTypeFolios_RefundTypes" Association="IMModel.FK_RefundTypeFolios_RefundTypes">
+            <End Role="RefundType" EntitySet="RefundTypes" />
+            <End Role="RefundTypeFolio" EntitySet="RefundTypesFolios" />
+          </AssociationSet>
+          <FunctionImport Name="USP_IM_RptStatisticsByFTB" ReturnType="Collection(IMModel.RptStatisticsByFTB)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+            <Parameter Name="Segments" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="ByLocations" Mode="In" Type="Boolean" />
+            <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
+            <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22544,6 +22661,126 @@
         <ComplexType Name="LocationShort">
           <Property Type="String" Name="loID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="loN" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="RptRefundLetter">
+          <Property Type="Int32" Name="GuestID" Nullable="false" />
+          <Property Type="String" Name="srID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SaleRoom" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="GuestNames" Nullable="false" MaxLength="177" />
+          <Property Type="String" Name="Guest1" Nullable="false" MaxLength="106" />
+          <Property Type="String" Name="Guest2" Nullable="false" MaxLength="66" />
+          <Property Type="String" Name="PRName" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="RefundID" Nullable="false" />
+          <Property Type="Int32" Name="RefundFolio" Nullable="false" />
+          <Property Type="Decimal" Name="TotalAmount" Nullable="false" Precision="19" />
+          <Property Type="DateTime" Name="RefundDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="OutInvt" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="RptRefundLetter_BookingDeposit">
+          <Property Type="Decimal" Name="Amount" Nullable="false" Precision="19" />
+          <Property Type="String" Name="AmountLetter" Nullable="false" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="CCType" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CardNum" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="ExpDate" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Auth" Nullable="false" MaxLength="7" />
+        </ComplexType>
+        <ComplexType Name="RptStatisticsByCloser">
+          <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="SalemanTypeN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="OPP" Nullable="true" />
+          <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesRegular" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptStatisticsByExitCloser">
+          <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="OPP" Nullable="true" />
+          <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
+          <Property Type="String" Name="SalesAmountRange" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="MealTicketData">
+          <Property Type="String" Name="meType" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="myN" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="megu" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="meD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="mepe" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Authorized" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="meFolio" Nullable="false" />
+          <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
+          <Property Type="Int32" Name="meAdults" Nullable="false" />
+          <Property Type="Int32" Name="meMinors" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="SalesRoomID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SalesRoomName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="raN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="REFERENCE" Nullable="false" MaxLength="138" />
+          <Property Type="String" Name="REFERENCENAME" Nullable="false" MaxLength="60" />
+        </ComplexType>
+        <EntityType Name="RefundTypeFolio">
+          <Key>
+            <PropertyRef Name="rtfrf" />
+            <PropertyRef Name="rtfFolio" />
+          </Key>
+          <Property Name="rtfrf" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="rtfFolio" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RefundType" Relationship="IMModel.FK_RefundTypeFolios_RefundTypes" FromRole="RefundTypeFolio" ToRole="RefundType" />
+        </EntityType>
+        <Association Name="FK_RefundTypeFolios_RefundTypes">
+          <End Type="IMModel.RefundType" Role="RefundType" Multiplicity="1" />
+          <End Type="IMModel.RefundTypeFolio" Role="RefundTypeFolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RefundType">
+              <PropertyRef Name="rfID" />
+            </Principal>
+            <Dependent Role="RefundTypeFolio">
+              <PropertyRef Name="rtfrf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="RptStatisticsByFTB">
+          <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Locations" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="SalemanTypeN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PostName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="OPP" Nullable="true" />
+          <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesRegular" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30350,6 +30587,136 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_DeleteGuestPromotion" FunctionName="IMModel.Store.USP_OR_DeleteGuestPromotion" />
+          <FunctionImportMapping FunctionImportName="USP_OR_RptRefundLetter" FunctionName="IMModel.Store.USP_OR_RptRefundLetter">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptRefundLetter">
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="srID" ColumnName="srID" />
+                <ScalarProperty Name="SaleRoom" ColumnName="SaleRoom" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="GuestNames" ColumnName="GuestNames" />
+                <ScalarProperty Name="Guest1" ColumnName="Guest1" />
+                <ScalarProperty Name="Guest2" ColumnName="Guest2" />
+                <ScalarProperty Name="PRName" ColumnName="PRName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RefundID" ColumnName="RefundID" />
+                <ScalarProperty Name="RefundFolio" ColumnName="RefundFolio" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="RefundDate" ColumnName="RefundDate" />
+                <ScalarProperty Name="OutInvt" ColumnName="OutInvt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptRefundLetter_BookingDeposit">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AmountLetter" ColumnName="AmountLetter" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CCType" ColumnName="CCType" />
+                <ScalarProperty Name="CardNum" ColumnName="CardNum" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="Auth" ColumnName="Auth" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptStatisticsByCloser" FunctionName="IMModel.Store.USP_IM_RptStatisticsByCloser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptStatisticsByCloser">
+                <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
+                <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
+                <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />
+                <ScalarProperty Name="SalemanTypeN" ColumnName="SalemanTypeN" />
+                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
+                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
+                <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="OPP" ColumnName="OPP" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="SalesRegular" ColumnName="SalesRegular" />
+                <ScalarProperty Name="SalesExit" ColumnName="SalesExit" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptStatisticsByExitCloser" FunctionName="IMModel.Store.USP_IM_RptStatisticsByExitCloser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptStatisticsByExitCloser">
+                <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
+                <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
+                <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />
+                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
+                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
+                <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="OPP" ColumnName="OPP" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="SalesAmountRange" ColumnName="SalesAmountRange" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesTotal" ColumnName="SalesTotal" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetMealTicketByFolio" FunctionName="IMModel.Store.USP_OR_GetMealTicketByFolio">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.MealTicketData">
+                <ScalarProperty Name="meType" ColumnName="meType" />
+                <ScalarProperty Name="myN" ColumnName="myN" />
+                <ScalarProperty Name="megu" ColumnName="megu" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="meD" ColumnName="meD" />
+                <ScalarProperty Name="mepe" ColumnName="mepe" />
+                <ScalarProperty Name="Authorized" ColumnName="Authorized" />
+                <ScalarProperty Name="meFolio" ColumnName="meFolio" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="meAdults" ColumnName="meAdults" />
+                <ScalarProperty Name="meMinors" ColumnName="meMinors" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
+                <ScalarProperty Name="SalesRoomName" ColumnName="SalesRoomName" />
+                <ScalarProperty Name="raN" ColumnName="raN" />
+                <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
+                <ScalarProperty Name="REFERENCENAME" ColumnName="REFERENCENAME" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGiftLog" FunctionName="IMModel.Store.USP_OR_SaveGiftLog" />
+          <EntitySetMapping Name="RefundTypesFolios">
+            <EntityTypeMapping TypeName="IMModel.RefundTypeFolio">
+              <MappingFragment StoreEntitySet="RefundTypeFolios">
+                <ScalarProperty Name="rtfFolio" ColumnName="rtfFolio" />
+                <ScalarProperty Name="rtfrf" ColumnName="rtfrf" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptStatisticsByFTB" FunctionName="IMModel.Store.USP_IM_RptStatisticsByFTB" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptStatisticsByFTB">
+                <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
+                <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
+                <ScalarProperty Name="Locations" ColumnName="Locations" />
+                <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />
+                <ScalarProperty Name="SalemanTypeN" ColumnName="SalemanTypeN" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
+                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
+                <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="OPP" ColumnName="OPP" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="SalesRegular" ColumnName="SalesRegular" />
+                <ScalarProperty Name="SalesExit" ColumnName="SalesExit" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

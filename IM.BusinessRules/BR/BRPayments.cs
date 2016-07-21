@@ -11,15 +11,16 @@ namespace IM.BusinessRules.BR
  public class BRPayments
   {
     #region GetPaymentsbySale
-    /// <summary>
-    /// Obtiene los pagos por venta
-    /// </summary>
-    /// <param name="srId">ID Sale</param>
-    /// <returns>Lista de Payment por Sale</returns>
-    /// <hitory>
-    /// [jorcanche] 20/05/2016 created
-    /// </hitory>
-    public async static Task<List<Payment>> GetPaymentsbySale(int saID)
+
+   /// <summary>
+   /// Obtiene los pagos por venta
+   /// </summary>
+   /// <param name="srId">ID Sale</param>
+   /// <returns>Lista de Payment por Sale</returns>
+   /// <hitory>
+   /// [jorcanche] 20/05/2016 created
+   /// </hitory>
+   public static async Task<List<Payment>> GetPaymentsbySale(int saId)
     {
       var res = new List<Payment>();
       await Task.Run(() =>
@@ -27,7 +28,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           res = (from gu in dbContext.Payments
-                 where gu.pasa == saID
+                 where gu.pasa == saId
                  orderby gu.papt
                  select gu).ToList();
         }
@@ -40,18 +41,18 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Elimina uno o mas registros que contengan el Id Sale en la tabla Payments
     /// </summary>
-    /// <param name="saleID">Idetificador de Sale</param>
+    /// <param name="saleId">Idetificador de Sale</param>
     /// <history>
     /// [jorcanche]  created 24062016
     /// </history>
-    public async static Task<int> DeletePaymentsbySale(int saleID)
+    public static async Task<int> DeletePaymentsbySale(int saleId)
     {
       int res = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          var lstPayments = dbContext.Payments.Where(p => p.pasa == saleID);
+          var lstPayments = dbContext.Payments.Where(p => p.pasa == saleId);
           dbContext.Payments.RemoveRange(lstPayments);
           res =  dbContext.SaveChanges();
         }

@@ -190,6 +190,77 @@ new ExcelFormatTable() { Title = "Bookings", PropertyName = "Bookings", Format =
       new ExcelFormatTable() { Title = "Canc Book", PropertyName = "guBookCanc", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Order = 23 },
       new ExcelFormatTable() { Title = "Gifts", PropertyName = "Gifts", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Order = 24 }
     };
+    }
+    #endregion
+
+    #region RptGuestLog
+    /// <summary>
+    /// Formato para el reporte de Guest Log
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 07072016 
+    /// </history>    
+    public static List<ExcelFormatTable> RptGuestLog()
+    {
+      return new List<ExcelFormatTable>
+      {    
+        new ExcelFormatTable { PropertyName = "glChangedBy",  Title = "By", Alignment = ExcelHorizontalAlignment.Left, Order = 2 },
+        new ExcelFormatTable { PropertyName = "ChangedByN",  Title = "Name", Alignment = ExcelHorizontalAlignment.Left, Order = 3 },
+        new ExcelFormatTable { PropertyName = "glID",  Title = "Update Date/Time", Alignment = ExcelHorizontalAlignment.Left, Order = 4 ,Format = EnumFormatTypeExcel.DateTime},
+        new ExcelFormatTable { PropertyName = "glsr",  Title = "S R", Alignment = ExcelHorizontalAlignment.Left, Order = 5 },
+        new ExcelFormatTable { PropertyName = "glLastName1",  Title = "Last Name", Alignment = ExcelHorizontalAlignment.Left, Order = 6 },
+        new ExcelFormatTable { PropertyName = "glFirstName1",  Title = "First Name", Alignment = ExcelHorizontalAlignment.Left, Order = 7 },
+        new ExcelFormatTable { PropertyName = "glLastName2",  Title = "Last Name 2", Alignment = ExcelHorizontalAlignment.Left, Order = 8 },
+        new ExcelFormatTable { PropertyName = "glFirstName2",  Title = "First Name 2", Alignment = ExcelHorizontalAlignment.Left, Order = 9 },
+        new ExcelFormatTable { PropertyName = "glHReservID",  Title = "Reserv. #", Alignment = ExcelHorizontalAlignment.Left, Order = 10 },
+        new ExcelFormatTable { PropertyName = "glAvailBySystem",  Title = "Avl Sys", Alignment = ExcelHorizontalAlignment.Left, Order = 11 },
+        new ExcelFormatTable { PropertyName = "glOriginAvail",  Title = "Orig Avl", Alignment = ExcelHorizontalAlignment.Left, Order = 12 },
+        new ExcelFormatTable { PropertyName = "glAvail",  Title = "Avl", Alignment = ExcelHorizontalAlignment.Left, Order = 13 },
+        new ExcelFormatTable { PropertyName = "umN",  Title = "Unavailable Motive", Alignment = ExcelHorizontalAlignment.Left, Order = 14 },
+        new ExcelFormatTable { PropertyName = "glPRAvail",  Title = "PR Avail", Alignment = ExcelHorizontalAlignment.Left, Order = 15 },
+        new ExcelFormatTable { PropertyName = "PRAvailN",  Title = "PR Avail Name", Alignment = ExcelHorizontalAlignment.Left, Order = 16 },
+        new ExcelFormatTable { PropertyName = "glInfoD",  Title = "Info D", Alignment = ExcelHorizontalAlignment.Left, Order = 17, Format=EnumFormatTypeExcel.Date},
+        new ExcelFormatTable { PropertyName = "glPRInfo",  Title = "PR Info", Alignment = ExcelHorizontalAlignment.Left, Order = 18 },
+        new ExcelFormatTable { PropertyName = "PRInfoN",  Title = "PR Info Name", Alignment = ExcelHorizontalAlignment.Left, Order = 19 },
+        new ExcelFormatTable { PropertyName = "glFollowD",  Title = "Follow D", Alignment = ExcelHorizontalAlignment.Left, Order = 20, Format=EnumFormatTypeExcel.Date },
+        new ExcelFormatTable { PropertyName = "glPRFollow",  Title = "PR Follow", Alignment = ExcelHorizontalAlignment.Left, Order = 21 },
+        new ExcelFormatTable { PropertyName = "PRFollowN",  Title = "PR Follow Name", Alignment = ExcelHorizontalAlignment.Left, Order = 22 },
+        new ExcelFormatTable { PropertyName = "glBookD",  Title = "Book D", Alignment = ExcelHorizontalAlignment.Left, Order = 23 , Format=EnumFormatTypeExcel.Date},
+        new ExcelFormatTable { PropertyName = "glBookT",  Title = "Book T", Alignment = ExcelHorizontalAlignment.Left, Order = 24 , Format=EnumFormatTypeExcel.Time},
+        new ExcelFormatTable { PropertyName = "glReschD",  Title = "Resch D", Alignment = ExcelHorizontalAlignment.Left, Order = 25 , Format=EnumFormatTypeExcel.Date},
+        new ExcelFormatTable { PropertyName = "glReschT",  Title = "Resch T", Alignment = ExcelHorizontalAlignment.Left, Order = 26 , Format=EnumFormatTypeExcel.Time},
+        new ExcelFormatTable { PropertyName = "glPRInvit1",  Title = "PR B", Alignment = ExcelHorizontalAlignment.Left, Order = 27 },
+        new ExcelFormatTable { PropertyName = "PRInvit1N",  Title = "PR Booking Name", Alignment = ExcelHorizontalAlignment.Left, Order = 28 },
+        new ExcelFormatTable { PropertyName = "glPRInvit2",  Title = "PR B 2", Alignment = ExcelHorizontalAlignment.Left, Order = 29 },
+        new ExcelFormatTable { PropertyName = "PRInvit2N",  Title = "PR Booking 2 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 30 },
+        new ExcelFormatTable { PropertyName = "glBookCanc",  Title = "C.Bk", Alignment = ExcelHorizontalAlignment.Left, Order = 31 },
+        new ExcelFormatTable { PropertyName = "glLiner1",  Title = "Liner 1", Alignment = ExcelHorizontalAlignment.Left, Order = 32 },
+        new ExcelFormatTable { PropertyName = "Liner1N",  Title = "Liner 1 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 33 },
+        new ExcelFormatTable { PropertyName = "glLiner2",  Title = "Liner 2", Alignment = ExcelHorizontalAlignment.Left, Order = 34 },
+        new ExcelFormatTable { PropertyName = "Liner2N",  Title = "Liner 2 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 35 },
+        new ExcelFormatTable { PropertyName = "glCloser1",  Title = "Closer 1", Alignment = ExcelHorizontalAlignment.Left, Order = 36 },
+        new ExcelFormatTable { PropertyName = "Closer1N",  Title = "Closer 1 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 37 },
+        new ExcelFormatTable { PropertyName = "glCloser2",  Title = "Closer 2", Alignment = ExcelHorizontalAlignment.Left, Order =  38},
+        new ExcelFormatTable { PropertyName = "Closer2N",  Title = "Closer 2 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 39 },
+        new ExcelFormatTable { PropertyName = "glCloser3",  Title = "Closer 3'", Alignment = ExcelHorizontalAlignment.Left, Order = 40 },
+        new ExcelFormatTable { PropertyName = "Closer3N",  Title = "Closer 3 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 41 },
+        new ExcelFormatTable { PropertyName = "glExit1",  Title = "Exit1", Alignment = ExcelHorizontalAlignment.Left, Order = 42 },
+        new ExcelFormatTable { PropertyName = "Exit1N",  Title = "Exit 1 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 43},
+        new ExcelFormatTable { PropertyName = "glExit2",  Title = "Exit2", Alignment = ExcelHorizontalAlignment.Left, Order = 44 },
+        new ExcelFormatTable { PropertyName = "Exit2N",  Title = "Exit 2 Name", Alignment = ExcelHorizontalAlignment.Left, Order = 45 },
+        new ExcelFormatTable { PropertyName = "glPodium",  Title = "Podium", Alignment = ExcelHorizontalAlignment.Left, Order = 46 },
+        new ExcelFormatTable { PropertyName = "PodiumN",  Title = "Podium Name", Alignment = ExcelHorizontalAlignment.Left, Order = 48 },
+        new ExcelFormatTable { PropertyName = "glVLO",  Title = "VLO", Alignment = ExcelHorizontalAlignment.Left, Order = 49 },
+        new ExcelFormatTable { PropertyName = "VLON",  Title = "VLO Name", Alignment = ExcelHorizontalAlignment.Left, Order = 50 },
+        new ExcelFormatTable { PropertyName = "glShow",  Title = "Sh", Alignment = ExcelHorizontalAlignment.Left, Order = 51 },
+        new ExcelFormatTable { PropertyName = "glShowD",  Title = "Show D", Alignment = ExcelHorizontalAlignment.Left, Order = 52 , Format=EnumFormatTypeExcel.Date },
+        new ExcelFormatTable { PropertyName = "glQ",  Title = "Q", Alignment = ExcelHorizontalAlignment.Left, Order = 53 },
+        new ExcelFormatTable { PropertyName = "glInOut",  Title = "IO", Alignment = ExcelHorizontalAlignment.Left, Order = 54 },
+        new ExcelFormatTable { PropertyName = "glWalkOut",  Title = "WO", Alignment = ExcelHorizontalAlignment.Left, Order = 55 },
+        new ExcelFormatTable { PropertyName = "glCTour",  Title = "CT", Alignment = ExcelHorizontalAlignment.Left, Order = 56 },
+        new ExcelFormatTable { PropertyName = "glReimpresion",  Title = "Re-Printed", Alignment = ExcelHorizontalAlignment.Left, Order = 57 },
+        new ExcelFormatTable { PropertyName = "rmN",  Title = "Re-Print Motive", Alignment = ExcelHorizontalAlignment.Left, Order = 58 }
+      };
     } 
     #endregion
   }

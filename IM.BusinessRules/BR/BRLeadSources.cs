@@ -109,12 +109,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] 11/04/2016 created
     /// </history>
-    public static string GetOccupationLeadSources(DateTime date, string lS)
+    public static Task<string> GetOccupationLeadSources(DateTime date, string lS)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
-      }
+       return Task.Run(() =>
+      {       
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_Occupation;
+          return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
+        }
+      });
     }
     #endregion
 

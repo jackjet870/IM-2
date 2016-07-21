@@ -579,7 +579,7 @@ namespace IM.Base.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      RptInvitationHelper.RPTInvitation(_guestID, _user.User.peID);
+      RptInvitationHelper.RptInvitation(_guestID, _user.User.peID);
     }
 
     /// <summary>
@@ -2210,9 +2210,9 @@ namespace IM.Base.Forms
     /// <summary>
     /// Carga la información del Grid de depósitos de los invitados
     /// </summary>
-    private void LoadDepositGrid()
+    private async void LoadDepositGrid()
     {
-      var deposits = BRBookingDeposits.GetBookingDeposits(_guestID);
+      var deposits = await BRBookingDeposits.GetBookingDeposits(_guestID);
 
       _lstObjInvitBookingDeposit = deposits.Select(c => new objInvitBookingDeposit
       {

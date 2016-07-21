@@ -6,7 +6,7 @@
         xmlns:Classes="clr-namespace:IM.Base.Classes"
         x:Class="IM.Base.Forms.frmReportQueue"
         mc:Ignorable="d"
-        Title="Report Queue" Height="300" Width="800" Closing="Window_Closing" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Report Queue" Height="300" Width="800" Closing="Window_Closing">
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="FontWeight" Value="Bold" />
@@ -63,7 +63,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </StackPanel.Style>
-                                        <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" />
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" />
                                         <Label Content="Loading report..." Margin="5,0,0,0" />
                                     </StackPanel>
                                     <Label Content="{Binding FileInfo.Name}">

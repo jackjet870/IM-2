@@ -4,9 +4,13 @@ using IM.BusinessRules.BR;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using System.Windows;
 
 namespace IM.Base.Helpers
 {
+  /// <summary>
+  /// C
+  /// </summary>
   public class RptInvitationHelper
   {
 
@@ -18,10 +22,10 @@ namespace IM.Base.Helpers
     /// [jorcanche] 16/04/2016 created
     /// [jorcanche] 12/05/2016 Se cambio de frmInvitaciona RptinvitationHelper
     /// </history>
-    public static void RPTInvitation(int guest = 0, string peID = "USER")
+    public static async void RptInvitation(int guest = 0, string peID = "USER", Window frm=null)
     {
       //Traemos la informacion del store y la almacenamos en un procedimiento
-      InvitationData invitationData = BRInvitation.RptInvitationData(guest);
+      InvitationData invitationData = await BRInvitation.RptInvitationData(guest);
 
       //Determinamos el Lenguaje
       LanguageHelper.IDLanguage = invitationData.Invitation.gula;
@@ -47,11 +51,13 @@ namespace IM.Base.Helpers
       rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
 
       //Cargamos las Etiquetas 
-      lblInvitation(rptInvi,peID);
+      LblInvitation(rptInvi,peID);
 
       //Cargamos el Viewer
-      var _frmViewer = new frmViewer(rptInvi);
-      _frmViewer.ShowDialog();
+      var frmViewer = new frmViewer(rptInvi) ;
+      frmViewer.ShowDialog();
+    
+
     }
     #endregion
 
@@ -64,7 +70,7 @@ namespace IM.Base.Helpers
     /// [jorcanche] 16/04/2016 created
     /// [jorcanche] 12/05/2016 Se cambio de frmInvitaciona RptinvitationHelper
     /// </history>
-    private static void lblInvitation(rptInvitation rptInv, string _peID)
+    private static void LblInvitation(rptInvitation rptInv, string _peID)
     {
       //Etiquetas de Depositos
       rptInv.SetParameterValue("lblDeposits", LanguageHelper.GetMessage(EnumMessage.msgLblDeposits));

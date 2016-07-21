@@ -19,12 +19,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [lchairez] 13/03/2016 Created.
     /// </history>
-    public static List<BookingDeposit> GetBookingDeposits(int guestId)
+    public async static Task<List<BookingDeposit>> GetBookingDeposits(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<BookingDeposit> lstResult = new List<BookingDeposit>();
+
+      await Task.Run(() =>
       {
-        return dbContext.BookingDeposits.Include("CreditCardType").Include("PaymentType").Where(b => b.bdgu == guestId).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          lstResult = dbContext.BookingDeposits.Include("CreditCardType").Include("PaymentType").Where(b => b.bdgu == guestId).ToList();
+        }
+      });
+
+      return lstResult;
     }
     #endregion
 

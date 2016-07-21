@@ -67,9 +67,9 @@ namespace IM.Model.Enums
     [Description("EXCHRATES")]
     ExchangeRates,
     [Description("FOLIOSOUT")]
-    FolioInvitationsOuthouse,
+    FoliosInvitationsOuthouse,
     [Description("FOLIOSCXC")]
-    FolioCXC,
+    FoliosCxC,
     [Description("CXCAUTH")]
     CxCAuthorization,
     [Description("CLOSESR")]

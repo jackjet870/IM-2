@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
-        Title="About" Height="420" Width="570" Background="SkyBlue" ResizeMode="NoResize">
+        Title="About" Height="420" Width="570" Background="SkyBlue" ResizeMode="NoResize" ShowInTaskbar="False">
     <Grid>
-        <Image Source="../Images/IM.png" Width="80" Height="80" Margin="10,10,452,279" ></Image>
+        <Image Source="pack://application:,,,/IM.Styles;component/Images/IM.png" Width="80" Height="80" Margin="10,10,452,279" ></Image>
         <TextBlock Text="INTELLIGENCE MARKETING" FontSize="30" Margin="122,10,10,314" FontWeight="Bold" Foreground="Blue"/>
         <TextBlock Text="The best timeshare management" FontSize="18" Foreground="DarkBlue" Margin="169,55,88,279"/>
         <Label Content="Versión:" Margin="6,95,478,237"/>
