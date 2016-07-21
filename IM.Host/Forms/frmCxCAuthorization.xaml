@@ -6,9 +6,14 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCxCAuthorization"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
   
         Title="CxC Authorization" Height="435.554" Width="977.836" Loaded="Window_Loaded" ShowInTaskbar="False">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
+            AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
+    </Window.InputBindings>
     <Window.Resources>
 
         <CollectionViewSource x:Key="cxCDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CxCData}, CreateList=True}"/>
@@ -124,29 +129,29 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="266*" MinHeight="220"/>
-            <RowDefinition Height="31*"/>
-            <RowDefinition Height="22"/>
+            <RowDefinition Height="53*" MinHeight="220"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="19"/>
         </Grid.RowDefinitions>
 
         <!--#region Barra de opciones y botones -->
         <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
-            <StackPanel >
-                <StackPanel Orientation="Horizontal" Height="40">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Height="Auto">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <xctk:DateTimePicker x:Name="dtpkFrom" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Height="30" Style="{StaticResource dtp-DateRange-TK}" />
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <xctk:DateTimePicker x:Name="dtpkTo" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Height="30" Style="{StaticResource dtp-DateRange-TK}" />
                     <TextBlock  Text="LS" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <ComboBox Name="cbxLeadSource"  Style="{StaticResource cbxPersonnel}" FontWeight="Light" DisplayMemberPath="lsN" SelectedValuePath="lsID"/>
 
+                    <ComboBox Name="cbxLeadSource" Style="{StaticResource ResourceKey=cbx-General}" Height="30" Width="200" FontWeight="Light" DisplayMemberPath="lsN" SelectedValuePath="lsID"/>
                     <TextBlock  Text="PR" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID" ItemTemplate="{StaticResource cbx-Personnel-img}"/>
+                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource ResourceKey=cbx-Personnel-ValidatePermission}" TextSearch.TextPath="peID" ItemTemplate="{StaticResource cbx-Personnel-img}"/>
 
                     <Border x:Name="imgButtonSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BSearch.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
                             </Viewbox>
                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -154,7 +159,7 @@
                     <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagSave" Source="pack://application:,,,/IM.styles;component/Images/BSave.png"/>
+                                <Image x:Name="imagSave" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
                             </Viewbox>
                             <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -169,11 +174,11 @@
                     </Border>
 
                 </StackPanel>
-                <!--<TextBlock Text="Filters" Margin="10,0,0,0"/>-->
+
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TabControl x:Name="tbcAuthorized"  SelectionChanged="Authorized_SelectionChanged">
-                        <TabItem Header="Unauthorized CxC's"/>
-                        <TabItem Header="Authorized CxC's"/>
+                    <TabControl x:Name="tbcAuthorized" Style="{StaticResource TabControlStyle}" SelectionChanged="Authorized_SelectionChanged">
+                        <TabItem Header="Unauthorized CxC's" Style="{StaticResource TabItemStyle}"/>
+                        <TabItem Header="Authorized CxC's" Style="{StaticResource TabItemStyle}"/>
                     </TabControl>
                 </StackPanel>
             </StackPanel>
@@ -201,14 +206,20 @@
                         <DataGridTextColumn x:Name="grcxcTaxiOutColumn" Binding="{Binding grcxcTaxiOut, StringFormat=\{0:C\}}" Header="CxC Taxi Out" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="CxCColumn" Binding="{Binding CxC, StringFormat=\{0:C\}}" Header="CxC" IsReadOnly="True" Width="auto"/>
 
-
-                        <DataGridTemplateColumn x:Name="AuthorizedColumn" IsReadOnly="False"  Header="Auth." Width="auto">
+                        <DataGridCheckBoxColumn x:Name="AuthorizedColumn" Header="Auth."  Width="auto" Binding="{Binding Authorized,  Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.CellStyle>
+                                <Style>
+                                    <EventSetter Event="CheckBox.Click" Handler="AuthorizedBox_Click"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.CellStyle>
+                        </DataGridCheckBoxColumn>
+                        <!--<DataGridTemplateColumn x:Name="AuthorizedColumn"  Header="Auth." Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox Name="ckbAuthorized" IsChecked="{Binding Authorized, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" Click="AuthorizedBox_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
 
                         <DataGridTemplateColumn x:Name="grCxCAppDColumn" Header="Auth. Date"  IsReadOnly="False" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
@@ -310,10 +321,10 @@
         <!--#endregion-->
 
         <!--#region Paginador -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="5">
-            <Button Name="btnFrist"  Content="Frist" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Height="21"/>
-            <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
-            <Button x:Name="btnPrev" Content="Prev" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="392,2,361,0" Width="auto">
+            <Button Name="btnFrist"  Content="First" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Height="21"/>
+            <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
+            <Button x:Name="btnPrev" Content="Prev" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto"  Height="21"/>
             <Label x:Name="lblPagText" Content="  0 of 0 " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
             <Button x:Name="btnNext" Content="Next"  IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="21"/>
             <Label x:Name="lblSpace2" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />

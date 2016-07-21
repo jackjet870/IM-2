@@ -44,6 +44,7 @@ namespace IM.Host.Forms
       imin = minLength.Value;
       strIsEqual = isEqual;
       strDefaultValue = defaultvalue;
+      WindowStartupLocation = WindowStartupLocation.CenterScreen;
       strError = (!String.IsNullOrEmpty(error) && !String.IsNullOrWhiteSpace(error)) ? error : "the field is empty";
       InitializeComponent();
       LoadComponents();
