@@ -8,7 +8,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using System.Windows.Controls;
 using System.Windows;
-
+using Xceed.Wpf.Toolkit;
 namespace IM.Base.Helpers
 {
   public class DateHelper
@@ -448,6 +448,36 @@ namespace IM.Base.Helpers
         //Y le asignamos la fecha del servidor (la actual hora actual)
         sender.SelectedDate = BRHelpers.GetServerDate();
       }
+    }
+    /// <summary>
+    /// Sirve para validar la fecha de los controles DATETIMEPICKER
+    /// Valida valores Nulos, y Rangos de fecha en el orden correcto.
+    /// </summary>
+    /// <param name="dtFrom">Fecha From</param>
+    /// <param name="dtTo">Fecha To</param>
+    /// <returns>True si pasó la validacion  || False en caso contrario</returns>
+    /// <history>
+    /// [erosado] Created.  20/07/2016
+    /// </history>
+    public static bool ValidateValueDate(DateTimePicker dtFrom, DateTimePicker dtTo)
+    {
+      bool validatePass = true;
+      if (dtFrom == null && dtTo == null)
+      {
+        validatePass = false;
+        UIHelper.ShowMessage("We can't get your selected date, please try again.", MessageBoxImage.Error, "Intelligence Marketing");
+      }
+      else if (dtFrom.Value.HasValue == false || dtTo.Value.HasValue == false)
+      {
+        validatePass = false;
+        UIHelper.ShowMessage("Sorry we can't accept empty dates", MessageBoxImage.Error, "Intelligence Marketing");
+      }
+      else if (!(dtFrom?.Value.Value <= dtTo?.Value.Value))
+      {
+        validatePass = false;
+        UIHelper.ShowMessage("End date must be greater than start date.", MessageBoxImage.Error, "Intelligence Marketing");
+      }
+      return validatePass;
     }
     #endregion
   }

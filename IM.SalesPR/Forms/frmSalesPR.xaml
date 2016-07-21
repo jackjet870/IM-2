@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.SalesPR.Forms"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
          mc:Ignorable="d"
          Title="Sales By PR"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
@@ -53,13 +55,13 @@
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="Auto">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <wpftk:DateTimePicker x:Name="dtpkFrom" Style="{StaticResource dtp-DateRange-TK}" KeyUp="dtpkEnterKey"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <wpftk:DateTimePicker x:Name="dtpkTo" Style="{StaticResource dtp-DateRange-TK}" KeyUp="dtpkEnterKey"/>
                     <ComboBox x:Name="cbxPersonnel" TextSearch.TextPath="peID"
                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                              ItemTemplate="{StaticResource cbx-Personnel-img}"/>
+                              ItemTemplate="{StaticResource cbx-Personnel-img}"  Width="300" Height="Auto"/>
                     <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">

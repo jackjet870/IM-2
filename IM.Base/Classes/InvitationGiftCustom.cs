@@ -7,76 +7,115 @@ using IM.Model;
 using System.ComponentModel;
 using IM.Base.Helpers;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 
 namespace IM.Base.Classes
 {
-  public class InvitationGiftCustom : InvitationGift, IDataErrorInfo, INotifyPropertyChanged
+  public class InvitationGiftCustom : InvitationGift, IDataErrorInfo
   {
-    public int IgQtyCustom
+    #region Propiedades 
+    //public int IgQtyCustom
+    //{
+    //  get { return igQty; }
+    //  set { igQty = value; OnPropertyChanged(); }
+    //}
+    //public string IggiCustom
+    //{
+    //  get { return iggi; }
+    //  set
+    //  {
+    //    iggi = value; OnPropertyChanged();
+    //  }
+    //}
+    //public int IgAdultsCustom
+    //{
+    //  get { return igAdults; }
+    //  set { igAdults = value; OnPropertyChanged(); }
+    //}
+
+    //public int IgMinorsCustom
+    //{
+    //  get { return igMinors; }
+    //  set { igMinors = value; OnPropertyChanged(); }
+    //}
+
+    private decimal _maxAuth;
+
+    public decimal MaxAuth
     {
-      get { return igQty; }
-      set { igQty = value; OnPropertyChanged(); }
-    }
-    public string IggiCustom
-    {
-      get { return iggi; }
-      set
-      {
-        iggi = value; OnPropertyChanged();
-        IgAdultsCustom = 1; OnPropertyChanged("IgAdultsCustom");
-      }
+      get { return _maxAuth; }
+      set { _maxAuth = value; }
     }
 
-    public int IgAdultsCustom
+    private decimal _totalCost;
+
+    public decimal TotalCost
     {
-      get { return igAdults; }
-      set { igAdults = value; OnPropertyChanged(); }
+      get { return _totalCost; }
+      set { _totalCost = value; }
     }
 
+    private decimal _totalPrice;
 
+    public decimal TotalPrice
+    {
+      get { return _totalPrice; }
+      set { _totalPrice = value; }
+    }
+    #endregion
     public InvitationGiftCustom()
     {
-
+      //Inicializa la propiedad
+      igQty = 1;
     }
-    public string this[string columnName]
-    {
-      get
-      {
-        string errorMessage = string.Empty;
+    #region Constructor
 
-        switch (columnName)
-        {
-          case "IgQtyCustom":
-            if (igQty == 0) errorMessage = "Quantity can't be lower than 1";
-            break;
-          case "Iggi":
-            if (igQty == 0)
-            {
-              errorMessage = "Enter the quantity first";
-              break;
-            }
-            else if (string.IsNullOrEmpty(iggi))
-            {
-              errorMessage = "Please select a gift";
-              break;
-            }
-            break;
-          case "igAdults":
-            if (igAdults == 0 && igMinors == 0) errorMessage = "Quantity of adult and quantity of minors can't be both zero";
-            break;
-        }
+    #endregion
 
-        return errorMessage;
-      }
-    }
-
+    #region IDataError
     public string Error
     {
       get
       {
-        return string.Empty;
+        throw new NotImplementedException();
       }
     }
+
+    public string this[string columnName]
+    {
+      get
+      {
+        string errorMessage = null;
+        switch (columnName)
+        {
+          case "igQty":
+            if (igQty == 0)
+            {
+              errorMessage = "Input a Quantity.";
+            }
+            break;
+          case "iggi":
+            if (igQty == 0)
+            {
+              errorMessage = "Input a Quantity.";
+            }
+            else if (String.IsNullOrWhiteSpace(iggi))
+            {
+              errorMessage = "Select a Gift.";
+            }
+            break;
+          case "igAdults":
+            if (igAdults == 0 && !String.IsNullOrEmpty(iggi))
+            {
+              errorMessage = "Adult quantity can not be less 1";
+            }
+            break;
+        }
+        return errorMessage;
+      }
+    }
+
+    #endregion
 
     #region Implementacion INotifyPropertyChange
     public event PropertyChangedEventHandler PropertyChanged;

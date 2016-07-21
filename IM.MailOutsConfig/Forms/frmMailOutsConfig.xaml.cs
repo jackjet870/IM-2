@@ -296,8 +296,6 @@ namespace IM.MailOutsConfig.Forms
         StaEnd();
         UIHelper.ShowMessage(ex);
       }
-      StaEnd();
-
     }
     /// <summary>
     /// Actualiza la información de un MailOut

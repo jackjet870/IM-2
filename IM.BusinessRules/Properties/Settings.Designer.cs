@@ -85,7 +85,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
         public int USP_OR_RptPRStats {
             get {
                 return ((int)(this["USP_OR_RptPRStats"]));

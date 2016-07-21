@@ -12,6 +12,7 @@ using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.SalesPR.Forms
 {
@@ -40,8 +41,8 @@ namespace IM.SalesPR.Forms
     {
       LoadPersonnel();
       //Seleccionamos los días en el datapicker 
-      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-      dtpkTo.SelectedDate = DateTime.Now;
+      dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+      dtpkTo.Value = DateTime.Now;
       //Agregamos login del usuario en la interfaz
       SetNewUserLogin();
     }
@@ -53,7 +54,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+      if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
       {
         if (cbxPersonnel?.SelectedValue != null)
         {
@@ -63,22 +64,13 @@ namespace IM.SalesPR.Forms
           var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
           _filtersReport = new List<Tuple<string, string>>();
           _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
-
-          if (dtpkFrom.SelectedDate != null && dtpkTo.SelectedDate != null)
-          {
-            DoGetSalesByPr(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
-          }
+          DoGetSalesByPr(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
         }
         else
         {
           UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
           cbxPersonnel.Focus();
         }
-      }
-      else
-      {
-        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
-        dtpkFrom.Focus();
       }
     }
     /// <summary>
@@ -92,9 +84,9 @@ namespace IM.SalesPR.Forms
       var listaSaleByPr = dtgr.DataContext as List<SaleByPR>;
       if (listaSaleByPr != null)
       {
-        if (dtpkFrom.SelectedDate != null & dtpkTo.SelectedDate != null)
+        if (dtpkFrom.Value != null & dtpkTo.Value != null)
         {
-          var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+          var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.Value.Value, dtpkTo.Value.Value);
           //Obtenemos el nombre del reporte y el dateRange
           const string rptName = "Sales By PR";
           //Obtenemos el dataTable con la lista formateada 
@@ -144,7 +136,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {
@@ -170,7 +162,7 @@ namespace IM.SalesPR.Forms
     {
       if (e.Key == Key.Enter)
       {
-        DatePicker dtpk = sender as DatePicker;
+        DateTimePicker dtpk = sender as DateTimePicker;
         if (dtpk.Name == "dtpkFrom")
         {
           dtpkTo.Focus();

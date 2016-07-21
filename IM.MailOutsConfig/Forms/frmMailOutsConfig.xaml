@@ -356,7 +356,7 @@
                     <Image x:Name="imgCerrar" Style="{StaticResource img-ExitButton}" Canvas.Left="264" Canvas.Top="4" MouseLeftButtonDown="imgCerrar_MouseLeftButtonDown"/>
                     <TextBlock  Text="New MailOuts" Canvas.Left="7" Canvas.Top="4" Foreground="White"/>
                     <TextBlock Text="Mail Out Name" Foreground="#147F79" TextAlignment="Center" FontWeight="Bold" FontSize="14" Canvas.Left="94" Canvas.Top="23"/>
-                    <TextBox Name="txtNewMotName" Canvas.Left="29" Canvas.Top="45" Width="241" BorderThickness="0" FontSize="18.667" KeyUp="txtNewMotName_KeyUp" Focusable="True" CharacterCasing="Upper" MaxLength="10"/>
+                    <TextBox Name="txtNewMotName" Canvas.Left="29" Canvas.Top="45" Width="241" BorderThickness="0" FontSize="18.667" KeyUp="txtNewMotName_KeyUp" Focusable="True" CharacterCasing="Upper"  MaxLength="10"/>
                     <Border Margin="0" Canvas.Left="206" Canvas.Top="75" Background="White" CornerRadius="5">
                         <Border x:Name="imgSaveNewMot" Style="{StaticResource brd-ButtonsBig}" ToolTip="Save" Margin="0" MouseLeftButtonDown="imgSaveNewMot_MouseLeftButtonDown">
                             <StackPanel Orientation="Horizontal">

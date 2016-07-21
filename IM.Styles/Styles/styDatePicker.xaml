@@ -13,6 +13,7 @@
         <Setter Property="Height" Value="25"/>
         <Setter Property="ToolTip" Value="Select a date"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
+        
     </Style>
     <!--#endregion-->
 </ResourceDictionary>

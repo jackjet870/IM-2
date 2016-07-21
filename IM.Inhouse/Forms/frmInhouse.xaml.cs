@@ -1652,7 +1652,9 @@ namespace IM.Inhouse.Forms
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
+      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
+        validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
 
       if (App.User.AutoSign)
       {
@@ -1670,6 +1672,8 @@ namespace IM.Inhouse.Forms
         invitacion.ShowDialog();
       }
     }
+
+
 
     #endregion
 

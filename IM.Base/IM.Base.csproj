@@ -110,6 +110,7 @@
     <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\CommonCatObject.cs" />
     <Compile Include="Classes\InvitationGiftCustom.cs" />
+    <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />
     <Compile Include="Forms\frmGuestsMovements.xaml.cs">

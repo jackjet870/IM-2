@@ -60,7 +60,8 @@ namespace IM.Inhouse
       if (frmLogin.IsAuthenticated)
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-        User = frmLogin.UserData;        
+
+        User = frmLogin.UserData;
         Forms.frmInhouse frmMain = new Forms.frmInhouse();
         frmMain.ShowDialog();
         frmSplash.Close();
