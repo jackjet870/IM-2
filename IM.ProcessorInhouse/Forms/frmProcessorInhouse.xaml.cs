@@ -34,7 +34,7 @@ namespace IM.ProcessorInhouse.Forms
     #region Atributos
 
     public ClsFilter _clsFilter;
-    private SystemCfg _systemConfig;
+    private frmSystemCfg _systemConfig;
     private frmFilterDateRange _frmFilter;
     private frmReportQueue _frmReportQueue;
 
@@ -1340,7 +1340,7 @@ namespace IM.ProcessorInhouse.Forms
       bool _isConfigured = false;
       MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
       if (result != MessageBoxResult.Yes) return false;
-      _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+      _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
       if (_systemConfig.ShowDialog() == true)
       {
         _isConfigured = true;

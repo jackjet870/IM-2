@@ -120,8 +120,8 @@
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\GiftType.cs" />
-    <Compile Include="Forms\SystemCfg.xaml.cs">
-      <DependentUpon>SystemCfg.xaml</DependentUpon>
+    <Compile Include="Forms\frmSystemCfg.xaml.cs">
+      <DependentUpon>frmSystemCfg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ConfigRegistryHelper.cs" />
     <Compile Include="Helpers\CrystalReportHelper.cs" />
@@ -314,7 +314,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\SystemCfg.xaml">
+    <Page Include="Forms\frmSystemCfg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

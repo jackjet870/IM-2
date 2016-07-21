@@ -29,7 +29,7 @@ namespace IM.ProcessorSales.Forms
 
     #region Privados
     private frmReportQueue _frmReportQueue;
-    private SystemCfg _systemConfig;
+    private frmSystemCfg _systemConfig;
     //Formulario de filtros
     private frmFilterDateRange _frmFilter;
     //Archivo de configuracion
@@ -721,7 +721,7 @@ namespace IM.ProcessorSales.Forms
       bool _isConfigured = false;
       MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
       if (result != MessageBoxResult.Yes) return false;
-      _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+      _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
       if (_systemConfig.ShowDialog() == true)
       {
         _isConfigured = true;

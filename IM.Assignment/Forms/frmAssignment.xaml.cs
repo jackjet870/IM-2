@@ -40,7 +40,6 @@ namespace IM.Assignment
     private CollectionViewSource _guestAssignedViewSource;
 
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-    private DataTable dt = new DataTable();
     private string dateRange;
     int weekYear;
     FileInfo finfo;
@@ -63,12 +62,10 @@ namespace IM.Assignment
     ///   [vku] 08/Mar/2016 Created
     /// </history>
     private async void LoadListMarkets()
-    {
-      status.Visibility = Visibility.Visible;
+    {  
       lstMarkets = await BRMarkets.GetMarkets(1);
       grdListMarkets.ItemsSource = lstMarkets;
       grdListMarkets.SelectAll();
-      status.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -82,10 +79,11 @@ namespace IM.Assignment
     /// </history>
     private async void LoadListGuestsUnassigned()
     {
+      txtStatus.Text = "Loading Guests Unassigned...";
       status.Visibility = Visibility.Visible;
       _guestUnassignedViewSource.Source = await BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
-      grdGuestUnassigned.UnselectAll();
       status.Visibility = Visibility.Collapsed;
+      grdGuestUnassigned.UnselectAll();
     }
     #endregion
 
@@ -99,10 +97,11 @@ namespace IM.Assignment
     /// </history>
     private async void LoadPRs()
     {
+      txtStatus.Text = "Loading PRs...";
       status.Visibility = Visibility.Visible;
       _pRAssignedViewSource.Source = await BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
-      LoadListGuestsAssigned();
       status.Visibility = Visibility.Collapsed;
+      LoadListGuestsAssigned();   
     }
     #endregion
 
@@ -116,11 +115,13 @@ namespace IM.Assignment
     /// </history>
     private async void LoadListGuestsAssigned()
     {
+      txtStatus.Text = "Loading Guests Assigned...";
       status.Visibility = Visibility.Visible;
       var selectedItems = grdPRAssigned.SelectedItems;
       if (selectedItems.Count > 0)
       {
         _guestAssignedViewSource.Source = await BRAssignment.GetGuestAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _strgPRs, _markets);
+        status.Visibility = Visibility.Collapsed;
       }
       int sumAssign = 0;
       foreach (PRAssigned item in grdPRAssigned.ItemsSource)
@@ -129,7 +130,6 @@ namespace IM.Assignment
       }
       lblTotalAssign.Content = sumAssign;
       lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
-      status.Visibility = Visibility.Collapsed;
     }
 
     #endregion
@@ -280,7 +280,6 @@ namespace IM.Assignment
       _guestUnassignedViewSource = ((CollectionViewSource)(this.FindResource("guestUnassignedViewSource")));
       _pRAssignedViewSource = ((CollectionViewSource)(this.FindResource("pRAssignedViewSource")));
       _guestAssignedViewSource = ((CollectionViewSource)(this.FindResource("guestAssignedViewSource")));
-      status.Visibility = Visibility.Visible;
       LoadListMarkets();
       LoadPRs();
     }
@@ -370,6 +369,8 @@ namespace IM.Assignment
     /// <history>
     ///   [vku] 08/Mar/2016 Created
     ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
+    ///   [vku] 20/Jul/2016 Modified. Ahora se utiliza la clase clsReports para exporar a excel.
+    ///                               Se renombro el label donde se muestra el PR ID de la cabezara por PR. 
     /// </history>
     private async void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
     {
@@ -379,13 +380,13 @@ namespace IM.Assignment
       if (ValidatePR()) {
         filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
-        filters.Add(Tuple.Create(_strgPRs, _strgNamePR));
+        filters.Add(Tuple.Create("PR", _strgPRs));
+        filters.Add(Tuple.Create("PR Name", _strgNamePR));
         List<RptAssignmentByPR> lstAssignmentByPR = await BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
         if (lstAssignmentByPR.Count > 0)
-        {
-          dt = TableHelper.GetDataTableFromList(lstAssignmentByPR, true);
+        {       
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-          finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Assignment by PR", dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
+          finfo = clsReports.ExportRptAssignmentByPR("Assignment by PR", dateRangeFileName, filters, lstAssignmentByPR);
         }
         else
         {
@@ -402,7 +403,7 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
-    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
+    ///   [vku] 20/Jul/2016 Modified. Ahora se utiliza la clase clsReports para exporar a excel.
     /// </history>
     private async void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
@@ -413,10 +414,8 @@ namespace IM.Assignment
       List<RptAssignment> lstAssignment = await BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
       if (lstAssignment.Count > 0)
       {
-        
-        dt = TableHelper.GetDataTableFromList(lstAssignment, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "General Assignment", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = clsReports.ExportRptGeneralAssignment("General Assignment", dateRangeFileName, filters, lstAssignment);
       }
       else
       {
@@ -428,11 +427,12 @@ namespace IM.Assignment
 
     #region btnAssignmentArrivals
     /// <summary>
-    /// Genera el reporte de llegadas y su asignación
+    ///   Genera el reporte de llegadas y su asignación
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
     ///   [vku] 27/May/2016 Modified. El metodo ahora es asincrono
+    ///   [vku] 20/Jul/2016 Modified. Ahora se utiliza la clase clsReports para exporar a excel.
     /// </history>
     private async void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
@@ -443,9 +443,8 @@ namespace IM.Assignment
       List<RptAssignmentArrivals> lstAssignmentArrivals = await BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
       if (lstAssignmentArrivals.Count > 0)
       {
-        dt = TableHelper.GetDataTableFromList(lstAssignmentArrivals, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Arrivals", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = clsReports.ExportRptAssignmentArrivals("Assignment Arrivals", dateRangeFileName, filters, lstAssignmentArrivals);
       }
       else
       {
@@ -467,6 +466,8 @@ namespace IM.Assignment
     {
       if (ValidateAssign())
       {
+        txtStatus.Text = "Assigning...";
+        status.Visibility = Visibility.Visible;
         int res = 0;
         res = await BRAssignment.SaveGuetsPRAssign(_strgGuestUnassigned, _strgPRs);
         FilterRecords();
@@ -487,6 +488,8 @@ namespace IM.Assignment
     {
       if (ValidateUnassign())
       {
+        txtStatus.Text = "Removing...";
+        status.Visibility = Visibility.Visible;
         int res = 0;
         res = await BRAssignment.SaveGuestUnassign(_strgGuestAssigned, _strgPRs);
         FilterRecords();

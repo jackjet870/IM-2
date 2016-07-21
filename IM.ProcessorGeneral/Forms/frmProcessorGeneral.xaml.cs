@@ -24,7 +24,7 @@ namespace IM.ProcessorGeneral.Forms
     private bool _skipSelectionChanged;//Bandera para evitar que el evento SelectionChanged se dispare al asignar el datasource.
 
     private frmFilterDateRange _frmFilter;
-    private SystemCfg _systemConfig;
+    private frmSystemCfg _systemConfig;
     private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
@@ -1817,7 +1817,7 @@ namespace IM.ProcessorGeneral.Forms
       if (result != MessageBoxResult.Yes) _isConfigured = false;
       else
       {
-        _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+        _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
         if (_systemConfig.ShowDialog() == true)
         {
           _isConfigured = true;
