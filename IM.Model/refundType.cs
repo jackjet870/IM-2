@@ -18,6 +18,7 @@ namespace IM.Model
         public RefundType()
         {
             this.DepositsRefunds = new HashSet<DepositRefund>();
+            this.RefundTypeFolios = new HashSet<RefundTypeFolio>();
         }
     
         public string rfID { get; set; }
@@ -26,5 +27,7 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DepositRefund> DepositsRefunds { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RefundTypeFolio> RefundTypeFolios { get; set; }
     }
 }

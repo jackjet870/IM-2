@@ -688,6 +688,9 @@
     <Compile Include="RefundType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RefundTypeFolio.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Region.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -1145,6 +1148,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptStatisticsByExitCloser.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatisticsByFTB.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptStatisticsByLocation.cs">
