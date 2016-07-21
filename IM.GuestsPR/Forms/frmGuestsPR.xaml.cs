@@ -12,6 +12,7 @@ using System.Diagnostics;
 using IM.GuestsPR.Utilities;
 using IM.Base.Forms;
 using IM.Model.Enums;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.GuestsPR.Forms
 {
@@ -29,7 +30,6 @@ namespace IM.GuestsPR.Forms
     public frmGuestsPR()
     {
       InitializeComponent();
-
       LoadCombo = new ExecuteCommandHelper(x => LoadPersonnel());
     }
 
@@ -44,10 +44,10 @@ namespace IM.GuestsPR.Forms
     {
       LoadPersonnel();
       //Seleccionamos los días en el datapicker 
-      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-      dtpkTo.SelectedDate = DateTime.Now;
+      dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+      dtpkTo.Value = DateTime.Now;
       //Agregamos login del usuario en la interfaz
-      SetNewUserLogin();     
+      SetNewUserLogin();
     }
     /// <summary>
     /// Evento que se lanza cuando realizamos la consulta boton Search
@@ -71,7 +71,7 @@ namespace IM.GuestsPR.Forms
       var listaGuestByPR = dtgr.DataContext as List<GuestByPR>;
       if (listaGuestByPR != null)
       {
-        var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+        var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.Value.Value, dtpkTo.Value.Value);
         //Obtenemos el nombre del reporte y el dateRange
         var rptName = "Guests By PR";
         //Obtenemos el dataTable con la lista formateada
@@ -119,7 +119,7 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
       await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {
@@ -143,7 +143,7 @@ namespace IM.GuestsPR.Forms
     {
       if (e.Key == Key.Enter)
       {
-        DatePicker dtpk = sender as DatePicker;
+        DateTimePicker dtpk = sender as DateTimePicker;
         if (dtpk.Name == "dtpkFrom")
         {
           dtpkTo.Focus();
@@ -214,7 +214,6 @@ namespace IM.GuestsPR.Forms
     {
       try
       {
-        StaStart("Loading data...");
         var data = await BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters);
         if (data.Count > 0)
         {
@@ -234,7 +233,7 @@ namespace IM.GuestsPR.Forms
         StaEnd();
         UIHelper.ShowMessage(ex);
       }
-    
+
 
     }
     #endregion
@@ -406,7 +405,6 @@ namespace IM.GuestsPR.Forms
       {
         cbxPersonnel.SelectedItem = null;
       }
-       
       GetGuestByPR();
     }
 
@@ -418,13 +416,13 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void GetGuestByPR()
     {
-      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+      if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
       {
         if (cbxPersonnel?.SelectedValue != null)
         {
-
+       
           if (chkAssign?.IsChecked == true || chkContact?.IsChecked == true || chkFollowUp?.IsChecked == true || chkInvitation?.IsChecked == true || chkShows?.IsChecked == true)
-          {            
+          {
             imgButtonOk.IsEnabled = false;
             filtersBool = new List<bool>();
             var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
@@ -448,7 +446,9 @@ namespace IM.GuestsPR.Forms
             filtersBool.Add(chkWithSale.IsChecked ?? false);
             filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
             #endregion
-            DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
+
+            StaStart("Loading data...");
+            DoGetGuestsByPR(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, personnelShort.peID, filtersBool);
           }
           else
           {
@@ -460,11 +460,6 @@ namespace IM.GuestsPR.Forms
           UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
           cbxPersonnel.Focus();
         }
-      }
-      else
-      {
-        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
-        dtpkFrom.Focus();
       }
     }
     #endregion

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IM.SalesCloser.Forms"
         mc:Ignorable="d" Title="Sales By Closer"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
@@ -52,13 +53,13 @@
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="Auto">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <wpftk:DateTimePicker x:Name="dtpkFrom" Style="{StaticResource dtp-DateRange-TK}" KeyUp="dtpkEnterKey"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <wpftk:DateTimePicker x:Name="dtpkTo" Style="{StaticResource dtp-DateRange-TK}" KeyUp="dtpkEnterKey"/>
                     <ComboBox x:Name="cbxPersonnel" TextSearch.TextPath="peID" IsEditable="False"
                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                               Style="{StaticResource cbx-Personnel-ValidatePermission}" 
-                              ItemTemplate="{StaticResource cbx-Personnel-img}" IsEnabled="True" >
+                              ItemTemplate="{StaticResource cbx-Personnel-img}" IsEnabled="True"  Height="Auto" Width="300">
                     </ComboBox>
                     <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">

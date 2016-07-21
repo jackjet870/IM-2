@@ -13,6 +13,7 @@ using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.SalesCloser.Forms
 {
@@ -44,8 +45,8 @@ namespace IM.SalesCloser.Forms
     {
       LoadPersonnel();
       //Seleccionamos los días en el datapicker 
-      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-      dtpkTo.SelectedDate = DateTime.Now;
+      dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+      dtpkTo.Value = DateTime.Now;
       //Agregamos login del usuario en la interfaz
       setNewUserLogin();
     }
@@ -57,7 +58,7 @@ namespace IM.SalesCloser.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+      if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
       {
         if (cbxPersonnel?.SelectedValue != null)
         {
@@ -68,19 +69,13 @@ namespace IM.SalesCloser.Forms
           PersonnelShort closer = cbxPersonnel.SelectedValue as PersonnelShort;
           filtersReport = new List<Tuple<string, string>>();
           filtersReport.Add(new Tuple<string, string>("Closer", string.Concat(closer.peID, " - ", closer.peN)));
-
-          DoGetSalesByCloser(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, closer.peID);
+          DoGetSalesByCloser(dtpkFrom.Value.Value, dtpkTo.Value.Value, App.User.SalesRoom.srID, closer.peID);
         }
         else
         {
           UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
           cbxPersonnel.Focus();
         }
-      }
-      else
-      {
-        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
-        dtpkFrom.Focus();
       }
     }
     /// <summary>
@@ -95,8 +90,8 @@ namespace IM.SalesCloser.Forms
       if (listaSaleByCloser != null)
       {
         //Obtenemos dateRange
-        string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+        string dateRange = DateHelper.DateRange(dtpkFrom.Value.Value, dtpkTo.Value.Value);
+        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.Value.Value, dtpkTo.Value.Value);
         //Obtenemos el nombre del reporte y el dateRange
         string rptName = "Sales By Closer";
         //Obtenemos el dataTable con la lista formateada
@@ -162,7 +157,7 @@ namespace IM.SalesCloser.Forms
     }
 
     /// <summary>
-    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// Enviamos el Focus al siguiente DateTimePicker To o si esta en DateTimePicker From se va el focus al boton Search
     /// </summary>
     /// <history>
     /// [erosado] 01/07/2016  Created.
@@ -171,7 +166,7 @@ namespace IM.SalesCloser.Forms
     {
       if (e.Key == Key.Enter)
       {
-        DatePicker dtpk = sender as DatePicker;
+        DateTimePicker dtpk = sender as DateTimePicker;
         if (dtpk.Name == "dtpkFrom")
         {
           dtpkTo.Focus();
@@ -196,7 +191,7 @@ namespace IM.SalesCloser.Forms
       StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
     }
     #endregion
-    
+
     #region Async Methods
     /// <summary>
     /// Obtiene la lista del personal

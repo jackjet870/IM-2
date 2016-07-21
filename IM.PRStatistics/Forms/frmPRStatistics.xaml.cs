@@ -14,6 +14,7 @@ using System.Data;
 using System.Linq;
 using IM.Base.Forms;
 using IM.Base.Helpers;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.PRStatistics.Forms
 {
@@ -49,8 +50,8 @@ namespace IM.PRStatistics.Forms
       //Inicializamos los catalogos
       LoadCatalogs();
       //Seleccionamos los días en el datapicker 
-      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-      dtpkTo.SelectedDate = DateTime.Now;
+      dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+      dtpkTo.Value = DateTime.Now;
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
 
@@ -69,26 +70,20 @@ namespace IM.PRStatistics.Forms
               && lsbxMarkets.SelectedItems.Count > 0)
       {
 
-        if (dtpkFrom.Text!= "" && dtpkTo.Text!="" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+        if (DateHelper.ValidateValueDate(dtpkFrom,dtpkTo))
         {
           filterTuple = new List<Tuple<string, string>>();
           StaStart("Loading Data...");
           imgButtonOk.IsEnabled = false;
-          filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value)));
+          filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.Value.Value, dtpkTo.Value.Value)));
           filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
           filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
           filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
           filterTuple.Add(new Tuple<string, string>("Agencies", chbxAgencies.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
           filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
 
-          DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
+          DoGetRptPrStats(dtpkFrom.Value.Value, dtpkTo.Value.Value, filterTuple);
         }
-        else
-        {
-          UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
-          dtpkFrom.Focus();
-        }
-
       }
       else
       {
@@ -106,7 +101,7 @@ namespace IM.PRStatistics.Forms
       List<RptPRStats> lstRptStats = dtgr.DataContext as List<RptPRStats>;
       if (lstRptStats != null)
       {
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.Value.Value, dtpkTo.Value.Value);
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = TableHelper.GetDataTableFromList(lstRptStats);
         string nombreReporte = "PR Statistics";
@@ -154,7 +149,7 @@ namespace IM.PRStatistics.Forms
     {
       if (e.Key == Key.Enter)
       {
-        DatePicker dtpk = sender as DatePicker;
+        DateTimePicker dtpk = sender as DateTimePicker;
         if (dtpk.Name == "dtpkFrom")
         {
           dtpkTo.Focus();
@@ -174,7 +169,7 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
+    private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
       if (e.Key == Key.Capital)
       {
@@ -234,7 +229,7 @@ namespace IM.PRStatistics.Forms
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      Cursor = Cursors.Wait;
+      Cursor = System.Windows.Input.Cursors.Wait;
 
     }
 
@@ -433,7 +428,7 @@ namespace IM.PRStatistics.Forms
     {
       if (sender.GetType().Name == "CheckBox")
       {
-        string chbxName = ((CheckBox)(sender)).Content.ToString();
+        string chbxName = ((System.Windows.Controls.CheckBox)(sender)).Content.ToString();
 
         switch (chbxName)
         {
@@ -472,7 +467,7 @@ namespace IM.PRStatistics.Forms
     {
       if (sender.GetType().Name == "CheckBox")
       {
-        string chbxName = ((CheckBox)(sender)).Content.ToString();
+        string chbxName = ((System.Windows.Controls.CheckBox)(sender)).Content.ToString();
 
         switch (chbxName)
         {
