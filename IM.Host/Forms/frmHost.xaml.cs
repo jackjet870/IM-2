@@ -851,6 +851,7 @@ namespace IM.Host
       frmCxCAuthorization _frmCxCAuthorization = new frmCxCAuthorization();
       _frmCxCAuthorization.ShowInTaskbar = false;
       _frmCxCAuthorization.Owner = this;
+      _frmCxCAuthorization.WindowStartupLocation = WindowStartupLocation.CenterOwner;
       _frmCxCAuthorization.ShowDialog();
 
     }

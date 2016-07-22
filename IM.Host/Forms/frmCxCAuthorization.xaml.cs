@@ -32,7 +32,7 @@ namespace IM.Host.Forms
     bool blnDatePiker = false; // bandera para determinar si el datepiker esta siendo utilizado
     bool blnOpenCalendar = false; // bandera para determinar si el datepiker fue pulsado
     DateTime dtmFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);// Fecha inicial seleccionada en el datepiker
-    DateTime dtmTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1).AddDays(-1); // Fecha final seleccionada en el datepiker 
+    DateTime dtmTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); // Fecha final seleccionada en el datepiker 
     private DateTime? _dtmClose = null; // Fecha de corte 
     string strSalesRoom = App.User.SalesRoom.srID;// Sale Room del usuario logueago
     string strUserID = App.User.User.peID; // ID del usuario logueado
@@ -51,13 +51,18 @@ namespace IM.Host.Forms
     public frmCxCAuthorization()
     {
       InitializeComponent();
-      dtpkFrom.SelectedDate = dtmFrom;
-      dtpkTo.SelectedDate = dtmTo;
+      
+      dtpkFrom.Value = dtmFrom;
+      dtpkTo.Value = dtmTo;
       _dtpServerDate = BRHelpers.GetServerDate();
       LoadComboPR = new ExecuteCommandHelper(x => LoadPersonnel());
       CxCDataViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("cxCDataViewSource")));
       LoadAtributes();
       underPaymentMotiveViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("underPaymentMotiveViewSource")));
+      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly) || !App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.None))
+      {
+        cxCDataDataGrid.Columns.SingleOrDefault(c => c.Header.ToString() == "Auth.").IsReadOnly = true;
+      }
     }
     #endregion
 
@@ -71,7 +76,7 @@ namespace IM.Host.Forms
     public async Task<int> setNewUserLogin()
     {
       var index = 0;
-      if (ComboBoxPermision(cbxPersonnel, EnumPermission.PRInvitations, EnumPermisionLevel.Special))
+      if (ComboBoxPermision(cbxPersonnel, EnumPermission.CxCAuthorization, EnumPermisionLevel.Special))
       {
         await Task.Run(() =>
         {
@@ -110,7 +115,11 @@ namespace IM.Host.Forms
     /// </history>
     public void LoadPersonnel()
     {
-      GetPersonnel(Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
+      StaStart("Loading personnel...");
+      //GetPersonnel(Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
+
+
+      DoGetPersonnel(Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
     }
     #endregion
 
@@ -123,6 +132,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 01/06/2016 Created
     /// </history>
+    
     public async void GetPersonnel(string roles)
     {
       try
@@ -134,13 +144,84 @@ namespace IM.Host.Forms
           cbxPersonnel.ItemsSource = data;
         }
         await setNewUserLogin();
+        StaEnd();
       }
       catch (Exception ex)
       {
+        StaEnd();
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
+    
+   
+
     #endregion
+
+    public async void DoGetPersonnel(string roles)
+    {
+      try
+      {
+        var data = await BRPersonnel.GetPersonnel(roles: roles);
+        if (data.Count > 0)
+        {
+          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
+          cbxPersonnel.ItemsSource = data;
+        }
+        SetNewUserLogin();
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public void SetNewUserLogin()
+    {
+      //Agregamos la informacion del usuario en la interfaz
+      //txtbUserName.Text = App.User.User.peN;
+      //txtbLocation.Text = App.User.Location.loN;
+      //Validamos permisos y restricciones para el combobox
+      if (App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.Special))
+      {
+        cbxPersonnel.IsEnabled = true;
+        if (cbxPersonnel.Items.Count > 0)
+        {
+          selectPersonnelInCombobox(App.User.User.peID);
+        }
+        else
+        {
+          cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
+        }
+      }
+      else
+      {
+        cbxPersonnel.IsEnabled = false;
+        if (cbxPersonnel.Items.Count > 0)
+        {
+          selectPersonnelInCombobox(App.User.User.peID);
+        }
+        else
+        {
+          cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
+        }
+      }
+    }
+
+    private void selectPersonnelInCombobox(string user)
+    {
+      var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
+      var index = lstPS.FindIndex(x => x.peID.Equals(user));
+      if (index != -1)
+      {
+        cbxPersonnel.SelectedIndex = index;
+      }
+      else
+      {
+        cbxPersonnel.SelectedItem = 0;
+      }
+    }
 
     #region LoadLeadSource
     /// <summary>
@@ -233,8 +314,9 @@ namespace IM.Host.Forms
     /// </history>
     public void LoadAtributes()
     {
-      dtmFrom = dtpkFrom.SelectedDate.Value;
-      dtmTo = dtpkTo.SelectedDate.Value;
+      
+      dtmFrom = dtpkFrom.Value.Value.Date;
+      dtmTo = dtpkTo.Value.Value.Date;
       strSalesRoom = App.User.SalesRoom.srID;
       strUserID = App.User.User.peID;
       var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
@@ -346,8 +428,6 @@ namespace IM.Host.Forms
       cxCDataDataGrid.CommitEdit();
       cxCDataDataGrid.CancelEdit();
       cxCDataDataGrid.Items.Refresh();
-      //lstCxCData = cxCDataDataGrid.ItemsSource as List<CxCData>;
-      //var ert = cxCDataDataGrid.GetCell().IsEnabled = false;
     }
     #endregion
 
@@ -545,11 +625,13 @@ namespace IM.Host.Forms
         case "btnPay":
           frmCxCPayments _frmCxCPayments = new frmCxCPayments(item.grID);
           _frmCxCPayments.ShowInTaskbar = false;
+          _frmCxCPayments.WindowStartupLocation = WindowStartupLocation.CenterScreen;
           _frmCxCPayments.ShowDialog();
           break;
         case "btnLog":
           frmGiftsReceiptsLog _frmGiftsReceiptsLog = new frmGiftsReceiptsLog(item.grID);
           _frmGiftsReceiptsLog.ShowInTaskbar = false;
+          _frmGiftsReceiptsLog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
           _frmGiftsReceiptsLog.ShowDialog();
           break;
         default:
@@ -607,8 +689,12 @@ namespace IM.Host.Forms
           SaveGiftsReceipts();
           break;
         case "imgButtonSearch":
-          LoadAtributes();
-          GetCxCAuthorized(blnFilterAuthorized);
+          if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
+          {
+            LoadAtributes();
+            GetCxCAuthorized(blnFilterAuthorized);
+          }
+          
           break;
         default:
           break;
@@ -643,7 +729,37 @@ namespace IM.Host.Forms
       var txt = sender as TextBox;
       txt.Focus();
     }
-    #endregion
+        #endregion
 
-  }
+    #region Status
+        
+    /// <summary>
+    /// Indica en la barra de estado que se inicio un proceso
+    /// </summary>
+    /// <history>
+    /// [michan] 21/Julio/2016 Created
+    /// </history>
+    /// <param name="message">mensaje</param>
+    private void StaStart(String message)
+    {
+        lblStatusBarMessage.Content = message;
+        imgStatusBarMessage.Visibility = Visibility.Visible;
+        this.Cursor = Cursors.Wait;
+    }
+
+    /// <summary>
+    /// Indica en la barra de estado que se termina un proceso
+    /// </summary>
+    /// <history>
+    /// [michan] 21/Julio/2016 Created
+    /// </history>
+    /// <param name="message">mensaje</param>
+    private void StaEnd()
+    {
+        lblStatusBarMessage.Content = null;
+        imgStatusBarMessage.Visibility = Visibility.Hidden;
+        this.Cursor = null;
+    }
+    #endregion
+    }
 }
