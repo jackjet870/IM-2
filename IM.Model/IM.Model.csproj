@@ -889,6 +889,24 @@
     <Compile Include="RptGuestRegistration.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGuestRegistration_Comments.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestRegistration_CreditCards.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestRegistration_Deposits.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestRegistration_Gifts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestRegistration_Guests.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestRegistration_Salesmen.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptGuestsNoBuyers.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
