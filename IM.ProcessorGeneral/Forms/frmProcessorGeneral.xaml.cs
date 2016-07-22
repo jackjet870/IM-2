@@ -21,15 +21,13 @@ namespace IM.ProcessorGeneral.Forms
   {
     #region Atributos
 
-    private bool _skipSelectionChanged;//Bandera para evitar que el evento SelectionChanged se dispare al asignar el datasource.
-
     private frmFilterDateRange _frmFilter;
     private frmSystemCfg _systemConfig;
     private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
     private bool _isConfigured;
-    public clsFilter ClsFilter;
+    public clsFilter _clsFilter;
 
     //public List<int> _lstGifts = new List<int>();
     //public List<int> _lstGiftsCate = new List<int>();
@@ -490,7 +488,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowSalesRoomReport(strReport, ClsFilter);
+        ShowSalesRoomReport(strReport, _clsFilter);
         _frmFilter.Close();
       }
       else
@@ -1170,7 +1168,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowLeadSourceReport(strReport, ClsFilter);
+        ShowLeadSourceReport(strReport, _clsFilter);
         _frmFilter.Close();
       }
       else
@@ -1413,7 +1411,7 @@ namespace IM.ProcessorGeneral.Forms
         default:
           _frmFilter = null;
           WaitMessage(true, (strReport != "Logins Log") ? "Loading Report..." : "Loading Date Range Window...");
-          ShowGeneralReport(strReport, ClsFilter);
+          ShowGeneralReport(strReport, _clsFilter);
           WaitMessage(false);
           break;
       }
@@ -1423,7 +1421,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowGeneralReport(strReport, ClsFilter, true);
+        ShowGeneralReport(strReport, _clsFilter, true);
         _frmFilter.Close();
       }
       else
@@ -1590,10 +1588,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void ConfigurarGrids()
     {
-      try
-      {
-        _skipSelectionChanged = true;
-
         #region Grid SalesRooms
 
         var lstrptSalesRooms = new ListCollectionView(new List<dynamic>
@@ -1701,12 +1695,7 @@ namespace IM.ProcessorGeneral.Forms
 
         #endregion
 
-        StatusBarReg.Content = $"{lstrptGeneral.Count + lstrptLeadSources.Count + lstrptSalesRooms.Count} Reports";
-      }
-      finally
-      {
-        _skipSelectionChanged = false;
-      }
+        StatusBarReg.Content = $"{lstrptGeneral.Count + lstrptLeadSources.Count + lstrptSalesRooms.Count} Reports";      
     }
 
     #endregion
@@ -1741,18 +1730,18 @@ namespace IM.ProcessorGeneral.Forms
     {
       DateTime serverDate = BRHelpers.GetServerDate();
       // Fecha inicial
-      ClsFilter.StartDate = new DateTime(serverDate.Year, serverDate.Month, 1);
+      _clsFilter.StartDate = new DateTime(serverDate.Year, serverDate.Month, 1);
 
       // obtenemos la fecha de inicio de la semana
       //_clsFilter.DtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
 
       //Fecha final
-      ClsFilter.EndDate = serverDate;
+      _clsFilter.EndDate = serverDate;
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
       var iniFileHelper = new IniFileHelper(strArchivo);
-      ClsFilter.StartDate = iniFileHelper.readDate("FilterDate", "DateStart", ClsFilter.StartDate);
-      ClsFilter.EndDate = iniFileHelper.readDate("FilterDate", "DateEnd", ClsFilter.EndDate);
+      _clsFilter.StartDate = iniFileHelper.readDate("FilterDate", "DateStart", _clsFilter.StartDate);
+      _clsFilter.EndDate = iniFileHelper.readDate("FilterDate", "DateEnd", _clsFilter.EndDate);
       //string strSalesRoom = _iniFileHelper.readText("FilterDate", "SalesRoom", string.Empty);
       //if (!string.IsNullOrEmpty(strSalesRoom)) _clsFilter.LstLeadSources.Add(strSalesRoom);
     }
@@ -1769,15 +1758,15 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void SetupParameters()
     {
-      ClsFilter = new clsFilter();
+      _clsFilter = new clsFilter();
       // obtenemos las fechas iniciales de los reportes
       GetFirstDayValue();
 
-      ClsFilter.BasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival; //Basado en llegada
-      ClsFilter.Quinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
-      ClsFilter.SaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
-      ClsFilter.SalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
-      ClsFilter.ExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
+      _clsFilter.BasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival; //Basado en llegada
+      _clsFilter.Quinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
+      _clsFilter.SaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
+      _clsFilter.SalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
+      _clsFilter.ExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
     }
 
     #endregion SetupParameters
