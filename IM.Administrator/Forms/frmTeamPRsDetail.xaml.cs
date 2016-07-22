@@ -129,6 +129,8 @@ namespace IM.Administrator.Forms
 
     #endregion
 
+    #region Enventos
+
     #region Window_Closing
     /// <summary>
     ///   Cierra la ventana
@@ -207,6 +209,7 @@ namespace IM.Administrator.Forms
       if (enumMode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
+        btnTransfer.Visibility = Visibility.Visible;
         txtgID.IsEnabled = (enumMode == EnumMode.add);
         txtDescrip.IsEnabled = true;
         cbotgLeader.IsEnabled = true;
@@ -248,8 +251,9 @@ namespace IM.Administrator.Forms
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstChanged = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peLinerID == pe.peLinerID)).ToList();
           int nRes = await BRTeamsGuestServices.SaveTeam(App.User.User.peID, team, (enumMode == EnumMode.edit), lstAdd, lstDel, lstChanged);
+          status.Visibility = Visibility.Collapsed;
           UIHelper.ShowMessageResult("Team", nRes);
-          if (nRes >= 1)
+          if (nRes > 0)
           {
             blnClosing = true;
             DialogResult = true;
@@ -260,7 +264,6 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(sMsj);
         }
-        status.Visibility = Visibility.Collapsed;
       }
     }
     #endregion
@@ -364,6 +367,31 @@ namespace IM.Administrator.Forms
       }
       dgrIntegrants.RowEditEnding += dgrIntegrants_RowEditEnding;
     }
+    #endregion
+
+    #region btnTransfer_Click
+    /// <summary>
+    ///   Abre la ventana para transferir integrantes a otro equipo
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 20/Jul/2016 Created
+    /// </history>
+    private void btnTransfer_Click(object sender, RoutedEventArgs e)
+    {
+      List<Personnel> lstPersonnelTransfer = (List<Personnel>)dgrIntegrants.ItemsSource;
+      frmTeamsTransfer frmTeamsTransfer = new frmTeamsTransfer();
+      frmTeamsTransfer.Owner = this;
+      frmTeamsTransfer.oldTeam = oldTeam;
+      frmTeamsTransfer._lstOldPersonnel = lstPersonnelTransfer;
+      if(frmTeamsTransfer.ShowDialog() == true)
+      {
+        LoadIntegrantes(oldTeam);
+      }
+    }
+    #endregion
+
     #endregion
   }
 }

@@ -84,6 +84,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnAccept" Content="_Accept" Margin="5,5,5,5" VerticalAlignment="Center" Width="60" Height="30" Click="btnAccept_Click" Visibility="Hidden"/>
             <Button x:Name="btnCancel" Content="_Cancel" Margin="5,5,5,5" VerticalAlignment="Center" Width="60" Height="30" Click="btnCancel_Click"/>
+            <Button x:Name="btnTransfer" Content="_Transfer" Margin="5,5,5,5" VerticalAlignment="Center" Width="60" Height="30" Click="btnTransfer_Click" Visibility="Collapsed"/>
         </StackPanel>
         <!--#endregion-->
         <!--#region Status bar-->

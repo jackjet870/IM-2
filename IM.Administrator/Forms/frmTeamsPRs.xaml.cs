@@ -87,7 +87,7 @@ namespace IM.Administrator.Forms
 
     #region ValidateFilter
     /// <summary>
-    ///  valida que un objeto dept cumpla con los filtros actuales
+    ///  valida que un objeto team cumpla con los filtros actuales
     /// </summary>
     /// <param name="team">Objeto a validar</param>
     /// <returns>True. Si cumple | False. No cumple</returns>

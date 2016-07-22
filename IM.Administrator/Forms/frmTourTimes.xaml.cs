@@ -67,7 +67,6 @@ namespace IM.Administrator.Forms
     private EnumMode enumMode;
     private EnumTourTimesSchema _enumTourTimes;
     private bool isInsert = false;
-    private bool isEdit = false;
     private bool isCancel = false;
     private bool _blnEdit = false;//boleano para saber si se tiene minimo permiso para editar|agregar 
     #endregion
@@ -666,10 +665,6 @@ namespace IM.Administrator.Forms
                     e.Cancel = true;
                   break;
               }
-            }
-            else
-            {
-              isEdit = true;
             }
           }    
         }

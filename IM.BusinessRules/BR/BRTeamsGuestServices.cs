@@ -205,5 +205,64 @@ namespace IM.BusinessRules.BR
       return nRes;
     }
     #endregion
+
+    #region Transfer
+    /// <summary>
+    ///   Transfiere los integrantes de un equipo a otro
+    /// </summary>
+    /// <param name="strUserID">Clave de usuario</param>
+    /// <param name="strloID">Clave de locación</param>
+    /// <param name="strTeamID">Clave de equipo</param>
+    /// <param name="lstPersonnelTransfer">Lista de integrantes</param>
+    /// <history>
+    ///   [vku] 21/Jul/2016 Created
+    /// </history>
+    /// <returns></returns>
+    public async static Task<int> Transfer(string strUserID,string strloID, string strTeamID, List<Personnel> lstPersonnelTransfer)
+    {
+      int nRes = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+
+            try
+            {
+              if (lstPersonnelTransfer.Count > 0)
+              {
+                dbContext.Personnels.AsEnumerable().Where(pe => lstPersonnelTransfer.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe =>
+                {
+                  pe.peTeamType = EnumToListHelper.GetEnumDescription(EnumTeamType.TeamPRs);
+                  pe.pePlaceID = strloID;
+                  pe.peTeam = strTeamID;
+                  
+                  DateTime dtmServerDate = BRHelpers.GetServerDateTime();
+
+                  TeamLog teamLog = new TeamLog();
+                  teamLog.tlDT = dtmServerDate;
+                  teamLog.tlChangedBy = strUserID;
+                  teamLog.tlpe = pe.peID;
+                  teamLog.tlTeamType = pe.peTeamType;
+                  teamLog.tlPlaceID = pe.pePlaceID;
+                  teamLog.tlTeam = pe.peTeam;
+                  dbContext.TeamsLogs.Add(teamLog);
+                });
+              }
+              int nSave = dbContext.SaveChanges();
+              transaction.Commit();
+              return nSave;
+            }
+            catch
+            {
+              transaction.Rollback();
+              return 0;
+            }
+          }
+        }
+      });
+      return nRes;
+    }
+    #endregion
   }
 }
