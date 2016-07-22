@@ -6323,5 +6323,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTB>("USP_IM_RptStatisticsByFTB", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, byLocationsParameter, byLocationsCategoriesParameter, includeAllSalesmenParameter);
         }
+    
+        public virtual ObjectResult<RptGuestRegistration> USP_OR_RptGuestRegistration(Nullable<int> guestID)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGuestRegistration>("USP_OR_RptGuestRegistration", guestIDParameter);
+        }
     }
 }

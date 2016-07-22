@@ -6808,6 +6808,9 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptGuestRegistration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptGuestsNoBuyers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -18041,6 +18044,9 @@
             <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
             <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGuestRegistration" ReturnType="Collection(IMModel.RptGuestRegistration)">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22781,6 +22787,39 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptGuestRegistration">
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guState" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="loN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="guCheckOutD" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="guDepositTwisted" Nullable="false" Precision="19" />
+          <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="guHotelB" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="Byte" Name="guChildren" Nullable="false" />
+          <Property Type="String" Name="guChildrenAges" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="guShowD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="guTimeInT" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="guTaxiIn" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="guDirect" Nullable="false" />
+          <Property Type="Boolean" Name="guInOut" Nullable="false" />
+          <Property Type="Boolean" Name="guWalkOut" Nullable="false" />
+          <Property Type="Boolean" Name="guIdentification" Nullable="false" />
+          <Property Type="String" Name="EntryHostN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
+          <Property Type="Boolean" Name="guQuinella" Nullable="false" />
+          <Property Type="Byte" Name="guReimpresion" Nullable="true" />
+          <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Area" Nullable="false" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30714,6 +30753,43 @@
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestRegistration" FunctionName="IMModel.Store.USP_OR_RptGuestRegistration">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGuestRegistration">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guState" ColumnName="guState" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="guHotel" ColumnName="guHotel" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="loN" ColumnName="loN" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guDepositTwisted" ColumnName="guDepositTwisted" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+                <ScalarProperty Name="guHotelB" ColumnName="guHotelB" />
+                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="guChildren" ColumnName="guChildren" />
+                <ScalarProperty Name="guChildrenAges" ColumnName="guChildrenAges" />
+                <ScalarProperty Name="guShowD" ColumnName="guShowD" />
+                <ScalarProperty Name="guTimeInT" ColumnName="guTimeInT" />
+                <ScalarProperty Name="guTaxiIn" ColumnName="guTaxiIn" />
+                <ScalarProperty Name="guDirect" ColumnName="guDirect" />
+                <ScalarProperty Name="guInOut" ColumnName="guInOut" />
+                <ScalarProperty Name="guWalkOut" ColumnName="guWalkOut" />
+                <ScalarProperty Name="guIdentification" ColumnName="guIdentification" />
+                <ScalarProperty Name="EntryHostN" ColumnName="EntryHostN" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+                <ScalarProperty Name="guReimpresion" ColumnName="guReimpresion" />
+                <ScalarProperty Name="rmN" ColumnName="rmN" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
