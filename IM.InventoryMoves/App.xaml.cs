@@ -39,7 +39,7 @@ namespace IM.InventoryMovements
     /// <history>
     /// [erosado] 01/06/2016  Modified. se agrego async
     /// </history>
-    protected async override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inventory Movements");
@@ -47,13 +47,11 @@ namespace IM.InventoryMovements
       await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
-      if (frmLogin.IsAuthenticated)
-      {
-        User = frmLogin.UserData;
-        frmInventoryMovements frmMain = new frmInventoryMovements();
-        frmMain.ShowDialog();
-        frmSplash.Close();
-      }
+      if (!frmLogin.IsAuthenticated) return;
+      User = frmLogin.UserData;
+      frmInventoryMovements frmMain = new frmInventoryMovements();
+      frmMain.ShowDialog();
+      frmSplash.Close();
     }
     #endregion
 
