@@ -154,25 +154,7 @@ namespace IM.Launcher.Forms
     {
       var lstMenu = new ItemsList();
 
-      lstMenu.Add(EnumMenu.Inhouse);
-      lstMenu.Add(EnumMenu.Assignment);
-      lstMenu.Add(EnumMenu.MailOuts);
-      lstMenu.Add(EnumMenu.Outhouse);
-      lstMenu.Add(EnumMenu.Host);
       lstMenu.Add(EnumMenu.InventoryMovs);
-      lstMenu.Add(EnumMenu.ProcessorGRAL);
-      lstMenu.Add(EnumMenu.ProcessorINH);
-      lstMenu.Add(EnumMenu.ProcessorOUT);
-      lstMenu.Add(EnumMenu.ProcessorSales);
-      lstMenu.Add(EnumMenu.PRStatistics);
-      lstMenu.Add(EnumMenu.Graph);
-      lstMenu.Add(EnumMenu.GuestsByPR);
-      lstMenu.Add(EnumMenu.SalesByPR);
-      lstMenu.Add(EnumMenu.SalesByLiner);
-      lstMenu.Add(EnumMenu.SalesByCloser);
-      lstMenu.Add(EnumMenu.Administrator);
-      lstMenu.Add(EnumMenu.MailOutsConfig);
-      lstMenu.Add(EnumMenu.InvitationsConfig);
       lstMenu.Add(EnumMenu.SystemConfig);
 
       return lstMenu;

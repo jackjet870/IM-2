@@ -32,6 +32,15 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Quality|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Publish\Quality\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PalaceResorts2.Common.PalaceTools, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d399b2cc59d85ff0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -2,10 +2,6 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_Get
 drop procedure [dbo].[USP_OR_GetGifts]
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
 
 /*
 ** Palace Resorts
@@ -14,6 +10,7 @@ GO
 ** Consulta el catalogo de regalos
 ** 
 ** [wtorres]	12/May/2014 Creado
+** [edgrodriguez] 07/Mar/2016 Modificado --Se agregó la columna de categoria(gigc)
 **
 */
 create procedure [dbo].[USP_OR_GetGifts]
@@ -25,7 +22,7 @@ create procedure [dbo].[USP_OR_GetGifts]
 as
 set nocount on
 
-select distinct G.giID, G.giN
+select distinct G.giID, G.giN, G.gigc
 from Gifts G
 	left join GiftsByLoc L on L.glgi = G.giID
 where
@@ -35,9 +32,4 @@ where
 	and (@Locations = 'ALL' or L.gllo in (select item from split(@Locations, ',')))
 order by G.giN
 
-GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
-GO
 
