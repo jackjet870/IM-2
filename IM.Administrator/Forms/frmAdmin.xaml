@@ -38,7 +38,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Name="btnMenu" Uid="{Binding Id}" Height="80" Width="100" Background="Transparent"  BorderBrush="Transparent" BorderThickness="0">
+                    <Border Name="btnMenu" Uid="{Binding Id}" Height="80" Width="80" Background="Transparent"  BorderBrush="Transparent" BorderThickness="0">
                         <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Image Width="32" Height="32" Source="{Binding ImageUrl}" HorizontalAlignment="Center" VerticalAlignment="Top" />
                             <TextBlock Name="txtMenu" Text="{Binding Name}" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextAlignment="Center"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"                        
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
-        Title="Dept Detail" Height="408" Width="348" Closing="Window_Closing">
+        Title="Dept Detail" Height="408" Width="368" Closing="Window_Closing">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
@@ -40,7 +40,7 @@
                 <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" SelectedValuePath="peID"
                                          SelectedValueBinding="{Binding peID}" DisplayMemberPath="peN"  Header="Personnel" >
                     <DataGridComboBoxColumn.ElementStyle>
-                        <Style TargetType="ComboBox">                            
+                        <Style TargetType="ComboBox">
                             <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Personnel-Concat}"/>
                         </Style>
                     </DataGridComboBoxColumn.ElementStyle>

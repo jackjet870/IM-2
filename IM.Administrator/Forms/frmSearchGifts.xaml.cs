@@ -120,7 +120,7 @@ namespace IM.Administrator.Forms
     /// Llena el combo de Productos del Monedero electronico
     /// </summary>
     /// <history>
-    /// [emoguel] modified 04/07/2016
+    /// [emoguel] created 04/07/2016
     /// </history>
     private async void LoadProductElectronicPurse()
     {
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
     /// Carga el combobox dee Transacction types
     /// </summary>
     /// <history>
-    /// [emoguel] modified 04/07/2016
+    /// [emoguel] created 04/07/2016
     /// </history>
     private async void LoadTransacctionTypes()
     {

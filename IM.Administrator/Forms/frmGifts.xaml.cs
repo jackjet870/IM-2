@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model.Enums;
-using IM.Model.Extensions;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
@@ -26,6 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmGifts : Window
   {
     #region Variables
+    private bool _blnEdit = false;
     private int _nStatus = -1;//estatus de los registros del grid
     private int _nPackage = -1;//Para saber si son paketes
     private Gift _giftFilter = new Gift {giProductGiftsCard="ALL",giPVPPromotion="ALL",giOperaTransactionType="ALL",gigc="",giPromotionOpera="ALL" };//Filtro de los registros del grid
@@ -47,6 +39,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      _blnEdit = App.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.Standard);
       LoadGifts();
     }
     #endregion
@@ -139,7 +132,30 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
+      Gift gift = (Gift)dgrGifs.SelectedItem;
+      frmGiftDetail frmGiftDetail = new frmGiftDetail();
+      frmGiftDetail.Owner = this;
+      frmGiftDetail._oldGift = gift;
+      frmGiftDetail.enumMode = _blnEdit ? EnumMode.edit : EnumMode.preview;
+      if(frmGiftDetail.ShowDialog()==true)
+      {
+        List<Gift> lstGifts = (List<Gift>)dgrGifs.ItemsSource;
+        int nIndex = 0;
+        if(ValidateFilter(frmGiftDetail.gift))
+        {
+          ObjectHelper.CopyProperties(gift, frmGiftDetail.gift);//Actualizamos los datos
+          lstGifts.Sort((x, y) => string.Compare(x.giN, y.giN));//Ordenamos la lista
+          nIndex = lstGifts.IndexOf(gift);//Obtenemos la posición del registro
+        }
+        else
+        {
+          lstGifts.Remove(gift);//Quitamos el registro
+        }
+        dgrGifs.Items.Refresh();
+        GridHelper.SelectRow(dgrGifs, nIndex);
 
+        StatusBarReg.Content = lstGifts.Count + " Gifts.";//Actualizamos el contador
+      }
     }
     #endregion
 
@@ -170,7 +186,22 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-
+      frmGiftDetail frmGiftDetail = new frmGiftDetail();
+      frmGiftDetail.enumMode = EnumMode.add;
+      frmGiftDetail.Owner = this;
+      if(frmGiftDetail.ShowDialog()==true)
+      {
+        if(ValidateFilter(frmGiftDetail.gift))
+        {
+          List<Gift> lstGifts = (List<Gift>)dgrGifs.ItemsSource;
+          lstGifts.Add(frmGiftDetail.gift);//Agregamos el registro
+          lstGifts.Sort((x, y) => string.Compare(x.giN, y.giN));//Ordenamos la lista
+          int nIndex = lstGifts.IndexOf(frmGiftDetail.gift);//Buscamos el index del registro
+          dgrGifs.Items.Refresh();//Actualizamos la vista
+          GridHelper.SelectRow(dgrGifs, nIndex);//Seleccionamos el registro
+          StatusBarReg.Content = lstGifts.Count + " Gifts.";//Actualizamos el contador
+        }
+      }
     }
     #endregion
 
@@ -199,6 +230,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
 
     #region btnLog_Click
     /// <summary>
@@ -278,6 +310,173 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Gifts");
       }
+    }
+    #endregion
+
+    #region ValidateFilter
+    /// <summary>
+    /// Valida que un gift cumpla con los filtros actuales
+    /// </summary>
+    /// <param name="gift">Objeto a validar</param>
+    /// <returns>True. Si cumple | false. No cumple</returns>
+    /// <history>
+    /// [emoguel] created 22/07/2016
+    /// </history>
+    private bool ValidateFilter(Gift gift)
+    {
+      #region Status
+      if (_nStatus != 1)
+      {
+        if (gift.giA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+      #endregion
+
+      #region Categories
+      if (!string.IsNullOrWhiteSpace(_giftFilter.gigc))
+      {
+        if (gift.gigc != _giftFilter.gigc)
+        {
+          return false;
+        }
+      }
+      #endregion
+
+      #region GiftCard
+      if (!string.IsNullOrEmpty(_giftFilter.giProductGiftsCard) && _giftFilter.giProductGiftsCard != "ALL")
+      {
+        switch (_giftFilter.giProductGiftsCard)
+        {
+          case "ANY":
+            {
+              if (string.IsNullOrWhiteSpace(gift.giProductGiftsCard))
+              {
+                return false;
+              }
+              break;
+            }
+          case "NONE":
+            {
+              if (!string.IsNullOrWhiteSpace(gift.giProductGiftsCard))
+              {
+                return false;
+              }
+              break;
+            }
+          default:
+            {
+              if (gift.giProductGiftsCard != _giftFilter.giProductGiftsCard)
+              {
+                return false;
+              }
+              break;
+            }
+        }
+      }
+      #endregion
+
+      #region Promotion
+      if (!string.IsNullOrEmpty(_giftFilter.giPVPPromotion) && _giftFilter.giPVPPromotion != "ALL")
+      {
+        switch (_giftFilter.giPVPPromotion)
+        {
+          case "ANY":
+            {
+              if (string.IsNullOrWhiteSpace(gift.giPVPPromotion))
+              {
+                return false;
+              }
+              break;
+            }
+          case "NONE":
+            {
+              if (!string.IsNullOrWhiteSpace(gift.giPVPPromotion))
+              {
+                return false;
+              }
+              break;
+            }
+          default:
+            {
+              if (gift.giPVPPromotion != _giftFilter.giPVPPromotion)
+              {
+                return false;
+              }
+              break;
+            }
+        }
+      }
+      #endregion
+
+      #region Transacction
+      if (!string.IsNullOrEmpty(_giftFilter.giOperaTransactionType) && _giftFilter.giOperaTransactionType != "ALL")
+      {
+        switch (_giftFilter.giOperaTransactionType)
+        {
+          case "ANY":
+            {
+              if (string.IsNullOrWhiteSpace(gift.giOperaTransactionType))
+              {
+                return false;
+              }
+              break;
+            }
+          case "NONE":
+            {
+              if (!string.IsNullOrWhiteSpace(gift.giOperaTransactionType))
+              {
+                return false;
+              }
+              break;
+            }
+          default:
+            {
+              if (gift.giOperaTransactionType != _giftFilter.giOperaTransactionType)
+              {
+                return false;
+              }
+              break;
+            }
+        }
+      }
+      #endregion
+
+      #region Promotion Opera
+      if (!string.IsNullOrEmpty(_giftFilter.giPromotionOpera) && _giftFilter.giPromotionOpera != "ALL")
+      {
+        switch (_giftFilter.giPromotionOpera)
+        {
+          case "ANY":
+            {
+              if (string.IsNullOrWhiteSpace(gift.giPromotionOpera))
+              {
+                return false;
+              }
+              break;
+            }
+          case "NONE":
+            {
+              if (!string.IsNullOrWhiteSpace(gift.giPromotionOpera))
+              {
+                return false;
+              }
+              break;
+            }
+          default:
+            {
+              if (gift.giPromotionOpera != _giftFilter.giPromotionOpera)
+              {
+                return false;
+              }
+              break;
+            }
+        }
+      }
+      #endregion
+
+      return true;
     } 
     #endregion
     #endregion

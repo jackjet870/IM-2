@@ -10,6 +10,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
 using IM.Services.Helpers;
+using System.Windows.Data;
 
 namespace IM.Administrator.Forms
 {
@@ -425,12 +426,16 @@ namespace IM.Administrator.Forms
             {
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit, false, "pppm");
               PersonnelPermission personnelPermission = (PersonnelPermission)dgrPermission.SelectedItem;
-              personnelPermission.pppl = 1;
+              personnelPermission.pppl = 1;              
               break;
             }
           case "plLSSRID":
             {
+              var cp = (ContentPresenter)e.EditingElement;
+              var combo = (ComboBox)cp.ContentTemplate.FindName("cmbLocations", cp);
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit,strPropGrid: "plLSSRID",typeName:e.Column.Header.ToString());
+              e.Cancel = blnIsRepeat;
+              
               break;
             }
           default:
@@ -563,7 +568,7 @@ namespace IM.Administrator.Forms
           {
             if (cmbpeTeamType.Items.Count > 0)
             {
-              cmbpeTeamType.Items.Clear();
+              cmbpeTeamType.ItemsSource = null;
             }
             break;
           }
@@ -581,59 +586,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 20/06/2016
     /// </history>
-    private async void cmbpepo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void cmbpepo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       Post post = (e.RemovedItems.Count > 0) ? (Post)e.RemovedItems[0] :new Post();
-      switch (personnel.pepo)
-      {
-        case "GS":
-        case "OPC":
-          {
-            if (!string.IsNullOrWhiteSpace(post.poID) || (post.poID != "GS" && post.poID != "OPC"))
-            {
-              List<object> lstLocations = await BRLocations.GetLocationByTeamGuestService();
-              cmbpePlaceID.ItemsSource = lstLocations;
-              cmbpePlaceID.SelectedValuePath = "loID";
-              cmbpePlaceID.DisplayMemberPath = "loN";
-            }
-            txtLocSal.Text = "Location";
-            cmbpeLinerID.IsEnabled = true;
-            break;
-          }
-        case "FTM":
-        case "LINER":
-        case "CLOSER":
-        case "FTB":
-        case "EXIT":
-        case "REGEN":
-        case "VLO":
-        case "ASM":
-          {
-            if (!string.IsNullOrWhiteSpace(post.poID)  || (post.poID != "FTM" && post.poID != "LINER" && post.poID != "CLOSER" && post.poID != "FTB"
-              && post.poID != "EXIT" && post.poID  != "REGEN" && post.poID != "VLO" && post.poID != "ASM"))
-            {
-              List<object> lstSalesRoom = await BRSalesRooms.GetSalesRoombyTeamSalesMen();              
-              cmbpePlaceID.ItemsSource = lstSalesRoom;
-              cmbpePlaceID.SelectedValuePath = "srID";
-              cmbpePlaceID.DisplayMemberPath = "srN";
-            }
-            cmbpeLinerID.IsEnabled = false;
-            txtLocSal.Text = "Sales Room";
-            break;
-          }
-        default:
-          {
-            txtLocSal.Text = "Place ID";
-            if (cmbpePlaceID.Items.Count > 0)
-            {
-              cmbpePlaceID.ItemsSource = null;
-              personnel.peTeamType = "";
-            }
-            cmbpeLinerID.IsEnabled = false;
-            break;
-          }
-      }
-      SetRoles(personnel.pepo);
+      LoadPlaces(post);
+      
     }
     #endregion
 
@@ -847,16 +804,16 @@ namespace IM.Administrator.Forms
     private async void LoadLeadSources()
     {
       try
-      {
-        List<LeadSourceByUser> lstLeadSource = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID.ToString());
-        cmbLeadSource.ItemsSource = lstLeadSource;
-
+      {        
+        var lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID.ToString());
+       cmbLeadSource.ItemsSource = lstLeadSources;        
         if (enumMode != EnumMode.add)
         {
           _lstOldAccesLeadSource = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.LeadSource);          
         }
-
+        
         dgrLeadSources.ItemsSource = _lstOldAccesLeadSource.ToList();
+        
       }
       catch (Exception ex)
       {
@@ -938,6 +895,8 @@ namespace IM.Administrator.Forms
           _lstOldRoles = await BRRoles.GetRolesByUser(personnel.peID);          
         }
         dgrRoles.ItemsSource = _lstOldRoles.ToList();
+        cmbpepo.SelectionChanged += cmbpepo_SelectionChanged;
+        LoadPlaces(new Post { poID = "-01" });     
       }
       catch (Exception ex)
       {
@@ -1120,9 +1079,9 @@ namespace IM.Administrator.Forms
       List<string> lstPostLiner = new List<string> { "GS", "OPC", "FTM", "LINER", "CLOSER", "FTB", "EXIT", "REGEN", "VLO" };
       if (cmbpepo.SelectedValue != null && lstPostLiner.Contains(cmbpepo.SelectedValue.ToString()))
       {
-        if (cmbpeSalesManID.SelectedValue != null)
+        if (cmbpeSalesManID.SelectedValue == null)
         {
-          strMsj += "Specify the team Personnel. \n";
+          strMsj += "Specify the Salesman Personnel. \n";
         }
       }
 
@@ -1272,7 +1231,70 @@ namespace IM.Administrator.Forms
       }
 
       return false;
-    } 
+    }
+    #endregion
+
+    #region LoadPlaces
+    /// <summary>
+    /// Método para cargar los places
+    /// </summary>
+    /// <param name="post">Objeto para validar</param>
+    /// <history>
+    /// [emoguel] modified 07/07/2016
+    /// </history>
+    private async void LoadPlaces(Post post)
+    {
+      switch (personnel.pepo)
+      {
+        case "GS":
+        case "OPC":
+          {
+            if (!string.IsNullOrWhiteSpace(post.poID) || (post.poID != "GS" && post.poID != "OPC"))
+            {
+              List<object> lstLocations = await BRLocations.GetLocationByTeamGuestService();
+              cmbpePlaceID.ItemsSource = lstLocations;
+              cmbpePlaceID.SelectedValuePath = "loID";
+              cmbpePlaceID.DisplayMemberPath = "loN";
+            }
+            txtLocSal.Text = "Location";
+            cmbpeLinerID.IsEnabled = true;
+            break;
+          }
+        case "FTM":
+        case "LINER":
+        case "CLOSER":
+        case "FTB":
+        case "EXIT":
+        case "REGEN":
+        case "VLO":
+        case "ASM":
+          {
+            if (!string.IsNullOrWhiteSpace(post.poID) || (post.poID != "FTM" && post.poID != "LINER" && post.poID != "CLOSER" && post.poID != "FTB"
+              && post.poID != "EXIT" && post.poID != "REGEN" && post.poID != "VLO" && post.poID != "ASM"))
+            {
+              List<object> lstSalesRoom = await BRSalesRooms.GetSalesRoombyTeamSalesMen();
+              cmbpePlaceID.ItemsSource = lstSalesRoom;
+              cmbpePlaceID.SelectedValuePath = "srID";
+              cmbpePlaceID.DisplayMemberPath = "srN";
+            }
+            cmbpeLinerID.IsEnabled = false;
+            txtLocSal.Text = "Sales Room";
+            break;
+          }
+        default:
+          {
+            txtLocSal.Text = "Place ID";
+            if (cmbpePlaceID.Items.Count > 0)
+            {
+              cmbpePlaceID.ItemsSource = null;
+              personnel.peTeamType = "";
+            }
+            cmbpeLinerID.IsEnabled = false;
+            break;
+          }
+      }
+      SetRoles(personnel.pepo);
+    }
     #endregion
     #endregion
 

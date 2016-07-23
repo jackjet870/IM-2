@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System;
 
 namespace IM.Administrator
 {
@@ -46,6 +47,7 @@ namespace IM.Administrator
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
+        
         User = frmLogin.UserData;
         if (User.HasRole(EnumRole.Manager))
         {
@@ -113,9 +115,8 @@ namespace IM.Administrator
       {
         dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
-    } 
+    }
     #endregion
-
     #endregion
   }
 }

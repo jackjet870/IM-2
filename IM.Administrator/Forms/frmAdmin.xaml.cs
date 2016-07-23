@@ -109,7 +109,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add("frmGiftsCategories", "Gifts Categories", "GiftCategory.png");
         lstMenu.Add("frmProducts", "Products", "Product.ico");
-        //lstMenu.Add("frmGifts", "Gifts", "Gift.png");
+        lstMenu.Add("frmGifts", "Gifts", "Gift.png");
       }
       #endregion
 

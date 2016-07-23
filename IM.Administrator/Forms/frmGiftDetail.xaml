@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
-        Title="Gift Detail" Height="480" Width="490">
-    <DockPanel LastChildFill="True">
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
+        Title="Gift Detail" Height="480" Width="490" Name="ed">
+    <Window.Resources>
+        <CollectionViewSource x:Key="cvsLocations"/>
+        <CollectionViewSource x:Key="cvsGiftsPackage"/>
+    </Window.Resources>
+    <DockPanel LastChildFill="True">        
         <!--#region Bottom-->
         <Grid Height="40" DockPanel.Dock="Bottom" Background="Transparent">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
@@ -14,13 +18,13 @@
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Collapsed" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
-            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4" IsCancel="True"/>
         </Grid>
         <!--#endregion-->
         <!--#region  General-->
-        <TabControl Background="Transparent" BorderThickness="0">
+        <TabControl Background="Transparent"   BorderThickness="0">
             <TabItem Name="tbiGeneral" Header="General">
-                <Grid Name="dgrGeneral" Margin="10,10,10,0">
+                <Grid Name="grdGeneral" Margin="10,10,10,0" IsEnabled="False">
                     <!--#region  Format-->
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -30,6 +34,8 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <!--#endregion-->
                     <!--#region  Row1-->
@@ -38,12 +44,10 @@
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="50*"/>                            
                         </Grid.ColumnDefinitions>
-
                         <TextBlock Grid.Column="0" Text="ID" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        <TextBlock Grid.Column="1" Text="Name" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0"/>
-                        <TextBox Grid.Column="0" Name="txtgiID" Text="{Binding giID}" Margin="60,0,0,0" VerticalAlignment="Top"/>
-                        <TextBox Grid.Column="1" Name="txtgiN" Text="{Binding giN}" Margin="60,0,0,0" VerticalAlignment="Top"/>
-
+                        <TextBlock Grid.Column="1" Text="Description" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                        <TextBox Grid.Column="0" Tag="ID" Name="txtgiID" Text="{Binding giID}" Margin="60,0,0,0" VerticalAlignment="Top" CharacterCasing="Upper"/>
+                        <TextBox Grid.Column="1" Tag="Description" Name="txtgiN" Text="{Binding giN}" Margin="60,0,0,0" VerticalAlignment="Top"/>
                     </Grid>
                     <!--#endregion-->
                     <!--#region  Row2-->
@@ -52,9 +56,9 @@
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Short name" Grid.Row="1"/>
+                        <TextBlock TextWrapping="Wrap" Width="55" HorizontalAlignment="Left" Text="Short description" Grid.Row="1"/>
                         <TextBlock Grid.Column="1" Text="Order" Margin="5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        <TextBox Grid.Row="1" Name="txtgiShortN" Text="{Binding giShortN}" Margin="60,0,0,0" VerticalAlignment="Top"/>
+                        <TextBox CharacterCasing="Upper" Grid.Row="1" Name="txtgiShortN" Tag="Short description" Text="{Binding giShortN}" Margin="60,0,0,0" VerticalAlignment="Top"/>
                         <TextBox Grid.Column="1" Name="txtgiO" Text="{Binding giO}" IsEnabled="False" Margin="60,0,0,0" VerticalAlignment="Top"/>
                     </Grid>
                     <!--#endregion-->
@@ -78,8 +82,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Category" Grid.Row="1"/>
                         <TextBlock Grid.Column="1" Text="Amount" Margin="5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        <TextBox Grid.Row="1" Name="txtgigc" Text="{Binding gigc}" Margin="60,0,0,0" VerticalAlignment="Top"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtgiAmount" Text="{Binding giAmount}" Margin="60,0,0,0" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="1" Name="cmbgigc" Tag="category" SelectedValue="{Binding gigc}" Margin="60,0,0,0" VerticalAlignment="Top" DisplayMemberPath="gcN" SelectedValuePath="gcID"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtgiAmount" IsEnabled="False" Text="{Binding giAmount,StringFormat={}{0:C}}" Margin="60,0,0,0" VerticalAlignment="Top"/>
                     </Grid>
                     <!--#endregion-->
                     <!--#region  Row5-->
@@ -117,37 +121,232 @@
                         </ComboBox>
                         <TextBox Grid.Column="1" Grid.Row="0" Name="txtgiPromotionOpera" Text="{Binding giPromotionOpera}" Margin="60,0,0,0" VerticalAlignment="Top"/>
                     </Grid>
-                    <!--#endregion-->
-                    <!--#region  Row7--><!--
+                    <!--#endregion-->                    
+                    <!--#region  Row7-->
                     <Grid Grid.Row="6">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
-                        <GroupBox Grid.Column="0" Header="Adult">
+                        <CheckBox Name="chkgiA" Grid.Column="0" IsChecked="{Binding giA}" Content="Active"/>
+                        <CheckBox Name="chkgiPack" Grid.Column="1" Checked="chk_Checked" Unchecked="chk_Unchecked" IsChecked="{Binding giPack}" Content="Package"/>
+                        <CheckBox Name="chkgiUnpack" Grid.Column="2" IsChecked="{Binding giUnpack}" Content="Unpack"/>
+                        <CheckBox Name="chkgiInven" Grid.Column="3" IsChecked="{Binding giInven}" Content="Inventory"/>
+                        <CheckBox Name="chkgiWFolio" Grid.Column="4" IsChecked="{Binding giWFolio}" Content="With Folio"/>
+                    </Grid>
+                    <!--#endregion-->
+                    <!--#region  Row8-->
+                    <Grid Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Name="chkgiWPax" Grid.Column="0" IsChecked="{Binding giWPax}" Content="With Pax"/>
+                        <CheckBox Name="chkgiMonetary" Grid.Column="1" Checked="chk_Checked" Unchecked="chk_Unchecked" IsChecked="{Binding giMonetary}" Content="Monetary"/>
+                        <CheckBox Name="chkgiWCost" Grid.Column="2" IsChecked="{Binding giWCost}" Content="With Cost"/>
+                        <CheckBox Name="chkgiCountInPackage" Grid.Column="3" IsChecked="{Binding giCountInPackage}">
+                            <TextBlock Text="Count In Package" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox Name="chkgiCountInCacelledReceipts" Grid.Column="4" IsChecked="{Binding giCountInCancelledReceipts}" >
+                            <TextBlock Text="Count In Cancelled Receips" TextWrapping="WrapWithOverflow"/>
+                        </CheckBox>
+                    </Grid>
+                    <!--#endregion-->
+                    <!--#region  Row9-->
+                    <Grid Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding giAmountModifiable}">
+                            <TextBlock Text="Amount Modifiable" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding giSale}" Content="Sale"/>
+                        <CheckBox Grid.Column="2" IsChecked="{Binding giDiscount}" Content="Discount"/>                        
+                    </Grid>
+                    <!--#endregion-->
+                </Grid>
+            </TabItem>
+            <TabItem Name="tbiCosts" Header="Costs">
+                <!--#region  Row7-->                
+                <Grid Grid.Row="6" Name="grdCost" IsEnabled="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region Left-->
+                        <GroupBox Grid.Column="0" Margin="20" Header="Adult">
+                            <Grid>                                
+                            <!--#region Formato-->                
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>                                
+                            <!--#endregion-->                
+                                <TextBlock Text="Cost" Grid.Row="0" VerticalAlignment="Center"/>
+                                <TextBlock Text="CxC" Grid.Row="1" VerticalAlignment="Center"/>
+                                <TextBlock Text="Price" Grid.Row="2" VerticalAlignment="Center"/>
+                                <TextBlock Text="Price Extra" Grid.Row="3" TextWrapping="Wrap" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                            <TextBox Name="txtgiPrice1" Grid.Row="0" VerticalAlignment="Center" Text="{Binding giPrice1,StringFormat={}{0:C}}" Margin="40,0,0,0"/>
+                            <TextBox Name="txtgiPrice3" Grid.Row="1" VerticalAlignment="Center" Text="{Binding giPrice3,StringFormat={}{0:C}}" Margin="40,0,0,0"/>
+                            <TextBox Name="txtgiPublicPrice" Grid.Row="2" VerticalAlignment="Center" Text="{Binding giPublicPrice,StringFormat={}{0:C}}" Margin="40,0,0,0"/>
+                            <TextBox Name="txtgiPriceExtraAdult" Grid.Row="3" VerticalAlignment="Center" Text="{Binding giPriceExtraAdult,StringFormat={}{0:C}}" Margin="40,0,0,0"/>
+                                
+                            </Grid>                            
+                        </GroupBox>
+                    <!--#endregion-->
+                    <!--#region Right-->
+                        <GroupBox Grid.Column="1" Margin="20" Header="Minor">
                             <Grid>
-                                --><!--#region Formato--><!--
+                                <!--#region Formato-->
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                --><!--#endregion--><!--
-                                <TextBlock Text="Cost" Grid.Row="0"/>
-                                <TextBlock Text="CxC" Grid.Row="1"/>
-                                <TextBlock Text="Price" Grid.Row="2"/>
-                                <TextBlock Text="Price Extra" Grid.Row="3"/>
-                            </Grid>
-                            
-                        </GroupBox>
-                    </Grid>
-                    --><!--#endregion-->
+                                <!--#endregion-->
+                                <TextBlock Text="Cost" Grid.Row="0" VerticalAlignment="Center"/>
+                                <TextBlock Text="CxC" Grid.Row="1" VerticalAlignment="Center"/>
+                                <TextBlock Text="Price" Grid.Row="2" VerticalAlignment="Center"/>
 
-                </Grid>
+                            <TextBox Name="txtgiPrice2" Grid.Row="0" Text="{Binding giPrice2,StringFormat={}{0:C}}" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                            <TextBox Name="txtgiPrice4" Grid.Row="1" Text="{Binding giPrice4,StringFormat={}{0:C}}" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                            <TextBox Name="txtgiPriceMinor" Grid.Row="2" Text="{Binding giPriceMinor,StringFormat={}{0:C}}" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                                
+                        </Grid>
+                        </GroupBox>
+                    <!--#endregion-->
+                </Grid>                    
+                <!--#endregion-->
             </TabItem>
             <TabItem Name="tbiItems" Header="Locations, Agencies &amp; Items">
-                
+                <Grid Margin="10,10,10,0" Name="grdLocations" IsEnabled="False">
+                    <!--#region Locations-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <!--#endregion-->
+                    <!--#region  Top-->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <!--#region Left-->
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <!--#region Regions-->
+                            <DataGrid Name="dgrRegions" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="False" Grid.Row="0" Margin="5,5,55,5">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Regions" Binding="{Binding rgN}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--#endregion-->
+                            <!--#region Regions-->
+                            <DataGrid Name="dgrPrograms" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="False"  Grid.Row="1" Margin="5,5,55,5">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Programs" Binding="{Binding pgN}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--#endregion-->
+                            <Button  Width="50" Name="btnAssignLocations" Grid.Row="0" Click="btnAssignLocations_Click" Height="35" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <TextBlock Text="Assign locations" TextWrapping="Wrap"/>
+                            </Button>
+                        </Grid>
+                        
+                        <!--#endregion-->
+                        <!--#region  Rigth-->
+                        <Grid Grid.Column="1">
+                            <!--#region Locations-->
+                            <DataGrid Name="dgrLocations" AutoGenerateColumns="False" SelectionMode="Single" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" CanUserResizeColumns="False" Margin="5">
+                                <DataGrid.Resources>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>                                    
+                                    <DataGridTemplateColumn x:Name="dtcLocations" Width="*" SortMemberPath="loN" Header="Locations (0)" >
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding loN}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding Source={StaticResource ResourceKey=cvsLocations}}" SelectedValue="{Binding loID}" x:Name="cmbLocations" SelectedValuePath="loID" DisplayMemberPath="loN"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--#endregion-->
+                        </Grid>
+                        <!--#endregion-->
+                    </Grid>
+                    <!--#endregion-->
+                    <!--#region Bottom-->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid Name="dgrAgencies" Grid.Row="1" Margin="5" SelectionMode="Single" AutoGenerateColumns="False" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgr_CellEditEnding" CanUserResizeColumns="False">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn x:Name="cmbAgencies" Header="Agencies (0)" SelectedValuePath="agID" DisplayMemberPath="agN" SelectedValueBinding="{Binding agID}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DataGrid Name="dgrGiftInPack"  CanUserReorderColumns="False" PreparingCellForEdit="dgrGiftInPack_PreparingCellForEdit" SelectionMode="Single" AutoGenerateColumns="False" BeginningEdit="dgr_BeginningEdit" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" CanUserResizeColumns="False" Grid.Column="1" Margin="5" Visibility="Collapsed" >
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  x:Name="txtQty" Header="Qty"  Binding="{Binding gpQty}">
+                                    <DataGridTextColumn.EditingElementStyle>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"/>
+                                            <Setter Property="MaxLength" Value="4"/>
+                                        </Style>
+                                    </DataGridTextColumn.EditingElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn  x:Name="dtcGiftPack" Width="*" SortMemberPath="GiftItem.giN" Header="Gift In Pack (0)" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding GiftItem.giN}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource ResourceKey=cvsGiftsPackage}}" SelectedValue="{Binding gpgi}" x:Name="cmbGiftPack" SelectedValuePath="giID" DisplayMemberPath="giN"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <!--#endregion-->
+                </Grid>
             </TabItem>
         </TabControl>
         <!--#endregion-->

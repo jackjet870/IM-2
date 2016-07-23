@@ -85,7 +85,7 @@
                         <TextBox Name="txtpePwdDays" Tag="Days" Grid.Column="1" VerticalAlignment="Top" Text="{Binding pePwdDays}" Margin="69,0,0,0" />
                     </Grid>
                     <ComboBox Name="cmbpede" Grid.Row="4" Tag="depts" VerticalAlignment="Top" SelectedValue="{Binding pede}" DisplayMemberPath="deN" SelectedValuePath="deID"  Margin="69,0,0,0" />
-                    <ComboBox Name="cmbpepo" SelectionChanged="cmbpepo_SelectionChanged" Grid.Row="5" VerticalAlignment="Top" SelectedValue="{Binding pepo}" DisplayMemberPath="poN" SelectedValuePath="poID"  Margin="69,0,0,0" />
+                    <ComboBox Name="cmbpepo" Grid.Row="5" VerticalAlignment="Top" SelectedValue="{Binding pepo}" DisplayMemberPath="poN" SelectedValuePath="poID"  Margin="69,0,0,0" />
                     <Grid Grid.Row="6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
@@ -189,8 +189,8 @@
                     <!--#endregion-->
                     <!--#region Buttons-->
                     <Grid Grid.Column="2" Margin="3">
-                    <Button Height="30" Name="btnLeadSources" Width="120" Content="Assign Lead Source" Click="btnLeadSources_Click" VerticalAlignment="Top"/>
-                    <Button Height="30" Name="btnSalesRoom" Width="120" Content="Assign Sales Room" Click="btnSalesRoom_Click" VerticalAlignment="Center"/>
+                    <Button Height="30" Name="btnLeadSources" Width="120" Content="Assign Lead Sources" Click="btnLeadSources_Click" VerticalAlignment="Top"/>
+                    <Button Height="30" Name="btnSalesRoom" Width="120" Content="Assign Sales Rooms" Click="btnSalesRoom_Click" VerticalAlignment="Center"/>
                     <Button Height="30" Name="btnWarehouses" Width="120" Content="Assign Warehouses" Click="btnWarehouses_Click" VerticalAlignment="Bottom"/>
                     </Grid>
                     <!--#endregion-->
@@ -209,7 +209,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <!--#endregion-->
-                    <!--#region Warehpuses-->
+                    <!--#region Warehouses-->
                     <DataGrid Margin="3" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" Name="dgrWarehouses" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Width="100*" x:Name="cmbWarehouses" DisplayMemberPath="whN" SelectedValuePath="whID" SelectedValueBinding="{Binding plLSSRID}" Header="Warehouses"/>

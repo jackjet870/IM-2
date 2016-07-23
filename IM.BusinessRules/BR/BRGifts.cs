@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -185,6 +186,11 @@ namespace IM.BusinessRules.BR
               query = query.Where(gi => gi.giN.Contains(gift.giN));
             }
             
+            if(!string.IsNullOrWhiteSpace(gift.giShortN))//Filtro por Descripción corta
+            {
+              query = query.Where(gi => gi.giShortN == gift.giShortN);
+            }
+
             if(!string.IsNullOrWhiteSpace(gift.gigc))//Filtro por categoria
             {             
               query = query.Where(gi => gi.gigc == gift.gigc);
@@ -314,7 +320,7 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
+        {          
           return dbContext.USP_OR_GetGiftLog(idGift).ToList();
         }
       });
@@ -341,6 +347,180 @@ namespace IM.BusinessRules.BR
       }
 
       return lstResult;
+    }
+
+    #region SaveGift
+    /// <summary>
+    /// Guarda un Gift y Su Log
+    /// </summary>
+    /// <param name="gift">Objeto a guardar</param>
+    /// <param name="blnUpdate">Truw. Actualiza | False. Inserta</param>
+    /// <param name="lstAddLocations">Locaciones a agregar</param>
+    /// <param name="lstDelLocations">Locaciones a eliminar</param>
+    /// <param name="lstAddAgencies">Agencias a agregar</param>
+    /// <param name="lstDelAgencies">Agencias a eliminar</param>
+    /// <param name="lstAddGiftPack">Gifts a agregar al paquete</param>
+    /// <param name="lstDelGiftPack">Gifts a elimina del paquete</param>
+    /// <param name="lstUpdGiftPack">Gift a actualizar en el paquete</param>
+    /// <param name="blnIsInventory">True. Guardamos el regalo en todos los almacenes existentes</param>
+    /// <param name="userId">usuario que está guardando el gift</param>
+    /// <history>
+    /// [emoguel] created 20/07/2016
+    /// </history>
+    /// <returns>-1. Existe un Gift con el mismo nombre| 0. No se guardó. | >0. Se guardó correctamente</returns>    
+    public async static Task<int> SaveGift(Gift gift, bool blnUpdate, List<Location> lstAddLocations, List<Location> lstDelLocations, List<Agency> lstAddAgencies, List<Agency> lstDelAgencies,
+                                            List<GiftPackageItem> lstAddGiftPack, List<GiftPackageItem> lstDelGiftPack, List<GiftPackageItem> lstUpdGiftPack, bool blnIsInventory, string userId)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          using (var transacction = dbContext.Database.BeginTransaction())
+          {
+            try
+            {
+              int nSave = 0;
+              Gift giftSave = new Gift();
+              #region Update
+              if (blnUpdate)//Actualizar
+              {
+                giftSave = dbContext.Gifts.Where(gi => gi.giID == gift.giID).
+                                            Include(gi => gi.Locations).
+                                            Include(gi => gi.Agencies).FirstOrDefault();
+
+                ObjectHelper.CopyProperties(giftSave, gift);
+              }
+              #endregion
+              #region Add
+              else//Add
+              {
+                if (dbContext.Gifts.Where(gi => gi.giID == gift.giID).FirstOrDefault() != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  int nOrder = dbContext.Gifts.Max(gi => gi.giO)+1;
+                  gift.giO = nOrder;
+                  dbContext.Gifts.Add(gift);
+                  giftSave = gift;
+                  nSave += dbContext.SaveChanges(); 
+                }
+              }
+              #endregion
+
+              #region Locations
+              //Eliminar Locations
+              giftSave.Locations.Where(lo => lstDelLocations.Any(loo => lo.loID == loo.loID)).ToList().ForEach(lo =>
+              {
+                giftSave.Locations.Remove(lo);
+              });
+
+
+              //Agregar Locations
+              var addLocations = dbContext.Locations.AsEnumerable().Where(lo => lstAddLocations.Any(loo => loo.loID == lo.loID)).ToList();
+              addLocations.ForEach(lo =>
+              {
+                giftSave.Locations.Add(lo);
+              });
+              #endregion
+
+              #region Agencies
+              //Eliminar
+              giftSave.Agencies.Where(ag => lstDelAgencies.Any(agg => ag.agID == agg.agID)).ToList().ForEach(ag =>
+              {
+                giftSave.Agencies.Remove(ag);
+              });
+
+              //Agregar
+              var addAgencies = dbContext.Agencies.AsEnumerable().Where(ag => lstAddAgencies.Any(agg => agg.agID == ag.agID)).ToList();
+
+              addAgencies.ForEach(ag =>
+              {
+                giftSave.Agencies.Add(ag);
+              });
+              #endregion
+
+              #region GiftPack
+              if (gift.giPack)
+              {
+                //Eliminar en caso de que ya no se vaya a utilizar
+                if (lstDelGiftPack.Count > 0)
+                {
+                  lstDelGiftPack.ForEach(gp =>
+                  {
+                    gp.GiftItem = null;
+                    dbContext.Entry(gp).State = EntityState.Deleted;
+                  });
+                }
+
+                //Actualizar en caso de que se haya modificado uno ya existeste
+                if (lstUpdGiftPack.Count > 0)
+                {
+                  lstUpdGiftPack.ForEach(gp =>
+                  {
+                    gp.GiftItem = null;
+                    dbContext.Entry(gp).State = EntityState.Modified;
+                  });
+                }
+
+                //Agregar Gift Pack Item
+                if (lstAddGiftPack.Count > 0)
+                {
+                  lstAddGiftPack.ForEach(gp =>
+                  {
+                    gp.GiftItem = null;
+                    gp.GiftPackage = null;
+                    gp.gpPack = gift.giID;
+                    dbContext.Entry(gp).State = EntityState.Added;
+                  });
+                }
+              }
+              else if (blnUpdate)
+              {
+                //Eliminar items en caso de que ya no se paquete
+                var lstDelPack = dbContext.GiftsPackagesItems.Where(gp => gp.gpPack == gift.giID).ToList();
+                lstDelPack.ForEach(gp =>
+                {
+                  gp.GiftItem = null;
+                  dbContext.Entry(gp).State = EntityState.Deleted;
+                });
+
+              }
+              #endregion
+
+              #region Inventory
+              if (blnIsInventory)
+              {
+                var date = BRHelpers.GetServerDate();
+                var lstWH = dbContext.Warehouses.Select(wh => wh.whID).ToList();
+                lstWH.ForEach(whID =>
+                {
+                  GiftInventory giftInventory = new GiftInventory { gvgi = gift.giID, gvwh = whID, gvQty = 0, gvD = new DateTime(date.Year, date.Month, date.Day) };
+                  dbContext.Entry(giftInventory).State = EntityState.Added;
+                });
+              }
+              #endregion
+
+              nSave += dbContext.SaveChanges();
+              #region GiftLog
+              dbContext.USP_OR_SaveGiftLog(gift.giID, 0, userId);
+              #endregion
+
+              nSave += dbContext.SaveChanges();
+              transacction.Commit();
+              return nSave;
+            }
+            catch(Exception ex)
+            {
+
+              throw;
+            }
+          }
+        }
+      });
     } 
+    #endregion
+
   }
 }
