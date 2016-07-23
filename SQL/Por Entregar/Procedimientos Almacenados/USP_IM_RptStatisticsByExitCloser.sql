@@ -236,15 +236,7 @@ BEGIN
 			AND S.sast NOT IN ('BUMP','REGEN')
 			AND S.saProcD BETWEEN @DateFrom AND @DateTo
 			AND (S.saCancel = 0 OR NOT S.saCancelD BETWEEN @DateFrom AND @DateTo)
-			AND S.sasr = @SalesRoom		
-			-- Vendedor 
-		and (@SalesmanID = 'ALL'		
-			-- Rol de Liner
-			or (@SalesmanID = S.saLiner1 or @SalesmanID = S.saLiner2)
-			-- Rol de Closer
-			or (@SalesmanID = S.saCloser1 or @SalesmanID = S.saCloser2 or @SalesmanID = S.saCloser3)
-			-- Rol de Exit
-			or (@SalesmanID = S.saExit1 or @SalesmanID = S.saExit2))
+			AND S.sasr = @SalesRoom				
 		-- Segmento
 		and (@Segments = 'ALL' or A.agse in (select item from split(@Segments, ',')))
 		-- Programa

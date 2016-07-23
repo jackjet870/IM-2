@@ -237,15 +237,15 @@ order by G.guID;
 --#region insertSales
 
 DECLARE @nReg int; -- numero de regitros
-SET @nReg=(SELECT COUNT(*) FROM @Manifest);
+SELECT @nReg = COUNT(*) FROM @Manifest
 DECLARE @cont int; -- almacena la cantidad de veces que se recorre el while
 SET @cont = 1;
 DECLARE @gu int; -- si tiene ventas
 WHILE @nReg >= @cont 
 BEGIN
-	SET @gu = (SELECT guid FROM @Manifest WHERE id = @cont); --obtiene el id del gest	
+	SELECT @gu = guid FROM @Manifest WHERE id = @cont --obtiene el id del gest	
 	DECLARE @sale int;
-	SET @sale = (SELECT TOP 1 sagu FROM Sales WHERE sagu = @gu);	
+	SELECT TOP 1 @sale = sagu FROM Sales WHERE sagu = @gu
 	--#region IF @sale
 
 	IF @sale IS NOT NULL		
@@ -316,14 +316,6 @@ BEGIN
 			AND S.saProcD BETWEEN @DateFrom AND @DateTo
 			AND (S.saCancel = 0 OR NOT S.saCancelD BETWEEN @DateFrom AND @DateTo)
 			AND S.sasr = @SalesRoom	
-			-- Vendedor 	
-			and (@SalesmanID = 'ALL'				
-				-- Rol de Liner
-				or (@SalesmanID = S.saLiner1 or @SalesmanID =  S.saLiner2)
-				-- Rol de Closer
-				or (@SalesmanID = S.saCloser1 or @SalesmanID = S.saCloser2 or @SalesmanID = S.saCloser3)
-				-- Rol de Exit
-				or (@SalesmanID = S.saExit1 or @SalesmanID = S.saExit2))	
 			AND (@Own = 0 OR dbo.UFN_IM_StringComparer(S.saLiner1,S.saLiner2,S.saCloser1,S.saCloser2,S.saCloser3,S.saExit1,S.saExit2) = 1)	
 		INSERT INTO @Manifest (guID,Segment,SegmentN, saID,salesmanDate,saGrossAmount,
 		Liner1,Liner1N,Liner1P,Liner2,Liner2N,Liner2P,Closer1,Closer1N,Closer1P,Closer2,Closer2N,Closer2p,Closer3,Closer3N,Closer3p,
