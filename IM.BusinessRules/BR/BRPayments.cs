@@ -14,8 +14,8 @@ namespace IM.BusinessRules.BR
 
    /// <summary>
    /// Obtiene los pagos por venta
-   /// </summary>
-   /// <param name="srId">ID Sale</param>
+   /// </summary> 
+   /// <param name="saId"></param>
    /// <returns>Lista de Payment por Sale</returns>
    /// <hitory>
    /// [jorcanche] 20/05/2016 created

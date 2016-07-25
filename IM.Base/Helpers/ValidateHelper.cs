@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -167,21 +166,24 @@ namespace IM.Base.Helpers
     #endregion  
 
     #region ValidateForm
+
     /// <summary>
     /// Valida que los texbox o combobox de un grid(contenedor) tengan que tener algun valor
     /// </summary>
-    /// <param name="grid">Contenedor</param>
+    /// <param name="container">Contenedor</param>   
     /// <param name="strForm">Nombre del formulario</param>
-    /// <param name="blnDatagrids">True. Valida que los datagrids del formulario hayan finalizado su edición</param>
+    /// <param name="validateVisible">valida los controles visibles</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
     /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
+    /// [jorcanche] Modified 19/07/2016 Se simplifico el metodo, se documento el parametro validateVisible
     /// </history>
 public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
-      string strMsj = "";
-      List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
+      var strMsj = "";
+      var lstControls = UIHelper.GetChildParentCollection<Control>(container);
+        //buscamos todos los controles de la ventana
       if (blnDatagrids)
       {
         var lstGrids = lstControls.Where(co => co is DataGrid).Select(co=>co as DataGrid).ToList();
@@ -199,76 +201,50 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         }
       }
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
-      foreach (Control control in lstControls)
+      foreach (var control in lstControls)
       {
         #region TextBox
-        if (control is TextBox)//Si es Textbox
+
+        if (control is TextBox) //Si es Textbox
         {
-          TextBox txt = (TextBox)control;
-
-          if (validateVisible)
-          {
-            if (txt.IsVisible && string.IsNullOrWhiteSpace(txt.Text))
-              strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
-          }
-          else
-          {
-            if (!validateVisible && string.IsNullOrWhiteSpace(txt.Text))
-              strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
-          }
+          var txt = (TextBox) control;
+          if (!string.IsNullOrEmpty(txt.Text)) continue;
+          if ((validateVisible && txt.IsVisible) || !validateVisible)          
+            strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
         }
-        #endregion
+          #endregion
 
-        #region Combobox
+          #region Combobox
+
         else if (control is ComboBox)
         {
-          ComboBox cmb = (ComboBox)control;
-          if (validateVisible)
-          {
-            if (cmb.IsVisible && cmb.SelectedIndex < 0)
-              strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
-          }
-          else
-          {
-            if (cmb.SelectedIndex < 0)
-              strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
-          }
-        }
-        #endregion
+          var cmb = (ComboBox) control;
+          if (cmb.SelectedIndex > 0) continue;
+          if ((validateVisible && cmb.IsVisible) || !validateVisible)         
+            strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";          
+        }        
+          #endregion
 
-        #region PasswordBox
+          #region PasswordBox
+
         else if (control is PasswordBox)
         {
-          PasswordBox pwd = (PasswordBox)control;
-          if (validateVisible)
-          {
-            if (pwd.IsVisible && string.IsNullOrWhiteSpace(pwd.Password))
-              strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
-          }
-          else 
-          {
-            if (string.IsNullOrWhiteSpace(pwd.Password))
-              strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
-          }
-        }
-        #endregion
+          var pwd = (PasswordBox) control;
+          if (!string.IsNullOrWhiteSpace(pwd.Password)) continue;
+          if ((validateVisible && pwd.IsVisible) || !validateVisible)
+            strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
+        }                
+          #endregion
 
         else if (control is DateTimePicker)
         {
-          DateTimePicker dtp = (DateTimePicker)control;
-          if (validateVisible)
-          {
-            if (dtp.IsVisible && string.IsNullOrWhiteSpace(dtp.Text))
-              strMsj += "Specify the " + strForm + " " + dtp.Tag.ToString() + ". \n";
-          }
-          else
-          {
-            if (string.IsNullOrWhiteSpace(dtp.Text))
-              strMsj += "Specify the " + strForm + " " + dtp.Tag.ToString() + ". \n";
-          }
+          var dtp = (DateTimePicker) control;
+          if (!string.IsNullOrWhiteSpace(dtp.Text)) continue;
+          if ((validateVisible && dtp.IsVisible) || !validateVisible)                
+              strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
         }
       }
-      if (strMsj != "")//Mandamos el foco al primer campo
+      if (strMsj != "") //Mandamos el foco al primer campo
       {
         lstControls.FirstOrDefault().Focus();
       }

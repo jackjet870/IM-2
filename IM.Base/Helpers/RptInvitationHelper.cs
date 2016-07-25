@@ -9,8 +9,11 @@ using System.Windows;
 namespace IM.Base.Helpers
 {
   /// <summary>
-  /// C
+  /// Clase que sirve para la invitación
   /// </summary>
+  /// <history>
+  /// [jorcanche]  created  13/05/2016
+  /// </history>
   public class RptInvitationHelper
   {
 
@@ -38,7 +41,7 @@ namespace IM.Base.Helpers
       *************************************************************************************************************
        Para que el DataSource acepte una entidad primero se debe de converir a lista                              
        1.- ObjectHelper.ObjectToList(invitationData.Invitation)                                                    
-       Pero sí al convertirlo hay propiedades nulas, el DataSource no lo aceptara y marcara error; para evirar esto
+       Pero sí al convertirlo hay propiedades nulas, el DataSource no lo aceptara y marcara error; para evitar esto
        se debera convertir a DateTable para que no tenga nulos.
        2.- TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation))
       *************************************************************************************************************/
@@ -55,9 +58,7 @@ namespace IM.Base.Helpers
 
       //Cargamos el Viewer
       var frmViewer = new frmViewer(rptInvi) ;
-      frmViewer.ShowDialog();
-    
-
+      frmViewer.ShowDialog();   
     }
     #endregion
 

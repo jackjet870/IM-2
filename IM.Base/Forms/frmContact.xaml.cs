@@ -61,15 +61,11 @@ namespace IM.Base.Forms
       if (!ValidateHelper.ValidateRequired(txtguPRInfo, "Unavailable PR", condition: true)) return false;
 
       // validamos que el motivo de indisponibilidad exista      
-      Personnel PR = BRPersonnel.GetPersonnelById(txtguPRInfo.Text); 
-      if (PR == null)
-      {
-        UIHelper.ShowMessage("The PR not exist");
-        txtguPRInfo.Focus();
-        return false;
-      }
-      return true;
-
+      Personnel pr = BRPersonnel.GetPersonnelById(txtguPRInfo.Text);
+      if (pr != null) return true;
+      UIHelper.ShowMessage("The PR not exist");
+      txtguPRInfo.Focus();
+      return false;
     }
 
     #endregion
@@ -198,7 +194,7 @@ namespace IM.Base.Forms
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [jorcanche] created  05003016
+    /// [jorcanche] created  05/03/016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)

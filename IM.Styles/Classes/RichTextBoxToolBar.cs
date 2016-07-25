@@ -210,9 +210,11 @@ namespace IM.Styles.Classes
     /// </summary>
     /// <history>
     /// [erosado] 06/04/2016
+    /// [jorcanche]  Modified 25/07/2016 Se agrego el focus del RichTextBox 
     /// </history>
     public static void OnChangeFontFamily(ref RichTextBox rtb, ref ComboBox cbx)
     {
+      rtb.Focus();
       if (cbx.SelectedItem != null)
         rtb.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, cbx.SelectedItem);
     }
@@ -221,9 +223,11 @@ namespace IM.Styles.Classes
     /// </summary>
     /// <history>
     /// [erosado] 06/04/2016
+    /// [jorcanche]  Modified 25/07/2016 Se agrego el focus del RichTextBox 
     /// </history>
     public static void OnChangeFontSize(ref RichTextBox rtb, ref ComboBox cbx)
     {
+      rtb.Focus();
       rtb.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, cbx.SelectedItem.ToString());
     }
     #endregion

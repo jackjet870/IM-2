@@ -593,18 +593,26 @@ namespace IM.Host
     private void ShowSale_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
-      DataGridRow row = sender as DataGridRow;
-      CheckBox _chekedValue = sender as CheckBox;
-      GuestPremanifestHost guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
+      var row = sender as DataGridRow;
+      var chekedValue = sender as CheckBox;
+      chekedValue.IsChecked = !chekedValue.IsChecked;
+      if ( chekedValue.IsChecked == false) return; 
+      var guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
 
       if (ValidateGuest(guestHost, EnumPermission.Sales, "guSale"))
       {
+        var frmSales = new frmSales(EnumSale.Sale,guestHost.guID);
+        frmSales.ShowDialog();
 
-
+        if (chekedValue.IsChecked.Value == false && !string.IsNullOrEmpty(frmSales.txtsaID.Text)
+          || chekedValue.IsChecked.Value  && string.IsNullOrEmpty(frmSales.txtsaID.Text))
+        {
+          chekedValue.IsChecked = true;
+        }
       }
       else
       {
-        _chekedValue.IsChecked = false;
+        if (chekedValue != null) chekedValue.IsChecked = false;
       }
     }
     #endregion
@@ -714,7 +722,8 @@ namespace IM.Host
     /// </history>
     private void btnSales_Click(object sender, RoutedEventArgs e)
     {
-
+      var sales = new frmSales(EnumSale.GlobalSale) {Owner = this};
+      sales.Show();
     }
     #endregion
 
