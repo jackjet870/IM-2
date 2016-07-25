@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InvitConfig", "IM.InvitC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.SalesCloser", "IM.SalesCloser\IM.SalesCloser.csproj", "{D392E711-25A3-401D-A7F8-9F0EFD879A0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.SalesLiner", "IM.SalesLiner\IM.SalesLiner.csproj", "{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,18 @@ Global
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|x86.Build.0 = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Debug|x86.Build.0 = Debug|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Quality|Any CPU.ActiveCfg = Quality|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Quality|Any CPU.Build.0 = Quality|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Quality|x86.ActiveCfg = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Quality|x86.Build.0 = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Release|x86.ActiveCfg = Release|Any CPU
+		{0649C8E1-A278-4722-8C18-4DD9DE9EF7A0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
