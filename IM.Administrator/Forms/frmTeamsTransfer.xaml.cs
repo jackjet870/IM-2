@@ -6,7 +6,9 @@ using IM.Model;
 using IM.Model.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 using System.Linq;
+using System.ComponentModel;
 
 namespace IM.Administrator.Forms
 {
@@ -16,11 +18,16 @@ namespace IM.Administrator.Forms
   public partial class frmTeamsTransfer : Window
   {
     #region Atributos
-    public TeamGuestServices oldTeam = new TeamGuestServices();//Objeto con los valores iniciales
-    public TeamGuestServices team = new TeamGuestServices();//Objeto para llenar el formulario
+    public TeamGuestServices oldTeamGuestServices = new TeamGuestServices();//Objeto con los valores iniciales
+    public TeamGuestServices teamGuestServices = new TeamGuestServices();//Objeto para llenar el formulario
+
+    public TeamSalesmen oldTeamSalesmen = new TeamSalesmen();//Objeto con los valores iniciales
+    public TeamSalesmen teamSalesmen = new TeamSalesmen();//Objeto para llenar el formulario
+
     public List<Personnel> _lstOldPersonnel = new List<Personnel>();//Lista inicial de personnel
     private List<Personnel> _lstPersonnel = new List<Personnel>();//Lista de Personnel para el viewSource 
     private bool blnClosing = false;
+    public EnumTeamType _enumTeamType;
     #endregion
 
     public frmTeamsTransfer()
@@ -62,20 +69,47 @@ namespace IM.Administrator.Forms
       try
       {
         List<object> lstLocationsFrom = await BRLocations.GetLocationByTeamGuestService();
-        List<object> lstLocationsTo = new List<object>();
-        lstLocationsTo.AddRange(lstLocationsFrom);
         cboPlaceIDFrom.ItemsSource = lstLocationsFrom;
         cboPlaceIDFrom.SelectedValuePath = "loID";
         cboPlaceIDFrom.DisplayMemberPath = "loN";
 
+        List<object> lstLocationsTo = new List<object>();
+        lstLocationsTo.AddRange(lstLocationsFrom);
         cboPlaceIDTo.ItemsSource = lstLocationsTo;
         cboPlaceIDTo.SelectedValuePath = "loID";
         cboPlaceIDTo.DisplayMemberPath = "loN";
-
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "TeamsPRs");
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams PRs");
+      }
+    }
+    #endregion
+
+    #region LoadSalesRoom
+    /// <summary>
+    ///   Carga las salas de ventas relacionados a TeamSalesmen
+    /// </summary>
+    /// <history>
+    ///   [vku] 25/Jul/2016 Created
+    /// </history>
+    public async void LoadSalesRoom()
+    {
+      try
+      {
+        List<object> lstSalesRoomFrom = await BRSalesRooms.GetSalesRoombyTeamSalesMen();
+        cboPlaceIDFrom.ItemsSource = lstSalesRoomFrom;
+        cboPlaceIDFrom.SelectedValuePath = "srID";
+        cboPlaceIDFrom.DisplayMemberPath = "srN";
+
+        List<object> lstSalesRoomTo = new List<object>();
+        lstSalesRoomTo.AddRange(lstSalesRoomFrom);
+        cboPlaceIDTo.ItemsSource = lstSalesRoomTo;
+        cboPlaceIDTo.SelectedValuePath = "srID";
+        cboPlaceIDTo.DisplayMemberPath = "srN";
+      }catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Salesmen");
       }
     }
     #endregion
@@ -92,7 +126,7 @@ namespace IM.Administrator.Forms
     {
       bool blnValidate;
       blnValidate = true;
-      if (!ValidateHelper.ValidateRequired(cboPlaceIDTo, "destination location"))
+      if (!ValidateHelper.ValidateRequired(cboPlaceIDTo, "destination " + lblPlaceIDFrom.Content.ToString()))
         blnValidate = false;
       else
       {
@@ -120,6 +154,28 @@ namespace IM.Administrator.Forms
       return blnValidate;
     }
     #endregion
+
+    #region Sort
+    /// <summary>
+    ///   Ordena los integrantes por nombre
+    /// </summary>
+    /// <history>
+    ///   [vku] 22/Jul/2016 Created
+    /// </history>
+    private void Sort()
+    {
+      grdFrom.Items.SortDescriptions.Clear();
+      grdFrom.Items.SortDescriptions.Add(new SortDescription("peN", ListSortDirection.Ascending));
+      grdFrom.Items.Refresh();
+
+      grdTo.Items.SortDescriptions.Clear();
+      grdTo.Items.SortDescriptions.Add(new SortDescription("peN", ListSortDirection.Ascending));
+      grdTo.Items.Refresh();
+
+      lblIntegrantFrom.Content = "Integrants: " + _lstPersonnel.Count;
+      lblIntegrantTo.Content = "Integrants: " + grdTo.Items.Count;
+    }
+    #endregion
     #endregion
 
     #region Eventos
@@ -140,7 +196,7 @@ namespace IM.Administrator.Forms
         skpStatus.Visibility = Visibility.Visible;
         txtStatus.Text = "Saving Data...";
         List<Personnel> lstPersonnels = grdTo.Items.Cast<Personnel>().ToList();
-        int nRes = await BRTeamsGuestServices.Transfer(App.User.User.peID, cboPlaceIDTo.SelectedValue.ToString(), cboTeamTo.SelectedValue.ToString(), lstPersonnels);
+        int nRes = await BRTransfer.TransferTeamMembers(App.User.User.peID, cboPlaceIDTo.SelectedValue.ToString(), cboTeamTo.SelectedValue.ToString(), lstPersonnels, _enumTeamType);
         skpStatus.Visibility = Visibility.Collapsed;
         UIHelper.ShowMessageResult("Integrants", nRes);
         if(nRes > 0)
@@ -179,10 +235,33 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      ObjectHelper.CopyProperties(team, oldTeam);
-      LoadLocations();
+      switch (_enumTeamType)
+      {
+        case EnumTeamType.TeamPRs:
+          {
+            lblPlaceIDFrom.Content = "Location";
+            lblPlaceIDTo.Content = "Location";
+            ObjectHelper.CopyProperties(teamGuestServices, oldTeamGuestServices);
+            LoadLocations();
+            DataContext = teamGuestServices;
+            cboPlaceIDFrom.SelectedValue = teamGuestServices.tglo; 
+            break;
+          }
+        case EnumTeamType.TeamSalesmen:
+          {
+            lblPlaceIDFrom.Content = "Sales Room";
+            lblPlaceIDTo.Content = "Sales Room";
+            ObjectHelper.CopyProperties(teamSalesmen, oldTeamSalesmen);
+            LoadSalesRoom();
+            DataContext = teamSalesmen;
+            cboPlaceIDFrom.SelectedValue = teamSalesmen.tssr;
+            grdFrom.Items.SortDescriptions.Clear();
+            grdFrom.Items.SortDescriptions.Add(new SortDescription("peN", ListSortDirection.Ascending));
+            grdFrom.Items.Refresh();
+            break;
+          }
+      }
       LoadPersonnel();
-      DataContext = team;
     }
     #endregion
 
@@ -197,9 +276,27 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void cboPlaceIDTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      string loIDTo = cboPlaceIDTo.SelectedValue.ToString();
-      List<TeamGuestServices> lstTeamTo = await BRTeamsGuestServices.GetTeamsGuestServices(1, teamGuestServices: new TeamGuestServices {  tglo = loIDTo });
-      cboTeamTo.ItemsSource = lstTeamTo;
+      string placeIDTo = cboPlaceIDTo.SelectedValue.ToString();
+      switch (_enumTeamType)
+      {
+        case EnumTeamType.TeamPRs:
+          {
+            List<TeamGuestServices> lstTeamTo = await BRTeamsGuestServices.GetTeamsGuestServices(1, teamGuestServices: new TeamGuestServices { tglo = placeIDTo });
+            cboTeamTo.ItemsSource = lstTeamTo;
+            cboTeamTo.SelectedValuePath = "tgID";
+            cboTeamTo.DisplayMemberPath = "tgN";
+            break;
+          }
+        case EnumTeamType.TeamSalesmen:
+          {
+            List<TeamSalesmen> lstTeamTo = await BRTeamsSalesMen.GetTeamsSalesMen(1, teamSalesMen: new TeamSalesmen { tssr = placeIDTo });
+            cboTeamTo.ItemsSource = lstTeamTo;
+            cboTeamTo.SelectedValuePath = "tsID";
+            cboTeamTo.DisplayMemberPath = "tsN";
+            break;
+          }
+      }
+      
     }
     #endregion
 
@@ -211,9 +308,28 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private async void cboPlaceIDFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      string loIDFrom = cboPlaceIDFrom.SelectedValue.ToString();
-      List<TeamGuestServices> lstTeamFrom = await BRTeamsGuestServices.GetTeamsGuestServices(1, teamGuestServices: new TeamGuestServices { tglo = loIDFrom });
-      cboTeamFrom.ItemsSource = lstTeamFrom;
+      string placeIDFrom = cboPlaceIDFrom.SelectedValue.ToString();
+      switch (_enumTeamType)
+      {
+        case EnumTeamType.TeamPRs:
+          {
+            List<TeamGuestServices> lstTeamFrom = await BRTeamsGuestServices.GetTeamsGuestServices(1, teamGuestServices: new TeamGuestServices { tglo = placeIDFrom });
+            cboTeamFrom.ItemsSource = lstTeamFrom;
+            cboTeamFrom.SelectedValuePath = "tgID";
+            cboTeamFrom.DisplayMemberPath = "tgN";
+            cboTeamFrom.SelectedValue = teamGuestServices.tgID;
+            break;
+          }
+        case EnumTeamType.TeamSalesmen:
+          {
+            List<TeamSalesmen> lstTeamFrom = await BRTeamsSalesMen.GetTeamsSalesMen(1, teamSalesMen: new TeamSalesmen { tssr = placeIDFrom });
+            cboTeamFrom.ItemsSource = lstTeamFrom;
+            cboTeamFrom.SelectedValuePath = "tsID";
+            cboTeamFrom.DisplayMemberPath = "tsN";
+            cboTeamFrom.SelectedValue = teamSalesmen.tsID;
+            break;
+          }    
+      }
     }
     #endregion
 
@@ -237,9 +353,7 @@ namespace IM.Administrator.Forms
           grdTo.Items.Add(SelectedItem);
           _lstPersonnel.Remove(SelectedItem);
         }
-        grdFrom.Items.Refresh();
-        lblIntegrantFrom.Content = "Integrants: " + _lstPersonnel.Count;
-        lblIntegrantTo.Content = "Integrants: " + grdTo.Items.Count;
+        Sort();
       }
     }
     #endregion
@@ -262,9 +376,7 @@ namespace IM.Administrator.Forms
         grdTo.Items.Add(Item);
         _lstPersonnel.Remove(Item);
       }
-      grdFrom.Items.Refresh();
-      lblIntegrantFrom.Content = "Integrants: " + _lstPersonnel.Count;
-      lblIntegrantTo.Content = "Integrants: " + grdTo.Items.Count;
+      Sort();
     }
     #endregion
 
@@ -288,9 +400,7 @@ namespace IM.Administrator.Forms
           _lstPersonnel.Add(SelectedItem);
           grdTo.Items.Remove(SelectedItem);
         }
-        grdFrom.Items.Refresh();
-        lblIntegrantFrom.Content = "Integrants: " + _lstPersonnel.Count;
-        lblIntegrantTo.Content = "Integrants: " + grdTo.Items.Count;
+        Sort();
       }
     }
     #endregion
@@ -313,10 +423,7 @@ namespace IM.Administrator.Forms
         _lstPersonnel.Add(Item);
         grdTo.Items.Remove(Item);
       }
-      _lstPersonnel.OrderBy(pe => pe.peN);
-      grdFrom.Items.Refresh();
-      lblIntegrantFrom.Content = "Integrants: " + _lstPersonnel.Count;
-      lblIntegrantTo.Content = "Integrants: " + grdTo.Items.Count;
+      Sort();
     }
     #endregion
 

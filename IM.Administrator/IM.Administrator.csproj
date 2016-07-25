@@ -1055,6 +1055,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmTeamsSalesmen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmTeamSalesmenDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmTeamsTransfer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1172,6 +1180,12 @@
     </Compile>
     <Compile Include="Forms\frmTeamsPRs.xaml.cs">
       <DependentUpon>frmTeamsPRs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTeamsSalesmen.xaml.cs">
+      <DependentUpon>frmTeamsSalesmen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTeamSalesmenDetail.xaml.cs">
+      <DependentUpon>frmTeamSalesmenDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmTeamsTransfer.xaml.cs">
       <DependentUpon>frmTeamsTransfer.xaml</DependentUpon>

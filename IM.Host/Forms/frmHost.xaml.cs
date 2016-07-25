@@ -505,7 +505,7 @@ namespace IM.Host
       _lstHotel = await BRHotels.GetHotels(null, 1);
       
       // Team Sales Men
-      _lstTeamSalesMen = BRTeamsSalesMen.GetTeamsSalesMen(1);
+      _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
       
       // Personnel
       _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);

@@ -558,7 +558,7 @@ namespace IM.Administrator.Forms
         case "VLO":
         case "ASM":
           {
-            List<TeamSalesmen> lstTeamSalesMen = BRTeamsSalesMen.GetTeamsSalesMen(1, new TeamSalesmen { tssr = personnel.pePlaceID });
+            List<TeamSalesmen> lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1, new TeamSalesmen { tssr = personnel.pePlaceID });
             cmbpeTeamType.ItemsSource = lstTeamSalesMen;
             cmbpeTeamType.SelectedValuePath = "tsID";
             cmbpeTeamType.DisplayMemberPath = "tsN";
