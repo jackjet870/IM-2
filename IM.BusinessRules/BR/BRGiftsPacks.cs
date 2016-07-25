@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -24,19 +25,33 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 07/Julio/2016 Created
+    /// [emoguel] modified 18/07/2016
     /// </history>
-    public async static Task<List<GiftPackageItem>> GetGiftsPacks()
+    public async static Task<List<GiftPackageItem>> GetGiftsPacks(GiftPackageItem giftPackageItem = null, bool blnIncludeGift = false)
     {
-      List<GiftPackageItem> lstResult = new List<GiftPackageItem>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          lstResult = dbContext.GiftsPackagesItems.ToList();
+          var query = from gp in dbContext.GiftsPackagesItems
+                      select gp;
+
+          if (blnIncludeGift)
+          {
+            query = query.Include(gp => gp.GiftItem);
+          }
+          if (giftPackageItem != null)
+          {
+            if (!string.IsNullOrWhiteSpace(giftPackageItem.gpPack))
+            {
+              query = query.Where(gp => gp.gpPack == giftPackageItem.gpPack);
+            }
+          }
+
+          return query.OrderBy(gp => gp.gpgi).ToList();
+
         }
       });
-
-      return lstResult;
     } 
     #endregion
 

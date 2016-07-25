@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -261,5 +262,26 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetAgenciesByIds
+
+    #region GetAgenciesByGift
+    /// <summary>
+    /// Obtiene las agencias asignadas a un Gift
+    /// </summary>
+    /// <param name="idGift">id para hacer el filtro</param>
+    /// <returns>Lista tipo Agencia</returns>
+    /// <history>
+    /// [emoguel] created 08/07/2016
+    /// </history>
+    public static async Task<List<Agency>> GetAgenciesByGift(string idGift)
+    {
+      return await Task.Run(() => {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var gift = dbContext.Gifts.Where(gi => gi.giID == idGift).Include(gi=>gi.Agencies).FirstOrDefault();
+          return gift.Agencies.ToList();
+        }
+      });
+    }
+    #endregion
   }
 }

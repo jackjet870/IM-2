@@ -62,37 +62,37 @@ namespace IM.BusinessRules.BR
                        select lo;
              }
              if (nStatus != -1)//Filtro por estatus
-          {
+             {
                bool blnEstatus = Convert.ToBoolean(nStatus);
                query = query.Where(lo => lo.loA == blnEstatus);
              }
-          #region Filtros adicionales
+             #region Filtros adicionales
 
-          if (location != null)//verificar si se tiene un objeto
-          {
+             if (location != null)//verificar si se tiene un objeto
+             {
                if (!string.IsNullOrWhiteSpace(location.loID))//filtro por ID
-            {
+               {
                  query = query.Where(lo => lo.loID == location.loID);
                }
 
                if (!string.IsNullOrWhiteSpace(location.loN))//Filtro por Descripcion
-            {
+               {
                  query = query.Where(lo => lo.loN.Contains(location.loN));
                }
 
                if (!string.IsNullOrWhiteSpace(location.losr))//Filtro por sales room
-            {
+               {
                  query = query.Where(lo => lo.losr == location.losr);
                }
 
                if (!string.IsNullOrWhiteSpace(location.lolc))//Filtro por categoria
-            {
+               {
                  query = query.Where(lo => lo.lolc == location.lolc);
                }
              }
 
-          #endregion
-          return query.OrderBy(lo => lo.loN).ToList();
+             #endregion
+             return query.OrderBy(lo => lo.loN).ToList();
            }
          });
       return lstLocations;
@@ -133,12 +133,13 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<object>> GetLocationByTeamGuestService()
     {
-      List<object> lstObject = await Task.Run(() => {
+      List<object> lstObject = await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from lo in dbContext.Locations
                        from tg in dbContext.TeamsGuestServices.Distinct()
-                       where lo.loID== tg.tglo
+                       where lo.loID == tg.tglo
                        select new { loID = lo.loID, loN = lo.loN }).Distinct();
           return query.ToList<object>();
         }
@@ -146,6 +147,52 @@ namespace IM.BusinessRules.BR
 
       return lstObject;
     }
+    #endregion
+    
+    #region GetLocationsByGifts
+    /// <summary>
+    /// Devuelve la lista de locaciones ligadas a un gift
+    /// </summary>
+    /// <param name="idGift">id del gift para filtrar</param>
+    /// <returns>Lista tipo Locations</returns>
+    /// <history>
+    /// [emoguel] created 08/07/2016
+    /// </history>
+    public static async Task<List<Location>> GetLocationsByGift(string idGift)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var gift = dbContext.Gifts.Where(gi => gi.giID == idGift).Include(gi => gi.Locations).FirstOrDefault();
+          return gift.Locations.ToList();
+
+        }
+      });      
+    }
+    #endregion
+
+    #region GetLocationsByRegionProgram
+    /// <summary>
+    /// Obtiene Locations
+    /// </summary>
+    /// <param name="program">Filtro por program</param>
+    /// <param name="status">0. Sin filtro | 1. Activos | 2. Inactivos</param>
+    /// <param name="regions">Filtro por regiones</param>
+    /// <history>
+    /// [emoguel] created 11/07/2016
+    /// </history>
+    /// <returns>Lista Location Short</returns>
+    public async static Task<List<LocationShort>> GetLocationsByRegionProgram(string program = "ALL", int status = 0, string regions = "ALL")
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetLocations(program, (byte)status, regions).ToList();
+        }
+      });
+    } 
     #endregion
   }
 }

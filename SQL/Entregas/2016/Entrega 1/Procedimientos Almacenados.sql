@@ -1,25 +1,30 @@
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/23/2016 10:50:10 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/25/2016 10:58:24 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetGifts]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetGifts]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/23/2016 10:50:10 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetWhsMovs]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[USP_OR_GetWhsMovs]
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/25/2016 10:58:24 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetLeadSourcesByUser]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[USP_OR_GetLeadSourcesByUser]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/23/2016 10:50:11 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/25/2016 10:58:24 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetWarehousesByUser]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetWarehousesByUser]
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/25/2016 10:58:25 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetWhsMovs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[USP_OR_GetWhsMovs]
 GO
 
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/23/2016 10:50:11 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/25/2016 10:58:25 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -61,7 +66,7 @@ order by G.giN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/23/2016 10:50:13 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/25/2016 10:58:26 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -73,26 +78,43 @@ GO
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
-** Script para obtener los  de un almacén 
-** que ocurrieron en un día en específico.
+** Obtiene los Lead Sources a los que tiene permiso un usuario
 ** 
-** [edgrodriguez]	22/feb/2016 Created
+** [wtorres]		07/Jun/2011 Created
+** [wtorres]		12/Ago/2014 Modified. Agregue el parametro @Regions
+** [edgrodriguez]	07/Mar/2016 Modified. Agregado a la consulta el campo lspg.
+** [emoguel]		20/Jun/2016 Modified. Se agregó a la consulta el campo lsrg. 
 **
 */
-CREATE procedure [dbo].[USP_OR_GetWhsMovs]
-@wmwh varchar(10),	--Clave del almacén
-@wmD datetime		--Fecha
+create procedure [dbo].[USP_OR_GetLeadSourcesByUser]
+	@User varchar(10),				-- Clave del usuario
+	@Programs varchar(8000) = 'ALL',	-- Clave de programas
+	@Regions varchar(8000) = 'ALL'		-- Clave de regiones
 as
-Begin
-	SELECT wmD, wmpe, peN, wmQty, giN, wmComments, wmwh FROM WhsMovs 
-	INNER JOIN Personnel ON wmpe = peID 
-	INNER JOIN Gifts ON wmgi=giID 
-	WHERE wmwh = @wmwh AND wmD = @wmD
-End
+set nocount on
+
+select distinct L.lsID, L.lsN, L.lspg,L.lsrg
+from PersLSSR P
+	inner join LeadSources L on P.plLSSRID = L.lsID
+	left join Areas A on A.arID = L.lsar
+where
+	-- Usuario
+	P.plpe = @User
+	-- Lugar de tipo Lead Source
+	and P.plLSSR = 'LS'
+	-- Activo
+	and L.lsA = 1
+	-- Programas
+	and (@Programs = 'ALL' or L.lspg in (select item from split(@Programs, ',')))
+	-- Regiones
+	and (@Regions = 'ALL' or A.arrg in (select item from split(@Regions, ',')))
+order by L.lsN
+
+
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/23/2016 10:50:14 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/25/2016 10:58:27 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -134,6 +156,37 @@ where
 order by W.whN
 
 
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/25/2016 10:58:28 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Script para obtener los  de un almacén 
+** que ocurrieron en un día en específico.
+** 
+** [edgrodriguez]	22/feb/2016 Created
+**
+*/
+CREATE procedure [dbo].[USP_OR_GetWhsMovs]
+@wmwh varchar(10),	--Clave del almacén
+@wmD datetime		--Fecha
+as
+Begin
+	SELECT wmD, wmpe, peN, wmQty, giN, wmComments, wmwh FROM WhsMovs 
+	INNER JOIN Personnel ON wmpe = peID 
+	INNER JOIN Gifts ON wmgi=giID 
+	WHERE wmwh = @wmwh AND wmD = @wmD
+End
 
 GO
 

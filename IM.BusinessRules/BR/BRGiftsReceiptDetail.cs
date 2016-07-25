@@ -190,6 +190,36 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_GetGiftsReceiptDetailRoomChargesOpera(ReceiptID).ToList();
       }
+    }
+    #endregion
+
+    #region GetGiftsReceiptDetail
+    /// <summary>
+    /// Obtiene registros de GiftsReceiptsC
+    /// </summary>
+    /// <param name="giftReceipDetail">Objeto con filtros adicionales</param>
+    /// <history>
+    /// [emoguel] created 11/07/2016
+    /// </history>
+    /// <returns>Lista de GiftsReceiptDetail</returns>
+    public static async Task<List<GiftsReceiptDetail>> GetGiftsReceiptDetail(GiftsReceiptDetail giftReceipDetail = null)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var query = from ge in dbContext.GiftsReceiptsDetails
+                      select ge;
+
+          if (!string.IsNullOrWhiteSpace(giftReceipDetail.gegi))
+          {
+            query = query.Where(ge => ge.gegi == giftReceipDetail.gegi);
+          }
+
+          return query.ToList();
+
+        }
+      });
     } 
     #endregion
 

@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.InventoryMovements.Clases;
 using IM.Model;
-using IM.Model.Classes;
 using IM.BusinessRules.BR;
 using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Helpers;
 using IM.Model.Enums;
 
 namespace IM.InventoryMovements
@@ -29,13 +22,13 @@ namespace IM.InventoryMovements
   {
     #region Atributos
 
-    private DateTime? _dtmcurrent = null; //Variable para manejar un problema del control DatePicker
-    private List<objWhsMovs> _lstobjWhsMovs = null;//Lista para nuevos registros de WhsMovs
+    private DateTime? _dtmcurrent; //Variable para manejar un problema del control DatePicker
+    private List<objWhsMovs> _lstobjWhsMovs;//Lista para nuevos registros de WhsMovs
     private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
-    private DateTime _dtmServerdate = new DateTime();
-    CollectionViewSource objWhsMovsViewSource;
-    CollectionViewSource getGiftsViewSource;
-    CollectionViewSource whsMovViewSource;
+    private DateTime _dtmServerdate;
+    private CollectionViewSource _objWhsMovsViewSource;
+    private CollectionViewSource _getGiftsViewSource;
+    private CollectionViewSource _whsMovViewSource;
     #endregion
 
     #region Constructores y destructores
@@ -54,6 +47,7 @@ namespace IM.InventoryMovements
     #endregion
 
     #region Metodos del formulario
+
     /// <summary>
     /// Inicio y configuracion del formulario.
     /// </summary>
@@ -72,6 +66,11 @@ namespace IM.InventoryMovements
       InicializarGrdNew();
       _dtmServerdate = BRHelpers.GetServerDate();
       dtpDate_SelectedDateChanged(null, null);
+      if (((EnumPermisionLevel) App.User.Permissions.FirstOrDefault(c => c.pppm == "GIFTSRCPTS").pppl) >=
+          EnumPermisionLevel.Special)
+      {
+        fraDate.IsEnabled = true;
+      }
     }
 
     /// <summary>
@@ -83,38 +82,19 @@ namespace IM.InventoryMovements
     /// </history>
     private void frmInventoryMovements_KeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Capital)
+      switch (e.Key)
       {
-        CkeckKeysPress(StatusBarCap, Key.Capital);
-      }
-      else if (e.Key == Key.Insert)
-      {
-        CkeckKeysPress(StatusBarIns, Key.Insert);
-      }
-      else if (e.Key == Key.NumLock)
-      {
-        CkeckKeysPress(StatusBarNum, Key.NumLock);
+        case Key.Capital:
+          CkeckKeysPress(StatusBarCap, Key.Capital);
+          break;
+        case Key.Insert:
+          CkeckKeysPress(StatusBarIns, Key.Insert);
+          break;
+        case Key.NumLock:
+          CkeckKeysPress(StatusBarNum, Key.NumLock);
+          break;
       }
     }
-
-    /// <summary>
-    /// Aumenta o decrementa los dias del control de fecha.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 18/Feb/2016 Created
-    /// </history>
-    //private void upd_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-    //{
-    //switch (e.ScrollEventType)
-    //{
-    //  case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
-    //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
-    //    break;
-    //  case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
-    //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
-    //    break;
-    //}
-    //}
 
     /// <summary>
     /// Cierra el formulario.
@@ -138,16 +118,16 @@ namespace IM.InventoryMovements
     private void dtpDate_SelectedDateChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       // [wtorres] 15/Mar/2016 validamos que el formulario ya se haya inicializado
-      if (!this.IsInitialized || string.IsNullOrEmpty(dtpDate.Text)) return;
+      if (!IsInitialized || string.IsNullOrEmpty(dtpDate.Text)) return;
 
-      if (_dtmcurrent != dtpDate.Value.Value)
+      if (dtpDate.Value != null && _dtmcurrent != dtpDate.Value.Value)
       {
-        whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
+        _whsMovViewSource = ((CollectionViewSource)FindResource("whsMovViewSource"));
         // Load data by setting the CollectionViewSource.Source property:
-        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
-        StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
+        _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
+        StatusBarReg.Content = $"{grd.SelectedItems.Count}/{_whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count()}";
       }
-      _dtmcurrent = dtpDate.Value.Value;
+      if (dtpDate.Value != null) _dtmcurrent = dtpDate.Value.Value;
     }
 
     /// <summary>
@@ -169,44 +149,40 @@ namespace IM.InventoryMovements
     /// </history>
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      if (ValidateCurrentDate())
-      {
-        if (_lstobjWhsMovs.Count > 0)
+      if (!ValidateCurrentDate() || _lstobjWhsMovs.Count <= 0 ||
+          _lstobjWhsMovs.Any(c => c.wmQty == 0 || c.wmgi == null || c.wmgi == "")) return;
+      
+        _lstobjWhsMovs.ForEach(c =>
         {
-          if (!_lstobjWhsMovs.Any(c => c.wmQty == 0 || c.wmgi == null || c.wmgi == ""))
-          {
-            _lstobjWhsMovs.ForEach(c =>
-            {
-              c.wmD = dtpDate.Value.Value;
-              c.wmwh = App.User.Warehouse.whID;
-              c.wmpe = App.User.User.peID;
+          c.wmD = dtpDate.Value.Value;
+          c.wmwh = App.User.Warehouse.whID;
+          c.wmpe = App.User.User.peID;
+        });
 
-            });
+        List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
+        {
+          wmComments = c.wmComments,
+          wmD = c.wmD,
+          wmgi = c.wmgi,
+          wmID = c.wmID,
+          wmpe = c.wmpe,
+          wmQty = c.wmQty,
+          wmwh = c.wmwh
+        }).ToList();
 
-            List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
-            {
-              wmComments = c.wmComments,
-              wmD = c.wmD,
-              wmgi = c.wmgi,
-              wmID = c.wmID,
-              wmpe = c.wmpe,
-              wmQty = c.wmQty,
-              wmwh = c.wmwh
-            }).ToList();
-
-            //BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
-            int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.add);
-            if (nRes > 0)
-            {
-              UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");
-              InicializarGrdNew();
-              whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
-            }
-            else
-              UIHelper.ShowMessage("The warehouse movements was not saved.", MessageBoxImage.Error, "Intelligence Marketing");
-          }
+        //BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
+        int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.add);
+        if (nRes > 0)
+        {
+          UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");
+          InicializarGrdNew();
+          _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID,
+            dtpDate.Value.Value.Date);
         }
-      }
+        else
+          UIHelper.ShowMessage("The warehouse movements was not saved.", MessageBoxImage.Error,
+            "Intelligence Marketing");
+      
     }
 
     /// <summary>
@@ -231,7 +207,7 @@ namespace IM.InventoryMovements
     /// </history>
     private void grd_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
+      StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, _whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
     }
     #endregion
 
@@ -268,6 +244,7 @@ namespace IM.InventoryMovements
     {
       statusBar.FontWeight = FontWeights.Normal;
       statusBar.Foreground = Brushes.Gray;
+     
     }
 
     /// <summary>
@@ -307,34 +284,39 @@ namespace IM.InventoryMovements
     private async void InicializarGrdNew()
     {
       _lstobjWhsMovs = new List<objWhsMovs>();
-      objWhsMovsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objWhsMovsViewSource")));
+      _objWhsMovsViewSource = ((CollectionViewSource)FindResource("objWhsMovsViewSource"));
       // Load data by setting the CollectionViewSource.Source property:
-      objWhsMovsViewSource.Source = _lstobjWhsMovs;
-      getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
+      _objWhsMovsViewSource.Source = _lstobjWhsMovs;
+      _getGiftsViewSource = ((CollectionViewSource)FindResource("getGiftsViewSource"));
       // Load data by setting the CollectionViewSource.Source property:
-      getGiftsViewSource.Source =await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
+      _getGiftsViewSource.Source =await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
     }
-    #endregion
 
+    /// <summary>
+    /// Valida las celdas del gridNew
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 07/Jul/2016 Created
+    /// </history>
     private void grdNew_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
       objWhsMovs _objWhsMov = e.Row.DataContext as objWhsMovs;
 
       // Obtenemos la columna actual
-      DataGridColumn Column = e.Column;
-      DataGridCellInfo _cell = grdNew.CurrentCell;
+      DataGridCellInfo cell = grdNew.CurrentCell;
 
-      switch (_cell.Column.SortMemberPath)
+      switch (cell.Column.SortMemberPath)
       {
         case "wmgi":
-          if (_objWhsMov.wmQty == 0)
+          if (_objWhsMov != null && _objWhsMov.wmQty == 0)
           {
             UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-            
+
             GridHelper.SelectRow(grdNew, grdNew.SelectedIndex, blnEdit: true);
           }
           break;
       }
     }
+    #endregion
   }
 }

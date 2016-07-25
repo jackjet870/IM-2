@@ -172,16 +172,32 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="grid">Contenedor</param>
     /// <param name="strForm">Nombre del formulario</param>
+    /// <param name="blnDatagrids">True. Valida que los datagrids del formulario hayan finalizado su edición</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
     /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// </history>
-    public static string ValidateForm(UIElement container, string strForm, bool validateVisible = true)
-    {
+public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
       string strMsj = "";
       List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
+      if (blnDatagrids)
+      {
+        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co=>co as DataGrid).ToList();
+        if (lstGrids != null)
+        {
+          foreach(DataGrid dgr in lstGrids)
+          {
+            var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromItem(obj) as DataGridRow).Where(obj=>dgr.ItemContainerGenerator.ContainerFromItem(obj)!=null).ToList();
+            if (lstRows.Any(obj => obj.IsEditing == true))
+            {
+              strMsj += "Please finalize the list edition. \n";
+              break;
+            }
+          }
+        }
+      }
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
       foreach (Control control in lstControls)
       {

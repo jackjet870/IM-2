@@ -1,28 +1,25 @@
 ﻿using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace IM.InventoryMovements
+namespace IM.InvitConfig
 {
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
     public static UserData User;
-
-    #endregion
 
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  09/Mar/2016 Created
+    ///   [jorcanche]  09/Mar/2016 Created
     /// </history>
     public App() : base()
     {
@@ -30,28 +27,32 @@ namespace IM.InventoryMovements
     }
     #endregion
 
-    #region Metodos
-
     #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
     /// <history>
+    /// [jorcanche] 11/04/2016  created 
     /// [erosado] 01/06/2016  Modified. se agrego async
     /// </history>
-    protected override async void OnStartup(StartupEventArgs e)
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Inventory Movements");
-      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Warehouse, validatePermission:true, permission:EnumPermission.GiftsReceipts, permissionLevel:EnumPermisionLevel.Standard, changePassword:true);
+      frmSplash frmSplash = new frmSplash("Invit Config");
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal,validatePermission:true,
+        changePassword: true, permission: EnumPermission.HostInvitations,
+        permissionLevel: EnumPermisionLevel.ReadOnly);
+
       await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
-      if (!frmLogin.IsAuthenticated) return;
-      User = frmLogin.UserData;
-      frmInventoryMovements frmMain = new frmInventoryMovements();
-      frmMain.ShowDialog();
-      frmSplash.Close();
+      if (frmLogin.IsAuthenticated)
+      {
+        User = frmLogin.UserData;
+        Forms.frmInvitConfig frmMain = new Forms.frmInvitConfig();
+        frmMain.ShowDialog();
+        frmSplash.Close();
+      }
     }
     #endregion
 
@@ -72,8 +73,6 @@ namespace IM.InventoryMovements
         Application.Current.Shutdown();
       }
     }
-    #endregion
-
     #endregion
   }
 }
