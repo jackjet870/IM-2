@@ -6035,6 +6035,12 @@
           <Parameter Name="Program" Type="varchar" Mode="In" />
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptSelfGenTeam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptStatisticsByCloser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -18054,6 +18060,12 @@
             <ReturnType Type="Collection(IMModel.RptGuestRegistration_Comments)" />
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="USP_IM_RptSelfGenTeam" ReturnType="Collection(IMModel.RptSelfGenTeam)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22871,6 +22883,24 @@
           <Property Type="String" Name="By" Nullable="false" MaxLength="9" />
           <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="Order" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptSelfGenTeam">
+          <Property Type="String" Name="Liner" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalesmanName" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="OOP" Nullable="true" />
+          <Property Type="Decimal" Name="OFVol" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OFUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OFSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="RGVol" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="RGUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="RGSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="NVol" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="NUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="NSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TVol" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TSales" Nullable="true" Precision="19" />
+          <Property Type="String" Name="SelfGenType" Nullable="true" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30897,6 +30927,28 @@
                 <ScalarProperty Name="By" ColumnName="By" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="Order" ColumnName="Order" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptSelfGenTeam" FunctionName="IMModel.Store.USP_IM_RptSelfGenTeam" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptSelfGenTeam">
+                <ScalarProperty Name="Liner" ColumnName="Liner" />
+                <ScalarProperty Name="SalesmanName" ColumnName="SalesmanName" />
+                <ScalarProperty Name="OOP" ColumnName="OOP" />
+                <ScalarProperty Name="OFVol" ColumnName="OFVol" />
+                <ScalarProperty Name="OFUPS" ColumnName="OFUPS" />
+                <ScalarProperty Name="OFSales" ColumnName="OFSales" />
+                <ScalarProperty Name="RGVol" ColumnName="RGVol" />
+                <ScalarProperty Name="RGUPS" ColumnName="RGUPS" />
+                <ScalarProperty Name="RGSales" ColumnName="RGSales" />
+                <ScalarProperty Name="NVol" ColumnName="NVol" />
+                <ScalarProperty Name="NUPS" ColumnName="NUPS" />
+                <ScalarProperty Name="NSales" ColumnName="NSales" />
+                <ScalarProperty Name="TVol" ColumnName="TVol" />
+                <ScalarProperty Name="TUPS" ColumnName="TUPS" />
+                <ScalarProperty Name="TSales" ColumnName="TSales" />
+                <ScalarProperty Name="SelfGenType" ColumnName="SelfGenType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

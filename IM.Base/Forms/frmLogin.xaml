@@ -7,35 +7,37 @@
         mc:Ignorable="d"
         Title="Login" Height="203" Width="290" ResizeMode="NoResize"
         Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Login_Loaded">
-    <Window.InputBindings>
-        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=CloseWindow}" Key="F4" Modifiers="Alt"/>
-    </Window.InputBindings>
-    <Grid Background="SkyBlue">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="15"/>
-        </Grid.RowDefinitions>
+  <Window.InputBindings>
+    <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=CloseWindow}" Key="F4" Modifiers="Alt"/>
+  </Window.InputBindings>
+  <Grid Background="SkyBlue">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="80"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="25"/>
+    </Grid.RowDefinitions>
 
-        <Label Grid.Column="0" Grid.Row="1" Content="User ID:" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White" Height="22"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="txtUser" Tag="User Id" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left" LostFocus="txtUser_LostFocus" CharacterCasing="Upper"/>
+    <Label Grid.Column="0" Grid.Row="1" Content="User ID:" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White"/>
+    <TextBox Grid.Column="1" Grid.Row="1" Name="txtUser" Tag="User Id" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left" LostFocus="txtUser_LostFocus" CharacterCasing="Upper"/>
 
-        <Label Grid.Column="0" Grid.Row="2" Content="Password:" VerticalAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White" Height="22"/>
-        <PasswordBox Name="txtPassword" Tag="Password"  Grid.Column="1" Grid.Row="2" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" MaxLength="10"/>
+    <Label Grid.Column="0" Grid.Row="2" Content="Password:" VerticalAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White"/>
+    <PasswordBox Name="txtPassword" Tag="Password"  Grid.Column="1" Grid.Row="2" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" MaxLength="10"/>
 
-        <Label Name="lblPlace" Grid.Column="0" Grid.Row="3" Content="lblPlace:" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Height="22" HorizontalContentAlignment="Right" />
-        <ComboBox x:Name="cmbPlace" Tag="Place"  Grid.Column="1" Grid.Row="3" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" IsEnabled="False" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+    <Label Name="lblPlace" Grid.Column="0" Grid.Row="3" Content="lblPlace:" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" HorizontalContentAlignment="Right" />
+    <ComboBox x:Name="cmbPlace" Tag="Place"  Grid.Column="1" Grid.Row="3" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" IsEnabled="False" DisplayMemberPath="Name" SelectedValuePath="Id"/>
 
-        <Button Name="btnAceptar" Content="Ok" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Left" Background="White" FontWeight="Bold" Click="btnAceptar_Click" IsDefault="True"/>
-        <Button Name="btnCancelar" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Right" Background="White" FontWeight="Bold" Click="btnCancelar_Click" Margin="5 0 15 0" />
-        <CheckBox x:Name="chkChangePwd" Content="Change Password" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Width="107"/>
-        <CheckBox x:Name="chkAutoSign" Content="Auto-Sign" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Width="62" Grid.RowSpan="2" Margin="5 0 15 0"/>
-    </Grid>
+    <Button Name="btnAceptar" Content="Ok" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Left" Background="White" FontWeight="Bold" Click="btnAceptar_Click" IsDefault="True"/>
+    <Button Name="btnCancelar" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Right" Background="White" FontWeight="Bold" Click="btnCancelar_Click" Margin="5 0 15 0" />
+    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left">
+      <CheckBox x:Name="chkChangePwd" Content="Change Password"/>
+      <CheckBox x:Name="chkAutoSign" Content="Auto-Sign" Margin="2,0"/>
+    </StackPanel>
+  </Grid>
 </Window>

@@ -6332,5 +6332,26 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGuestRegistration>("USP_OR_RptGuestRegistration", guestIDParameter);
         }
+    
+        public virtual ObjectResult<RptSelfGenTeam> USP_IM_RptSelfGenTeam(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string salesmanID)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSelfGenTeam>("USP_IM_RptSelfGenTeam", dateFromParameter, dateToParameter, salesRoomsParameter, salesmanIDParameter);
+        }
     }
 }

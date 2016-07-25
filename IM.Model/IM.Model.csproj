@@ -1162,6 +1162,9 @@
     <Compile Include="RptSelfGen.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptSelfGenTeam.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptShowFactorByBookingDate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
