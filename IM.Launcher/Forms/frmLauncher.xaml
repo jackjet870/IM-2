@@ -34,12 +34,17 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="30"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="70*"/>
     </Grid.RowDefinitions>
 
     <Label Name="lblVersion" HorizontalAlignment="Center" VerticalAlignment="Center">VERSION</Label>
-
-    <ListBox Grid.Row="1" Name="lsbLauncher" TextSearch.TextPath="Name" Background="SkyBlue" MouseDoubleClick="lsbLauncher_MouseDoubleClick" KeyDown="lsbLauncher_KeyDown">
+    <ListBox Grid.Row="1" Name="lsbLauncher" TextSearch.TextPath="Name" Background="SkyBlue">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="lsbLauncher_MouseDoubleClick" />
+                    <EventSetter Event="KeyDown" Handler="lsbLauncher_KeyDown"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
     </ListBox>
 
   </Grid>
