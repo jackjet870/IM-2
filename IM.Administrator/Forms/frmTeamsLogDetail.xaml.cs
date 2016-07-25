@@ -268,7 +268,7 @@ namespace IM.Administrator.Forms
           {
             cmbtlTeam.SelectedValuePath = "tsID";
             cmbtlTeam.DisplayMemberPath = "tsN";
-            List<TeamSalesmen> lstTeamSalesMen = BRTeamsSalesMen.GetTeamsSalesMen(1, new TeamSalesmen { tssr = teamLog.tlPlaceID });
+            List<TeamSalesmen> lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1, new TeamSalesmen { tssr = teamLog.tlPlaceID });
             cmbtlTeam.ItemsSource = lstTeamSalesMen;
             break;
           }

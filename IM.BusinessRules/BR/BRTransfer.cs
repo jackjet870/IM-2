@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
-using System.Data.Entity.Validation;
+using IM.Model.Enums;
 using IM.BusinessRules.Properties;
-using System.Data.Entity.Core;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
-    
+
   public class BRTransfer
   {
     #region Start
@@ -1366,6 +1364,66 @@ namespace IM.BusinessRules.BR
         }
       });
       return  status;
+    }
+    #endregion
+
+    #region Transfer
+    /// <summary>
+    ///   Transfiere los integrantes de un equipo a otro
+    /// </summary>
+    /// <param name="strUserID">Clave de usuario</param>
+    /// <param name="strloID">Clave de locación</param>
+    /// <param name="strTeamID">Clave de equipo</param>
+    /// <param name="lstPersonnelTransfer">Lista de integrantes</param>
+    /// <param name="_enumTeamType">Tipo de equipo TeamPRs | TeamSalesmen</param>
+    /// <history>
+    ///   [vku] 21/Jul/2016 Created
+    /// </history>
+    /// <returns></returns>
+    public async static Task<int> TransferTeamMembers(string strUserID, string strPlaceID, string strTeamID, List<Personnel> lstPersonnelTransfer, EnumTeamType _enumTeamType)
+    {
+      int nRes = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+
+            try
+            {
+              if (lstPersonnelTransfer.Count > 0)
+              {
+                dbContext.Personnels.AsEnumerable().Where(pe => lstPersonnelTransfer.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe =>
+                {
+                  pe.peTeamType = EnumToListHelper.GetEnumDescription(_enumTeamType);
+                  pe.pePlaceID = strPlaceID;
+                  pe.peTeam = strTeamID;
+
+                  DateTime dtmServerDate = BRHelpers.GetServerDateTime();
+
+                  TeamLog teamLog = new TeamLog();
+                  teamLog.tlDT = dtmServerDate;
+                  teamLog.tlChangedBy = strUserID;
+                  teamLog.tlpe = pe.peID;
+                  teamLog.tlTeamType = pe.peTeamType;
+                  teamLog.tlPlaceID = pe.pePlaceID;
+                  teamLog.tlTeam = pe.peTeam;
+                  dbContext.TeamsLogs.Add(teamLog);
+                });
+              }
+              int nSave = dbContext.SaveChanges();
+              transaction.Commit();
+              return nSave;
+            }
+            catch
+            {
+              transaction.Rollback();
+              return 0;
+            }
+          }
+        }
+      });
+      return nRes;
     }
     #endregion
   }

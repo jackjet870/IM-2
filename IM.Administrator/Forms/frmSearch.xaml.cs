@@ -32,6 +32,9 @@ namespace IM.Administrator.Forms
     #region teamPRs
     public string sLocation = "";//Location by TeamPR para cuando se abra desde teamPR's
     #endregion
+    #region teamSalesmen
+    public string sSalesRoom = "";//Sales Room by TeamSalesmen para cuando se abra desde teamSalesmen
+    #endregion
     #endregion
 
     public frmSearch()
@@ -237,6 +240,17 @@ namespace IM.Administrator.Forms
             cmbLocation.SelectedValue = sLocation;
           }
           break;
+        #endregion
+
+        #region TeamSalesmen
+        case EnumWindow.TeamsSalesmen:
+          {
+            cmbSalesRoom.Visibility = Visibility.Visible;
+            lblTSalesRoom.Visibility = Visibility.Visible;
+            loadSalesRoom();
+            cmbLocation.SelectedValue = sSalesRoom;
+          }
+          break;
           #endregion
       }
 
@@ -432,6 +446,18 @@ namespace IM.Administrator.Forms
             Close();
             break;
           }
+        #endregion
+        #region TeamSalesmen
+        case EnumWindow.TeamsSalesmen:
+          {
+            if (cmbSalesRoom.SelectedValue != null)
+            {
+              sSalesRoom = cmbSalesRoom.SelectedValue.ToString();
+            }
+            DialogResult = true;
+            Close();
+            break;
+          }
           #endregion
       }
     }
@@ -484,6 +510,29 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-    #endregion
-  }
+
+    #region TeamSalesmen
+    /// <summary>
+    ///   Llena el combobox de sales room relacionados a TeamsSalesmen cuando se abre desde teamSalesmen
+    /// </summary>
+    /// <history>
+    ///   [vku] 23/Jul/2016 Created
+    /// </history>
+    protected async void loadSalesRoom()
+    {
+      try
+      {
+        List<object> lstSalesRoom = await BRSalesRooms.GetSalesRoombyTeamSalesMen();
+        cmbSalesRoom.ItemsSource = lstSalesRoom;
+        cmbSalesRoom.SelectedValuePath = "srID";
+        cmbSalesRoom.DisplayMemberPath = "srN";
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Salesmen");
+      }
+    }
+      #endregion
+      #endregion
+    }
 }
