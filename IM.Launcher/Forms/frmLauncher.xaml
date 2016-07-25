@@ -19,7 +19,7 @@
             </StackPanel>
           </DataTemplate>
         </Setter.Value>
-      </Setter>            
+      </Setter>
       <Setter Property="ItemsPanel">
         <Setter.Value>
           <ItemsPanelTemplate>
