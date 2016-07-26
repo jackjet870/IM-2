@@ -236,7 +236,7 @@ namespace IM.SalesPR.Forms
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception);
           StaEnd();
           imgButtonOk.IsEnabled = true;
           return false;

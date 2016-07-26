@@ -63,6 +63,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [erosado] 24/Mar/2016 Created
     /// [wtorres] 16/Abr/2016 Modified. Correccion de error en el formato de mes en rangos de 1 dia
+    /// [wtorres] 25/Jul/2016 Modified. Correccion de error en el formato de meses incompletos
     /// </history>
     public static string DateRangeFileName(DateTime dateFrom, DateTime dateTo)
     {
@@ -92,7 +93,7 @@ namespace IM.Base.Helpers
         }
        
       }
-      //Si son diferentes Meses
+      //Si son diferentes meses
       else if (dateFrom.Month != dateTo.Month)
       {
         //Año completo
@@ -100,15 +101,15 @@ namespace IM.Base.Helpers
         {
           dateRange = string.Format("{0:yyyy}", dateFrom);
         }
-        //Meses Completo
+        //Meses completos
         else if (dateFrom.Day==1 && dateTo.Day== DateTime.DaysInMonth(dateTo.Year,dateTo.Month))
         {
           dateRange = string.Format("{0:yyyy-MM} to {1:MM}", dateFrom, dateTo);
         }
-        //Meses Incompletos
+        //Meses incompletos
         else
         {
-          dateRange = string.Format("{0:yyyy-MM-dd to} - {1:MM-dd}", dateFrom, dateTo);
+          dateRange = string.Format("{0:yyyy-MM-dd} to {1:MM-dd}", dateFrom, dateTo);
         }
       }
       // Mismo mes y mismo año
@@ -119,10 +120,10 @@ namespace IM.Base.Helpers
         {
           dateRange = string.Format("{0:yyyy-MM}", dateFrom);
         }
-        //Mes Incompleto
+        //Mes incompleto
         else
         {
-          dateRange = string.Format("{0:yyyy-MM-dd to}{1:dd}", dateFrom,dateTo);
+          dateRange = string.Format("{0:yyyy-MM-dd} to {1:dd}", dateFrom,dateTo);
         }
       }
       return dateRange;
