@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace IM.Host.Classes
+namespace IM.Base.Classes
 {
   /// <summary>
   /// Clase para el manejo de regalos regalos
@@ -27,27 +27,26 @@ namespace IM.Host.Classes
     ///          Total = Cantidad de regalos * Cantidad de personas * Precio
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="pGrid"></param>
-    /// <param name="pRow"></param>
-    /// <param name="pGiftField"></param>
-    /// <param name="pQuantityField"></param>
-    /// <param name="pAdultsField"></param>
-    /// <param name="pMinorsField"></param>
-    /// <param name="pExtraAdultsField"></param>
-    /// <param name="pCostAdultsField"></param>
-    /// <param name="pCostMinorsField"></param>
-    /// <param name="pPriceAdultsField"></param>
-    /// <param name="pPriceMinorsField"></param>
-    /// <param name="pPriceExtraAdultsField"></param>
-    /// <param name="pLstGifts"></param>
-    /// <param name="pUseCxCCost"></param>
-    /// <param name="pEnum"></param>
+    /// <param name="pCurrent">Tipo de objeto del grid</param>
+    /// <param name="gift"></param>
+    /// <param name="pQuantityField">Nombre de la propiedad</param>
+    /// <param name="pAdultsField">Nombre de la propiedad</param>
+    /// <param name="pMinorsField">Nombre de la propiedad</param>
+    /// <param name="pExtraAdultsField">Nombre de la propiedad</param>
+    /// <param name="pCostAdultsField">Nombre de la propiedad</param>
+    /// <param name="pCostMinorsField">Nombre de la propiedad</param>
+    /// <param name="pPriceAdultsField">Nombre de la propiedad</param>
+    /// <param name="pPriceMinorsField">Nombre de la propiedad</param>
+    /// <param name="pPriceExtraAdultsField">Nombre de la propiedad</param>
+    /// <param name="pUseCxCCost">True Costo empleado | False Costo publico</param>
+    /// <param name="pEnum">Identifica el campo que vamos a calcular</param>
     /// <history>
     /// [vipacheco] 04/Julio/2016 Created
+    /// [erosado] 26/07/2016  Modified. Se eliminaron parametros y se agrego el parametro Gift, para eliminar el reflection.
     /// </history>
-    public static void CalculateCostsPrices<T,U>(ref T pCurrent, int pRow, string pGiftField, string pQuantityField, string pAdultsField, string pMinorsField,
+    public static void CalculateCostsPrices<T>(ref T pCurrent, Gift gift,  string pQuantityField, string pAdultsField, string pMinorsField,
                                                string pExtraAdultsField, string pCostAdultsField, string pCostMinorsField, string pPriceAdultsField, string pPriceMinorsField,
-                                               string pPriceExtraAdultsField, List<U> pLstGifts, bool pUseCxCCost = false, EnumPriceType pEnum = EnumPriceType.All)
+                                               string pPriceExtraAdultsField,bool pUseCxCCost = false, EnumPriceType pEnum = EnumPriceType.All)
     {
       decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
 
@@ -56,26 +55,26 @@ namespace IM.Host.Classes
 
       // Si se encuentra el regalo
       T objGift = pCurrent;
-      var gift = pLstGifts.Where(x => (string)x.GetType().GetProperty("giID").GetValue(x, null) == (string)type.GetProperty(pGiftField).GetValue(objGift, null)).FirstOrDefault();
+    
       if (gift != null)
       {
         // costos
         // Si se va usar el costo de empleado
         if (pUseCxCCost)
         {
-          costAdult = (decimal)gift.GetType().GetProperty("giPrice3").GetValue(gift, null);
-          costMinor = (decimal)gift.GetType().GetProperty("giPrice4").GetValue(gift, null);
+          costAdult = gift.giPrice3;
+          costMinor = gift.giPrice4;
         }
         // si se va a usar el costo publico
         else
         {
-          costAdult = (decimal)gift.GetType().GetProperty("giPrice1").GetValue(gift, null);
-          costMinor = (decimal)gift.GetType().GetProperty("giPrice2").GetValue(gift, null);
+          costAdult = gift.giPrice1;
+          costMinor = gift.giPrice2;
         }
         // Precios
-        priceAdult = (decimal)gift.GetType().GetProperty("giPublicPrice").GetValue(gift, null);
-        priceMinor = (decimal)gift.GetType().GetProperty("giPriceMinor").GetValue(gift, null);
-        priceExtraAdult = (decimal)gift.GetType().GetProperty("giPriceExtraAdult").GetValue(gift, null);
+        priceAdult = gift.giPublicPrice;
+        priceMinor = gift.giPriceMinor;
+        priceExtraAdult = gift.giPriceExtraAdult;
         quantity = (int)type.GetProperty(pQuantityField).GetValue(pCurrent, null);
 
         switch (pEnum)
@@ -119,13 +118,13 @@ namespace IM.Host.Classes
     /// <summary>
     /// Calcula el costo y precio total de regalos
     /// </summary>
-    /// <param name="Grid"></param>
-    /// <param name="GiftsType"></param>
-    /// <param name="txtTotalCost"></param>
-    /// <param name="txtTotalPrice"></param>
-    /// <param name="txtTotalToPay"></param>
-    /// <param name="OnlyCancellled"></param>
-    /// <param name="CancelField"></param>
+    /// <param name="Grid">Grid donde estan los gift</param>
+    /// <param name="GiftsType">Tipo de regalo</param>
+    /// <param name="txtTotalCost">Costo total</param>
+    /// <param name="txtTotalPrice">Precio total</param>
+    /// <param name="txtTotalToPay">Total a pagar</param>
+    /// <param name="OnlyCancellled">True resta el costo del gift | False No hace nada</param>
+    /// <param name="CancelField">Propiedad para cancelar un gift</param>
     /// <history>
     /// [vipacheco] 24/Mayo/2016 Created
     /// </history>
@@ -208,8 +207,8 @@ namespace IM.Host.Classes
     /// <summary>
     /// Valida el monto maximo de regalos
     /// </summary>
-    /// <param name="totalGifts"></param>
-    /// <param name="maxAuthGifts"></param>
+    /// <param name="totalGifts">Total de costo de los regalos</param>
+    /// <param name="maxAuthGifts">Máximo autorizado de los regalos</param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
@@ -241,38 +240,42 @@ namespace IM.Host.Classes
     /// <summary>
     /// Valida la cantidad de adultos y menores
     /// </summary>
-    /// <param name="pEnum"></param>
-    /// <param name="pRow"></param>
-    /// <param name="pCancel"></param>
+    /// <param name="Enum">Identifica el campor que vamos a calcular</param>
+    /// <param name="Row">Objeto del grid</param>
+    /// <param name="Cancel">True Fallo la validacion | False Paso la validacion</param>
+    /// <param name="adultsField">Propiedad Adults</param>
+    /// <param name="minorsField">Propiedaad Minors</param>
+    /// <param name="extraAdultsField">Propiedad ExtraAdults</param>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
+    /// [erosado] 26/07/2016  Modified. Se agrego Reflection para volver generico, y se agrego el parametro ExtraAdults
     /// </history>
-    public static void ValidateAdultsMinors(EnumAdultsMinors pEnum, GiftsReceiptDetail pRow, ref bool pCancel)
+    public static void ValidateAdultsMinors<T>(EnumAdultsMinors Enum, T Row, ref bool Cancel, string adultsField, string minorsField, string extraAdultsField)
     {
       int value = 0;
       bool cancel = false;
 
-      switch (pEnum)
+      switch (Enum)
       {
         case EnumAdultsMinors.Adults:
-          value = pRow.geAdults;
+          value =(int)Row.GetType().GetProperty(adultsField).GetValue(Row, null);
           GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of adults", 99, 0);
           break;
         case EnumAdultsMinors.Minors:
-          value = pRow.geMinors;
+          value = (int)Row.GetType().GetProperty(minorsField).GetValue(Row, null);
           GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of minors", 99, 0);
           break;
         case EnumAdultsMinors.ExtraAdults:
-          value = pRow.geMinors;
+          value = (int)Row.GetType().GetProperty(extraAdultsField).GetValue(Row, null);
           GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of extra adults", 99, 0);
           break;
       }
       // si es valido
       if (!cancel)
       {
-        if (pRow.geAdults == 0 && pRow.geMinors == 0)
+        if ((int)Row.GetType().GetProperty(adultsField).GetValue(Row, null) == 0 && (int)Row.GetType().GetProperty(minorsField).GetValue(Row, null) == 0)
         {
-          pCancel = true;
+          Cancel = true;
           UIHelper.ShowMessage("Quantity of adults and quantity of minors they can not both be zero.", MessageBoxImage.Exclamation, "Intelligence MArketing");
         }
       }
@@ -286,10 +289,14 @@ namespace IM.Host.Classes
     /// <param name="pRow"></param>
     /// <param name="pIsExchange"></param>
     /// <param name="pCancel"></param>
+    /// <param name="gift">Gift que vamos calcular</param>
+    /// <param name="pLowerBound">limite inferior para ingresar</param>
+    /// <param name="pQuantityField">Propiedad Cantidad del regalo</param>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
+    /// [erosado] 26/07/2016  Modified. se agregó el parametro Gift.
     /// </history>
-    public static void ValidateMaxQuantityOnEntryQuantity<T>(ref T pRow, bool pIsExchange, int pLowerBound, ref bool pCancel, string pQuantityField, string pGiftField)
+    public static void ValidateMaxQuantityOnEntryQuantity<T>(ref T pRow, Gift gift ,bool pIsExchange, int pLowerBound, ref bool pCancel, string pQuantityField)
     {
       int value = (int)pRow.GetType().GetProperty(pQuantityField).GetValue(pRow, null);
       bool cancel = false;
@@ -298,13 +305,6 @@ namespace IM.Host.Classes
       // si es valido
       if (!cancel)
       {
-        Gift gift = null;
-        if (pRow.GetType().GetProperty(pGiftField).GetValue(pRow, null) != null)
-        {
-          string strGift = (string)pRow.GetType().GetProperty(pGiftField).GetValue(pRow, null);
-          gift = frmHost._lstGifts.Where(x => x.giID == strGift).First();
-        }
-
         // Si ya se ingreso el regalo
         if (gift != null)
         {
@@ -346,9 +346,11 @@ namespace IM.Host.Classes
     /// <summary>
     /// Valida la cantidad maxima de un regalo
     /// </summary>
-    /// <param name="pGift"></param>
-    /// <param name="pQuantity"></param>
-    /// <param name="pIsExchange"></param>
+    /// <param name="pGift">Informacion  del Gift</param>
+    /// <param name="pQuantity">Cantidad ingresada</param>
+    /// <param name="pIsExchange">True es de intercambio | False No </param>
+    /// <param name="pQuantityField">Propiedad Qty</param>
+    /// <param name="pRow">Objeto grid</param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created

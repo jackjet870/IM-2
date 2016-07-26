@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using IM.Base.Classes;
 
 namespace IM.Host.Classes
 {
@@ -278,6 +279,8 @@ namespace IM.Host.Classes
     {
       int LowerBound = 0;
 
+      
+
       // si es un intercambio de regalos
       if (pIsExchange)
         LowerBound = -999;
@@ -287,17 +290,20 @@ namespace IM.Host.Classes
       switch (cell.Column.SortMemberPath)
       {
         case "geAdults":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, pRow, ref pCancel);
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, pRow, ref pCancel, "geAdults","geMinors","geExtraAdults" );
           break;
         case "geMinors":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, pRow, ref pCancel);
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, pRow, ref pCancel, "geAdults", "geMinors", "geExtraAdults");
           break;
         case "geExtraAdults":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.ExtraAdults, pRow, ref pCancel);
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.ExtraAdults, pRow, ref pCancel, "geAdults", "geMinors", "geExtraAdults");
           break;
         case "geQty":
+          //Obtenemos el Gift
+          var gift = frmHost._lstGifts.Where(x => x.giID == pRow.gegi ).First();
+
           // validamos la cantidad maxima del regalo
-          Gifts.ValidateMaxQuantityOnEntryQuantity(ref pRow, pIsExchange, LowerBound, ref pCancel, "geQty", "gegi");
+          Gifts.ValidateMaxQuantityOnEntryQuantity(ref pRow, gift, pIsExchange, LowerBound, ref pCancel, "geQty");
 
           //si el regalo esta guardado como promocion de Opera
           if (pRow.geAsPromotionOpera == true)
@@ -379,13 +385,19 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void AfterEdit<T>(ref DataGrid pGrid, GuestShort pGuest, int pRowSelected, string pGiftField, string pQuantityField, string pAdultsField, string pMinorsField,
+    public static void AfterEdit<T>(ref DataGrid pGrid, GuestShort pGuest, string pQuantityField, string pAdultsField, string pMinorsField,
                                              string pExtraAdultsField, string pCostAdultsField, string pCostMinorsField, string pPriceAdultsField, string pPriceMinorsField,
                                              string pPriceExtraAdultsField, List<T> pLstGifts, ref GiftsReceiptDetail pRow, DataGridCellInfo pCell, bool pUseCxCCost, bool pIsExchange,
                                              ChargeTo pChargeTo, string pLeadSourceID, ref TextBox pTxtTotalCost, ref TextBox pTxtTotalPrice, ref TextBox pTxtTotalToPay, ref TextBox pTxtgrCxCGifts,
                                              ref TextBox pTxtTotalCxC, ref TextBox pTxtgrCxCAdj, ref TextBox pTxtgrMaxAuthGifts, ref TextBlock pLblgrMaxAuthGifts)
     {
       bool calculateCharge = false;
+
+      string gegi= pRow.gegi ; 
+      //Obtenemos el Gift
+      var gift = frmHost._lstGifts.Where(x => x.giID == gegi).FirstOrDefault();
+
+
 
       switch (pCell.Column.SortMemberPath)
       {
@@ -394,8 +406,8 @@ namespace IM.Host.Classes
           if (pRow.gegi != null && pRow.geAdults != -1 && pRow.geMinors != -1)
           {
             // calculamos los costos y precios
-            Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
-                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost);
+            Gifts.CalculateCostsPrices(ref pRow, gift , pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pUseCxCCost);
             calculateCharge = true;
           }
           break;
@@ -406,12 +418,12 @@ namespace IM.Host.Classes
             calculateCharge = true;
           break;
         case "gegi":
-          Gift gift = null;
-          if (pRow.gegi != null)
-          {
-            string strGift = pRow.gegi;
-            gift = frmHost._lstGifts.Where(x => x.giID == strGift).FirstOrDefault();
-          }
+          
+          //if (pRow.gegi != null)
+          //{
+          //  //string strGift = pRow.gegi;
+          //  //gift = frmHost._lstGifts.Where(x => x.giID == strGift).FirstOrDefault();
+          //}
 
 
           // si se ingreso el regalo
@@ -449,27 +461,27 @@ namespace IM.Host.Classes
             Gifts.ValidateMaxQuantityOnEntryGift(gift, "geQty", ref pRow, pIsExchange);
 
             // calculamos los costos y precios
-            Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
-                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost);
+            Gifts.CalculateCostsPrices(ref pRow, gift ,pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pUseCxCCost);
             calculateCharge = true;
           }
           break;
         case "geAdults":
           // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
-                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.Adults);
+          Gifts.CalculateCostsPrices(ref pRow, gift, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pUseCxCCost, EnumPriceType.Adults);
           calculateCharge = true;
           break;
         case "geMinors":
           // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
-                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.Minors);
+          Gifts.CalculateCostsPrices(ref pRow, gift,  pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pUseCxCCost, EnumPriceType.Minors);
           calculateCharge = true;
           break;
         case "geExtraAdults":
           // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
-                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.ExtraAdults);
+          Gifts.CalculateCostsPrices(ref pRow, gift,  pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pUseCxCCost, EnumPriceType.ExtraAdults);
           calculateCharge = true;
           break;
       }

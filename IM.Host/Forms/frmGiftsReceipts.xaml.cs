@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Data;
 using IM.Model.Helpers;
 using System.ComponentModel;
+using IM.Base.Classes;
 
 namespace IM.Host.Forms
 {
@@ -52,7 +53,7 @@ namespace IM.Host.Forms
     public static bool useCxCCost;  //Variable para la validacion del cobro (Empleado || Publico)
 
     private int _guestID;
-    private DateTime? _dtpClose;              
+    private DateTime? _dtpClose;
     private bool _newExchangeGiftReceipt = false, _newGiftReceipt = false, _edition = false, _invitationGifts = false;
     private short _reimpresion = 0;
     public bool _validateMaxAuthGifts;  // Variable para saber si se valida el maximo autorizado de gifts
@@ -713,31 +714,31 @@ namespace IM.Host.Forms
     {
       if (!string.IsNullOrEmpty(GuestID))
       {
-      //Cargamos los depositos
+        //Cargamos los depositos
         List<BookingDeposit> lstDeposit = await BRBookingDeposits.GetBookingDeposits(Convert.ToInt32(GuestID));
-      var _resultLst = lstDeposit.Select(c => new
-      {
-        bdAmount = c.bdAmount,
-        bdReceived = c.bdReceived,
-        CxC = c.bdAmount - c.bdReceived,
-        bdcu = c.bdcu,
-        bdpt = c.bdpt,
-        bdpc = c.bdpc,
-        bdcc = c.bdcc,
-        bdCardNum = c.bdCardNum,
-        bdExpD = c.bdExpD,
-        bdAuth = c.bdAuth,
-        bdFolioCXC = c.bdFolioCXC,
-        bdUserCXC = c.bdUserCXC,
-        bdEntryDCXC = c.bdEntryDCXC
-      }).ToList();
+        var _resultLst = lstDeposit.Select(c => new
+        {
+          bdAmount = c.bdAmount,
+          bdReceived = c.bdReceived,
+          CxC = c.bdAmount - c.bdReceived,
+          bdcu = c.bdcu,
+          bdpt = c.bdpt,
+          bdpc = c.bdpc,
+          bdcc = c.bdcc,
+          bdCardNum = c.bdCardNum,
+          bdExpD = c.bdExpD,
+          bdAuth = c.bdAuth,
+          bdFolioCXC = c.bdFolioCXC,
+          bdUserCXC = c.bdUserCXC,
+          bdEntryDCXC = c.bdEntryDCXC
+        }).ToList();
 
-      obsDeposits = new ObservableCollection<dynamic>(_resultLst);
-      // Localizamos el recurso
-      CollectionViewSource dsBookingDeposit = ((CollectionViewSource)(this.FindResource("dsBookingDeposit")));
-      // Asignamos los resultados obtenidos
-      dsBookingDeposit.Source = obsDeposits;
-    }
+        obsDeposits = new ObservableCollection<dynamic>(_resultLst);
+        // Localizamos el recurso
+        CollectionViewSource dsBookingDeposit = ((CollectionViewSource)(this.FindResource("dsBookingDeposit")));
+        // Asignamos los resultados obtenidos
+        dsBookingDeposit.Source = obsDeposits;
+      }
 
     }
     #endregion
@@ -759,7 +760,7 @@ namespace IM.Host.Forms
       // Realizamos la consulta con los datos ingresados
       GiftsReceipt giftReceipt = await BRGiftsReceipts.GetGiftReceipt(selected.grID);
       // Obtenemos la cantidad de reimpresiones que tiene realizado este gift
-      _reimpresion = giftReceipt.grReimpresion;  
+      _reimpresion = giftReceipt.grReimpresion;
       // Asignamos el valor a la propiedad
       GiftsReceiptDetail = giftReceipt;
     }
@@ -802,7 +803,7 @@ namespace IM.Host.Forms
       // Localizamos el recurso
       CollectionViewSource dsGiftsDetail = ((CollectionViewSource)(this.FindResource("dsGiftsDetail")));
       // Asignamos los Gifts al grid
-      dsGiftsDetail.Source = obsGifts;         
+      dsGiftsDetail.Source = obsGifts;
 
       // calculamos el monto total de regalos
       Gifts.CalculateTotalGifts(grdGifts, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref txtTotalPrice, ref txtTotalToPay);
@@ -1093,7 +1094,7 @@ namespace IM.Host.Forms
       SalesRoomShort _sr = (SalesRoomShort)cboSalesRoom.SelectedItem;
       SalesRoom _salesRoom = BRSalesRooms.GetSalesRoomByID(_sr.srID);
       _SRCurrency = _salesRoom.srcu;
-    } 
+    }
     #endregion
 
     #region ConvertDepositToUsDlls
@@ -1565,7 +1566,7 @@ namespace IM.Host.Forms
         obsGiftsReceipt.Add(giftReceiptShort);
 
         #region GiftsReceiptsAdditional
-          // Cargamos los datos del huesped
+        // Cargamos los datos del huesped
         Guest guest = BRGuests.GetGuestById(Convert.ToInt32(txtgrgu.Text));
 
         if (guest.guQuinella && !guest.guGiftsReceived && App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
@@ -1751,11 +1752,11 @@ namespace IM.Host.Forms
             // Se verifica si se elimino alguno de la lista original
             if (_lstPaymentsDelete.Count > 0)
               await BREntities.OperationEntities(_lstPaymentsDelete, Model.Enums.EnumMode.deleted);
-            
-              }
-            }
+
           }
         }
+      }
+    }
     #endregion
 
     #region Validate
@@ -2572,7 +2573,7 @@ namespace IM.Host.Forms
           // autorizado. De lo contrario el cargo es por el total de regalos
           case "A":
             // Validamos si tiene tour
-           LoadGuest(txtgrgu.Text);
+            LoadGuest(txtgrgu.Text);
             blnTour = _guest.guTour;
             if (blnTour)
               curCharge = CalculateChargeBasedOnMaxAuthGifts(curTotalCost, curMaxAuthGifts);
@@ -2682,22 +2683,22 @@ namespace IM.Host.Forms
 
         // Si se cancela la edicion
         if (!cancel)
-    {
-          ReceiptsGifts.AfterEdit(ref grdGifts, _guestShort, grdGifts.SelectedIndex, pGiftField: "gegi", pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
+        {
+          ReceiptsGifts.AfterEdit(ref grdGifts, _guestShort, pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
                                   pExtraAdultsField: "geExtraAdults", pCostAdultsField: "gePriceA", pCostMinorsField: "gePriceM", pPriceAdultsField: "gePriceAdult",
                                   pPriceMinorsField: "gePriceMinor", pPriceExtraAdultsField: "gePriceExtraAdult", pLstGifts: frmHost._lstGifts, pRow: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange,
                                   pChargeTo: (ChargeTo)cbogrct.SelectedItem, pLeadSourceID: txtgrls.Text, pTxtTotalCost: ref txtTotalCost, pTxtTotalPrice: ref txtTotalPrice, pTxtTotalToPay: ref txtTotalToPay, pTxtgrCxCGifts: ref txtgrCxCGifts,
-                                  pTxtTotalCxC: ref txtTotalCxC, pTxtgrCxCAdj: ref txtgrCxCAdj, pTxtgrMaxAuthGifts: ref txtgrMaxAuthGifts, pLblgrMaxAuthGifts: ref lblgrMaxAuthGifts );
+                                  pTxtTotalCxC: ref txtTotalCxC, pTxtgrCxCAdj: ref txtgrCxCAdj, pTxtgrMaxAuthGifts: ref txtgrMaxAuthGifts, pLblgrMaxAuthGifts: ref lblgrMaxAuthGifts);
 
           dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
           grdGifts_RowEditEnding(sender, null);
-      }
+        }
         else
-      {
+        {
           e.Cancel = true;
-      }
+        }
         grdGifts.CellEditEnding += grdGifts_CellEditEnding;
-    }
+      }
       // Verificamos si se puso en modo lectura la celda
       if (_currentCell.Column.IsReadOnly)
         _currentCell.Column.IsReadOnly = false;
@@ -2744,7 +2745,7 @@ namespace IM.Host.Forms
 
       // Gifts
       grbGifts.Height = 225;
-    } 
+    }
     #endregion
 
   }

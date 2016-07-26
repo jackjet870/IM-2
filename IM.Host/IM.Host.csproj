@@ -116,7 +116,6 @@
     </ApplicationDefinition>
     <Compile Include="Classes\clsFormatReport.cs" />
     <Compile Include="Classes\Common.cs" />
-    <Compile Include="Classes\Gifts.cs" />
     <Compile Include="Classes\GiftsCancel.cs" />
     <Compile Include="Classes\GiftsExchange.cs" />
     <Compile Include="Classes\GiftsReceiptsPacks.cs" />

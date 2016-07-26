@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\CommonCatObject.cs" />
+    <Compile Include="Classes\Gifts.cs" />
     <Compile Include="Classes\InvitationGiftCustom.cs" />
     <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />

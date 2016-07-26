@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
 using IM.Host.Enums;
@@ -740,7 +741,7 @@ namespace IM.Host.Forms
           ChargeTo pChargeTo = frmHost._lstChargeTo.Where(x => x.ctID.ToUpper() == "MARKETING").Single();
           LeadSource pLeadSource = cboLeadSource.SelectedItem as LeadSource;
 
-          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, grdExchange.SelectedIndex, pGiftField: "gegi", pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
+          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
                                         pExtraAdultsField: "geExtraAdults", pCostAdultsField: "gePriceA", pCostMinorsField: "gePriceM", pPriceAdultsField: "gePriceAdult",
                                         pPriceMinorsField: "gePriceMinor", pPriceExtraAdultsField: "gePriceExtraAdult", pLstGifts: frmHost._lstGifts, pRow: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: true,
                                         pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: ref txtTotalCost, pTxtTotalPrice: ref _null, pTxtTotalToPay: ref _null, pTxtgrCxCGifts: ref txtgrcxcGifts,
