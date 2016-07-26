@@ -233,6 +233,8 @@ namespace IM.Base.Forms
     private void SelectedPrinterLoaded()
     {
       RegistryKey configuration = ConfigRegistryHelper.GetUrlConfigRegistry();
+      if (configuration == null)
+        return;
       cmbPrinterInvitation.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintInvit");
       cmbPrinterMeal.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintMealTicket");
     }
