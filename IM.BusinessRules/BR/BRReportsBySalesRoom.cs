@@ -1607,7 +1607,6 @@ namespace IM.BusinessRules.BR
       var result = new List<RptFTMInOutHouse>();
       await Task.Run(() =>
       {
-
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptFTMInOutHouse(dtStart, dtEnd, string.Join(",", salesRooms), salesmanID).ToList();
@@ -1713,6 +1712,31 @@ namespace IM.BusinessRules.BR
       return result;
     }
     #endregion GetStatisticsByExitCloser
+
+    #region GetRptSelfGen&SelfGenTeam
+    /// <summary>
+    /// Devuelve un listado con el reporte SelfGen&SelfGenTeam
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicial</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Sala(s) de ventas</param>
+    /// <param name="salesmanID">ID del personal</param>
+    /// <history>
+    ///   [ecanul] 25/07/2016 Created
+    /// </history>
+    public static async Task<List<RptSelfGenTeam>> GetRptSelfGenAndSelfGenTeam (DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom, string salesmanID = "ALL")
+    {
+      var result = new List<RptSelfGenTeam>();
+      await Task.Run(()=>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptSelfGenTeam(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion
 
     #endregion Processor Sales
 

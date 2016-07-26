@@ -537,6 +537,48 @@ namespace IM.ProcessorSales.Classes
     }
     #endregion RptStatisticsByExitCloser
 
+    #region RptSelfGenAndSelfGenTeam
+    /// <summary>
+    /// Obtiene un archivocon el reporte RptSelfGen&SelfGenTeam
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta de archivo </param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstReport">Datos del reporte</param>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <history>
+    /// [ecanul] 26/07/2016 Created
+    /// </history>
+    public static FileInfo RptSelfGenAndSelfGenTeam(string report, string fileFullPath, List<Tuple<string,string>> filters, List<RptSelfGenTeam> lstReport, DateTime dtStart, DateTime dtEnd)
+    {
+      var data = lstReport.Select(c => new
+      {
+        c.Liner,
+        c.SalesmanName,
+        c.OOP,
+        c.OFVol,
+        c.OFUPS,
+        c.OFSales,
+        c.RGVol,
+        c.RGUPS,
+        c.RGSales,
+        c.NVol,
+        c.NUPS,
+        c.NSales,
+        c.TVol,
+        c.TUPS,
+        c.TSales,
+        c.SelfGenType,
+        EFF = c.TUPS != 0 ? c.TVol / c.TUPS : 0,
+        CPer = c.TUPS != 0 ?  c.TSales / c.TUPS : 0,
+        AVS = c.TSales != 0 ? c.TVol / c.TSales : 0
+      }).ToList();
+      var dtData = TableHelper.GetDataTableFromList(data, true, true);
+      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+    }
+    #endregion
+
     #endregion
   }
 }

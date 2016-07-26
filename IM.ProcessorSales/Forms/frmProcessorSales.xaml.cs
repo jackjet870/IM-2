@@ -357,13 +357,17 @@ namespace IM.ProcessorSales.Forms
             if (list.Any())
               file = Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
-            #endregion
+          #endregion
 
-
+          #region Self Gen & Self Gen Team
+          case EnumRptRoomSales.SelfGenAndSelfGenTeam:
+            list.AddRange(await BRReportsBySalesRoom.GetRptSelfGenAndSelfGenTeam(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
+            if (list.Count > 0)
+              file = Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+            break;
+          #endregion
 
         }
-
-
         if (file == null)
         {
           file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);
@@ -424,11 +428,13 @@ namespace IM.ProcessorSales.Forms
       {
         switch (rptSalesman)
         {
+          #region FtmIn&OutHouse
           case EnumRptSalesRoomAndSalesman.FtmInAndOutHouse:
-            list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,clsFilter.Salesman.peID));
+            list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms, clsFilter.Salesman.peID));
             if (list.Count > 0)
               file = Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
-            break;
+            break; 
+          #endregion
           #region Manifest
           case EnumRptSalesRoomAndSalesman.Manifest:
             // Roles
@@ -438,10 +444,15 @@ namespace IM.ProcessorSales.Forms
               clsFilter.Salesman.peID, clsFilter.LstEnumRole));
             if (list.Any())
               file = Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
-            break; 
-          #endregion
-          case EnumRptSalesRoomAndSalesman.SelfGenAndSelfGenTeam:
             break;
+          #endregion
+          #region Self Gen & Self Gen Team
+          case EnumRptSalesRoomAndSalesman.SelfGenAndSelfGenTeam:
+            list.AddRange(await BRReportsBySalesRoom.GetRptSelfGenAndSelfGenTeam(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,clsFilter.Salesman.peID));
+            if (list.Count > 0)
+              file = Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+            break;
+          #endregion
           #region Stats by Closer
           case EnumRptSalesRoomAndSalesman.StatsByCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
