@@ -12,6 +12,7 @@
     FoliosInvitationOuthouse,
     MealTicketTypes,
     DefaultByte,
-    TeamsPRs
+    TeamsPRs,
+    TeamsSalesmen
   }
 }

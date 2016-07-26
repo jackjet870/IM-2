@@ -49,12 +49,12 @@ namespace IM.InvitConfig.Forms
 
     #region Eventos
     public void ChangeFontFamily(object sender, EventArgs e)
-    {
+    {      
       RichTextBoxToolBar.OnChangeFontFamily(ref _rtb, ref tbrFontStyle.cbxfontFamilies);
     }
 
     public void ChangeFontSize(object sender, EventArgs e)
-    {
+    {     
       RichTextBoxToolBar.OnChangeFontSize(ref _rtb, ref tbrFontStyle.cbxfontSize);
     }
 
@@ -348,57 +348,21 @@ namespace IM.InvitConfig.Forms
     /// </history>
     private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
-      if (e.Key == Key.Capital)
+      switch (e.Key)
       {
-        CkeckKeysPress(StatusBarCap, Key.Capital);
+        case Key.Capital:
+          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+          break;
+        case Key.Insert:
+          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+          break;
+        case Key.NumLock:
+          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+          break;
       }
-      else if (e.Key == Key.Insert)
-      {
-        CkeckKeysPress(StatusBarIns, Key.Insert);
-      }
-      else if (e.Key == Key.NumLock)
-      {
-        CkeckKeysPress(StatusBarNum, Key.NumLock);
-      }
-    } 
-    #endregion
+    }
 
-    #region CkeckKeysPress
-    /// <summary>
-    /// Verifica que la tecla se encuentre activa/inactiva, para cambiar el estilo de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    ///  [jorcanche] 12/05/2016 Created
-    /// </history>
-    private void CkeckKeysPress(StatusBarItem statusBar, Key key)
-    {
-      var keyPess = Keyboard.GetKeyStates(key).ToString();
-
-      if (keyPess.Contains("Toggled")) //si está activo el Bloq Mayús
-      {
-        statusBar.FontWeight = FontWeights.Bold;
-        statusBar.Foreground = Brushes.Black;
-      }
-      else
-      {
-        KeyDefault(statusBar);
-      }
-    } 
-    #endregion
-
-    #region KeyDefault
-    /// <summary>
-    /// Configuracion inicial de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    /// [erosado] 23/Mar/2016 Created
-    /// </history>
-    private void KeyDefault(StatusBarItem statusBar)
-    {
-      statusBar.FontWeight = FontWeights.Normal;
-      statusBar.Foreground = Brushes.Gray;
-    } 
-    #endregion
+    #endregion   
 
     #region StaStart
     /// <summary>
@@ -428,6 +392,21 @@ namespace IM.InvitConfig.Forms
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
       Cursor = null;
+    }
+    #endregion
+
+    #region OnIsKeyboardFocusedChanged
+    /// <summary>
+    /// comprobará si existen cambios en el teclado (Si fueron oprimidas las teclas MAYUS,INSERT y BLOQ NUM) y refresca nuestro StatusBar
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created
+    /// </history>
+    private void OnIsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     } 
     #endregion
   }

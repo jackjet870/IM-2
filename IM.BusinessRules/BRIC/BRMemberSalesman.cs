@@ -93,12 +93,14 @@ namespace IM.BusinessRules.BRIC
     /// [jorcanche] created 08/07/2016
     /// </history>
     public static async Task<bool> ExistsSalesman(string zOna, string cOde)
+
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new ICEntities(ConnectionHelper.ConnectionString(EnumDatabase.IntelligenceContracts)))
         {
-         return  dbContext.USP_CL_ExistsSalesman(zOna, cOde).FirstOrDefault() == 1;         
+          var aa = dbContext.USP_CL_ExistsSalesman(zOna, cOde).FirstOrDefault() == 1;
+          return aa;
         }
       });
     } 

@@ -355,16 +355,12 @@ namespace IM.BusinessRules.BR
     /// [jorcanche] created 01072016
     /// </history>
     public static async Task<int> DeleteSale(int saleId)
-    {
-      int res = 0;
-      await Task.Run(() =>
+    {      
+      return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          res = dbContext.USP_OR_DeleteSale(saleId);
-        }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))        
+          return dbContext.USP_OR_DeleteSale(saleId);        
       });
-      return res;
     }
     #endregion
 
@@ -406,10 +402,12 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          return
+          var algo =
             dbContext.USP_OR_ValidateSale(changedBy, password, sale, membershipNumber, guest, saleType, salesRoom,
               location, pR1, pR2, pR3, pRCaptain1, pRCaptain2, pRCaptain3, liner1, liner2, linerCaptain, closer1,
               closer2, closer3, closerCaptain, exit1, exit2, podium, vLO).FirstOrDefault();
+          return algo;
+
         }
       });
     }

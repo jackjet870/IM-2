@@ -1,32 +1,37 @@
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/25/2016 13:49:07 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/26/2016 13:36:36 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetGifts]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetGifts]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/25/2016 13:49:07 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/26/2016 13:36:36 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetLeadSourcesByUser]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetLeadSourcesByUser]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetPersonnel]    Script Date: 07/25/2016 13:49:07 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetPersonnel]    Script Date: 07/26/2016 13:36:36 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetPersonnel]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetPersonnel]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesRoomsByUser]    Script Date: 07/25/2016 13:49:08 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesByPR]    Script Date: 07/26/2016 13:36:37 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetSalesByPR]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[USP_OR_GetSalesByPR]
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesRoomsByUser]    Script Date: 07/26/2016 13:36:37 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetSalesRoomsByUser]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetSalesRoomsByUser]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/25/2016 13:49:08 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/26/2016 13:36:38 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetWarehousesByUser]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetWarehousesByUser]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/25/2016 13:49:09 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/26/2016 13:36:38 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_OR_GetWhsMovs]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[USP_OR_GetWhsMovs]
 GO
@@ -34,7 +39,7 @@ GO
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/25/2016 13:49:09 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetGifts]    Script Date: 07/26/2016 13:36:38 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -76,7 +81,7 @@ order by G.giN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/25/2016 13:49:12 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetLeadSourcesByUser]    Script Date: 07/26/2016 13:36:40 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -124,7 +129,7 @@ order by L.lsN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetPersonnel]    Script Date: 07/25/2016 13:49:13 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetPersonnel]    Script Date: 07/26/2016 13:36:41 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -196,7 +201,79 @@ order by P.peN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesRoomsByUser]    Script Date: 07/25/2016 13:49:15 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesByPR]    Script Date: 07/26/2016 13:36:43 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Obtiene las ventas de un PR
+** 
+** [wtorres]	14/Ago/2014 Created
+** [wtorres]	05/Ene/2015 Modified. Desplegar los PR de la venta, no de la invitacion
+** [lchairez]	19/Abr/2016 Modified. Se agrego el parametro @SearchBySalePR
+** [wtorres]	26/Jul/2016 Modified. Simplifique la busqueda por PR de venta o PR de contacto
+**
+*/
+create procedure [dbo].[USP_OR_GetSalesByPR] 
+	@DateFrom datetime,					-- Fecha desde
+	@DateTo datetime,					-- Fecha hasta
+	@LeadSource varchar(10) = 'ALL',	-- Clave del Lead Source
+	@PR varchar(10) = 'ALL',			-- Clave del PR
+	@SearchBySalePR bit = 1				-- Busqueda por PR de venta o PR de contacto. 1 = Buscar por PR de venta, 0 = Buscar por PR de contacto
+as
+set nocount on
+
+select
+	S.saID,
+	S.sals,
+	S.sasr,
+	S.saMembershipNum,
+	ST.stN,
+	S.saD,
+	S.saProcD,
+	S.saLastName1,
+	G.guCheckOutD,
+	G.guag,
+	A.agN,
+	S.saPR1,
+	P1.peN as PR1N,
+	S.saPR2,
+	P2.peN as PR2N,
+	S.saPR3,
+	P3.peN as PR3N,
+	G.guQ,
+	S.saGrossAmount,
+	S.saCancel,
+	S.saCancelD
+from Sales S
+	left join Guests G on G.guID = S.sagu
+	left join SaleTypes ST on ST.stID = S.sast
+	left join Agencies A on A.agID = G.guag
+	left join Personnel P1 on P1.peID = S.saPR1
+	left join Personnel P2 on P2.peID = S.saPR2
+	left join Personnel P3 on P3.peID = S.saPR3	
+where
+	-- Lead Source
+	(@LeadSource = 'ALL' or S.sals = @LeadSource)
+	-- Fecha de procesable
+	and S.saProcD between @DateFrom and @DateTo
+	-- PR's de venta o PR de contacto
+	and (@PR = 'ALL'
+		-- PR's de venta
+		or (@SearchBySalePR = 1 and (S.saPR1 = @PR or S.saPR2 = @PR or S.saPR3 = @PR))
+		-- PR de contacto
+		or (@SearchBySalePR = 0 and G.guPRInfo = @PR))
+order by S.saMembershipNum
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetSalesRoomsByUser]    Script Date: 07/26/2016 13:36:45 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -241,7 +318,7 @@ order by S.srN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/25/2016 13:49:16 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWarehousesByUser]    Script Date: 07/26/2016 13:36:46 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -286,7 +363,7 @@ order by W.whN
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/25/2016 13:49:18 ******/
+/****** Object:  StoredProcedure [dbo].[USP_OR_GetWhsMovs]    Script Date: 07/26/2016 13:36:47 ******/
 SET ANSI_NULLS ON
 GO
 

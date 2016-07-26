@@ -71,10 +71,12 @@ namespace IM.BusinessRules.BR
     /// <summary>
     ///   Agrega | Actualiza un equipo de PRs
     /// </summary>
+    /// <param name="idUser">Clave de usuario</param>
     /// <param name="team">Objeto a guardar</param>
     /// <param name="blnUpdate">True - Actualiza | False - Agrega</param>
     /// <param name="lstAdd">Personnels a asignar al equipo</param>
     /// <param name="lstDel">Personeels a remover del equipo</param>
+    /// <param name="lstChanged">Lista de integrantes que tuvieron cambios</param>
     /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     ///   [vku] 13/Jul/2016 Created
@@ -190,65 +192,6 @@ namespace IM.BusinessRules.BR
               }
               #endregion
 
-              int nSave = dbContext.SaveChanges();
-              transaction.Commit();
-              return nSave;
-            }
-            catch
-            {
-              transaction.Rollback();
-              return 0;
-            }
-          }
-        }
-      });
-      return nRes;
-    }
-    #endregion
-
-    #region Transfer
-    /// <summary>
-    ///   Transfiere los integrantes de un equipo a otro
-    /// </summary>
-    /// <param name="strUserID">Clave de usuario</param>
-    /// <param name="strloID">Clave de locación</param>
-    /// <param name="strTeamID">Clave de equipo</param>
-    /// <param name="lstPersonnelTransfer">Lista de integrantes</param>
-    /// <history>
-    ///   [vku] 21/Jul/2016 Created
-    /// </history>
-    /// <returns></returns>
-    public async static Task<int> Transfer(string strUserID,string strloID, string strTeamID, List<Personnel> lstPersonnelTransfer)
-    {
-      int nRes = await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
-          {
-
-            try
-            {
-              if (lstPersonnelTransfer.Count > 0)
-              {
-                dbContext.Personnels.AsEnumerable().Where(pe => lstPersonnelTransfer.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe =>
-                {
-                  pe.peTeamType = EnumToListHelper.GetEnumDescription(EnumTeamType.TeamPRs);
-                  pe.pePlaceID = strloID;
-                  pe.peTeam = strTeamID;
-                  
-                  DateTime dtmServerDate = BRHelpers.GetServerDateTime();
-
-                  TeamLog teamLog = new TeamLog();
-                  teamLog.tlDT = dtmServerDate;
-                  teamLog.tlChangedBy = strUserID;
-                  teamLog.tlpe = pe.peID;
-                  teamLog.tlTeamType = pe.peTeamType;
-                  teamLog.tlPlaceID = pe.pePlaceID;
-                  teamLog.tlTeam = pe.peTeam;
-                  dbContext.TeamsLogs.Add(teamLog);
-                });
-              }
               int nSave = dbContext.SaveChanges();
               transaction.Commit();
               return nSave;
