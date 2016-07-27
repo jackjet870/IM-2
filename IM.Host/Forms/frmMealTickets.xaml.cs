@@ -355,11 +355,14 @@ namespace IM.Host.Forms
     /// [edgrodriguez] 15/07/2016 Created
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
-    { 
+    {
+      List<string> notPrinted = new List<string>();
       (_dsMealTicket.Source as List<MealTicket>)
         .Where(c => !c.mePrinted)
         .ToList().ForEach(async c =>
         {
+          int folio = 0;
+          if (!int.TryParse(c.meFolios, out folio)) { notPrinted.Add(c.meFolios); return; }
           var mT = await BRMealTicketFolios.GetMealTicket(c.meID, Convert.ToInt32(c.meFolios), $"{App.User.User.peID} - {App.User.User.peN}");
           if (mT != null)
           {
@@ -402,6 +405,7 @@ namespace IM.Host.Forms
             }
           }
         });
+      if (notPrinted.Any()) { UIHelper.ShowMessage($"Could not print these meal tickets.\n{string.Join("\n", notPrinted)}"); }
     }
   }
 }

@@ -91,14 +91,14 @@ namespace IM.Base.Helpers
     /// <history>
     /// [edgrodriguez] 16/Jul/2016 Created
     /// </history>
-    public static void ShowReport(ReportDocument report, string reportName = "", bool isDialog = false, Window owner = null, EnumPrintDevice PrintDevice = EnumPrintDevice.pdScreen)
+    public static void ShowReport(ReportDocument report, string reportName = "", bool isDialog = false, Window owner = null, EnumPrintDevice PrintDevice = EnumPrintDevice.pdScreen, bool IsInvitation=false)
     {
       switch (PrintDevice)
       {
         case EnumPrintDevice.pdPrinter:
           var boPrintReportOptions = new PrintReportOptions();
-          boPrintReportOptions.PrinterName = ConfigRegistryHelper.GetConfiguredPrinter("PrintInvit");
-          if (string.IsNullOrEmpty(boPrintReportOptions.PrinterName))
+          boPrintReportOptions.PrinterName = (IsInvitation) ? ConfigRegistryHelper.GetConfiguredPrinter("PrintInvit") : boPrintReportOptions.PrinterName;
+          if (IsInvitation && string.IsNullOrEmpty(boPrintReportOptions.PrinterName))
           {
             UIHelper.ShowMessage($"The printer is not configured, please configure your printer.");
             return;
