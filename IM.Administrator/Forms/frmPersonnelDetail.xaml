@@ -94,7 +94,7 @@
                         <TextBlock Name="txtLocSal" Grid.Column="0" HorizontalAlignment="Left">Place ID</TextBlock>
                         <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0">Team</TextBlock>
                         <ComboBox Name="cmbpePlaceID" SelectionChanged="cmbpePlaceID_SelectionChanged" Grid.Column="0" VerticalAlignment="Top" SelectedValue="{Binding pePlaceID}"  Margin="69,0,0,0"/>
-                        <ComboBox Name="cmbpeTeamType" Grid.Column="1" VerticalAlignment="Top" Text="{Binding peTeamType}" Margin="69,0,0,0" />
+                        <ComboBox Name="cmbpeTeam" Grid.Column="1" VerticalAlignment="Top" Text="{Binding peTeam}" Margin="69,0,0,0" />
                     </Grid>
                     <ComboBox Name="cmbpeLinerID" Grid.Column="1"  Grid.Row="7" TextSearch.TextPath="peN" VerticalAlignment="Top" SelectedValuePath="peID" SelectedValue="{Binding peLinerID}" Margin="69,0,0,0" >
                         <ComboBox.ItemTemplate>

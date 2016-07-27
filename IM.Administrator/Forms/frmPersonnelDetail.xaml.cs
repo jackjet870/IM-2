@@ -22,6 +22,7 @@ namespace IM.Administrator.Forms
     #region Variables
     private bool _isCellCancel = false;
     private bool _isClosing = false;
+    private bool _isOpen = true;    
     public Personnel personnel = new Personnel();//Objeto a guardar
     public Personnel oldPersonnel = new Personnel();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana    
@@ -156,79 +157,88 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      personnel.pePwd = psbpePwd.Password;
-      List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
-      List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
-      List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
-      List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
-      List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
-
-      #region PersonnelPermision changes
-      var lstPersonnelPermissionAdd = lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
-      var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp=> pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
-      var lstPersonnelPermissionUpd = lstPersonnelPermision.Where(pp => _lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl!=ppp.pppl)).ToList();
-      #endregion
-
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(personnel,oldPersonnel)  && !HasChanged(lstWarehousesAcces,lstSalesRoomAcces,lstLeadSourcesAcces,lstRoles) && lstPersonnelPermissionAdd.Count==0 
-        && lstPersonnelPermissionDel.Count==0 && lstPersonnelPermissionUpd.Count==0)
+      try
       {
-        oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
-        _isClosing = true;
-        Close();
-      }
-      else
-      {
-        txtStatus.Text = "Saving Data...";
-        skpStatus.Visibility = Visibility.Visible;
-        btnAccept.Visibility = Visibility.Hidden;
-        string strMsj = ValidateHelper.ValidateForm(tbiGeneral, "Personnel");
-        string strValidate = ValidateGeneral();
-        if (strValidate!="")
+        btnAccept.Focus();
+        personnel.pePwd = psbpePwd.Password;
+        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
+        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
+        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
+        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
+        List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+
+        #region PersonnelPermision changes
+        var lstPersonnelPermissionAdd = lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
+        var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
+        var lstPersonnelPermissionUpd = lstPersonnelPermision.Where(pp => _lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
+        #endregion
+
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(personnel, oldPersonnel) && !HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) && lstPersonnelPermissionAdd.Count == 0
+          && lstPersonnelPermissionDel.Count == 0 && lstPersonnelPermissionUpd.Count == 0)
         {
-          strMsj += (strMsj != "") ? "\n" : "" + strValidate;
-        }
-
-        if(strMsj=="")
-        {
-          //ROles
-          var lstRolesAdd = lstRoles.Where(ro => !_lstOldRoles.Any(roo => roo.roID == ro.roID)).ToList();
-          var lstRolesDel = _lstOldRoles.Where(ro => !lstRoles.Any(roo => roo.roID == ro.roID)).ToList();
-          //LeadSources
-          var lstLeadSourceAdd = lstLeadSourcesAcces.Where(pa => !_lstOldAccesLeadSource.Any(paa=>pa.plLSSRID==paa.plLSSRID)).ToList();
-          var lstLeadSourceDel = _lstOldAccesLeadSource.Where(pa => !lstLeadSourcesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-          //SalesRoom
-          var lstSalesRoomAdd = lstSalesRoomAcces.Where(pa => !_lstOldAccesSalesRoom.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-          var lstSalesRoomDel = _lstOldAccesSalesRoom.Where(pa => !lstSalesRoomAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-
-          //Warehouses
-          var lstWarehousesAdd = lstWarehousesAcces.Where(pa => !_lstOldAccesWH.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-          var lsWarehousesDel = _lstOldAccesWH.Where(pa => !lstWarehousesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-
-          //Guardar los registros
-          personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
-          int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
-            lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo), 
-            (personnel.peTeamType!=oldPersonnel.peTeamType || personnel.pePlaceID!=oldPersonnel.pePlaceID || personnel.peTeam!=oldPersonnel.peTeam));
-          UIHelper.ShowMessageResult("Personnel", nRes);
-          if(nRes>0)
-          {
-            _isClosing = true;
-            DialogResult = true;
-            Close();
-          }
-          else
-          {
-            personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
-          }
+          oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
+          _isClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          txtStatus.Text = "Saving Data...";
+          skpStatus.Visibility = Visibility.Visible;
+          btnAccept.Visibility = Visibility.Hidden;
+          string strMsj = ValidateHelper.ValidateForm(tbiGeneral, "Personnel");
+          string strValidate = ValidateGeneral();
+          if (strValidate != "")
+          {
+            strMsj += (strMsj != "") ? "\n" : "" + strValidate;
+          }
+
+          if (strMsj == "")
+          {
+            //ROles
+            var lstRolesAdd = lstRoles.Where(ro => !_lstOldRoles.Any(roo => roo.roID == ro.roID)).ToList();
+            var lstRolesDel = _lstOldRoles.Where(ro => !lstRoles.Any(roo => roo.roID == ro.roID)).ToList();
+            //LeadSources
+            var lstLeadSourceAdd = lstLeadSourcesAcces.Where(pa => !_lstOldAccesLeadSource.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+            var lstLeadSourceDel = _lstOldAccesLeadSource.Where(pa => !lstLeadSourcesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+            //SalesRoom
+            var lstSalesRoomAdd = lstSalesRoomAcces.Where(pa => !_lstOldAccesSalesRoom.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+            var lstSalesRoomDel = _lstOldAccesSalesRoom.Where(pa => !lstSalesRoomAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+
+            //Warehouses
+            var lstWarehousesAdd = lstWarehousesAcces.Where(pa => !_lstOldAccesWH.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+            var lsWarehousesDel = _lstOldAccesWH.Where(pa => !lstWarehousesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+
+            //Guardar los registros
+            personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
+
+
+            int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
+              lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo),
+              (personnel.peTeamType != oldPersonnel.peTeamType || personnel.pePlaceID != oldPersonnel.pePlaceID || personnel.peTeam != oldPersonnel.peTeam));
+            UIHelper.ShowMessageResult("Personnel", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+            else
+            {
+              personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
-        skpStatus.Visibility = Visibility.Collapsed;
-        btnAccept.Visibility = Visibility.Visible;
-      }      
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
     }
     #endregion
 
@@ -544,9 +554,9 @@ namespace IM.Administrator.Forms
         case "OPC":
           {
             List<TeamGuestServices> lstTeamguestService = await BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = personnel.pePlaceID });
-            cmbpeTeamType.ItemsSource = lstTeamguestService;
-            cmbpeTeamType.SelectedValuePath = "tgID";
-            cmbpeTeamType.DisplayMemberPath = "tgN";
+            cmbpeTeam.ItemsSource = lstTeamguestService;
+            cmbpeTeam.SelectedValuePath = "tgID";
+            cmbpeTeam.DisplayMemberPath = "tgN";
             break;
           }
         case "FTM":
@@ -559,16 +569,16 @@ namespace IM.Administrator.Forms
         case "ASM":
           {
             List<TeamSalesmen> lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1, new TeamSalesmen { tssr = personnel.pePlaceID });
-            cmbpeTeamType.ItemsSource = lstTeamSalesMen;
-            cmbpeTeamType.SelectedValuePath = "tsID";
-            cmbpeTeamType.DisplayMemberPath = "tsN";
+            cmbpeTeam.ItemsSource = lstTeamSalesMen;
+            cmbpeTeam.SelectedValuePath = "tsID";
+            cmbpeTeam.DisplayMemberPath = "tsN";
             break;
           }
         default:
           {
-            if (cmbpeTeamType.Items.Count > 0)
+            if (cmbpeTeam.Items.Count > 0)
             {
-              cmbpeTeamType.ItemsSource = null;
+              cmbpeTeam.ItemsSource = null;
             }
             break;
           }
@@ -1068,7 +1078,7 @@ namespace IM.Administrator.Forms
       //Validamos que se tenga seleccionado un equipo si se tiene seleccionado un lugar
       if (cmbpePlaceID.SelectedValue != null)
       {
-        if (cmbpeTeamType.SelectedValue == null)
+        if (cmbpeTeam.SelectedValue == null)
         {
           strMsj += "Specify the team Personnel. \n";
         }
@@ -1293,7 +1303,14 @@ namespace IM.Administrator.Forms
             break;
           }
       }
-      SetRoles(personnel.pepo);
+      if (!_isOpen)
+      {
+        SetRoles(personnel.pepo);
+      }
+      else
+      {
+        _isOpen = false;
+      }
     }
     #endregion
     #endregion

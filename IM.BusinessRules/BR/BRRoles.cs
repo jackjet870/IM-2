@@ -69,7 +69,7 @@ namespace IM.BusinessRules.BR
         {
           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
-            var person = dbContext.Personnels.Where(pe => pe.peID == idUser).Include(pe=>pe.Roles).FirstOrDefault();
+            var person = dbContext.Personnels.Where(pe => pe.peID == idUser).Include("Roles").FirstOrDefault();
 
             return person.Roles.ToList();
           }

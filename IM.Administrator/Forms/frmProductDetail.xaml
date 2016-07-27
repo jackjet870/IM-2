@@ -23,7 +23,7 @@
         <Grid Name="grdContent" >
             <!--#region Columnas del grid-->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <ColumnDefinition Width="55*" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
             <!--#endregion-->
@@ -51,7 +51,7 @@
                     <UC:ToolBarRtfFontStyle DockPanel.Dock="Top" Name="ucRichTextBoxToolBar2" Margin="3,0,3,0" />
                     <UC:ToolBarRtfStyle DockPanel.Dock="Left" Margin="8,3,0,0" Name="ucRichTextBoxToolBar1"/>
                     <RichTextBox DockPanel.Dock="Top" x:FieldModifier="public" Margin="8,8,0,0" x:Name="richTextBox" BorderThickness="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
-                        <!--<RichTextBox.ContextMenu>
+                        <RichTextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">
                                     <MenuItem.Icon>
@@ -60,17 +60,17 @@
                                 </MenuItem>
                                 <MenuItem Header="Copy" Command="ApplicationCommands.Copy">
                                     <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/IM.Base;component/Images/BCopy.png" Width="12"/>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" Width="12"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Header="Paste" Command="ApplicationCommands.Paste">
                                     <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/IM.Base;component/Images/BPaste.png" Width="12"/>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BPaste.png" Width="12"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator/>                                
                             </ContextMenu>
-                        </RichTextBox.ContextMenu>-->
+                        </RichTextBox.ContextMenu>
                     </RichTextBox>
                 </DockPanel>
             </Grid>

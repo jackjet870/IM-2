@@ -215,8 +215,7 @@ namespace IM.Administrator.Forms
           dtpTo.IsEnabled = false;
           dtpFrom.SelectedDateChanged -= dtp_SelectedDateChanged;
           dtpTo.SelectedDateChanged -= dtp_SelectedDateChanged;
-        }
-        
+        }        
 
       }
     }

@@ -462,7 +462,7 @@ namespace IM.BusinessRules.BR
                   teamLog.tlDT = dtmServerDate;
                   teamLog.tlChangedBy = idUser;
                   teamLog.tlpe = personnel.peID;
-                  teamLog.tlTeamType = personnel.peTeamType;
+                  teamLog.tlTeamType = (personnel.peTeamType == "") ? null : personnel.peTeamType;
                   teamLog.tlPlaceID = personnel.pePlaceID;
                   teamLog.tlTeam = personnel.peTeam;
                   dbContext.TeamsLogs.Add(teamLog);
@@ -476,7 +476,7 @@ namespace IM.BusinessRules.BR
               catch
               {
                 transacction.Rollback();
-                return 0;
+                throw;
               }
             }
           }

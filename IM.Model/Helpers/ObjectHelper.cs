@@ -71,7 +71,7 @@ namespace IM.Model.Helpers
             var oldValue = type.GetProperty(pi.Name).GetValue(ObjOld, null);
             if (pi.PropertyType == typeof(string))//Validar los strings cuando sea null && ""
             {
-              if (newValue != oldValue && !newValue.Equals(oldValue) && !(string.IsNullOrWhiteSpace((string)newValue) && string.IsNullOrWhiteSpace((string)oldValue)))
+              if (newValue != oldValue && !newValue.Equals(oldValue) )
               {
                 return false;
               }

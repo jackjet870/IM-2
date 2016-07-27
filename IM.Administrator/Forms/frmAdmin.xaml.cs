@@ -129,21 +129,21 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Languages Permission
-      if (App.User.HasPermission(EnumPermission.Languages,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Languages, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmLanguages", "Languages", "World.ico");
       }
       #endregion
 
       #region Marital Status Permission
-      if (App.User.HasPermission(EnumPermission.MaritalStatus,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.MaritalStatus, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmMaritalStatus", "Marital Status", "Marital_Status.png");
       }
       #endregion
 
       #region Motives Permission
-      if (App.User.HasPermission(EnumPermission.Motives,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Motives, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmNotBookingMotives", "Not Booking Motives", "DateTime_Forbidden.png");
         lstMenu.Add("frmUnderPaymentMotives", "Under Payment  Motives", "Forbidden.png");
@@ -152,7 +152,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Teams Permission
-      if (App.User.HasPermission(EnumPermission.Teams,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmPosts", "Posts", "Posts.png");
         lstMenu.Add("frmPostsLog", "Posts Log", "Log.ico");
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Secretary Role
-      if(App.User.HasRole(EnumRole.Secretary))
+      if (App.User.HasRole(EnumRole.Secretary))
       {
         lstMenu.Add("frmSalesAmountRanges", "Sales Amount Ranges", "Money_Bag.png");
         lstMenu.Add("frmGoals", "Goals", "Goal.png");
@@ -204,7 +204,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Tour Times Permission
-      if(App.User.HasPermission(EnumPermission.TourTimes,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.TourTimes, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmTourTimesSchemas", "Tour Times Schemas", "IconDate.png");
         lstMenu.Add("frmTourTimes", "Tour Times", "IconDate.png");
@@ -212,14 +212,14 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Warehouses Permission
-      if (App.User.HasPermission(EnumPermission.Warehouses,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Warehouses, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmWarehouses", "Warehouses", "Warehouse.png");
       }
       #endregion
 
       #region Wholesalers Permission
-      if (App.User.HasPermission(EnumPermission.WholeSalers,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmWholesalers", "Wholesalers", "shopping_cart.png");
       }
@@ -231,6 +231,13 @@ namespace IM.Administrator.Forms
         lstMenu.Add("frmPersonnel", "Personnel", "Personnel.png");
       }
 
+      #endregion
+
+      #region PRCaptian Roles
+      if (App.User.HasRole(EnumRole.PRCaptain))
+      {
+        lstMenu.Add("frmNotices", "Notices", "Notice.png");
+      }
       #endregion
 
       // ordenamos la lista

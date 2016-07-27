@@ -27,6 +27,7 @@ namespace IM.Administrator.Forms
     public Gift _oldGift = new Gift();
     public EnumMode enumMode;
     private bool _isClosing = false;
+    private bool _isCellCancel = false;
     private List<Agency> _lstOldAgencies = new List<Agency>();
     private List<Location> _lstOldLocations = new List<Location>();
     private List<GiftPackageItem> _lstOldPacks = new List<GiftPackageItem>();
@@ -282,12 +283,13 @@ namespace IM.Administrator.Forms
     private void dgr_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (e.EditAction==DataGridEditAction.Commit)
-      {        
+      { 
         DataGrid dgr = sender as DataGrid;        
         switch (e.Column.SortMemberPath)
         {
           case "loN":
             {
+              _isCellCancel = false;
               var cp = (ContentPresenter)e.EditingElement;
               var combo = (ComboBox)cp.ContentTemplate.FindName("cmbLocations", cp);
               bool blnIsRepeat = GridHelper.HasRepeatItem(combo, dgr, true);
@@ -300,6 +302,7 @@ namespace IM.Administrator.Forms
             }
           case "agID":
             {
+              _isCellCancel = false;
               bool blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgr);
               if (!blnIsRepeat)
               {
@@ -352,6 +355,10 @@ namespace IM.Administrator.Forms
             }
         }        
       }
+      else
+      {
+        _isCellCancel = true;
+      }
 
     }
     #endregion
@@ -403,7 +410,7 @@ namespace IM.Administrator.Forms
             default:
               {
                 dgr.RowEditEnding -= dgr_RowEditEnding;
-                if (Keyboard.IsKeyDown(Key.Escape))
+                if (_isCellCancel)
                 {
                   dgr.CancelEdit();
                 }
@@ -414,6 +421,7 @@ namespace IM.Administrator.Forms
                   GridHelper.SelectRow(dgr, dgr.SelectedIndex);
                 }
                 dgr.RowEditEnding += dgr_RowEditEnding;
+                _isCellCancel = false;
                 break;
               }
           }
