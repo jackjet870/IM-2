@@ -1628,11 +1628,20 @@ namespace IM.Inhouse.Forms
 
     #region btnWithGifts_Click
 
+    #region MyRegion
+    /// <summary>
+    /// Crea el reporte 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 27/jul/2016
+    /// </history>
     private void btnWithGifts_Click(object sender, RoutedEventArgs e)
     {
       CreateExcelReport(true);
-    }
+    } 
+    #endregion
 
+    #region dtpDate_ValueChanged
     /// <summary>
     /// Actualiza la variable global _serverDate y carga los controles
     /// </summary>
@@ -1640,15 +1649,16 @@ namespace IM.Inhouse.Forms
     /// [jorcanche] created 17/07/2016
     /// </history>
     private async void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {      
+    {
       if (!IsInitialized) return;
       if (dtpDate.Text == string.Empty) dtpDate.Value = _serverDate;
-      if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;      
+      if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;
       StaStart($"Loading {_screen}...");
       _serverDate = dtpDate.Value.Value;
       txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, App.User.Location.loID);
       LoadGrid();
-    }
+    } 
+    #endregion
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {

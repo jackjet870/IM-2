@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Policy;
 using System.Windows;
@@ -63,7 +64,7 @@ namespace IM.Host.Forms
     Sale _sale = new Sale();
 
     //Payments
-    List<Payment> _payments = new List<Payment>();
+    private ObservableCollection<Payment> _payments = new ObservableCollection<Payment>();
 
     //Sale Type Category 
     private string _saleTypeCategory;
@@ -87,9 +88,9 @@ namespace IM.Host.Forms
     public frmSales(EnumSale typeSale, int guId = 0)
     {
       InitializeComponent();
-      //typeSale = EnumSale.Sale;
+      typeSale = EnumSale.Sale;
       gprCriteria.Visibility = typeSale == EnumSale.Sale ? Visibility.Collapsed : Visibility.Visible;
-      _guId = guId; //= 7754745;
+      _guId = guId = 7754745;
     }
 
     #endregion
@@ -313,7 +314,7 @@ namespace IM.Host.Forms
         SetOutOfPending();
 
         //Cargamos los pagos de la venta      
-        _payments = await BRPayments.GetPaymentsbySale(_sale.saID);
+        _payments = new ObservableCollection<Payment>(await BRPayments.GetPaymentsbySale(_sale.saID)); 
         dgpayment.DataContext = _payments;
 
         //Nombre del huesped
@@ -789,7 +790,7 @@ namespace IM.Host.Forms
     /// [jorcanche]  created 24062016
     /// </history>
     private void txt_LostFocus(object sender, RoutedEventArgs e)
-        {
+    {
       var txt = (TextBox) sender;
       var cbo = (ComboBox) FindName(txt.Name.Replace("txt", "cbo"));
       if (cbo == null) return;
@@ -841,6 +842,16 @@ namespace IM.Host.Forms
     ///</history>
     private bool ValidatePagos()
     {
+
+      
+      _payments.ToList().ForEach(x =>
+      {
+        if (x.papt == null && x.pacc == null)
+        {
+        _payments.Remove(x);
+        }
+      });
+
       bool foundbad = false;
       if (_payments.Count == 0) return true;
       foreach (var item in _payments)
@@ -966,7 +977,6 @@ namespace IM.Host.Forms
               {
                 UIHelper.ShowMessage(
                   "In a Downgrade, the Membership Type Global can't be greater than the Membership Type Previous");
-                // _validateMembershipTypeGlobal = false;
                 return false;
               }
               break;
@@ -976,11 +986,11 @@ namespace IM.Host.Forms
         {
           UIHelper.ShowMessage("Membership Number Previous not found");
           txtsaRefMember.Focus();
-          //return  _validateMembershipTypeGlobal = false;
+
           return false;
         }
       }
-      //return  _validateMembershipTypeGlobal = true;
+
       return true;
     }
 
@@ -1198,6 +1208,7 @@ namespace IM.Host.Forms
 
       //if (!_validateMembershipTypeGlobal) return false;
       if (!await ValidateMembershipTypeGlobal()) return false;
+
       //Validamos los campos necesarios que estan dentro dell Grid gGeneral:
       //El numero de membresia
       //El huesped
@@ -1280,10 +1291,7 @@ namespace IM.Host.Forms
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       SetMode(EnumMode.modEdit);
-      if (_payments.Count == 0)
-      {
-        _payments.Add(new Payment());
-      }
+
     }
 
     #endregion
@@ -1630,7 +1638,7 @@ namespace IM.Host.Forms
             memberSalesmens.ZONA = _sale.sasr;
             //Actualizamos el vendedor de Intelligence contracts 
             await BRMemberSalesman.SaveMemberSalesman(memberSalesmens.RECNUM, memberSalesmens, txtChangedBy.Text);
-              //App.User.User.peID);
+            //App.User.User.peID);
           }
           else //Si no tiene el rol solicitado
           {
@@ -1674,12 +1682,12 @@ namespace IM.Host.Forms
       _lstMemberSalesmens.Add(memberSalesmen);
       //Agregamos el vendedor en intelligence Contracts
       return await BRMemberSalesman.SaveMemberSalesman(0, memberSalesmen, txtChangedBy.Text);
-        //App.User.User.peID);      
+      //App.User.User.peID);      
     }
 
     #endregion
 
-
+    #region PaymentsSave
     /// <summary>
     /// Guarda los cambios del DataGrid y valida que no se repitan los rows
     /// </summary>
@@ -1703,7 +1711,8 @@ namespace IM.Host.Forms
         if (resOperationEntity > 0) return;
         UIHelper.ShowMessageResult("Payments", resOperationEntity);
       }
-    }
+    } 
+    #endregion
 
     #region SetVolumenPercentage
 
@@ -1876,151 +1885,6 @@ namespace IM.Host.Forms
 
     #endregion
 
-    private bool _cancel;
-
-    private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-    {
-      e.Cancel = _cancel;
-    }
-
-    /// <summary>
-    /// Valida que no se repita registros en el datagrid
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05072016
-    /// </history>
-    private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-    {
-      //var cbo = (ComboBox)e.EditingElement;
-      //if (e.Column.Header.ToString() == "Payment Type")
-      //{
-      //  if (cbo.SelectedValue == null) return;
-      //  var papt = cbo.SelectedValue.ToString();
-      //  if (_payments.Count(pay => pay.papt == papt) > 1)
-      //  {
-      //    UIHelper.ShowMessage("Payment Type must not be repeated");
-      //    cbo.SelectedIndex = -1;
-      //    e.Cancel = true;
-      //    _cancel = true;
-
-      //  }
-      //  else
-      //  {
-      //    _cancel = false;
-      //  }
-      //}
-      //else //CrediCard
-      //{
-      //  var row = e.Row.Item as Payment;
-      //  if (row == null) return;
-      //  if (row.papt == "CC" && row.pacc == null || row.papt == null)
-      //  {
-      //    _cancel = true;
-      //  }
-      //  else
-      //  {
-      //    _cancel = false;
-      //  }
-      //  if (_payments.Count(x => x.pacc != null) > 1)
-      //  {
-      //    UIHelper.ShowMessage("Ya se ha escogido Credit Card");
-      //    cbo.Focusable = false;
-      //    cbo.SelectedIndex = -1;
-      //    e.Cancel = true;
-      //  }
-      //}
-      //if (_payments.Exists(x => x.papt == null && x.pacc == null))
-      //{
-      //  _cancel = true;
-      //}
-    }
-
-    private void Dgpayment_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-      //Habilitamos el Combobox para que luego el evento LoadedPaccColumn_OnHandler
-      //decida si lo habilita o lo dehabilita
-      paccColumn.IsReadOnly = false;
-    }
-
-    private void LoadedPaccColumn_OnHandler(object sender, RoutedEventArgs e)
-    {
-      //Habilita ó deshabilita Payment Type segun si selecciono Tarjeta de Credito 
-      var payment = (Payment) dgpayment.CurrentItem;
-      paccColumn.IsReadOnly = payment.papt != "CC";   
-    }
-
-
-
-    private void SelectionChangedPaptColumn_OnHandler(object sender, SelectionChangedEventArgs e)
-        {
-      //Cuando se selecciona uno diferente a CrediCard en la columna Papt se habilita para que agregue otra fila
-
-      var payment = (ComboBox) e.Source;
-      if (payment.SelectedValue == null) return;
-
-      if (payment.SelectedValue.ToString() != "CC")
-      {
-        _cancel = false;
-        var index = dgpayment.Items.IndexOf(dgpayment.CurrentItem);
-        _payments[index].pacc = "";
-
-      }
-      if (_payments.Count(pay => pay.papt == payment.SelectedValue.ToString()) == 1)
-      {
-        _cancel = false;
-      }
-      else
-      {
-        UIHelper.ShowMessage("Payment Type must not be repeated");
-        _cancel = true;
-        payment.SelectedIndex = -1;       
-      }
-    
-    }
-
-    private void PreviewGotKeyboardFocusPaccColumn_OnHandler(object sender, KeyboardFocusChangedEventArgs e)
-    {
-           
-    }
-
-
-
-
-    #region dgpayment_BeginningEdit
-
-    //private int _row;
-
-
-    /// <summary>
-    /// Valida antes de editar el grid de pagos 
-    /// </summary>
-    /// <history>
-    /// [jorcanche] created 24/062016
-    /// </history>
-    private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-     
-      
-    }
-
-    private void dgpayment_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-     
-    }
-
-    private void dgpayment_InitializingNewItem(object sender, InitializingNewItemEventArgs e)
-    {
-     
-
-    }
-
-    private void dgpayment_KeyDown(object sender, KeyEventArgs e)
-    {
-    
-    }
-
-    #endregion
-
     #region Txtsagu_OnLostFocus
 
     /// <summary>
@@ -2036,43 +1900,152 @@ namespace IM.Host.Forms
 
     #endregion
 
+
+
+    #region Dgpayment_OnRowEditEnding
+
+    /// <summary>
+    /// Si existe una fila vacia cancela el evento 
+    /// Elimina los Rows Vacios y me agrega uno al final
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      e.Cancel = _payments.ToList().Exists(x => x.papt == null && x.pacc == null);
+      
+      _payments.ToList().ForEach(x =>
+      {
+        if (x.papt == null && x.pacc == null)
+        {
+          _payments.Remove(x);
+        }
+      });
+      _payments.ToList().Add(new Payment());
+    }
+
+    #endregion
+
+
+    #region Dgpayment_OnLostKeyboardFocus
+    /// <summary>
+    ///Habilitamos el Combobox para que luego el evento LoadedPaccColumn_OnHandler
+    ///decida si lo habilita o lo dehabilita
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void Dgpayment_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+      paccColumn.IsReadOnly = false;
+    }
+    #endregion
+
+    #region LoadedPaccColumn_OnHandler
+
+    /// <summary>
+    /// Habilita ó deshabilita Payment Type segun si selecciono Tarjeta de Credito 
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void LoadedPaccColumn_OnHandler(object sender, RoutedEventArgs e)
+    {
+      var payment = (Payment) dgpayment.CurrentItem;
+      paccColumn.IsReadOnly = payment.papt != "CC";
+    }
+
+    #endregion
+
+    #region SelectionChangedPaptColumn_OnHandler
+
+    /// <summary>
+    /// Valida la primera columna papt de modo que:
+    /// 1.- Si selecciona CC habilita la segunda columana pacc y selecciona por default el primer registro.
+    /// 2.- Si selecciona uno diferenta a CC dehabilita la segunda columna pacc y y quita la seleccion dejandolo en SelectedIndex = -1;
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void SelectionChangedPaptColumn_OnHandler(object sender, SelectionChangedEventArgs e)
+    {
+      var payment = (ComboBox) e.Source;
+      if (payment.SelectedValue == null) return;
+
+      var drSelected = dgpayment.ItemContainerGenerator.ContainerFromIndex(dgpayment.SelectedIndex) as DataGridRow;
+      var dcCreditCard = dgpayment.Columns[1].GetCellContent(drSelected).Parent as DataGridCell;
+      var combo = dcCreditCard.Content as ComboBox;
+
+      if (combo != null)
+      {
+        combo.SelectedIndex = payment.SelectedValue.ToString() != "CC" ? -1 : 1;
+      }
+
+      if (_payments.Count(pay => pay.papt == payment.SelectedValue.ToString()) != 1)
+      {
+        UIHelper.ShowMessage("Payment Type must not be repeated");
+        payment.SelectedIndex = -1;
+        if (combo != null) combo.SelectedIndex = -1;
+      }
+    }
+
+    #endregion
+
+
+    private void PreviewGotKeyboardFocusPaccColumn_OnHandler(object sender, KeyboardFocusChangedEventArgs e)
+    {
+
+    }
+  
+    private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+
+    }
+
+    private void dgpayment_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void dgpayment_InitializingNewItem(object sender, InitializingNewItemEventArgs e)
+    {
+
+    }
+
+    private void dgpayment_KeyDown(object sender, KeyEventArgs e)
+    {
+
+    }   
+
     private void dgpayment_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
 
     }
 
     private void Dgpayment_OnLostFocus(object sender, RoutedEventArgs e)
-      {
-     
+    {
+    
     }
-
-
- 
 
     private void LostFocusPaccColumn_OnHandler(object sender, RoutedEventArgs e)
     {
-      var comboBox = e.OriginalSource as ComboBox;
-      var payment = (Payment)dgpayment.CurrentItem;
 
-      if (comboBox != null && (comboBox.SelectedIndex == -1) && payment.papt == "CC" && !comboBox.IsDropDownOpen)
-      {
-        UIHelper.ShowMessage("A type must select Credit Card");
-        e.Handled = true;
-        _cancel = true;
-      }
-      else
-      {
-        _cancel = false;
-      }
     }
-
 
     private void Dgpayment_OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
     {
 
-    
     }
 
-  
+    private void LostFocusPaptColumn_OnHandler(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+
+    }
   }
 }

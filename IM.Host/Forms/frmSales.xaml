@@ -28,17 +28,17 @@
     </Window.Resources>
     <Window.Style>
         <Style TargetType="{x:Type Window}">
-            <Setter Property="MaxHeight" Value="725"/>
-            <Setter Property="MaxWidth" Value="985"/>
+            <Setter Property="MaxHeight" Value="735"/>
+            <Setter Property="MaxWidth" Value="995"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Visibility, ElementName=gprCriteria}" Value="Collapsed">
-                    <Setter Property="MaxHeight" Value="655"/>
-                    <Setter Property="MaxWidth" Value="955"/>
+                    <Setter Property="MaxHeight" Value="665"/>
+                    <Setter Property="MaxWidth" Value="965"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
     </Window.Style>
-    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -244,17 +244,24 @@
                                       RowEditEnding="Dgpayment_OnRowEditEnding"
                                       LostFocus="Dgpayment_OnLostFocus"
                                       BeginningEdit="dgpayment_BeginningEdit"
-                                      x:Name="dgpayment" Margin="5" ItemsSource="{Binding}" Height="75" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False"
-                                       CanUserDeleteRows="false" BorderBrush="Black" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="True" RowHeaderWidth="0" SelectionChanged="dgpayment_SelectionChanged" InitializingNewItem="dgpayment_InitializingNewItem" KeyDown="dgpayment_KeyDown" FocusableChanged="dgpayment_FocusableChanged">
+                                      CanUserReorderColumns="False" 
+                                      CanUserResizeColumns="False"
+                                      CanUserResizeRows="False"
+                                      CanUserAddRows="True"
+                                      CanUserDeleteRows="true" 
+                                      ItemsSource="{Binding}"
+                                      x:Name="dgpayment" Margin="5" Height="90" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False" Width="220" 
+                                      BorderBrush="Black" RowHeaderWidth="0" SelectionChanged="dgpayment_SelectionChanged" InitializingNewItem="dgpayment_InitializingNewItem" KeyDown="dgpayment_KeyDown" FocusableChanged="dgpayment_FocusableChanged">
                                 <DataGrid.Columns>
-                                    <DataGridComboBoxColumn x:Name="paptColumn" Width="AUTO" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged }">
+                                    <DataGridComboBoxColumn x:Name="paptColumn" Width="*" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged }">
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <EventSetter Event="SelectionChanged" Handler="SelectionChangedPaptColumn_OnHandler"/>
+                                                <EventSetter Event="LostFocus" Handler="LostFocusPaptColumn_OnHandler" />
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                         </DataGridComboBoxColumn>
-                                    <DataGridComboBoxColumn x:Name="paccColumn" Width="AUTO" Header="Credit Card"  SelectedValuePath="ccID"  DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc,  Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" >
+                                    <DataGridComboBoxColumn x:Name="paccColumn" Width="*" Header="Credit Card"  SelectedValuePath="ccID"  DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc,  Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" >
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <EventSetter Event="LostFocus" Handler="LostFocusPaccColumn_OnHandler" />
