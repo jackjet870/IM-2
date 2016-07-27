@@ -1738,6 +1738,44 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetStatisticsByFTB
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="segments">Claves de segmentos</param>
+    /// <param name="program">Programs</param> 
+    /// <param name="byLocations">Indica si es por locaciones</param>
+    /// <param name="byLocationsCategories">Indica si es por categorias de locaciones</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    /// </history>
+    public static async Task<List<RptStatisticsByFTB>> GetStatisticsByFTB(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All,
+      bool byLocations= false, bool byLocationsCategories=false , bool includeAllSalesmen = false)
+    {
+      var result = new List<RptStatisticsByFTB>();
+
+      if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          result = dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+          EnumToListHelper.GetEnumDescription(program), byLocations, byLocationsCategories, includeAllSalesmen).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion GetStatisticsByFTB
+
     #endregion Processor Sales
 
 

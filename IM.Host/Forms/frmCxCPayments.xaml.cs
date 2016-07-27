@@ -45,10 +45,12 @@ namespace IM.Host.Forms
       _dtpServerDate = BRHelpers.GetServerDate();
       _lstExchangeRate = BRExchangeRate.GetExchangeRatesByDate(DateTime.Now, "MEX").FirstOrDefault();
       dbExchange = (double)_lstExchangeRate.exExchRate;
+      
     }
     #endregion
 
     #region Metodos de la ventana
+
     /// <summary>
     /// 
     /// </summary>
@@ -69,17 +71,22 @@ namespace IM.Host.Forms
       
     }
 
+    #region tbx_KeyDown
+    /// <summary>
+    /// Evento para la tecla presionada
+    /// </summary>
+    ///<history>
+    ///[michan] 16/Junio/2016 Created
+    ///</history>
     private void tbx_KeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+      /*if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
         e.Handled = false;
       else if (e.Key == Key.Decimal)//Key.OemComma
         e.Handled = false;
       else
-        e.Handled = true;
-
-      tbxUSD.TextChanged += null;
-      tbxMXN.TextChanged += null;
+        e.Handled = true;*/
+      //e.Handled = !ValidateHelper.OnlyDecimals(e., sender as TextBox);
       switch (((TextBox)sender).Name)
       {
         case "tbxUSD":
@@ -91,8 +98,46 @@ namespace IM.Host.Forms
         default:
           break;
       }
+      
     }
+    #endregion
 
+
+
+    #region Decimal_PreviewTextInput
+    /// <summary>
+    /// Valida que el texto introducido sea decimal
+    /// </summary>
+    /// <history>
+    /// [michan] 23/07/2016 Created
+    /// </history>
+    private void Decimal_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = !ValidateHelper.OnlyDecimals(e.Text, sender as TextBox);
+      if(!e.Handled)
+        switch (((TextBox)sender).Name)
+        {
+          case "tbxUSD":
+            tbxUSD.TextChanged += tbx_TextChanged;
+            break;
+          case "tbxMXN":
+            tbxMXN.TextChanged += tbx_TextChanged;
+            break;
+          default:
+            break;
+        }
+    }
+    #endregion
+
+
+
+    #region tbx_TextChanged
+    /// <summary>
+    /// Valida en cabio en los texbox
+    /// </summary>
+    ///<history>
+    ///[michan] 16/Junio/2016 Created
+    ///</history>
     private void tbx_TextChanged(object sender, TextChangedEventArgs e)
     {
       var tbx = ((TextBox)sender);
@@ -105,13 +150,23 @@ namespace IM.Host.Forms
       {
         ApplyRate("MXN", dbTextExchange);
       }
-
+      tbx.TextChanged -= tbx_TextChanged;
     }
+    #endregion
 
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    #region btnSave_Click
+    /// <summary>
+    /// Guarda las cantidades ingresadas.
+    /// </summary>
+    ///<history>
+    ///[michan] 16/Junio/2016 Created
+    ///</history>
+    private void btnSave_Click(object sender, MouseButtonEventArgs e)
     {
       Save();
     }
+    #endregion
+    
     #endregion
 
     #region LoadPayments
@@ -157,6 +212,7 @@ namespace IM.Host.Forms
       else
       {
         double db = 0;
+        
         bool success = double.TryParse(((TextBox)sender).Text, out db);//((TextBox)sender).Text
         if (success & db >= 0)
         {

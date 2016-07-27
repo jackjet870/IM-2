@@ -1,0 +1,22 @@
+﻿<Window x:Class="IM.Host.Forms.frmInputbox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        mc:Ignorable="d"
+        Title="frmInputbox"
+        
+        WindowStartupLocation="CenterScreen"
+        Height="149.956" 
+        Width="271.698" 
+        WindowStyle="SingleBorderWindow" 
+        ResizeMode="NoResize" 
+        ShowInTaskbar="False">
+    <Grid>
+        <TextBox x:Name="Input" HorizontalAlignment="Left" Height="23" Margin="10,53,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="246"/>
+        <TextBlock x:Name="tbkMessage" HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="246"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="200,90,0,0" VerticalAlignment="Top" Width="56" Click="btnCancel_Click"/>
+        <Button x:Name="btnAccept" Content="Accept" HorizontalAlignment="Left" Margin="132,90,0,0" VerticalAlignment="Top" Width="57" Click="btnAccept_Click"/>
+    </Grid>
+</Window>

@@ -264,9 +264,9 @@ namespace IM.Transfer.Forms
       {
         AddLogGridReservations("Info", "Transfer Canceled.");
       }
-      catch (Exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Info", "Transfer Canceled.");
+        AddLogGridReservations("Info", ex.InnerException.Message);
       }
       finally
       {
@@ -545,9 +545,6 @@ namespace IM.Transfer.Forms
         //si la reservacion no ha sido agregada todavia
         Model.Transfer transfer = Transfer(reservationOrigos);
         await BRTransfer.AddReservation(transfer);
-
-        // Agregamos la informacion de Origen a GuestOpera
-        await AddTransferToOperaGuest(reservationOrigos);
       }
       else
       {
@@ -556,39 +553,7 @@ namespace IM.Transfer.Forms
     }
     #endregion
 
-    #region AddTransferToOperaGuest
-    /// <summary>
-    /// Agrega la informaicon de la reservacion de Opera  a la tabla GuestOpera
-    /// </summary>
-    /// <param name="reservationOrigos">Reservacion obtenida en web service</param>
-    /// <history>
-    /// [michan]  23/04/2016  Created
-    /// </history>
-    public async Task AddTransferToOperaGuest(ReservationOrigosTransfer reservationOrigos)
-    {
-      ////Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
-      //Model.Guest guest = await BRGuests.GetGuestValidForTransfer(reservationOrigos.Folio.ToString(), reservationOrigos.Hotel);
-      //if ((guest != null))
-      //{
-      //  // Revisamos si ya existe en Guest
-      //  GuestOpera guestOpera = await BRGuestOpera.GetGuestOpera(guest.guID);
-      //  GuestOpera guOpera = null;
-      //  // Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
-      //  if (guestOpera != null)
-      //  {
-      //    // Si ya existe, se actualiza el valor
-      //    guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gOpera: guestOpera);
-      //    await BRGuestOpera.SaveGuestOpera(guestOpera, false);
-      //  }
-      //  else
-      //  {
-      //    // Si no existe, se agrega
-      //    guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gogu: guest.guID);
-      //    await BRGuestOpera.SaveGuestOpera(guOpera, true);
-      //  }
-      //}
-    }
-    #endregion
+   
 
     #region GetReservations
     /// <summary>
@@ -809,50 +774,6 @@ namespace IM.Transfer.Forms
 
       return transfer;
     }
-    #endregion
-
-    #region UpdateGuestOpera
-    /// <summary>
-    /// Metodo para crear un nuevo registro para la tabla Trasnfer
-    /// </summary>
-    /// <param name="reservationOrigosTransfer">Datos obtenidos del web service</param>
-    /// <param name="gogu">ID del registro que proviene de la tabla Guest</param>
-    /// <param name="gOpera">Registro del guestOpera ha actualizar</param>
-    /// <returns></returns>
-    /// <history>
-    /// [michan]  25/04/2016  Created
-    /// </history>
-    //public async Task<GuestOpera> UpdateGuestOpera(ReservationOrigosTransfer reservationOrigosTransfer, int? gogu = null,GuestOpera gOpera = null)
-    //{
-    //  // Creamos un objecto GuestOpera
-    //  //GuestOpera guestOpera = null;
-    //  await Task.Run(() =>
-    //  {
-    //    // si recibimos un objecto GuestOpera 
-    //    if (gOpera != null)
-    //    {
-    //      // asignamos el objeto gOpera al objeto guestOpera creado
-    //      guestOpera = gOpera;
-    //    }
-    //    else
-    //    {
-    //      // instnaceamos un objecto de tipo de tipo GuestOpera
-    //      guestOpera = new GuestOpera();
-    //      guestOpera.gogu = gogu.Value;
-    //    }
-    //    guestOpera.goSourceID = ConvertHelper.StringToInt(reservationOrigosTransfer.Source_id);
-    //    guestOpera.goTravelAgentID = ConvertHelper.StringToInt(reservationOrigosTransfer.Travel_Agent_Id);
-    //    guestOpera.goGroupID = ConvertHelper.StringToInt(reservationOrigosTransfer.Group_id);
-    //    guestOpera.goBlockCode = reservationOrigosTransfer.Block_code;
-    //    guestOpera.goMarketCode = reservationOrigosTransfer.Market_code;
-    //    guestOpera.goMarketGroup = reservationOrigosTransfer.Market_group;
-    //    guestOpera.goSourceGroup = reservationOrigosTransfer.Source_group;
-    //    guestOpera.goRegion = reservationOrigosTransfer.Source_Region;
-    //    guestOpera.goCountry = reservationOrigosTransfer.Source_Country;
-    //    guestOpera.goTerritory = reservationOrigosTransfer.Source_Territory;
-    //  });
-    //  return guestOpera;
-    //}
     #endregion
 
     #region ExportToGuests
@@ -1291,8 +1212,8 @@ namespace IM.Transfer.Forms
       try
       {
         //eliminando reservaciones canceladas
-        AddLogGridReservations("Delete", "Deleting Canceled Reservations.");
         await BRTransfer.DeleteReservationsCancelled();
+        AddLogGridReservations("Delete", "Deleting Canceled Reservations.");
       }
       catch (Exception exception)
       {

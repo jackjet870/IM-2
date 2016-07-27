@@ -9,7 +9,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
   
-        Title="CxC Authorization" Height="435.554" Width="977.836" Loaded="Window_Loaded" ShowInTaskbar="False">
+        Title="CxC Authorization" Height="435.554" Width="1027" MinHeight="500" MinWidth="1027" Loaded="Window_Loaded" ShowInTaskbar="False">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
             AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
@@ -176,10 +176,42 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TabControl x:Name="tbcAuthorized" Style="{StaticResource TabControlStyle}" SelectionChanged="Authorized_SelectionChanged">
-                        <TabItem Header="Unauthorized CxC's" Style="{StaticResource TabItemStyle}"/>
-                        <TabItem Header="Authorized CxC's" Style="{StaticResource TabItemStyle}"/>
+                    <TabControl x:Name="tbcAuthorized" Style="{StaticResource TabControlStyle}">
+                        <TabItem x:Name="Unauthorized" Header="Unauthorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
+                        <TabItem x:Name="Authorized" Header="Authorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
                     </TabControl>
+
+
+                    <!--<TabControl Name="tabControl">
+                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
+                            <TabItem.Header>
+                                <TextBlock>Text a</TextBlock>
+                            </TabItem.Header>
+                            <DockPanel>
+                                <ListBox Background="AliceBlue" />
+                            </DockPanel>
+                        </TabItem>
+
+                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
+                            <TabItem.Header>
+                                <TextBlock>Text a</TextBlock>
+                            </TabItem.Header>
+                            <DockPanel>
+                                <ListBox Background="Black" />
+                            </DockPanel>
+                        </TabItem>
+
+                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
+                            <TabItem.Header>
+                                <TextBlock>Text a</TextBlock>
+                            </TabItem.Header>
+                            <DockPanel>
+                                <ListBox Background="Red" />
+                            </DockPanel>
+                        </TabItem>
+                    </TabControl>-->
+
+
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -192,7 +224,7 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt" IsReadOnly="True" Width="auto"/>
-                        <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Chb PP," IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Chb PP" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grlsColumn" Binding="{Binding grls}" Header="LS" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grguColumn" Binding="{Binding grgu}" Header="Guest ID" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grGuestColumn" Binding="{Binding grGuest}" Header="Guest Name" IsReadOnly="True" Width="auto"/>
@@ -207,42 +239,34 @@
                         <DataGridTextColumn x:Name="CxCColumn" Binding="{Binding CxC, StringFormat=\{0:C\}}" Header="CxC" IsReadOnly="True" Width="auto"/>
 
                         <DataGridCheckBoxColumn x:Name="AuthorizedColumn" Header="Auth."  Width="auto" Binding="{Binding Authorized,  Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridCheckBoxColumn.CellStyle>
+                            <DataGridCheckBoxColumn.EditingElementStyle>
                                 <Style>
-                                    <EventSetter Event="CheckBox.Click" Handler="AuthorizedBox_Click"/>
+                                    <EventSetter Event="CheckBox.Checked" Handler="AuthorizedBox_Click"/>
+                                    <EventSetter Event="CheckBox.Unchecked" Handler="AuthorizedBox_Click"/>
                                 </Style>
-                            </DataGridCheckBoxColumn.CellStyle>
+                            </DataGridCheckBoxColumn.EditingElementStyle>
                         </DataGridCheckBoxColumn>
-                        <!--<DataGridTemplateColumn x:Name="AuthorizedColumn"  Header="Auth." Width="auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox Name="ckbAuthorized" IsChecked="{Binding Authorized, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" Click="AuthorizedBox_Click"  HorizontalAlignment="Center" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
-
+                        
                         <DataGridTemplateColumn x:Name="grCxCAppDColumn" Header="Auth. Date"  IsReadOnly="False" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <!--<DatePickerTextBox IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto" IsReadOnly="True"></DatePickerTextBox>-->
                                     <TextBlock IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <DatePicker 
-                    x:Name="grCxCAppD" 
-                    SelectedDate="{Binding grCxCAppD, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" 
-                    FirstDayOfWeek="Monday"
-                    IsTodayHighlighted="True" 
-                    CalendarOpened="CxCAppD_CalendarOpened"  
-                    SelectedDateChanged="CxCAppD_SelectedDateChanged" 
-                    Width="auto" 
-                    Style="{StaticResource ResourceKey=styleDatePicker}">
+                                        x:Name="grCxCAppD" 
+                                        SelectedDate="{Binding grCxCAppD, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" 
+                                        FirstDayOfWeek="Monday"
+                                        IsTodayHighlighted="True" 
+                                        CalendarOpened="CxCAppD_CalendarOpened"  
+                                        SelectedDateChanged="CxCAppD_SelectedDateChanged" 
+                                        Width="auto" 
+                                        Style="{StaticResource ResourceKey=styleDatePicker}">
                                         <DatePicker.Resources>
                                             <Style TargetType="DatePickerTextBox">
                                                 <Setter Property="IsReadOnly" Value="True"/>
-
                                                 <Setter Property="Focusable" Value="False"/>
                                                 <Setter Property="IsEnabled" Value="False" />
                                                 <Setter Property="IsHitTestVisible" Value="False"/>
@@ -258,7 +282,7 @@
                         <DataGridTextColumn x:Name="grAuthorizedByColumn" Binding="{Binding grAuthorizedBy}" Header="Auth. By" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grAuthorizedNameColumn" Binding="{Binding grAuthorizedName}" Header="Auth. Name" IsReadOnly="True" Width="auto"/>
 
-                        <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=\{0:C\}}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=0.000;;#}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grAmountPaidColumn" Binding="{Binding grAmountPaid, StringFormat=\{0:C\}}" Header="Amount Paid" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grBalanceColumn" Binding="{Binding grBalance, StringFormat=\{0:C\}}" Header="Balance" IsReadOnly="True" Width="auto"/>
 
@@ -275,15 +299,15 @@
                         </DataGridTemplateColumn>
 
                         <DataGridComboBoxColumn
-              x:Name="grupColumn"
-              Header="Motive"
-              Width="auto"
-              EditingElementStyle="{StaticResource  ResourceKey=ctrlStyleVisibility}"
-              ItemsSource="{Binding Source={StaticResource underPaymentMotiveViewSource}}"
-              SelectedValueBinding="{Binding grup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectedValuePath="upID"
-              DisplayMemberPath="upN" 
-              />
+                          x:Name="grupColumn"
+                          Header="Motive"
+                          Width="auto"
+                          EditingElementStyle="{StaticResource  ResourceKey=ctrlStyleVisibility}"
+                          ItemsSource="{Binding Source={StaticResource underPaymentMotiveViewSource}}"
+                          SelectedValueBinding="{Binding grup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValuePath="upID"
+                          DisplayMemberPath="upN" 
+                          />    
 
 
                         <DataGridTemplateColumn x:Name="grcxcAuthCommentsColumn" Header="CxC Auth Comments"  Width="auto">
@@ -338,13 +362,13 @@
             <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
             <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
             <Separator />
-            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
-                <StackPanel Orientation="Horizontal">
+            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center" Width="auto">
+                <StackPanel Orientation="Horizontal" Width="auto">
                     <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" Width="200"/>
                 </StackPanel>
             </StatusBarItem>
-            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+            <StatusBarItem x:Name="StatusBarReg" Content="" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
         </StatusBar>
         <!--#endregion-->
     </Grid>

@@ -191,5 +191,11 @@
     <Setting Name="USP_OR_Occupation" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>
     </Setting>
+    <Setting Name="USP_OR_GetCxC_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="USP_IM_RptStatisticsByFTB_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

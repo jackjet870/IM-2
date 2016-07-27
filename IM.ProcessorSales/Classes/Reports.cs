@@ -577,6 +577,117 @@ namespace IM.ProcessorSales.Classes
       var dtData = TableHelper.GetDataTableFromList(data, true, true);
       return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
+    #region RptStatisticsByFTB
+
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptStatisticsByFTB
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="groupedByTeams">Agrupado por equipos</param>
+    /// <history>
+    ///  [michan] 21/07/2016 Created
+    /// </history>
+    internal static FileInfo RptStatisticsByFTB(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
+    {
+      var lstReportAux = new List<dynamic>();
+      if (groupedByTeams)
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          c.SalemanTypeN,
+          Team = c.TeamN + "   " + c.TeamLeaderN,
+          c.SalesmanStatus,
+          c.PostName,
+          c.SalemanID,
+          c.SalemanName,
+          c.SalesAmount,
+          c.OPP,
+          c.UPS,
+          c.SalesRegular,
+          c.SalesExit,
+          c.Sales
+        }));
+      }
+      else
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          c.SalemanTypeN,
+          c.PostName,
+          c.SalemanID,
+          c.SalemanName,
+          c.SalesAmount,
+          c.OPP,
+          c.UPS,
+          c.SalesRegular,
+          c.SalesExit,
+          c.Sales
+        }));
+      }
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBGroupedByTeams() : FormatReport.RptStatisticsByFTB(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+    }
+    #endregion RptStatisticsByFTB
+
+    #region RptStatisticsByFTBByLocations
+
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptStatisticsByFTB ByLocations
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="groupedByTeams">Agrupado por equipos</param>
+    /// <history>
+    ///  [michan] 22/07/2016 Created
+    /// </history>
+    internal static FileInfo RptStatisticsByFTBByLocations(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
+    {
+      var lstReportAux = new List<dynamic>();
+      if (groupedByTeams)
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          Team = c.TeamN + "   " + c.TeamLeaderN,
+          c.Locations,
+          c.SalemanID,
+          c.SalemanName,
+          c.UPS,
+          OWN = c.SalemanType == "OWN" ? c.SalesAmount : 0,
+          WITH = c.SalemanType == "WITH" ? c.SalesAmount : 0,
+          AS = c.SalemanType == "AS" ? c.SalesAmount : 0,
+          c.SalesRegular,
+          c.SalesExit,
+          c.Sales
+        }));
+      }
+      else
+      {
+        lstReportAux.AddRange(lstReport.Select(c => new
+        {
+          c.Locations,
+          c.SalemanID,
+          c.SalemanName,
+          c.UPS,
+          OWN = c.SalemanType == "OWN" ? c.SalesAmount : 0,
+          WITH = c.SalemanType == "WITH" ? c.SalesAmount : 0,
+          AS = c.SalemanType == "AS" ? c.SalesAmount : 0,
+          c.SalesRegular,
+          c.SalesExit,
+          c.Sales
+        }));
+      }
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByLocationsGroupedByTeams() : FormatReport.RptStatisticsByFTBByLocations(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+    }
+    #endregion RptStatisticsByFTB
+
     #endregion
 
     #endregion

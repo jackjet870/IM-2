@@ -6,21 +6,21 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCxCPayments"
         mc:Ignorable="d"
-        Title="CxC Payments" Height="324.811" Width="457.792" Loaded="Window_Loaded" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="CxC Payments" Height="346.811" Width="457.792" Loaded="Window_Loaded" ResizeMode="NoResize" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="giftsReceiptPaymentShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPaymentShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="cxCPaymentShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CxCPaymentShort}, CreateList=True}"/>
   </Window.Resources>
   <Grid DataContext="{StaticResource giftsReceiptPaymentShortViewSource}">
-    <GroupBox x:Name="groupBox1" Header="Received" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="73" Width="429"/>
+        <GroupBox x:Name="groupBox1" BorderThickness="1" BorderBrush="Black" Header="Received" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="73" Width="429"/>
     <Label x:Name="label" Content="GiftReceiptID" HorizontalAlignment="Left" Margin="14,24,0,0" VerticalAlignment="Top" Width="84"/>
     <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="22" Margin="103,23,0,0" VerticalAlignment="Top" Width="166">
       <Label x:Name="lblReceiptID" Content="GiftReceiptID"  Margin="9,-1"/>
     </Border>
-    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="23" Margin="311,23,0,0" VerticalAlignment="Top" Width="119">
+    <Border BorderBrush="Black"  BorderThickness="1" HorizontalAlignment="Left" Height="23" Margin="311,23,0,0" VerticalAlignment="Top" Width="119">
       <Label x:Name="lblPaymentDt" Content="Date" ContentStringFormat="{}{0:dd/MM/yyyy}" Margin="9,-1,9,0"/>
     </Border>
-    <GroupBox x:Name="groupBox" Header="Amounts" HorizontalAlignment="Left" Margin="13,88,0,0" VerticalAlignment="Top" Height="99" Width="426"/>
+        <GroupBox x:Name="groupBox" BorderThickness="1" BorderBrush="Black" Header="Amounts" HorizontalAlignment="Left" Margin="13,88,0,0" VerticalAlignment="Top" Height="112" Width="426"/>
     <Label x:Name="lblExchange" Content="Exchange Rate USD/MXN :" HorizontalAlignment="Left" Margin="25,104,0,0" VerticalAlignment="Top"/>
     <Border x:Name="brdExchangeRate" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="22" Margin="165,105,0,0" VerticalAlignment="Top" Width="166">
       <Label x:Name="lblExchangeRate" Content="ExchangeRate" Margin="9,-1"/>
@@ -28,12 +28,22 @@
     <Label x:Name="lblDate" Content="Date" HorizontalAlignment="Left" Margin="274,22,0,0" VerticalAlignment="Top"/>
     <Label x:Name="lblGiftReceiptID" Content="Received By" HorizontalAlignment="Left" Margin="14,51,0,0" VerticalAlignment="Top"/>
     <Label x:Name="lblAmountUSD" Content="USD" IsEnabled="True" HorizontalAlignment="Left" Margin="25,131,0,0" VerticalAlignment="Top"/>
-    <TextBox x:Name="tbxUSD" HorizontalAlignment="Left" Height="23" Margin="61,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="tbx_KeyDown" Width="151"/>
-    <TextBox x:Name="tbxMXN" HorizontalAlignment="Left" Height="23" Margin="279,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="tbx_KeyDown"  Width="151"/>
+        <TextBox x:Name="tbxUSD" HorizontalAlignment="Left" Height="23" Margin="61,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" PreviewTextInput="Decimal_PreviewTextInput"  Width="151"/>
+        <!--KeyDown="tbx_KeyDown"-->
+        <TextBox x:Name="tbxMXN" HorizontalAlignment="Left" Height="23" Margin="279,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" PreviewTextInput="Decimal_PreviewTextInput" Width="151"/>
+        <!--KeyDown="tbx_KeyDown"  -->
     <Label x:Name="lblAmountMXN" Content="MXN" HorizontalAlignment="Left" Margin="242,132,0,0" VerticalAlignment="Top"/>
     <TextBox x:Name="tbxReceivedBy" Text="{ Binding Path=Value ,Mode=OneWay, StringFormat={}{0:C}}" HorizontalAlignment="Left" Height="23" Margin="101,53,0,0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Top" Width="329"/>
-    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="194,161,0,0" VerticalAlignment="Top" Click="btnSave_Click" Width="75"/>
-    <DataGrid x:Name="cxCPaymentShortDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource cxCPaymentShortViewSource}}" Margin="14,192,11,10" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False " CanUserReorderColumns="False" IsReadOnly="False">
+    <!--<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="194,161,0,0" VerticalAlignment="Top" Click="btnSave_Click" Width="75"/>-->
+        <Border x:Name="imgButtonSave" IsEnabled="True" Style="{StaticResource brd-ButtonsBig}" Margin="192,160,196,130" MouseLeftButtonDown="btnSave_Click">
+            <StackPanel Orientation="Horizontal">
+                <Viewbox Stretch="Uniform" Width="20">
+                    <Image x:Name="imagSave" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
+                </Viewbox>
+                <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+        <DataGrid x:Name="cxCPaymentShortDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource cxCPaymentShortViewSource}}" Margin="14,205,11,10" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False " CanUserReorderColumns="False" IsReadOnly="False">
       <DataGrid.Columns>
         <DataGridTextColumn x:Name="cxReceivedByColumn" Binding="{Binding cxReceivedBy}" Header="ReceivedBy" Width="*" IsReadOnly="True"/>
         <DataGridTextColumn x:Name="cxAmountColumn" Binding="{Binding cxAmount, StringFormat=\{0:C\}}" Header="Amount USD" Width="auto" IsReadOnly="True"/>

@@ -1,4 +1,5 @@
-﻿using IM.Model;
+﻿using IM.BusinessRules.Properties;
+using IM.Model;
 using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace IM.BusinessRules.BR
       await Task.Run(() => {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GetCxC_Timeout;
           cxcData = dbContext.USP_OR_GetCxC(authorized, salesRoom, user, dateFrom.Value, dateTo.Value, leadSource, personnel).ToList();
         }
       });
