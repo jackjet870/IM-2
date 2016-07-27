@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Base.Forms.frmAssistance"
         mc:Ignorable="d"
-        Title="Assistance" Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
+        Title="Assistance" Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <Window.Resources>
         <CollectionViewSource x:Key="assistanceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Assistance}, CreateList=True}"/>
         <CollectionViewSource x:Key="assistanceStatusViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:AssistanceStatus}, CreateList=True}"/>

@@ -335,10 +335,6 @@ namespace IM.Base.Forms
       dtpEnd.FirstDayOfWeek = DayOfWeek.Monday;
       _dtmServerDate = BRHelpers.GetServerDate();
       dtpStart.SelectedDate = _dtmServerDate;
-
-      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
-      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
-      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       ChangeUseMode(false);
       StaEnd();
     }
@@ -424,6 +420,12 @@ namespace IM.Base.Forms
       }
     }
 
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
     #endregion Eventos del Formulario
   }
 }

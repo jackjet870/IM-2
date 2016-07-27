@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Base.Forms.frmDaysOff"
         mc:Ignorable="d"
-        Title="Days Off" Height="600" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" ShowInTaskbar="False">
+        Title="Days Off" Height="600" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" ShowInTaskbar="False">
     <Window.Resources>
 
         <CollectionViewSource x:Key="personnelDayOffViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelDayOff}, CreateList=True}"/>
@@ -27,8 +27,13 @@
             <!--#region Grid-->
             <Grid x:Name="grdContent" Grid.Column="0" DataContext="{StaticResource personnelDayOffViewSource}">
                 <DataGrid x:Name="dtgpersonnelDayOff" Margin="0,0,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" SelectionMode="Single"
-                          RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" 
-                          MouseDoubleClick="dtgpersonnelDayOff_MouseDoubleClick">
+                          RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgpersonnelDayOff_SelectionChanged" >                    
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="dtgpersonnelDayOff_MouseDoubleClick"/>
+                            <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="dopeColumn" Binding="{Binding dope}" Header="ID" Width=".5*" />
                         <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="2*" />

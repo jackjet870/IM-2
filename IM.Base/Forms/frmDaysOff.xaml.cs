@@ -231,14 +231,9 @@ namespace IM.Base.Forms
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
-      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
-      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-
       cvsPersonnelDaysOff = ((CollectionViewSource)(this.FindResource("personnelDayOffViewSource")));
       //Carga de grddaysOff
       LoadGrid();
-
     }
 
     private void btnShow_Click(object sender, RoutedEventArgs e)
@@ -251,6 +246,22 @@ namespace IM.Base.Forms
       StatusBarReg.Content = string.Format("{0}/{1}", dtgpersonnelDayOff.Items.IndexOf(dtgpersonnelDayOff.CurrentItem) + 1, dtgpersonnelDayOff.Items.Count);
       btnEdit.IsEnabled = false;
       CleanControls();
+    }
+
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool handled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            //dtgpersonnelDayOff_MouseDoubleClick(null, null);
+            LoadPersonnelInfo();
+            handled = true;
+            break;
+          }
+      }
+      e.Handled = handled;
     }
 
     private void dtgpersonnelDayOff_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -292,6 +303,13 @@ namespace IM.Base.Forms
         StaEnd();
       }
 
+    }
+
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
   }
