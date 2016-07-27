@@ -219,7 +219,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is ComboBox)
         {
           var cmb = (ComboBox) control;
-          if (cmb.SelectedIndex > 0) continue;
+          if (cmb.SelectedIndex > -1) continue;
           if ((validateVisible && cmb.IsVisible) || !validateVisible)         
             strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";          
         }        
