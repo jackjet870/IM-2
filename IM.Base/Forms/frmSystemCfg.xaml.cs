@@ -229,10 +229,10 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 05/Feb/2016 Created
     /// [edgrodriguez] 16/Jul/2016 Modified. Se optimizo el codigo.
+    /// [edgrodriguez] 26/Jul/2016 Modified. Se corrigio un error de validacion.
     /// </history>
     private void SelectedPrinterLoaded()
     {
-      RegistryKey configuration = ConfigRegistryHelper.GetUrlConfigRegistry();
       cmbPrinterInvitation.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintInvit");
       cmbPrinterMeal.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintMealTicket");
     }

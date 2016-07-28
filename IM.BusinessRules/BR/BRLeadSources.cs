@@ -397,6 +397,35 @@ namespace IM.BusinessRules.BR
           }
         }
       });
+    }
+    #endregion
+
+    #region GetLeadsourcesByNotice
+    /// <summary>
+    /// Obtiene los leadSources relacionados a un Notice que equivale a traer los registros de la tabla NoticesByLeadSource
+    /// </summary>
+    /// <param name="idNotice">id del notice</param>
+    /// <returns>Lista de tipo LeadSources</returns>
+    /// <history>
+    /// [emoguel] created 26/07/2016
+    /// </history>
+    public static async Task<List<LeadSource>> GetLeadsourcesByNotice(int idNotice)
+    {
+      try
+      {
+        return await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+          {
+            var notice = dbContext.Notices.Where(no => no.noID == idNotice).Include(no => no.LeadSources).FirstOrDefault();
+            return notice.LeadSources.OrderBy(ls => ls.lsN).ToList();
+          }
+        });
+      }
+      catch
+      {
+        throw;
+      }
     } 
     #endregion
   }

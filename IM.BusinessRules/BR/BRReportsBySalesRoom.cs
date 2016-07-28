@@ -1607,7 +1607,6 @@ namespace IM.BusinessRules.BR
       var result = new List<RptFTMInOutHouse>();
       await Task.Run(() =>
       {
-
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptFTMInOutHouse(dtStart, dtEnd, string.Join(",", salesRooms), salesmanID).ToList();
@@ -1713,6 +1712,69 @@ namespace IM.BusinessRules.BR
       return result;
     }
     #endregion GetStatisticsByExitCloser
+
+    #region GetRptSelfGen&SelfGenTeam
+    /// <summary>
+    /// Devuelve un listado con el reporte SelfGen&SelfGenTeam
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicial</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Sala(s) de ventas</param>
+    /// <param name="salesmanID">ID del personal</param>
+    /// <history>
+    ///   [ecanul] 25/07/2016 Created
+    /// </history>
+    public static async Task<List<RptSelfGenTeam>> GetRptSelfGenAndSelfGenTeam (DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom, string salesmanID = "ALL")
+    {
+      var result = new List<RptSelfGenTeam>();
+      await Task.Run(()=>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptSelfGenTeam(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion
+
+    #region GetStatisticsByFTB
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="segments">Claves de segmentos</param>
+    /// <param name="program">Programs</param> 
+    /// <param name="byLocations">Indica si es por locaciones</param>
+    /// <param name="byLocationsCategories">Indica si es por categorias de locaciones</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    /// </history>
+    public static async Task<List<RptStatisticsByFTB>> GetStatisticsByFTB(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All,
+      bool byLocations= false, bool byLocationsCategories=false , bool includeAllSalesmen = false)
+    {
+      var result = new List<RptStatisticsByFTB>();
+
+      if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          result = dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+          EnumToListHelper.GetEnumDescription(program), byLocations, byLocationsCategories, includeAllSalesmen).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion GetStatisticsByFTB
 
     #endregion Processor Sales
 

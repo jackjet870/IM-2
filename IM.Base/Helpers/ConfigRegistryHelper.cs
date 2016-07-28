@@ -99,11 +99,11 @@ namespace IM.Base.Helpers
     /// <returns>string || NULL si la ruta no existe</returns>
     /// <history>
     ///   [edgrodriguez] 16/Jul/2016 Created
+    ///   [edgrodriguez] 26/Jul/2016 Modified. Se corrigió la validacion del método, ya que marcaba error cuando era nulo.
     /// </history>
     public static string GetConfiguredPrinter(string Printer)
     {
-      var value = GetUrlConfigRegistry().GetValue(Printer);
-      return value?.ToString();
+      return GetUrlConfigRegistry()?.GetValue(Printer)?.ToString();
     }
     #endregion
   }

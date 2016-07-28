@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Styles", "IM.Styles\IM.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InvitConfig", "IM.InvitConfig\IM.InvitConfig.csproj", "{F81185F3-005E-4A5D-B203-2B4B5A1F4440}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.PRStatistics", "IM.PRStatistics\IM.PRStatistics.csproj", "{ABB2DC92-18FA-4727-824E-B604D16605A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,18 @@ Global
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.ActiveCfg = Release|Any CPU
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.Build.0 = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Debug|x86.Build.0 = Debug|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Quality|Any CPU.ActiveCfg = Quality|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Quality|Any CPU.Build.0 = Quality|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Quality|x86.ActiveCfg = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Quality|x86.Build.0 = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|x86.ActiveCfg = Release|Any CPU
+		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

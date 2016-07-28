@@ -511,9 +511,9 @@ namespace IM.BusinessRules.BR
               transacction.Commit();
               return nSave;
             }
-            catch(Exception ex)
+            catch
             {
-
+              transacction.Rollback();
               throw;
             }
           }

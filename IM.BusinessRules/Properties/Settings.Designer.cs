@@ -778,5 +778,29 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_Occupation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_GetCxC_Timeout {
+            get {
+                return ((int)(this["USP_OR_GetCxC_Timeout"]));
+            }
+            set {
+                this["USP_OR_GetCxC_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_IM_RptStatisticsByFTB_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptStatisticsByFTB_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptStatisticsByFTB_Timeout"] = value;
+            }
+        }
     }
 }

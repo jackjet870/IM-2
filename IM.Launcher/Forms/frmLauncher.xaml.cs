@@ -155,6 +155,7 @@ namespace IM.Launcher.Forms
       var lstMenu = new ItemsList();
 
       lstMenu.Add(EnumMenu.InventoryMovs);
+      lstMenu.Add(EnumMenu.PRStatistics);
       lstMenu.Add(EnumMenu.SalesByPR);
       lstMenu.Add(EnumMenu.SalesByLiner);
       lstMenu.Add(EnumMenu.SalesByCloser);

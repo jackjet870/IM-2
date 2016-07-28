@@ -1276,8 +1276,15 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
-          response =  dbContext.USP_OR_TransferDeleteReservationsCancelled();
+          try
+          {
+            dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
+            response = dbContext.USP_OR_TransferDeleteReservationsCancelled();
+          }
+          catch (Exception)
+          {
+            throw;
+          } 
         }
       });
       return response;
