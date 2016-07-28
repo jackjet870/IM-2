@@ -111,36 +111,45 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 27/04/2016
     /// [jorcanche] se agrego asincronia
+    /// [edgrodriguez]  28/07/2016 Modified. Ahora se realiza un throw a la excepcion. Para utilizar el metodo de ShowMessage(Exception ex).
     /// </history>
     public async static Task<int> OperationEntities<T>(List<T> lstEntities, EnumMode enumMode) where T : class
     {
       int nRes = 0;
-      await Task.Run(() =>
+      try
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        await Task.Run(() =>
         {
-          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
-            #region Transacción
-            try
+            using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
-              lstEntities.ForEach(item =>
+              #region Transacción
+              try
               {
-                dbContext.Entry(item).State = (enumMode == EnumMode.add) ? EntityState.Added : (enumMode == EnumMode.edit) ? EntityState.Modified : EntityState.Deleted;
-              });
-              nRes = dbContext.SaveChanges();
-              transaction.Commit();
+                lstEntities.ForEach(item =>
+                {
+                  dbContext.Entry(item).State = (enumMode == EnumMode.add) ? EntityState.Added : (enumMode == EnumMode.edit) ? EntityState.Modified : EntityState.Deleted;
+                });
+                nRes = dbContext.SaveChanges();
+                transaction.Commit();
+              }
+              catch (Exception)
+              {
+                /// nRes = 0;
+                transaction.Rollback();
+                throw;
+              }
+              #endregion
             }
-            catch
-            {
-              nRes = 0;
-              transaction.Rollback();
-            }
-            #endregion
-          }          
-        }      
-      });
-      return nRes;
+          }
+        });
+        return nRes;
+      }
+      catch (Exception)
+      {
+        throw;
+      }
     } 
     #endregion
 

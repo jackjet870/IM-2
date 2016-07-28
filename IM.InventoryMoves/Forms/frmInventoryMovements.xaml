@@ -10,97 +10,103 @@
         Title="Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
         Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown">
-  <Window.Resources>
-    <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
-    <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="whsMovViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:WarehouseMovement}, CreateList=True}"/>
-  </Window.Resources>  
-  <Grid>
-    <Grid Height="540" VerticalAlignment="Top">
+    <Window.Resources>
+        <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
+        <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="whsMovViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:WarehouseMovement}, CreateList=True}"/>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=DateFocus}" Key="D" Modifiers="Alt" />
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=SaveData}" Key="S" Modifiers="Alt" />
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=CanceldEdit}" Key="C" Modifiers="Alt" />
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=CloseWindow}" Key="L" Modifiers="Alt" />
+    </Window.InputBindings>
+    <Grid>
+        <Grid Height="540" VerticalAlignment="Top">
 
-      <Grid Height="410" VerticalAlignment="Bottom" DataContext="{StaticResource objWhsMovsViewSource}">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="25*"/>
-          <RowDefinition Height="180*" />
-          <RowDefinition Height="25*"/>
-          <RowDefinition Height="180*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="20*"/>
-          <ColumnDefinition Width="750*"/>
-          <ColumnDefinition Width="20*"/>
-        </Grid.ColumnDefinitions>
-        <Label x:Name="lblExisting" Content="Movements" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" FontWeight="Bold"/>
-        <DataGrid x:Name="grd" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="True" CanUserResizeColumns="True" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource whsMovViewSource}}" SelectionChanged="grd_SelectionChanged">
-          <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding wmD,StringFormat=\{0:dd/MM/yy\}}" Header="Date"/>
-            <DataGridTextColumn Binding="{Binding wmpe}" Header="User"/>
-            <DataGridTextColumn Binding="{Binding peN}" Header="Name"/>
-            <DataGridTextColumn Binding="{Binding wmQty}" Header="Quantity" Width="60"/>
-            <DataGridTextColumn Binding="{Binding giN}" Header="Gift" Width="200"/>
-            <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*"/>
-          </DataGrid.Columns>
-        </DataGrid>
-        <Label x:Name="lblNew" Content="New Movements" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" FontWeight="Bold" />
-        <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}" PreparingCellForEdit="grdNew_PreparingCellForEdit" >
-          <DataGrid.Columns>
+            <Grid Height="410" VerticalAlignment="Bottom" DataContext="{StaticResource objWhsMovsViewSource}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25*"/>
+                    <RowDefinition Height="180*" />
+                    <RowDefinition Height="25*"/>
+                    <RowDefinition Height="180*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="750*"/>
+                    <ColumnDefinition Width="20*"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="lblExisting" Content="Movements" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" FontWeight="Bold"/>
+                <DataGrid x:Name="grd" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="True" CanUserResizeColumns="True" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource whsMovViewSource}}" SelectionChanged="grd_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding wmD,StringFormat=\{0:dd/MM/yy\}}" Header="Date"/>
+                        <DataGridTextColumn Binding="{Binding wmpe}" Header="User"/>
+                        <DataGridTextColumn Binding="{Binding peN}" Header="Name"/>
+                        <DataGridTextColumn Binding="{Binding wmQty}" Header="Quantity" Width="60"/>
+                        <DataGridTextColumn Binding="{Binding giN}" Header="Gift" Width="200"/>
+                        <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Label x:Name="lblNew" Content="New Movements" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" FontWeight="Bold" />
+                <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}" PreparingCellForEdit="grdNew_PreparingCellForEdit" >
+                    <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding wmQty, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" ElementStyle="{StaticResource ResourceKey=txt-ErrorInfo}" Header="Quantity" Width="60" />
-              <DataGridComboBoxColumn x:Name="dgcbGifts" SelectedValueBinding="{Binding wmgi, ValidatesOnDataErrors=True}" DisplayMemberPath="giN" SelectedValuePath="giID"  Header="Gift" ItemsSource="{Binding Source={StaticResource getGiftsViewSource}}" Width="200">
-              <DataGridComboBoxColumn.EditingElementStyle>
-                <Style TargetType="ComboBox">
-                                    <Setter Property="IsEditable" Value="True"/>
+                        <DataGridComboBoxColumn x:Name="dgcbGifts" TextSearch.TextPath="wmgi" SelectedValueBinding="{Binding wmgi, ValidatesOnDataErrors=True}" DisplayMemberPath="giN" SelectedValuePath="giID"  Header="Gift" ItemsSource="{Binding Source={StaticResource getGiftsViewSource}}" Width="200" />
+                        <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*">
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="MaxLength" Value="50"/>
                                 </Style>
-              </DataGridComboBoxColumn.EditingElementStyle>
-            </DataGridComboBoxColumn>
-            <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*"/>
-          </DataGrid.Columns>
-        </DataGrid>
-      </Grid>
-      <Grid Height="130" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="40*"/>
-          <RowDefinition Height="90*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition/>
-          <ColumnDefinition Width="20*"/>
-          <ColumnDefinition Width="750*"/>
-          <ColumnDefinition Width="20*"/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="25" Grid.Column="2" Click="btnAbout_Click">
-          <StackPanel Orientation="Horizontal">
-            <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="15" Height="15" HorizontalAlignment="Left"/>
-            <TextBlock Text="About" HorizontalAlignment="Right"/>
-          </StackPanel>
-        </Button>
-        <GroupBox x:Name="fraDate" Grid.Column="2" Header="_Date" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="75" Width="200" FontWeight="Bold" IsEnabled="False">
-          <Grid>
-             <xctk:DateTimePicker Name="dtpDate" VerticalAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" DefaultValue="{x:Static sys:DateTime.Today}" Format="ShortDate" Margin="5 0 5 0" ValueChanged="dtpDate_SelectedDateChanged" />
-          </Grid>
-        </GroupBox>
-        <Label x:Name="lblCloseDate" Content="CloseDate" Grid.Column="2" Margin="215,10,205,52" Grid.Row="1" HorizontalContentAlignment="Center" Height="25" FontWeight="Bold"/>
-        <GroupBox x:Name="fraUser" Grid.Column="2" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="190" Margin="0,18,10,0">
-          <Grid>
-            <Label x:Name="lblUserName" VerticalAlignment="Top" HorizontalContentAlignment="Center" Content="User Name" Margin="10,5,10,0" FontWeight="Bold"/>
-            <Label x:Name="lblWareHouse" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Content="WareHouse" Margin="10,0,10,5" FontWeight="Bold"/>
-          </Grid>
-        </GroupBox>
-      </Grid>
+                            </DataGridTextColumn.EditingElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <Grid Height="130" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40*"/>
+                    <RowDefinition Height="90*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="750*"/>
+                    <ColumnDefinition Width="20*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="25" Grid.Column="2" Click="btnAbout_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/About.png" Width="15" Height="15" HorizontalAlignment="Left"/>
+                        <TextBlock Text="About" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Button>
+                <GroupBox x:Name="fraDate" Grid.Column="2" Header="Date" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="75" Width="200" FontWeight="Bold" IsEnabled="False" >
+                    <Grid>
+                        <xctk:DateTimePicker Name="dtpDate" VerticalAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" DefaultValue="{x:Static sys:DateTime.Today}" Format="ShortDate" Margin="5 0 5 0" ValueChanged="dtpDate_SelectedDateChanged" />
+                    </Grid>
+                </GroupBox>
+                <Label x:Name="lblCloseDate" Content="CloseDate" Grid.Column="2" Margin="215,10,205,52" Grid.Row="1" HorizontalContentAlignment="Center" Height="25" FontWeight="Bold"/>
+                <GroupBox x:Name="fraUser" Grid.Column="2" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="190" Margin="0,18,10,0">
+                    <Grid>
+                        <Label x:Name="lblUserName" VerticalAlignment="Top" HorizontalContentAlignment="Center" Content="User Name" Margin="10,5,10,0" FontWeight="Bold"/>
+                        <Label x:Name="lblWareHouse" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Content="WareHouse" Margin="10,0,10,5" FontWeight="Bold"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+        <Grid Height="80" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="770*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnClose" Content="Close" Height="20" Width="74" VerticalAlignment="Top" Margin="0,10,10,0" HorizontalAlignment="Right" Click="btnClose_Click" />
+            <Button x:Name="btnCancel" Content="Cancel" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74" Margin="0,10,90,0" Click="btnCancel_Click" />
+            <Button x:Name="btnSave" Content="Save" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74" Margin="0,10,169,0" Click="btnSave_Click" />
+            <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+                <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+                <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
+                <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
+                <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
+            </StatusBar>
+        </Grid>
     </Grid>
-    <Grid Height="80" VerticalAlignment="Bottom">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="770*"/>
-        <ColumnDefinition Width="20*"/>
-      </Grid.ColumnDefinitions>
-      <Button x:Name="btnClose" Content="C_lose" Height="20" Width="74" VerticalAlignment="Top" Margin="0,10,10,0" HorizontalAlignment="Right" Click="btnClose_Click" Command="{Binding btnClose_Click}"/>
-      <Button x:Name="btnCancel" Content="_Cancel" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74" Margin="0,10,90,0" Click="btnCancel_Click" Command="{Binding btnCancel_Click}"/>
-      <Button x:Name="btnSave" Content="_Save" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74" Margin="0,10,169,0" Click="btnSave_Click" Command="{Binding btnSave_Click}"/>
-      <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-        <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-        <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
-        <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-        <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
-      </StatusBar>
-    </Grid>
-  </Grid>
 </Window>

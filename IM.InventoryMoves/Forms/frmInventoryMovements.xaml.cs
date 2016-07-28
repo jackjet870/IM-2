@@ -29,6 +29,11 @@ namespace IM.InventoryMovements
     private CollectionViewSource _objWhsMovsViewSource;
     private CollectionViewSource _getGiftsViewSource;
     private CollectionViewSource _whsMovViewSource;
+
+    public ExecuteCommandHelper DateFocus { get; set; }
+    public ExecuteCommandHelper SaveData { get; set; }
+    public ExecuteCommandHelper CancelEdit { get; set; }
+    public ExecuteCommandHelper CloseWindow { get; set; }
     #endregion
 
     #region Constructores y destructores
@@ -42,6 +47,11 @@ namespace IM.InventoryMovements
     public frmInventoryMovements()
     {
       InitializeComponent();
+      DateFocus = new ExecuteCommandHelper(c => dtpDate.Focus());
+      SaveData = new ExecuteCommandHelper(c => btnSave_Click(null, null));
+      CancelEdit = new ExecuteCommandHelper(c => btnCancel_Click(null, null));
+      CloseWindow = new ExecuteCommandHelper(c => btnClose_Click(null, null));
+
     }
 
     #endregion
@@ -170,7 +180,8 @@ namespace IM.InventoryMovements
           wmwh = c.wmwh
         }).ToList();
 
-        //BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
+      try
+      {
         int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.add);
         if (nRes > 0)
         {
@@ -182,6 +193,11 @@ namespace IM.InventoryMovements
         else
           UIHelper.ShowMessage("The warehouse movements was not saved.", MessageBoxImage.Error,
             "Intelligence Marketing");
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
       
     }
 
