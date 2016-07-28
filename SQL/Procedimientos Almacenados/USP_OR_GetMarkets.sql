@@ -1,10 +1,14 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_GetMarkets]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_GetMarkets]
+GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
 ** Consulta el catalogo de Markets
 ** 
-** [erosado]	24/Febrero/2016 Creado
+** [erosado]	24/Febrero/2016 Created
 **
 */
 create procedure [dbo].[USP_OR_GetMarkets]
@@ -21,6 +25,3 @@ where
 	-- Estatus
 	(@Status = 0 or (@Status = 1 and mkA = 1) or (@Status = 2 and mkA = 0))
 order by mkN
-
-
-

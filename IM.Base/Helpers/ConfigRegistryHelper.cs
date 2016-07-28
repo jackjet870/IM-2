@@ -103,7 +103,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static string GetConfiguredPrinter(string Printer)
     {
-      return GetUrlConfigRegistry()?.GetValue(Printer).ToString();
+      return GetUrlConfigRegistry()?.GetValue(Printer)?.ToString();
     }
     #endregion
   }

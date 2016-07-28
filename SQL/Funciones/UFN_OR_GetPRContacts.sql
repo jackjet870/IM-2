@@ -1,22 +1,22 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[UFN_OR_GetPRContacts]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[UFN_OR_GetPRContacts]
+GO
 
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
-
 **
-
 ** Devuelve el numero de contactos por PR
 ** 
-** [wtorres]	18/Sep/2009 Creado
-** [wtorres]	23/Sep/2009 Convertido a funcion. Agregue el parametro @LeadSources
-** [wtorres]	12/Jul/2010 Agregue el parametro @ConsiderFollow
-** [wtorres]	18/Nov/2010 Agregue el parametro @BasedOnArrival
-** [wtorres]	20/Oct/2011 Ahora no se cuentan los rebooks
-** [erosado]	04/Mar/2016 Modified. Agregue los parametros @SalesRooms, @Countries, @Agencies y @Markets
+** [wtorres]		18/Sep/2009 Created
+** [wtorres]		23/Sep/2009 Modified. Convertido a funcion. Agregue el parametro @LeadSources
+** [wtorres]		12/Jul/2010 Modified. Agregue el parametro @ConsiderFollow
+** [wtorres]		18/Nov/2010 Modified. Agregue el parametro @BasedOnArrival
+** [wtorres]		20/Oct/2011 Modified. Ahora no se cuentan los rebooks
+** [erosado]		04/Mar/2016 Modified. Agregue los parametros @SalesRooms, @Countries, @Agencies y @Markets
 ** [edgrodriguez]	05/May/2016 Modified. Se agregaron parametros a la funcion UFN_OR_GetPercentageSalesman
 **
 */
-
 CREATE function [dbo].[UFN_OR_GetPRContacts](
 
 	@DateFrom datetime,					-- Fecha desde
@@ -29,29 +29,22 @@ CREATE function [dbo].[UFN_OR_GetPRContacts](
 	@Agencies varchar(max) = 'ALL',		-- Clave de las agencias
 	@Markets varchar(max) = 'ALL'		-- Clave de los mercados
 )
-
 returns @Table table (
-
 	PR varchar(10),
 	Contacts money
 )
-
 as
 begin
 
 insert @Table
 
-
--- Contactos (PR Info)
+-- Contactos (PR de contacto)
 -- =============================================
-
 select
 	guPRInfo,
 	Count(*)
-
 from Guests
 where
-
 	-- PR de contacto
 	guPRInfo is not null
 	-- Fecha de contacto
@@ -74,23 +67,17 @@ where
 	and (@Agencies = 'ALL' or guag in (select item from split(@Agencies, ',')))
 	-- Markets
 	and (@Markets = 'ALL' or gumk in (select item from split(@Markets, ',')))
-	
 group by guPRInfo
-union all
 
 -- Contactos (PR 1)
 -- =============================================
-
+union all
 select
 	guPRInvit1,
 	Sum(dbo.UFN_OR_GetPercentageSalesman(guPRInvit1, guPRInvit2, guPRInvit3, DEFAULT, DEFAULT))
-
 from Guests
-
 where
-
 	-- PR 1
-
 	guPRInvit1 is not null
 	-- PR de contacto diferente de los PR de invitacion
 	and guPRInfo not in (IsNull(guPRInvit1, ''), IsNull(guPRInvit2, ''), IsNull(guPRInvit3, ''))
@@ -114,29 +101,17 @@ where
 	and (@Agencies = 'ALL' or guag in (select item from split(@Agencies, ',')))
 	-- Markets
 	and (@Markets = 'ALL' or gumk in (select item from split(@Markets, ',')))
-	
 group by guPRInvit1
 
-union all
-
-
-
 -- Contactos (PR 2)
-
 -- =============================================
-
+union all
 select
-
 	guPRInvit2,
-
 	Sum(dbo.UFN_OR_GetPercentageSalesman(guPRInvit1, guPRInvit2, guPRInvit3, DEFAULT, DEFAULT))
-
 from Guests
-
 where
-
 	-- PR 2
-
 	guPRInvit2 is not null
 	-- PR de contacto diferente de los PR de invitacion
 	and guPRInfo not in (IsNull(guPRInvit1, ''), IsNull(guPRInvit2, ''), IsNull(guPRInvit3, ''))
@@ -160,24 +135,16 @@ where
 	and (@Agencies = 'ALL' or guag in (select item from split(@Agencies, ',')))
 	-- Markets
 	and (@Markets = 'ALL' or gumk in (select item from split(@Markets, ',')))
-
 group by guPRInvit2
-
 union all
 
 -- Contactos (PR 3)
-
 -- =============================================
-
 select
-
 	guPRInvit3,
 	Sum(dbo.UFN_OR_GetPercentageSalesman(guPRInvit1, guPRInvit2, guPRInvit3, DEFAULT, DEFAULT))
-
 from Guests
-
 where
-
 	-- PR 3
 	guPRInvit3 is not null
 	-- PR de contacto diferente de los PR de invitacion
@@ -202,29 +169,17 @@ where
 	and (@Agencies = 'ALL' or guag in (select item from split(@Agencies, ',')))
 	-- Markets
 	and (@Markets = 'ALL' or gumk in (select item from split(@Markets, ',')))
-
 group by guPRInvit3
 
-
-
 -- Contactos (PR de seguimiento)
-
 -- =============================================
-
 if @ConsiderFollow = 1
-
 	insert @Table
-
 	select
-
 		guPRFollow,
-
 		Count(*)
-
 	from Guests
-
 	where
-
 		-- PR de seguimiento
 		guPRFollow is not null
 		-- PR de contacto diferente del PR de seguimiento
@@ -251,11 +206,7 @@ if @ConsiderFollow = 1
 		and (@Agencies = 'ALL' or guag in (select item from split(@Agencies, ',')))
 		-- Markets
 		and (@Markets = 'ALL' or gumk in (select item from split(@Markets, ',')))
-
 	group by guPRFollow
 
-
-
 return
-
 end
