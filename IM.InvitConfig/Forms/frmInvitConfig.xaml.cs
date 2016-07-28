@@ -231,15 +231,16 @@ namespace IM.InvitConfig.Forms
       try
       {
         StaStart("Save Invit...");
-        EnableControls(true, false, true, false, Visibility.Collapsed);
+        EnableControls(true, false, true, false);
         rtbFooter.IsReadOnly = rtbHeader.IsReadOnly = true;
         #region Carga de Header y Footer
         //Se almacena en una variabele los RTF´s
         var header = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbHeader);
         var footer = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbFooter);
         StaEnd();
+
         //Si almenos un RichTexBox se modifico entonces se hace la actualización
-        if (_rtfInvitation.itRTFFooter == footer || _rtfInvitation.itRTFHeader == header) return;
+        if (_rtfInvitation.itRTFFooter == footer && _rtfInvitation.itRTFHeader == header) return;
         _rtfInvitation.itRTFFooter = footer;
         _rtfInvitation.itRTFHeader = header;
         await BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
@@ -280,6 +281,11 @@ namespace IM.InvitConfig.Forms
     ///</history>
     private async void btnPreview_Click(object sender, RoutedEventArgs e)
     {
+      if (!UIRichTextBoxHelper.HasInfo(ref rtbHeader) || !UIRichTextBoxHelper.HasInfo(ref rtbFooter))
+      {
+        UIHelper.ShowMessage("The header and footer must contain information. \n They can not be empty");
+        return;
+      }
       StaStart("Preview Invit...");
       if (cmbLanguage.SelectedValue == null || cmbLeadSource.SelectedValue == null) return;
       EnableControls(true, false, true, false);
@@ -407,7 +413,8 @@ namespace IM.InvitConfig.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-    } 
+    }
     #endregion
+
   }
 }
