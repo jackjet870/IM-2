@@ -22,7 +22,8 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private bool _isNew;
+    private bool _isNew ;
+    private bool _isLoad = true;
     
     CollectionViewSource assistanceViewSource;
     CollectionViewSource assistanceDataViewSource;
@@ -51,6 +52,7 @@ namespace IM.Base.Forms
         palaceId = userdata.SalesRoom.srID;
       cmbWeeks.SelectedIndex = 1;
       user = userdata;
+      
     }
 
     #endregion Constructores y destructores 
@@ -66,13 +68,13 @@ namespace IM.Base.Forms
     {
       if (setMode)
       {
-        dtpStart.IsEnabled = true;
-        dtpEnd.IsEnabled = true;
+        dtpStartt.IsEnabled = true;
+        dtpEndd.IsEnabled = true;
       }
       else
       {
-        dtpStart.IsEnabled = false;
-        dtpEnd.IsEnabled = false;
+        dtpStartt.IsEnabled = false;
+        dtpEndd.IsEnabled = false;
       }
     }
 
@@ -103,10 +105,10 @@ namespace IM.Base.Forms
     {
       DateTime dt;
       dt = GetFirstDayOfWeek(Date);
-
-      dtpStart.SelectedDate = dt;
+      
+      dtpStartt.Value = dt;
       dt = dt.Date.AddDays(6);
-      dtpEnd.SelectedDate = dt;
+      dtpEndd.Value = dt;
     }
 
     /// <summary>
@@ -147,8 +149,8 @@ namespace IM.Base.Forms
         btnShow.IsEnabled = false;
         btnEdit.IsEnabled = false;
         cmbWeeks.IsEnabled = false;
-        dtpStart.IsEnabled = false;
-        dtpEnd.IsEnabled = false;
+        dtpStartt.IsEnabled = false;
+        dtpEndd.IsEnabled = false;
         ///Habilita
         assistanceDataDataGrid.IsReadOnly = false;
         btnSave.IsEnabled = true;
@@ -162,8 +164,8 @@ namespace IM.Base.Forms
         cmbWeeks.IsEnabled = true;
         if (cmbWeeks.SelectedIndex == 0)
         {
-          dtpStart.IsEnabled = true;
-          dtpEnd.IsEnabled = true;
+          dtpStartt.IsEnabled = true;
+          dtpEndd.IsEnabled = true;
         }
         //Inhabilita
         assistanceDataDataGrid.IsReadOnly = true;
@@ -179,7 +181,7 @@ namespace IM.Base.Forms
     async void LoadGrid()
     {
       StaStart("Loading Assistance List...");
-      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
       assistanceDataViewSource = ((CollectionViewSource)(this.FindResource("assistanceDataViewSource")));
       assistanceStatusViewSource = ((CollectionViewSource)(this.FindResource("assistanceStatusViewSource")));
       assistanceViewSource = ((CollectionViewSource)(this.FindResource("assistanceViewSource")));
@@ -193,9 +195,9 @@ namespace IM.Base.Forms
       }
       else
       {
-        if (MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        if (System.Windows.MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
         {
-          List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+          List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
           lstPersonAssist.ForEach(c =>
           {
             var assistance = AssistanceToAssistance.ConvertPersonnelAssistanceToAssistanceData(c);
@@ -256,7 +258,7 @@ namespace IM.Base.Forms
 
       nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.add : EnumMode.edit);
       ChangeUseMode(false);
-      MessageBox.Show("Saved Assistence", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+      UIHelper.ShowMessage("Saved Assistance", MessageBoxImage.Information, "Saved");
       LoadGrid();
       StaEnd();
     }
@@ -317,25 +319,22 @@ namespace IM.Base.Forms
           break;
       }
     }
-
-    private void dtpStart_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    
+    private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      ChangedtpDates(dtpStart.SelectedDate.Value);
-    }
-
-    private void dtpEnd_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-    {
-      ChangedtpDates(dtpEnd.SelectedDate.Value);
+      if(!_isLoad)
+        ChangedtpDates(dtpStartt.Value.Value);
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      _isLoad = false;
       StaStart("Loading Data...");
-      dtpStart.FirstDayOfWeek = DayOfWeek.Monday;
-      dtpEnd.FirstDayOfWeek = DayOfWeek.Monday;
       _dtmServerDate = BRHelpers.GetServerDate();
-      dtpStart.SelectedDate = _dtmServerDate;
+      dtpStartt.Value = _dtmServerDate;
+      dtpEndd.Value = _dtmServerDate.AddDays(7);
       ChangeUseMode(false);
+      //_isLoad = false;
       StaEnd();
     }
 
@@ -370,13 +369,14 @@ namespace IM.Base.Forms
       else
         filters.Add(Tuple.Create("Sales Room", user.SalesRoom.srID));
 
-      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
       if (_listAssistData.Count > 0)
       {
         dt = TableHelper.GetDataTableFromList(_listAssistData, true);
         rptName = "Assistance " + palaceId;
-        string dateRange = DateHelper.DateRange(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+
+        string dateRange = DateHelper.DateRange(dtpStartt.Value.Value, dtpEndd.Value.Value);
+        string dateRangeFileName = DateHelper.DateRangeFileName(dtpStartt.Value.Value, dtpEndd.Value.Value);
 
         List<ExcelFormatTable> format = new List<ExcelFormatTable>();
         format.Add(new ExcelFormatTable() { Title = "Palace Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
@@ -394,7 +394,7 @@ namespace IM.Base.Forms
         format.Add(new ExcelFormatTable() { Title = "Sunday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
-        MessageBox.Show("Generated Report", "Generated", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Generated Report", MessageBoxImage.Exclamation, "Generated");
       }
       else
       {
@@ -426,6 +426,9 @@ namespace IM.Base.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
+
     #endregion Eventos del Formulario
+
+    
   }
 }

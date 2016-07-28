@@ -3,14 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Base.Forms.frmAssistance"
         mc:Ignorable="d"
+
         Title="Assistance" Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <Window.Resources>
-        <CollectionViewSource x:Key="assistanceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Assistance}, CreateList=True}"/>
-        <CollectionViewSource x:Key="assistanceStatusViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:AssistanceStatus}, CreateList=True}"/>
-        <CollectionViewSource x:Key="assistanceDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:AssistanceData}, CreateList=True}"/>
+        <ResourceDictionary>
+            <CollectionViewSource x:Key="assistanceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Assistance}, CreateList=True}"/>
+            <CollectionViewSource x:Key="assistanceStatusViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:AssistanceStatus}, CreateList=True}"/>
+            <CollectionViewSource x:Key="assistanceDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:AssistanceData}, CreateList=True}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -19,13 +26,13 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
+
         <!--#region Menu-->
         <Grid x:Name="grdMenu">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
             <!--#region Menu Dates Column-->
             <Grid x:Name="grdMenuDates" SnapsToDevicePixels="True" Grid.Column="0" Margin="10,0,5,0">
@@ -47,7 +54,7 @@
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="txbFrom" Text="From: " Grid.Column="0"/>
-                    <DatePicker x:Name="dtpStart"  Grid.Column="1" IsEnabled="False" SelectedDateChanged="dtpStart_SelectedDateChanged" />
+                    <wpftk:DateTimePicker x:Name="dtpStartt" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dateTime_ValueChanged" Grid.Column="1" IsEnabled="False" Margin="0,0,-19,0" Height="18" VerticalAlignment="Bottom" Width="130" HorizontalAlignment="Right"/>
                 </Grid>
                 <Grid x:Name="grdTo" VerticalAlignment="Center" Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -55,19 +62,19 @@
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="txbTo" Text="To: " Grid.Column="0"/>
-                    <DatePicker x:Name="dtpEnd"  Grid.Column="1" IsEnabled="False" SelectedDateChanged="dtpEnd_SelectedDateChanged" />
+                    <wpftk:DateTimePicker x:Name="dtpEndd" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dateTime_ValueChanged"  Grid.Column="1" IsEnabled="False" Margin="0,0,-19,0" Height="18" VerticalAlignment="Bottom" Width="130" HorizontalAlignment="Right"/>
                 </Grid>
             </Grid>
             <!--#endregion Menu Dates Column-->
             <!--#region Menu Buttons Column-->
             <Grid x:Name="grdMenuButtons" Grid.Column="1" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="44"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btnToExcel" Content="Excel" Grid.Row="0" VerticalAlignment="Center" Margin="10,10,10,10" Click="btnToExcel_Click" />
-                <Button x:Name="btnShow" Content="Show" Grid.Row="2" VerticalAlignment="Center"  Margin="10,10,10,10" Click="btnShow_Click"  />
+                <Button x:Name="btnToExcel" Content="Excel" Grid.Row="0" VerticalAlignment="Center" Margin="20,10,10,10" Click="btnToExcel_Click" />
+                <Button x:Name="btnShow" Content="Show" Grid.Row="2" VerticalAlignment="Center"  Margin="20,10,01,10" Click="btnShow_Click"  />
             </Grid>
             <!--#endregion Menu Buttons Column-->
         </Grid>

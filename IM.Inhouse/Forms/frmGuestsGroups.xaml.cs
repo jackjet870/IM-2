@@ -9,6 +9,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Base.Forms;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Inhouse.Forms
 {
@@ -334,7 +335,7 @@ namespace IM.Inhouse.Forms
               }
             }
             if (exist)
-              MessageBox.Show("The Guest " + newGuest.guID + " already exists in the group", "Can´t Add Guest", MessageBoxButton.OK, MessageBoxImage.Error);
+              UIHelper.ShowMessage($"The Guest {newGuest.guID} already exists in the group", MessageBoxImage.Error, "Can´t Add Guest");
             else
               _lstGuestTemp.Add(newGuest);
           }
@@ -402,7 +403,7 @@ namespace IM.Inhouse.Forms
     {
       if (txtDescription.IsEnabled == true)
       {
-        MessageBoxResult msr = MessageBox.Show("This form is currently in edit mode. Please save or undo your changes before closing it.", "Closing", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        MessageBoxResult msr = System.Windows.MessageBox.Show("This form is currently in edit mode. Please save or undo your changes before closing it.", "Closing", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (msr == MessageBoxResult.No)
           e.Cancel = true;
       }
@@ -419,19 +420,8 @@ namespace IM.Inhouse.Forms
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      if (dtpGuestStart.SelectedDate != null)
-        if (dtpGuestEnd.SelectedDate != null)
-          LoadGrdGuestsGroups();
-        else
-        {
-          UIHelper.ShowMessage("Select a End Date", MessageBoxImage.Asterisk, "Inhouse");
-          dtpGuestEnd.Focus();
-        }
-      else
-      {
-        UIHelper.ShowMessage("Select a Start Date", MessageBoxImage.Asterisk, "Inhouse");
-        dtpGuestStart.Focus();
-      }
+      if(DateHelper.ValidateValueDate(dtpGuestStart,dtpGuestEnd))
+        LoadGrdGuestsGroups();
     }
 
     private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -470,8 +460,7 @@ namespace IM.Inhouse.Forms
         EnableControls(2);
       }
       else
-        MessageBox.Show("Select a Guests Group", "Can''t Edit", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
+        UIHelper.ShowMessage("Select a Guests Group",MessageBoxImage.Exclamation, "Can''t Edit");
       _mode = true;
     }
 
@@ -537,14 +526,9 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    private void dtpGuestStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      DateHelper.ValidateValueDate((DatePicker)sender);
-    }
-
-    private void dtpGuestEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-      DateHelper.ValidateValueDate((DatePicker)sender);
+      DateHelper.ValidateValueDate((DateTimePicker)sender);
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

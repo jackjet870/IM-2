@@ -3,30 +3,36 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmGuestsGroups"
         mc:Ignorable="d"
-        Title="Guests Groups"  Height="650" Width="800" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="Guests Groups"  Height="650" Width="928" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
-        <Style TargetType="Button" x:Key="btnOptions">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Background" Value="White"/>
-        </Style>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="btnOptions">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Background" Value="White"/>
+            </Style>
 
-        <Style TargetType="Image" x:Key="ImageOptions">
-            <Setter Property="Width" Value="24"/>
-            <Setter Property="Height" Value="24"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
+            <Style TargetType="Image" x:Key="ImageOptions">
+                <Setter Property="Width" Value="24"/>
+                <Setter Property="Height" Value="24"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
 
-        <Style TargetType="TextBlock" x:Key="txtOptions">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="9"/>
-            <Setter Property="FontStyle" Value="Normal"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
+            <Style TargetType="TextBlock" x:Key="txtOptions">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="9"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -77,9 +83,9 @@
                 <Label x:Name="lblGuestName" Content="Name" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="txtguLastName1" Text="{Binding guLastName1}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
                 <Label x:Name="lblGuestDateFrom" Content="Arrival Date From" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2"/>
-                <DatePicker x:Name="dtpGuestStart" SelectedDate="{Binding guCheckInD}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" SelectedDateChanged="dtpGuestStart_SelectedDateChanged"/>
+                <wpftk:DateTimePicker x:Name="dtpGuestStart" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckInD}" ValueChanged="dateTime_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2"/>
                 <Label x:Name="lblGuestDateTo" Content="Arrival Date To" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3"/>
-                <DatePicker x:Name="dtpGuestEnd" SelectedDate="{Binding guCheckOutD}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" SelectedDateChanged="dtpGuestEnd_SelectedDateChanged"/>
+                <wpftk:DateTimePicker x:Name="dtpGuestEnd" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckInD}" ValueChanged="dateTime_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3"/>
             </Grid>
 
             <Grid Grid.Column="2" x:Name="grdSearch">
