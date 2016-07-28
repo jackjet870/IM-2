@@ -526,7 +526,12 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    private void dtpGuestStart_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      DateHelper.ValidateValueDate((DateTimePicker)sender);
+    }
+
+    private void dtpGuestEnd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       DateHelper.ValidateValueDate((DateTimePicker)sender);
     }

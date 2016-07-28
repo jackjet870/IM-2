@@ -83,9 +83,9 @@
                 <Label x:Name="lblGuestName" Content="Name" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="txtguLastName1" Text="{Binding guLastName1}" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
                 <Label x:Name="lblGuestDateFrom" Content="Arrival Date From" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2"/>
-                <wpftk:DateTimePicker x:Name="dtpGuestStart" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckInD}" ValueChanged="dateTime_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2"/>
+                <wpftk:DateTimePicker x:Name="dtpGuestStart" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckInD}" ValueChanged="dtpGuestStart_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2"/>
                 <Label x:Name="lblGuestDateTo" Content="Arrival Date To" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3"/>
-                <wpftk:DateTimePicker x:Name="dtpGuestEnd" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckInD}" ValueChanged="dateTime_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3"/>
+                <wpftk:DateTimePicker x:Name="dtpGuestEnd" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding guCheckOutD}" ValueChanged="dtpGuestEnd_ValueChanged" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3"/>
             </Grid>
 
             <Grid Grid.Column="2" x:Name="grdSearch">
