@@ -6353,5 +6353,27 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSelfGenTeam>("USP_IM_RptSelfGenTeam", dateFromParameter, dateToParameter, salesRoomsParameter, salesmanIDParameter);
         }
+    
+        public virtual int USP_OR_UpdateGuestReimpresionMotive(Nullable<int> guest, Nullable<byte> reimpresionMotive)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var reimpresionMotiveParameter = reimpresionMotive.HasValue ?
+                new ObjectParameter("ReimpresionMotive", reimpresionMotive) :
+                new ObjectParameter("ReimpresionMotive", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestReimpresionMotive", guestParameter, reimpresionMotiveParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGuestReimpresionNumber(Nullable<int> guest)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestReimpresionNumber", guestParameter);
+        }
     }
 }

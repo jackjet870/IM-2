@@ -7491,6 +7491,13 @@
           <Parameter Name="Gift" Type="varchar" Mode="In" />
           <Parameter Name="TransactionTypeOpera" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateGuestReimpresionMotive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="ReimpresionMotive" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGuestReimpresionNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateGuestSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
           <Parameter Name="Sale" Type="bit" Mode="In" />
@@ -10536,7 +10543,7 @@
           <Property Name="noText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="noStartD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="noEndD" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="LeadSources" Relationship="Self.NoticesByLeadSource" FromRole="Notices" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="LeadSources" Relationship="Self.NoticesByLeadSource" FromRole="Notices" ToRole="LeadSources" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Configuration">
           <Key>
@@ -18065,6 +18072,13 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
             <Parameter Name="SalesmanID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestReimpresionMotive">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="ReimpresionMotive" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestReimpresionNumber">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -30952,6 +30966,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestReimpresionMotive" FunctionName="IMModel.Store.USP_OR_UpdateGuestReimpresionMotive" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestReimpresionNumber" FunctionName="IMModel.Store.USP_OR_UpdateGuestReimpresionNumber" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
