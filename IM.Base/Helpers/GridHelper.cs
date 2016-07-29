@@ -5,6 +5,9 @@ using System.Reflection;
 using System.Windows.Controls;
 using IM.Model.Helpers;
 using System.Windows;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Windows.Input;
+using IM.Styles.Classes;
 
 namespace IM.Base.Helpers
 {
@@ -12,7 +15,7 @@ namespace IM.Base.Helpers
   /// Clase que contiene las funciones comunes de grids
   /// </summary>
   public static class GridHelper
-  {    
+  {
     #region SelectRow
 
     /// <summary>
@@ -27,14 +30,14 @@ namespace IM.Base.Helpers
     /// [michan] modified 28/04/2016 Se agregó el parametro de la columna a seleccionar
     /// [emoguel] modified Se agregó para cambiar el campo de busqueda
     /// </history>
-    public static void SelectRow(DataGrid grid, int nIndex, int? column = 0,bool blnEdit=false)
+    public static void SelectRow(DataGrid grid, int nIndex, int? column = 0, bool blnEdit = false)
     {
       if (nIndex > -1)
       {
         grid.Focus();
         grid.SelectedIndex = nIndex;
         if (grid.SelectedItem != null)
-        { 
+        {
           grid.ScrollIntoView(grid.Items[nIndex]);
           grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[column.Value]);
           //Se cambia el campo de busqueda
@@ -83,7 +86,7 @@ namespace IM.Base.Helpers
       }
 
       return _lstResult;
-      }
+    }
     #endregion
 
     #region GetItems
@@ -133,8 +136,8 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 18/05/2016
     /// </history>
-    public static bool HasRepeatItem(Control control, DataGrid dgrItems,bool blnClone=false,string strPropGrid="", string typeName="")
-    {      
+    public static bool HasRepeatItem(Control control, DataGrid dgrItems, bool blnClone = false, string strPropGrid = "", string typeName = "")
+    {
       switch (control.GetType().Name)
       {
         case "ComboBox":
@@ -144,9 +147,9 @@ namespace IM.Base.Helpers
             var listaGrid = dgrItems.ItemsSource.Cast<object>().ToList();//Lista de registros del grid
             var gridSelec = dgrItems.SelectedItem;//Item seleccionado del grid
             var selectedItem = combobox.SelectedItem;//Nuevo item seleccionado                                   
-            
+
             if (selectedItem != null)
-            {              
+            {
               if (gridSelec != selectedItem)
               {
                 string strPropControl = combobox.SelectedValuePath;//Valor para hacer el filtro
@@ -157,17 +160,17 @@ namespace IM.Base.Helpers
 
                 var gridSelectValue = typeFromGrid.GetProperty(strPropGrid).GetValue(gridSelec, null);
                 var selectItemValue = typeFromControl.GetProperty(strPropControl).GetValue(selectedItem, null);
-                
+
                 if (selectItemValue != null)
                 {
                   var itemVal = listaGrid.Where(it => typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) != gridSelectValue
                     && (typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) == selectItemValue || typeFromGrid.GetProperty(strPropGrid).GetValue(it, null).Equals(selectItemValue))).FirstOrDefault();
                   if (itemVal != null)
                   {
-                    UIHelper.ShowMessage(((typeName!="")?typeName:typeFromControl.Name)+ " must not be repeated");
+                    UIHelper.ShowMessage(((typeName != "") ? typeName : typeFromControl.Name) + " must not be repeated");
                     return true;
                   }
-                  else if(blnClone)
+                  else if (blnClone)
                   {
                     ObjectHelper.CopyProperties(gridSelec, selectedItem);
                   }
@@ -280,7 +283,7 @@ namespace IM.Base.Helpers
             Type typeTemp = _GridTemp.GetType();
             var propertyTemp = typeTemp.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
 
-            if (propertyTemp.Count > 0 &&  i != j) // Para evitar que sea el mismo row
+            if (propertyTemp.Count > 0 && i != j) // Para evitar que sea el mismo row
             {
               // recorremos los campos que forman la llave primaria
               foreach (string field in Fields)
@@ -366,7 +369,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void ValidateEditNumber(ref int pNumber, ref bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
+    public static void ValidateEditNumber(int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
       if (pNumber >= 0)
@@ -397,8 +400,155 @@ namespace IM.Base.Helpers
           pNumber = pLowerBound;
       }
 
-    } 
+    }
     #endregion
 
+    #region Update All Cells From a Row
+    /// <summary>
+    /// Sirve para actualizar nuestras celdas del grid con los valores de el objeto enlazado
+    /// </summary>
+    /// <param name="dtg">DataGrid que vamos a actualizar</param>
+    /// <history>
+    /// [erosado] 29/07/2016  Created.
+    /// </history>
+    public static void updateCellsFromARow(DataGrid dtg)
+    {
+      //Si el Grid es diferente de NULL
+      if (dtg != null && dtg?.SelectedIndex != -1)
+      {
+        //Obtenemos el DataGridRow seleccionado
+        DataGridRow dtgRow = (DataGridRow)dtg.ItemContainerGenerator.ContainerFromIndex(dtg.SelectedIndex);
+        //Obtenemos la lista de las columnas
+        List<DataGridColumn> columns = dtg?.Columns?.ToList();
+
+        //Si tiene alguna columna
+        if (columns.Any())
+        {
+          columns.ForEach(column =>
+          {
+            //Obtenemos la celda
+            DataGridCell cell = column.GetCellContent(dtgRow).Parent as DataGridCell;
+
+            if (cell != null)
+            {
+
+              Type controlType = cell.Content.GetType();
+
+              switch (controlType.Name)
+              {
+                case "TextBlock":
+                  TextBlock txtb = cell.Content as TextBlock;
+                  var txtBinding = txtb.GetBindingExpression(TextBlock.TextProperty);
+                  txtBinding.UpdateTarget();
+                  break;
+                case "TextBlockComboBox":
+                  ComboBox cmb = cell.Content as ComboBox;
+                  var cmbBinding = cmb.GetBindingExpression(ComboBox.SelectedValueProperty);
+                  cmbBinding.UpdateTarget();
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        }
+      }
+    }
+
+    #endregion
+
+    #region SetUpGrid
+    /// <summary>
+    /// Configura el Estilo de los DataGridTextColumn 
+    /// Maxlength, Admision de caracteres especiales, Numerico, Decimal , Precision, Escala,
+    /// </summary>
+    /// <param name="dgrGrid">Grid a configurar</param>
+    /// <param name="objBinding">Objeto con el que se quiere configurar el grid</param>
+    /// <history>
+    /// [emoguel] 28/07/2016  Created.
+    /// [erosado] 29/07/2016  Modified. Se agregó el Tag para definir el Maxlength desde la columna.
+    /// </history>
+    public static void setUpGrid(DataGrid dgrGrid, object objBinding, bool blnCharacters = false)
+    {
+      List<DataGridTextColumn> lstColumns = dgrGrid.Columns.Where(dgc => dgc is DataGridTextColumn).OfType<DataGridTextColumn>().ToList();
+
+      #region Object properties
+      Type type = objBinding.GetType();
+      List<PropertyInfo> lstProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual).ToList();
+      EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);
+      #endregion
+
+      lstColumns.ForEach(dgc =>
+      {
+
+        if (!string.IsNullOrWhiteSpace(dgc.SortMemberPath))
+        {
+          PropertyInfo property = lstProperties.Where(pi => pi.Name == dgc.SortMemberPath).FirstOrDefault();
+          if (property != null)
+          {
+            EdmMember edmMember = entityTypeBase.Members.Where(em => em.Name == property.Name).FirstOrDefault();
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+            Facet facet;
+            Style style = new Style(typeof(TextBox));
+            switch (typeCode)
+            {
+              #region String
+              case TypeCode.String:
+              case TypeCode.Char:
+                {
+                  facet = edmMember.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length                  
+                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, Convert.ToInt32(facet.Value)));
+                  if (blnCharacters)//Bloquea caracteres especiales
+                  {
+                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.TextInputSpecialCharacters)));
+                  }
+                  dgc.EditingElementStyle = style;
+                  break;
+                }
+              #endregion
+
+              #region Decimal
+              case TypeCode.Decimal:
+              case TypeCode.Double:
+                {
+                  int Precision = Convert.ToInt32(edmMember.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
+                  int Scale = Convert.ToInt32(edmMember.TypeUsage.Facets.Where(fc => fc.Name == "Scale").FirstOrDefault().Value);
+                  if (Scale > 0)
+                  {
+                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput)));
+                  }
+                  else
+                  {
+                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));
+                  }
+                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, Precision));
+                  break;
+                }
+              #endregion
+
+              #region Int
+              case TypeCode.Int16:
+              case TypeCode.Int32:
+              case TypeCode.Int64:
+                {
+                  string tagValue = TagPropertyClass.GetTag(dgc).ToString();
+                  int maxLength = 0;
+                  if (int.TryParse(tagValue, out maxLength))
+                  {
+                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty, maxLength));
+                  }
+                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));
+                  break;
+                }
+                #endregion
+            }
+
+            dgc.EditingElementStyle = style;
+          }
+        }
+
+      });
+    }
+    #endregion
   }
 }

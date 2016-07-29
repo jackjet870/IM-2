@@ -127,9 +127,11 @@ namespace IM.Base.Classes
     /// <param name="CancelField">Propiedad para cancelar un gift</param>
     /// <history>
     /// [vipacheco] 24/Mayo/2016 Created
+    /// [erosado] 27/07/2016  Modified. Se volvio generico
     /// </history>
-    public static void CalculateTotalGifts(DataGrid Grid, EnumGiftsType GiftsType, ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtTotalToPay,
-                                bool OnlyCancellled = false, string CancelField = "")
+    public static void CalculateTotalGifts(DataGrid Grid, EnumGiftsType GiftsType, string QuantityField, string giftField, string priceMField,
+      string priceMinorField, string priceAdultField, string priceAField,  string priceExtraAdultsField, TextBox txtTotalCost ,
+      TextBox txtTotalPrice = null,  TextBox txtTotalToPay = null, bool OnlyCancellled = false, string CancelField = "", string saleField="")
     {
       decimal curCost = 0;
       decimal curPrice = 0;
@@ -144,19 +146,19 @@ namespace IM.Base.Classes
 
         if (properties.Count > 0) // Verificamos que tenga propiedades
         {
-          if (((int)type.GetProperty("geQty").GetValue(item, null)) != 0 && ((string)type.GetProperty("gegi").GetValue(item, null)) != "")
+          if (((int)type.GetProperty(QuantityField).GetValue(item, null)) != 0 && ((string)type.GetProperty(giftField).GetValue(item, null)) != "")
           {
             // Calculamos el costo del regalo
-            curCost = ((decimal)type.GetProperty("gePriceA").GetValue(item, null)) + ((decimal)type.GetProperty("gePriceM").GetValue(item, null));
+            curCost = ((decimal)type.GetProperty(priceAField).GetValue(item, null)) + ((decimal)type.GetProperty(priceMField).GetValue(item, null));
 
             // Calculamos el precio del regalo
-            curPrice = ((decimal)type.GetProperty("gePriceAdult").GetValue(item, null)) + ((decimal)type.GetProperty("gePriceMinor").GetValue(item, null)) + ((decimal)type.GetProperty("gePriceExtraAdult").GetValue(item, null));
+            curPrice = ((decimal)type.GetProperty(priceAdultField).GetValue(item, null)) + ((decimal)type.GetProperty(priceMinorField).GetValue(item, null)) + ((decimal)type.GetProperty(priceExtraAdultsField).GetValue(item, null));
 
             // Si se desean todos los regalos
             if (!OnlyCancellled)
             {
               // Si la cantidad es positiva
-              if (((int)type.GetProperty("geQty").GetValue(item, null)) > 0)
+              if (((int)type.GetProperty(QuantityField).GetValue(item, null)) > 0)
               {
                 curTotalCost += curCost;
                 curTotalPrice += curPrice;
@@ -165,7 +167,7 @@ namespace IM.Base.Classes
                 if (GiftsType == EnumGiftsType.ReceiptGifts)
                 {
                   // Si el regalo esta marcado como venta
-                  if (((bool)type.GetProperty("geSale").GetValue(item, null)) == true)
+                  if (((bool)type.GetProperty(saleField).GetValue(item, null)) == true)
                   {
                     curTotalToPay += curPrice;
                   }
@@ -250,7 +252,7 @@ namespace IM.Base.Classes
     /// [vipacheco] 30/Junio/2016 Created
     /// [erosado] 26/07/2016  Modified. Se agrego Reflection para volver generico, y se agrego el parametro ExtraAdults
     /// </history>
-    public static void ValidateAdultsMinors<T>(EnumAdultsMinors Enum, T Row, ref bool Cancel, string adultsField, string minorsField, string extraAdultsField)
+    public static void ValidateAdultsMinors<T>(EnumAdultsMinors Enum, T Row, bool Cancel, string adultsField, string minorsField, string extraAdultsField="")
     {
       int value = 0;
       bool cancel = false;
@@ -259,15 +261,15 @@ namespace IM.Base.Classes
       {
         case EnumAdultsMinors.Adults:
           value =(int)Row.GetType().GetProperty(adultsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of adults", 99, 0);
+          GridHelper.ValidateEditNumber(value, cancel, "Quantity of adults", 99, 0);
           break;
         case EnumAdultsMinors.Minors:
           value = (int)Row.GetType().GetProperty(minorsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of minors", 99, 0);
+          GridHelper.ValidateEditNumber(value, cancel, "Quantity of minors", 99, 0);
           break;
         case EnumAdultsMinors.ExtraAdults:
           value = (int)Row.GetType().GetProperty(extraAdultsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of extra adults", 99, 0);
+          GridHelper.ValidateEditNumber(value, cancel, "Quantity of extra adults", 99, 0);
           break;
       }
       // si es valido
@@ -286,21 +288,21 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida la cantidad maxima de un regalo al ingresar la cantidad
     /// </summary>
-    /// <param name="pRow"></param>
-    /// <param name="pIsExchange"></param>
+    /// <param name="row"></param>
+    /// <param name="isExchange"></param>
     /// <param name="pCancel"></param>
     /// <param name="gift">Gift que vamos calcular</param>
-    /// <param name="pLowerBound">limite inferior para ingresar</param>
-    /// <param name="pQuantityField">Propiedad Cantidad del regalo</param>
+    /// <param name="lowerBound">limite inferior para ingresar</param>
+    /// <param name="quantityField">Propiedad Cantidad del regalo</param>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// [erosado] 26/07/2016  Modified. se agregó el parametro Gift.
     /// </history>
-    public static void ValidateMaxQuantityOnEntryQuantity<T>(ref T pRow, Gift gift ,bool pIsExchange, int pLowerBound, ref bool pCancel, string pQuantityField)
+    public static void ValidateMaxQuantityOnEntryQuantity<T>(T row, Gift gift ,bool isExchange, int lowerBound, bool pCancel, string quantityField)
     {
-      int value = (int)pRow.GetType().GetProperty(pQuantityField).GetValue(pRow, null);
+      int value = (int)row.GetType().GetProperty(quantityField).GetValue(row);
       bool cancel = false;
-      GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity ", 9999, pLowerBound, 1);
+      GridHelper.ValidateEditNumber(value, cancel, "Quantity ", 9999, lowerBound, 1);
 
       // si es valido
       if (!cancel)
@@ -308,7 +310,7 @@ namespace IM.Base.Classes
         // Si ya se ingreso el regalo
         if (gift != null)
         {
-          pCancel = !ValidateMaxQuantity(gift, value, pIsExchange, ref pRow, pQuantityField);
+          pCancel = !ValidateMaxQuantity(gift, value, isExchange, ref row, quantityField);
         }
       }
       else

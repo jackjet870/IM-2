@@ -69,7 +69,8 @@ namespace IM.Host.Classes
     public static void CalculateTotalGifts(DataGrid Grid, ref TextBox txtTotalCost, bool OnlyCancellled = false, string CancelField = "")
     {
       TextBox _null = null;
-      Gifts.CalculateTotalGifts(Grid, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref _null, ref _null, OnlyCancellled, CancelField);
+      //TODO: Agregar parametros
+      //Gifts.CalculateTotalGifts(Grid, EnumGiftsType.ReceiptGifts,  txtTotalCost,  _null,  _null, OnlyCancellled, CancelField);
     }
     #endregion
 

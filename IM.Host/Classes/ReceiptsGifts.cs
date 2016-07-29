@@ -290,20 +290,20 @@ namespace IM.Host.Classes
       switch (cell.Column.SortMemberPath)
       {
         case "geAdults":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, pRow, ref pCancel, "geAdults","geMinors","geExtraAdults" );
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, pRow, pCancel, "geAdults","geMinors","geExtraAdults" );
           break;
         case "geMinors":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, pRow, ref pCancel, "geAdults", "geMinors", "geExtraAdults");
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, pRow, pCancel, "geAdults", "geMinors", "geExtraAdults");
           break;
         case "geExtraAdults":
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.ExtraAdults, pRow, ref pCancel, "geAdults", "geMinors", "geExtraAdults");
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.ExtraAdults, pRow, pCancel, "geAdults", "geMinors", "geExtraAdults");
           break;
         case "geQty":
           //Obtenemos el Gift
           var gift = frmHost._lstGifts.Where(x => x.giID == pRow.gegi ).First();
 
           // validamos la cantidad maxima del regalo
-          Gifts.ValidateMaxQuantityOnEntryQuantity(ref pRow, gift, pIsExchange, LowerBound, ref pCancel, "geQty");
+          Gifts.ValidateMaxQuantityOnEntryQuantity(pRow, gift, pIsExchange, LowerBound, pCancel, "geQty");
 
           //si el regalo esta guardado como promocion de Opera
           if (pRow.geAsPromotionOpera == true)
@@ -486,7 +486,8 @@ namespace IM.Host.Classes
           break;
       }
       // calculamos el monto total de regalos
-      Gifts.CalculateTotalGifts(pGrid, EnumGiftsType.ReceiptGifts, ref pTxtTotalCost, ref pTxtTotalPrice, ref pTxtTotalToPay);
+      //TODO: Agregar parametros
+      //Gifts.CalculateTotalGifts(pGrid, EnumGiftsType.ReceiptGifts,  pTxtTotalCost,  pTxtTotalPrice,  pTxtTotalToPay);
 
       // si se debe calcular el cargo
       if (calculateCharge)
@@ -1155,7 +1156,8 @@ namespace IM.Host.Classes
     public static void CalculateTotalGifts(DataGrid Grid, EnumGiftsType GiftsType, ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtTotalToPay,
                                     bool OnlyCancellled = false, string CancelField = "")
     {
-      Gifts.CalculateTotalGifts(Grid, GiftsType, ref txtTotalCost, ref txtTotalPrice, ref txtTotalToPay, OnlyCancellled, CancelField);
+      //TODO: Agregar parametros
+      //Gifts.CalculateTotalGifts(Grid, GiftsType,  txtTotalCost,  txtTotalPrice,  txtTotalToPay, OnlyCancellled, CancelField);
     }
     #endregion
 

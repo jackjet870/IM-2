@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\RichTextBoxToolBar.cs" />
+    <Compile Include="Classes\TagProperty.cs" />
     <Compile Include="Interfaces\IRichTextBoxToolBar.cs" />
     <Compile Include="UserControls\ToolBarRtfStyle.xaml.cs">
       <DependentUpon>ToolBarRtfStyle.xaml</DependentUpon>

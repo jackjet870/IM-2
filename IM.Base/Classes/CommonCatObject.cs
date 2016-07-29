@@ -50,8 +50,17 @@ namespace IM.Base.Classes
     public List<LocationByUser> Locations => _locations;
     private List<DisputeStatus> _disputeStatus;
     public List<DisputeStatus> DisputeStatus => _disputeStatus;
-    private ObservableCollection<InvitationGiftCustom> _invitationGiftList;
-    public ObservableCollection<InvitationGiftCustom> InvitationGiftList => _invitationGiftList;
+
+    private ObservableCollection<InvitationGift> _invitationGiftList;
+
+    public ObservableCollection<InvitationGift> InvitationGiftList
+    {
+      get { return _invitationGiftList; }
+      set { _invitationGiftList = value; OnPropertyChanged("InvitationGiftList"); }
+    }
+
+    //private ObservableCollection<InvitationGiftCustom> _invitationGiftList;
+    //public ObservableCollection<InvitationGiftCustom> InvitationGiftList => _invitationGiftList;
     private ObservableCollection<BookingDeposit> _bookingDepositList;
     public ObservableCollection<BookingDeposit> BookingDepositList => _bookingDepositList;
     private ObservableCollection<GuestCreditCard> _guestCreditCardList;
@@ -91,7 +100,7 @@ namespace IM.Base.Classes
       if (invitationType == EnumInvitationMode.modAdd)
       {
         //Asignamos 
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGiftCustom>(), "InvitationGiftList"); 
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), "InvitationGiftList"); 
         SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), "BookingDepositList");
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), "GuestCreditCardList");
         SetField(ref _aditionalGuestList, new ObservableCollection<Guest>(), "AditionalGuestList");
@@ -99,12 +108,17 @@ namespace IM.Base.Classes
       }
       else
       {
+
         //Search information 
-        List<InvitationGiftCustom> lista = new List<InvitationGiftCustom>();
-        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
-        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
-        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGiftCustom>(lista), "InvitationGiftList");
+        List<InvitationGift> lista = new List<InvitationGift>();
+        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
+        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
+        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(lista), "InvitationGiftList");
+
+
+        Guest gue = new Guest() { gums1 = "N", gums2 = "W" };
+        SetField(ref _guestObj, gue, "GuestObj");
       }
     }
 

@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Data;
 using System.ComponentModel;
 using System;
+using System.Windows.Data;
+using IM.Styles.Classes;
 
 namespace IM.Base.Forms
 {
@@ -25,6 +27,9 @@ namespace IM.Base.Forms
     private readonly EnumInvitationType _invitationType;
     private readonly int _guestId;
     private readonly EnumInvitationMode _invitationMode;
+    //Grids Banderas
+    private DataGridCellInfo _IGCurrentCell;
+    private bool _hasError = false;
     #endregion
     public frmInvitation(EnumInvitationType InvitationType, UserData User, int GuestId, EnumInvitationMode InvitationMode, bool AllowReschedule = true)
     {
@@ -37,12 +42,17 @@ namespace IM.Base.Forms
         _invitationMode = InvitationMode;
         DataContext = catObj;
         InitializeComponent();
-        
-        ////Inicializamos el DataGrid InvitationGift
-        //dtgGifts.InitializingNewItem += (sender, e) => 
-        //{
-        //  InvitationGiftCustom newInvitationGiftCustom = e.NewItem as InvitationGiftCustom;
-        //};
+
+
+        dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
+        {
+          if (e.NewItem != null)
+          {
+            ((InvitationGift)e.NewItem).igQty = 1;
+          }
+        });
+
+        GridHelper.setUpGrid(dtgGifts, new InvitationGift());
 
       }
       catch (Exception ex)
@@ -55,16 +65,16 @@ namespace IM.Base.Forms
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
       ControlsConfiguration(_invitationType);
-      UIHelper.SetUpControls(new Guest(),this);
+      UIHelper.SetUpControls(new Guest(), this);
 
     }
 
     private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       CommonCatObject k = DataContext as CommonCatObject;
-      var h =  k.GuestObj.guID;
+      var h = k.GuestObj.guID;
 
-     
+
     }
     #region Metodos Privados
     /// <summary>
@@ -260,57 +270,71 @@ namespace IM.Base.Forms
 
     private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
-      DataGrid dtg = sender as DataGrid;
-      InvitationGiftCustom item = e.Row.DataContext as InvitationGiftCustom;
-      if (e.Column.SortMemberPath != "IgQty" && item.igQty  >0 )
-      {
-        
-      }
+      
+      Control ctrl = e.EditingElement as Control;
+      ctrl.Focus();
+      
+      
+      DataGrid dataGrid = sender as DataGrid;
+      InvitationGift invitationGiftCustom = dataGrid.Items.CurrentItem as InvitationGift;
+      _IGCurrentCell = dtgGifts.CurrentCell;
+      InvitationGiftCustom.StartEdit(_invitationMode, invitationGiftCustom, _IGCurrentCell, dataGrid, _hasError);
+
+
     }
 
     private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      //Obtenemos el acceso a los controles que necesitamos
-      DataGrid dtg = sender as DataGrid;
-      //Nos des subscribimos al evento para poder hacer commit
-      dtg.CellEditEnding -= dtgGifts_CellEditEnding;
-      
-      
-      
-      
-      
-      //Validacionese
-      switch (true)
+      //Si paso las validaciones del preparingCellForEdit
+      if (!_hasError)
       {
-        default:
-          break;
+        if (e.EditAction == DataGridEditAction.Commit)
+        {
+          //Obtenemos el acceso a los controles que necesitamos
+          DataGrid dtg = sender as DataGrid;
+          //Obtenemos el Objeto 
+          InvitationGift invitationGift = e.Row.Item as InvitationGift;
+
+          bool _hasErrorValidateEdit = false;
+          //Validamos la celda
+          InvitationGiftCustom.ValidateEdit(invitationGift, _hasErrorValidateEdit, _IGCurrentCell);
+
+          //Si Paso las validaciones
+          if (!_hasErrorValidateEdit)
+          {
+            InvitationGiftCustom.AfterEdit(dtg, invitationGift, _IGCurrentCell, txtGiftTotalCost, txtGiftTotalPrice, txtGiftMaxAuth);
+          }
+
+        }
+
       }
-
-
-      //Seleccionamos la fila y la columna que queremos editar
-      GridHelper.SelectRow(dtg, e.Row.GetIndex(), 3);
-      
-      //Realizamos el commit
-      dtg.CommitEdit(DataGridEditingUnit.Row, true);
-
-      //Nos volvemos a subscribir al evento 
-      dtg.CellEditEnding += dtgGifts_CellEditEnding;
     }
 
     private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid fi = sender as DataGrid;
-      InvitationGiftCustom koko = fi.CurrentItem as InvitationGiftCustom;
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
 
-      fi.RowEditEnding -= dtgGifts_RowEditEnding;
-      fi.CommitEdit();
-      fi.RowEditEnding += dtgGifts_RowEditEnding;
-      
+        //DataGrid fi = sender as DataGrid;
+        //InvitationGiftCustom koko = fi.CurrentItem as InvitationGiftCustom;
+
+        //fi.RowEditEnding -= dtgGifts_RowEditEnding;
+        //fi.CommitEdit();
+        //fi.RowEditEnding += dtgGifts_RowEditEnding;
+        e.Cancel = false;
+      }
     }
 
     private void dtgGifts_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
     {
 
     }
+
+    private void dtgGifts_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
+    {
+
+    }
+
+
   }
 }

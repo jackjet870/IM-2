@@ -806,7 +806,8 @@ namespace IM.Host.Forms
       dsGiftsDetail.Source = obsGifts;
 
       // calculamos el monto total de regalos
-      Gifts.CalculateTotalGifts(grdGifts, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref txtTotalPrice, ref txtTotalToPay);
+      //TODO: Agregar parametros
+      //Gifts.CalculateTotalGifts(grdGifts, EnumGiftsType.ReceiptGifts,  txtTotalCost,  txtTotalPrice,  txtTotalToPay);
 
       // configuramos la informacion de GuestStatus que se validara
       if (_guestID > 0 || txtgrID.Text != "")
