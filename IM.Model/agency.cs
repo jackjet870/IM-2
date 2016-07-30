@@ -17,6 +17,12 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Agency()
         {
+            this.agum = 0;
+            this.agmk = "AGENCIES";
+            this.agA = true;
+            this.agco = "?";
+            this.agVerified = true;
+            this.agIncludedTour = true;
             this.Guests = new HashSet<Guest>();
             this.MealTickets = new HashSet<MealTicket>();
             this.Gifts = new HashSet<Gift>();

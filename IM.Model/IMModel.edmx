@@ -9021,17 +9021,17 @@
             <PropertyRef Name="agID" />
           </Key>
           <Property Name="agID" Type="String" MaxLength="35" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="agum" Type="Byte" Nullable="false" />
-          <Property Name="agmk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="agum" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="agmk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="AGENCIES" />
           <Property Name="agShowPay" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="agSalePay" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="agrp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="agA" Type="Boolean" Nullable="false" />
-          <Property Name="agco" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="agA" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="agco" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="?" />
           <Property Name="agList" Type="Boolean" Nullable="false" />
-          <Property Name="agVerified" Type="Boolean" Nullable="false" />
+          <Property Name="agVerified" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="agse" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="agIncludedTour" Type="Boolean" Nullable="false" />
+          <Property Name="agIncludedTour" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="agN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="agcl" Type="Int32" />
           <NavigationProperty Name="Club" Relationship="Self.FK_Agencies_Clubs" FromRole="Agencies" ToRole="Clubs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />

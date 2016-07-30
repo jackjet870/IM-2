@@ -69,14 +69,56 @@ namespace IM.Model.Helpers
           {
             var newValue = type.GetProperty(pi.Name).GetValue(objNew, null);
             var oldValue = type.GetProperty(pi.Name).GetValue(ObjOld, null);
-            if (pi.PropertyType == typeof(string))//Validar los strings cuando sea null && ""
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
+            #region TypeCode
+            switch (typeCode)
             {
-              if (newValue != oldValue && !newValue.Equals(oldValue) )
-              {
-                return false;
-              }
+              case TypeCode.String:
+              case TypeCode.Char:
+                {
+                  newValue = (newValue == null) ? "" : newValue;
+                  oldValue = (oldValue == null) ? "" : oldValue;
+                  break;
+                }
+              case TypeCode.Boolean:
+                {
+                  newValue = (newValue == null) ? true : newValue;
+                  oldValue = (oldValue == null) ? true : oldValue;
+                  break;
+                }
+
+
+              case TypeCode.Int16:
+              case TypeCode.Int32:
+              case TypeCode.Int64:
+                {
+                  newValue = (newValue == null) ? -1 : newValue;
+                  oldValue = (oldValue == null) ? -1 : oldValue;
+                  break;
+                }
+
+              case TypeCode.Byte:
+              case TypeCode.Decimal:
+              case TypeCode.Double:
+              case TypeCode.SByte:
+              case TypeCode.UInt16:
+              case TypeCode.UInt32:
+              case TypeCode.UInt64:                   
+                {
+                  newValue = (newValue == null) ? -1 : newValue;
+                  oldValue = (oldValue == null) ? -1 : oldValue;
+                  break;
+                }
+              case TypeCode.DateTime:
+                {
+                  newValue = (newValue == null) ? new DateTime() : newValue;
+                  oldValue = (oldValue == null) ? new DateTime() : oldValue;
+                  break;
+                }
             }
-            else if (newValue != oldValue && (newValue == null || !newValue.Equals(oldValue)))
+
+            #endregion
+            if (newValue != oldValue && !newValue.Equals(oldValue))
             {
               return false;
             }
