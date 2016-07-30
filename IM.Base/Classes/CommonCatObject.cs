@@ -92,10 +92,10 @@ namespace IM.Base.Classes
       if (invitationType == EnumInvitationMode.modAdd)
       {
         //Asignamos 
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), "InvitationGiftList"); 
-        SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), "BookingDepositList");
-        SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), "GuestCreditCardList");
-        SetField(ref _aditionalGuestList, new ObservableCollection<Guest>(), "AditionalGuestList");
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList)); 
+        SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), nameof(BookingDepositList));
+        SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
+        SetField(ref _aditionalGuestList, new ObservableCollection<Guest>(), nameof(AditionalGuestList));
         SetField(ref _guestObj, new Guest(), "Guest");
       }
       else

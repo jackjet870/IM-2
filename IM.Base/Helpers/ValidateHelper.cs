@@ -210,7 +210,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         if (control is TextBox) //Si es Textbox
         {
           var txt = (TextBox) control;
-          if (!string.IsNullOrEmpty(txt.Text?.Trim())) continue;
+          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
           if ((validateVisible && txt.IsVisible) || !validateVisible)          
             strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
         }
@@ -232,7 +232,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is PasswordBox)
         {
           var pwd = (PasswordBox) control;
-          if (!string.IsNullOrEmpty(pwd.Password?.Trim())) continue;
+          if (!string.IsNullOrWhiteSpace(pwd.Password)) continue;
           if ((validateVisible && pwd.IsVisible) || !validateVisible)
             strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
         }                
@@ -241,7 +241,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is DateTimePicker)
         {
           var dtp = (DateTimePicker) control;
-          if (!string.IsNullOrEmpty(dtp.Text?.Trim())) continue;
+          if (!string.IsNullOrWhiteSpace(dtp.Text)) continue;
           if ((validateVisible && dtp.IsVisible) || !validateVisible)                
               strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
         }

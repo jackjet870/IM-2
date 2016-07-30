@@ -571,14 +571,13 @@
                                                       PreparingCellForEdit="dtgGifts_PreparingCellForEdit"
                                                       CellEditEnding="dtgGifts_CellEditEnding" 
                                                       RowEditEnding="dtgGifts_RowEditEnding"
+                                                     
                                                       >
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Qty"
-                                                                        styClasses:TagPropertyClass.Tag="4"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
                                                                         Binding="{Binding igQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
 
                                                     <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
                                                                             SelectedValueBinding="{Binding iggi, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
@@ -586,20 +585,15 @@
                                                                             ItemsSource="{Binding Source={StaticResource giftList}}" />
 
                                                     <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
-                                                                        styClasses:TagPropertyClass.Tag="4"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="4"
                                                                         Binding="{Binding igAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                     </DataGridTextColumn>
                                                     
                                                     <DataGridTextColumn Header="Minors"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
                                                                          ElementStyle="{StaticResource txt-ErrorInfo}"
                                                                         Binding="{Binding igMinors, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger =PropertyChanged}">
-                                                        <DataGridTextColumn.EditingElementStyle>
-                                                            <Style TargetType="{x:Type TextBox}">
-                                                                <Setter Property="MaxLength" Value="2"/>
-                                                            </Style>
-                                                        </DataGridTextColumn.EditingElementStyle>
                                                     </DataGridTextColumn>
-                                                    
                                                     
                                                     <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </DataGrid.Columns>

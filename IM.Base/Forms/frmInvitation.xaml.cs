@@ -52,7 +52,7 @@ namespace IM.Base.Forms
           }
         });
 
-        GridHelper.setUpGrid(dtgGifts, new InvitationGift());
+        GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
 
       }
       catch (Exception ex)

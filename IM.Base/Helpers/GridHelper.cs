@@ -411,7 +411,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [erosado] 29/07/2016  Created.
     /// </history>
-    public static void updateCellsFromARow(DataGrid dtg)
+    public static void UpdateCellsFromARow(DataGrid dtg)
     {
       //Si el Grid es diferente de NULL
       if (dtg != null && dtg?.SelectedIndex != -1)
@@ -468,7 +468,7 @@ namespace IM.Base.Helpers
     /// [emoguel] 28/07/2016  Created.
     /// [erosado] 29/07/2016  Modified. Se agregó el Tag para definir el Maxlength desde la columna.
     /// </history>
-    public static void setUpGrid(DataGrid dgrGrid, object objBinding, bool blnCharacters = false)
+    public static void SetUpGrid(DataGrid dgrGrid, object objBinding, bool blnCharacters = false)
     {
       List<DataGridTextColumn> lstColumns = dgrGrid.Columns.Where(dgc => dgc is DataGridTextColumn).OfType<DataGridTextColumn>().ToList();
 
@@ -531,11 +531,10 @@ namespace IM.Base.Helpers
               case TypeCode.Int32:
               case TypeCode.Int64:
                 {
-                  string tagValue = TagPropertyClass.GetTag(dgc).ToString();
-                  int maxLength = 0;
-                  if (int.TryParse(tagValue, out maxLength))
+                  int maxLengthValue= MaxLengthPropertyClass.GetMaxLength(dgc);
+                  if (maxLengthValue != 0)
                   {
-                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty, maxLength));
+                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty, maxLengthValue));
                   }
                   style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));
                   break;
@@ -582,8 +581,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void dgr_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      bool blnIsEdit = IsInEditMode(sender as DataGrid);
-      e.Cancel = blnIsEdit;
+      e.Cancel =IsInEditMode(sender as DataGrid); 
     }
     #endregion
     

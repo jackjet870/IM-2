@@ -83,8 +83,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\FormatInputPropertyClass.cs" />
+    <Compile Include="Classes\MaxLengthPropertyClass.cs" />
     <Compile Include="Classes\RichTextBoxToolBar.cs" />
-    <Compile Include="Classes\TagProperty.cs" />
+    <Compile Include="Classes\TagPropertyClass.cs" />
+    <Compile Include="Enums\EnumFormatInput.cs" />
     <Compile Include="Interfaces\IRichTextBoxToolBar.cs" />
     <Compile Include="UserControls\ToolBarRtfStyle.xaml.cs">
       <DependentUpon>ToolBarRtfStyle.xaml</DependentUpon>

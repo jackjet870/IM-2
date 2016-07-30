@@ -203,7 +203,7 @@ namespace IM.Base.Classes
 
 
       //Refresca los datos en las celdas del Grid
-      GridHelper.updateCellsFromARow(dtg);
+      GridHelper.UpdateCellsFromARow(dtg);
 
     }
 
