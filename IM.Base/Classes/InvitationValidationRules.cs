@@ -4,172 +4,211 @@ using IM.Model.Enums;
 using System;
 using System.Windows;
 using IM.Model;
+using IM.BusinessRules.BR;
 
 namespace IM.Base.Classes
 {
   public class InvitationValidationRules
   {
+    #region Grid Invitation Gift
 
-
-    //public static void StartEdit(Enums.EnumMode mode, GiftsReceiptDetail row, ref DataGridCellInfo cell, ref DataGrid grid)
-    //{
-    //  //bool validationResult=false;
-
-    //  //switch (e.Column.SortMemberPath)
-    //  //{
-    //  //  case "IggiCustom":
-    //  //    {
-    //  //      if (string.IsNullOrEmpty(item.igQty.ToString()))
-    //  //      {
-    //  //        UIHelper.ShowMessage("Please enter the quantity first", title: "Invitation");
-    //  //        item.IgQtyCustom = 1;
-    //  //        return;
-    //  //      }
-    //  //      break;
-    //  //    }
-    //  //  case "IgAdultsCustom":
-    //  //    {
-    //  //      if (item.igMinors == 0 && item.igAdults == 0)
-    //  //      {
-    //  //        UIHelper.ShowMessage("Quantity of adult and quantity of minors can't be both zero", title: "Invitation");
-    //  //        item.IgAdultsCustom = 1;
-    //  //      }
-    //  //      break;
-    //  //    }
-    //  //  case "IgMinorsCustom":
-    //  //    {
-    //  //      if (item.igAdults == 0 && item.igMinors == 0)
-    //  //      {
-    //  //        UIHelper.ShowMessage("Quantity of adult and quantity of minors can't be both zero", title: "Invitation");
-    //  //        item.IgMinorsCustom = 1;
-    //  //      }
-    //  //      break;
-    //  //    }
-    //  //  default:
-    //  //    {
-    //  //      break;
-    //  //    }
-    //  //}
-
-
-    //  //return validationResult;
-    //  return false;
-    //}
-    internal static void StartEdit(EnumMode mode, InvitationGiftCustom row, ref DataGridCellInfo cell, ref DataGrid grid, ref bool cancell)
-    {
-      ////Obtenemos el Index del Row
-      //int rowIndex = grid.SelectedIndex != -1 ? grid.SelectedIndex : 0;
-
-      //switch (mode)
-      //{
-      //  case EnumMode.edit:
-
-      //    switch (cell.Column.SortMemberPath)
-      //    {
-      //      // Cantidad
-      //      case "geQty":
-      //        bool blnResult = !EnableQuantity(row);
-      //        cell.Column.IsReadOnly = blnResult;
-      //        cancell = blnResult;
-      //        break;
-      //      // Regalo
-      //      case "gegi":
-      //        // si no se ha ingresado la cantidad
-      //        if (row.igQty == 0)
-      //        {
-      //          UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //          cancell = true;
-
-      //          GridHelper.SelectRow(grid, rowIndex, 0, true);
-      //        }
-      //        // determinamos si se puede modificar el regalo
-      //        else if (!EnableGift(row))
-      //        {
-      //          cancell = false;
-      //          cell.Column.IsReadOnly = true;
-      //        }
-      //        else
-      //        {
-      //          cancell = false;
-      //          cell.Column.IsReadOnly = false;
-      //        }
-
-      //        // Habilitamos las columnas
-      //        DataGridCellInfo Adults = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[3]);
-      //        Adults.Column.IsReadOnly = false;
-      //        DataGridCellInfo Minors = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[4]);
-      //        Minors.Column.IsReadOnly = false;
-      //        DataGridCellInfo EAdults = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[5]);
-      //        EAdults.Column.IsReadOnly = false;
-
-      //        break;
-      //      // Numero de adultos, menores y adultos extra
-      //      case "geAdults":
-      //      case "geMinors":
-      //      case "geExtraAdults":
-      //        // si no se ha ingresado la cantidad
-      //        if (row.igQty == 0)
-      //        {
-      //          UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //          cancell = true;
-      //          GridHelper.SelectRow(grid, rowIndex, 0, true);
-      //        }
-      //        // si no se ha ingresado el regalo
-      //        else if (row.iggi == null)
-      //        {
-      //          UIHelper.ShowMessage("Enter the Gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //          cancell = true;
-      //          GridHelper.SelectRow(grid, rowIndex, 2, true);
-      //        }
-      //        else
-      //        {
-      //          // localizamos el regalo
-      //          Gift _gift = frmHost._lstGifts.Where(x => x.giID == row.gegi).First();
-
-      //          // se permite modificar si el regalo maneja Pax
-      //          cell.Column.IsReadOnly = !_gift.giWPax;
-      //          cancell = !_gift.giWPax;
-      //        }
-      //        break;
-      //        break;
-      //      default:
-      //        break;
-      //    }
-
-      //}
-    }
-
-    #region EnableGift
+    #region StartEdit
     /// <summary>
-    /// Habilita / deshabilita la columna de regalo
+    /// Inicia las validaciones de los campos del Grid
     /// </summary>
-    /// <param name="row"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 24/Junio/2016 Created
-    /// </history>
-    public static void EnableGift(InvitationGiftCustom row)
+    /// <param name="_invitMode"></param>
+    /// <param name="invitationGift"></param>
+    /// <param name="_IGCurrentCell"></param>
+    /// <param name="dataGrid"></param>
+    /// <param name="_hasError"></param>
+    internal static void StartEdit(EnumInvitationMode _invitMode, InvitationGift invitationGift,
+      DataGridCellInfo _IGCurrentCell, DataGrid dataGrid, bool _hasError)
     {
-      //// no se permite modificar regalos guardados en promociones de Sistur
-      //if (row.igInPVPPromo == true)
-      //{
-      //  UIHelper.ShowMessage("You can not modify gifts have been given in Sistur promotions.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //  return false;
-      //}
-      //// no se permite modificar regalos guardados en Opera
-      //else if (row.geInOpera == true)
-      //{
-      //  UIHelper.ShowMessage("You can not modify gifts have been given in Opera.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //  return false;
-      //}
-      //// no se permite modificar regalos usados como promocion de Opera
-      //else if (IsUsedGuestPromotion(row))
-      //{
-      //  UIHelper.ShowMessage("You can not modify gifts have been used as promotion of Opera.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //  return false;
-      //}
-      //return true;
+      //Index del Row en edicion
+      int rowIndex = dataGrid.SelectedIndex != -1 ? dataGrid.SelectedIndex : 0;
+
+      if (invitationGift.iggr == null || invitationGift.iggr == 0)
+      {
+        switch (_IGCurrentCell.Column.SortMemberPath)
+        {
+          case "iggi":
+            //Si no ha ingresado una cantidad
+            if (invitationGift.igQty == 0)
+            {
+              UIHelper.ShowMessage("Enter the quantity first.", System.Windows.MessageBoxImage.Exclamation, "Intelligence Marketing");
+              _hasError = true;
+              GridHelper.SelectRow(dataGrid, rowIndex, 0, true);
+            }
+            break;
+          case "igAdults":
+          case "igMinors":
+          case "igExtraAdults":
+            //Si no se ha seleccionado un regalo
+            if (string.IsNullOrEmpty(invitationGift.iggi))
+            {
+              UIHelper.ShowMessage("Enter the gift first.", System.Windows.MessageBoxImage.Exclamation, "Intelligence Marketing");
+              _hasError = true;
+              GridHelper.SelectRow(dataGrid, rowIndex, 1, true);
+            }
+            else
+            {
+              //Obtenemos el Gift Completo
+              var gift = BRGifts.GetGiftId(invitationGift.iggi);
+              // se permite modificar si el regalo maneja Pax
+              _IGCurrentCell.Column.IsReadOnly = gift.giWPax;
+            }
+            break;
+          default:
+            break;
+        }
+
+      }
+      //Si el regalo ya fue entregado
+      else
+      {
+        _hasError = false;
+      }
+
     }
+
+    #endregion
+
+    #region ValidateEdit
+    /// <summary>
+    /// Valida la informacion del Grid
+    /// </summary>
+    /// <param name="invitationGiftCustom">objeto de la fila que se esta editando</param>
+    /// <param name="hasError">True Falló | False pasó la validacion</param>
+    /// <param name="IGCurrentCell">Informacion de la celda que se esta validando</param>
+    /// <history>
+    /// [erosado] 27/07/2016  Created.
+    /// </history>
+    internal static void ValidateEdit(InvitationGift invitationGiftCustom, bool hasError, DataGridCellInfo IGCurrentCell)
+    {
+      switch (IGCurrentCell.Column.SortMemberPath)
+      {
+        case "igQty":
+          if (invitationGiftCustom.iggi != null)//Si tiene seleccionado un gift
+          {
+            //Buscamos el Gift
+            var gift = BRGifts.GetGiftId(invitationGiftCustom.iggi);
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(invitationGiftCustom, gift, false, 1, hasError, nameof(invitationGiftCustom.igQty));
+          }//Si no ha seleccionado el Gift
+          else
+          {
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(invitationGiftCustom, null, false, 1, hasError, nameof(invitationGiftCustom.igQty));
+          }
+          break;
+        case "igAdults":
+          //Validacion Numero de Adultos
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGiftCustom, hasError, nameof(invitationGiftCustom.igAdults), nameof(invitationGiftCustom.igMinors));
+          break;
+        case "igMinors":
+          //Validacion Numero de menores
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGiftCustom, hasError, nameof(invitationGiftCustom.igAdults), nameof(invitationGiftCustom.igMinors));
+          break;
+        default:
+          break;
+      }
+    }
+    #endregion
+
+    #region AfterEdit
+    internal static void AfterEdit(DataGrid dtg, InvitationGift invitationGift, DataGridCellInfo _IGCurrentCell,
+      TextBox txtTotalCost, TextBox txtTotalPrice, TextBox txtgrMaxAuthGifts)
+    {
+      var gift = BRGifts.GetGiftId(invitationGift.iggi);
+      switch (_IGCurrentCell.Column.SortMemberPath)
+      {
+        case "igQty":
+          if (!string.IsNullOrEmpty(invitationGift.igQty.ToString()) && !string.IsNullOrEmpty(invitationGift.igAdults.ToString())
+            && !string.IsNullOrEmpty(invitationGift.igMinors.ToString()) && !string.IsNullOrEmpty(invitationGift.igExtraAdults.ToString()))
+          {
+            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult));
+          }
+          break;
+        case "iggi":
+          if (!string.IsNullOrEmpty(invitationGift.iggi))
+          {
+            // Cargar a Marketing
+            invitationGift.igct = "MARKETING";
+
+            //Si el regalo no maneja Pax
+            if (!gift.giWPax)
+            {
+              invitationGift.igAdults = 1;
+              invitationGift.igMinors = 0;
+              invitationGift.igExtraAdults = 0;
+            }
+            //Establecemos valores default de adultos y menores
+            invitationGift.igAdults = 1;
+            invitationGift.igMinors = 0;
+            invitationGift.igExtraAdults = 0;
+            invitationGift.igPriceA = 0;
+            invitationGift.igPriceM = 0;
+            invitationGift.igPriceAdult = 0;
+            invitationGift.igPriceMinor = 0;
+            invitationGift.igPriceExtraAdult = 0;
+
+            //Validamos la cantidad maxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryGift(gift, nameof(invitationGift.igQty), ref invitationGift, false);
+
+            //Calculamos los costos y los precios 
+            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false);
+
+          }
+          break;
+        case "igAdults":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Adults);
+          break;
+        case "igMinors":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Minors);
+          break;
+        case "igExtraAdults":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.ExtraAdults);
+          break;
+        default:
+          break;
+      }
+
+      //Calculamos el monto total de los regalos
+      Gifts.CalculateTotalGifts(dtg, EnumGiftsType.InvitsGifts, nameof(invitationGift.igQty), nameof(invitationGift.iggi),
+        nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceAdult),
+        nameof(invitationGift.igPriceA), nameof(invitationGift.igPriceExtraAdult), txtTotalCost, txtTotalPrice);
+
+
+      //Refresca los datos en las celdas del Grid
+      GridHelper.updateCellsFromARow(dtg);
+
+    }
+
+    #endregion
+
     #endregion
   }
 }

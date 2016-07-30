@@ -15,10 +15,6 @@ namespace IM.Base.Classes
 {
   public class CommonCatObject : INotifyPropertyChanged
   {
-    #region Attributes and Params
-    private List<objInvitGift> _InitialInvitGift;
-    #endregion
-
     #region Properties
     private List<LanguageShort> _languages;
     public List<LanguageShort> Languages => _languages;
@@ -52,15 +48,11 @@ namespace IM.Base.Classes
     public List<DisputeStatus> DisputeStatus => _disputeStatus;
 
     private ObservableCollection<InvitationGift> _invitationGiftList;
-
     public ObservableCollection<InvitationGift> InvitationGiftList
     {
       get { return _invitationGiftList; }
       set { _invitationGiftList = value; OnPropertyChanged("InvitationGiftList"); }
     }
-
-    //private ObservableCollection<InvitationGiftCustom> _invitationGiftList;
-    //public ObservableCollection<InvitationGiftCustom> InvitationGiftList => _invitationGiftList;
     private ObservableCollection<BookingDeposit> _bookingDepositList;
     public ObservableCollection<BookingDeposit> BookingDepositList => _bookingDepositList;
     private ObservableCollection<GuestCreditCard> _guestCreditCardList;
@@ -118,11 +110,12 @@ namespace IM.Base.Classes
 
 
         Guest gue = new Guest() { gums1 = "N", gums2 = "W" };
-        SetField(ref _guestObj, gue, "GuestObj");
+        SetField(ref _guestObj, gue, nameof(GuestObj));
       }
     }
 
     #region Metodos Carga de Catalogos
+
     #region Languages
     private async void LoadLenguages()
     {
@@ -245,12 +238,12 @@ namespace IM.Base.Classes
     #endregion
 
     #region InvitationGift Load
-    private async void loadInvitationGift(int guId)
-    {
-      //var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(guId);
-      //SetField(ref _in)
+    //private async void loadInvitationGift(int guId)
+    //{
+    //  //var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(guId);
+    //  //SetField(ref _in)
 
-    }
+    //}
     #endregion
 
     #endregion

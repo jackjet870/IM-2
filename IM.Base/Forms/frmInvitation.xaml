@@ -571,7 +571,6 @@
                                                       PreparingCellForEdit="dtgGifts_PreparingCellForEdit"
                                                       CellEditEnding="dtgGifts_CellEditEnding" 
                                                       RowEditEnding="dtgGifts_RowEditEnding"
-                                                      TargetUpdated="dtgGifts_TargetUpdated"
                                                       >
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Qty"

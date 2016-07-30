@@ -268,19 +268,16 @@ namespace IM.Base.Forms
 
     }
 
+    #region Eventos del GRID Invitation Gift
     private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
-      
+      //Sirve para agregar el Focus a las celdas
       Control ctrl = e.EditingElement as Control;
       ctrl.Focus();
-      
-      
       DataGrid dataGrid = sender as DataGrid;
       InvitationGift invitationGiftCustom = dataGrid.Items.CurrentItem as InvitationGift;
       _IGCurrentCell = dtgGifts.CurrentCell;
-      InvitationGiftCustom.StartEdit(_invitationMode, invitationGiftCustom, _IGCurrentCell, dataGrid, _hasError);
-
-
+      InvitationValidationRules.StartEdit(_invitationMode, invitationGiftCustom, _IGCurrentCell, dataGrid, _hasError);
     }
 
     private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -297,16 +294,14 @@ namespace IM.Base.Forms
 
           bool _hasErrorValidateEdit = false;
           //Validamos la celda
-          InvitationGiftCustom.ValidateEdit(invitationGift, _hasErrorValidateEdit, _IGCurrentCell);
+          InvitationValidationRules.ValidateEdit(invitationGift, _hasErrorValidateEdit, _IGCurrentCell);
 
           //Si Paso las validaciones
           if (!_hasErrorValidateEdit)
           {
-            InvitationGiftCustom.AfterEdit(dtg, invitationGift, _IGCurrentCell, txtGiftTotalCost, txtGiftTotalPrice, txtGiftMaxAuth);
+            InvitationValidationRules.AfterEdit(dtg, invitationGift, _IGCurrentCell, txtGiftTotalCost, txtGiftTotalPrice, txtGiftMaxAuth);
           }
-
         }
-
       }
     }
 
@@ -314,7 +309,6 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-
         //DataGrid fi = sender as DataGrid;
         //InvitationGiftCustom koko = fi.CurrentItem as InvitationGiftCustom;
 
@@ -324,17 +318,6 @@ namespace IM.Base.Forms
         e.Cancel = false;
       }
     }
-
-    private void dtgGifts_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-    {
-
-    }
-
-    private void dtgGifts_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
-    {
-
-    }
-
-
+    #endregion
   }
 }

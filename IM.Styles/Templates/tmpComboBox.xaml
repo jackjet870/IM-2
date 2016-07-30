@@ -7,44 +7,44 @@
         <Border Height="30">
             <Grid ToolTip="{Binding peN}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="16" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
+                    <Viewbox Width="16" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BUser.png" />
                     </Viewbox>
-                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
+                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10" />
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding peN}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding peN}" />
                 <TextBlock  Text="{Binding deN}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>
     </DataTemplate>
 
     <!--#endregion-->
-    
+
     <!--#region Personnel Concat-->
     <DataTemplate x:Key="cbx-Personnel-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="peID"/>
-                            <Binding Path="peN"/>
+                            <Binding Path="peID" />
+                            <Binding Path="peN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -60,20 +60,19 @@
         <Border Height="35" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="16" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                    <Viewbox Width="16" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png" />
                     </Viewbox>
-                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
+                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10" />
                 </StackPanel>
-
             </Grid>
         </Border>
     </DataTemplate>
@@ -84,16 +83,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="laID"/>
-                            <Binding Path="laN"/>
+                            <Binding Path="laID" />
+                            <Binding Path="laN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -108,16 +107,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="msID"/>
-                            <Binding Path="msN"/>
+                            <Binding Path="msID" />
+                            <Binding Path="msN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -134,16 +133,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="srID"/>
-                            <Binding Path="srN"/>
+                            <Binding Path="srID" />
+                            <Binding Path="srN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -154,25 +153,25 @@
 
     <!--#region SaleRoom Img-->
     <DataTemplate x:Key="cbx-SaleRoom-img">
-        <Border Height="30" >
+        <Border Height="30">
             <Grid ToolTip="{Binding srN}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="24" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSalesRooms.png"/>
+                    <Viewbox Width="24" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSalesRooms.png" />
                     </Viewbox>
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding srN}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding srN}" />
                 <TextBlock  Text="{Binding srID}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>
     </DataTemplate>
@@ -187,16 +186,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="loID"/>
-                            <Binding Path="loN"/>
+                            <Binding Path="loID" />
+                            <Binding Path="loN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -210,22 +209,22 @@
         <Border Height="30">
             <Grid ToolTip="{Binding loN}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="24" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BLocation.png"/>
+                    <Viewbox Width="24" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BLocation.png" />
                     </Viewbox>
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding loN}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding loN}" />
                 <TextBlock  Text="{Binding loID}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>
     </DataTemplate>
@@ -238,76 +237,149 @@
         <Border Height="30">
             <Grid ToolTip="{Binding hoID}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="24" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                    <Viewbox Width="24" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png" />
                     </Viewbox>
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding hoID}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding hoID}" />
                 <TextBlock  Text="{Binding hoGroup}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>
     </DataTemplate>
     <!--#endregion-->
 
+    <!--#region Agency-->
     <!--#region Agency Img-->
     <DataTemplate x:Key="cbx-Agency-img">
         <Border Height="30">
             <Grid ToolTip="{Binding agN}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="24" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BAgency.png"/>
+                    <Viewbox Width="24" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BAgency.png" />
                     </Viewbox>
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding agN}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding agN}" />
                 <TextBlock  Text="{Binding agID}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>
     </DataTemplate>
     <!--#endregion-->
 
-    <!--#region Country-->
+    <!--#region Agency Concat-->
+    <DataTemplate x:Key="cbx-Agency-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="agID" />
+                            <Binding Path="agN" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
 
+    <!--#endregion-->
+
+    <!--#region Country-->
     <!--#region Country Img-->
     <DataTemplate x:Key="cbx-Country-img">
         <Border Height="30">
             <Grid ToolTip="{Binding coN}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
-                    <Viewbox Width="24" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCountry.png"/>
+                    <Viewbox Width="24" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCountry.png" />
                     </Viewbox>
                 </StackPanel>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding coN}"/>
+                            Grid.Column="1" Grid.Row="0" Text="{Binding coN}" />
                 <TextBlock  Text="{Binding coID}" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Column="1" Grid.Row="1" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region Country Concat-->
+    <DataTemplate x:Key="cbx-Country-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="coID" />
+                            <Binding Path="coN" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+    <!--#endregion-->
+
+    <!--#region Contract-->
+    <!--#region Contract Concat-->
+    <DataTemplate x:Key="cbx-Contract-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="cnID" />
+                            <Binding Path="cnN" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </Grid>
         </Border>
     </DataTemplate>
@@ -322,16 +394,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="gsID"/>
-                            <Binding Path="gsN"/>
+                            <Binding Path="gsID" />
+                            <Binding Path="gsN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -349,16 +421,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="cuID"/>
-                            <Binding Path="cuN"/>
+                            <Binding Path="cuID" />
+                            <Binding Path="cuN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -376,16 +448,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="ptID"/>
-                            <Binding Path="ptN"/>
+                            <Binding Path="ptID" />
+                            <Binding Path="ptN" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -403,16 +475,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="CODE"/>
-                            <Binding Path="NAME"/>
+                            <Binding Path="CODE" />
+                            <Binding Path="NAME" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -421,22 +493,22 @@
     </DataTemplate>
     <!--#endregion-->
     <!--#endregion-->
-    
+
     <!--#region ProductElectronicPurse-->
     <DataTemplate x:Key="cbx-ProductElectronicPurse-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="IDPRODUCTO"/>
-                            <Binding Path="DESCRIPCION"/>
+                            <Binding Path="IDPRODUCTO" />
+                            <Binding Path="DESCRIPCION" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -450,16 +522,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="clave"/>
-                            <Binding Path="nombre"/>
+                            <Binding Path="clave" />
+                            <Binding Path="nombre" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -473,16 +545,16 @@
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="Trx_code"/>
-                            <Binding Path="Description"/>
+                            <Binding Path="Trx_code" />
+                            <Binding Path="Description" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>

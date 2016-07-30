@@ -365,7 +365,7 @@ namespace IM.Base.Classes
         // si la cantidad maxima del regalo fue excedida
         if (pQuantity > pGift.giMaxQty)
         {
-          UIHelper.ShowMessage("The maximum quantity authorized of the gift " + pGift.giN + "has been exceeded. \r\n" +
+          UIHelper.ShowMessage("The maximum quantity authorized of the gift " + pGift.giN + " has been exceeded. \r\n" +
                                 "Max authorized = " + pGift.giMaxQty, MessageBoxImage.Exclamation, "Intelligence Marketing");
           pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, pGift.giMaxQty, null);
           return false;
