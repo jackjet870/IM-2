@@ -202,6 +202,9 @@
     <Compile Include="Efficiency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EfficiencyData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EfficiencyType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

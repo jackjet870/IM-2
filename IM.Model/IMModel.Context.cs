@@ -6375,5 +6375,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestReimpresionNumber", guestParameter);
         }
+    
+        public virtual ObjectResult<EfficiencyData> USP_IM_GetEfficiencyByWeeks(string salesRoom, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<EfficiencyData>("USP_IM_GetEfficiencyByWeeks", salesRoomParameter, dateFromParameter, dateToParameter);
+        }
     }
 }
