@@ -113,27 +113,10 @@ namespace IM.Administrator.Forms
         }        
         LoadBoss();
         LoadHotels();
+        dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
+        dgrLocations.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
       DataContext = leadSource;
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 16/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if(e.Key==Key.Escape)
-      {
-        btnCancel.Focus();
-        Close();
-      }
     }
     #endregion
 
@@ -164,7 +147,8 @@ namespace IM.Administrator.Forms
           #region Save
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
-          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source",blnDatagrids:true);
           if (strMsj=="")
           {
             #region Locations
@@ -184,6 +168,7 @@ namespace IM.Administrator.Forms
               DialogResult = true;
               Close();
             }
+            btnAccept.Visibility = Visibility.Visible;
           }
           else
           {
@@ -208,58 +193,16 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambions pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 16/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
-      {
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-        List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
-        if (!ObjectHelper.IsEquals(leadSource, oldLeadSource) || !ObjectHelper.IsListEquals(lstLocations, _oldLocations) || !ObjectHelper.IsListEquals(lstAgencies,_oldAgencies))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!blnClosing) { blnClosing = true; Close(); }
-          }
-          else
-          {
-            blnClosing = false;
-          }
-        }
-        else
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
-    }
-    #endregion
-
     #region dgrLocations_CellEditEnding
     /// <summary>
     /// Verifica que una locacion no se pueda repetir mas de una vez
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 17/05/2016
     /// </history>
     private void dgr_CellEditEnding(object sender,DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
         DataGrid dg = sender as DataGrid;
@@ -277,20 +220,28 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica cambios al cerrar
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing)
+      if (!blnClosing && enumMode != EnumMode.preview && enumMode != EnumMode.search)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
+        if (!ObjectHelper.IsEquals(leadSource, oldLeadSource) || !ObjectHelper.IsListEquals(lstLocations, _oldLocations) || !ObjectHelper.IsListEquals(lstAgencies, _oldAgencies))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAgencies.CancelEdit();
+            dgrLocations.CancelEdit();
+          }
         }
       }
     }
@@ -300,16 +251,15 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// No permite que se agreguen filas vacias
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
     /// </history>
     private void dgr_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid dgr = (DataGrid)sender;
-      if (isCellCancel)
+      
+      if (e.EditAction==DataGridEditAction.Commit && isCellCancel)
       {
+        DataGrid dgr = (DataGrid)sender;
         dgr.RowEditEnding -= dgr_RowEditEnding;
         dgr.CancelEdit();
         dgr.RowEditEnding += dgr_RowEditEnding;

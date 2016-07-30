@@ -38,8 +38,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/06/2016
     /// </history>
@@ -58,26 +56,11 @@ namespace IM.Administrator.Forms
         LoadAgencies();
         LoadContracs();
         LoadCountries();
+        dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
+        dgrContracts.BeginningEdit += GridHelper.dgr_BeginningEdit;
+        dgrCountries.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
       DataContext = unavailableMotive;
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 06/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
     }
     #endregion
 
@@ -85,24 +68,30 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/06/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode != EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<Agency> lstAgencies = new List<Agency>();
+        List<Country> lstCountries = (List<Country>)dgrCountries.ItemsSource;
+        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+        if (!ObjectHelper.IsEquals(unavailableMotive, oldUnavailableMotive) || !ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies) || !ObjectHelper.IsListEquals(lstContracts, _lstOldContracts) || !ObjectHelper.IsListEquals(lstCountries, _lstOldCountries))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAgencies.CancelEdit();
+            dgrContracts.CancelEdit();
+            dgrCountries.CancelEdit();
+          }
         }
       }
     }
@@ -119,83 +108,51 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<Agency> lstAgenciesAdd = new List<Agency>();
-      List<Country> lstCountriesAdd = new List<Country>();
-      List<Contract> lstContractsAdd = new List<Contract>();
-      getNewItems(ref lstAgenciesAdd,ref lstCountriesAdd,ref lstContractsAdd);
-      if(ObjectHelper.IsEquals(unavailableMotive,oldUnavailableMotive)&&lstAgenciesAdd.Count==0&&lstContractsAdd.Count==0&&lstCountriesAdd.Count==0)
+      try
       {
-        _isClosing = true;
-        Close();
-      }
-      else
-      {
-        skpStatus.Visibility = Visibility.Visible;
-        txtStatus.Text = "Saving Data...";
-        string strMsj = ValidateHelper.ValidateForm(this, "Unavailable Motives");
-        if(unavailableMotive.umID==0)
+        btnAccept.Focus();
+        List<Agency> lstAgenciesAdd = new List<Agency>();
+        List<Country> lstCountriesAdd = new List<Country>();
+        List<Contract> lstContractsAdd = new List<Contract>();
+        getNewItems(ref lstAgenciesAdd, ref lstCountriesAdd, ref lstContractsAdd);
+        if (ObjectHelper.IsEquals(unavailableMotive, oldUnavailableMotive) && lstAgenciesAdd.Count == 0 && lstContractsAdd.Count == 0 && lstCountriesAdd.Count == 0)
         {
-          strMsj += (strMsj == "") ? "" : " \n " + "ID can not be 0";
-        }
-        if(strMsj=="")
-        {
-          int nRes = await BRUnavailableMotives.SaveUnavailableMotives(unavailableMotive,lstAgenciesAdd,lstContractsAdd,lstCountriesAdd,(enumMode==EnumMode.edit));
-          UIHelper.ShowMessageResult("Unavailable Motives",nRes);
-          if(nRes>0)
-          {
-            _isClosing = true;
-            Close();
-          }
+          _isClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
-        }
-        skpStatus.Visibility = Visibility.Collapsed;
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana Verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 06/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode!=EnumMode.preview)
-      {
-        List<Agency> lstAgencies = new List<Agency>();
-        List<Country> lstCountries = (List<Country>)dgrCountries.ItemsSource;
-        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
-        if (!ObjectHelper.IsEquals(unavailableMotive, oldUnavailableMotive) || !ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies) || !ObjectHelper.IsListEquals(lstContracts,_lstOldContracts) || !ObjectHelper.IsListEquals(lstCountries, _lstOldCountries))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Unavailable Motives",blnDatagrids:true);
+          if (unavailableMotive.umID == 0)
           {
-            if (!_isClosing) { _isClosing = true; Close(); }
+            strMsj += (strMsj == "") ? "" : " \n " + "ID can not be 0";
+          }
+          if (strMsj == "")
+          {
+            int nRes = await BRUnavailableMotives.SaveUnavailableMotives(unavailableMotive, lstAgenciesAdd, lstContractsAdd, lstCountriesAdd, (enumMode == EnumMode.edit));
+            UIHelper.ShowMessageResult("Unavailable Motives", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
           }
           else
           {
-            _isClosing = false;
+            UIHelper.ShowMessage(strMsj);
           }
+          skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      } 
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
       }
-
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
     }
     #endregion
 
@@ -203,14 +160,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// No permite agregar registros repetidos
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/06/2016
     /// </history>
     private void dgr_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if(!Keyboard.IsKeyDown(Key.Escape))
+      if(e.EditAction==DataGridEditAction.Commit)
       {
         _isCellCancel = false;
         bool blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, (DataGrid)sender, true);
@@ -227,40 +182,41 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// No permite agregar filas vacias
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/06/2016
     /// </history>
     private void dgr_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid dgr = sender as DataGrid;
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgr.RowEditEnding -= dgr_RowEditEnding;
-        dgr.CancelEdit();
-        dgr.RowEditEnding += dgr_RowEditEnding;
-      }
-      else
-      {
-        switch(dgr.Name)
+        DataGrid dgr = sender as DataGrid;
+        if (_isCellCancel)
         {
-          case "dgrCountries":
-            {
-              cmbCountries.Header = "Country (" + (dgr.Items.Count - 1) + ")";
-              break;
-            }
-          case "dgrAgencies":
-            {
-              cmbAgencies.Header = "Agency (" + (dgr.Items.Count - 1) + ")";
-              break;
-            }
-          case "dgrContracts":
-            {
-              cmbContracts.Header = "Contract (" + (dgr.Items.Count - 1) + ")";
-              break;
-            }
-        }        
+          dgr.RowEditEnding -= dgr_RowEditEnding;
+          dgr.CancelEdit();
+          dgr.RowEditEnding += dgr_RowEditEnding;
+        }
+        else
+        {
+          switch (dgr.Name)
+          {
+            case "dgrCountries":
+              {
+                cmbCountries.Header = "Country (" + (dgr.Items.Count - 1) + ")";
+                break;
+              }
+            case "dgrAgencies":
+              {
+                cmbAgencies.Header = "Agency (" + (dgr.Items.Count - 1) + ")";
+                break;
+              }
+            case "dgrContracts":
+              {
+                cmbContracts.Header = "Contract (" + (dgr.Items.Count - 1) + ")";
+                break;
+              }
+          }
+        }
       }
     }
     #endregion
@@ -340,8 +296,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Agency> lstAllAgencies = await BRAgencies.GetAgencies();
-        cmbAgencies.ItemsSource = lstAllAgencies;
-        cmbIDAgencies.ItemsSource = lstAllAgencies;
+        cmbAgencies.ItemsSource = lstAllAgencies;        
         List<Agency> lstAgencies = (unavailableMotive.umID > 0) ? lstAllAgencies.Where(ag => ag.agum ==unavailableMotive.umID).ToList() : new List<Agency>();
         dgrAgencies.ItemsSource = lstAgencies;
         lstAgencies.ForEach(ag => {
@@ -371,7 +326,6 @@ namespace IM.Administrator.Forms
       try
       {
         List<Country> lstAllCountries = await BRCountries.GetCountries(null);
-        cmbCountriesID.ItemsSource = lstAllCountries;
         cmbCountries.ItemsSource = lstAllCountries;
         List<Country>lstCountries=(unavailableMotive.umID>0)? lstAllCountries.Where(co=>co.coum==unavailableMotive.umID).ToList():new List<Country>();
         dgrCountries.ItemsSource = lstCountries;
@@ -398,7 +352,6 @@ namespace IM.Administrator.Forms
       {
         List<Contract> lstAllContracts = await BRContracts.getContracts();
         cmbContracts.ItemsSource = lstAllContracts;
-        cmbContractsID.ItemsSource = lstAllContracts;
         List<Contract> lstContracts = (unavailableMotive.umID > 0) ? lstAllContracts.Where(cn => cn.cnum == unavailableMotive.umID).ToList() : new List<Contract>();
         dgrContracts.ItemsSource = lstContracts;
         _lstOldContracts = lstContracts.ToList();

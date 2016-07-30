@@ -47,25 +47,7 @@ namespace IM.Administrator.Forms
       txtmgID.IsEnabled = (enumMode == EnumMode.add);      
       DataContext = membershipGroup;
       LoadMembershipTypes();
-    }
-    #endregion
-
-    #region Keydown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 19/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if(e.Key==Key.Escape)
-      {
-        btnCancel.Focus();
-        Close();
-      }
+      dgrmembershipTypes.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -86,9 +68,13 @@ namespace IM.Administrator.Forms
         if (!ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) || !ObjectHelper.IsListEquals(lstMembershipTypes, _oldLstmembershipTypes))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result != MessageBoxResult.Yes)
+          if (result == MessageBoxResult.No)
           {
             e.Cancel = true;
+          }
+          else
+          {
+            dgrmembershipTypes.CancelEdit();
           }
         }
       }
@@ -106,7 +92,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrmembershipTypes_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))
+      if (e.EditAction==DataGridEditAction.Commit)
       {
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrmembershipTypes);
@@ -139,8 +125,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Agrega| Actualiza un MembershipGroup
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 19/05/2016
     /// </history>
@@ -159,7 +143,8 @@ namespace IM.Administrator.Forms
         {
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
-          string strMsj = ValidateHelper.ValidateForm(this, "Membership Group");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Membership Group",blnDatagrids:true);
           if (strMsj == "")
           {
             List<MembershipType> lstAdd = lstMembershipGroup.Where(mt => !_oldLstmembershipTypes.Any(mtt => mtt.mtID == mt.mtID)).ToList();
@@ -177,6 +162,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
@@ -217,14 +203,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// EndRowEdit
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
     /// </history>
     private void dgrmembershipTypes_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {      
-      if (isCellCancel)
+      if (e.EditAction==DataGridEditAction.Commit && isCellCancel)
       {
         dgrmembershipTypes.RowEditEnding -= dgrmembershipTypes_RowEditEnding;
         dgrmembershipTypes.CancelEdit();
@@ -258,6 +242,7 @@ namespace IM.Administrator.Forms
         });
         cmbMembershipTypes.Header = "Membership Type (" + lstMembershipTypes.Count + ")";
         skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
       catch(Exception ex)
       {

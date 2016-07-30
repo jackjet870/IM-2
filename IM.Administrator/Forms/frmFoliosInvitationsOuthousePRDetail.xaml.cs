@@ -22,14 +22,12 @@ namespace IM.Administrator.Forms
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     private List<FolioInvitationOuthousePR> _lstFolios = new List<FolioInvitationOuthousePR>();//Lista con los folios iniciales
     private List<FolioInvitationOuthousePRCancellation> _lstCancellation=new List<FolioInvitationOuthousePRCancellation>();//Lista de folios cancelados
-    public ExecuteCommandHelper KeyEnter { get; set; }
     private bool blnClosing = false;
     #endregion
 
     public frmFoliosInvitationsOuthousePRDetail()
     {
       InitializeComponent();
-      KeyEnter = new ExecuteCommandHelper(x => txtpeID_KeyDown());
     }
 
     #region Methods Form
@@ -49,18 +47,15 @@ namespace IM.Administrator.Forms
         btnAccept.Visibility = Visibility.Visible;
         if (enumMode == EnumMode.search)
         {
-          txtpeID.IsEnabled = true;
           cmbPersonnel.IsEnabled = true;
           SizeToContent = SizeToContent.WidthAndHeight;
           grdContent.Visibility = Visibility.Collapsed;
           cmbPersonnel.Width = 250;
-          txtpeID.Width = 250;
         }
         else
         {
           if (enumMode == EnumMode.add)
           {
-            txtpeID.IsEnabled = true;
             cmbPersonnel.IsEnabled = true;
           }
           dgrAssigned.IsReadOnly = false;
@@ -74,24 +69,8 @@ namespace IM.Administrator.Forms
       loadSeries();
       UIHelper.SetUpControls(new Personnel(), this);
       DataContext = personnel;
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 07/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
+      dgrCancelled.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dgrAssigned.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -207,66 +186,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region cmbPersonnel_SelectionChanged
-    /// <summary>
-    /// Asigna el ID del Personnel seleccionado al textbox
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 07/05/2016
-    /// </history>
-    private void cmbPersonnel_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      PersonnelShort prCombo = (PersonnelShort)cmbPersonnel.SelectedItem;
-      if (prCombo != null)
-      {
-        txtpeID.Text = prCombo.peID;
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 07/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode != EnumMode.search && enumMode != EnumMode.preview)
-      {
-        List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
-        List<FolioInvitationOuthousePRCancellation> lstFoliosCancel = (List<FolioInvitationOuthousePRCancellation>)dgrCancelled.ItemsSource;
-        bool blnHasChanged = ValidateChanges(lstFoliosPR, lstFoliosCancel);
-        if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode!=EnumMode.edit) || blnHasChanged==true)
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!blnClosing) { blnClosing = true; Close(); }
-          }
-          else
-          {
-            blnClosing = false;
-          }
-        }
-        else
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
-    } 
-    #endregion
-
     #region int_PreviewTextInput
     /// <summary>
     /// Valida que solo se puedan usar números
@@ -328,21 +247,6 @@ namespace IM.Administrator.Forms
 
     #endregion
 
-    #region txtpeID_KeyDown
-    /// <summary>
-    /// Selecciona en el combobox el id insertado
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 07/05/2016
-    /// </history>
-    protected void txtpeID_KeyDown()//(object sender, KeyEventArgs e)
-    {
-      cmbPersonnel.SelectedValue = txtpeID.Text;
-    }
-    #endregion
-
     #region Window_Closing
     /// <summary>
     /// Cierra la ventana
@@ -356,11 +260,22 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+
+        List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
+        List<FolioInvitationOuthousePRCancellation> lstFoliosCancel = (List<FolioInvitationOuthousePRCancellation>)dgrCancelled.ItemsSource;
+        bool blnHasChanged = ValidateChanges(lstFoliosPR, lstFoliosCancel);
+        if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode != EnumMode.edit) || blnHasChanged == true)
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAssigned.CancelEdit();
+            dgrCancelled.CancelEdit();
+          }
         }
       }
     }

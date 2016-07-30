@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" KeyDown="Window_KeyDown"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Program Detail" Height="418" Width="338">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
@@ -31,7 +31,7 @@
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
-            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
         <!--#endregion-->
 

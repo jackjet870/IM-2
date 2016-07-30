@@ -31,7 +31,7 @@
         <ComboBox Name="cmbRegion" Grid.Column="1" Grid.Row="2" Tag="region" Height="27" VerticalAlignment="Top" DisplayMemberPath="rgN" SelectedValuePath="rgID" SelectedValue="{Binding arrg}" IsEnabled="False"/>        
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Name="skpStatus" Visibility="Hidden" Margin="0,0,0,7" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Name="skpStatus" Visibility="Visible" Margin="0,0,0,7" HorizontalAlignment="Left" Grid.ColumnSpan="2">
             <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>

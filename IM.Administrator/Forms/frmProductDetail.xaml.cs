@@ -75,26 +75,8 @@ namespace IM.Administrator.Forms
         dcpText.IsEnabled = true;
         richTextBox.IsReadOnly = false;
         btnAccept.Visibility = Visibility.Visible;
+        dgrGift.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }      
-    }
-    #endregion
-
-    #region keyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 21/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel.Focus();
-        btnCancel_Click(null, null);
-      }
     }
     #endregion
 
@@ -102,20 +84,26 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Se ejecuta cuando se está cerrando la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 221/05/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing)
+      if (!blnClosing && enumMode != EnumMode.preview)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        List<Gift> lstGifts = (List<Gift>)dgrGift.ItemsSource;
+        string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
+        if (!ObjectHelper.IsEquals(product, oldProduct) || richText != _productLegend.pxText || !ObjectHelper.IsListEquals(lstGifts, _oldlstGifts))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrGift.CancelEdit();
+          }
         }
       }
     }
@@ -132,18 +120,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrGift_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      dgrGift.RowEditEnding -= dgrGift_RowEditEnding;
-      if (isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrGift.CancelEdit();
-      }
-      else
-      {
-        dgrGift.CommitEdit();
-        dgrGift.Items.Refresh();
-        GridHelper.SelectRow(dgrGift, dgrGift.SelectedIndex);
-      }
-      dgrGift.RowEditEnding += dgrGift_RowEditEnding;
+        dgrGift.RowEditEnding -= dgrGift_RowEditEnding;
+        if (isCellCancel)
+        {
+          dgrGift.CancelEdit();
+        }
+        else
+        {
+          dgrGift.CommitEdit();
+          dgrGift.Items.Refresh();
+          GridHelper.SelectRow(dgrGift, dgrGift.SelectedIndex);
+        }
+        dgrGift.RowEditEnding += dgrGift_RowEditEnding;
+      };
     }
     #endregion
 
@@ -158,7 +149,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrGift_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if(!Keyboard.IsKeyDown(Key.Escape))
+      if(e.EditAction==DataGridEditAction.Commit)
       {
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrGift,true);        
@@ -190,16 +181,15 @@ namespace IM.Administrator.Forms
         Close();
       }
       else
-      {        
-        string strMsj = ValidateHelper.ValidateForm(this, "Product");
+      {
+        StaStart("Saving Data...");
+        string strMsj = ValidateHelper.ValidateForm(this, "Product",blnDatagrids:true);
         if (strMsj == "")
-        {
-          StaStart("Saving Data...");
+        {          
           _productLegend.pxText = richText;
           List<Gift> lstAdd = lstGift.Where(gi => !_oldlstGifts.Any(gii => gii.giID == gi.giID)).ToList();
           List<Gift> lstDel = _oldlstGifts.Where(gi => !lstGift.Any(gii => gii.giID == gi.giID)).ToList();          
-          int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);          
-          StaEnd();
+          int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);                    
           UIHelper.ShowMessageResult("Product", nRes);
 
           if (nRes > 0)
@@ -213,45 +203,7 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(strMsj);
         }
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 21/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      if (enumMode != EnumMode.preview)
-      {
-        List<Gift> lstGifts = (List<Gift>)dgrGift.ItemsSource;
-        string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
-        if (!ObjectHelper.IsEquals(product, oldProduct) || richText!=_productLegend.pxText  || !ObjectHelper.IsListEquals(lstGifts, _oldlstGifts))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!blnClosing) { blnClosing = true; Close(); }
-          }
-          else
-          {
-            blnClosing = false;
-          }
-        }
-        else
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if(!blnClosing){ blnClosing = true;Close(); }
+        StaEnd();
       }
     }
     #endregion

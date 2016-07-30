@@ -7,6 +7,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
 using System;
+using System.Windows.Controls;
 
 namespace IM.Administrator.Forms
 {
@@ -83,7 +84,7 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();//Para actualizar el datacontext
-      if (ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add)
+      if (cmbUnavMot.SelectedValue!=null && ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add )
       {
         _isClosing = true;
         Close();
@@ -349,7 +350,8 @@ namespace IM.Administrator.Forms
           _isClosing = false;
         }
       }
-    } 
+    }
     #endregion
+
   }
 }

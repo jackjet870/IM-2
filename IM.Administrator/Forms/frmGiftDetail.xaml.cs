@@ -43,8 +43,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 08/07/2016
     /// </history>
@@ -65,13 +63,15 @@ namespace IM.Administrator.Forms
       dgrGiftInPack.IsReadOnly = gift.giPack;
       if (enumMode != EnumMode.preview)
       {
-        UIHelper.SetUpControls(gift, this, blnCharacters: true);
+        UIHelper.SetUpControls(gift, this, blnCharacters: true);      
         grdCost.IsEnabled = true;
         grdGeneral.IsEnabled = true;
         grdLocations.IsEnabled = true;
         txtgiID.IsEnabled = (enumMode == EnumMode.add);
       }
       DataContext = gift;
+      dgrLocations.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion    
 
@@ -295,7 +295,7 @@ namespace IM.Administrator.Forms
               bool blnIsRepeat = GridHelper.HasRepeatItem(combo, dgr, true);
               if (!blnIsRepeat)
               {
-                dtcLocations.Header = "Lccations (" + (dgr.Items.Count - 1) + ")";
+                dtcLocations.Header = "Locations (" + (dgr.Items.Count - 1) + ")";
               }
               e.Cancel = blnIsRepeat;
               break;

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Unavailable Motive Detail" Height="480" Width="490">
     <DockPanel LastChildFill="True" >
 
@@ -15,7 +15,7 @@
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
-            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
         <!--#endregion-->
 
@@ -48,58 +48,17 @@
                 <!--#region Grid Agencies-->
                 <DataGrid Name="dgrAgencies" Grid.Row="3" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,13,0,0" IsReadOnly="True">
-                    <DataGrid.Columns>                        
-                        <DataGridComboBoxColumn Header="ID" x:Name="cmbIDAgencies" Width="40*" SelectedValueBinding="{Binding agID}" DisplayMemberPath="agID" SelectedValuePath="agID" >
-                            <DataGridComboBoxColumn.EditingElementStyle>
-                                <Style TargetType="{x:Type ComboBox}">
-                                    <Setter Property="ItemTemplate">
-                                        <Setter.Value>
-                                            <DataTemplate>
-                                                <Border Margin="0,4,0,0">
-                                                    <Grid >
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
-                                                        </Grid.RowDefinitions>
-                                                        <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding agID}"/>
-                                                        <TextBlock  Text="{Binding agN}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </DataGridComboBoxColumn.EditingElementStyle>
-                        </DataGridComboBoxColumn>
+                    <DataGrid.Columns>           
                         <DataGridComboBoxColumn Header="Agency (0)" x:Name="cmbAgencies" Width="60*" SelectedValueBinding="{Binding agID}" DisplayMemberPath="agN" SelectedValuePath="agID" >
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Agency-Concat}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
                             <DataGridComboBoxColumn.EditingElementStyle>
-                                <Style TargetType="{x:Type ComboBox}">
-                                    <Setter Property="ItemTemplate">
-                                        <Setter.Value>
-                                            <DataTemplate>
-                                                <Border Margin="0,4,0,0">
-                                                    <Grid >
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
-                                                        </Grid.RowDefinitions>
-                                                        <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding agN}"/>
-                                                        <TextBlock  Text="{Binding agID}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </Setter.Value>
-                                    </Setter>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="TextSearch.TextPath" Value="agN"/>
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Agency-Concat}"/>
                                 </Style>
                             </DataGridComboBoxColumn.EditingElementStyle>
                         </DataGridComboBoxColumn>
@@ -124,57 +83,16 @@
                     <DataGrid Name="dgrCountries" ScrollViewer.VerticalScrollBarVisibility="Auto" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgr_CellEditEnding" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                           CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,15,15,0" IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridComboBoxColumn Header="ID" x:Name="cmbCountriesID" Width="40*" SelectedValuePath="coID" DisplayMemberPath="coID" SelectedValueBinding="{Binding coID}">
-                                <DataGridComboBoxColumn.EditingElementStyle>
-                                    <Style TargetType="{x:Type ComboBox}">
-                                        <Setter Property="ItemTemplate">
-                                            <Setter.Value>
-                                                <DataTemplate>
-                                                    <Border Margin="0,4,0,0">
-                                                        <Grid >
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto"/>
-                                                                <RowDefinition Height="Auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding coID}"/>
-                                                            <TextBlock  Text="{Binding coN}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </DataGridComboBoxColumn.EditingElementStyle>
-                            </DataGridComboBoxColumn>
                             <DataGridComboBoxColumn Header="Country (0)" x:Name="cmbCountries" Width="60*" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValueBinding="{Binding coID}">
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Country-Concat}"/>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
                                 <DataGridComboBoxColumn.EditingElementStyle>
-                                    <Style TargetType="{x:Type ComboBox}">
-                                        <Setter Property="ItemTemplate">
-                                            <Setter.Value>
-                                                <DataTemplate>
-                                                    <Border Margin="0,4,0,0">
-                                                        <Grid >
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto"/>
-                                                                <RowDefinition Height="Auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding coN}"/>
-                                                            <TextBlock  Text="{Binding coID}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </Setter.Value>
-                                        </Setter>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="TextSearch.TextPath" Value="coN"/>
+                                        <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Country-Concat}"/>
                                     </Style>
                                 </DataGridComboBoxColumn.EditingElementStyle>
                             </DataGridComboBoxColumn>
@@ -193,57 +111,16 @@
                     <DataGrid Name="dgrContracts" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,13,15,0" IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridComboBoxColumn Header="ID" x:Name="cmbContractsID" Width="40*" SelectedValueBinding="{Binding cnID}" DisplayMemberPath="cnID" SelectedValuePath="cnID" >
-                                <DataGridComboBoxColumn.EditingElementStyle>
-                                    <Style TargetType="{x:Type ComboBox}">
-                                        <Setter Property="ItemTemplate">
-                                            <Setter.Value>
-                                                <DataTemplate>
-                                                    <Border Margin="0,4,0,0">
-                                                        <Grid >
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto"/>
-                                                                <RowDefinition Height="Auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding cnID}"/>
-                                                            <TextBlock  Text="{Binding cnN}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </DataGridComboBoxColumn.EditingElementStyle>
-                            </DataGridComboBoxColumn>
                             <DataGridComboBoxColumn Header="Contract (0)" x:Name="cmbContracts" Width="100*" SelectedValueBinding="{Binding cnID}" DisplayMemberPath="cnN" SelectedValuePath="cnID" >
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Contract-Concat}"/>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
                                 <DataGridComboBoxColumn.EditingElementStyle>
-                                    <Style TargetType="{x:Type ComboBox}">
-                                        <Setter Property="ItemTemplate">
-                                            <Setter.Value>
-                                                <DataTemplate>
-                                                    <Border Margin="0,4,0,0">
-                                                        <Grid >
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto"/>
-                                                                <RowDefinition Height="Auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock FontWeight="Bold" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="0" Text="{Binding cnN}"/>
-                                                            <TextBlock  Text="{Binding cnID}" TextAlignment="Justify" 
-                                Grid.Column="0" Grid.Row="1"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </Setter.Value>
-                                        </Setter>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="TextSearch.TextPath" Value="coN"/>
+                                        <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Contract-Concat}"/>
                                     </Style>
                                 </DataGridComboBoxColumn.EditingElementStyle>
                             </DataGridComboBoxColumn>

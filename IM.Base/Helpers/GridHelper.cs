@@ -550,5 +550,42 @@ namespace IM.Base.Helpers
       });
     }
     #endregion
+
+    #region IsInEditMode
+    /// <summary>
+    /// Valida si un datagrid está en modo edición
+    /// </summary>
+    /// <param name="dgr">Datagrid a validar</param>
+    /// <returns>True. está en modo edición | False. No está en modo edición</returns>
+    /// <history>
+    /// [emoguel] created 29/07/2016
+    /// </history>
+    public static bool IsInEditMode(DataGrid dgr)
+    {
+      List<object> lstObject = dgr.ItemsSource.OfType<object>().ToList();
+      var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+
+      if (lstRows != null && lstRows.Any(obj => obj.IsEditing == true))
+      {
+        return true;
+      }
+      return false;
+    }
+    #endregion
+
+    #region BeginEdit
+    /// <summary>
+    /// Valida que no se puedan habilitar mas de una fila en modo edición
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 29/07/2016
+    /// </history>
+    public static void dgr_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      bool blnIsEdit = IsInEditMode(sender as DataGrid);
+      e.Cancel = blnIsEdit;
+    }
+    #endregion
+    
   }
 } 

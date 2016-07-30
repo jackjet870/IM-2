@@ -39,6 +39,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified 29/07/2016---->Se agrego la suscripcion al evento begin edit
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -47,24 +48,7 @@ namespace IM.Administrator.Forms
       DataContext = club;
       LoadAgencies(club.clID);
       txtclID.IsEnabled = (enumMode == EnumMode.add);
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 03/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
+      dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -93,7 +77,8 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          string strMsj = ValidateHelper.ValidateForm(this, "Club");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Club", blnDatagrids : true);
           if (club.clID == 0)
           {
             strMsj += (strMsj == "") ? "" : " \n " + "The Club ID can not be 0.";
@@ -116,43 +101,12 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Clubs");
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 03/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-      if (!ObjectHelper.IsEquals(club, oldClub) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -165,10 +119,11 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified se agregó la validación de editAction
     /// </history>
     private void dgrAgencies_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);
@@ -186,15 +141,14 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// No repite registros vacios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
+    /// [emoguel] modified se agregó la validación de editAction
     /// </history>
     private void dgrAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (isCellCancel)
-      {
+      if(e.EditAction==DataGridEditAction.Commit && isCellCancel)
+      { 
         dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
         dgrAgencies.CancelEdit();
         dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
@@ -215,11 +169,19 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        if (!ObjectHelper.IsEquals(club, oldClub) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAgencies.CancelEdit();
+          }
         }
       }
     }

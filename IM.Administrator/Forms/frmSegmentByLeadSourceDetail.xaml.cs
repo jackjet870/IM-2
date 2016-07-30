@@ -53,49 +53,34 @@ namespace IM.Administrator.Forms
         dgrLeadSources.IsReadOnly = false;
       }
       DataContext = segmentByLeadSource;
+      dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 02/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
+    #endregion    
 
     #region Closing
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode != EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
+        if (!ObjectHelper.IsEquals(segmentByLeadSource, oldSegmentByLeadSource) || !ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrLeadSources.CancelEdit();
+          }
         }
       }
     }
@@ -105,22 +90,23 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se agreguen registros vacios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void dgrLeadSources_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrLeadSources.RowEditEnding -= dgrLeadSources_RowEditEnding;
-        dgrLeadSources.CancelEdit();
-        dgrLeadSources.RowEditEnding += dgrLeadSources_RowEditEnding;
-      }
-      else
-      {
-        cmbLeadSources.Header = "Lead Source (" + (dgrLeadSources.Items.Count - 1) + ")";
+        if (_isCellCancel)
+        {
+          dgrLeadSources.RowEditEnding -= dgrLeadSources_RowEditEnding;
+          dgrLeadSources.CancelEdit();
+          dgrLeadSources.RowEditEnding += dgrLeadSources_RowEditEnding;
+        }
+        else
+        {
+          cmbLeadSources.Header = "Lead Source (" + (dgrLeadSources.Items.Count - 1) + ")";
+        }
       }
     }
     #endregion
@@ -129,14 +115,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se repita un leadSource
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void dgrLeadSources_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))
+      if (e.EditAction==DataGridEditAction.Commit)
       {
         _isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrLeadSources, true);
@@ -153,8 +137,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Guarda un segment by Lead Source
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
@@ -173,7 +155,8 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          string strMsj = ValidateHelper.ValidateForm(this, "Segment By Lead Source");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Segment By Lead Source",blnDatagrids:true);
           if (strMsj == "")
           {
             List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
@@ -192,50 +175,12 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch (Exception ex)
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Clubs");
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 02/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode != EnumMode.preview)
-      {
-        List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
-        if (!ObjectHelper.IsEquals(segmentByLeadSource, oldSegmentByLeadSource) || !ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion

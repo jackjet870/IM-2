@@ -39,6 +39,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 17/06/2016
+    /// [emoguel] modified 29/07/2016--->Se agregó el método Beginnigedti
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -48,22 +49,8 @@ namespace IM.Administrator.Forms
       UIHelper.SetUpControls(desk, this);
       LoadGridComputers();
       LoadCmbComputers();
+      dgrComputers.BeginningEdit += GridHelper.dgr_BeginningEdit;
     } 
-    #endregion
-
-    #region Window Key Down
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
     #endregion
 
     #region Boton aceptar
@@ -90,7 +77,8 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          string strMsj = ValidateHelper.ValidateForm(this, "Desk");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Desk",blnDatagrids:true);
           int nRes = 0;
 
           if (strMsj == "")
@@ -110,6 +98,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
@@ -130,7 +119,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrComputers_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         _isCellCancel = false;
         bool blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrComputers);
@@ -143,46 +132,7 @@ namespace IM.Administrator.Forms
 
     }
     #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 29/03/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
-      {
-        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;        
-        if (!ObjectHelper.IsEquals(desk, oldDesk) || !ObjectHelper.IsListEquals(lstComputers,_oldLstComputers))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
-    }
-    #endregion
-
+      
     #region Window_Closing
     /// <summary>
     /// Cierra la ventana
@@ -194,17 +144,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode != EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+        if (!ObjectHelper.IsEquals(desk, oldDesk) || !ObjectHelper.IsListEquals(lstComputers, _oldLstComputers))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrComputers.CancelEdit();
+          }
         }
       }
 
@@ -222,15 +176,18 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrComputers_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrComputers.RowEditEnding -= dgrComputers_RowEditEnding;
-        dgrComputers.CancelEdit();
-        dgrComputers.RowEditEnding += dgrComputers_RowEditEnding;
-      }
-      else
-      {
-        cmbComputers.Header = "Computer (" + (dgrComputers.Items.Count - 1) + ")";
+        if (_isCellCancel)
+        {
+          dgrComputers.RowEditEnding -= dgrComputers_RowEditEnding;
+          dgrComputers.CancelEdit();
+          dgrComputers.RowEditEnding += dgrComputers_RowEditEnding;
+        }
+        else
+        {
+          cmbComputers.Header = "Computer (" + (dgrComputers.Items.Count - 1) + ")";
+        }
       }
     }
     #endregion

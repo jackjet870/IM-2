@@ -36,8 +36,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
@@ -54,49 +52,34 @@ namespace IM.Administrator.Forms
         dgrSegmentsCategory.IsReadOnly = false;
       }
       DataContext = segmentCategory;
+      dgrSegmentsCategory.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 02/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
+    #endregion    
 
     #region Closing
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode!=EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<Item> lstItems = (List<Item>)dgrSegmentsCategory.ItemsSource;
+        if (!ObjectHelper.IsEquals(segmentCategory, oldSegmentCategory) || !ObjectHelper.IsListEquals(lstItems, _lstOldItems, "UserId"))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrSegmentsCategory.CancelEdit();
+          }
         }
       }
     }
@@ -128,26 +111,27 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se agregue un resgistro vacio
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void dgrSegmentsCategory_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      dgrSegmentsCategory.RowEditEnding -= dgrSegmentsCategory_RowEditEnding;
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrSegmentsCategory.CancelEdit();
+        dgrSegmentsCategory.RowEditEnding -= dgrSegmentsCategory_RowEditEnding;
+        if (_isCellCancel)
+        {
+          dgrSegmentsCategory.CancelEdit();
+        }
+        else
+        {
+          dgrSegmentsCategory.CommitEdit();
+          dgrSegmentsCategory.Items.Refresh();
+          GridHelper.SelectRow(dgrSegmentsCategory, dgrSegmentsCategory.SelectedIndex);
+          cmbSegmentsCat.Header = "Segment (" + (dgrSegmentsCategory.Items.Count - 1) + ")";
+        }
+        dgrSegmentsCategory.RowEditEnding += dgrSegmentsCategory_RowEditEnding;
       }
-      else
-      {
-        dgrSegmentsCategory.CommitEdit();
-        dgrSegmentsCategory.Items.Refresh();
-        GridHelper.SelectRow(dgrSegmentsCategory, dgrSegmentsCategory.SelectedIndex);
-        cmbSegmentsCat.Header = "Segment (" + (dgrSegmentsCategory.Items.Count - 1) + ")";
-      }
-      dgrSegmentsCategory.RowEditEnding += dgrSegmentsCategory_RowEditEnding;
     }
     #endregion
 
@@ -155,14 +139,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se repita un registro ya agregado
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
     private void dgrSegmentsCategory_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))
+      if (e.EditAction==DataGridEditAction.Commit)
       {
         _isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrSegmentsCategory,true);        
@@ -179,8 +161,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Guarda un segmentCategory
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 02/06/2016
     /// </history>
@@ -199,7 +179,8 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          string strMsj = ValidateHelper.ValidateForm(this, "Segment Category");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Segment Category",blnDatagrids:true);
           if (strMsj == "")
           {            
             List<Item> lstAdd = lstItems.Where(it => !_lstOldItems.Any(itt => itt.UserId == it.UserId)).ToList();
@@ -218,50 +199,12 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Segment Category");
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 02/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode != EnumMode.preview)
-      {
-        List<Item> lstItems = (List<Item>)dgrSegmentsCategory.ItemsSource;
-        if (!ObjectHelper.IsEquals(segmentCategory, oldSegmentCategory) || !ObjectHelper.IsListEquals(lstItems, _lstOldItems,"UserId"))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

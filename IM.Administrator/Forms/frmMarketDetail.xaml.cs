@@ -51,26 +51,9 @@ namespace IM.Administrator.Forms
         chkmkA.IsEnabled = true;
         dgrAgencies.IsReadOnly = false;
         btnAccept.Visibility = Visibility.Visible;
+        dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
       DataContext = market;
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 18/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
     }
     #endregion
 
@@ -85,7 +68,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrAgencies_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
         bool isRepeat=GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);        
@@ -102,57 +85,16 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// RownEdingEdit
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
     /// </history>
     private void dgrAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {     
-      if (isCellCancel)
+      if (e.EditAction==DataGridEditAction.Commit && isCellCancel)
       {
         dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
         dgrAgencies.CancelEdit();
         dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 18/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
-      {
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-        if (!ObjectHelper.IsEquals(market, oldMarket) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {            
-            if (!blnClosing) { blnClosing = true; Close(); }
-          }
-          else
-          {
-            blnClosing = false;
-          }
-        }
-        else
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -166,21 +108,25 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
       if (enumMode != EnumMode.add && ObjectHelper.IsEquals(market, oldMarket) && ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
       {
+        blnClosing = true;
         Close();
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Market");
+        string strMsj = ValidateHelper.ValidateForm(this, "Market", blnDatagrids: true);
         if (strMsj == "")
         {
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          btnAccept.Visibility = Visibility.Collapsed;
           List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();          
-          int nRes = BRMarkets.SaveMarket(market,lstAdd,(enumMode==EnumMode.edit));
+          int nRes = await BRMarkets.SaveMarket(market,lstAdd,(enumMode==EnumMode.edit));
           UIHelper.ShowMessageResult("Market", nRes);
           if (nRes > 0)
           {
@@ -193,6 +139,8 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(strMsj);
         }
+        skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
     #endregion
@@ -228,20 +176,26 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Se ejecuta cuando se está cerrando la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 19/05/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing)
+      if (!blnClosing && enumMode != EnumMode.preview)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        if (!ObjectHelper.IsEquals(market, oldMarket) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAgencies.CancelEdit();
+          }
         }
       }
     }

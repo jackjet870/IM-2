@@ -85,6 +85,10 @@ namespace IM.Administrator.Forms
         personnel.peps = "ACTIVE";
       }
       DataContext = personnel;
+      dgrRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dgrSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dgrWarehouses.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -133,9 +137,17 @@ namespace IM.Administrator.Forms
           || lstPersonnelPermissionDel.Count > 0 || lstPersonnelPermissionUpd.Count > 0))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result != MessageBoxResult.Yes)
+          if (result == MessageBoxResult.No)
           {
             e.Cancel = true;
+          }
+          else
+          {
+            dgrLeadSources.CancelEdit();
+            dgrPermission.CancelEdit();
+            dgrSalesRoom.CancelEdit();
+            dgrWarehouses.CancelEdit();
+            dgrRoles.CancelEdit();
           }
         }
         if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd))
@@ -185,7 +197,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Hidden;
-          string strMsj = ValidateHelper.ValidateForm(tbiGeneral, "Personnel");
+          string strMsj = ValidateHelper.ValidateForm(tbiGeneral, "Personnel",blnDatagrids:true);
           string strValidate = ValidateGeneral();
           if (strValidate != "")
           {
@@ -418,14 +430,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se repita un registro
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
     private void CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))
+      if (e.EditAction==DataGridEditAction.Commit)
       {
         _isCellCancel = false;
         DataGrid dgrEdit = sender as DataGrid;
@@ -440,9 +450,7 @@ namespace IM.Administrator.Forms
               break;
             }
           case "plLSSRID":
-            {
-              var cp = (ContentPresenter)e.EditingElement;
-              var combo = (ComboBox)cp.ContentTemplate.FindName("cmbLocations", cp);
+            {              
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit,strPropGrid: "plLSSRID",typeName:e.Column.Header.ToString());
               e.Cancel = blnIsRepeat;
               
@@ -470,28 +478,29 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se agreguen filas vacias
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 14/06/2016
     /// </history>
     private void RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid dgr = sender as DataGrid;
-      dgr.RowEditEnding -= RowEditEnding;
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgr.CancelEdit();
-      }
-      else
-      {        
-        if (dgr.Name== "dgrPermission" && dgr.CurrentColumn.SortMemberPath == "pppm")
+        DataGrid dgr = sender as DataGrid;
+        dgr.RowEditEnding -= RowEditEnding;
+        if (_isCellCancel)
         {
-          dgr.CommitEdit();
-          dgr.Items.Refresh();
+          dgr.CancelEdit();
         }
+        else
+        {
+          if (dgr.Name == "dgrPermission" && dgr.CurrentColumn.SortMemberPath == "pppm")
+          {
+            dgr.CommitEdit();
+            dgr.Items.Refresh();
+          }
+        }
+        dgr.RowEditEnding += RowEditEnding;
       }
-      dgr.RowEditEnding += RowEditEnding;
     }
     #endregion
 
@@ -499,17 +508,22 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Permite editar unicamente cuando un el permiso ha sido asignado
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 14/06/2016
     /// </history>
     private void dgrPermission_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      if (e.Column.SortMemberPath == "pppl")
+      if (!GridHelper.IsInEditMode(sender as DataGrid))
       {
-        PersonnelPermission personelPermission = (PersonnelPermission)e.Row.Item;
-        e.Cancel = (string.IsNullOrWhiteSpace(personelPermission.pppm));
+        if (e.Column.SortMemberPath == "pppl")
+        {
+          PersonnelPermission personelPermission = (PersonnelPermission)e.Row.Item;
+          e.Cancel = (string.IsNullOrWhiteSpace(personelPermission.pppm));
+        }
+      }
+      else
+      {
+        e.Cancel = true;
       }
     }
     #endregion

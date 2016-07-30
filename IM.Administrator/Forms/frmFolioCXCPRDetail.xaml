@@ -4,31 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded"
+        mc:Ignorable="d" Loaded="Window_Loaded"
         Title="Folio CXC by PR Detail" Height="418" Width="338" Closing="Window_Closing">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
-        <Grid DockPanel.Dock="Top" Margin="10,10,14,2" Height="77">
+        <Grid DockPanel.Dock="Top" Margin="10,10,14,2" Height="35">
             <!--#region Formato del grid-->
             <Grid.RowDefinitions>
-                <RowDefinition Height="44"/>
                 <RowDefinition Height="44"/>
                 <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
             <!--#endregion-->
-            <!--#region títulos-->
-            <Label Grid.Column="0" Grid.Row="0">PR ID</Label>
-            <Label Grid.Column="0" Grid.Row="1" Margin="0,0,0,12">Description</Label>
-            <!--#endregion-->
-            <TextBox Name="txtpeID" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding peID}" CharacterCasing="Upper" IsEnabled="False" Margin="69,0,0,0" >
-                <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
-            AncestorType={x:Type Window}},
-            Path=KeyEnter}" Key="Enter" />
-                    
-                </TextBox.InputBindings>
-            </TextBox>
-            <ComboBox Name="cmbPersonnel" IsEditable="True" IsTextSearchEnabled="True" SelectionChanged="cmbPersonnel_SelectionChanged" Tag="Name" Grid.Row="1" Height="21" VerticalAlignment="Top" SelectedValue="{Binding peID}" DisplayMemberPath="peN" SelectedValuePath="peID" IsEnabled="False" Margin="69,0,0,0" />
+            <!--#region títulos-->            
+            <Label Grid.Column="0" Grid.Row="0" Margin="0,0,0,12">Description</Label>
+            <!--#endregion-->            
+            <ComboBox Name="cmbPersonnel" IsEditable="True" IsTextSearchEnabled="True" Tag="Name" Grid.Row="0" Height="21" VerticalAlignment="Top" SelectedValue="{Binding peID}" SelectedValuePath="peID" IsEnabled="False" Margin="69,0,0,0" TextSearch.TextPath="peN">
+                <ComboBox.ItemTemplate>
+                    <StaticResource ResourceKey="cbx-Personnel-Concat" />
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!--#endregion-->
 
@@ -39,7 +33,7 @@
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Visibility="Hidden" Content="_Accept" Margin="0,4,84,4"/>
-            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
         <!--#endregion-->
 

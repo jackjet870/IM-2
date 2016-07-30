@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model;
 using IM.Model.Enums;
@@ -41,6 +40,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified 29/07/2016---->se agregó la suscripción al evento begin edit
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -49,24 +49,7 @@ namespace IM.Administrator.Forms
       UIHelper.SetUpControls(dept, this);
       DataContext = dept;
       LoadPersonnels(dept.deID);
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] cretaed 03/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if(e.Key==Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
+      dgrPersonnel.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -79,7 +62,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// 
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
@@ -90,12 +73,13 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Dept");
+        string strMsj = ValidateHelper.ValidateForm(this, "Dept",blnDatagrids:true);
         if (strMsj == "")
         {
+          btnAccept.Visibility = Visibility.Collapsed;
           List<Personnel> lstAdd = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
-          int nRes = BRDepts.SaveDept(dept,(enumMode==EnumMode.edit),lstAdd,lstDel);
+          int nRes = await BRDepts.SaveDept(dept,(enumMode==EnumMode.edit),lstAdd,lstDel);
           UIHelper.ShowMessageResult("Dept", nRes);
           if (nRes > 0)
           {
@@ -108,40 +92,10 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(strMsj);
         }
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 03/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
-      if (!ObjectHelper.IsEquals(dept, oldDept) || !ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
-    }
-    #endregion
+    #endregion  
 
     #region EndEdit
     /// <summary>
@@ -178,18 +132,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrPersonnel_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      dgrPersonnel.RowEditEnding -= dgrPersonnel_RowEditEnding;
-      if (_blnIsCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrPersonnel.CancelEdit();
+        dgrPersonnel.RowEditEnding -= dgrPersonnel_RowEditEnding;
+        if (_blnIsCellCancel)
+        {
+          dgrPersonnel.CancelEdit();
+        }
+        else
+        {
+          dgrPersonnel.CommitEdit();
+          dgrPersonnel.Items.Refresh();
+          GridHelper.SelectRow(dgrPersonnel, dgrPersonnel.SelectedIndex);
+        }
+        dgrPersonnel.RowEditEnding += dgrPersonnel_RowEditEnding;
       }
-      else
-      {
-        dgrPersonnel.CommitEdit();
-        dgrPersonnel.Items.Refresh();
-        GridHelper.SelectRow(dgrPersonnel, dgrPersonnel.SelectedIndex);
-      }
-      dgrPersonnel.RowEditEnding += dgrPersonnel_RowEditEnding;
     }
     #endregion
 
@@ -206,11 +163,18 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
+        if (!ObjectHelper.IsEquals(dept, oldDept) || !ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrPersonnel.CancelEdit();
+          }
         }
       }
     }

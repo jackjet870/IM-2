@@ -76,7 +76,7 @@
             <ComboBox Name="cmbRep" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" SelectedValuePath="rpID" DisplayMemberPath="rpID" SelectedValue="{Binding agrp}" IsEnabled="False"/>
             <ComboBox Name="cmbSegment" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" SelectedValuePath="seID" DisplayMemberPath="seN" SelectedValue="{Binding agse}" IsEnabled="False"/>
             <ComboBox Name="cmbClub" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValuePath="clID" DisplayMemberPath="clN" SelectedValue="{Binding agcl}" IsEnabled="False"/>
-            <ComboBox Name="cmbCountri" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValue="{Binding agco}" IsEnabled="False"/>
+            <ComboBox Name="cmbCountri" Tag="country" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValue="{Binding agco}" IsEnabled="False"/>
             <Grid Grid.Column="1" Grid.Row="4" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>

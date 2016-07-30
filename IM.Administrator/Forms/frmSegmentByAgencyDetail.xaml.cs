@@ -35,8 +35,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 31/05/2016
     /// </history>
@@ -53,49 +51,34 @@ namespace IM.Administrator.Forms
         dgrAgencies.IsReadOnly = false;
       }
       DataContext = segmentByAgency;
+      dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 31/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
+    #endregion    
 
     #region Closing
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 31/05/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode != EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        if (!ObjectHelper.IsEquals(segmentByAgency, oldSegmentByAgency) || !ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrAgencies.CancelEdit();
+          }
         }
       }
     }
@@ -105,26 +88,27 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se creen registros vacios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 31/05/2016
     /// </history>
     private void dgrAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrAgencies.CancelEdit();
+        dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
+        if (_isCellCancel)
+        {
+          dgrAgencies.CancelEdit();
+        }
+        else
+        {
+          dgrAgencies.CommitEdit();
+          dgrAgencies.Items.Refresh();
+          GridHelper.SelectRow(dgrAgencies, dgrAgencies.SelectedIndex);
+          cmbAgenciesID.Header = "Agency (" + (dgrAgencies.Items.Count - 1) + ")";
+        }
+        dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
       }
-      else
-      {
-        dgrAgencies.CommitEdit();
-        dgrAgencies.Items.Refresh();
-        GridHelper.SelectRow(dgrAgencies, dgrAgencies.SelectedIndex);
-        cmbAgenciesN.Header = "Agency (" + (dgrAgencies.Items.Count - 1) + ")";
-      }
-      dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
     }
     #endregion
 
@@ -144,7 +128,7 @@ namespace IM.Administrator.Forms
         var item = dgrAgencies.SelectedItem;
         if (item.GetType().Name == "Agency")
         {
-          cmbAgenciesN.Header = "Agency (" + (dgrAgencies.Items.Count - 2) + ")";
+          cmbAgenciesID.Header = "Agency (" + (dgrAgencies.Items.Count - 2) + ")";
         }
       }
     } 
@@ -225,45 +209,6 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 31/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode != EnumMode.preview)
-      {
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-        if (!ObjectHelper.IsEquals(segmentByAgency, oldSegmentByAgency) || !ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
-    }
-    #endregion
     #endregion
 
     #region Methods
@@ -280,8 +225,7 @@ namespace IM.Administrator.Forms
       {
         List<Agency> lstAllAgencies = await BRAgencies.GetAgencies(null);
         List<Agency> lstAgencies = (!string.IsNullOrWhiteSpace(segmentByAgency.seID)) ? lstAllAgencies.Where(ag => ag.agse == segmentByAgency.seID).ToList() : new List<Agency>();
-        dgrAgencies.ItemsSource = lstAgencies;
-        cmbAgenciesN.ItemsSource = lstAllAgencies;
+        dgrAgencies.ItemsSource = lstAgencies;        
         cmbAgenciesID.ItemsSource = lstAllAgencies;
         lstAgencies.ForEach((Action<Agency>)(ag => {
           Agency agency = new Agency();
@@ -292,7 +236,7 @@ namespace IM.Administrator.Forms
         {
           btnAccept.Visibility = Visibility.Visible;
         }
-        cmbAgenciesN.Header = "Agency (" + lstAgencies.Count + ")";
+        cmbAgenciesID.Header = "Agency (" + lstAgencies.Count + ")";
         skpStatus.Visibility = Visibility.Collapsed;
       }
       catch (Exception ex)

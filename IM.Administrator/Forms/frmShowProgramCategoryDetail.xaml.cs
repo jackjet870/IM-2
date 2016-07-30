@@ -35,8 +35,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
@@ -47,24 +45,7 @@ namespace IM.Administrator.Forms
       txtsgID.IsEnabled = (enumMode == EnumMode.add);
       DataContext = showProgramCategory;
       LoadShowPrograms();
-    }
-    #endregion
-
-    #region key Down
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
+      dgrShowPrograms.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -72,8 +53,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
@@ -81,15 +60,19 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
+        if (!ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) || !ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrShowPrograms.CancelEdit();
+          }
         }
       }
     }
@@ -99,75 +82,50 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Guarda los cambios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) && ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
+      try
       {
-        _isClosing = true;
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Show Program Category");
-        if (strMsj == "")
+        btnAccept.Focus();
+        List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) && ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
         {
-          txtStatus.Text = "Saving Data...";
-          skpStatus.Visibility = Visibility.Visible;
-          List<ShowProgram> lstAdd = lstShowPrograms.Where(sk => !_lstOldShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
-          List<ShowProgram> lstDel = _lstOldShowPrograms.Where(sk => !lstShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
-          int nRes =await BRShowProgramsCategories.SaveShowProgramCategory(showProgramCategory, lstAdd, lstDel, (enumMode == EnumMode.edit));
-          UIHelper.ShowMessageResult("Show Program Category", nRes);
-          if (nRes > 0)
+          _isClosing = true;
+          Close();
+        }
+        else
+        {
+          string strMsj = ValidateHelper.ValidateForm(this, "Show Program Category", blnDatagrids: true);
+          if (strMsj == "")
           {
-            _isClosing = true;
-            DialogResult = true;
-            Close();
+            txtStatus.Text = "Saving Data...";
+            skpStatus.Visibility = Visibility.Visible;
+            btnAccept.Visibility = Visibility.Collapsed;
+            List<ShowProgram> lstAdd = lstShowPrograms.Where(sk => !_lstOldShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
+            List<ShowProgram> lstDel = _lstOldShowPrograms.Where(sk => !lstShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
+            int nRes = await BRShowProgramsCategories.SaveShowProgramCategory(showProgramCategory, lstAdd, lstDel, (enumMode == EnumMode.edit));
+            UIHelper.ShowMessageResult("Show Program Category", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
           }
-        }
-        else
-        {
-          UIHelper.ShowMessage(strMsj);
-        }
-        skpStatus.Visibility = Visibility.Collapsed;
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Verifica cambios pendientes antes de cerrar
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
-      if (!ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) || !ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-        else
-        {
-          _isClosing = false;
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
-      else
+      catch(Exception ex)
       {
-        if (!_isClosing) { _isClosing = true; Close(); }
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -176,22 +134,19 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// No permite que se repita un mismo registro
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
     private void dgrShowPrograms_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrShowPrograms.RowEditEnding -= dgrShowPrograms_RowEditEnding;
-        dgrShowPrograms.CancelEdit();
-        dgrShowPrograms.RowEditEnding += dgrShowPrograms_RowEditEnding;
+        bool blnRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrShowPrograms);
+        e.Cancel = blnRepeat;
       }
       else
       {
-        cmbShowPrograms.Header = "Show Programs (" + (dgrShowPrograms.Items.Count - 1) + ")";
+        _isCellCancel = true;
       }
     }
     #endregion
@@ -200,25 +155,25 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que no se agreguen registros vacios al grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/06/2016
     /// </history>
     private void dgrShowPrograms_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      dgrShowPrograms.RowEditEnding -= dgrShowPrograms_RowEditEnding;
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrShowPrograms.CancelEdit();
+        if (_isCellCancel)
+        {
+          dgrShowPrograms.RowEditEnding -= dgrShowPrograms_RowEditEnding;
+          dgrShowPrograms.CancelEdit();
+          dgrShowPrograms.RowEditEnding += dgrShowPrograms_RowEditEnding;
+        }
+        else
+        {
+          cmbShowPrograms.Header = "Show Programs (" + (dgrShowPrograms.Items.Count - 1) + ")";
+        }
+        dgrShowPrograms.RowEditEnding -= dgrShowPrograms_RowEditEnding;        
       }
-      else
-      {
-        dgrShowPrograms.CommitEdit();
-        dgrShowPrograms.Items.Refresh();
-        GridHelper.SelectRow(dgrShowPrograms, dgrShowPrograms.SelectedIndex);
-      }
-      dgrShowPrograms.RowEditEnding += dgrShowPrograms_RowEditEnding;
     }
     #endregion
 

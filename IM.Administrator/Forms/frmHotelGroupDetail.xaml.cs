@@ -51,27 +51,11 @@ namespace IM.Administrator.Forms
         dgrHotels.IsReadOnly = false;
         txthoID.IsEnabled = (enumMode == EnumMode.add);
         btnAccept.Visibility = Visibility.Visible;
+        dgrHotels.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
       LoadHotels();
       DataContext = hotelGroup;
-    }
-    #endregion
-
-    #region Window keyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 12/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
+      dgrHotels.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -79,14 +63,12 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica que un Hotel no se seleccione 2 veces
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 12/05/2016
     /// </history>
     private void dgrHotels_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrHotels);
@@ -110,13 +92,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing)
+      if (!blnClosing && enumMode != EnumMode.preview)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();
+        List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
+        if (!ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) || !ObjectHelper.IsListEquals(lstHotels, _oldHotels))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrHotels.CancelEdit();
+          }
         }
       }
     }
@@ -130,7 +120,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void dgrHotels_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (isCellCancel)
+      if (e.EditAction==DataGridEditAction.Commit && isCellCancel)
       {
         dgrHotels.RowEditEnding -= dgrHotels_RowEditEnding;
         dgrHotels.CancelEdit();
@@ -163,7 +153,8 @@ namespace IM.Administrator.Forms
         {
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
-          string strMsj = ValidateHelper.ValidateForm(this, "Hotel");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Hotel", blnDatagrids: true);
           if (strMsj == "")
           {
             List<Hotel> lstAdd = lstHotels.Where(ho => !_oldHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
@@ -182,51 +173,13 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel Group");
       }      
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verficando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 12/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (enumMode != EnumMode.preview)
-      {
-        List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
-        if (!ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) || !ObjectHelper.IsListEquals(lstHotels, _oldHotels))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!blnClosing) { blnClosing = true; Close(); }
-          }
-          else
-          {
-            blnClosing = false;
-          }
-        }
-        else
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
     }
     #endregion
     #endregion

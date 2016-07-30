@@ -52,30 +52,10 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 26/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
-
     #region Closing
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 26/05/2016
     /// </history>
@@ -83,15 +63,18 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();
+        if (!ObjectHelper.IsEquals(scoreRule, oldScoreRule) || hasChageScores())
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          blnClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrScores.CancelEdit();
+          }
         }
       }
     }
@@ -117,7 +100,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule");
+        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule",blnDatagrids:true);
         if (strMsj == "")
         {
           skpStatus.Visibility = Visibility.Visible;
@@ -159,37 +142,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 27/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if (!ObjectHelper.IsEquals(scoreRule, oldScoreRule)  || hasChageScores())
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
-    }
-    #endregion
-
     #region CellEdit
     /// <summary>
     /// Verifica que no se repita un concept
@@ -201,7 +153,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrScores_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if(!Keyboard.IsKeyDown(Key.Escape))
+      if(e.EditAction==DataGridEditAction.Commit)
       {
         isCellCancel = false;
         if (e.EditingElement is Control)
@@ -227,22 +179,25 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 26/06/2016
     /// </history>
     private void dgrScores_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-    {      
-      if (isCellCancel)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrScores.RowEditEnding -= dgrScores_RowEditEnding;
-        dgrScores.CancelEdit();
-        if(e.Row.IsNewItem)
+        if (isCellCancel)
         {
-          dgrScores.Items.RemoveAt(dgrScores.SelectedIndex);
-          dgrScores.Items.Refresh();
+          dgrScores.RowEditEnding -= dgrScores_RowEditEnding;
+          dgrScores.CancelEdit();
+          if (e.Row.IsNewItem)
+          {
+            dgrScores.Items.RemoveAt(dgrScores.SelectedIndex);
+            dgrScores.Items.Refresh();
+          }
+          dgrScores.RowEditEnding += dgrScores_RowEditEnding;
         }
-        dgrScores.RowEditEnding += dgrScores_RowEditEnding;
+        else
+        {
+          cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count - 1) + ")";
+        }
       }
-      else
-      {
-        cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count-1) + ")";
-      }      
     }
     #endregion
 
@@ -257,14 +212,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrScores_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      if ((e.Column is DataGridComboBoxColumn) == false)
+      if (!GridHelper.IsInEditMode(dgrScores))
       {
-        var item = e.Row.Item;
-        if (Convert.ToInt32(item.GetType().GetProperty("sisp").GetValue(item)) < 1)
+        if ((e.Column is DataGridComboBoxColumn) == false)
         {
-          UIHelper.ShowMessage("Please select one concept");
-          e.Cancel = true;
+          var item = e.Row.Item;
+          if (Convert.ToInt32(item.GetType().GetProperty("sisp").GetValue(item)) < 1)
+          {
+            UIHelper.ShowMessage("Please select one concept");
+            e.Cancel = true;
+          }
         }
+      }
+      else
+      {
+        e.Cancel = true;
       }
     }
     #endregion

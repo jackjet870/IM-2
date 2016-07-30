@@ -41,8 +41,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Carga los datos de la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 09/06/2016
     /// </history>
@@ -57,26 +55,9 @@ namespace IM.Administrator.Forms
         txtznN.IsEnabled = true;
         chkznA.IsEnabled = true;
         dgrLeadSources.IsReadOnly = false;
+        dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
       DataContext = zone;
-    }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 09/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
     }
     #endregion
 
@@ -84,24 +65,26 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 09/06/2016
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing)
+      if (!_isClosing && enumMode != EnumMode.preview)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
+        if (!ObjectHelper.IsEquals(zone, oldZone) || !ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrLeadSources.CancelEdit();
+          }
         }
       }
     }
@@ -111,8 +94,6 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Guarda los cambios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 09/06/2016
     /// </history>
@@ -127,11 +108,12 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Zone");
+        string strMsj = ValidateHelper.ValidateForm(this, "Zone",blnDatagrids:true);
         if (strMsj == "")
         {
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
+          btnAccept.Visibility = Visibility.Collapsed;
           List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
           List<LeadSource> lstDel = _lstOldLeadSources.Where(ls => !lstLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
           int nRes = await BRZones.SaveZone(zone,lstAdd,lstDel,(enumMode==EnumMode.edit));
@@ -148,62 +130,21 @@ namespace IM.Administrator.Forms
           UIHelper.ShowMessage(strMsj);
         }
         skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 09/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      if(enumMode!=EnumMode.preview)
-      {
-        btnCancel.Focus();
-        List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
-        if (!ObjectHelper.IsEquals(zone, oldZone) || !ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
-    }
-
     #endregion
 
     #region CellEditing
     /// <summary>
     /// Verifica que no se repita un registro
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 09/06/2016
     /// </history>
     private void dgrZones_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if(!Keyboard.IsKeyDown(Key.Escape))
+      if(e.EditAction==DataGridEditAction.Commit)
       {
         _isCellCancel = false;
         bool blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrLeadSources);
@@ -220,22 +161,23 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verfiica que no se guarden registros vacios
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 09/06/2016
     /// </history>
     private void dgrZones_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (_isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrLeadSources.RowEditEnding -= dgrZones_RowEditEnding;
-        dgrLeadSources.CancelEdit();
-        dgrLeadSources.RowEditEnding += dgrZones_RowEditEnding;
-      }
-      else
-      {
-        cmbLeadSources.Header = "Lead Source (" + (dgrLeadSources.Items.Count - 1) + ")";
+        if (_isCellCancel)
+        {
+          dgrLeadSources.RowEditEnding -= dgrZones_RowEditEnding;
+          dgrLeadSources.CancelEdit();
+          dgrLeadSources.RowEditEnding += dgrZones_RowEditEnding;
+        }
+        else
+        {
+          cmbLeadSources.Header = "Lead Source (" + (dgrLeadSources.Items.Count - 1) + ")";
+        }
       }
     } 
     #endregion

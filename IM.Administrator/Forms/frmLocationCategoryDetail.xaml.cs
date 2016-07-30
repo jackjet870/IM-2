@@ -47,25 +47,7 @@ namespace IM.Administrator.Forms
       txtlcID.IsEnabled = (enumMode == EnumMode.add);
       DataContext = locationCategory;
       loadLocations();
-    }
-    #endregion
-
-    #region keyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 17/05/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel.Focus();
-        Close();
-      }
+      dgrLocation.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -80,7 +62,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrLocation_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrLocation);
@@ -98,39 +80,24 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Verifica si se esta cancelando la edicion para que no se agregue una fila vacia
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/05/2016
     /// </history>
     private void dgrLocation_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrLocation.RowEditEnding -= dgrLocation_RowEditEnding;
-        dgrLocation.CancelEdit();
-        dgrLocation.RowEditEnding += dgrLocation_RowEditEnding;
+        if (isCellCancel)
+        {
+          dgrLocation.RowEditEnding -= dgrLocation_RowEditEnding;
+          dgrLocation.CancelEdit();
+          dgrLocation.RowEditEnding += dgrLocation_RowEditEnding;
+        }
+        else
+        {
+          cmbLocations.Header = "Location (" + (dgrLocation.Items.Count - 1) + ")";
+        }
       }
-      else
-      {
-        cmbLocations.Header = "Location (" + (dgrLocation.Items.Count - 1) + ")";
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 17/05/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      Close();
     }
     #endregion
 
@@ -143,7 +110,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private  async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       List<Location> lstLocations = (List<Location>)dgrLocation.ItemsSource;
@@ -154,12 +121,15 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Location");
+        btnAccept.Visibility = Visibility.Collapsed;
+        skpStatus.Visibility = Visibility.Visible;
+        txtStatus.Text = "Saving data...";
+        string strMsj = ValidateHelper.ValidateForm(this, "Location",blnDatagrids:true);
         if (strMsj == "")
         {
           List<Location> lstAdd = lstLocations.Where(lo => !_oldLocations.Any(loo => loo.loID == lo.loID)).ToList();
           List<Location> lstDel = _oldLocations.Where(lo => !lstLocations.Any(loo => loo.loID == lo.loID)).ToList();
-          int nRes = BRLocationsCategories.SaveLocationCategories(locationCategory,lstAdd,lstDel,(enumMode==EnumMode.edit));
+          int nRes = await BRLocationsCategories.SaveLocationCategories(locationCategory,lstAdd,lstDel,(enumMode==EnumMode.edit));
           UIHelper.ShowMessageResult("Location", nRes);
           if (nRes > 0)
           {
@@ -172,6 +142,8 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(strMsj);
         }
+        skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
     #endregion
@@ -196,6 +168,10 @@ namespace IM.Administrator.Forms
           if (result != MessageBoxResult.Yes)
           {
             e.Cancel = true;
+          }
+          else
+          {
+            dgrLocation.CancelEdit();
           }
         }
       }

@@ -42,17 +42,18 @@ namespace IM.Administrator
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Administrator");
-      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole:true, role:EnumRole.Manager,changePassword:true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole: true, role: EnumRole.Manager, changePassword: true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        
+
         User = frmLogin.UserData;
         if (User.HasRole(EnumRole.Manager))
         {
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));
           EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
+          EventManager.RegisterClassHandler(typeof(ComboBox), UIElement.KeyDownEvent, new KeyEventHandler(cmb_KeyDown));
           frmAdmin frmMain = new frmAdmin();
           frmMain.ShowDialog();
           frmSplash.Close();
@@ -80,7 +81,7 @@ namespace IM.Administrator
       }
     }
     #endregion
-    
+
     #region KeyManager
     /// <summary>
     /// Verifica que los accesText sólo se ejecuten en combinacion con ALtLeft
@@ -114,6 +115,28 @@ namespace IM.Administrator
       if (dgr.CurrentColumn != null)
       {
         dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+      }
+    }
+    #endregion
+
+    #region cmb_KeyDown
+    /// <summary>
+    /// Deselecciona el valor de un combobox al oprimir la tecla suprimir
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 27-Jul-2016
+    /// </history>
+    private void cmb_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete)
+      {
+        var combo = sender as ComboBox;
+        if(combo!=null)
+        {
+          combo.SelectedIndex = -1;
+        }
       }
     }
     #endregion

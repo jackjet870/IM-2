@@ -18,12 +18,13 @@ namespace IM.Administrator.Forms
   public partial class frmBankDetail : Window
   {
     #region Variables
+    
     public Bank bank = new Bank();//Objeto a edita o agregar
     public Bank oldBank = new Bank();//Objeto con los datos iniciales
     public EnumMode enumMode;//modo en que se mostrará la ventana  
     private List<SalesRoom> _oldLstSalesRoom = new List<SalesRoom>();//Lista incial de computadoras 
     private bool isCellCancel = false;
-    private bool blnClosing = false; 
+    private bool blnClosing = false;
     #endregion
     public frmBankDetail()
     {
@@ -55,26 +56,9 @@ namespace IM.Administrator.Forms
       txtbkID.IsEnabled = (enumMode == EnumMode.add);
       LoadSalesRoom();
       DataContext = bank;
+      dgrSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
-    #endregion
-
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 30/04/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
+    #endregion    
 
     #region Window_Closing
     /// <summary>
@@ -89,11 +73,19 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        btnCancel.Focus();        
+        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
+        if (!ObjectHelper.IsEquals(bank, oldBank) || !ObjectHelper.IsListEquals(lstSalesRoom, _oldLstSalesRoom))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.No)
+          {
+            e.Cancel = true;
+          }
+          else
+          {
+            dgrSalesRoom.CancelEdit();
+          }
         }
       }
     }
@@ -110,42 +102,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrSalesRoom_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if (isCellCancel)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        dgrSalesRoom.RowEditEnding -= dgrSalesRoom_RowEditEnding;
-        dgrSalesRoom.CancelEdit();
-        dgrSalesRoom.RowEditEnding += dgrSalesRoom_RowEditEnding;
-      }
-    }
-    #endregion
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana Verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 30/04/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus(); 
-      List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
-      if (!ObjectHelper.IsEquals(bank, oldBank) || !ObjectHelper.IsListEquals(lstSalesRoom, _oldLstSalesRoom))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
+        if (isCellCancel)
         {
-          if (!blnClosing) { blnClosing = true; Close(); }
+          dgrSalesRoom.RowEditEnding -= dgrSalesRoom_RowEditEnding;
+          dgrSalesRoom.CancelEdit();
+          dgrSalesRoom.RowEditEnding += dgrSalesRoom_RowEditEnding;
         }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -175,7 +139,8 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          string strMsj = ValidateHelper.ValidateForm(this, "Bank");
+          btnAccept.Visibility = Visibility.Collapsed;
+          string strMsj = ValidateHelper.ValidateForm(this, "Bank",blnDatagrids:true);
           if (strMsj == "")
           {
             List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
@@ -197,6 +162,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
           skpStatus.Visibility = Visibility.Collapsed;
+          btnAccept.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
@@ -217,14 +183,15 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrSalesRoom_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
-      {
+      if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
+      {      
         isCellCancel = false;
         bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrSalesRoom);
         e.Cancel = isRepeat;
       }
       else
       {
+        
         isCellCancel = true;
       }
     }
@@ -248,6 +215,7 @@ namespace IM.Administrator.Forms
         List<SalesRoom> lstSalesRoom =await BRSalesRooms.GetSalesRooms(1, -1);
         cmbSalesRoom.ItemsSource = lstSalesRoom.ToList();
         skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
       catch(Exception ex)
       {
@@ -257,5 +225,7 @@ namespace IM.Administrator.Forms
     #endregion
 
     #endregion
+
+
   }
 }

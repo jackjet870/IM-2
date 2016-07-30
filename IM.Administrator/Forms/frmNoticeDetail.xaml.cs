@@ -74,6 +74,7 @@ namespace IM.Administrator.Forms
           {
             txtStatus.Text = "Saving Data...";
             skpStatus.Visibility = Visibility.Visible;
+            btnAccept.Visibility = Visibility.Collapsed;
             string strMsj = "";
             strMsj = ValidateHelper.ValidateForm(this, "Notice", blnDatagrids: true);
             if (dgrLeadSources.Items.Count == 1)
@@ -98,6 +99,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessage(strMsj);
             }
             skpStatus.Visibility = Visibility.Collapsed;
+            btnAccept.Visibility = Visibility.Visible;
           }
         }
       }
@@ -380,6 +382,7 @@ namespace IM.Administrator.Forms
       UIRichTextBoxHelper.LoadRTF(ref richTextBox, notice.noText);
       oldNotice.noText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
       DataContext = notice;
+      dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 

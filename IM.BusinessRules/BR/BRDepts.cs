@@ -68,62 +68,66 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 04/05/2016
+    /// [emoguel] modified 29/07/2016--->Se volvió async
     /// </history>
-    public static int SaveDept(Dept dept,bool blnUpdate,List<Personnel> lstAdd, List<Personnel> lstDel)
+    public static async Task<int> SaveDept(Dept dept,bool blnUpdate,List<Personnel> lstAdd, List<Personnel> lstDel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region Update
-            if (blnUpdate)
+            try
             {
-              dbContext.Entry(dept).State = EntityState.Modified;
-            }
-            #endregion
-
-            #region Add
-            else
-            {
-              Dept deptVal = dbContext.Depts.Where(de => de.deID == dept.deID).FirstOrDefault();
-              if (deptVal != null)
+              #region Update
+              if (blnUpdate)
               {
-                return -1;
+                dbContext.Entry(dept).State = EntityState.Modified;
               }
+              #endregion
+
+              #region Add
               else
               {
-                dbContext.Depts.Add(dept);
+                Dept deptVal = dbContext.Depts.Where(de => de.deID == dept.deID).FirstOrDefault();
+                if (deptVal != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  dbContext.Depts.Add(dept);
+                }
               }
-            }
-            #endregion
+              #endregion
 
-            #region add personnel
-            if (lstAdd.Count > 0)
+              #region add personnel
+              if (lstAdd.Count > 0)
+              {
+                dbContext.Personnels.AsEnumerable().Where(pe => lstAdd.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe => pe.pede = dept.deID);
+              }
+              #endregion
+
+              #region del Personnel
+              if (lstDel.Count > 0)
+              {
+                dbContext.Personnels.AsEnumerable().Where(pe => lstDel.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe => pe.pede = null);
+              }
+              #endregion
+
+              int nRes = dbContext.SaveChanges();
+              transaction.Commit();
+              return nRes;
+            }
+            catch
             {
-              dbContext.Personnels.AsEnumerable().Where(pe => lstAdd.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe => pe.pede = dept.deID);
+              transaction.Rollback();
+              return 0;
             }
-            #endregion
-
-            #region del Personnel
-            if (lstDel.Count > 0)
-            {
-              dbContext.Personnels.AsEnumerable().Where(pe => lstDel.Any(pee => pee.peID == pe.peID)).ToList().ForEach(pe => pe.pede = null);
-            }
-            #endregion
-
-            int nRes = dbContext.SaveChanges();
-            transaction.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transaction.Rollback();
-            return 0;
           }
         }
-      }
+      });
     }
     #endregion
   }

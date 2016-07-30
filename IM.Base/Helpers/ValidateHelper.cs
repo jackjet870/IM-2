@@ -173,12 +173,14 @@ namespace IM.Base.Helpers
     /// <param name="container">Contenedor</param>   
     /// <param name="strForm">Nombre del formulario</param>
     /// <param name="validateVisible">valida los controles visibles</param>
+    /// <param name="blnDatagrids">Valida que los datagrids ya eno estén en modo edición</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
     /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// [jorcanche] Modified 19/07/2016 Se simplifico el metodo, se documento el parametro validateVisible
+    /// [emogue] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
     /// </history>
 public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
       var strMsj = "";
@@ -190,11 +192,11 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         if (lstGrids != null)
         {
           foreach(DataGrid dgr in lstGrids)
-          {
-            var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromItem(obj) as DataGridRow).Where(obj=>dgr.ItemContainerGenerator.ContainerFromItem(obj)!=null).ToList();
-            if (lstRows.Any(obj => obj.IsEditing == true))
+          { 
+            
+            if (GridHelper.IsInEditMode(dgr))
             {
-              strMsj += "Please finalize the list edition. \n";
+              strMsj += "Please finish editing the list. \n";
               break;
             }
           }
@@ -208,7 +210,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         if (control is TextBox) //Si es Textbox
         {
           var txt = (TextBox) control;
-          if (!string.IsNullOrEmpty(txt.Text)) continue;
+          if (!string.IsNullOrEmpty(txt.Text?.Trim())) continue;
           if ((validateVisible && txt.IsVisible) || !validateVisible)          
             strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
         }
@@ -230,7 +232,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is PasswordBox)
         {
           var pwd = (PasswordBox) control;
-          if (!string.IsNullOrWhiteSpace(pwd.Password)) continue;
+          if (!string.IsNullOrEmpty(pwd.Password?.Trim())) continue;
           if ((validateVisible && pwd.IsVisible) || !validateVisible)
             strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
         }                
@@ -239,7 +241,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is DateTimePicker)
         {
           var dtp = (DateTimePicker) control;
-          if (!string.IsNullOrWhiteSpace(dtp.Text)) continue;
+          if (!string.IsNullOrEmpty(dtp.Text?.Trim())) continue;
           if ((validateVisible && dtp.IsVisible) || !validateVisible)                
               strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
         }
