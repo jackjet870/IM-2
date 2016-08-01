@@ -21,15 +21,15 @@ namespace IM.Base.Classes
     /// <param name="_IGCurrentCell"></param>
     /// <param name="dataGrid"></param>
     /// <param name="_hasError"></param>
-    internal static void StartEdit(EnumInvitationMode _invitMode, InvitationGift invitationGift,
-      DataGridCellInfo _IGCurrentCell, DataGrid dataGrid, bool _hasError)
+    public static void StartEdit(EnumInvitationMode _invitMode, InvitationGift invitationGift,
+      DataGridCellInfo _IGCurrentCell, DataGrid dataGrid, ref bool _hasError)
     {
       //Index del Row en edicion
       int rowIndex = dataGrid.SelectedIndex != -1 ? dataGrid.SelectedIndex : 0;
 
       if (invitationGift.iggr == null || invitationGift.iggr == 0)
       {
-        switch (_IGCurrentCell.Column.SortMemberPath)
+        switch (dataGrid.CurrentCell.Column.SortMemberPath)
         {
           case "iggi":
             //Si no ha ingresado una cantidad
@@ -37,7 +37,8 @@ namespace IM.Base.Classes
             {
               UIHelper.ShowMessage("Enter the quantity first.", System.Windows.MessageBoxImage.Exclamation, "Intelligence Marketing");
               _hasError = true;
-              GridHelper.SelectRow(dataGrid, rowIndex, 0, true);
+              GridHelper.SelectRow(dataGrid, rowIndex, 0);
+              //dataGrid.CurrentCell = new DataGridCellInfo(invitationGift, dataGrid.Columns[0]);
             }
             break;
           case "igAdults":
@@ -48,7 +49,8 @@ namespace IM.Base.Classes
             {
               UIHelper.ShowMessage("Enter the gift first.", System.Windows.MessageBoxImage.Exclamation, "Intelligence Marketing");
               _hasError = true;
-              GridHelper.SelectRow(dataGrid, rowIndex, 1, true);
+              //GridHelper.SelectRow(dataGrid, rowIndex, 1, true);
+              dataGrid.CurrentCell = new DataGridCellInfo(invitationGift, dataGrid.Columns[0]);
             }
             else
             {

@@ -531,7 +531,7 @@ namespace IM.Base.Helpers
               case TypeCode.Int32:
               case TypeCode.Int64:
                 {
-                  int maxLengthValue= MaxLengthPropertyClass.GetMaxLength(dgc);
+                  int maxLengthValue = MaxLengthPropertyClass.GetMaxLength(dgc);
                   if (maxLengthValue != 0)
                   {
                     style.Setters.Add(new Setter(TextBox.MaxLengthProperty, maxLengthValue));
@@ -563,8 +563,13 @@ namespace IM.Base.Helpers
     {
       List<object> lstObject = dgr.ItemsSource.OfType<object>().ToList();
       var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+      //Obtener la fila en edición
+      var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
 
-      if (lstRows != null && lstRows.Any(obj => obj.IsEditing == true))
+      //Fila a editar o seleccionada
+      var rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex);
+
+      if(rowEdit!=null && rowEdit!=rowSelected)
       {
         return true;
       }
@@ -580,10 +585,10 @@ namespace IM.Base.Helpers
     /// [emoguel] created 29/07/2016
     /// </history>
     public static void dgr_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-      e.Cancel =IsInEditMode(sender as DataGrid); 
+    {      
+      e.Cancel = IsInEditMode(sender as DataGrid);
     }
     #endregion
-    
+ 
   }
-} 
+}

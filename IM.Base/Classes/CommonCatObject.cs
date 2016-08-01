@@ -16,6 +16,7 @@ namespace IM.Base.Classes
   public class CommonCatObject : INotifyPropertyChanged
   {
     #region Properties
+    #region Solo Lectura(Catalogos)
     private List<LanguageShort> _languages;
     public List<LanguageShort> Languages => _languages;
     private List<MaritalStatus> _maritalStatus;
@@ -46,33 +47,58 @@ namespace IM.Base.Classes
     public List<LocationByUser> Locations => _locations;
     private List<DisputeStatus> _disputeStatus;
     public List<DisputeStatus> DisputeStatus => _disputeStatus;
+    #endregion
 
+    #region Lectura & Escritura
     private ObservableCollection<InvitationGift> _invitationGiftList;
     public ObservableCollection<InvitationGift> InvitationGiftList
     {
       get { return _invitationGiftList; }
-      set { _invitationGiftList = value; OnPropertyChanged("InvitationGiftList"); }
+      set { SetField(ref _invitationGiftList, value); }
     }
     private ObservableCollection<BookingDeposit> _bookingDepositList;
-    public ObservableCollection<BookingDeposit> BookingDepositList => _bookingDepositList;
+    public ObservableCollection<BookingDeposit> BookingDepositList
+    {
+      get { return _bookingDepositList; }
+      set { SetField(ref _bookingDepositList, value); }
+    }
     private ObservableCollection<GuestCreditCard> _guestCreditCardList;
-    public ObservableCollection<GuestCreditCard> GuestCreditCardList => _guestCreditCardList;
+    public ObservableCollection<GuestCreditCard> GuestCreditCardList
+    {
+      get { return _guestCreditCardList; }
+      set { SetField(ref _guestCreditCardList, value); }
+    }
     private ObservableCollection<Guest> _aditionalGuestList;
-    public ObservableCollection<Guest> AditionalGuestList => _aditionalGuestList;
+    public ObservableCollection<Guest> AditionalGuestList
+    {
+      get { return _aditionalGuestList; }
+      set { SetField(ref _aditionalGuestList, value); }
+    }
     private Guest _guestObj;
     public Guest GuestObj
     {
       get { return _guestObj; }
       set
-      {
-        SetField(ref _guestObj, value);
-      }
+      { SetField(ref _guestObj, value); }
     }
 
     #endregion
 
+    #region Listas Clonadas
+    private List<InvitationGift> _cInvitationGiftList;
+    public List<InvitationGift> CInvitationGiftList => _cInvitationGiftList;
+    private List<BookingDeposit> _cBookingDepositList;
+    public List<BookingDeposit> CBookingDepositList => _cBookingDepositList;
+    private List<GuestCreditCard> _cGuestCreditCardList;
+    public List<GuestCreditCard> CGuestCreditCardList => _cGuestCreditCardList;
+    private Guest _cGuestObj;
+    public Guest CGuestObj => _cGuestObj;
+
+    #endregion
+    #endregion
     public CommonCatObject(UserData user, int guId, EnumInvitationMode invitationType = EnumInvitationMode.modAdd)
     {
+      #region Inicializar Catalogos
       LoadLenguages();
       LoadMaritalStatus();
       LoadPersonnel(user);
@@ -88,28 +114,34 @@ namespace IM.Base.Classes
       LoadLocations(user);
       LoadDisputeStatus();
       LoadGifts(user);
+      #endregion
 
-      if (invitationType == EnumInvitationMode.modAdd)
+      //Si se va a Generar una Nueva Invitacion
+      if (invitationType == EnumInvitationMode.modAdd) 
       {
-        //Asignamos 
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList)); 
+        //Asignamos memoria para que pueden usarse
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList));
         SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), nameof(BookingDepositList));
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
         SetField(ref _aditionalGuestList, new ObservableCollection<Guest>(), nameof(AditionalGuestList));
-        SetField(ref _guestObj, new Guest(), "Guest");
+        SetField(ref _guestObj, new Guest(), nameof(GuestObj));
       }
+      //Si se va a modificar una Invitacion
       else
       {
-
-        //Search information 
+        //Search information
         List<InvitationGift> lista = new List<InvitationGift>();
-        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
-        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
-        lista.Add(new InvitationGift() { igQty = 1, igAdults = 2 });
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(lista), "InvitationGiftList");
+        lista.Add(new InvitationGift() { igQty = 1, iggi= "GROUNDMOON", igAdults = 1 });
+        lista.Add(new InvitationGift() { igQty = 1, iggi = "200SPAC", igAdults = 1 });
+        lista.Add(new InvitationGift() { igQty = 1, iggi = "TAXIBACK", igAdults = 1 });
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(lista), nameof(InvitationGiftList));
 
 
-        Guest gue = new Guest() { gums1 = "N", gums2 = "W" };
+        //Creamos la copia
+        SetField(ref _cInvitationGiftList, lista, nameof(CInvitationGiftList));
+      
+
+        Guest gue = new Guest() { gums1 = "N", gums2 = "W", guGStatus = "S" };
         SetField(ref _guestObj, gue, nameof(GuestObj));
       }
     }
@@ -237,13 +269,24 @@ namespace IM.Base.Classes
     }
     #endregion
 
-    #region InvitationGift Load
-    //private async void loadInvitationGift(int guId)
-    //{
-    //  //var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(guId);
-    //  //SetField(ref _in)
+    #endregion
 
-    //}
+    #region Invitation Info
+
+    #region Load Guest
+    private void LoadGuest(int guID)
+    {
+      var result =  BRGuests.GetGuestById(guID);
+      SetField(ref _guestObj, result, "Languages");
+    }
+    #endregion
+
+    #region Load InvitationGift
+
+    #endregion
+
+    #region Load Deposit
+
     #endregion
 
     #endregion

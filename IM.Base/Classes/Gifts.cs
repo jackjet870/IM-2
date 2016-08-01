@@ -20,6 +20,13 @@ namespace IM.Base.Classes
   /// </history>
   public class Gifts
   {
+    #region CalculateMaxAuthGifts
+    //public static void CalculateMaxAuthGifts(TextBox txtMaxAut, )
+    //{
+
+    //}
+
+    #endregion
 
     #region CalculateCostsPrices
     /// <summary>
@@ -189,17 +196,20 @@ namespace IM.Base.Classes
 
         // Actualizamos la etiqueta costo total
         txtTotalCost.Text = string.Format("{0:C2}", curTotalCost);
+        txtTotalCost.IsReadOnly = true;
 
         // Actualizamos la etiqueta de precio total
         if (txtTotalPrice != null)
         {
           txtTotalPrice.Text = string.Format("{0:C2}", curTotalPrice);
+          txtTotalPrice.IsReadOnly = true;
         }
 
         //Actualizamos la etiqueta de total a pagar
         if (txtTotalToPay != null)
         {
           txtTotalToPay.Text = string.Format("{0:C2}", curTotalToPay);
+          txtTotalToPay.IsReadOnly = true;
         }
       }
     } 
