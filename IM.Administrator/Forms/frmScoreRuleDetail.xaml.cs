@@ -289,7 +289,8 @@ namespace IM.Administrator.Forms
         List<ScoreRuleConcept> lstScoreRuleConcepts = await BRScoreRulesConcepts.GetScoreRulesConcepts(1);
         cmbScoreRuleConcept.ItemsSource = lstScoreRuleConcepts;
         cmbScoreRuleConcept.Header = "Score Rule ("+lstScoreRuleConcepts.Count+")";
-        skpStatus.Visibility = Visibility.Collapsed;        
+        skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
       catch(Exception ex)
       {

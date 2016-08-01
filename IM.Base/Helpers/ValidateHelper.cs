@@ -180,7 +180,8 @@ namespace IM.Base.Helpers
     /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// [jorcanche] Modified 19/07/2016 Se simplifico el metodo, se documento el parametro validateVisible
-    /// [emogue] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
+    /// [emoguel] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
+    /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
     /// </history>
 public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
       var strMsj = "";
@@ -210,6 +211,14 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         if (control is TextBox) //Si es Textbox
         {
           var txt = (TextBox) control;
+          #region Remover espacios
+          txt.Text= txt.Text.Trim();
+          var binding = txt.GetBindingExpression(TextBox.TextProperty);
+          if(binding!=null)
+          {
+            binding.UpdateSource();
+          }
+          #endregion
           if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
           if ((validateVisible && txt.IsVisible) || !validateVisible)          
             strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
@@ -232,7 +241,10 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is PasswordBox)
         {
           var pwd = (PasswordBox) control;
-          if (!string.IsNullOrWhiteSpace(pwd.Password)) continue;
+          #region Remover espacios
+          pwd.Password=pwd.Password.Trim();
+          #endregion
+          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
           if ((validateVisible && pwd.IsVisible) || !validateVisible)
             strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
         }                
@@ -241,7 +253,15 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
         else if (control is DateTimePicker)
         {
           var dtp = (DateTimePicker) control;
-          if (!string.IsNullOrWhiteSpace(dtp.Text)) continue;
+          #region Remover espacios
+          dtp.Text=dtp.Text.Trim();
+          var binding = dtp.GetBindingExpression(TextBox.TextProperty);
+          if (binding != null)
+          {
+            binding.UpdateSource();
+          }
+          #endregion
+          if (!string.IsNullOrWhiteSpace(dtp.Text.Trim())) continue;
           if ((validateVisible && dtp.IsVisible) || !validateVisible)                
               strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
         }
@@ -250,6 +270,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
       {
         lstControls.FirstOrDefault().Focus();
       }
+      container.UpdateLayout();
       return strMsj.TrimEnd('\n');
     }
 

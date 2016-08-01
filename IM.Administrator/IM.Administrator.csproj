@@ -278,6 +278,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmSaleTypeCategoryDetail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmSaleTypesCategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearchGifts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -760,6 +768,12 @@
     </Compile>
     <Compile Include="Forms\frmNotices.xaml.cs">
       <DependentUpon>frmNotices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSaleTypeCategoryDetail.xaml.cs">
+      <DependentUpon>frmSaleTypeCategoryDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSaleTypesCategories.xaml.cs">
+      <DependentUpon>frmSaleTypesCategories.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearchGifts.xaml.cs">
       <DependentUpon>frmSearchGifts.xaml</DependentUpon>

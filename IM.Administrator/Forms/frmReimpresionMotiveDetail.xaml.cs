@@ -54,7 +54,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(reimpresionMotive, oldReimpresionMotive);
       UIHelper.SetUpControls(reimpresionMotive, this);
-      txtrmID.IsEnabled = true;
+      txtrmID.IsEnabled = (enumMode==EnumMode.add);
       DataContext = reimpresionMotive;
     }
     #endregion
@@ -110,28 +110,10 @@ namespace IM.Administrator.Forms
     } 
     #endregion
 
-    #region Cancel
-    /// <summary>
-    /// Cierra verficando
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 18/04/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      Close();
-    }
-    #endregion
-
     #region Window_Closing
     /// <summary>
     /// Cierra la ventana verificando cambios pendientes
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 28/06/2016
     /// </history>
@@ -139,10 +121,11 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
+        btnCancel.Focus();
         if (!ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result != MessageBoxResult.Yes)
+          if (result == MessageBoxResult.No)
           {
             e.Cancel = true;
           }

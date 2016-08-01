@@ -191,6 +191,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add("frmPaymentSchemas", "Payment Schemas", "Payment.png");
         lstMenu.Add("frmRefundTypes", "Refund Types", "Money_Bag.png");
         lstMenu.Add("frmBanks", "Banks", "Money.ico");
+        lstMenu.Add("frmSaleTypesCategories", "Sale Types Categories", "Money.ico");
       }
       #endregion
 

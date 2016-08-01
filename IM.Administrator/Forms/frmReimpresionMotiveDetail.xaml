@@ -28,7 +28,7 @@
         <TextBox Name="txtrmN" Grid.Column="1" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding rmN}"  />
         <CheckBox Name="chkrmA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding rmA}" Height="13" >Active</CheckBox>
         <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>
