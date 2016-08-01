@@ -582,6 +582,9 @@
     <Compile Include="MealTicketType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Member.cs">
+      <DependentUpon>ICModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MemberSalesmen.cs">
       <DependentUpon>ICModel.tt</DependentUpon>
     </Compile>

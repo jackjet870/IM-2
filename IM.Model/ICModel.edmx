@@ -4,7 +4,314 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HotelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HotelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CLMEMBER">
+          <Key>
+            <PropertyRef Name="APPLICATION" />
+          </Key>
+          <Property Name="RECNUM" Type="decimal" Precision="8" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="APPLICATION" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="INTERVAL" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="ADDRESS2" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="CITY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="STATE" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="ZIP" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ZIP2" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="COUNTRY" Type="varchar" MaxLength="7" Nullable="false" />
+          <Property Name="COUNTRY_CODE" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="STATE_CODE" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="CITY_CODE" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="COUNTRY_CODE2" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="STATE_CODE2" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="CITY_CODE2" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="TEL1" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TEL2" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TEL3" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TEL21" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TEL22" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TEL23" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="PURCHASE" Type="datetime" Nullable="false" />
+          <Property Name="SALE" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_ESCROW" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_BAL" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="REMAIN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="REMAIN_PRIN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="REMAIN_INT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="REMAIN_DATE" Type="datetime" Nullable="false" />
+          <Property Name="BUDGET" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FIRST" Type="datetime" Nullable="false" />
+          <Property Name="UNIT" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LAST" Type="datetime" Nullable="false" />
+          <Property Name="CANCEL" Type="datetime" Nullable="false" />
+          <Property Name="REFUND" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FORFEIT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PAID" Type="datetime" Nullable="false" />
+          <Property Name="DISCOUNT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DISCOUNT_PCT" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="DISCOUNT_NET" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="COP" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SUSPENSE" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PMTS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="STATUS" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="LAST1" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="FIRST1" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="LAST2" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FIRST2" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PHA1" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="PHA2" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="PHA3" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="SEASON" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="COMPANY" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="NO_INT" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="LANG_OLD" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SEAS" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TOT_PMTS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="AMT_FIN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="INT_RATE" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PCT" Type="decimal" Precision="14" Scale="4" Nullable="false" />
+          <Property Name="PROJECT" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="PLAN" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="OFFICE" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="EXCHANGE" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="TOUR_DATE" Type="datetime" Nullable="false" />
+          <Property Name="COMM_DUE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="ENTER_BY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AUTHORIZED_BY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="HOTEL" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="ROOM#" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="FAMILY_MEMB1" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="FAMILY_MEMB2" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="FAMILY_MEMB3" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="FAMILY_MEMB4" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="SCH_PAY" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="COMM_PAID" Type="datetime" Nullable="false" />
+          <Property Name="SCH_COMM_DT" Type="datetime" Nullable="false" />
+          <Property Name="REINSTATE" Type="datetime" Nullable="false" />
+          <Property Name="CNX_CR_DATE" Type="datetime" Nullable="false" />
+          <Property Name="REIN_PD_DATE" Type="datetime" Nullable="false" />
+          <Property Name="ENTRY" Type="datetime" Nullable="false" />
+          <Property Name="DOWN_PAID" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_OTHER" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="UPDATE" Type="datetime" Nullable="false" />
+          <Property Name="REL_APPLIC" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="CANCEL_SALE_DT" Type="datetime" Nullable="false" />
+          <Property Name="SALES_COMM" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ASSOC_APL" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="ASSOC_CD" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="CNX_REASON" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AFFILIATION" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ADMIN_FEE" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="VAT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="TOTAL" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PAY" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="BALANCE" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PAY1_" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PAY1D" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DOWN_PAY2_" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PAY2D" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DOWN_PAY3_" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="DOWN_PAY3D" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CC_TYPE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CC_NUM" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CC_EXP" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CC_INICIA" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MAX_PER" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="MAINTENANCE" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="AGENT" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TITLE" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FOOD_BEV_ADULT" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="FOOD_BEV_CHILD" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="VAC_RETURN" Type="datetime" Nullable="false" />
+          <Property Name="FUP_DATE" Type="datetime" Nullable="false" />
+          <Property Name="FUP_CD" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="FUP_NOTE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="NATIONALITY" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="MAX_KIDS" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="BASE" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="POINTS" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="PT_COST" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="TOTAL_DOWN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="TOT_HSE_PTSG" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+          <Property Name="DWN_OTH_DTE" Type="datetime" Nullable="false" />
+          <Property Name="PROC_DATE" Type="datetime" Nullable="false" />
+          <Property Name="PROCESABLE" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="COMM_PCT" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+          <Property Name="PACK" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="RG" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CPF_MF" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CPP_CGS" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PTS_BASIC" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="PTS_CONTRACT" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="PESO_DEAL" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="DOWN_PAY2_DT" Type="datetime" Nullable="false" />
+          <Property Name="DOWN_PAY3_DT" Type="datetime" Nullable="false" />
+          <Property Name="EXCHG_INITIAL" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="EXCHG_DOWN2" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="EXCHG_DOWN3" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="EXCHG_FIN" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="BEG_CERT#" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="END_CERT#" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DOWN_PAY2_COMO" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="DOWN_PAY3_COMO" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TRF_DATE" Type="datetime" Nullable="false" />
+          <Property Name="BEG_CERT#2" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="END_CERT#2" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="COLLECT_PRIN" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="COLLECT_INT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="CANT_REEM" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FORMA_REEM" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MENS_PAG_FILLER" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="DEPTO_CANC" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CLUB" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="EQUITY" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="TIPO" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CLS1" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="CLS2" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="CLS3" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="CLS4" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="OCCUPATION" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="UNL_CERT" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="MENS_PAG" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FROM" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="COLECT" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CHP_COMMENT" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="FORFEIT_MIAMI" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="MONTHPAY" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CANC_DTE_RCI" Type="datetime" Nullable="false" />
+          <Property Name="PROGRAM" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="FCAJA" Type="datetime" Nullable="false" />
+          <Property Name="BEG_CERT#3" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="END_CERT#3" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="BEG_CERT#4" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="END_CERT#4" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ADMIN_FEER" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="AIWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="EPWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EMAIL2" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DOS_EDOS_CTA" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CTY_PAID" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="DESCUENTO" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="APARTADO" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="BASE_COM" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="TRANSFER" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="EDAD_MENOR" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="DOWN_PCTR" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="COMMENT_OFFICE" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="COMMENTS" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="IDAREADE" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="PAYMENTNUM" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="PAYMENTDAYS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="PAYMENTDATE" Type="datetime" Nullable="false" />
+          <Property Name="DWN_PAY_REMA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="SALE_TYPE" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="ESTATUS" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="FECHA_ALTA" Type="datetime" Nullable="false" />
+          <Property Name="HORA_ALTA" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="CVEALTA" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="FECHA_BAJA" Type="datetime" Nullable="false" />
+          <Property Name="HORA_BAJA" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="CVEBAJA" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="FECHA_MODIF" Type="datetime" Nullable="false" />
+          <Property Name="HORA_MODIF" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="CVEMODIF" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="ENGXCOB" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="MENXCOB" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="CHPCOM_ID" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="CNXCOD_ID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="CNXRCIAUT" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="CNXRCIRESORT" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="GOLF" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="GOLF_VAT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="TOTAL_GOLF" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="GOLFROUNDS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="GR_ACCESS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="SPAWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="RCIWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="MEM_TYPE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PMEM_TYPE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PACK_SALE" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="MEXICAN_MEMBER" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PERSONA_FISICA" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PACK_SALE_GOLF" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PACK_GOLF_AMT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ULGWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="GOLF_SALE" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SUBPGM" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="LANG" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="EXPIRATION" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="FOLIO#" Type="decimal" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="IDMONEDA" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="SIDEK_APPLICATION" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="SIDEK_SALE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="SIDEK_1STUSEYEAR" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="SIDEK_INTERVAL2" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="SIDEK_INTERVAL3" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="SIDEK_INTERVAL4" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="SIDEK_RCI_FEE" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SIDEK_RCI" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="DERECHO" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PS_ACCESS" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="GOB_ACCESS" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="JACB_ACCESS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="JACCG_ACCESS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="SALE_GLFT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PSM_PACK" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PSM" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PSM_MPAYS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="PAQTE" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="PS2_ACCESS" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="IVA_TAX_RATE" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="SIDEK_NEW_RATE" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="NUM_POL" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="SSN1" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="SSN2" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="CTA_MONEDEROP" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="RCI" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="ACCESS_HTLS" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="AIRTICKETS#" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="VALIDA_X_PRECIOLISTA" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="ACCESS_CDG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="WEEK52" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="WEEK52#" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="SPAUGWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="BIRTHDAY" Type="datetime" Nullable="false" />
+          <Property Name="LOCACIONCNX" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DISPUTA_SPAMONEY" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="UG90" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PERDIDO_SPAMONEY" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="WELCOME_KIT" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="MONTHPAYM" Type="varchar" MaxLength="1" />
+          <Property Name="REFUNDED_BANK" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="DEPOSIT_DATE" Type="datetime" Nullable="false" />
+          <Property Name="PRECIOGLOBALPP" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="DESC_ACTUALES" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="DESC_ANTERIORES" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="REGEN" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="MONTO_CREDITOH" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="MOTORGADO_CREDITOH" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="DIFMONTO_CREDITOH" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="GUID" Type="int" Nullable="false" />
+          <Property Name="ULGPWEEKS" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="ULGP_AMOUNT" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="NIGHTS" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="WEEKS" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="NIGHTS_PCT" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="RCI_PLUS" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="HIRATE_INC" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="ELECTRONIC_SIGNATURE_ID" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="REFERRAL_PROMOTION" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="FAMILY_CATEGORY" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SPAMONEY_DOWNPAYMENT" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="ACH_BANK" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="ACH_ABA" Type="varchar" MaxLength="9" Nullable="false" />
+          <Property Name="ACH_ACCOUNT_NUMBER" Type="varchar" MaxLength="17" Nullable="false" />
+          <Property Name="ACH_BENEFICIARY" Type="varchar" MaxLength="22" Nullable="false" />
+          <Property Name="ACH_TRANSACTION_CODE" Type="varchar" MaxLength="2" Nullable="false" />
+        </EntityType>
         <Function Name="USP_CL_DeleteMemberSalesman" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="analista_h">
           <Parameter Name="CLMEMOPC_ID" Type="decimal" Mode="In" />
         </Function>
@@ -33,15 +340,16 @@
           <Parameter Name="OPC" Type="varchar" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
         </Function>
-        <EntityContainer Name="HotelModelStoreContainer" />
-      </Schema>
-    </edmx:StorageModels>
+        <EntityContainer Name="HotelModelStoreContainer">
+          <EntitySet Name="CLMEMBER" EntityType="Self.CLMEMBER" Schema="analista_h" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HotelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ICEntities" annotation:LazyLoadingEnabled="true" >
           <FunctionImport Name="USP_CL_DeleteMemberSalesman">
-            <Parameter Name="CLMEMOPC_ID" Mode="In" Type="Decimal" />
+          <Parameter Name="CLMEMOPC_ID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="USP_CL_ExistsSalesman" ReturnType="Collection(Int32)">
             <Parameter Name="ZONA" Mode="In" Type="String" />
@@ -68,6 +376,7 @@
             <Parameter Name="OPC" Mode="In" Type="String" />
             <Parameter Name="User" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Members" EntityType="HotelModel.Member" />
         </EntityContainer>
         <ComplexType Name="MemberSalesmen">
           <Property Type="Decimal" Name="RECNUM" Nullable="false" Precision="8" Scale="0" />
@@ -95,6 +404,313 @@
           <Property Type="String" Name="TITLE" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Role" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="APPLICATION" />
+          </Key>
+          <Property Name="RECNUM" Type="Decimal" Nullable="false" Precision="8" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="APPLICATION" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="INTERVAL" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="NAME" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS2" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="CITY" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="ZIP" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ZIP2" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTRY" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTRY_CODE" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="STATE_CODE" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CITY_CODE" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="COUNTRY_CODE2" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="STATE_CODE2" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CITY_CODE2" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="TEL1" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TEL2" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TEL3" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TEL21" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TEL22" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TEL23" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PURCHASE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SALE" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_ESCROW" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_BAL" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="REMAIN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="REMAIN_PRIN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="REMAIN_INT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="REMAIN_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BUDGET" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FIRST" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UNIT" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LAST" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CANCEL" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="REFUND" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FORFEIT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PAID" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DISCOUNT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DISCOUNT_PCT" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="DISCOUNT_NET" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="COP" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SUSPENSE" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PMTS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="STATUS" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="LAST1" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="FIRST1" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="LAST2" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FIRST2" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PHA1" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PHA2" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PHA3" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="SEASON" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="COMPANY" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="NO_INT" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LANG_OLD" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SEAS" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TOT_PMTS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="AMT_FIN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="INT_RATE" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="DOWN_PCT" Type="Decimal" Nullable="false" Precision="14" Scale="4" />
+          <Property Name="PROJECT" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="PLAN" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="OFFICE" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="EXCHANGE" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="TOUR_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="COMM_DUE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ENTER_BY" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AUTHORIZED_BY" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="HOTEL" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ROOM_" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="FAMILY_MEMB1" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="FAMILY_MEMB2" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="FAMILY_MEMB3" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="FAMILY_MEMB4" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="SCH_PAY" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="COMM_PAID" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SCH_COMM_DT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="REINSTATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CNX_CR_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="REIN_PD_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ENTRY" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DOWN_PAID" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_OTHER" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="UPDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="REL_APPLIC" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="CANCEL_SALE_DT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SALES_COMM" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="ASSOC_APL" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="ASSOC_CD" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CNX_REASON" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AFFILIATION" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="ADMIN_FEE" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="VAT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="TOTAL" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_PAY" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="BALANCE" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_PAY1_" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_PAY1D" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOWN_PAY2_" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_PAY2D" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOWN_PAY3_" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="DOWN_PAY3D" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CC_TYPE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CC_NUM" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CC_EXP" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CC_INICIA" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MAX_PER" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="MAINTENANCE" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="AGENT" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TITLE" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FOOD_BEV_ADULT" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="FOOD_BEV_CHILD" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="VAC_RETURN" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FUP_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FUP_CD" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="FUP_NOTE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NATIONALITY" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="MAX_KIDS" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="BASE" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="POINTS" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="PT_COST" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="TOTAL_DOWN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="TOT_HSE_PTSG" Type="Decimal" Nullable="false" Precision="4" Scale="2" />
+          <Property Name="DWN_OTH_DTE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PROC_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PROCESABLE" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="COMM_PCT" Type="Decimal" Nullable="false" Precision="4" Scale="2" />
+          <Property Name="PACK" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="RG" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CPF_MF" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CPP_CGS" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PTS_BASIC" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="PTS_CONTRACT" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="PESO_DEAL" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DOWN_PAY2_DT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DOWN_PAY3_DT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EXCHG_INITIAL" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="EXCHG_DOWN2" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="EXCHG_DOWN3" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="EXCHG_FIN" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="BEG_CERT_" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="END_CERT_" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOWN_PAY2_COMO" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="DOWN_PAY3_COMO" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TRF_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BEG_CERT_2" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="END_CERT_2" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="COLLECT_PRIN" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="COLLECT_INT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="CANT_REEM" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FORMA_REEM" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MENS_PAG_FILLER" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="DEPTO_CANC" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CLUB" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="EQUITY" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="TIPO" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CLS1" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="CLS2" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="CLS3" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="CLS4" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="OCCUPATION" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="UNL_CERT" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="MENS_PAG" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FROM" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="COLECT" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CHP_COMMENT" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="FORFEIT_MIAMI" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="MONTHPAY" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CANC_DTE_RCI" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PROGRAM" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="FCAJA" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BEG_CERT_3" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="END_CERT_3" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BEG_CERT_4" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="END_CERT_4" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ADMIN_FEER" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="AIWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="EPWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="EMAIL" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EMAIL2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DOS_EDOS_CTA" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CTY_PAID" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DESCUENTO" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="APARTADO" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="BASE_COM" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="TRANSFER" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="EDAD_MENOR" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="DOWN_PCTR" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="COMMENT_OFFICE" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="COMMENTS" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="IDAREADE" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="PAYMENTNUM" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="PAYMENTDAYS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="PAYMENTDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DWN_PAY_REMA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="SALE_TYPE" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="ESTATUS" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_ALTA" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HORA_ALTA" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CVEALTA" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_BAJA" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HORA_BAJA" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CVEBAJA" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_MODIF" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HORA_MODIF" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CVEMODIF" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ENGXCOB" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="MENXCOB" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="CHPCOM_ID" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="CNXCOD_ID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CNXRCIAUT" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="CNXRCIRESORT" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="GOLF" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="GOLF_VAT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="TOTAL_GOLF" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="GOLFROUNDS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="GR_ACCESS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="SPAWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="RCIWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="MEM_TYPE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PMEM_TYPE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PACK_SALE" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="MEXICAN_MEMBER" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PERSONA_FISICA" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PACK_SALE_GOLF" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PACK_GOLF_AMT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="ULGWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="GOLF_SALE" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SUBPGM" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="LANG" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="EXPIRATION" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="FOLIO_" Type="Decimal" Nullable="false" Precision="8" Scale="0" />
+          <Property Name="IDMONEDA" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="SIDEK_APPLICATION" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="SIDEK_SALE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SIDEK_1STUSEYEAR" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="SIDEK_INTERVAL2" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="SIDEK_INTERVAL3" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="SIDEK_INTERVAL4" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="SIDEK_RCI_FEE" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SIDEK_RCI" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DERECHO" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PS_ACCESS" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="GOB_ACCESS" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="JACB_ACCESS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="JACCG_ACCESS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="SALE_GLFT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PSM_PACK" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PSM" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PSM_MPAYS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="PAQTE" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="PS2_ACCESS" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="IVA_TAX_RATE" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="SIDEK_NEW_RATE" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="NUM_POL" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="SSN1" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="SSN2" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="CTA_MONEDEROP" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="RCI" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ACCESS_HTLS" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="AIRTICKETS_" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="VALIDA_X_PRECIOLISTA" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ACCESS_CDG" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="WEEK52" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="WEEK52_" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="SPAUGWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="BIRTHDAY" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LOCACIONCNX" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DISPUTA_SPAMONEY" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="UG90" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PERDIDO_SPAMONEY" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="WELCOME_KIT" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="MONTHPAYM" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="REFUNDED_BANK" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DEPOSIT_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PRECIOGLOBALPP" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="DESC_ACTUALES" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="DESC_ANTERIORES" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="REGEN" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="MONTO_CREDITOH" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="MOTORGADO_CREDITOH" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="DIFMONTO_CREDITOH" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="GUID" Type="Int32" Nullable="false" />
+          <Property Name="ULGPWEEKS" Type="Decimal" Nullable="false" Precision="4" Scale="0" />
+          <Property Name="ULGP_AMOUNT" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="NIGHTS" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="WEEKS" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="NIGHTS_PCT" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="RCI_PLUS" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="HIRATE_INC" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ELECTRONIC_SIGNATURE_ID" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="REFERRAL_PROMOTION" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="FAMILY_CATEGORY" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SPAMONEY_DOWNPAYMENT" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ACH_BANK" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="ACH_ABA" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="ACH_ACCOUNT_NUMBER" Type="String" Nullable="false" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="ACH_BENEFICIARY" Type="String" Nullable="false" MaxLength="22" FixedLength="false" Unicode="false" />
+          <Property Name="ACH_TRANSACTION_CODE" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -163,6 +779,314 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="HotelModel.Member">
+              <MappingFragment StoreEntitySet="CLMEMBER">
+                <ScalarProperty Name="ACH_TRANSACTION_CODE" ColumnName="ACH_TRANSACTION_CODE" />
+                <ScalarProperty Name="ACH_BENEFICIARY" ColumnName="ACH_BENEFICIARY" />
+                <ScalarProperty Name="ACH_ACCOUNT_NUMBER" ColumnName="ACH_ACCOUNT_NUMBER" />
+                <ScalarProperty Name="ACH_ABA" ColumnName="ACH_ABA" />
+                <ScalarProperty Name="ACH_BANK" ColumnName="ACH_BANK" />
+                <ScalarProperty Name="SPAMONEY_DOWNPAYMENT" ColumnName="SPAMONEY_DOWNPAYMENT" />
+                <ScalarProperty Name="FAMILY_CATEGORY" ColumnName="FAMILY_CATEGORY" />
+                <ScalarProperty Name="REFERRAL_PROMOTION" ColumnName="REFERRAL_PROMOTION" />
+                <ScalarProperty Name="ELECTRONIC_SIGNATURE_ID" ColumnName="ELECTRONIC_SIGNATURE_ID" />
+                <ScalarProperty Name="HIRATE_INC" ColumnName="HIRATE_INC" />
+                <ScalarProperty Name="RCI_PLUS" ColumnName="RCI_PLUS" />
+                <ScalarProperty Name="NIGHTS_PCT" ColumnName="NIGHTS_PCT" />
+                <ScalarProperty Name="WEEKS" ColumnName="WEEKS" />
+                <ScalarProperty Name="NIGHTS" ColumnName="NIGHTS" />
+                <ScalarProperty Name="ULGP_AMOUNT" ColumnName="ULGP_AMOUNT" />
+                <ScalarProperty Name="ULGPWEEKS" ColumnName="ULGPWEEKS" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+                <ScalarProperty Name="DIFMONTO_CREDITOH" ColumnName="DIFMONTO_CREDITOH" />
+                <ScalarProperty Name="MOTORGADO_CREDITOH" ColumnName="MOTORGADO_CREDITOH" />
+                <ScalarProperty Name="MONTO_CREDITOH" ColumnName="MONTO_CREDITOH" />
+                <ScalarProperty Name="REGEN" ColumnName="REGEN" />
+                <ScalarProperty Name="DESC_ANTERIORES" ColumnName="DESC_ANTERIORES" />
+                <ScalarProperty Name="DESC_ACTUALES" ColumnName="DESC_ACTUALES" />
+                <ScalarProperty Name="PRECIOGLOBALPP" ColumnName="PRECIOGLOBALPP" />
+                <ScalarProperty Name="DEPOSIT_DATE" ColumnName="DEPOSIT_DATE" />
+                <ScalarProperty Name="REFUNDED_BANK" ColumnName="REFUNDED_BANK" />
+                <ScalarProperty Name="MONTHPAYM" ColumnName="MONTHPAYM" />
+                <ScalarProperty Name="WELCOME_KIT" ColumnName="WELCOME_KIT" />
+                <ScalarProperty Name="PERDIDO_SPAMONEY" ColumnName="PERDIDO_SPAMONEY" />
+                <ScalarProperty Name="UG90" ColumnName="UG90" />
+                <ScalarProperty Name="DISPUTA_SPAMONEY" ColumnName="DISPUTA_SPAMONEY" />
+                <ScalarProperty Name="LOCACIONCNX" ColumnName="LOCACIONCNX" />
+                <ScalarProperty Name="BIRTHDAY" ColumnName="BIRTHDAY" />
+                <ScalarProperty Name="SPAUGWEEKS" ColumnName="SPAUGWEEKS" />
+                <ScalarProperty Name="WEEK52_" ColumnName="WEEK52#" />
+                <ScalarProperty Name="WEEK52" ColumnName="WEEK52" />
+                <ScalarProperty Name="ACCESS_CDG" ColumnName="ACCESS_CDG" />
+                <ScalarProperty Name="VALIDA_X_PRECIOLISTA" ColumnName="VALIDA_X_PRECIOLISTA" />
+                <ScalarProperty Name="AIRTICKETS_" ColumnName="AIRTICKETS#" />
+                <ScalarProperty Name="ACCESS_HTLS" ColumnName="ACCESS_HTLS" />
+                <ScalarProperty Name="RCI" ColumnName="RCI" />
+                <ScalarProperty Name="CTA_MONEDEROP" ColumnName="CTA_MONEDEROP" />
+                <ScalarProperty Name="SSN2" ColumnName="SSN2" />
+                <ScalarProperty Name="SSN1" ColumnName="SSN1" />
+                <ScalarProperty Name="NUM_POL" ColumnName="NUM_POL" />
+                <ScalarProperty Name="SIDEK_NEW_RATE" ColumnName="SIDEK_NEW_RATE" />
+                <ScalarProperty Name="IVA_TAX_RATE" ColumnName="IVA_TAX_RATE" />
+                <ScalarProperty Name="PS2_ACCESS" ColumnName="PS2_ACCESS" />
+                <ScalarProperty Name="PAQTE" ColumnName="PAQTE" />
+                <ScalarProperty Name="PSM_MPAYS" ColumnName="PSM_MPAYS" />
+                <ScalarProperty Name="PSM" ColumnName="PSM" />
+                <ScalarProperty Name="PSM_PACK" ColumnName="PSM_PACK" />
+                <ScalarProperty Name="SALE_GLFT" ColumnName="SALE_GLFT" />
+                <ScalarProperty Name="JACCG_ACCESS" ColumnName="JACCG_ACCESS" />
+                <ScalarProperty Name="JACB_ACCESS" ColumnName="JACB_ACCESS" />
+                <ScalarProperty Name="GOB_ACCESS" ColumnName="GOB_ACCESS" />
+                <ScalarProperty Name="PS_ACCESS" ColumnName="PS_ACCESS" />
+                <ScalarProperty Name="DERECHO" ColumnName="DERECHO" />
+                <ScalarProperty Name="SIDEK_RCI" ColumnName="SIDEK_RCI" />
+                <ScalarProperty Name="SIDEK_RCI_FEE" ColumnName="SIDEK_RCI_FEE" />
+                <ScalarProperty Name="SIDEK_INTERVAL4" ColumnName="SIDEK_INTERVAL4" />
+                <ScalarProperty Name="SIDEK_INTERVAL3" ColumnName="SIDEK_INTERVAL3" />
+                <ScalarProperty Name="SIDEK_INTERVAL2" ColumnName="SIDEK_INTERVAL2" />
+                <ScalarProperty Name="SIDEK_1STUSEYEAR" ColumnName="SIDEK_1STUSEYEAR" />
+                <ScalarProperty Name="SIDEK_SALE_DATE" ColumnName="SIDEK_SALE_DATE" />
+                <ScalarProperty Name="SIDEK_APPLICATION" ColumnName="SIDEK_APPLICATION" />
+                <ScalarProperty Name="IDMONEDA" ColumnName="IDMONEDA" />
+                <ScalarProperty Name="FOLIO_" ColumnName="FOLIO#" />
+                <ScalarProperty Name="EXPIRATION" ColumnName="EXPIRATION" />
+                <ScalarProperty Name="LANG" ColumnName="LANG" />
+                <ScalarProperty Name="SUBPGM" ColumnName="SUBPGM" />
+                <ScalarProperty Name="GOLF_SALE" ColumnName="GOLF_SALE" />
+                <ScalarProperty Name="ULGWEEKS" ColumnName="ULGWEEKS" />
+                <ScalarProperty Name="PACK_GOLF_AMT" ColumnName="PACK_GOLF_AMT" />
+                <ScalarProperty Name="PACK_SALE_GOLF" ColumnName="PACK_SALE_GOLF" />
+                <ScalarProperty Name="PERSONA_FISICA" ColumnName="PERSONA_FISICA" />
+                <ScalarProperty Name="MEXICAN_MEMBER" ColumnName="MEXICAN_MEMBER" />
+                <ScalarProperty Name="PACK_SALE" ColumnName="PACK_SALE" />
+                <ScalarProperty Name="PMEM_TYPE" ColumnName="PMEM_TYPE" />
+                <ScalarProperty Name="MEM_TYPE" ColumnName="MEM_TYPE" />
+                <ScalarProperty Name="RCIWEEKS" ColumnName="RCIWEEKS" />
+                <ScalarProperty Name="SPAWEEKS" ColumnName="SPAWEEKS" />
+                <ScalarProperty Name="GR_ACCESS" ColumnName="GR_ACCESS" />
+                <ScalarProperty Name="GOLFROUNDS" ColumnName="GOLFROUNDS" />
+                <ScalarProperty Name="TOTAL_GOLF" ColumnName="TOTAL_GOLF" />
+                <ScalarProperty Name="GOLF_VAT" ColumnName="GOLF_VAT" />
+                <ScalarProperty Name="GOLF" ColumnName="GOLF" />
+                <ScalarProperty Name="CNXRCIRESORT" ColumnName="CNXRCIRESORT" />
+                <ScalarProperty Name="CNXRCIAUT" ColumnName="CNXRCIAUT" />
+                <ScalarProperty Name="CNXCOD_ID" ColumnName="CNXCOD_ID" />
+                <ScalarProperty Name="CHPCOM_ID" ColumnName="CHPCOM_ID" />
+                <ScalarProperty Name="MENXCOB" ColumnName="MENXCOB" />
+                <ScalarProperty Name="ENGXCOB" ColumnName="ENGXCOB" />
+                <ScalarProperty Name="CVEMODIF" ColumnName="CVEMODIF" />
+                <ScalarProperty Name="HORA_MODIF" ColumnName="HORA_MODIF" />
+                <ScalarProperty Name="FECHA_MODIF" ColumnName="FECHA_MODIF" />
+                <ScalarProperty Name="CVEBAJA" ColumnName="CVEBAJA" />
+                <ScalarProperty Name="HORA_BAJA" ColumnName="HORA_BAJA" />
+                <ScalarProperty Name="FECHA_BAJA" ColumnName="FECHA_BAJA" />
+                <ScalarProperty Name="CVEALTA" ColumnName="CVEALTA" />
+                <ScalarProperty Name="HORA_ALTA" ColumnName="HORA_ALTA" />
+                <ScalarProperty Name="FECHA_ALTA" ColumnName="FECHA_ALTA" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="SALE_TYPE" ColumnName="SALE_TYPE" />
+                <ScalarProperty Name="DWN_PAY_REMA" ColumnName="DWN_PAY_REMA" />
+                <ScalarProperty Name="PAYMENTDATE" ColumnName="PAYMENTDATE" />
+                <ScalarProperty Name="PAYMENTDAYS" ColumnName="PAYMENTDAYS" />
+                <ScalarProperty Name="PAYMENTNUM" ColumnName="PAYMENTNUM" />
+                <ScalarProperty Name="IDAREADE" ColumnName="IDAREADE" />
+                <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+                <ScalarProperty Name="COMMENT_OFFICE" ColumnName="COMMENT_OFFICE" />
+                <ScalarProperty Name="DOWN_PCTR" ColumnName="DOWN_PCTR" />
+                <ScalarProperty Name="EDAD_MENOR" ColumnName="EDAD_MENOR" />
+                <ScalarProperty Name="TRANSFER" ColumnName="TRANSFER" />
+                <ScalarProperty Name="BASE_COM" ColumnName="BASE_COM" />
+                <ScalarProperty Name="APARTADO" ColumnName="APARTADO" />
+                <ScalarProperty Name="DESCUENTO" ColumnName="DESCUENTO" />
+                <ScalarProperty Name="CTY_PAID" ColumnName="CTY_PAID" />
+                <ScalarProperty Name="DOS_EDOS_CTA" ColumnName="DOS_EDOS_CTA" />
+                <ScalarProperty Name="EMAIL2" ColumnName="EMAIL2" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="EPWEEKS" ColumnName="EPWEEKS" />
+                <ScalarProperty Name="AIWEEKS" ColumnName="AIWEEKS" />
+                <ScalarProperty Name="ADMIN_FEER" ColumnName="ADMIN_FEER" />
+                <ScalarProperty Name="END_CERT_4" ColumnName="END_CERT#4" />
+                <ScalarProperty Name="BEG_CERT_4" ColumnName="BEG_CERT#4" />
+                <ScalarProperty Name="END_CERT_3" ColumnName="END_CERT#3" />
+                <ScalarProperty Name="BEG_CERT_3" ColumnName="BEG_CERT#3" />
+                <ScalarProperty Name="FCAJA" ColumnName="FCAJA" />
+                <ScalarProperty Name="PROGRAM" ColumnName="PROGRAM" />
+                <ScalarProperty Name="CANC_DTE_RCI" ColumnName="CANC_DTE_RCI" />
+                <ScalarProperty Name="MONTHPAY" ColumnName="MONTHPAY" />
+                <ScalarProperty Name="FORFEIT_MIAMI" ColumnName="FORFEIT_MIAMI" />
+                <ScalarProperty Name="CHP_COMMENT" ColumnName="CHP_COMMENT" />
+                <ScalarProperty Name="COLECT" ColumnName="COLECT" />
+                <ScalarProperty Name="FROM" ColumnName="FROM" />
+                <ScalarProperty Name="MENS_PAG" ColumnName="MENS_PAG" />
+                <ScalarProperty Name="UNL_CERT" ColumnName="UNL_CERT" />
+                <ScalarProperty Name="OCCUPATION" ColumnName="OCCUPATION" />
+                <ScalarProperty Name="CLS4" ColumnName="CLS4" />
+                <ScalarProperty Name="CLS3" ColumnName="CLS3" />
+                <ScalarProperty Name="CLS2" ColumnName="CLS2" />
+                <ScalarProperty Name="CLS1" ColumnName="CLS1" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="EQUITY" ColumnName="EQUITY" />
+                <ScalarProperty Name="CLUB" ColumnName="CLUB" />
+                <ScalarProperty Name="DEPTO_CANC" ColumnName="DEPTO_CANC" />
+                <ScalarProperty Name="MENS_PAG_FILLER" ColumnName="MENS_PAG_FILLER" />
+                <ScalarProperty Name="FORMA_REEM" ColumnName="FORMA_REEM" />
+                <ScalarProperty Name="CANT_REEM" ColumnName="CANT_REEM" />
+                <ScalarProperty Name="COLLECT_INT" ColumnName="COLLECT_INT" />
+                <ScalarProperty Name="COLLECT_PRIN" ColumnName="COLLECT_PRIN" />
+                <ScalarProperty Name="END_CERT_2" ColumnName="END_CERT#2" />
+                <ScalarProperty Name="BEG_CERT_2" ColumnName="BEG_CERT#2" />
+                <ScalarProperty Name="TRF_DATE" ColumnName="TRF_DATE" />
+                <ScalarProperty Name="DOWN_PAY3_COMO" ColumnName="DOWN_PAY3_COMO" />
+                <ScalarProperty Name="DOWN_PAY2_COMO" ColumnName="DOWN_PAY2_COMO" />
+                <ScalarProperty Name="END_CERT_" ColumnName="END_CERT#" />
+                <ScalarProperty Name="BEG_CERT_" ColumnName="BEG_CERT#" />
+                <ScalarProperty Name="EXCHG_FIN" ColumnName="EXCHG_FIN" />
+                <ScalarProperty Name="EXCHG_DOWN3" ColumnName="EXCHG_DOWN3" />
+                <ScalarProperty Name="EXCHG_DOWN2" ColumnName="EXCHG_DOWN2" />
+                <ScalarProperty Name="EXCHG_INITIAL" ColumnName="EXCHG_INITIAL" />
+                <ScalarProperty Name="DOWN_PAY3_DT" ColumnName="DOWN_PAY3_DT" />
+                <ScalarProperty Name="DOWN_PAY2_DT" ColumnName="DOWN_PAY2_DT" />
+                <ScalarProperty Name="PESO_DEAL" ColumnName="PESO_DEAL" />
+                <ScalarProperty Name="PTS_CONTRACT" ColumnName="PTS_CONTRACT" />
+                <ScalarProperty Name="PTS_BASIC" ColumnName="PTS_BASIC" />
+                <ScalarProperty Name="CPP_CGS" ColumnName="CPP_CGS" />
+                <ScalarProperty Name="CPF_MF" ColumnName="CPF_MF" />
+                <ScalarProperty Name="RG" ColumnName="RG" />
+                <ScalarProperty Name="PACK" ColumnName="PACK" />
+                <ScalarProperty Name="COMM_PCT" ColumnName="COMM_PCT" />
+                <ScalarProperty Name="PROCESABLE" ColumnName="PROCESABLE" />
+                <ScalarProperty Name="PROC_DATE" ColumnName="PROC_DATE" />
+                <ScalarProperty Name="DWN_OTH_DTE" ColumnName="DWN_OTH_DTE" />
+                <ScalarProperty Name="TOT_HSE_PTSG" ColumnName="TOT_HSE_PTSG" />
+                <ScalarProperty Name="TOTAL_DOWN" ColumnName="TOTAL_DOWN" />
+                <ScalarProperty Name="PT_COST" ColumnName="PT_COST" />
+                <ScalarProperty Name="POINTS" ColumnName="POINTS" />
+                <ScalarProperty Name="BASE" ColumnName="BASE" />
+                <ScalarProperty Name="MAX_KIDS" ColumnName="MAX_KIDS" />
+                <ScalarProperty Name="NATIONALITY" ColumnName="NATIONALITY" />
+                <ScalarProperty Name="FUP_NOTE" ColumnName="FUP_NOTE" />
+                <ScalarProperty Name="FUP_CD" ColumnName="FUP_CD" />
+                <ScalarProperty Name="FUP_DATE" ColumnName="FUP_DATE" />
+                <ScalarProperty Name="VAC_RETURN" ColumnName="VAC_RETURN" />
+                <ScalarProperty Name="FOOD_BEV_CHILD" ColumnName="FOOD_BEV_CHILD" />
+                <ScalarProperty Name="FOOD_BEV_ADULT" ColumnName="FOOD_BEV_ADULT" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="AGENT" ColumnName="AGENT" />
+                <ScalarProperty Name="MAINTENANCE" ColumnName="MAINTENANCE" />
+                <ScalarProperty Name="MAX_PER" ColumnName="MAX_PER" />
+                <ScalarProperty Name="CC_INICIA" ColumnName="CC_INICIA" />
+                <ScalarProperty Name="CC_EXP" ColumnName="CC_EXP" />
+                <ScalarProperty Name="CC_NUM" ColumnName="CC_NUM" />
+                <ScalarProperty Name="CC_TYPE" ColumnName="CC_TYPE" />
+                <ScalarProperty Name="DOWN_PAY3D" ColumnName="DOWN_PAY3D" />
+                <ScalarProperty Name="DOWN_PAY3_" ColumnName="DOWN_PAY3_" />
+                <ScalarProperty Name="DOWN_PAY2D" ColumnName="DOWN_PAY2D" />
+                <ScalarProperty Name="DOWN_PAY2_" ColumnName="DOWN_PAY2_" />
+                <ScalarProperty Name="DOWN_PAY1D" ColumnName="DOWN_PAY1D" />
+                <ScalarProperty Name="DOWN_PAY1_" ColumnName="DOWN_PAY1_" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+                <ScalarProperty Name="DOWN_PAY" ColumnName="DOWN_PAY" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
+                <ScalarProperty Name="ADMIN_FEE" ColumnName="ADMIN_FEE" />
+                <ScalarProperty Name="AFFILIATION" ColumnName="AFFILIATION" />
+                <ScalarProperty Name="CNX_REASON" ColumnName="CNX_REASON" />
+                <ScalarProperty Name="ASSOC_CD" ColumnName="ASSOC_CD" />
+                <ScalarProperty Name="ASSOC_APL" ColumnName="ASSOC_APL" />
+                <ScalarProperty Name="SALES_COMM" ColumnName="SALES_COMM" />
+                <ScalarProperty Name="CANCEL_SALE_DT" ColumnName="CANCEL_SALE_DT" />
+                <ScalarProperty Name="REL_APPLIC" ColumnName="REL_APPLIC" />
+                <ScalarProperty Name="UPDATE" ColumnName="UPDATE" />
+                <ScalarProperty Name="DOWN_OTHER" ColumnName="DOWN_OTHER" />
+                <ScalarProperty Name="DOWN_PAID" ColumnName="DOWN_PAID" />
+                <ScalarProperty Name="ENTRY" ColumnName="ENTRY" />
+                <ScalarProperty Name="REIN_PD_DATE" ColumnName="REIN_PD_DATE" />
+                <ScalarProperty Name="CNX_CR_DATE" ColumnName="CNX_CR_DATE" />
+                <ScalarProperty Name="REINSTATE" ColumnName="REINSTATE" />
+                <ScalarProperty Name="SCH_COMM_DT" ColumnName="SCH_COMM_DT" />
+                <ScalarProperty Name="COMM_PAID" ColumnName="COMM_PAID" />
+                <ScalarProperty Name="SCH_PAY" ColumnName="SCH_PAY" />
+                <ScalarProperty Name="FAMILY_MEMB4" ColumnName="FAMILY_MEMB4" />
+                <ScalarProperty Name="FAMILY_MEMB3" ColumnName="FAMILY_MEMB3" />
+                <ScalarProperty Name="FAMILY_MEMB2" ColumnName="FAMILY_MEMB2" />
+                <ScalarProperty Name="FAMILY_MEMB1" ColumnName="FAMILY_MEMB1" />
+                <ScalarProperty Name="ROOM_" ColumnName="ROOM#" />
+                <ScalarProperty Name="HOTEL" ColumnName="HOTEL" />
+                <ScalarProperty Name="AUTHORIZED_BY" ColumnName="AUTHORIZED_BY" />
+                <ScalarProperty Name="ENTER_BY" ColumnName="ENTER_BY" />
+                <ScalarProperty Name="COMM_DUE_DATE" ColumnName="COMM_DUE_DATE" />
+                <ScalarProperty Name="TOUR_DATE" ColumnName="TOUR_DATE" />
+                <ScalarProperty Name="EXCHANGE" ColumnName="EXCHANGE" />
+                <ScalarProperty Name="OFFICE" ColumnName="OFFICE" />
+                <ScalarProperty Name="PLAN" ColumnName="PLAN" />
+                <ScalarProperty Name="PROJECT" ColumnName="PROJECT" />
+                <ScalarProperty Name="DOWN_PCT" ColumnName="DOWN_PCT" />
+                <ScalarProperty Name="INT_RATE" ColumnName="INT_RATE" />
+                <ScalarProperty Name="AMT_FIN" ColumnName="AMT_FIN" />
+                <ScalarProperty Name="TOT_PMTS" ColumnName="TOT_PMTS" />
+                <ScalarProperty Name="SEAS" ColumnName="SEAS" />
+                <ScalarProperty Name="LANG_OLD" ColumnName="LANG_OLD" />
+                <ScalarProperty Name="NO_INT" ColumnName="NO_INT" />
+                <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
+                <ScalarProperty Name="SEASON" ColumnName="SEASON" />
+                <ScalarProperty Name="PHA3" ColumnName="PHA3" />
+                <ScalarProperty Name="PHA2" ColumnName="PHA2" />
+                <ScalarProperty Name="PHA1" ColumnName="PHA1" />
+                <ScalarProperty Name="FIRST2" ColumnName="FIRST2" />
+                <ScalarProperty Name="LAST2" ColumnName="LAST2" />
+                <ScalarProperty Name="FIRST1" ColumnName="FIRST1" />
+                <ScalarProperty Name="LAST1" ColumnName="LAST1" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="PMTS" ColumnName="PMTS" />
+                <ScalarProperty Name="SUSPENSE" ColumnName="SUSPENSE" />
+                <ScalarProperty Name="COP" ColumnName="COP" />
+                <ScalarProperty Name="DISCOUNT_NET" ColumnName="DISCOUNT_NET" />
+                <ScalarProperty Name="DISCOUNT_PCT" ColumnName="DISCOUNT_PCT" />
+                <ScalarProperty Name="DISCOUNT" ColumnName="DISCOUNT" />
+                <ScalarProperty Name="PAID" ColumnName="PAID" />
+                <ScalarProperty Name="FORFEIT" ColumnName="FORFEIT" />
+                <ScalarProperty Name="REFUND" ColumnName="REFUND" />
+                <ScalarProperty Name="CANCEL" ColumnName="CANCEL" />
+                <ScalarProperty Name="LAST" ColumnName="LAST" />
+                <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+                <ScalarProperty Name="FIRST" ColumnName="FIRST" />
+                <ScalarProperty Name="BUDGET" ColumnName="BUDGET" />
+                <ScalarProperty Name="REMAIN_DATE" ColumnName="REMAIN_DATE" />
+                <ScalarProperty Name="REMAIN_INT" ColumnName="REMAIN_INT" />
+                <ScalarProperty Name="REMAIN_PRIN" ColumnName="REMAIN_PRIN" />
+                <ScalarProperty Name="REMAIN" ColumnName="REMAIN" />
+                <ScalarProperty Name="DOWN_BAL" ColumnName="DOWN_BAL" />
+                <ScalarProperty Name="DOWN_ESCROW" ColumnName="DOWN_ESCROW" />
+                <ScalarProperty Name="DOWN" ColumnName="DOWN" />
+                <ScalarProperty Name="SALE" ColumnName="SALE" />
+                <ScalarProperty Name="PURCHASE" ColumnName="PURCHASE" />
+                <ScalarProperty Name="TEL23" ColumnName="TEL23" />
+                <ScalarProperty Name="TEL22" ColumnName="TEL22" />
+                <ScalarProperty Name="TEL21" ColumnName="TEL21" />
+                <ScalarProperty Name="TEL3" ColumnName="TEL3" />
+                <ScalarProperty Name="TEL2" ColumnName="TEL2" />
+                <ScalarProperty Name="TEL1" ColumnName="TEL1" />
+                <ScalarProperty Name="CITY_CODE2" ColumnName="CITY_CODE2" />
+                <ScalarProperty Name="STATE_CODE2" ColumnName="STATE_CODE2" />
+                <ScalarProperty Name="COUNTRY_CODE2" ColumnName="COUNTRY_CODE2" />
+                <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+                <ScalarProperty Name="STATE_CODE" ColumnName="STATE_CODE" />
+                <ScalarProperty Name="COUNTRY_CODE" ColumnName="COUNTRY_CODE" />
+                <ScalarProperty Name="COUNTRY" ColumnName="COUNTRY" />
+                <ScalarProperty Name="ZIP2" ColumnName="ZIP2" />
+                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="ADDRESS2" ColumnName="ADDRESS2" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="INTERVAL" ColumnName="INTERVAL" />
+                <ScalarProperty Name="APPLICATION" ColumnName="APPLICATION" />
+                <ScalarProperty Name="RECNUM" ColumnName="RECNUM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -177,7 +1101,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
