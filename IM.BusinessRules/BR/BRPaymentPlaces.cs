@@ -1,18 +1,16 @@
-﻿using System;
+﻿using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IM.Model;
-using IM.Model.Helpers;
-using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRPaymentPlaces
+  public static class BRPaymentPlaces
   {
-
     #region GetPaymentPlaces
+
     /// <summary>
     /// Obtiene registros del catalogo PaymentPlaces
     /// </summary>
@@ -22,34 +20,39 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 05/04/2016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [aalcocer] 02/08/2016 Modified. Se modifica la asincronía con Task
     /// </history>
-    public async static Task<List<PaymentPlace>> GetPaymentPlaces(int nStatus = -1, PaymentPlace paymentPlaces = null)
+    public static async Task<List<PaymentPlace>> GetPaymentPlaces(int nStatus = -1, PaymentPlace paymentPlaces = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var query = from pc in dbContext.PaymentPlaces
-                    select pc;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(pc => pc.pcA == blnStatus);
-        }
-        if (paymentPlaces != null)//verificamos que se tenga el objeto
-        {
-          if (!string.IsNullOrWhiteSpace(paymentPlaces.pcID))//Filtro por ID
-          {
-            query = query.Where(pc => pc.pcID == paymentPlaces.pcID);
-          }
+          var query = from pc in dbContext.PaymentPlaces
+                      select pc;
 
-          if (!string.IsNullOrWhiteSpace(paymentPlaces.pcN))//Filtro por Descripción
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(pc => pc.pcN.Contains(paymentPlaces.pcN));
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(pc => pc.pcA == blnStatus);
           }
+          if (paymentPlaces != null)//verificamos que se tenga el objeto
+          {
+            if (!string.IsNullOrWhiteSpace(paymentPlaces.pcID))//Filtro por ID
+            {
+              query = query.Where(pc => pc.pcID == paymentPlaces.pcID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paymentPlaces.pcN))//Filtro por Descripción
+            {
+              query = query.Where(pc => pc.pcN.Contains(paymentPlaces.pcN));
+            }
+          }
+          return query.OrderBy(pc => pc.pcN).ToList();
         }
-        return await query.OrderBy(pc => pc.pcN).ToListAsync();
-      }
+      });
     }
-    #endregion
+
+    #endregion GetPaymentPlaces
   }
 }

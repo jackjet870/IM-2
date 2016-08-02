@@ -10,7 +10,7 @@ using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRGuests
+  public static class BRGuests
   {
     #region GetGuestsArrivals
 
@@ -300,16 +300,20 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [lchairez] 18/03/2016 Created.
+    /// [aalcocer] 02/08/2016 Modified. se agrego asincronia
     /// </history>
-    public static List<GuestCreditCard> GetGuestCreditCard(int guestId)
+    public static async Task<List<GuestCreditCard>> GetGuestCreditCard(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
+        }
+      });
     }
-    #endregion
-   
+    #endregion GetGuestCreditCard
+
     #region SaveGuestInvitation
 
     /// <summary>
