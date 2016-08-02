@@ -122,6 +122,7 @@
     <Compile Include="Classes\GiftsReceiptsPayments.cs" />
     <Compile Include="Classes\objMealTicketsIM.cs" />
     <Compile Include="Classes\objRptGiftsReceiptIM.cs" />
+    <Compile Include="Classes\objRptGuestRegistrationIM.cs" />
     <Compile Include="Classes\ReceiptsGifts.cs" />
     <Compile Include="Classes\RptDepositRefundIM.cs" />
     <Compile Include="Classes\SalesSalesmen.cs" />
@@ -176,10 +177,10 @@
     <Compile Include="Forms\frmSalesSalesmen.xaml.cs">
       <DependentUpon>frmSalesSalesmen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reports\RptBookingDeposits.cs">
+    <Compile Include="Reports\rptBookingDeposits1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RptBookingDeposits.rpt</DependentUpon>
+      <DependentUpon>rptBookingDeposits.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptGiftsReceipt.cs">
@@ -188,10 +189,10 @@
       <DependentUpon>rptGiftsReceipt.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\RptGiftsReceipt_Gifts.cs">
+    <Compile Include="Reports\rptGiftsReceipt_Gifts1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RptGiftsReceipt_Gifts.rpt</DependentUpon>
+      <DependentUpon>rptGiftsReceipt_Gifts.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptGiftsReceipt_ProductLegends.cs">
@@ -200,16 +201,58 @@
       <DependentUpon>rptGiftsReceipt_ProductLegends.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\RptMealTicket.cs">
+    <Compile Include="Reports\rptGuestRegistration.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RptMealTicket.rpt</DependentUpon>
+      <DependentUpon>rptGuestRegistration.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\RptRefundLetter.cs">
+    <Compile Include="Reports\rptGuestRegistration_Comments.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RptRefundLetter.rpt</DependentUpon>
+      <DependentUpon>rptGuestRegistration_Comments.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGuestRegistration_CreditCards.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGuestRegistration_CreditCards.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGuestRegistration_Deposits.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGuestRegistration_Deposits.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGuestRegistration_Gifts.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGuestRegistration_Gifts.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGuestRegistration_Guests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGuestRegistration_Guests.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGuestRegistration_Salesmen.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGuestRegistration_Salesmen.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptMealTicket1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMealTicket.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptRefundLetter1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptRefundLetter.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Forms\frmAddExchangeRate.xaml">
@@ -397,29 +440,57 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\RptBookingDeposits.rpt">
+    <EmbeddedResource Include="Reports\rptBookingDeposits.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptBookingDeposits.cs</LastGenOutput>
+      <LastGenOutput>rptBookingDeposits1.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptGiftsReceipt.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptGiftsReceipt.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\RptGiftsReceipt_Gifts.rpt">
+    <EmbeddedResource Include="Reports\rptGiftsReceipt_Gifts.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptGiftsReceipt_Gifts.cs</LastGenOutput>
+      <LastGenOutput>rptGiftsReceipt_Gifts1.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptGiftsReceipt_ProductLegends.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptGiftsReceipt_ProductLegends.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\RptMealTicket.rpt">
+    <EmbeddedResource Include="Reports\rptGuestRegistration.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptMealTicket.cs</LastGenOutput>
+      <LastGenOutput>rptGuestRegistration.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\RptRefundLetter.rpt">
+    <EmbeddedResource Include="Reports\rptGuestRegistration_Comments.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptRefundLetter.cs</LastGenOutput>
+      <LastGenOutput>rptGuestRegistration_Comments.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGuestRegistration_CreditCards.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGuestRegistration_CreditCards.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGuestRegistration_Deposits.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGuestRegistration_Deposits.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGuestRegistration_Gifts.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGuestRegistration_Gifts.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGuestRegistration_Guests.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGuestRegistration_Guests.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGuestRegistration_Salesmen.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGuestRegistration_Salesmen.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptMealTicket.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMealTicket1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptRefundLetter.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptRefundLetter1.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Host.Classes.objRptGiftsReceiptIM.datasource" />

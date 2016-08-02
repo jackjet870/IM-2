@@ -264,6 +264,7 @@ namespace IM.Base.Helpers
                 {
                   txt.MaxLength = 10;
                   txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                  txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;

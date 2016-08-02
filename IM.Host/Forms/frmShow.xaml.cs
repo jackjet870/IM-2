@@ -1,10 +1,15 @@
-﻿using IM.Base.Helpers;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Host.Classes;
 using IM.Host.Enums;
 using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -40,7 +45,79 @@ namespace IM.Host.Forms
     CollectionViewSource _dsPersonnelEXITCLOSER;
     CollectionViewSource _dsPersonnelPODIUM;
     CollectionViewSource _dsPersonnelVLO, _dsPersonnelHOSTSENTRY, _dsPersonnelHOSTSGIFTS, _dsPersonnelHOSTSEXIT;
+    private Guest _guest;
 
+    #endregion
+
+    #region btnPrint_Click
+    /// <summary>
+    /// Imprime el reporte GuestRegistration
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 25/Jul/2016 Created
+    /// </history>
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      byte iMotive = 0;
+      if (_guest.guReimpresion > 0)
+      {
+        frmReimpresionMotives _frmReimpresion = new frmReimpresionMotives()
+        {
+          ShowInTaskbar = false,
+          Owner = this
+        };
+        if (!(_frmReimpresion.ShowDialog() ?? false)) return;
+
+        iMotive = (byte)_frmReimpresion.LstMotives.SelectedValue;
+        
+        //Actualizamos el motivo de reimpresion.
+        await BRReimpresionMotives.UpdateGuestReimpresionMotive(_guest.guID, iMotive);
+      }
+      else
+      //Actualizamos el contador de reimpresion.
+      {
+        await BRReimpresionMotives.UpdateGuestReimpresionNumber(_guest.guID);
+      }
+      //Salvamos la informacion del show.
+      //GuardarInfo();
+
+      //Se imprime el reporte.
+      var lstRptGuestRegistration = await BRGuests.GetGuestRegistration(_guestCurrent);
+      if (lstRptGuestRegistration.Any())
+      {
+        var guestRegistration = (lstRptGuestRegistration[0] as List<RptGuestRegistration>).Select(c => new objRptGuestRegistrationIM(c)).FirstOrDefault();
+        var guReg_Guest = (lstRptGuestRegistration[1] as List<RptGuestRegistration_Guests>)?.Select(c => new objRptGuestRegistrationGuestIM(c)).ToList() ?? new List<objRptGuestRegistrationGuestIM>();
+        var guReg_Deposits = (lstRptGuestRegistration[2] as List<RptGuestRegistration_Deposits>)?.Select(c => new objRptGuestRegistrationDepositsIM(c)).ToList() ?? new List<objRptGuestRegistrationDepositsIM>();
+        var guReg_Gifts = (lstRptGuestRegistration[3] as List<RptGuestRegistration_Gifts>)?.Select(c => new objRptGuestRegistrationGiftsIM(c)).ToList() ?? new List<objRptGuestRegistrationGiftsIM>();
+        var guReg_Salesmen = (lstRptGuestRegistration[4] as List<RptGuestRegistration_Salesmen>)?.Select(c => new objRptGuestRegistrationSalesmenIM(c)).ToList() ?? new List<objRptGuestRegistrationSalesmenIM>();
+        var guReg_CreditCard = (lstRptGuestRegistration[5] as List<RptGuestRegistration_CreditCards>)?.Select(c => new objRptGuestRegistrationCreditCardsIM(c)).ToList() ?? new List<objRptGuestRegistrationCreditCardsIM>();
+        var guReg_Comments = (lstRptGuestRegistration[6] as List<RptGuestRegistration_Comments>)?.Select(c => new objRptGuestRegistrationCommentsIM(c)).ToList() ?? new List<objRptGuestRegistrationCommentsIM>();
+        var rptGuestRegistration = new Reports.rptGuestRegistration();
+
+        rptGuestRegistration.Database.Tables[0].SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(guestRegistration)));
+        rptGuestRegistration.Subreports["rptGuestRegistration_Guests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Guest));
+        rptGuestRegistration.Subreports["rptGuestRegistration_Deposits.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Deposits));
+        rptGuestRegistration.Subreports["rptGuestRegistration_Gifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Gifts));
+        rptGuestRegistration.Subreports["rptGuestRegistration_CreditCards.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_CreditCard));
+        rptGuestRegistration.Subreports["rptGuestRegistration_Salesmen.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Salesmen));
+        rptGuestRegistration.Subreports["rptGuestRegistration_Comments.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Comments));
+
+        CrystalReportHelper.SetLanguage(rptGuestRegistration, guestRegistration.gula);
+
+        //Si es reimpresion reemplazamos los campos clave.
+        if (guestRegistration.guReimpresion > 1)
+        {
+          var msgReimpresion = LanguageHelper.GetMessage(EnumMessage.msglblReimpresion);
+          msgReimpresion = (string.IsNullOrEmpty(msgReimpresion)) ? "" : msgReimpresion.Replace("[grReimpresion]", guestRegistration.guReimpresion.ToString()).Replace("[rmN]", guestRegistration.rmN?.ToString() ?? "");
+          (rptGuestRegistration.ReportDefinition.ReportObjects["lblReimpresion"] as TextObject).Text = msgReimpresion;
+        }
+
+        CrystalReportHelper.ShowReport(rptGuestRegistration, $"Guest Registration {_guest.guID.ToString()}", PrintDevice: EnumPrintDevice.pdScreen, numCopies: ((string.IsNullOrWhiteSpace(txtCopies.Text)) ? 1 : Convert.ToInt32(txtCopies.Text)));
+
+        //Cerramos el Formulario.
+        Close();
+      }
+    }
     #endregion
 
     public frmShow(int guestID)
@@ -50,7 +127,7 @@ namespace IM.Host.Forms
     }
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsGuest = ((CollectionViewSource)(this.FindResource("guestViewSource")));
 
@@ -76,7 +153,7 @@ namespace IM.Host.Forms
       _dsPersonnelVLO = ((CollectionViewSource)(this.FindResource("dsPersonnelVLO")));
       _dsPersonnelHOSTSENTRY = ((CollectionViewSource)(this.FindResource("dsPersonnelHOSTSENTRY")));
       _dsPersonnelHOSTSGIFTS = ((CollectionViewSource)(this.FindResource("dsPersonnelHOSTSGIFTS")));
-      _dsPersonnelHOSTSEXIT = ((CollectionViewSource)(this.FindResource("dsPersonnelHOSTSEXIT"))); 
+      _dsPersonnelHOSTSEXIT = ((CollectionViewSource)(this.FindResource("dsPersonnelHOSTSEXIT")));
       #endregion
 
       LoadCombos();
@@ -89,6 +166,8 @@ namespace IM.Host.Forms
       }
 
       // Cargamos los datos del Show
+      _guest = await BRGuests.GetGuest(_guestCurrent);
+      DataContext = _guest;
 
     }
     #endregion

@@ -349,7 +349,7 @@
       </Canvas>
     </GroupBox>
     <TextBox x:Name="txtCopies" HorizontalAlignment="Left" Height="23" Margin="319,644,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="35"/>
-    <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="363,644,0,0" VerticalAlignment="Top" Width="75"/>
+    <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="363,644,0,0" VerticalAlignment="Top" Width="75" Click="btnPrint_Click"/>
     <Button x:Name="btnSave" Content="Save and Exit" HorizontalAlignment="Left" Margin="444,644,0,0" VerticalAlignment="Top" Width="75"/>
     <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="526,644,0,0" VerticalAlignment="Top" Width="75"/>
 

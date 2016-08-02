@@ -16,14 +16,14 @@ namespace IM.Host.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class RptGiftsReceipt_Gifts : ReportClass {
+    public class rptRefundLetter : ReportClass {
         
-        public RptGiftsReceipt_Gifts() {
+        public rptRefundLetter() {
         }
         
         public override string ResourceName {
             get {
-                return "RptGiftsReceipt_Gifts.rpt";
+                return "rptRefundLetter.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Host.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Host.Reports.RptGiftsReceipt_Gifts.rpt";
+                return "IM.Host.Reports.rptRefundLetter.rpt";
             }
             set {
                 // Do nothing
@@ -74,7 +74,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection4 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -82,17 +82,33 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection5 {
             get {
                 return this.ReportDefinition.Sections[4];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+            get {
+                return this.ReportDefinition.Sections[5];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+            get {
+                return this.ReportDefinition.Sections[6];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedRptGiftsReceipt_Gifts : Component, ICachedReport {
+    public class CachedrptRefundLetter : Component, ICachedReport {
         
-        public CachedRptGiftsReceipt_Gifts() {
+        public CachedrptRefundLetter() {
         }
         
         [Browsable(false)]
@@ -129,7 +145,7 @@ namespace IM.Host.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            RptGiftsReceipt_Gifts rpt = new RptGiftsReceipt_Gifts();
+            rptRefundLetter rpt = new rptRefundLetter();
             rpt.Site = this.Site;
             return rpt;
         }

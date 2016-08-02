@@ -6,10 +6,11 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:IM.InventoryMovements"
         xmlns:Clases="clr-namespace:IM.InventoryMovements.Clases" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.InventoryMovements.frmInventoryMovements"
+        xmlns:styClss="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         mc:Ignorable="d"
         Title="Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
-        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown">
+        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" >
     <Window.Resources>
         <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
         <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
@@ -48,9 +49,9 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <Label x:Name="lblNew" Content="New Movements" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" FontWeight="Bold" />
-                <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}" PreparingCellForEdit="grdNew_PreparingCellForEdit" >
+                <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}" BeginningEdit="grdNew_BeginningEdit" CellEditEnding="grdNew_CellEditEnding">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding wmQty, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" ElementStyle="{StaticResource ResourceKey=txt-ErrorInfo}" Header="Quantity" Width="60" />
+                        <DataGridTextColumn Binding="{Binding wmQty, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" ElementStyle="{StaticResource ResourceKey=txt-ErrorInfo}" Header="Quantity" Width="60" styClss:FormatInputPropertyClass.FormatInput="NumberNegative" styClss:MaxLengthPropertyClass.MaxLength="5" />
                         <DataGridComboBoxColumn x:Name="dgcbGifts" TextSearch.TextPath="wmgi" SelectedValueBinding="{Binding wmgi, ValidatesOnDataErrors=True}" DisplayMemberPath="giN" SelectedValuePath="giID"  Header="Gift" ItemsSource="{Binding Source={StaticResource getGiftsViewSource}}" Width="200" />
                         <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*">
                             <DataGridTextColumn.EditingElementStyle>

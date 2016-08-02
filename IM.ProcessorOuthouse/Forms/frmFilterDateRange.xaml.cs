@@ -30,7 +30,7 @@ namespace IM.ProcessorOuthouse.Forms
       InitializeComponent();
       txtFolFrom.PreviewTextInput += TextBoxHelper.IntTextInput;
       txtFolTo.PreviewTextInput += TextBoxHelper.IntTextInput;
-      this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
+      this.PreviewKeyDown += Close_KeyPreviewESC;
     }
 
     #endregion Contructor

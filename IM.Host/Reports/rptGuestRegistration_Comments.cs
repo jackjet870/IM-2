@@ -16,14 +16,14 @@ namespace IM.Host.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptGiftsReceipt : ReportClass {
+    public class rptGuestRegistration_Comments : ReportClass {
         
-        public rptGiftsReceipt() {
+        public rptGuestRegistration_Comments() {
         }
         
         public override string ResourceName {
             get {
-                return "rptGiftsReceipt.rpt";
+                return "rptGuestRegistration_Comments.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Host.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Host.Reports.rptGiftsReceipt.rpt";
+                return "IM.Host.Reports.rptGuestRegistration_Comments.rpt";
             }
             set {
                 // Do nothing
@@ -74,7 +74,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection2 {
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -82,65 +82,17 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection4 {
-            get {
-                return this.ReportDefinition.Sections[4];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection3 {
-            get {
-                return this.ReportDefinition.Sections[5];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection5 {
-            get {
-                return this.ReportDefinition.Sections[6];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
-            get {
-                return this.ReportDefinition.Sections[7];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.CrystalReports.Engine.Section Section5 {
             get {
-                return this.ReportDefinition.Sections[8];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_isCharge {
-            get {
-                return this.DataDefinition.ParameterFields[0];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_msgLblCoupon {
-            get {
-                return this.DataDefinition.ParameterFields[1];
+                return this.ReportDefinition.Sections[4];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptGiftsReceipt : Component, ICachedReport {
+    public class CachedrptGuestRegistration_Comments : Component, ICachedReport {
         
-        public CachedrptGiftsReceipt() {
+        public CachedrptGuestRegistration_Comments() {
         }
         
         [Browsable(false)]
@@ -177,7 +129,7 @@ namespace IM.Host.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptGiftsReceipt rpt = new rptGiftsReceipt();
+            rptGuestRegistration_Comments rpt = new rptGuestRegistration_Comments();
             rpt.Site = this.Site;
             return rpt;
         }

@@ -16,14 +16,14 @@ namespace IM.Host.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class RptBookingDeposits : ReportClass {
+    public class rptGuestRegistration_CreditCards : ReportClass {
         
-        public RptBookingDeposits() {
+        public rptGuestRegistration_CreditCards() {
         }
         
         public override string ResourceName {
             get {
-                return "RptBookingDeposits.rpt";
+                return "rptGuestRegistration_CreditCards.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Host.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Host.Reports.RptBookingDeposits.rpt";
+                return "IM.Host.Reports.rptGuestRegistration_CreditCards.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace IM.Host.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedRptBookingDeposits : Component, ICachedReport {
+    public class CachedrptGuestRegistration_CreditCards : Component, ICachedReport {
         
-        public CachedRptBookingDeposits() {
+        public CachedrptGuestRegistration_CreditCards() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace IM.Host.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            RptBookingDeposits rpt = new RptBookingDeposits();
+            rptGuestRegistration_CreditCards rpt = new rptGuestRegistration_CreditCards();
             rpt.Site = this.Site;
             return rpt;
         }

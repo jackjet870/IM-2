@@ -1,5 +1,6 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.ReportAppServer.Controllers;
+using CrystalDecisions.Shared;
 using IM.Base.Forms;
 using IM.Model.Enums;
 using System;
@@ -21,32 +22,50 @@ namespace IM.Base.Helpers
     /// <param name="Language"></param>
     /// <history>
     /// [edgrodriguez] 13/Jul/2016 Created
+    /// [edgrodriguez] 29/Jul/2016 Modified. Se agregó el reconocimiento para los controles tipo Parámetro.
     /// </history>
     public static void SetLanguage(ReportDocument report, string Language = "")
     {
 
       //Determinamos el Lenguaje
       LanguageHelper.IDLanguage = Language;
-
+      var controles = report.ReportDefinition.ReportObjects
+        .Cast<object>()
+        .Where(c => c.GetType() == typeof(FieldHeadingObject) || c.GetType() == typeof(TextObject) || c.GetType() == typeof(FieldObject))
+        .Select(c => c)
+        .ToList();
       //Buscamos en el reporte principal
       report.ReportDefinition.ReportObjects
         .Cast<object>()
-        .Where(c => c.GetType() == typeof(FieldHeadingObject) || c.GetType() == typeof(TextObject))
+        .Where(c => c.GetType() == typeof(FieldHeadingObject) || c.GetType() == typeof(TextObject) || c.GetType()==typeof(FieldObject))
         .Select(c => c)
         .ToList()
         .ForEach(c =>
         {
+          //Etiquetas de Campo
           if (c.GetType() == typeof(FieldHeadingObject))
           {
-            var msg = LanguageHelper.GetMessage(((FieldHeadingObject)c).Name);
+            var msg = LanguageHelper.GetMessage(((FieldHeadingObject)c).Text);
             if (!string.IsNullOrEmpty(msg))
               ((FieldHeadingObject)c).Text = msg;
           }
+          //Etiquetas normales.
           else if (c.GetType() == typeof(TextObject))
           {
-            var msg = LanguageHelper.GetMessage(((TextObject)c).Name);
+            var msg = LanguageHelper.GetMessage(((TextObject)c).Text);
             if (!string.IsNullOrEmpty(msg))
               ((TextObject)c).Text = msg;
+          }
+          //Etiquetas de tipo Parametro.
+          else if (c.GetType() == typeof(FieldObject))
+          {
+            var ctrl = ((FieldObject)c).DataSource as ParameterFieldDefinition;
+            if (ctrl != null && ctrl.DefaultValues.ToArray().Any())
+            {
+              var msg = LanguageHelper.GetMessage(ctrl.DefaultValues.Cast<ParameterDiscreteValue>().FirstOrDefault().Value.ToString());
+              if (!string.IsNullOrEmpty(msg))
+                report.SetParameterValue(ctrl.Name, msg);
+            }
           }
         });
       //Buscamos en los subreportes.
@@ -63,15 +82,25 @@ namespace IM.Base.Helpers
           {
             if (c.GetType() == typeof(FieldHeadingObject))
             {
-              var msg = LanguageHelper.GetMessage(((FieldHeadingObject)c).Name);
+              var msg = LanguageHelper.GetMessage(((FieldHeadingObject)c).Text);
               if (!string.IsNullOrEmpty(msg))
                 ((FieldHeadingObject)c).Text = msg;
             }
             else if (c.GetType() == typeof(TextObject))
             {
-              var msg = LanguageHelper.GetMessage(((TextObject)c).Name);
+              var msg = LanguageHelper.GetMessage(((TextObject)c).Text);
               if (!string.IsNullOrEmpty(msg))
                 ((TextObject)c).Text = msg;
+            }
+            else if (c.GetType() == typeof(FieldObject))
+            {
+              var ctrl = ((FieldObject)c).DataSource as ParameterFieldDefinition;
+              if (ctrl != null && ctrl.DefaultValues.ToArray().Any())
+              {
+                var msg = LanguageHelper.GetMessage(ctrl.DefaultValues.Cast<CrystalDecisions.Shared.ParameterDiscreteValue>().FirstOrDefault().Value.ToString());
+                if (!string.IsNullOrEmpty(msg))
+                  rpt.SetParameterValue(((FieldObject)c).Name, msg);
+              }
             }
           });
         });
@@ -91,7 +120,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [edgrodriguez] 16/Jul/2016 Created
     /// </history>
-    public static void ShowReport(ReportDocument report, string reportName = "", bool isDialog = false, Window owner = null, EnumPrintDevice PrintDevice = EnumPrintDevice.pdScreen, bool IsInvitation=false)
+    public static void ShowReport(ReportDocument report, string reportName = "", bool isDialog = false, Window owner = null, EnumPrintDevice PrintDevice = EnumPrintDevice.pdScreen, bool IsInvitation=false, int numCopies=1)
     {
       switch (PrintDevice)
       {
@@ -107,6 +136,7 @@ namespace IM.Base.Helpers
           var boPrintOutputController = boReportClientDocument.PrintOutputController;
 
           boPrintReportOptions.JobTitle = reportName;
+          boPrintReportOptions.NumberOfCopies = numCopies;
           boPrintOutputController.PrintReport(boPrintReportOptions);
           break;
         case EnumPrintDevice.pdScreen:

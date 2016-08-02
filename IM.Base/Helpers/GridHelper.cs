@@ -8,6 +8,7 @@ using System.Windows;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Windows.Input;
 using IM.Styles.Classes;
+using IM.Styles.Enums;
 
 namespace IM.Base.Helpers
 {
@@ -490,6 +491,7 @@ namespace IM.Base.Helpers
             TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
             Facet facet;
             Style style = new Style(typeof(TextBox));
+            EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(dgc);
             switch (typeCode)
             {
               #region String
@@ -511,9 +513,9 @@ namespace IM.Base.Helpers
               case TypeCode.Decimal:
               case TypeCode.Double:
                 {
-                  int Precision = Convert.ToInt32(edmMember.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
-                  int Scale = Convert.ToInt32(edmMember.TypeUsage.Facets.Where(fc => fc.Name == "Scale").FirstOrDefault().Value);
-                  if (Scale > 0)
+                  int precision = Convert.ToInt32(edmMember?.TypeUsage.Facets.FirstOrDefault(fc => fc.Name == "Precision")?.Value);
+                  int scale = Convert.ToInt32(edmMember?.TypeUsage.Facets.FirstOrDefault(fc => fc.Name == "Scale")?.Value);
+                  if (scale > 0)
                   {
                     style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput)));
                   }
@@ -521,7 +523,7 @@ namespace IM.Base.Helpers
                   {
                     style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));
                   }
-                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, Precision));
+                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, precision));
                   break;
                 }
               #endregion
@@ -531,12 +533,21 @@ namespace IM.Base.Helpers
               case TypeCode.Int32:
               case TypeCode.Int64:
                 {
-                  int maxLengthValue = MaxLengthPropertyClass.GetMaxLength(dgc);
-                  if (maxLengthValue != 0)
+                  int maxLengthValue= MaxLengthPropertyClass.GetMaxLength(dgc);                  
+                  if (maxLengthValue > 0)
                   {
-                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty, maxLengthValue));
+                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty, (formatInput == EnumFormatInput.NumberNegative) ? maxLengthValue + 1 : maxLengthValue));
                   }
-                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));
+                  switch (formatInput)
+                  {
+                    case EnumFormatInput.Number:
+                      style.Setters.Add(new EventSetter() { Event = UIElement.PreviewTextInputEvent, Handler = new TextCompositionEventHandler(TextBoxHelper.IntTextInput) });
+                      break;
+                    case EnumFormatInput.NumberNegative:
+                      style.Setters.Add(new EventSetter() { Event = UIElement.PreviewTextInputEvent, Handler = new TextCompositionEventHandler(TextBoxHelper.IntWithNegativeTextInput) });
+                      break;
+                  }
+                  style.Setters.Add(new EventSetter() { Event = UIElement.PreviewKeyDownEvent, Handler = new System.Windows.Input.KeyEventHandler(TextBoxHelper.ValidateSpace) });
                   break;
                 }
                 #endregion
@@ -585,10 +596,10 @@ namespace IM.Base.Helpers
     /// [emoguel] created 29/07/2016
     /// </history>
     public static void dgr_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {      
+    {
       e.Cancel = IsInEditMode(sender as DataGrid);
     }
     #endregion
- 
+
   }
 }

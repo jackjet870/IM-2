@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
     #endregion
 
 
-    #region UpdateReimpresionMotive
+    #region UpdateGiftReceiptsReimpresionMotive
     /// <summary>
     /// Actualiza el motivo de reimpresion del recibo de regalos
     /// </summary>
@@ -62,7 +62,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 09/Junio/2016 Created
     /// </history>
-    public static async Task UpdateReimpresionMotive(int ReceiptID, byte ReimpresionMotive)
+    public static async Task UpdateGiftReceiptsReimpresionMotive(int ReceiptID, byte ReimpresionMotive)
     {
       await Task.Run(() =>
       {
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region UpdateReimpresionNumber
+    #region UpdateGiftReceiptsReimpresionNumber
     /// <summary>
     ///  Actualiza el contador de reimpresion del recibo de regalos
     /// </summary>
@@ -83,7 +83,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 09/Junio/2016 Created
     /// </history>
-    public static async Task UpdateReimpresionNumber(int ReceiptID)
+    public static async Task UpdateGiftReceiptsReimpresionNumber(int ReceiptID)
     {
       await Task.Run(() =>
       {
@@ -92,7 +92,49 @@ namespace IM.BusinessRules.BR
           dbContext.USP_OR_UpdateGiftReceiptsReimpresionNumber(ReceiptID);
         }
       });
-    } 
+    }
+    #endregion
+
+    #region UpdateGuestReimpresionMotive
+    /// <summary>
+    /// Actualiza el motivo de reimpresion del Registro de Guests
+    /// </summary>
+    /// <param name="guestID">ID del guest</param>
+    /// <param name="reimpresionMotive">Motivo de reimpresion</param>
+    /// <history>
+    /// [edgrodriguez] 30/Jul/2016 Created
+    /// </history>
+    public static async Task UpdateGuestReimpresionMotive(int guestID, byte reimpresionMotive)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.USP_OR_UpdateGuestReimpresionMotive(guestID, reimpresionMotive);
+        }
+      });
+    }
+    #endregion
+
+    #region UpdateGuestReimpresionNumber
+    /// <summary>
+    ///  Actualiza el contador de reimpresion del Registro de Guests
+    /// </summary>
+    /// <param name="guestID">ID del Guest</param>
+    /// <returns></returns>
+    /// <history>
+    /// [edgrodriguez] 30/Jul/2016 Created
+    /// </history>
+    public static async Task UpdateGuestReimpresionNumber(int guestID)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.USP_OR_UpdateGuestReimpresionNumber(guestID);
+        }
+      });
+    }
     #endregion
 
   }

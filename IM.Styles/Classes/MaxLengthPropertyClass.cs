@@ -17,7 +17,7 @@ namespace IM.Styles.Classes
   {
     public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.RegisterAttached(
       "MaxLength",
-      typeof(object),
+      typeof(int),
       typeof(MaxLengthPropertyClass),
       new FrameworkPropertyMetadata(null));
 

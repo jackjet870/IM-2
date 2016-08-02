@@ -16,14 +16,14 @@ namespace IM.Host.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class RptRefundLetter : ReportClass {
+    public class rptBookingDeposits : ReportClass {
         
-        public RptRefundLetter() {
+        public rptBookingDeposits() {
         }
         
         public override string ResourceName {
             get {
-                return "RptRefundLetter.rpt";
+                return "rptBookingDeposits.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Host.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Host.Reports.RptRefundLetter.rpt";
+                return "IM.Host.Reports.rptBookingDeposits.rpt";
             }
             set {
                 // Do nothing
@@ -74,7 +74,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection4 {
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -82,33 +82,17 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection5 {
-            get {
-                return this.ReportDefinition.Sections[4];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
-            get {
-                return this.ReportDefinition.Sections[5];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.CrystalReports.Engine.Section Section5 {
             get {
-                return this.ReportDefinition.Sections[6];
+                return this.ReportDefinition.Sections[4];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedRptRefundLetter : Component, ICachedReport {
+    public class CachedrptBookingDeposits : Component, ICachedReport {
         
-        public CachedRptRefundLetter() {
+        public CachedrptBookingDeposits() {
         }
         
         [Browsable(false)]
@@ -145,7 +129,7 @@ namespace IM.Host.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            RptRefundLetter rpt = new RptRefundLetter();
+            rptBookingDeposits rpt = new rptBookingDeposits();
             rpt.Site = this.Site;
             return rpt;
         }

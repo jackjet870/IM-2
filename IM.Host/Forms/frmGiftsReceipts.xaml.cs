@@ -2447,13 +2447,13 @@ namespace IM.Host.Forms
           return;
 
         // actualizamos el motivo de reimpresion
-        await BRReimpresionMotives.UpdateReimpresionMotive(Convert.ToInt32(txtgrID.Text), iMotive);
+        await BRReimpresionMotives.UpdateGiftReceiptsReimpresionMotive(Convert.ToInt32(txtgrID.Text), iMotive);
         ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text));
       }
       else
       {
         // actualizamos el contador de reimpresion
-        await BRReimpresionMotives.UpdateReimpresionNumber(Convert.ToInt32(txtgrID.Text));
+        await BRReimpresionMotives.UpdateGiftReceiptsReimpresionNumber(Convert.ToInt32(txtgrID.Text));
         ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text));
       }
 

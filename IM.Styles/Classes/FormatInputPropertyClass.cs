@@ -17,7 +17,7 @@ namespace IM.Styles.Classes
   {
     public static readonly DependencyProperty FormatInputProperty = DependencyProperty.RegisterAttached(
        "FormatInput",
-       typeof(object),
+       typeof(Enums.EnumFormatInput),
        typeof(FormatInputPropertyClass),
        new FrameworkPropertyMetadata(null));
     /// <summary>
@@ -30,6 +30,7 @@ namespace IM.Styles.Classes
     /// </history>
     public static Enums.EnumFormatInput GetFormatInput(DependencyObject dependencyObject)
     {
+      var xd = dependencyObject.GetValue(FormatInputProperty);
       return (dependencyObject.GetValue(FormatInputProperty) == null) ? Enums.EnumFormatInput.Text : (Enums.EnumFormatInput)dependencyObject.GetValue(FormatInputProperty);
     }
     /// <summary>

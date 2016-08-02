@@ -29,7 +29,7 @@ namespace IM.InventoryMovements
     private CollectionViewSource _objWhsMovsViewSource;
     private CollectionViewSource _getGiftsViewSource;
     private CollectionViewSource _whsMovViewSource;
-
+    bool _HasError;
     public ExecuteCommandHelper DateFocus { get; set; }
     public ExecuteCommandHelper SaveData { get; set; }
     public ExecuteCommandHelper CancelEdit { get; set; }
@@ -38,6 +38,7 @@ namespace IM.InventoryMovements
 
     #region Constructores y destructores
 
+    #region frmInventoryMovements
     /// <summary>
     /// Constructor
     /// </summary>
@@ -53,11 +54,13 @@ namespace IM.InventoryMovements
       CloseWindow = new ExecuteCommandHelper(c => btnClose_Click(null, null));
 
     }
+    #endregion
 
     #endregion
 
     #region Metodos del formulario
 
+    #region frmInventoryMovements_Loaded
     /// <summary>
     /// Inicio y configuracion del formulario.
     /// </summary>
@@ -67,22 +70,25 @@ namespace IM.InventoryMovements
     private void frmInventoryMovements_Loaded(object sender, RoutedEventArgs e)
     {
       _salesRoom = BRSalesRooms.GetSalesRoom(App.User.Warehouse.whID);
-      CkeckKeysPress(StatusBarCap, Key.Capital);
-      CkeckKeysPress(StatusBarIns, Key.Insert);
-      CkeckKeysPress(StatusBarNum, Key.NumLock);
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       lblUserName.Content = App.User.User.peN;
       lblWareHouse.Content = App.User.Warehouse.whN;
       lblCloseDate.Content = "Close Receipts Date: " + _salesRoom.srGiftsRcptCloseD.ToString("dd/MMM/yyyy");
-      InicializarGrdNew();
+      InitializeGrdNew();
       _dtmServerdate = BRHelpers.GetServerDate();
       dtpDate_SelectedDateChanged(null, null);
-      if (((EnumPermisionLevel) App.User.Permissions.FirstOrDefault(c => c.pppm == "GIFTSRCPTS").pppl) >=
+      GridHelper.SetUpGrid(grdNew, new WarehouseMovement());
+      if (((EnumPermisionLevel)App.User.Permissions.FirstOrDefault(c => c.pppm == "GIFTSRCPTS")?.pppl) >=
           EnumPermisionLevel.Special)
       {
         fraDate.IsEnabled = true;
       }
     }
+    #endregion
 
+    #region frmInventoryMovements_KeyDown
     /// <summary>
     /// Se verifica la tecla que el usuario presionó y aplica el cambio de estilo
     /// a los StatusBarItem.
@@ -95,17 +101,19 @@ namespace IM.InventoryMovements
       switch (e.Key)
       {
         case Key.Capital:
-          CkeckKeysPress(StatusBarCap, Key.Capital);
+          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
           break;
         case Key.Insert:
-          CkeckKeysPress(StatusBarIns, Key.Insert);
+          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
           break;
         case Key.NumLock:
-          CkeckKeysPress(StatusBarNum, Key.NumLock);
+          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
           break;
       }
     }
+    #endregion
 
+    #region btnClose_Click
     /// <summary>
     /// Cierra el formulario.
     /// </summary>
@@ -116,7 +124,9 @@ namespace IM.InventoryMovements
     {
       Close();
     }
+    #endregion
 
+    #region dtpDate_SelectedDateChanged
     /// <summary>
     /// Método que se ejecuta al dispararse el evento SelectedDateChanged,
     /// si existió un cambio se realiza la consulta a la base de datos para
@@ -139,7 +149,9 @@ namespace IM.InventoryMovements
       }
       if (dtpDate.Value != null) _dtmcurrent = dtpDate.Value.Value;
     }
+    #endregion
 
+    #region btnCancel_Click
     /// <summary>
     /// Método para cancelar el proceso de creación de nuevos movimientos de inventario.
     /// </summary>
@@ -148,9 +160,11 @@ namespace IM.InventoryMovements
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      InicializarGrdNew();
+      InitializeGrdNew();
     }
+    #endregion
 
+    #region btnSave_Click
     /// <summary>
     /// Método para guardar los nuevos movimientos de inventario a la base de datos.
     /// </summary>
@@ -161,24 +175,24 @@ namespace IM.InventoryMovements
     {
       if (!ValidateCurrentDate() || _lstobjWhsMovs.Count <= 0 ||
           _lstobjWhsMovs.Any(c => c.wmQty == 0 || c.wmgi == null || c.wmgi == "")) return;
-      
-        _lstobjWhsMovs.ForEach(c =>
-        {
-          c.wmD = dtpDate.Value.Value;
-          c.wmwh = App.User.Warehouse.whID;
-          c.wmpe = App.User.User.peID;
-        });
 
-        List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
-        {
-          wmComments = c.wmComments,
-          wmD = c.wmD,
-          wmgi = c.wmgi,
-          wmID = c.wmID,
-          wmpe = c.wmpe,
-          wmQty = c.wmQty,
-          wmwh = c.wmwh
-        }).ToList();
+      _lstobjWhsMovs.ForEach(c =>
+      {
+        c.wmD = dtpDate.Value.Value;
+        c.wmwh = App.User.Warehouse.whID;
+        c.wmpe = App.User.User.peID;
+      });
+
+      List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
+      {
+        wmComments = c.wmComments,
+        wmD = c.wmD,
+        wmgi = c.wmgi,
+        wmID = c.wmID,
+        wmpe = c.wmpe,
+        wmQty = c.wmQty,
+        wmwh = c.wmwh
+      }).ToList();
 
       try
       {
@@ -186,7 +200,7 @@ namespace IM.InventoryMovements
         if (nRes > 0)
         {
           UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");
-          InicializarGrdNew();
+          InitializeGrdNew();
           _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID,
             dtpDate.Value.Value.Date);
         }
@@ -198,9 +212,11 @@ namespace IM.InventoryMovements
       {
         UIHelper.ShowMessage(ex);
       }
-      
-    }
 
+    }
+    #endregion
+
+    #region btnAbout_Click
     /// <summary>
     /// Método para mostrar el formulario About.
     /// </summary>
@@ -213,7 +229,9 @@ namespace IM.InventoryMovements
       frmAbout.Owner = this;
       frmAbout.ShowDialog();
     }
+    #endregion
 
+    #region grd_SelectionChanged
     /// <summary>
     /// Método que actualiza la StatusBarReg con la cantidad
     /// de registros seleccionados.
@@ -227,42 +245,26 @@ namespace IM.InventoryMovements
     }
     #endregion
 
+    #region Window_IsKeyboardFocusedChanged
+    /// <summary>
+    /// Verifica si los botones estan activos
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 29/Jul/2016 Created
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
+    #endregion
+
+    #endregion
+
     #region Metodos Privados
 
-    /// <summary>
-    /// Verifica que la tecla se encuentre activa/inactiva, para cambiar el estilo de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 18/Feb/2016 Created
-    /// </history>
-    private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
-    {
-      var keyPess = Keyboard.GetKeyStates(key).ToString();
-
-      if (keyPess.Contains("Toggled")) //si está activo el Bloq Mayús
-      {
-        statusBar.FontWeight = FontWeights.Bold;
-        statusBar.Foreground = Brushes.Black;
-      }
-      else
-      {
-        KeyDefault(statusBar);
-      }
-    }
-
-    /// <summary>
-    /// Configuracion inicial de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 18/Feb/2016 Created
-    /// </history>
-    private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
-    {
-      statusBar.FontWeight = FontWeights.Normal;
-      statusBar.Foreground = Brushes.Gray;
-     
-    }
-
+    #region ValidateCurrentDate
     /// <summary>
     /// Método para validar que la fecha de cierre de recibos no sea mayor que
     /// la fecha del servidor o la fecha seleccionada.
@@ -289,7 +291,9 @@ namespace IM.InventoryMovements
 
       return blnValid;
     }
+    #endregion
 
+    #region InitializeGrdNew
     /// <summary>
     /// Método para asignar valores a los controles del formulario.
     /// </summary>
@@ -297,7 +301,7 @@ namespace IM.InventoryMovements
     /// [edgrodriguez] 18/Feb/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void InicializarGrdNew()
+    private async void InitializeGrdNew()
     {
       _lstobjWhsMovs = new List<objWhsMovs>();
       _objWhsMovsViewSource = ((CollectionViewSource)FindResource("objWhsMovsViewSource"));
@@ -305,34 +309,54 @@ namespace IM.InventoryMovements
       _objWhsMovsViewSource.Source = _lstobjWhsMovs;
       _getGiftsViewSource = ((CollectionViewSource)FindResource("getGiftsViewSource"));
       // Load data by setting the CollectionViewSource.Source property:
-      _getGiftsViewSource.Source =await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
+      _getGiftsViewSource.Source = await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
+    }
+    #endregion
+       
+    #endregion
+
+    private void grdNew_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      grdNew.CellEditEnding -= grdNew_CellEditEnding;
+      var _objWhsMov = e.Row.Item as objWhsMovs;
+      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
+      var column = e.Column.SortMemberPath;
+      switch (column)
+      {
+        case "wmQty":
+          var textbox = e.EditingElement as TextBox;
+          if (string.IsNullOrWhiteSpace(textbox.Text) || textbox.Text == "0")
+          {
+            UIHelper.ShowMessage("Enter a quantity.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
+            GridHelper.SelectRow(grdNew,lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
+            _HasError = true;
+            e.Cancel = true;
+          }
+          break;
+      }
+      grdNew.CellEditEnding += grdNew_CellEditEnding;
     }
 
-    /// <summary>
-    /// Valida las celdas del gridNew
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 07/Jul/2016 Created
-    /// </history>
-    private void grdNew_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    private void grdNew_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      objWhsMovs _objWhsMov = e.Row.DataContext as objWhsMovs;
-
-      // Obtenemos la columna actual
-      DataGridCellInfo cell = grdNew.CurrentCell;
-
-      switch (cell.Column.SortMemberPath)
+      var column = e.Column.SortMemberPath;
+      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
+      objWhsMovs _objWhsMov = grdNew.CurrentCell.Item as objWhsMovs;
+      if (_HasError) { e.Cancel = true; _HasError = false; return; }
+      switch (column)
       {
         case "wmgi":
           if (_objWhsMov != null && _objWhsMov.wmQty == 0)
           {
             UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-
-            GridHelper.SelectRow(grdNew, grdNew.SelectedIndex, blnEdit: true);
+            _HasError = true;
+            e.Cancel = true;
+            //grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
+            GridHelper.SelectRow(grdNew, lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
           }
           break;
       }
     }
-    #endregion
   }
 }

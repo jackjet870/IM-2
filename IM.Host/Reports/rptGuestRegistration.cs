@@ -16,14 +16,14 @@ namespace IM.Host.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class RptMealTicket : ReportClass {
+    public class rptGuestRegistration : ReportClass {
         
-        public RptMealTicket() {
+        public rptGuestRegistration() {
         }
         
         public override string ResourceName {
             get {
-                return "RptMealTicket.rpt";
+                return "rptGuestRegistration.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Host.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Host.Reports.RptMealTicket.rpt";
+                return "IM.Host.Reports.rptGuestRegistration.rpt";
             }
             set {
                 // Do nothing
@@ -74,7 +74,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection3 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection4 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -82,7 +82,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection4 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection5 {
             get {
                 return this.ReportDefinition.Sections[4];
             }
@@ -90,7 +90,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection5 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection3 {
             get {
                 return this.ReportDefinition.Sections[5];
             }
@@ -98,7 +98,7 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection6 {
             get {
                 return this.ReportDefinition.Sections[6];
             }
@@ -106,17 +106,41 @@ namespace IM.Host.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection2 {
             get {
                 return this.ReportDefinition.Sections[7];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection1 {
+            get {
+                return this.ReportDefinition.Sections[8];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+            get {
+                return this.ReportDefinition.Sections[9];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+            get {
+                return this.ReportDefinition.Sections[10];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedRptMealTicket : Component, ICachedReport {
+    public class CachedrptGuestRegistration : Component, ICachedReport {
         
-        public CachedRptMealTicket() {
+        public CachedrptGuestRegistration() {
         }
         
         [Browsable(false)]
@@ -153,7 +177,7 @@ namespace IM.Host.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            RptMealTicket rpt = new RptMealTicket();
+            rptGuestRegistration rpt = new rptGuestRegistration();
             rpt.Site = this.Site;
             return rpt;
         }

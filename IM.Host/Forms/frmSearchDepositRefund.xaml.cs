@@ -431,7 +431,7 @@ namespace IM.Host.Forms
             .Replace("[PRName]", objRptRefundletter.PRName);
           var footer = reportText[1].reText;
 
-          var crptRefundLetter = new Reports.RptRefundLetter();
+          var crptRefundLetter = new Reports.rptRefundLetter();
           crptRefundLetter.Database.Tables[0].SetDataSource(ObjectHelper.ObjectToList(objRptRefundletter));
           crptRefundLetter.Database.Tables[1].SetDataSource(ObjectHelper.ObjectToList(new Classes.objReportText { Header = header, Footer = footer }));
           crptRefundLetter.Subreports[0].SetDataSource(RptRefundLetter[1].Cast<RptRefundLetter_BookingDeposit>().ToList());
