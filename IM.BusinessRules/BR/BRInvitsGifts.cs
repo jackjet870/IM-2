@@ -3,12 +3,11 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRInvitsGifts
+  public static class BRInvitsGifts
   {
 
     #region GetGiftsInvitationWithoutReceipt
@@ -21,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 28/Abril/2016 Created
     /// [vipacheco] 17/Junio/2016 Modified --> Se agrego sincronia y se modifico el tipo de lista retornada
     /// </history>
-    public async static Task<List<GiftsReceiptDetail>> GetGiftsInvitationWithoutReceipt(int? guestID, bool? package = false)
+    public static async Task<List<GiftsReceiptDetail>> GetGiftsInvitationWithoutReceipt(int? guestID, bool? package = false)
     {
       List<GiftsReceiptDetail> lstResult = new List<GiftsReceiptDetail>();
 
@@ -79,13 +78,17 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 11/Mayo/2016 Created
+    /// [aalcocer]  03/08/2016 Modified. Se agregó asincronía
     /// </history>
-    public static InvitationGift GetInvitGift(int guestID, string giftID)
+    public static async Task<InvitationGift> GetInvitGift(int guestID, string giftID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.InvitationsGifts.Where(x => x.iggu == guestID && x.iggi == giftID).SingleOrDefault();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.InvitationsGifts.SingleOrDefault(x => x.iggu == guestID && x.iggi == giftID);
+        }
+      });
     }
     #endregion
 
@@ -97,15 +100,19 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 13/Mayo/2016 Created
+    /// [aalcocer]  03/08/2016 Modified. Se agregó asincronía
     /// </history>
-    public static List<InvitationGift> GetInvitsGiftsByGuestID(int guestID)
+    public static async Task<List<InvitationGift>> GetInvitsGiftsByGuestID(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.InvitationsGifts.Where(x => x.iggu == guestID).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.InvitationsGifts.Where(x => x.iggu == guestID).ToList();
+        }
+      });
     }
-    #endregion
+    #endregion GetInvitGift
 
   }
 }

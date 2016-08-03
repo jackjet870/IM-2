@@ -301,11 +301,11 @@ namespace IM.Base.Forms
     /// <summary>
     /// Carga la información del Grid de regalos
     /// </summary>
-    private void LoadGiftGrid()
+    private async void LoadGiftGrid()
     {
       _lstObjInvitGift = new List<objInvitGift>();
 
-      var invitGift = BRGifts.GetGiftsByGuest(_guestId);
+      var invitGift = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestId);
 
       _lstObjInvitGift = invitGift.Select(c => new objInvitGift
       {
