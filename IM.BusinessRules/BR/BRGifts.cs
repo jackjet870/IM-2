@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRGifts
+  public static class BRGifts
   {
     #region GetGifts
 
@@ -37,26 +37,7 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetGifts
-
-    #region GetGiftsByGuest
-
-    /// <summary>
-    /// Método para obtener una lista de Regalos por invitado
-    /// </summary>
-    /// <param name="guestID">Indetificador del invitado</param>
-    /// <history>
-    /// [lchairez] 10/Mar/2016 Created
-    /// </history>
-    public static List<InvitationGift> GetGiftsByGuest(int guestID)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        return dbContext.InvitationsGifts.Where(i => i.iggu == guestID).ToList();
-      }
-    }
-
-    #endregion GetGiftsByGuest
-
+    
     #region GetGiftId
 
     /// <summary>
@@ -76,18 +57,6 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetGiftId
-
-    #region GetInventationGift
-
-    public static InvitationGift GetInventationGift(int guestId, string gift)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        return dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == guestId && g.iggi == gift);
-      }
-    }
-
-    #endregion GetInventationGift
 
     #region GetGiftsShortById
 

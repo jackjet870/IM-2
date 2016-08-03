@@ -2149,11 +2149,11 @@ namespace IM.Base.Forms
     /// <summary>
     /// Carga la información del Grid de regalos
     /// </summary>
-    private void LoadGiftGrid()
+    private async void LoadGiftGrid()
     {
       _lstObjInvitGift = new List<objInvitGift>();
 
-      var invitGift = IM.BusinessRules.BR.BRGifts.GetGiftsByGuest(_guestID);
+      var invitGift = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestID);
 
       _lstObjInvitGift = invitGift.Select(c => new objInvitGift
       {

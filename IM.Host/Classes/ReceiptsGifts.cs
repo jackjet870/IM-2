@@ -1292,7 +1292,7 @@ namespace IM.Host.Classes
       bool blnUpd = false;
 
       //  seleccionamos los regalos de la invitacion
-      var lstResult = BRInvitsGifts.GetInvitsGiftsByGuestID(pGuestID);
+      var lstResult = await BRInvitsGifts.GetInvitsGiftsByGuestID(pGuestID);
 
       // actualizamos los regalos en la BD
       foreach (var item in pGiftsReceipts)

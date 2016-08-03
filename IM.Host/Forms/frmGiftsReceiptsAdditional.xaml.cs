@@ -222,7 +222,7 @@ namespace IM.Host.Forms
     private async void AddGifts(int GuestID, int ReceiptID)
     {
       // Obtenemos los regalos del huesped
-      List<InvitationGift> _lstInvitationGifts = BRInvitsGifts.GetInvitsGiftsByGuestID(GuestID);
+      List<InvitationGift> _lstInvitationGifts = await BRInvitsGifts.GetInvitsGiftsByGuestID(GuestID);
       List<GiftsReceiptDetail> _lstGiftReceiptDetail = new List<GiftsReceiptDetail>();
 
       // Recorremos los regalos de la invitacion
@@ -280,7 +280,7 @@ namespace IM.Host.Forms
     private async void UpdateInvitsGifts(int ReceiptID, int GuestID)
     {
       // Seleccionamos los regalos de la invitacion
-      List<InvitationGift> _lstInvitationGifts = BRInvitsGifts.GetInvitsGiftsByGuestID(GuestID);
+      List<InvitationGift> _lstInvitationGifts = await BRInvitsGifts.GetInvitsGiftsByGuestID(GuestID);
 
       foreach (InvitationGift Current in _lstInvitationGifts)
       {
