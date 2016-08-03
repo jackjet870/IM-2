@@ -5903,6 +5903,11 @@
           <Parameter Name="endD" Type="datetime" Mode="In" />
           <Parameter Name="WH0" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_GetEfficiencyByWeeks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="USP_IM_GetGiftsReceiptsAdditional" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
         </Function>
@@ -7491,6 +7496,13 @@
           <Parameter Name="Gift" Type="varchar" Mode="In" />
           <Parameter Name="TransactionTypeOpera" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateGuestReimpresionMotive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="ReimpresionMotive" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGuestReimpresionNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateGuestSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
           <Parameter Name="Sale" Type="bit" Mode="In" />
@@ -9014,17 +9026,17 @@
             <PropertyRef Name="agID" />
           </Key>
           <Property Name="agID" Type="String" MaxLength="35" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="agum" Type="Byte" Nullable="false" />
-          <Property Name="agmk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="agum" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="agmk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="AGENCIES" />
           <Property Name="agShowPay" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="agSalePay" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="agrp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="agA" Type="Boolean" Nullable="false" />
-          <Property Name="agco" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="agA" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="agco" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="?" />
           <Property Name="agList" Type="Boolean" Nullable="false" />
-          <Property Name="agVerified" Type="Boolean" Nullable="false" />
+          <Property Name="agVerified" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="agse" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="agIncludedTour" Type="Boolean" Nullable="false" />
+          <Property Name="agIncludedTour" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="agN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="agcl" Type="Int32" />
           <NavigationProperty Name="Club" Relationship="Self.FK_Agencies_Clubs" FromRole="Agencies" ToRole="Clubs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -10536,7 +10548,7 @@
           <Property Name="noText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="noStartD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="noEndD" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="LeadSources" Relationship="Self.NoticesByLeadSource" FromRole="Notices" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="LeadSources" Relationship="Self.NoticesByLeadSource" FromRole="Notices" ToRole="LeadSources" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Configuration">
           <Key>
@@ -18066,6 +18078,18 @@
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
             <Parameter Name="SalesmanID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestReimpresionMotive">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="ReimpresionMotive" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestReimpresionNumber">
+          <Parameter Name="Guest" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_GetEfficiencyByWeeks" ReturnType="Collection(IMModel.EfficiencyData)">
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22901,6 +22925,11 @@
           <Property Type="Decimal" Name="TUPS" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TSales" Nullable="true" Precision="19" />
           <Property Type="String" Name="SelfGenType" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="EfficiencyData">
+          <Property Type="Boolean" Name="Include" Nullable="true" />
+          <Property Type="DateTime" Name="efDateFrom" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="efDateTo" Nullable="false" Precision="23" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30949,6 +30978,17 @@
                 <ScalarProperty Name="TUPS" ColumnName="TUPS" />
                 <ScalarProperty Name="TSales" ColumnName="TSales" />
                 <ScalarProperty Name="SelfGenType" ColumnName="SelfGenType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestReimpresionMotive" FunctionName="IMModel.Store.USP_OR_UpdateGuestReimpresionMotive" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestReimpresionNumber" FunctionName="IMModel.Store.USP_OR_UpdateGuestReimpresionNumber" />
+          <FunctionImportMapping FunctionImportName="USP_IM_GetEfficiencyByWeeks" FunctionName="IMModel.Store.USP_IM_GetEfficiencyByWeeks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.EfficiencyData">
+                <ScalarProperty Name="Include" ColumnName="Include" />
+                <ScalarProperty Name="efDateFrom" ColumnName="efDateFrom" />
+                <ScalarProperty Name="efDateTo" ColumnName="efDateTo" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -322,7 +322,6 @@ namespace IM.Base.Forms
 
         if (_invitationMode)
         {
-          cmbPlace.IsEnabled = false;
           var lstPS = cmbPlace.ItemsSource as List<Item>;
           int index = lstPS.FindIndex(x => x.Name.Equals(_invitationPlaceName));
           if (index == -1)
@@ -346,7 +345,7 @@ namespace IM.Base.Forms
           cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
         }
       }
-      cmbPlace.IsEnabled = data.Count > 1;
+      cmbPlace.IsEnabled = data.Count > 1 && _invitationMode == false;
     }
     #endregion
 

@@ -451,6 +451,24 @@ namespace IM.Base.Helpers
       }
     }
     /// <summary>
+    /// Valida que sea correcta la fecha proporcionada
+    /// Sobrecarga del metodo que usa solo el DatePicker comun de wpf
+    /// </summary>
+    /// <param name="sender">Objeto de tipo DataTimePicker</param>
+    /// <history>
+    ///   [ecanul] 28/07/2016 Created
+    /// </history>
+    public static void ValidateValueDate(DateTimePicker sender)
+    {
+      if(!sender.Value.HasValue)
+      {
+        //Cuando el usuario ingresa una fecha invalida
+        UIHelper.ShowMessage("Invalid date", MessageBoxImage.Exclamation, "Specify the Date");
+        //Y le asignamos la fecha del servidor (la actual hora actual)
+        sender.Value = BRHelpers.GetServerDate();
+      }
+    }
+    /// <summary>
     /// Sirve para validar la fecha de los controles DATETIMEPICKER
     /// Valida valores Nulos, y Rangos de fecha en el orden correcto.
     /// </summary>

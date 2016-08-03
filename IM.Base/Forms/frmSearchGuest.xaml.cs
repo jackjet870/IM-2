@@ -2,15 +2,14 @@
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Base.Classes;
 using IM.Model.Classes;
 using System.Windows.Controls;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Base.Forms
 {
@@ -58,12 +57,12 @@ namespace IM.Base.Forms
     {
       if (dtgGuests.SelectedItems.Count == 0)
       {
-        MessageBox.Show("Select at least one Guest", "IM Search");
+        UIHelper.ShowMessage("Select at least one Guest", title:"IM Search");
         return;
       }
       if (_program == EnumProgram.Outhouse && !user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
       {
-        MessageBox.Show("Account has only read access.");
+        UIHelper.ShowMessage("Account has only read access.");
         return;
       }
       StaStart("Loading Selected Guests...");
@@ -108,6 +107,19 @@ namespace IM.Base.Forms
 
     #region Eventos del Formulario
 
+    #region dtp_ValueChanged
+    /// <summary>
+    /// Cambio de fechas en el control DateTimePicker
+    /// </summary>
+    /// <history>
+    /// [ecanul] 28/07/2016 Created
+    /// </history>
+    private void dtp_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      DateHelper.ValidateValueDate((DateTimePicker)sender);
+    } 
+    #endregion
+
     #region btnSearch_Click
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
@@ -122,8 +134,8 @@ namespace IM.Base.Forms
                                 txtRoom.Text,
                                 txtReservation.Text,
                                 (!txtGUID.Text.Equals(string.Empty) ? Convert.ToInt32(txtGUID.Text) : 0),
-                                dtpFrom.SelectedDate.Value,
-                                dtpTo.SelectedDate.Value,
+                                dtpFrom.Value.Value,
+                                dtpTo.Value.Value,
                                 _program,
                                 txtPR.Text);
 
@@ -162,8 +174,8 @@ namespace IM.Base.Forms
     {
       cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSources(1, _program);
       DateTime serverDate = BRHelpers.GetServerDate();
-      dtpTo.SelectedDate = serverDate;
-      dtpFrom.SelectedDate = serverDate.AddDays(-7);
+      dtpTo.Value = serverDate;
+      dtpFrom.Value = serverDate.AddDays(-7);
       cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
       StatusBarReg.Content = "0 Guests";
       if (_program == EnumProgram.Outhouse)
@@ -227,28 +239,6 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region dtpTo_SelectedDateChanged
-    /// <history>
-    /// [jorcanche] 04/05/2016 created
-    /// [ecanul] 19/07/2016 Modified, Ahora usa el ValidateValueDate que esta en DateHelpper
-    /// </history>
-    private void dtpTo_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-      DateHelper.ValidateValueDate((DatePicker)sender);
-    }
-    #endregion
-
-    #region dtpFrom_SelectedDateChanged
-    /// <history>
-    /// [jorcanche] 04/05/2016 created
-    /// [ecanul] 19/07/2016 Modified, Ahora usa el ValidateValueDate que esta en DateHelpper
-    /// </history>
-    private void dtpFrom_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-      DateHelper.ValidateValueDate((DatePicker)sender);
-    }
-    #endregion
-
     #region ValidateDateRange
     /// <summary>
     /// Valida el valor de dtpStart sea mayo que dtpEnd
@@ -256,11 +246,11 @@ namespace IM.Base.Forms
     /// <history>[jorcanche] 17/03/2016</history>
     public bool ValidateDateRange()
     {
-      if (dtpFrom.SelectedDate.Value > dtpTo.SelectedDate.Value)
+      if (dtpFrom.Value.Value > dtpTo.Value.Value)
       {
         UIHelper.ShowMessage("Start Date can not be greater than End Date.", MessageBoxImage.Exclamation, "Date");
-        DateTime dt = dtpTo.SelectedDate.Value.AddDays(-1);
-        dtpFrom.SelectedDate = dt;
+        DateTime dt = dtpTo.Value.Value.AddDays(-1);
+        dtpFrom.Value = dt;
         dtpFrom.Focus();
         return false;
       }
@@ -289,10 +279,9 @@ namespace IM.Base.Forms
     private void dtgGuests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
       AddGuest();
-    } 
+    }
     #endregion
 
     #endregion
-
   }
 }

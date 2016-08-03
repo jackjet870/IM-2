@@ -34,7 +34,7 @@ namespace IM.Base.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       reportViewer.Owner = GetWindow(this);
-      if (!string.IsNullOrEmpty(_reportName))
+      if (!string.IsNullOrWhiteSpace(_reportName))
         _rpt.SummaryInfo.ReportTitle = _reportName;
       reportViewer.ViewerCore.ReportSource = _rpt;
     } 

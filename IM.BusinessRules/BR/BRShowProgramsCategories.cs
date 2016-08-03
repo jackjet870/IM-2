@@ -118,7 +118,7 @@ namespace IM.BusinessRules.BR
             catch
             {
               transacction.Rollback();
-              return 0;
+              throw;
             }
           }
         }

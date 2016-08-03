@@ -56,7 +56,7 @@ namespace IM.Base.Helpers
       //Cargamos las Etiquetas 
       LblInvitation(rptInvi,peID);
 
-      //Cargamos el Viewer
+     //Cargamos el Viewer
       var frmViewer = new frmViewer(rptInvi) ;
       frmViewer.ShowDialog();   
     }

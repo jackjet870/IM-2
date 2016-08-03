@@ -4,7 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f551ddaf9a0940c691c42fe77fe7ef94" Name="Diagram1" />
+      <Diagram DiagramId="f551ddaf9a0940c691c42fe77fe7ef94" Name="Diagram1" ZoomLevel="14" >
+        <EntityTypeShape EntityType="HotelModel.Member" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

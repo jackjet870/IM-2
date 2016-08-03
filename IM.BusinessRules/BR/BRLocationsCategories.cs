@@ -66,55 +66,59 @@ namespace IM.BusinessRules.BR
     /// <returns>-1. Existe un registro con el mismo ID | 0. No se guardó | >0. Se guardó correctamente</returns>
     /// <history>
     /// [emoguel] created 18/05/2016
+    /// [emoguel] modified 29/07/2016 se volvió async
     /// </history>
-    public static int SaveLocationCategories(LocationCategory locationCategory, List<Location> lstAdd, List<Location> lstDel, bool blnUpdate)
+    public static async Task<int> SaveLocationCategories(LocationCategory locationCategory, List<Location> lstAdd, List<Location> lstDel, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            if (blnUpdate)
+            try
             {
-              dbContext.Entry(locationCategory).State = EntityState.Modified;
-            }
-            else
-            {
-              var locationVal = dbContext.LocationsCategories.Where(lc => lc.lcID == locationCategory.lcID).FirstOrDefault();
-              if (locationVal != null)
+              if (blnUpdate)
               {
-                return -1;
+                dbContext.Entry(locationCategory).State = EntityState.Modified;
               }
               else
               {
-                dbContext.LocationsCategories.Add(locationCategory);
+                var locationVal = dbContext.LocationsCategories.Where(lc => lc.lcID == locationCategory.lcID).FirstOrDefault();
+                if (locationVal != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  dbContext.LocationsCategories.Add(locationCategory);
+                }
               }
+
+              #region Locations
+              dbContext.Locations.AsEnumerable().Where(lo => lstAdd.Any(loo => loo.loID == lo.loID)).ToList().ForEach(lo =>
+                   {//Agresignar locaciones
+                     lo.lolc = locationCategory.lcID;
+                   });
+
+              dbContext.Locations.AsEnumerable().Where(lo => lstDel.Any(loo => loo.loID == lo.loID)).ToList().ForEach(lo =>
+              {//Agresignar locaciones
+                lo.lolc = null;
+              });
+              #endregion
+
+              int nRes = dbContext.SaveChanges();
+              transacction.Commit();
+              return nRes;
             }
-
-            #region Locations
-            dbContext.Locations.AsEnumerable().Where(lo=> lstAdd.Any(loo=>loo.loID==lo.loID)).ToList().ForEach(lo =>
-            {//Agresignar locaciones
-              lo.lolc = locationCategory.lcID;
-            });
-
-            dbContext.Locations.AsEnumerable().Where(lo => lstDel.Any(loo => loo.loID == lo.loID)).ToList().ForEach(lo =>
-            {//Agresignar locaciones
-              lo.lolc = null;
-            });
-            #endregion
-
-            int nRes = dbContext.SaveChanges();
-            transacction.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transacction.Rollback();
-            return 0;
+            catch
+            {
+              transacction.Rollback();
+              return 0;
+            }
           }
         }
-      }
+      });
     } 
     #endregion
   }

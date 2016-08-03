@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Classes="clr-namespace:IM.Base.Classes"
+        xmlns:styClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Invitation" 
         d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="SingleBorderWindow"
@@ -25,6 +27,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styComboBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataErrorInfo.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -291,10 +294,10 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cbogums2" Width="100" TextSearch.TextPath="msID"
+                                                <ComboBox x:Name="cbogums2" Width="100" TextSearch.TextPath="msID"
                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
-                                                          ToolTip="{Binding Path=SelectedItem.msN, RelativeSource={RelativeSource Self}}"
+                                                          ToolTip="{Binding SelectedItem.msN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="msID"
                                                           SelectedValue="{Binding GuestObj.gums2, Mode=TwoWay}"/>
                                             </StackPanel>
@@ -399,9 +402,9 @@
                                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
                                             <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                             <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay}"/>
-                                            <DatePicker Name="dtpBookDate" Width="120" SelectedDate="{Binding GuestObj.guBookD, Mode=TwoWay}"/>
+                                            <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guBookD, Mode=TwoWay}"/>
                                             <TextBlock Text="Time" Margin="0,5"/>
-                                            <ComboBox Name="cbxBookTime" Width="120"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.BookTimes, Mode=TwoWay}" />
+                                            <ComboBox Name="cbxBookTime" Width="130"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.BookTimes, Mode=TwoWay}" />
                                             <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay}"/>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
@@ -409,9 +412,9 @@
                                             <StackPanel Orientation="Horizontal" >
                                                 <StackPanel Name="stkRescheduleDate">
                                                     <TextBlock Text="Reschedule Date" Margin="0,5"/>
-                                                    <DatePicker Name="dtpRescheduleDate" Width="120" SelectedDate="{Binding GuestObj.guReschD, Mode=TwoWay}"/>
+                                                    <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"  Value="{Binding GuestObj.guReschD, Mode=TwoWay}"/>
                                                     <TextBlock Text="Time" Margin="0,5"/>
-                                                    <ComboBox Name="cbxReschudeleTime" Width="120" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.ReschTimes, Mode=TwoWay}"/>
+                                                    <ComboBox Name="cbxReschudeleTime" Width="130" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.ReschTimes, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkFlightNumber" Margin="5,0">
                                                     <TextBlock Text="Flight Number" Margin="0,5"/>
@@ -546,7 +549,7 @@
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
-                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay}"/>
+                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay}" SelectionChanged="cmbGuestStatus_SelectionChanged"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -560,47 +563,55 @@
                                     <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel>
-                                            <DataGrid Name="dtgGifts" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList}" 
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" 
+                                            <DataGrid Name="dtgGifts" BeginningEdit="dtgGifts_BeginningEdit" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      EnableRowVirtualization="True"
+                                                      IsSynchronizedWithCurrentItem="True"
+                                                      AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" 
                                                       CanUserSortColumns="False" SelectionMode="Single" RowValidationErrorTemplate="{x:Null}"
-                                                      PreparingCellForEdit="dtgGifts_PreparingCellForEdit" CellEditEnding="dtgGifts_CellEditEnding" 
-                                                      RowEditEnding="dtgGifts_RowEditEnding" SelectedCellsChanged="dtgGifts_SelectedCellsChanged">
-
+                                                      PreparingCellForEdit="dtgGifts_PreparingCellForEdit"
+                                                      CellEditEnding="dtgGifts_CellEditEnding" 
+                                                      RowEditEnding="dtgGifts_RowEditEnding"
+                                                     
+                                                      >
                                                 <DataGrid.Columns>
-
                                                     <DataGridTextColumn Header="Qty"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
+                                                                                                                                         
                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
-                                                                        Binding="{Binding IgQty, Mode=TwoWay , ValidatesOnDataErrors=True}">
-                                                    </DataGridTextColumn>
+                                                                        Binding="{Binding igQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                                                     <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
-                                                                            SelectedValueBinding="{Binding IggiCustom, Mode=TwoWay, ValidatesOnExceptions=True}"
-                                                                            DisplayMemberPath="giN" 
-                                                                            SelectedValuePath="giID"
+                                                                            SelectedValueBinding="{Binding iggi, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                            DisplayMemberPath="giN" SelectedValuePath="giID"
                                                                             ItemsSource="{Binding Source={StaticResource giftList}}" />
 
                                                     <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
-                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
-                                                                        Binding="{Binding IgAdults, Mode=TwoWay, ValidatesOnDataErrors=True}">
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="4"
+                                                                        Binding="{Binding igAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                     </DataGridTextColumn>
+                                                    
                                                     <DataGridTextColumn Header="Minors"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
                                                                          ElementStyle="{StaticResource txt-ErrorInfo}"
-                                                                        Binding="{Binding IgMinors, Mode=TwoWay, ValidatesOnDataErrors=True}">
+                                                                        Binding="{Binding igMinors, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger =PropertyChanged}">
                                                     </DataGridTextColumn>
-                                                    <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults}"/>
+                                                    
+                                                    <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </DataGrid.Columns>
                                             </DataGrid>
+                                            
                                             <StackPanel Orientation="Horizontal" Margin="0,5">
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Max Auth" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftMaxAuth" Width="100" Text="{Binding InvitationGiftList.MaxAuth, Mode=TwoWay, StringFormat={}{0:C2}}"/>
+                                                    <TextBox Name="txtGiftMaxAuth" Width="100" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0">
                                                     <TextBlock Text="Total Cost" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalCost" Width="100" Text="{Binding InvitationGiftList.TotalCost, Mode=TwoWay, StringFormat={}{0:C2}}"/>
+                                                    <TextBox Name="txtGiftTotalCost" Width="100" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Total Price" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalPrice" Width="100" Text="{Binding InvitationGiftList.TotalPrice, Mode=TwoWay, StringFormat={}{0:C2}}" IsReadOnly="True"/>
+                                                    <TextBox Name="txtGiftTotalPrice" Width="100" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

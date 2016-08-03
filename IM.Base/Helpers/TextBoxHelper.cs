@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -75,6 +76,7 @@ namespace IM.Base.Helpers
     #endregion
 
     #region Textbox OnlyNumber
+
     /// <summary>
     /// Valida que un texbox acepte solo números
     /// </summary>
@@ -85,8 +87,14 @@ namespace IM.Base.Helpers
     /// </history>
     public static void IntTextInput(object sender, TextCompositionEventArgs e)
     {
-      e.Handled = !Char.IsDigit(Convert.ToChar(e.Text));
+      var txt = (TextBox) sender;
+      var input = txt.Text.Insert(txt.SelectionStart, e.Text);
+      if (txt.MaxLength > 0)
+        e.Handled = !(Regex.IsMatch(input, @"^[0-9]*$") && input.Count(char.IsDigit) <= txt.MaxLength);
+      else
+        e.Handled = !Regex.IsMatch(input, @"^[0-9]*$");
     }
+
     #endregion
 
     #region Decimal_GotFocus
@@ -152,6 +160,40 @@ namespace IM.Base.Helpers
     {
       e.Handled = !ValidateHelper.validateCharacters(e.Text);
     }
+    #endregion
+
+    #region IntWithNegativeTextInput
+    /// <summary>
+    /// Valida que un texbox acepte solo números positivos o negativos.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [edgordriguez] 30/07/2016 Created.
+    /// </history>
+    public static void IntWithNegativeTextInput(object sender, TextCompositionEventArgs e)
+    {
+      var txt = (TextBox)sender;
+      var input = txt.Text.Insert(txt.SelectionStart, e.Text);
+      if (txt.MaxLength > 0)
+          e.Handled = !(Regex.IsMatch(input, @"^[-]?[0-9]*$") && input.Count(char.IsDigit) <= txt.MaxLength - 1);
+      else
+        e.Handled = !Regex.IsMatch(input, @"^[-]?[0-9]*$");
+    }
+    #endregion
+
+    #region validateSpace
+    /// <summary>
+    /// Valida la tecla espacio.
+    /// </summary>
+    /// <history>
+    /// [edgordriguez] 30/07/2016 Created.
+    /// </history>
+    public static void ValidateSpace(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Space)
+        e.Handled = true;
+    }   
     #endregion
   }
 }

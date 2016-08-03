@@ -2242,9 +2242,9 @@ namespace IM.Base.Forms
 
     /// Carga la información del Grid de las tarjetas de crédito de los invitados
     /// </summary>
-    private void LoadCreditCardGrid()
+    private async void LoadCreditCardGrid()
     {
-      var creditCard = IM.BusinessRules.BR.BRGuests.GetGuestCreditCard(_guestID);
+      var creditCard = await BRGuests.GetGuestCreditCard(_guestID);
 
       _lstObjInvitCreditCard = creditCard.Select(c => new objInvitCreditCard
       {

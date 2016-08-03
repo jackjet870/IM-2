@@ -182,7 +182,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false)
     {
-      List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
+      List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor
 
       Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
@@ -264,6 +264,7 @@ namespace IM.Base.Helpers
                 {
                   txt.MaxLength = 10;
                   txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                  txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;

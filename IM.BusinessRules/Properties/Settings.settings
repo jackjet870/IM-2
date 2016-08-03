@@ -54,7 +54,7 @@
       <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByGiftQuantity_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">120</Value>
+      <Value Profile="(Default)">180</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByPRInhouse_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
@@ -171,7 +171,7 @@
       <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_GraphProductionByPR_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">120</Value>
+      <Value Profile="(Default)">180</Value>
     </Setting>
     <Setting Name="USP_OR_GetGiftsReceipts_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>

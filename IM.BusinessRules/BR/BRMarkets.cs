@@ -92,51 +92,58 @@ namespace IM.BusinessRules.BR
     /// <param name="lstDel">Agencias a desasignar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
     /// <returns></returns>
-    public static int SaveMarket(Market market, List<Agency> lstAdd, bool blnUpdate)
+    /// <history>
+    /// [emoguel] modified 29/07/2016-->Se volvió async
+    /// </history>
+    public static async Task<int> SaveMarket(Market market, List<Agency> lstAdd, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region UpdateMarket
-            if (blnUpdate)
+            try
             {
-              dbContext.Entry(market).State = EntityState.Modified;
-            }
-            #endregion
-            #region Add market
-            else
-            {
-              if(dbContext.Markets.Where(mk=>mk.mkID==market.mkID).FirstOrDefault()!=null)
+              #region UpdateMarket
+              if (blnUpdate)
               {
-                return -1;
+                dbContext.Entry(market).State = EntityState.Modified;
               }
+              #endregion
+              #region Add market
               else
               {
-                dbContext.Markets.Add(market);
+                if (dbContext.Markets.Where(mk => mk.mkID == market.mkID).FirstOrDefault() != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  dbContext.Markets.Add(market);
+                }
               }
-            }
-            #endregion
+              #endregion
 
-            #region Agencies
-            //Add markets
-            dbContext.Agencies.AsEnumerable().Where(ag => lstAdd.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag=>{
-              ag.agmk = market.mkID;
-            });
-            #endregion
-            int nRes = dbContext.SaveChanges();
-            transacction.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transacction.Rollback();
-            return 0;
+              #region Agencies
+              //Add markets
+              dbContext.Agencies.AsEnumerable().Where(ag => lstAdd.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag =>
+              {
+                ag.agmk = market.mkID;
+              });
+              #endregion
+              int nRes = dbContext.SaveChanges();
+              transacction.Commit();
+              return nRes;
+            }
+            catch
+            {
+              transacction.Rollback();
+              return 0;
+            }
           }
         }
-      }
+      });
     } 
     #endregion
   }

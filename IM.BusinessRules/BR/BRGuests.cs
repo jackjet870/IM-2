@@ -7,10 +7,11 @@ using IM.Model.Helpers;
 using IM.Model.Classes;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Collections;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRGuests
+  public static class BRGuests
   {
     #region GetGuestsArrivals
 
@@ -300,16 +301,20 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [lchairez] 18/03/2016 Created.
+    /// [aalcocer] 02/08/2016 Modified. se agrego asincronia
     /// </history>
-    public static List<GuestCreditCard> GetGuestCreditCard(int guestId)
+    public static async Task<List<GuestCreditCard>> GetGuestCreditCard(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
+        }
+      });
     }
-    #endregion
-   
+    #endregion GetGuestCreditCard
+
     #region SaveGuestInvitation
 
     /// <summary>
@@ -991,7 +996,36 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-
+    #region GetGuestRegistration
+    /// <summary>
+    /// Retorna la informacion para el reporte Guest Registration
+    /// </summary>
+    /// <param name="GuestID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [edgrodriguez] 26/Jul/2016 Created
+    /// </history>
+    public async static Task<List<IEnumerable>> GetGuestRegistration(int GuestID)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var lst = dbContext.USP_OR_RptGuestRegistration(GuestID)
+          .MultipleResults()
+          .With<RptGuestRegistration>()
+          .With<RptGuestRegistration_Guests>()
+          .With<RptGuestRegistration_Deposits>()
+          .With<RptGuestRegistration_Gifts>()
+          .With<RptGuestRegistration_Salesmen>()
+          .With<RptGuestRegistration_CreditCards>()
+          .With<RptGuestRegistration_Comments>()
+          .GetValues();
+          return lst.Any() ? lst : new List<IEnumerable>();
+        }
+      });
+    }
+    #endregion
   }
 
 }
