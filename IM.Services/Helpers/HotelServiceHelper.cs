@@ -64,17 +64,11 @@ namespace IM.Services.Helpers
       /// </history>
     public async static Task<List<ReservationOrigosTransfer>> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels, System.Threading.CancellationToken cancellationToken)
     {
-      
       List<ReservationOrigosTransfer> lstOrigosTransfer = null;
-      //using (var linkedTokenSource = System.Threading.CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
-      //{
-      
       await Task.Run(() =>
       {
         QueryRequest request = new QueryRequest();
         ReservationOrigosTransferResponse response = new ReservationOrigosTransferResponse();
-        //System.Threading.CancellationToken disconnectedToken = Current.Abort();//..ClientDisconnectedToken;
-        //var source = System.Threading.CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, disconnectedToken);
         //configuramos el Request
         request.Zona = zone;
         request.Desde = dateFrom;
@@ -88,8 +82,6 @@ namespace IM.Services.Helpers
           lstOrigosTransfer = response.Data?.Cast<ReservationOrigosTransfer>().ToList();
         }
       }, cancellationToken);
-      
-      //}
     return lstOrigosTransfer;
     }
     #endregion

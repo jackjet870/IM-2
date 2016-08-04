@@ -219,29 +219,30 @@ namespace IM.Base.Helpers
       XmlNode ident;
       try
       {
-        XmlDoc = new XmlDocument();
-        string _pathFileXML = ExistDirectory(nameLog, date);
-        XmlDoc.Load(@_pathFileXML);
-        Raiz = XmlDoc.DocumentElement;
-        ident = Raiz;
+        
+          XmlDoc = new XmlDocument();
+          string _pathFileXML = ExistDirectory(nameLog, date);
+          XmlDoc.Load(@_pathFileXML);
+          Raiz = XmlDoc.DocumentElement;
+          ident = Raiz;
 
-        XmlElement newTransaction = XmlDoc.CreateElement("Transaction"); //Como vamos a llamar el nuevo nodo  
-        newTransaction.InnerXml = "<Date></Date><LogLevel></LogLevel><Message></Message>"; // Este es el contenido que va a tener el nuevo nodo  
+          XmlElement newTransaction = XmlDoc.CreateElement("Transaction"); //Como vamos a llamar el nuevo nodo  
+          newTransaction.InnerXml = "<Date></Date><LogLevel></LogLevel><Message></Message>"; // Este es el contenido que va a tener el nuevo nodo  
 
-        newTransaction.AppendChild(XmlDoc.CreateWhitespace("\r\n"));
-        newTransaction["Date"].InnerText = date.ToString();
-        newTransaction["LogLevel"].InnerText = logLevel;
-        newTransaction["Message"].InnerText = message;
+          newTransaction.AppendChild(XmlDoc.CreateWhitespace("\r\n"));
+          newTransaction["Date"].InnerText = date.ToString();
+          newTransaction["LogLevel"].InnerText = logLevel;
+          newTransaction["Message"].InnerText = message;
 
 
-        ident.InsertAfter(newTransaction, ident.LastChild);
-        XmlTextWriter writeTransactions = new XmlTextWriter(@_pathFileXML, System.Text.Encoding.UTF8);
-        XmlDoc.WriteTo(writeTransactions);
-        writeTransactions.Close();
+          ident.InsertAfter(newTransaction, ident.LastChild);
+          XmlTextWriter writeTransactions = new XmlTextWriter(@_pathFileXML, System.Text.Encoding.UTF8);
+          XmlDoc.WriteTo(writeTransactions);
+          writeTransactions.Close();
 
-        newItemTransaction.Date = date;
-        newItemTransaction.LogLevel = logLevel;
-        newItemTransaction.Message = message;
+          newItemTransaction.Date = date;
+          newItemTransaction.LogLevel = logLevel;
+          newItemTransaction.Message = message;
 
       }
       catch (Exception)

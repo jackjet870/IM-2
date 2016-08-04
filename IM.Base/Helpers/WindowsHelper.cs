@@ -193,7 +193,7 @@ namespace IM.Base.Helpers
       #region Manejo de la ventana
       //parametros para el manejo de la ventana
       // Si la ventana al minimizar ocultar aplicación en el menu de iconos de la barra de tarea.
-      System.Windows.Forms.NotifyIcon _notifyIconFormTransfers = (blnNotifycon.Value) ? Notify(form:window) : null;
+      //System.Windows.Forms.NotifyIcon _notifyIconFormTransfers = (blnNotifycon.Value) ? Notify(form:window) : null;
       // bandera si se pulso la tecla control
       bool pushCtrl = false;
       bool pushCtrlE = false;
@@ -245,7 +245,7 @@ namespace IM.Base.Helpers
 
       // evento para controlar las acciones del formulario
       // es utilizado para el notifycon
-      window.StateChanged += new EventHandler(
+      /*window.StateChanged += new EventHandler(
         (s, e) => {
           // Si la ventana fue minimizada
           if (window.WindowState == WindowState.Minimized)
@@ -260,7 +260,7 @@ namespace IM.Base.Helpers
               _notifyIconFormTransfers.ShowBalloonTip(400);
             }
           }
-        });
+        });*/
     }
     #endregion
 

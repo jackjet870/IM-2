@@ -22,6 +22,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Media;
+using System.Windows.Data;
 
 namespace IM.Transfer.Forms
 
@@ -77,19 +78,10 @@ namespace IM.Transfer.Forms
     #region Lista de registros
     // lista de transacciones de reservaciones
     public static List<LogHelper.Transaction> listTransactionsExchangeReservations = new List<LogHelper.Transaction>();
+    CollectionViewSource reservationsCollectionViewSource;
     // lista de transacciones de exchange rate
     public static List<LogHelper.Transaction> listTransactionsReservations = new List<LogHelper.Transaction>();
-    #endregion
-
-    #region Instancias de delegados
-    //Instancia de delegado para la actualizacion del grid de Exchange Rate
-    public UpdateDelegateGrid updateGridExchangeRate = null;
-    //Instancia de delegado para la actualizacion del grid de las reservaciones.
-    public UpdateDelegateGrid updateGridReservations = null;
-    //Instancia de delegado para la actualizcion de label de los botones.
-    public UpdateDelegateButton updateContentButton = null;
-    // Instancia de delegado para la actualizacion del texto de labels.
-    UpdateDelegateLabel updateDelegateLabel = null;
+    CollectionViewSource exchangeRateCollectionViewSource;
     #endregion
 
     #region timeWatch
@@ -127,17 +119,21 @@ namespace IM.Transfer.Forms
     // valida el estatus de la transferencia de reservaciones
     public bool blnRunOrCancelReservations = false;
     // valida el estatus de la transferencia de exchange rate 
-    public bool blnRunOrCancelExchangeRate = false; 
+    public bool blnRunOrCancelExchangeRate = false;
     #endregion
 
     #endregion
-    
+
     #region Contructores y Destructores
     public frmTransferLauncher()
     {
       InitializeComponent();
       //Inicializa los parametros de la aplicación.
       InitializeValuesParameters();
+      // inicializamos los viewsource
+      exchangeRateCollectionViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("exchangeRateCollectionViewSource")));
+      reservationsCollectionViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("reservationsCollectionViewSource")));
+     
     }
     #endregion
 
@@ -244,7 +240,7 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan] 28/04/2016
     /// </history>
-    public async void StartReservations()
+    public async Task StartReservations()
     {
       // Se valida el estatus del formulario
       StatusForm();
@@ -252,7 +248,8 @@ namespace IM.Transfer.Forms
       // ponemos en verdadero la ejecucion de transferencia de reservaciones
       blnRunOrCancelReservations = true;
       // cambiamos el testo del boton para cancelar la transferemcia
-      UpdateButton(btnReservations, "Cancel updating of Reservations");
+      btnReservations.Content = "Cancel updating of Reservations";
+      //UpdateButton(btnReservations, "Cancel updating of Reservations");
       // iniciamos el efecto blink en el label de status 
       OnOffBlinkReservations();
 
@@ -264,9 +261,9 @@ namespace IM.Transfer.Forms
       {
         AddLogGridReservations("Info", "Transfer Canceled.");
       }
-      catch (Exception ex)
+      catch (Exception exception)
       {
-        AddLogGridReservations("Info", ex.InnerException.Message);
+        AddLogGridReservations("Info", UIHelper.GetMessageError(exception));
       }
       finally
       {
@@ -289,7 +286,7 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan] 28/04/2016
     /// </history>
-    public async void StartExchangeRate()
+    public async Task StartExchangeRate()
     {
       // Se valida el estatus del formulario
       StatusForm();
@@ -308,9 +305,9 @@ namespace IM.Transfer.Forms
       {
         AddLogGridExchangeRate("Info", "Update Canceled.");
       }
-      catch (Exception)
+      catch (Exception exception)
       {
-        AddLogGridExchangeRate("Info", "Update Canceled.");
+        AddLogGridExchangeRate("Info", UIHelper.GetMessageError(exception));
       }
       finally
       {
@@ -334,7 +331,7 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    private async void LoadDataGRidExchangeRate()
+    private async Task LoadDataGRidExchangeRate()
     {
       
         DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
@@ -347,7 +344,7 @@ namespace IM.Transfer.Forms
             _lastExchangeRate = last.Date;
             _nextExchangeRate = last.Date;
           }
-          UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations);
+          UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
         }
       
     }
@@ -358,9 +355,9 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    private async void LoadDataGRidReservations()
+    private async Task LoadDataGRidReservations()
     {
-      //await Task.Run(() => {
+      
         DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
         listTransactionsReservations = await LogHelper.LoadHistoryLog("Reservations", DateTime.Now, dateTo);
         if (listTransactionsExchangeReservations.Count > 0 && listTransactionsExchangeReservations != null)
@@ -371,9 +368,9 @@ namespace IM.Transfer.Forms
             _lastReservations = last.Date;
             _nextReservations = last.Date;
           }
-          UpdatingGrid(grdLogReservations, listTransactionsReservations);
+          UpdatingGrid(grdLogReservations, listTransactionsReservations, reservationsCollectionViewSource);
         }
-      //});
+      
       
 
     }
@@ -543,7 +540,7 @@ namespace IM.Transfer.Forms
       {
         // agregamos la reservacion
         //si la reservacion no ha sido agregada todavia
-        Model.Transfer transfer = Transfer(reservationOrigos);
+        Model.Transfer transfer = await Transfer(reservationOrigos);
         await BRTransfer.AddReservation(transfer);
       }
       else
@@ -552,8 +549,6 @@ namespace IM.Transfer.Forms
       }
     }
     #endregion
-
-   
 
     #region GetReservations
     /// <summary>
@@ -592,14 +587,12 @@ namespace IM.Transfer.Forms
       //si no hay hoteles en la zona
       if ((hotels.Count > 0) && (hotels != null) && dateFrom <= dateTo)
       {
-        
-        //await Task.Run(() => {
         // obtenemos las reservaciones e la zona
         AddLogGridReservations("Info", $"Getting Reservations from {zoneName} (Check In Date: {DateHelper.DateRange(dateFrom, dateTo)} , Hotels: {leadSourceID} ).");
         timeWatchReservations.Start();
         reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID, cancelTokenReservations.Token);
         timeWatchReservations.Stop();
-        //}, cancelTokenReservations.Token).ConfigureAwait(false); ;
+        
 
         // valida si se obtubieron reservaciones
         if (reservations != null && reservations.Count > 0)
@@ -608,7 +601,7 @@ namespace IM.Transfer.Forms
           TimeSpan tSpan = timeWatchReservations.Elapsed;
           // Convertimos el tiempo de obtencion en string para pintar en el grid
           string elapsedTime = StringTimeDifference(tSpan);
-          AddLogGridReservations("Info", reservations.Count.ToString() + " Reservations were Obtained in " + elapsedTime);
+          AddLogGridReservations("Info", $"{reservations.Count } Reservations were Obtained in { elapsedTime}");
         }
         else
         {
@@ -651,9 +644,11 @@ namespace IM.Transfer.Forms
     /// </summary>
     /// <param name="reservationOrigosTransfer"></param>
     /// <returns></returns>
-    public Model.Transfer Transfer(ReservationOrigosTransfer reservationOrigosTransfer)
+    public async Task<Model.Transfer> Transfer(ReservationOrigosTransfer reservationOrigosTransfer)
     {
       Model.Transfer transfer = new Model.Transfer();
+      await Task.Run(() => {   
+      #region Transfer
 
       //Hotel
       transfer.tls = reservationOrigosTransfer.Hotel;
@@ -771,7 +766,8 @@ namespace IM.Transfer.Forms
       transfer.tIdProfileOpera = reservationOrigosTransfer.IdProfileOpera;
       //Fecha y hora de modificacion
       transfer.tEditDT = DateTime.Now;
-
+        #endregion
+      });
       return transfer;
     }
     #endregion
@@ -822,50 +818,59 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateCountries()
     {
+      
+      #region AddCountriesHotel
       try
-      { 
+      {
         // agregando paises de Hotel
         AddLogGridReservations("Insert", "Adding Hotel Countries.");
         await BRTransfer.AddCountriesHotel();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region AddCountries
       try
-      { 
+      {
         // agregando paises de Origos
         AddLogGridReservations("Insert", "Adding Origos Countries.");
         await BRTransfer.AddCountries();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateCountriesHotelNames
       try
-      { 
+      {
         // actualizando las descripciones de los paises de Hotel
         AddLogGridReservations("Update", "Updating Hotel Countries Names.");
         await BRTransfer.UpdateCountriesHotelNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateCountriesNames
       try
-      { 
+      {
         // actualizando las descripciones de los paises de Origos
         AddLogGridReservations("Update", "Updating Origos Countries Names.");
         await BRTransfer.UpdateCountriesNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+      #endregion
+
     }
     #endregion
 
@@ -878,50 +883,57 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateAgencies()
     {
+      #region AddAgenciesHotel
       try
-      { 
+      {
         //agregando agencias de Hotel
         AddLogGridReservations("Insert", "Adding Hotel Agencies.");
         await BRTransfer.AddAgenciesHotel();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region AddAgencies
       try
-      { 
+      {
         //agregando agencias de Origos
         AddLogGridReservations("Insert", "Adding Origos Agencies.");
         await BRTransfer.AddAgencies();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateAgenciesHotelNames
       try
-      { 
+      {
         //actualizando las descripciones de las agencias de Hotel
         AddLogGridReservations("Update", "Updating Hotel Agencies Names.");
         await BRTransfer.UpdateAgenciesHotelNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateAgenciesNames
       try
-      { 
+      {
         //actualizando las descripciones de las agencias de Origos
         AddLogGridReservations("Update", "Updating Origos Agencies Names.");
         await BRTransfer.UpdateAgenciesNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-    
+      #endregion
     }
     #endregion
 
@@ -934,29 +946,31 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateRoomTypes()
     {
+      #region AddRoomTypes
       try
-      { 
+      {
         //agregando tipos de habitacion
         AddLogGridReservations("Insert", "Adding Room Types.");
         await BRTransfer.AddRoomTypes();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateRoomTypesNames
       try
-      { 
-
+      {
         //actualizando las descripciones de los tipos de habitacion
         AddLogGridReservations("Update", "Updating Room Types Names.");
         await BRTransfer.UpdateRoomTypesNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+      #endregion
     }
     #endregion
 
@@ -969,16 +983,20 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateContracts()
     {
+      #region AddContracts
       try
-      { 
+      {
         //agregando contratos
         AddLogGridReservations("Insert", "Adding Contracts.");
         await BRTransfer.AddContracts();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
+
+      #region UpdateContractsNames
       try
       {
         //actualizando las descripciones de los contratos
@@ -987,9 +1005,9 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+      #endregion
     }
     #endregion
 
@@ -1010,18 +1028,18 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
 
       try
-      { 
+      {
         //actualizando las descripciones de los contratos
         AddLogGridReservations("Update", "Updating Groups Names");
         await BRTransfer.UpdateGroupsNames();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
       
     }
@@ -1036,17 +1054,20 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateTransfer()
     {
+      #region UpdateTransferCountries
       try
-      { 
+      {
         //actualizando paises de la tabla de transferencia
         AddLogGridReservations("Update", "Updating Countries");
         await BRTransfer.UpdateTransferCountries();
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferAgencies
       try
       {
 
@@ -1056,9 +1077,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferLanguages
       try
       {
         //actualizando idiomas de la tabla de transferencia
@@ -1067,9 +1090,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferMarkets
       try
       {
         //actualizando mercados de la tabla de transferencia
@@ -1078,9 +1103,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByGroups
       try
       {
         //actualizando disponibilidad por grupos
@@ -1089,9 +1116,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByAgency
       try
       {
         //actualizando motivos de indisponibilidad de la tabla de transferencia por agencia
@@ -1100,9 +1129,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByCountry
       try
       {
         //actualizando motivos de indisponibilidad de la tabla de transferencia por pais
@@ -1111,9 +1142,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByContract
       try
       {
         //actualizando motivos de indisponibilidad de la tabla de transferencia por contrato
@@ -1122,9 +1155,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesBy1Night and  UpdateTransferUnavailableMotivesBy2Nights
       if (blnOneNight)
       {
         try
@@ -1135,7 +1170,7 @@ namespace IM.Transfer.Forms
         }
         catch (Exception exception)
         {
-          AddLogGridReservations("Error", exception.InnerException.Message);
+          AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
         }
       }
       if (blnTwoNight)
@@ -1148,10 +1183,12 @@ namespace IM.Transfer.Forms
         }
         catch (Exception exception)
         {
-          AddLogGridReservations("Error", exception.InnerException.Message);
+          AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
         }
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByTransfer
       try
       {
 
@@ -1161,9 +1198,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByNewMember
       try
       {
         //actualizando motivos de indisponibilidad de la tabla de transferencia por ser nuevo socio
@@ -1172,9 +1211,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferUnavailableMotivesByPax
       try
       {
         //actualizando motivos de indisponibilidad de la tabla de transferencia por tener pax 1
@@ -1183,9 +1224,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateTransferAvailability
       try
       {
         //actualizando disponibilidad de la tabla de transferencia
@@ -1194,9 +1237,10 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+      #endregion
+
     }
     #endregion
 
@@ -1209,6 +1253,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateGuests()
     {
+      #region DeleteReservationsCancelled
       try
       {
         //eliminando reservaciones canceladas
@@ -1217,9 +1262,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsRoomNumbers
       try
       {
         //actualizando numeros de habitacion de huespedes
@@ -1228,9 +1275,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsRoomTypes
       try
       {
         //actualizando tipos de habitacion de huespedes
@@ -1239,9 +1288,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCreditCards
       try
       {
         //actualizando tarjetas de credito de huespedes
@@ -1250,9 +1301,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsLastNames
       try
       {
         //actualizando apellidos de huespedes
@@ -1261,9 +1314,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsFirstNames
       try
       {
         //actualizando nombres de huespedes
@@ -1272,9 +1327,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCheckInDates
       try
       {
         //actualizando fechas de llegada de huespedes
@@ -1283,9 +1340,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCheckIns
       try
       {
         //actualizando Check Ins de huespedes
@@ -1294,9 +1353,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCheckOutDates
       try
       {
         //actualizando fechas de salida de huespedes
@@ -1305,9 +1366,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsEmails
       try
       {
         //actualizando correos electronicos de huespedes
@@ -1316,9 +1379,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCities
       try
       {
         //actualizando ciudades de huespedes
@@ -1327,9 +1392,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsStates
       try
       {
         //actualizando estados de huespedes
@@ -1338,9 +1405,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCountries
       try
       {
         //actualizando paises de huespedes
@@ -1349,9 +1418,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsCheckOutsEarly
       try
       {
         //actualizando salidas anticipadas de huespedes
@@ -1360,9 +1431,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region  UpdateGuestsGuestTypes
       try
       {
         //actualizando tipos de huespedes
@@ -1371,9 +1444,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsContracts
       try
       {
         //actualizando contratos de huespedes
@@ -1382,9 +1457,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsBirthDates
       try
       {
         //actualizando fechas de nacimiento de huespedes
@@ -1393,9 +1470,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsAges
       try
       {
 
@@ -1405,9 +1484,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsPax
       try
       {
         //actualizando pax de huespedes
@@ -1416,9 +1497,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsReservationTypes
       try
       {
         //actualizando tipos de reservacion de huespedes
@@ -1427,9 +1510,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsIdProfileOpera
       try
       {
         //actualizando id del perfil de Opera de huespedes
@@ -1438,9 +1523,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsAgencies
       try
       {
         //actualizando agencias de huespedes
@@ -1449,9 +1536,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsMarkets
       try
       {
         //actualizando mercados de huespedes
@@ -1460,9 +1549,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsAvailabilityUnavailableMotives
       try
       {
         //actualizando disponibilidad y motivos de indisponibilidad de huespedes
@@ -1471,9 +1562,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsUnavailableMotives1NightRevert
       try
       {
         //actualizando motivos de indisponibilidad de huespedes (Revirtiendo proceso de disponibilidad por una noche)
@@ -1482,9 +1575,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region UpdateGuestsAvailables
       try
       {
         //actualizando huespedes disponibles
@@ -1495,9 +1590,11 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
+      #region AddGuests
       try
       {
         //agregando nuevos huespedes
@@ -1506,8 +1603,9 @@ namespace IM.Transfer.Forms
       }
       catch (Exception exception)
       {
-        AddLogGridReservations("Error", exception.InnerException.Message);
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      #endregion
 
     }
     #endregion
@@ -1522,16 +1620,16 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task TransferStopZone(string strZone)
     {
-      
-        AddLogGridReservations("Stop", "Stop Transafer " + strZone);
-        try
-        {
-          await BRTransfer.StopZone(strZone);
-        }
-        catch (Exception exception)
-        {
-          AddLogGridReservations("Error", exception.InnerException.Message);
-        }
+
+      AddLogGridReservations("Stop", "Stop Transafer " + strZone);
+      try
+      {
+        await BRTransfer.StopZone(strZone);
+      }
+      catch (Exception exception)
+      {
+        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+      }
       
     }
     #endregion
@@ -1636,33 +1734,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public void OnOffBlinkReservations(bool? blnStatus = true)
     {
-      if (dispatcherBlinkLabelReservations != null && !blnStatus.Value)
-      {
-        dispatcherBlinkLabelReservations.Stop();
-        if (!dispatcherBlinkLabelReservations.IsEnabled)
-        {
-          if (lblStatusReservations != null)
-          {
-            lblStatusReservations.Foreground = Brushes.Black;
-            lblStatusReservations.Background = Brushes.Transparent;
-            lblStatusReservations.BorderBrush = Brushes.Transparent;
-          }
-          if (brdStatusReservations != null)
-          {
-            brdStatusReservations.Background = Brushes.Transparent;
-            brdStatusReservations.BorderBrush = Brushes.Black;
-          }
-        }
-      }
-      else if (dispatcherBlinkLabelReservations == null && blnStatus.Value)
-      {
-        dispatcherBlinkLabelReservations = BlinkLabel(lblName: lblStatusReservations, brdName: brdStatusReservations);
-        dispatcherBlinkLabelReservations.Start();
-      }
-      else if (dispatcherBlinkLabelReservations != null && blnStatus.Value)
-      {
-        dispatcherBlinkLabelReservations.Start();
-      }
+      lblStatusReservations.IsEnabled = blnStatus.Value;
     }
     #endregion
 
@@ -1676,111 +1748,12 @@ namespace IM.Transfer.Forms
     /// </history>
     public void OnOffBlinkExchangeRate(bool? blnStatus = true)
     {
-      if (dispatcherBlinkLabelExchangeRate != null && !blnStatus.Value)
-      {
-        dispatcherBlinkLabelExchangeRate.Stop();
-        if (!dispatcherBlinkLabelExchangeRate.IsEnabled)
-        {
-          if (lblStatusExchangeRate != null)
-          {
-            lblStatusExchangeRate.Foreground = Brushes.Black;
-            lblStatusExchangeRate.Background = Brushes.Transparent;
-            lblStatusExchangeRate.BorderBrush = Brushes.Transparent;
-          }
-          if (brdStatusExchangeRate != null)
-          {
-            brdStatusExchangeRate.Background = Brushes.Transparent;
-            brdStatusExchangeRate.BorderBrush = Brushes.Black;
-          }
-        }
-      }
-      else if (dispatcherBlinkLabelExchangeRate == null && blnStatus.Value)
-      {
-        dispatcherBlinkLabelExchangeRate = BlinkLabel(lblName: lblStatusExchangeRate, brdName: brdStatusExchangeRate);
-        dispatcherBlinkLabelExchangeRate.Start();
-      }
-      else if (dispatcherBlinkLabelExchangeRate != null && blnStatus.Value)
-      {
-        dispatcherBlinkLabelExchangeRate.Start();
-      }
+      lblStatusExchangeRate.IsEnabled = blnStatus.Value;
     }
     #endregion
-
-    #region BlinkLabel
-    /// <summary>
-    /// Metodo para aplicar efecto blink a label
-    /// </summary>
-    /// <param name="lblName">Label a que se aplicara el efecto</param>
-    /// <param name="brdName">Si tiene borde el label se envia para aplicar efecto igual</param>
-    /// <param name="blnStatus">True para iniciar y False paraterminar</param>
-    /// <history>
-    /// [michan]  02/05/2016  Created
-    /// </history>   
-    public DispatcherTimer BlinkLabel(System.Windows.Controls.Label lblName = null, System.Windows.Controls.Border brdName = null, bool? blnStatus = true) //where T : Window //, 
-    {
-      //Booleano para control del efecto blink.
-      bool blnOnOff = false;
-      // Distpacher que ejecutara determinado tiempo el efecto blink
-      DispatcherTimer dispatcher = new DispatcherTimer();
-      // agregamos el tiempo de efecto blink
-      dispatcher.Interval = new TimeSpan(0, 0, 0, 0, 500);
-      // tarea para aplciar el efecto blink
-      dispatcher.Tick += (s, a) =>
-      {
-        // valida si hay label para aplicar efecto
-        if (lblName != null)
-        {
-          // aplica color de letra a label
-          lblName.Foreground = (blnOnOff) ? Brushes.Black : Brushes.Transparent;
-          // se aplica fondo trasnparente al label.
-          lblName.Background = Brushes.Transparent;
-          //lblName.BorderBrush = (blnOnOff) ? System.Windows.Media.Brushes.BlueViolet : System.Windows.Media.Brushes.Black;
-        }
-        // valida si tiene bordes el label
-        if (brdName != null)
-        {
-          // cambia de color de fondo al borde
-          brdName.Background = (blnOnOff) ? Brushes.DarkRed : Brushes.Transparent;
-          // aplica transparencia para no perder el label.
-          brdName.Opacity = (blnOnOff) ? .6 : 0;
-          brdName.BorderBrush = Brushes.Black;
-          //new SolidColorBrush(Color.FromArgb(128, 255, 0, 0)) brdName.BorderBrush = (blnOnOff) ? System.Windows.Media.Brushes.Black : System.Windows.Media.Brushes.White;
-        }
-        //cambiamos el control del efecto.
-        blnOnOff = !blnOnOff;
-      };
-      return dispatcher;
-    }
-
-    #endregion
-
     #endregion
 
     #region Metodos para actualizar botones
-
-    #region UpdateDelegateButton
-    ///<summary>Delegado utilizado en la actualizacion el content de los botones</summary>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public delegate void UpdateDelegateButton(System.Windows.Controls.Button btnName, string strContent, bool? blnIsEnable = true);
-    #endregion
-
-    #region ContentButton
-    /// <summary>
-    /// Metodo para actualizar el contenido de los botones
-    /// </summary>
-    /// <param name="btnName">Boton a actualizar o modificar su contenido</param>
-    /// <param name="strContetn">contenido del boton</param>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public void ContentButton(System.Windows.Controls.Button btnName, string strContetn, bool? blnIsEnable = true)
-    {
-      btnName.Content = strContetn;
-      btnName.IsEnabled = blnIsEnable.Value;
-    }
-    #endregion
 
     #region UpdateButton
     /// <summary>
@@ -1793,6 +1766,9 @@ namespace IM.Transfer.Forms
     ///</history>
     public void UpdateButton(System.Windows.Controls.Button btnName, string strContent, bool? blnIsEnable = true)
     {
+      btnName.Content = strContent;
+      btnName.IsEnabled = blnIsEnable.Value;
+      /*
       // si no se ha instanciado el delegado
       if (updateContentButton == null)
       {
@@ -1800,21 +1776,13 @@ namespace IM.Transfer.Forms
         updateContentButton = new UpdateDelegateButton(ContentButton);
       }
       // actualizamos el buttom con el delegado
-      btnName.Dispatcher.BeginInvoke(DispatcherPriority.Render, updateContentButton, btnName, strContent, blnIsEnable.Value);
+      btnName.Dispatcher.BeginInvoke(DispatcherPriority.Render, updateContentButton, btnName, strContent, blnIsEnable.Value);*/
     }
     #endregion
 
     #endregion
 
     #region Actualizacion de Grids
-
-    #region UpdateDelegateGrid
-    ///<summary>Metodo para crear delegado utilizado en la actualizacion el grid del log de reservations</summary>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public delegate void UpdateDelegateGrid(DateTime dtmDate, string strLogLevel, string strMessage);
-    #endregion
 
     #region UpdatingGrid
     /// <summary>
@@ -1825,77 +1793,26 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public void UpdatingGrid(System.Windows.Controls.DataGrid grdDataGrid, List<LogHelper.Transaction> listTransations)
+    public void UpdatingGrid(System.Windows.Controls.DataGrid grdDataGrid, List<LogHelper.Transaction> listTransations, CollectionViewSource collectionView)
     {
-      // validamos que ayan pasado un objeto datagrid
-      if (grdDataGrid != null)
-      {
-        // valida si el datagrid si tiene registros
-        if (grdDataGrid.ItemsSource != null)
-          // borra los registros del datagrid
-          grdDataGrid.ItemsSource = null;
-
+      
         // valida si la lista tiene elementos
-        if (listTransations != null)
+        // validamos que ayan pasado un objeto datagrid
+        if (listTransations != null && grdDataGrid != null && collectionView != null && listTransations.Count > 0)
         {
           // se obtienen los primeros 500 registros.
           var itemsSource = listTransations.Skip(Math.Max(0, listTransations.Count() - 499)).Take(499).ToList();
-          if (itemsSource != null)
-            // asignamos los registros al datagrid
-            grdDataGrid.ItemsSource = itemsSource;
-
+          collectionView.Source = null;
+          // asignamos los registros al datagrid
+          collectionView.Source = itemsSource;
           // refrescamos el datagrid con los nuevos elementos.
           grdDataGrid.Items.Refresh();
-          
           // obtenemos el total de registros en el datagrid
-          int index = (grdDataGrid.Items.Count > 0) ? grdDataGrid.Items.Count - 1 : 0;
+          int index = (grdDataGrid.Items.Count > 2) ? grdDataGrid.Items.Count - 1 : 0;
           // seleccionamos el ultimo elementos en el datagrid.
           GridHelper.SelectRow(grdDataGrid, index);
         }
-      }
       
-    }
-    #endregion
-
-    #region UpdateDelegateDatagridReservations
-    ///<summary>Metodo que agrega nuevo registro en el log de reservations y actualiza el grid de log de reservations</summary>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public void UpdateDelegateDatagridReservations(DateTime dtmDate, string strLogLevel, string strMessage)
-    {
-      // agregamos al log el registro
-      var logTransfer = LogHelper.AddTransaction("Reservations", dtmDate, strLogLevel, strMessage);
-      if (logTransfer != null)
-      {
-        // agregamos el log a la lista de logs
-        listTransactionsReservations.Add(logTransfer);
-        // se actualiza el grid
-        UpdatingGrid(grdLogReservations, listTransactionsReservations);
-      }
-      
-      
-    }
-    #endregion
-
-    #region UpdateDelegateDatagridExchangeRate
-    ///<summary>
-    ///Metodo que agrega nuevo registro en el log de reservations y actualiza el grid de log de exchange rate
-    ///</summary>
-    ///<param name="dtmDate">Fecha de registro</param>
-    ///<param name="strLogLevel">Tipo de mensaje en el log</param>
-    ///<param name="strMessage">Mensaje del log</param>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public void UpdateDatagridExchangeRate(DateTime dtmDate, string strLogLevel = "", string strMessage = "")
-    {
-      var logTransfer = LogHelper.AddTransaction("ExchangeRate", dtmDate, strLogLevel, strMessage);
-      if(logTransfer != null)
-      {
-        listTransactionsExchangeReservations.Add(logTransfer);
-        UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations);
-      }
     }
     #endregion
 
@@ -1913,13 +1830,16 @@ namespace IM.Transfer.Forms
       // validamos que el strLogLevel y el strMessage no sean vacios o nullos
       if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
       {
-        // validamos que exista la instancia del delegado para actualizar el grid de reservaciones
-        if (updateGridReservations == null)
-          // si es nullo se crea la instancia
-          updateGridReservations = new UpdateDelegateGrid(UpdateDelegateDatagridReservations);
-        // actualizamos el grid de reservaciones.
-        grdLogReservations.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateGridReservations, DateTime.Now, strLogLevel, strLogMessage);
-      }  
+        // agregamos al log el registro
+        var logTransfer = LogHelper.AddTransaction("Reservations", DateTime.Now, strLogLevel, strLogMessage);
+        if (logTransfer != null)
+        {
+          // agregamos el log a la lista de logs
+          listTransactionsReservations.Add(logTransfer);
+          // se actualiza el grid
+          UpdatingGrid(grdLogReservations, listTransactionsReservations, reservationsCollectionViewSource);
+        }
+      }
     }
     #endregion
 
@@ -1934,16 +1854,18 @@ namespace IM.Transfer.Forms
     ///</history>
     public void AddLogGridExchangeRate(string strLogLevel, string strLogMessage)
     {
-      // validamos que el tipo de log y el mensaje no esten vacios.
-      if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
-      {
-        // validamos la instancia del delegado para actualizar el grid
-        if (updateGridExchangeRate == null)
-          // creamos la instancia si no existe.
-          updateGridExchangeRate = new UpdateDelegateGrid(UpdateDatagridExchangeRate);
-        // actualizamos el grid.
-        grdLogExchangeRate.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateGridExchangeRate, DateTime.Now, strLogLevel, strLogMessage);
-      }
+      
+        // validamos que el tipo de log y el mensaje no esten vacios.
+        if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
+        {
+          var logTransfer = LogHelper.AddTransaction("ExchangeRate", DateTime.Now, strLogLevel, strLogMessage);
+          if (logTransfer != null)
+          {
+            listTransactionsExchangeReservations.Add(logTransfer);
+            UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
+          }
+        }
+      
     }
     #endregion
 
@@ -1998,18 +1920,19 @@ namespace IM.Transfer.Forms
       blnRunOrCancelReservations = false;
       // reiniciamos a cero los valores del progresbar
       AddValueProgressBarReservations(porcentBase: 0);
-      UpdateLabel(lblPorcentProgresBarReservations, "");
+      lblPorcentProgresBarReservations.Content = string.Empty;
+      
       // cambiamos el label del boton de reservaciones
       UpdateButton(btnReservations, "Update Reservations");
       // borramos los registros del label de visor de reservaciones
-      UpdateLabel(lblTransferReservations, "");
-
+      lblTransferReservations.Content = string.Empty;
+      
       // actualizamos la hora y fecha de la ultima y proxima actualización.
       _lastReservations = DateTime.Now;
       _nextReservations = DateHelper.AddTimeDate(_intervalTimeReservations);
-      UpdateLabel(lblLastTransferReservations, lblTextLast + _lastReservations.ToString());
-      UpdateLabel(lblNextTransferReservations, lblTextNext + _nextReservations.ToString());
-
+      lblLastTransferReservations.Content = lblTextLast + _lastReservations.ToString();
+      lblNextTransferReservations.Content = lblTextNext + _nextReservations.ToString();
+     
       // Detenemos el efecto blink
       OnOffBlinkReservations(false);
       // ponemos en stand by el label de estatus
@@ -2030,15 +1953,17 @@ namespace IM.Transfer.Forms
     {
       // actualizamos la fecha y hora de la ultima altualización
       _lastExchangeRate = DateTime.Now;
-      UpdateLabel(lblLastTransferExchangeRate, lblTextLast + _lastExchangeRate.ToString());
+      lblLastTransferExchangeRate.Content = lblTextLast + _lastExchangeRate.ToString();
+      
       // actualizamos la fecha y hora de la siguiente actualización
       _nextExchangeRate = DateHelper.AddTimeDate(_tranferExchangeRatesIntervalTime);
       // actualizamos el label de estatus de la actualización
-      UpdateLabel(lblNextTransferExchangeRate, lblTextNext + _nextExchangeRate.ToString());
-
+      lblNextTransferExchangeRate.Content = lblTextNext + _nextExchangeRate.ToString();
+     
       // regresamos a cero el progressbar
       AddValueProgressBarExchangeRate(value: 0);
-      UpdateLabel(lblPorcentProgressExchangeRate, "");
+      lblPorcentProgressExchangeRate.Content = string.Empty;
+     
       // cambiamos el estatus de la bandera de actualización
       blnRunOrCancelExchangeRate = false;
       // actualizamos el label del button
@@ -2056,45 +1981,6 @@ namespace IM.Transfer.Forms
 
     #region Actualiza Labels
 
-    #region UpdateDelegateLabelText
-    /// <summary>
-    /// Delegado para actualizar los labels del formulario en interacción.
-    /// </summary>
-    /// <param name="lblUpdate">label que se desea actualizar</param>
-    /// <param name="strContent">Cadena que se desea pintar en el label</param>
-    private delegate void UpdateDelegateLabel(System.Windows.Controls.Label lblUpdate, string strContent);
-    #endregion
-
-    #region UpdateLabelDelegate
-    /// <summary>
-    /// Metodo que recibe los valores para el label aactualizar
-    /// </summary>
-    /// <param name="lblUpdate">Labeel a aactualizar</param>
-    /// <param name="stringContent">Contenido del label</param>
-    private void UpdateLabelDelegate(System.Windows.Controls.Label lblUpdate, string strContent)
-    {
-      // agregamos el contenido (string) al label
-      lblUpdate.Content = strContent;
-    }
-    #endregion
-
-    #region UpdateLabel
-    /// <summary>
-    /// Metodo que invoca al delegado para la actualizacion del contenido del label
-    /// </summary>
-    /// <param name="lblUpdate">Label a actualizar</param>
-    /// <param name="stringContent">contenido del label</param>
-    public void UpdateLabel(System.Windows.Controls.Label lblUpdate, string stringContent)
-    {
-      // validamos si el delegado para la actualizacion del label se encuentra inicalizado
-      if (updateDelegateLabel == null)
-        // si no se encuentra inicializado se inicializa.
-        updateDelegateLabel = new UpdateDelegateLabel(UpdateLabelDelegate);
-      // se actualiza el label con la informacion recbida
-      lblUpdate.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateDelegateLabel, lblUpdate, stringContent);
-    }
-    #endregion
-
     #region UpdateLabelTrasnferReservations
     /// <summary>
     /// Metodo para actualizar las transferencias realizadas en las reservaciones
@@ -2103,9 +1989,7 @@ namespace IM.Transfer.Forms
     public void UpdateLabelTrasnferReservations(string stringContent)
     {
       // validamos que el conetenido no sea nullo o vacio.
-      string stringLabel = (!String.IsNullOrEmpty(stringContent) && !String.IsNullOrWhiteSpace(stringContent)) ? stringContent : "";
-      UpdateLabel(lblTransferReservations, stringLabel);
-
+      lblTransferReservations.Content = (!String.IsNullOrEmpty(stringContent) && !String.IsNullOrWhiteSpace(stringContent)) ? stringContent : ""; ;
     }
     #endregion
 
@@ -2116,7 +2000,7 @@ namespace IM.Transfer.Forms
     /// <param name="stringContent">contenido del label status</param>
     public void UpdateLabelStatusExchangeRate(string stringContent)
     {
-      UpdateLabel(lblStatusExchangeRate, stringContent);
+      lblStatusExchangeRate.Content = stringContent;
     }
     #endregion
 
@@ -2127,22 +2011,13 @@ namespace IM.Transfer.Forms
     /// <param name="stringContent">contenido del label status</param>
     public void UpdateLabelStatusReservations(string stringContent)
     {
-      UpdateLabel(lblStatusReservations, stringContent);
+      lblStatusReservations.Content = stringContent;
     }
     #endregion
 
     #endregion
 
     #region Actualiza ProgresBar
-
-    #region UpdateDelegateProgressBar
-    /// <summary>
-    /// Delegado para actualizar los labels del formulario en interacción.
-    /// </summary>
-    /// <param name="lblUpdate">label que se desea actualizar</param>
-    /// <param name="strContent">Cadena que se desea pintar en el label</param>
-    private delegate void UpdateDelegateProgressBar(System.Windows.Controls.ProgressBar progressBar, System.Windows.Controls.Label lblProcent, double? value = null, double? porcentBase = null);
-    #endregion
 
     #region InitializerProgressBar
     ///<summary>Metodo que inicializa y reestablece los valores de la barra de progreso</summary>
@@ -2202,7 +2077,7 @@ namespace IM.Transfer.Forms
       if ((valueIncrement >=0) && (porcentValue >=0) && (!valueIncrement.Equals(null)) && (!porcentValue.Equals(null)))
       {
         progressBar.Value = valueIncrement;
-        UpdateLabel(lblProcent, String.Format("{0:0} %", porcentValue));
+        lblProcent.Content = String.Format("{0:0} %", porcentValue);
       }
       
 
@@ -2268,7 +2143,7 @@ namespace IM.Transfer.Forms
     {
       UpdateLabelStatusExchangeRate("STARTED");
       //Se obtiene la fecha del servidor
-      _dtmServerDate = BRHelpers.GetServerDate();    
+      _dtmServerDate = BRHelpers.GetServerDate();
       AddLogGridExchangeRate("Start", "Start Updating Exchange Rates");
       AddValueProgressBarExchangeRate(value: 1);
       Thread.Sleep(100);
@@ -2288,10 +2163,12 @@ namespace IM.Transfer.Forms
     #region UpdateExchangeRatesFromIntranet
     public async Task UpdateExchangeRatesFromIntranet()
     {
+      //Se obtiene la fecha del servidor
+      _dtmServerDate = BRHelpers.GetServerDateTime();
       //obtenemos el tipo de cambio de la Intranet
       AddValueProgressBarExchangeRate(value: 2);
       AddLogGridExchangeRate("Info", "Getting Exchange Rate from Intranet Service");
-      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(Convert.ToDateTime("27/05/2016"), "USD", cancelTokenExchangeRate.Token);
+      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD", cancelTokenExchangeRate.Token);
       if (exchangeRate != null)
       {
         timeWatchExchangeRate.Start();
@@ -2315,8 +2192,6 @@ namespace IM.Transfer.Forms
           string elapsedTime = StringTimeDifference(tSpan);
 
           AddLogGridExchangeRate("Info", $"Updating Exchange Rate in {elapsedTime}");
-         
-
           AddLogGridExchangeRate("Success", "Exchange Rate finished");
         }
         else
@@ -2345,9 +2220,9 @@ namespace IM.Transfer.Forms
       AddValueProgressBarExchangeRate(value: 6);
       AddLogGridExchangeRate("Info", "Updating CurrencyChange...");
       //Se obtiene la fecha del servidor
-      _dtmServerDate = BRHelpers.GetServerDate();
+      _dtmServerDate = BRHelpers.GetServerDateTime();
       //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
-      await BRExchangeRate.InsertExchangeRate(Convert.ToDateTime("27/05/2016"));
+      await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
       AddValueProgressBarExchangeRate(value: 7);
       // obtenemos el tipo de cambio de la Intranet
       AddLogGridExchangeRate("Info", "Getting Currency Change from Intranet Service...");
@@ -2394,12 +2269,12 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  03/May/2016 Created
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      WindowsHelper.EventsKeys(window:this, blnNotifycon:true);
+      WindowsHelper.EventsKeys(window:this, blnNotifycon:false);
       // cargamos el contenido de los grid.
-      LoadDataGRidExchangeRate();
-      LoadDataGRidReservations();
+      await LoadDataGRidExchangeRate();
+      await LoadDataGRidReservations();
       // inicializamos los valores default de los progres bar.
       InitializerProgressBar();
         
@@ -2419,6 +2294,7 @@ namespace IM.Transfer.Forms
       lblNextTransferReservations.Content = "";
       
       InitializeTransfers();
+      
     }
     #endregion
 
@@ -2539,5 +2415,9 @@ namespace IM.Transfer.Forms
 
     #endregion
 
+    
+
   }
+
+  
 }

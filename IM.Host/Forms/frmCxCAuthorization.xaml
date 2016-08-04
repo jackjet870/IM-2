@@ -8,8 +8,10 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCxCAuthorization"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-  
+    
+        KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="CxC Authorization" Height="435.554" Width="1027" MinHeight="500" MinWidth="1027" Loaded="Window_Loaded" ShowInTaskbar="False">
+
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
             AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
@@ -129,9 +131,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="53*" MinHeight="220"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="19"/>
+            <RowDefinition Height="316*" MinHeight="220"/>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="0"/>
         </Grid.RowDefinitions>
 
         <!--#region Barra de opciones y botones -->
@@ -140,6 +142,7 @@
                 <StackPanel Orientation="Horizontal" Height="Auto">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
                     <xctk:DateTimePicker x:Name="dtpkFrom" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Height="30" Style="{StaticResource dtp-DateRange-TK}" />
+
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
                     <xctk:DateTimePicker x:Name="dtpkTo" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Height="30" Style="{StaticResource dtp-DateRange-TK}" />
                     <TextBlock  Text="LS" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
@@ -173,6 +176,7 @@
                         </StackPanel>
                     </Border>
 
+                    
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
@@ -180,37 +184,6 @@
                         <TabItem x:Name="Unauthorized" Header="Unauthorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
                         <TabItem x:Name="Authorized" Header="Authorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
                     </TabControl>
-
-
-                    <!--<TabControl Name="tabControl">
-                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
-                            <TabItem.Header>
-                                <TextBlock>Text a</TextBlock>
-                            </TabItem.Header>
-                            <DockPanel>
-                                <ListBox Background="AliceBlue" />
-                            </DockPanel>
-                        </TabItem>
-
-                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
-                            <TabItem.Header>
-                                <TextBlock>Text a</TextBlock>
-                            </TabItem.Header>
-                            <DockPanel>
-                                <ListBox Background="Black" />
-                            </DockPanel>
-                        </TabItem>
-
-                        <TabItem PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
-                            <TabItem.Header>
-                                <TextBlock>Text a</TextBlock>
-                            </TabItem.Header>
-                            <DockPanel>
-                                <ListBox Background="Red" />
-                            </DockPanel>
-                        </TabItem>
-                    </TabControl>-->
-
 
                 </StackPanel>
             </StackPanel>
@@ -246,11 +219,11 @@
                                 </Style>
                             </DataGridCheckBoxColumn.EditingElementStyle>
                         </DataGridCheckBoxColumn>
-                        
+
                         <DataGridTemplateColumn x:Name="grCxCAppDColumn" Header="Auth. Date"  IsReadOnly="False" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto"/>
+                                    <TextBlock Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Height="auto" Width="auto"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -259,7 +232,7 @@
                                         x:Name="grCxCAppD" 
                                         SelectedDate="{Binding grCxCAppD, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" 
                                         FirstDayOfWeek="Monday"
-                                        IsTodayHighlighted="True" 
+                                        IsTodayHighlighted="True"
                                         CalendarOpened="CxCAppD_CalendarOpened"  
                                         SelectedDateChanged="CxCAppD_SelectedDateChanged" 
                                         Width="auto" 
@@ -273,10 +246,8 @@
                                             </Style>
                                         </DatePicker.Resources>
                                     </DatePicker>
-
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
-
                         </DataGridTemplateColumn>
 
                         <DataGridTextColumn x:Name="grAuthorizedByColumn" Binding="{Binding grAuthorizedBy}" Header="Auth. By" IsReadOnly="True" Width="auto"/>
@@ -307,7 +278,7 @@
                           SelectedValueBinding="{Binding grup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedValuePath="upID"
                           DisplayMemberPath="upN" 
-                          />    
+                          />
 
 
                         <DataGridTemplateColumn x:Name="grcxcAuthCommentsColumn" Header="CxC Auth Comments"  Width="auto">
@@ -345,9 +316,9 @@
         <!--#endregion-->
 
         <!--#region Paginador -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="392,2,361,0" Width="auto">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="454,2,337,31" Width="auto">
             <Button Name="btnFrist"  Content="First" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Height="21"/>
-            <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
+            <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
             <Button x:Name="btnPrev" Content="Prev" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto"  Height="21"/>
             <Label x:Name="lblPagText" Content="  0 of 0 " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
             <Button x:Name="btnNext" Content="Next"  IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="21"/>
@@ -357,18 +328,18 @@
         <!--#endregion-->
 
         <!--#region  Estatus Bar-->
-        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Margin="10,0,10,0" Height="19" >
+        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="3" Margin="10,0,10,0" >
             <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
             <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
             <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
             <Separator />
-            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center" Width="auto">
-                <StackPanel Orientation="Horizontal" Width="auto">
+            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal">
                     <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" Width="200"/>
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>
             </StatusBarItem>
-            <StatusBarItem x:Name="StatusBarReg" Content="" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
         </StatusBar>
         <!--#endregion-->
     </Grid>
