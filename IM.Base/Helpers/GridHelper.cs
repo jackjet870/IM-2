@@ -370,7 +370,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void ValidateEditNumber(int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
+    public static void ValidateEditNumber(ref int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
       if (pNumber >= 0)
@@ -395,6 +395,7 @@ namespace IM.Base.Helpers
       else
       {
         // si se envio un valor default
+        //TODO: revisar si se asigna esta validacion Tony pNumber no esta por referencia
         if (pDefaultValue != 0)
           pNumber = pDefaultValue;
         else
@@ -576,11 +577,13 @@ namespace IM.Base.Helpers
       var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
       //Obtener la fila en edición
       var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
-
-      //Fila a editar o seleccionada
-      var rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex);
-
-      if(rowEdit!=null && rowEdit!=rowSelected)
+      DataGridRow rowSelected = new DataGridRow();
+      if (dgr.SelectedIndex != -1)
+      {
+        //Fila a editar o seleccionada
+        rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;        
+      }
+      if (rowEdit != null && rowEdit != rowSelected)
       {
         return true;
       }

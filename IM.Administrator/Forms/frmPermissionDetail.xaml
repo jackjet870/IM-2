@@ -23,6 +23,7 @@
         <!--#region títulos-->
         <Label Grid.Column="0" Grid.Row="0">ID</Label>
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Tool Tip</Label>
         <!--#endregion-->
         <!--#region Datos-->
         <TextBox Name="txtpmID" Grid.Column="1" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding pmID}" CharacterCasing="Upper" IsEnabled="False" />

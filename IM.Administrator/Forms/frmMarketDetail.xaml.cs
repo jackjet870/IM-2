@@ -120,11 +120,11 @@ namespace IM.Administrator.Forms
       else
       {
         string strMsj = ValidateHelper.ValidateForm(this, "Market", blnDatagrids: true);
-        if (strMsj == "")
-        {
-          skpStatus.Visibility = Visibility.Visible;
-          txtStatus.Text = "Saving Data...";
-          btnAccept.Visibility = Visibility.Collapsed;
+        skpStatus.Visibility = Visibility.Visible;
+        txtStatus.Text = "Saving Data...";
+        btnAccept.Visibility = Visibility.Collapsed;
+        if (strMsj == "")        {
+          
           List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();          
           int nRes = await BRMarkets.SaveMarket(market,lstAdd,(enumMode==EnumMode.edit));
           UIHelper.ShowMessageResult("Market", nRes);
@@ -219,9 +219,9 @@ namespace IM.Administrator.Forms
       dgrAgencies.ItemsSource = lstAgencies;
       _oldLstAgencies = lstAgencies.ToList();
       cmbAgencies.Header=("Agency ("+lstAgencies.Count+")");
+      skpStatus.Visibility = Visibility.Collapsed;
     }
     #endregion
-
     #endregion
   }
 }

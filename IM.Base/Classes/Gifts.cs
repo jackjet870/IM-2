@@ -1,4 +1,5 @@
 ﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using System;
@@ -20,13 +21,6 @@ namespace IM.Base.Classes
   /// </history>
   public class Gifts
   {
-    #region CalculateMaxAuthGifts
-    //public static void CalculateMaxAuthGifts(TextBox txtMaxAut, )
-    //{
-
-    //}
-
-    #endregion
 
     #region CalculateCostsPrices
     /// <summary>
@@ -51,9 +45,9 @@ namespace IM.Base.Classes
     /// [vipacheco] 04/Julio/2016 Created
     /// [erosado] 26/07/2016  Modified. Se eliminaron parametros y se agrego el parametro Gift, para eliminar el reflection.
     /// </history>
-    public static void CalculateCostsPrices<T>(ref T pCurrent, Gift gift,  string pQuantityField, string pAdultsField, string pMinorsField,
+    public static void CalculateCostsPrices<T>(ref T pCurrent, Gift gift, string pQuantityField, string pAdultsField, string pMinorsField,
                                                string pExtraAdultsField, string pCostAdultsField, string pCostMinorsField, string pPriceAdultsField, string pPriceMinorsField,
-                                               string pPriceExtraAdultsField,bool pUseCxCCost = false, EnumPriceType pEnum = EnumPriceType.All)
+                                               string pPriceExtraAdultsField, bool pUseCxCCost = false, EnumPriceType pEnum = EnumPriceType.All)
     {
       decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
 
@@ -61,8 +55,7 @@ namespace IM.Base.Classes
       Type type = pCurrent.GetType();
 
       // Si se encuentra el regalo
-      T objGift = pCurrent;
-    
+
       if (gift != null)
       {
         // costos
@@ -137,8 +130,8 @@ namespace IM.Base.Classes
     /// [erosado] 27/07/2016  Modified. Se volvio generico
     /// </history>
     public static void CalculateTotalGifts(DataGrid Grid, EnumGiftsType GiftsType, string QuantityField, string giftField, string priceMField,
-      string priceMinorField, string priceAdultField, string priceAField,  string priceExtraAdultsField, TextBox txtTotalCost ,
-      TextBox txtTotalPrice = null,  TextBox txtTotalToPay = null, bool OnlyCancellled = false, string CancelField = "", string saleField="")
+      string priceMinorField, string priceAdultField, string priceAField, string priceExtraAdultsField, TextBox txtTotalCost,
+      TextBox txtTotalPrice = null, TextBox txtTotalToPay = null, bool OnlyCancellled = false, string CancelField = "", string saleField = "")
     {
       decimal curCost = 0;
       decimal curPrice = 0;
@@ -212,7 +205,7 @@ namespace IM.Base.Classes
           txtTotalToPay.IsReadOnly = true;
         }
       }
-    } 
+    }
     #endregion
 
     #region ValidateMaxAuthGifts
@@ -262,7 +255,7 @@ namespace IM.Base.Classes
     /// [vipacheco] 30/Junio/2016 Created
     /// [erosado] 26/07/2016  Modified. Se agrego Reflection para volver generico, y se agrego el parametro ExtraAdults
     /// </history>
-    public static void ValidateAdultsMinors<T>(EnumAdultsMinors Enum, T Row, bool Cancel, string adultsField, string minorsField, string extraAdultsField="")
+    public static void ValidateAdultsMinors<T>(EnumAdultsMinors Enum, T Row, ref bool Cancel, string adultsField, string minorsField, string extraAdultsField = "")
     {
       int value = 0;
       bool cancel = false;
@@ -270,21 +263,22 @@ namespace IM.Base.Classes
       switch (Enum)
       {
         case EnumAdultsMinors.Adults:
-          value =(int)Row.GetType().GetProperty(adultsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(value, cancel, "Quantity of adults", 99, 0);
+          value = (int)Row.GetType().GetProperty(adultsField).GetValue(Row, null);
+          GridHelper.ValidateEditNumber(ref value, cancel, "Quantity of adults", 99, 0);
           break;
         case EnumAdultsMinors.Minors:
           value = (int)Row.GetType().GetProperty(minorsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(value, cancel, "Quantity of minors", 99, 0);
+          GridHelper.ValidateEditNumber(ref value, cancel, "Quantity of minors", 99, 0);
           break;
         case EnumAdultsMinors.ExtraAdults:
           value = (int)Row.GetType().GetProperty(extraAdultsField).GetValue(Row, null);
-          GridHelper.ValidateEditNumber(value, cancel, "Quantity of extra adults", 99, 0);
+          GridHelper.ValidateEditNumber(ref value, cancel, "Quantity of extra adults", 99, 0);
           break;
       }
       // si es valido
       if (!cancel)
       {
+        //Comparo AdultsField con AdultsMinors, Si son 0 ambos mando un mensaje
         if ((int)Row.GetType().GetProperty(adultsField).GetValue(Row, null) == 0 && (int)Row.GetType().GetProperty(minorsField).GetValue(Row, null) == 0)
         {
           Cancel = true;
@@ -308,11 +302,11 @@ namespace IM.Base.Classes
     /// [vipacheco] 30/Junio/2016 Created
     /// [erosado] 26/07/2016  Modified. se agregó el parametro Gift.
     /// </history>
-    public static void ValidateMaxQuantityOnEntryQuantity<T>(T row, Gift gift ,bool isExchange, int lowerBound, bool pCancel, string quantityField)
+    public static void ValidateMaxQuantityOnEntryQuantity<T>(ref T row, Gift gift, bool isExchange, int lowerBound, ref bool pCancel, string quantityField)
     {
       int value = (int)row.GetType().GetProperty(quantityField).GetValue(row);
       bool cancel = false;
-      GridHelper.ValidateEditNumber(value, cancel, "Quantity ", 9999, lowerBound, 1);
+      GridHelper.ValidateEditNumber(ref value, cancel, "Quantity ", 9999, lowerBound, 1);
 
       // si es valido
       if (!cancel)
@@ -351,7 +345,7 @@ namespace IM.Base.Classes
         // establecemos como cantidad la cantidad maxima autorizada
         pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, pGift.giMaxQty, null);
       }
-    } 
+    }
     #endregion
 
     #region ValidateMaxQuantity
@@ -377,6 +371,8 @@ namespace IM.Base.Classes
         {
           UIHelper.ShowMessage("The maximum quantity authorized of the gift " + pGift.giN + " has been exceeded. \r\n" +
                                 "Max authorized = " + pGift.giMaxQty, MessageBoxImage.Exclamation, "Intelligence Marketing");
+
+          //Le asigna el valor Maximo que permite regalar ese Gift
           pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, pGift.giMaxQty, null);
           return false;
         }
@@ -392,10 +388,82 @@ namespace IM.Base.Classes
           return false;
         }
       }
-
       return true;
-    } 
+    }
     #endregion
 
+
+
+    //Este metodo sera remplazado por el que ya existe dentro de GiftReceips
+    //TODO: quitar este metodo cuando se agregue el de tony
+    public static bool ValidateMaxQuantityGiftTour(DataGrid dtg, GuestStatusType guestStatusType, string qtyField, string giftField)
+    {
+      bool _hasError = false;
+      //Nuestras restricciones son
+      var maxQtyTours = guestStatusType.gsMaxQtyTours;
+
+      //int tourCount = 0;
+      int totalTourHas = 0;
+      //int descTourCount = 0;
+      int totaldescTourCount = 0;
+      //Si el GuesStatus tiene Cantidad Max de Tour validamos que no se agreguen mas de la cuenta.
+      if (maxQtyTours > 0)
+      {
+        //Recorremos los elementos del grid
+        foreach (var item in dtg.Items.SourceCollection)
+        {
+          var giftValue = item.GetType().GetProperty(giftField).GetValue(item);
+          int qtyValue = Convert.ToInt32(item.GetType().GetProperty(qtyField).GetValue(item));
+
+          //Consultamos el tipo de Gift 
+          var gift = BRGifts.GetGiftId(giftValue.ToString());
+
+          if (gift.gigc == nameof(EnumGiftCategory.TOURS))
+          {
+            if (guestStatusType.gsAllowTourDisc == true && gift.giDiscount != null && gift.giDiscount == true)
+            {
+              //descTourCount++;
+              totaldescTourCount += qtyValue;
+            }
+            else
+            {
+              //tourCount++;
+              totalTourHas += qtyValue;
+            }
+          }
+        }
+        //Validamos que no se sobre pase el limite de Tours permitidos
+        if (guestStatusType.gsAllowTourDisc != true)
+        {
+          //Enviamos Mensaje
+          UIHelper.ShowMessage($"The maximum number of tours {maxQtyTours} has been exceeded. There are {totalTourHas} tours on this invitation", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          _hasError = true;
+        }
+        else if (true && totalTourHas > maxQtyTours)
+        {
+          //Enviamos Mensaje
+          UIHelper.ShowMessage($"The maximum number of tours {maxQtyTours} has been exceeded. There are {totalTourHas} tours on this invitation", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          _hasError = true;
+        }
+      }
+      return _hasError;
+    }
+
+    #region CalculateAdultsMinorsByPax
+    /// <summary>
+    /// Calcula el numero de adultos y menores en base al Pax
+    /// </summary>
+    /// <param name="pcurPax"></param>
+    /// <param name="piAdults"></param>
+    /// <param name="piMinors"></param>
+    /// <history>
+    /// [vipacheco] 10/Mayo/2016 Created
+    /// </history>
+    private static void CalculateAdultsMinorsByPax(decimal pcurPax, ref decimal piAdults, ref decimal piMinors)
+    {
+      piAdults = Convert.ToInt32(pcurPax);
+      piMinors = (pcurPax - piAdults) * 10;
+    }
+    #endregion
   }
 }

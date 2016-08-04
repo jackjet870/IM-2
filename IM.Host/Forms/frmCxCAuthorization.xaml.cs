@@ -6,6 +6,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,7 +67,7 @@ namespace IM.Host.Forms
       CxCDataViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("cxCDataViewSource")));
       LoadAtributes();
       underPaymentMotiveViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("underPaymentMotiveViewSource")));
-      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly) || !App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.None))
+      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
       {
         imgButtonSave.IsEnabled = false;
         cxCDataDataGrid.Columns.SingleOrDefault(c => c.Header.ToString() == "Auth.").IsReadOnly = true;
@@ -84,7 +85,7 @@ namespace IM.Host.Forms
     public async Task setNewUserLogin()
     {
       var index = 0;
-      if (ComboBoxPermision(cbxPersonnel, EnumPermission.CxCAuthorization, EnumPermisionLevel.Special))
+      if (ComboBoxPermision(cbxPersonnel, EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
       {
         await Task.Run(() =>
         {
@@ -123,40 +124,6 @@ namespace IM.Host.Forms
       StaStart("Loading personnel...");
       DoGetPersonnel("PR");
     }
-    #endregion
-
-    #region GetPersonnel
-    /// <summary>
-    /// Obtiene la lista del personal
-    /// </summary>
-    /// <param name="leadSources">filtro leadsources</param>
-    /// <param name="roles">rol del usuario loggeado</param>
-    /// <history>
-    /// [michan] 01/06/2016 Created
-    /// </history>
-    
-    public async void GetPersonnel(string roles)
-    {
-      try
-      {
-        var data = await BRPersonnel.GetPersonnel(roles: roles);
-        if (data.Count > 0)
-        {
-          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
-          cbxPersonnel.ItemsSource = data;
-        }
-        await setNewUserLogin();
-        StaEnd();
-      }
-      catch (Exception ex)
-      {
-        StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
-      }
-    }
-
-
-
     #endregion
 
     #region DoGetPersonnel
@@ -201,7 +168,7 @@ namespace IM.Host.Forms
       //txtbUserName.Text = App.User.User.peN;
       //txtbLocation.Text = App.User.Location.loN;
       //Validamos permisos y restricciones para el combobox
-      if (App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.Special))
+      if (App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
       {
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
@@ -322,14 +289,14 @@ namespace IM.Host.Forms
           cbxLeadSource.ItemsSource = data;
           cbxLeadSource.IsEnabled = true;
         }
-        if (ComboBoxPermision(cbxLeadSource, EnumPermission.CxCAuthorization, EnumPermisionLevel.Special))
+        if (ComboBoxPermision(cbxLeadSource, EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
         {
           selectInCombobox(cbxLeadSource);
         }
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -364,18 +331,21 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 06/06/2016 Created
     /// </history>
-    public async void GetCxCAuthorized(bool? blnAuthorized = false)
+    public async Task GetCxCAuthorized(bool? blnAuthorized = false)
     {
       imgButtonSearch.IsEnabled = false;
       StaStart("Searching records... Please wait");
       lstCxCData = await BRCxC.GetCxC(blnAuthorized.Value, strSalesRoom, strUserID, dtmFrom, dtmTo, strLeadSource, strPR);
       totalRows = lstCxCData.Count();
+      ColumnVisibility("Log", blnAuthorized.Value);
+      ColumnVisibility("Pay", blnAuthorized.Value);
       lastPage = (totalRows > 0) ? (int)lstCxCData.Max(pagina => pagina.Page.Value) : 1;
       firtPage = (totalRows > 0) ? (int)lstCxCData.Min(pagina => pagina.Page.Value) : 1;
       ConfigButtons();
       StaEnd();
       iTotalchanges = 0;
       imgButtonSearch.IsEnabled = true;
+      
     }
     #endregion
 
@@ -403,6 +373,7 @@ namespace IM.Host.Forms
       var from = (totalRows > 100 && minPage > 1) ? (100 * (minPage)) + 1 : 1;
       var to = (totalRows > 100 && minPage > 1) ? (100 * minPage) + totalCollumns : (totalCollumns * minPage);
       lblPagText.Content = $"{from} / {to} of {totalRows}";
+      StatusBarReg.Content = $"{minPage} / {lastPage}";
     }
     #endregion
 
@@ -449,7 +420,6 @@ namespace IM.Host.Forms
           else
           {
             item.Authorized = false;
-            
           }
           _inputBox.Close();
       }
@@ -553,7 +523,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 08/06/2016 Created
     /// </history>
-    private void TabItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void TabItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var newTab = FindFirstParent<TabItem>(sender as FrameworkElement);
       if (newTab != tbcAuthorized.SelectedItem)
@@ -569,9 +539,8 @@ namespace IM.Host.Forms
         {
           tbcAuthorized.SelectedItem = newTab;
           blnFilterAuthorized = (tbcAuthorized.SelectedIndex == 1) ? true : false;
-          ColumnVisibility("Log", blnFilterAuthorized);
-          ColumnVisibility("Pay", blnFilterAuthorized);
-          GetCxCAuthorized(blnFilterAuthorized);
+          
+          await GetCxCAuthorized(blnFilterAuthorized);
         }
       }
     }
@@ -618,7 +587,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 18/06/2016 Created
     /// </history>
-    public async void SaveGiftsReceipts()
+    public async Task SaveGiftsReceipts()
     {
       imgButtonSave.IsEnabled = false;
       StaStart("Saving changes... Please wait");
@@ -632,7 +601,7 @@ namespace IM.Host.Forms
         }
       }
       
-      GetCxCAuthorized(blnFilterAuthorized);
+      await GetCxCAuthorized(blnFilterAuthorized);
       
       UIHelper.ShowMessage("Saving Process Completed.", MessageBoxImage.Information, "CxC Authorized");
       StaEnd();
@@ -748,7 +717,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 14/06/2016 Created
     /// </history>
-    private void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       switch (((Border)sender).Name)
       {
@@ -756,13 +725,13 @@ namespace IM.Host.Forms
           Close();
           break;
         case "imgButtonSave":
-          SaveGiftsReceipts();
+          await SaveGiftsReceipts();
           break;
         case "imgButtonSearch":
           if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
           {
             LoadAtributes();
-            GetCxCAuthorized(blnFilterAuthorized);
+            await GetCxCAuthorized(blnFilterAuthorized);
           }
           break;
         default:
@@ -830,5 +799,55 @@ namespace IM.Host.Forms
         this.Cursor = null;
     }
     #endregion
+
+    #region keyboardFocusChage
+    /// <summary>
+    /// Verifica que teclas están presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/04/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
+    #endregion
+
+    #region window keyDown
+    /// <summary>
+    /// Valida las teclas INS|MAYSU|LOCKNUM
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/04/2016
+    /// </history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.Key)
+      {
+        case Key.Capital:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+            break;
+          }
+        case Key.Insert:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+            break;
+          }
+        case Key.NumLock:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+            break;
+          }
+      }
+    }
+    #endregion
+
+  }
 }

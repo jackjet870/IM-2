@@ -802,5 +802,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_IM_RptStatisticsByFTB_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_DeletePersonnel {
+            get {
+                return ((int)(this["USP_OR_DeletePersonnel"]));
+            }
+            set {
+                this["USP_OR_DeletePersonnel"] = value;
+            }
+        }
     }
 }

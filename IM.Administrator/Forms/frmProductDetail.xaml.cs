@@ -399,7 +399,6 @@ namespace IM.Administrator.Forms
       try
       {
         List<Gift> lstAllGifts = await BRGifts.GetGifts(-1, null);
-        cmbGift.ItemsSource = lstAllGifts;
         cmbGiftID.ItemsSource = lstAllGifts;
         List<Gift> lstGifts = lstAllGifts.Where(gi => gi.gipr == product.prID && gi.gipr != null).ToList();
         dgrGift.ItemsSource = lstGifts.ToList();
