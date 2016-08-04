@@ -21,12 +21,11 @@ namespace IM.BusinessRules.BR
     /// [lchairez] 10/03/2016 Created.
     /// [emoguel] modified 01/04/2016--->Se agregaron filtros opcionales
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<MaritalStatus>> GetMaritalStatus(int status = -1, MaritalStatus maritaStatus = null)
     {
-      List<MaritalStatus> Result = null;
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
@@ -51,11 +50,9 @@ namespace IM.BusinessRules.BR
           }
           #endregion
 
-          Result = query.OrderBy(ms => ms.msN).ToList();
+          return query.OrderBy(ms => ms.msN).ToList();
         }
       });
-
-      return Result;
     }
     #endregion
   }

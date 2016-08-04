@@ -18,20 +18,24 @@ namespace IM.BusinessRules.BR
     /// <returns>lista de BookingDeposit</returns>
     /// <history>
     /// [lchairez] 13/03/2016 Created.
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna, y se agregó la bandera para que incluya CreditCardType y PaymentType
     /// </history>
-    public async static Task<List<BookingDeposit>> GetBookingDeposits(int guestId)
+    public async static Task<List<BookingDeposit>> GetBookingDeposits(int guestId, bool withCreditCardTypeAndPaymentType = false)
     {
-      List<BookingDeposit> lstResult = new List<BookingDeposit>();
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          lstResult = dbContext.BookingDeposits.Include("CreditCardType").Include("PaymentType").Where(b => b.bdgu == guestId).ToList();
+          if (withCreditCardTypeAndPaymentType)
+          {
+            return dbContext.BookingDeposits.Include("CreditCardType").Include("PaymentType").Where(b => b.bdgu == guestId).ToList();
+          }
+          else
+          {
+            return dbContext.BookingDeposits.Where(b => b.bdgu == guestId).ToList();
+          }
         }
       });
-
-      return lstResult;
     }
     #endregion
 
@@ -45,7 +49,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
-    public async static Task<List<DepositToRefund>> GetBookingDepositsByGuest(int GuestID, int RefundID = 0)
+    public async static Task<List<DepositToRefund>> GetDepositsToRefund(int GuestID, int RefundID = 0)
     {
       List<DepositToRefund> lstBookingDeposits = new List<DepositToRefund>();
 

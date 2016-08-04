@@ -18,19 +18,17 @@ namespace IM.BusinessRules.BR
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<AgencyShort>> GetAgencies(int status)
     {
-      List<AgencyShort> result = new List<AgencyShort>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
+          return dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
         }
       });
-
-      return result;
     }
 
     #endregion GetAgencies

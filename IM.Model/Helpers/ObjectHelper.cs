@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace IM.Model.Helpers
 {
@@ -19,6 +21,7 @@ namespace IM.Model.Helpers
     /// [emoguel] created 12/03/2016
     /// [emoguel] modified se agrego una bandera para clonar las propiedades "Virtual"
     /// </history>
+    /// TODO: Eliminar este metodo cuando todos se migren a su sobre carga que retorna el objeto.
     public static void CopyProperties<T>(T objNew, T ObjOld, bool blnIsVirtual = false)
     {
       if (objNew != null && ObjOld != null)
@@ -37,6 +40,58 @@ namespace IM.Model.Helpers
         }
       }
     }
+    /// <summary>
+    /// Clona un objeto eliminando las referencias con el objeto original.
+    /// </summary>
+    /// <typeparam name="T">Tipo de objeto</typeparam>
+    /// <param name="ObjToClone">Objeto que vamos a clonar</param>
+    /// <param name="includeVirtualProperties">True si deseamos copiar las propiedades virtuales | False si NO </param>
+    /// <returns>Objecto clon</returns>
+    /// <history>
+    /// [erosado, emoguel]  04/08/2016  Created.
+    /// </history>
+    public static T CopyProperties<T>( T ObjToClone, bool includeVirtualProperties = false) where T: class,new()
+    {
+      T objNew = new T();
+      if (ObjToClone != null)
+      {
+        Type type = objNew.GetType();
+        var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+        if (!includeVirtualProperties)
+        {
+          properties = properties.Where(pi => !pi.GetMethod.IsVirtual).ToList();
+        }
+        foreach (PropertyInfo pi in properties)
+        {
+          var oldValue = type.GetProperty(pi.Name).GetValue(ObjToClone, null);
+          type.GetProperty(pi.Name).SetValue(objNew, oldValue);
+        }
+      }
+      return objNew;
+    }
+    /// <summary>
+    /// Clona una lista eliminando las referencias con la lista original.
+    /// </summary>
+    /// <typeparam name="T">Lista<T></typeparam>
+    /// <param name="lstToClone"></param>
+    /// <returns>Lista clon</returns>
+    /// <history>
+    /// [erosado, emoguel]  04/08/2016  Created.
+    /// </history>
+    public static List<T> CopyProperties<T>(List<T> lstToClone) where T : class,new()
+    {
+      List<T> lstClone = new List<T>();
+      if (lstToClone != null)
+      {
+        lstToClone.ForEach(obj =>
+        {
+          var objClone = CopyProperties(obj);
+          lstClone.Add(objClone);
+        });
+      }
+      return lstClone;
+    }
+
     #endregion
 
     #region Equals
@@ -193,7 +248,8 @@ namespace IM.Model.Helpers
     }
 
     #endregion
-    
-   
+
+
+
   }
 }
