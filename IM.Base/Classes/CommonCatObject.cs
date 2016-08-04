@@ -131,9 +131,9 @@ namespace IM.Base.Classes
       {
         //Search information
         List<InvitationGift> lista = new List<InvitationGift>();
-        lista.Add(new InvitationGift() { igQty = 1, iggi= "GROUNDMOON", igAdults = 1 });
-        lista.Add(new InvitationGift() { igQty = 1, iggi = "200SPAC", igAdults = 1 });
-        lista.Add(new InvitationGift() { igQty = 1, iggi = "TAXIBACK", igAdults = 1 });
+        lista.Add(new InvitationGift() { igQty = 1, iggi= "$160PSHOPM", igAdults = 1 });
+        lista.Add(new InvitationGift() { igQty = 1, iggi = "$160PSHOPM", igAdults = 1 });
+        lista.Add(new InvitationGift() { igQty = 1, iggi = "CR1600VIP", igAdults = 1 });
         SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(lista), nameof(InvitationGiftList));
 
 

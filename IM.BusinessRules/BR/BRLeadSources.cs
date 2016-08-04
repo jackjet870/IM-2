@@ -65,7 +65,7 @@ namespace IM.BusinessRules.BR
         {
           leadSources = dbContext.LeadSources
             .Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true)
-            .Where(ls => program != EnumProgram.All ? ls.lspg == pro: true)
+            .Where(ls => program != EnumProgram.All ? ls.lspg == pro : true)
             .OrderBy(ls => ls.lsN).ToList();
         }
       });
@@ -86,7 +86,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<LeadSourceShort>> GetLeadSourcesByZoneBoss(string zone)
     {
-      List < LeadSourceShort > leadSourceShort  = null;
+      List<LeadSourceShort> leadSourceShort = null;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
@@ -98,7 +98,7 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetLeadSources
-    
+
     #region GetOccupationLeadSources
     /// <summary>
     /// Obtiene el porcentaje de ocupacion de un Lead Source en una fecha determinada
@@ -111,14 +111,14 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Task<string> GetOccupationLeadSources(DateTime date, string lS)
     {
-       return Task.Run(() =>
-      {       
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_Occupation;
-          return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
-        }
-      });
+      return Task.Run(() =>
+     {
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+       {
+         dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_Occupation;
+         return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
+       }
+     });
     }
     #endregion
 
@@ -168,19 +168,7 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.LeadSources.Where(x => x.lsID == leadSourceID).SingleOrDefault();
-
-
-
-
-
-
-
-
-
-
-
-
-  }
+}
     }
     #endregion
 
@@ -200,13 +188,14 @@ namespace IM.BusinessRules.BR
     public async static Task<List<LeadSource>> GetLeadSources(int nStatus = -1, int nRegen = -1, int nAnimation = -1, LeadSource leadSource = null, bool blnAgencies = false)
     {
       List<LeadSource> lstLeadSources = new List<LeadSource>();
-      await Task.Run(() => { 
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {        
+        {
           var query = (from ls in dbContext.LeadSources
-                      select ls);
+                       select ls);
 
-          if(blnAgencies)
+          if (blnAgencies)
           {
             query = query.Include("Agencies");
           }
@@ -215,7 +204,7 @@ namespace IM.BusinessRules.BR
           {
             bool blnStatus = Convert.ToBoolean(nStatus);
             query = query.Where(ls => ls.lsA == blnStatus);
-          }        
+          }
 
           if (nRegen != -1)//Filtro por Regen
           {
@@ -267,7 +256,7 @@ namespace IM.BusinessRules.BR
             }
 
           }
-          lstLeadSources= query.OrderBy(ls => ls.lsN).ToList();
+          lstLeadSources = query.OrderBy(ls => ls.lsN).ToList();
         }
       });
       return lstLeadSources;
@@ -426,7 +415,36 @@ namespace IM.BusinessRules.BR
       {
         throw;
       }
-    } 
+    }
+    #endregion
+
+    #region GetLeadSourceProgram
+    /// <summary>
+    /// Obtiene el program de un LeadSource en especifico 
+    /// </summary>
+    /// <param name="lsID">lsID</param>
+    /// <returns>string program</returns>
+    /// <history>
+    /// [erosado] 02/08/2016  Created.
+    /// </history>
+    public static async Task<string> GetLeadSourceProgram(string lsID)
+    {
+      try
+      {
+        return await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+          {
+            var program = dbContext.LeadSources.Where(x => x.lsID == lsID).FirstOrDefault();
+            return program.lspg;
+          }
+        });
+      }
+      catch
+      {
+        throw;
+      }
+    }
     #endregion
   }
 }
