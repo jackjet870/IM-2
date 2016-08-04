@@ -154,7 +154,63 @@ namespace IM.Host.Classes
       }
 
       return true;
-    } 
+    }
+    #endregion
+
+    #region IsClosed
+    /// <summary>
+    /// Evalua si el Mealticket no se ha cerrado!
+    /// </summary>
+    /// <param name="pdtmDate"></param>
+    /// <param name="pdtmClose"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// [vipacheco] 29/Julio/2016 Modified --> Migrado a esta clase comun
+    /// </history>
+    public static bool IsClosed(DateTime pdtmDate, DateTime pdtmClose)
+    {
+      bool blnClosed = false;
+      DateTime _pdtmDate;
+
+      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
+      {
+        if (_pdtmDate <= pdtmClose)
+        {
+          blnClosed = true;
+        }
+      }
+      return blnClosed;
+    }
+    #endregion
+
+    #region GetFullName
+    /// <summary>
+    /// Obtiene el nombre completo de un huesped
+    /// </summary>
+    /// <param name="LastName"></param>
+    /// <param name="FirstName"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 13/Mayo/2016 Created
+    /// </history>
+    public static string GetFullName(string LastName, string FirstName)
+    {
+      string FullName = "";
+
+      // si tiene apellido
+      if (!string.IsNullOrEmpty(LastName) && LastName != "")
+      {
+        FullName = LastName;
+
+        // si tiene nombre
+        if (!string.IsNullOrEmpty(FirstName) && FirstName != "")
+        {
+          FullName = FullName + " " + FirstName;
+        }
+      }
+      return FullName;
+    }
     #endregion
 
   }
