@@ -22,22 +22,21 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 24/Feb/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<GiftShort>> GetGiftsShort(string location = "ALL", int Status = 0)
     {
-      List<GiftShort> result = new List<GiftShort>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status)).ToList();
+          return dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status)).ToList();
         }
       });
-      return result;
     }
 
     #endregion GetGifts
-    
+
     #region GetGiftId
 
     /// <summary>
@@ -127,7 +126,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 23/05/2016
     /// [emoguel] modified 30/06/2016 ----> Se agregaron más filtros
     /// </history>
-    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null, int giftPack=-1)
+    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null, int giftPack = -1)
     {
       List<Gift> lstGift = new List<Gift>();
       await Task.Run(() =>
@@ -136,7 +135,7 @@ namespace IM.BusinessRules.BR
         {
           var query = from gi in dbContext.Gifts
                       select gi;
-          
+
           if (nStatus != -1)//Filtro por estatus
           {
             bool blnStatus = Convert.ToBoolean(nStatus);
@@ -154,25 +153,25 @@ namespace IM.BusinessRules.BR
             {
               query = query.Where(gi => gi.giN.Contains(gift.giN));
             }
-            
-            if(!string.IsNullOrWhiteSpace(gift.giShortN))//Filtro por Descripción corta
+
+            if (!string.IsNullOrWhiteSpace(gift.giShortN))//Filtro por Descripción corta
             {
               query = query.Where(gi => gi.giShortN == gift.giShortN);
             }
 
-            if(!string.IsNullOrWhiteSpace(gift.gigc))//Filtro por categoria
-            {             
+            if (!string.IsNullOrWhiteSpace(gift.gigc))//Filtro por categoria
+            {
               query = query.Where(gi => gi.gigc == gift.gigc);
             }
 
-            if(giftPack!=-1)//Si es paquete
+            if (giftPack != -1)//Si es paquete
             {
               bool blnPack = Convert.ToBoolean(giftPack);
               query = query.Where(gi => gi.giPack == blnPack);
             }
 
             #region giftCard
-            if (!string.IsNullOrEmpty(gift.giProductGiftsCard) && gift.giProductGiftsCard!="ALL")//Filtro por giftCard
+            if (!string.IsNullOrEmpty(gift.giProductGiftsCard) && gift.giProductGiftsCard != "ALL")//Filtro por giftCard
             {
               switch (gift.giProductGiftsCard)
               {
@@ -191,12 +190,12 @@ namespace IM.BusinessRules.BR
                     query = query.Where(gi => gi.giProductGiftsCard == gift.giProductGiftsCard);
                     break;
                   }
-              }              
+              }
             }
             #endregion
 
             #region Promotion
-            if (!string.IsNullOrWhiteSpace(gift.giPVPPromotion) && gift.giPVPPromotion!="ALL")//Filtro por Promotion
+            if (!string.IsNullOrWhiteSpace(gift.giPVPPromotion) && gift.giPVPPromotion != "ALL")//Filtro por Promotion
             {
               switch (gift.giPVPPromotion)
               {
@@ -220,7 +219,7 @@ namespace IM.BusinessRules.BR
             #endregion
 
             #region Transacction
-            if (!string.IsNullOrWhiteSpace(gift.giOperaTransactionType) && gift.giOperaTransactionType!="ALL")//Filtro por opera transacction
+            if (!string.IsNullOrWhiteSpace(gift.giOperaTransactionType) && gift.giOperaTransactionType != "ALL")//Filtro por opera transacction
             {
               switch (gift.giOperaTransactionType)
               {
@@ -244,7 +243,7 @@ namespace IM.BusinessRules.BR
             #endregion
 
             #region Promotion Opera
-            if (!string.IsNullOrWhiteSpace(gift.giPromotionOpera) && gift.giPromotionOpera!="ALL")//Filtro por promotion Opera
+            if (!string.IsNullOrWhiteSpace(gift.giPromotionOpera) && gift.giPromotionOpera != "ALL")//Filtro por promotion Opera
             {
               switch (gift.giPromotionOpera)
               {
@@ -264,10 +263,10 @@ namespace IM.BusinessRules.BR
                     break;
                   }
               }
-            } 
+            }
             #endregion
-          }          
-          lstGift= query.OrderBy(gi => gi.giN).ToList();
+          }
+          lstGift = query.OrderBy(gi => gi.giN).ToList();
         }
       });
       return lstGift;
@@ -289,11 +288,11 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {          
+        {
           return dbContext.USP_OR_GetGiftLog(idGift).ToList();
         }
       });
-    } 
+    }
     #endregion
 
     public static IEnumerable<object> GetGiftsWithPackages()
@@ -306,11 +305,11 @@ namespace IM.BusinessRules.BR
                     where a.giA == true
                     select new
                     {
-                                giID = a.giID,
-                                giN = a.giN,
-                                Visibility = a.giPack ? true : false,
-                                packs = dbContext.GiftsPackagesItems.Where(w => w.gpPack == a.giID).Select(s => dbContext.Gifts.Where(w => w.giID == s.gpgi).Select(ss => ss.giN).FirstOrDefault()).ToList()
-                                };
+                      giID = a.giID,
+                      giN = a.giN,
+                      Visibility = a.giPack ? true : false,
+                      packs = dbContext.GiftsPackagesItems.Where(w => w.gpPack == a.giID).Select(s => dbContext.Gifts.Where(w => w.giID == s.gpgi).Select(ss => ss.giN).FirstOrDefault()).ToList()
+                    };
 
         lstResult = query.ToList();
       }
@@ -369,11 +368,11 @@ namespace IM.BusinessRules.BR
                 }
                 else
                 {
-                  int nOrder = dbContext.Gifts.Max(gi => gi.giO)+1;
+                  int nOrder = dbContext.Gifts.Max(gi => gi.giO) + 1;
                   gift.giO = nOrder;
                   dbContext.Gifts.Add(gift);
                   giftSave = gift;
-                  nSave += dbContext.SaveChanges(); 
+                  nSave += dbContext.SaveChanges();
                 }
               }
               #endregion
@@ -488,7 +487,7 @@ namespace IM.BusinessRules.BR
           }
         }
       });
-    } 
+    }
     #endregion
 
   }

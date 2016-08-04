@@ -22,39 +22,38 @@ namespace IM.BusinessRules.BR
     /// [Emoguel] created 07/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<CreditCardType>> GetCreditCardTypes(CreditCardType creditCardType = null, int nStatus = -1)
     {
-      List<CreditCardType> lstCreditsCard = await Task.Run(() =>
-        {
-         
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-          {
-            var query = from cct in dbContext.CreditCardTypes select cct;
+      return await Task.Run(() =>
+       {
 
-            if (nStatus != -1)//Validación por estatus
-          {
-              bool blnEstatus = Convert.ToBoolean(nStatus);
-              query = query.Where(cct => cct.ccA == blnEstatus);
-            }
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+         {
+           var query = from cct in dbContext.CreditCardTypes select cct;
 
-            if (creditCardType != null)//Valida si se tiene un obejto
-          {
-              if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
+           if (nStatus != -1)//Validación por estatus
             {
-                query = query.Where(cct => cct.ccID == creditCardType.ccID);
-              }
+             bool blnEstatus = Convert.ToBoolean(nStatus);
+             query = query.Where(cct => cct.ccA == blnEstatus);
+           }
 
-              if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+           if (creditCardType != null)//Valida si se tiene un obejto
             {
-                query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
-              }
-            }
-            return query.OrderBy(cct => cct.ccN).ToList();
-          }
-        });
-      return lstCreditsCard;
+             if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
+              {
+               query = query.Where(cct => cct.ccID == creditCardType.ccID);
+             }
 
+             if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+              {
+               query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
+             }
+           }
+           return query.OrderBy(cct => cct.ccN).ToList();
+         }
+       });
     }
     #endregion    
 

@@ -71,7 +71,7 @@
                 <TextBlock Text="Option Menu" Margin="10,0,0,0"/>
 
                 <StackPanel Orientation="Horizontal" Height="40">
-                    <Border x:Name="imgButtonEdit" Style="{StaticResource   brd-ButtonsBig}">
+                    <Border x:Name="imgButtonEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonEdit_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
@@ -79,7 +79,7 @@
                             <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" >
+                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" >
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
@@ -95,7 +95,7 @@
                             <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}">
+                    <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonCancel_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
@@ -103,7 +103,7 @@
                             <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}">
+                    <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonLog_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png"/>

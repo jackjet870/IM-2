@@ -37,16 +37,17 @@ namespace IM.Base.Forms
     {
       try
       {
-        var catObj = new CommonCatObject(User, GuestId, InvitationMode);
-        //var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit);
+        //var catObj = new CommonCatObject(User, GuestId, InvitationMode); SE USA PARA PRUEBAS
+        var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit);
         _invitationType = InvitationType;
         _guestId = GuestId;
+        //_guestId = 6547022; SE USA PARA PRUEBAS
         _user = User;
         _invitationMode = InvitationMode;
         DataContext = catObj;
         InitializeComponent();
 
-
+        #region Inicializar Grids
         dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
         {
           if (e.NewItem != null)
@@ -54,9 +55,8 @@ namespace IM.Base.Forms
             ((InvitationGift)e.NewItem).igQty = 1;
           }
         });
-
         GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
-
+        #endregion
       }
       catch (Exception ex)
       {
@@ -64,6 +64,7 @@ namespace IM.Base.Forms
       }
     }
 
+    #region Eventos de la Forma 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
@@ -74,9 +75,31 @@ namespace IM.Base.Forms
 
     private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      CommonCatObject k = DataContext as CommonCatObject;
-      var h = k.GuestObj.guID;
+      CommonCatObject k = DataContext as CommonCatObject;//PRUEBAS
+      var h = k.GuestObj.guID;//PRUEBAS
+      k.BookingDepositList[0].bddr = 25; //PRUEBAS
+      var j = k.CBookingDepositList[0].bddr;//PRUEBAS
+      var ñp = k.BookingDepositList[0].bddr;//PRUEBAS
     }
+
+    private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    private void imgButtonCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    #endregion
+
     #region Metodos Privados
     /// <summary>
     /// Prepara los controles para cada invitacion
@@ -111,7 +134,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region ControlsConfig
+    #region ControlsConfig Hide, Visible, Collapse
     /// <summary>
     /// Prepara los controles para que trabaje con InHouseInvitation
     /// </summary>
@@ -171,6 +194,8 @@ namespace IM.Base.Forms
     }
 
     #endregion
+
+    #region Controls Enables or Disables
 
     private void EnableControlsExternal()
     {
@@ -269,6 +294,8 @@ namespace IM.Base.Forms
       #endregion
 
     }
+
+    #endregion
 
     #region Eventos del GRID Invitation Gift
     #region BeginningEdit
@@ -452,6 +479,7 @@ namespace IM.Base.Forms
     }
 
     #endregion
+
 
   }
 }

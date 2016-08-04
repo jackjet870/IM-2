@@ -23,12 +23,11 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 10/03/2016 Modified --> Se agregó validacion de Object Currency vacía.
     /// [vipacheco] 11/03/2016 Modified --> Se agregó parametro nuevo para excluir alguna lista currencies en especifico por su ID
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<Currency>> GetCurrencies(Currency currency = null, int nStatus = -1, List<string> exceptCurrencyID = null)
     {
-      List<Currency> Result = null;
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
@@ -60,11 +59,10 @@ namespace IM.BusinessRules.BR
               query = query.Where(c => c.cuN.Contains(currency.cuN));
             }
           }
-          Result = query.OrderBy(c => c.cuN).ToList();
+          return query.OrderBy(c => c.cuN).ToList();
         }
       });
-
-      return Result;
+           
     }
     #endregion
 
