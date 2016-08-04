@@ -274,6 +274,7 @@ namespace IM.BusinessRules.BR
             {
               try
               {
+                dbContext.Database.CommandTimeout = Settings.Default.USP_OR_DeletePersonnel;
                 lstPersonnels.ForEach(pe =>
                 {
                   dbContext.USP_OR_DeletePersonnel(pe.peID);
@@ -286,7 +287,7 @@ namespace IM.BusinessRules.BR
               catch
               {
                 transacction.Rollback();
-                return 0;
+                throw;
               }
             }
           }

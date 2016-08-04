@@ -224,7 +224,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      ReasonCancellationFolio reasonCancellationFolio = (ReasonCancellationFolio)dgrReaCanFols.ItemsSource;
+      ReasonCancellationFolio reasonCancellationFolio = (ReasonCancellationFolio)dgrReaCanFols.SelectedItem;
       LoadReasonCancellationFolios(reasonCancellationFolio);
     } 
     #endregion

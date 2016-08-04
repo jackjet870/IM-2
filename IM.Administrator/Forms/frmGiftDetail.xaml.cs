@@ -21,9 +21,6 @@ namespace IM.Administrator.Forms
   {
     #region Variables
     public Gift gift = new Gift ();   
-    #endregion
-
-
     public Gift _oldGift = new Gift();
     public EnumMode enumMode;
     private bool _isClosing = false;
@@ -33,6 +30,7 @@ namespace IM.Administrator.Forms
     private List<GiftPackageItem> _lstOldPacks = new List<GiftPackageItem>();
     CollectionViewSource collectionLocations = new CollectionViewSource();
     CollectionViewSource collectionPackages = new CollectionViewSource();
+    #endregion
     public frmGiftDetail()
     {     
       InitializeComponent();
@@ -387,13 +385,12 @@ namespace IM.Administrator.Forms
                 if (giftInPack.gpQty < 1)
                 {                                    
                   e.Cancel = true;
-                  UIHelper.ShowMessage("Quantity can no be lower than 1.");                                    
+                  UIHelper.ShowMessage("Quantity can no be lower than 1.");
                 }
                 else if (string.IsNullOrWhiteSpace(giftInPack.gpgi))
                 {
                   e.Cancel = true;
-                  UIHelper.ShowMessage("Please Select a Gift.");                                    
-                  
+                  UIHelper.ShowMessage("Please Select a Gift.");
                 }
                 break;
               }
@@ -450,23 +447,30 @@ namespace IM.Administrator.Forms
     private void dgr_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
       var grid = (DataGrid)sender;
-      switch (e.Column.SortMemberPath)
-      {
-        case "GiftItem.giN":
-          {           
-            GiftPackageItem giftPackageItem = (GiftPackageItem)e.Row.Item;
-            if (giftPackageItem.gpQty < 1)
+      if (!GridHelper.IsInEditMode(sender as DataGrid))
+      {        
+        switch (e.Column.SortMemberPath)
+        {
+          case "GiftItem.giN":
             {
-              e.Cancel = true;
-              UIHelper.ShowMessage("Quantity can not be lower than 1.");
-              grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
-              grid.BeginningEdit -= dgr_BeginningEdit;
-              grid.BeginEdit();
-              grid.BeginningEdit += dgr_BeginningEdit;
-            }              
-            break;
-          }
+              GiftPackageItem giftPackageItem = (GiftPackageItem)e.Row.Item;
+              if (giftPackageItem.gpQty < 1)
+              {
+                e.Cancel = true;
+                UIHelper.ShowMessage("Quantity can not be lower than 1.");
+                grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);                
+                grid.BeginningEdit -= dgr_BeginningEdit;
+                grid.BeginEdit();
+                grid.BeginningEdit += dgr_BeginningEdit;
+              }
+              break;
+            }
         }
+      }
+      else
+      {
+        e.Cancel = true;
+      }
     }
     #endregion
 
@@ -494,7 +498,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-
+       
     #region btnAssignLocations_Click
     /// <summary>
     /// Asigna Locations
@@ -552,8 +556,6 @@ namespace IM.Administrator.Forms
     // <summary>
     /// Cambia el contador de los registros
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 16/07/2016
     /// </history>

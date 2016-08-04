@@ -84,24 +84,20 @@
                   CanUserResizeColumns="False" CanUserResizeRows="False" RowEditEnding="dgrGift_RowEditEnding" >
                     <DataGrid.Columns>
                         <DataGridComboBoxColumn  Width="35*" x:Name="cmbGiftID" DisplayMemberPath="giID" SelectedValuePath="giID"
-                                         SelectedValueBinding="{Binding giID}"  Header="ID" >
-                            <DataGridComboBoxColumn.EditingElementStyle>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="IsEditable" Value="True"/>
-                                </Style>
-                            </DataGridComboBoxColumn.EditingElementStyle>
-
-                        </DataGridComboBoxColumn>
-                        <DataGridComboBoxColumn  Width="65*" x:Name="cmbGift" DisplayMemberPath="giN" SelectedValuePath="giID"
                                          SelectedValueBinding="{Binding giID}"  Header="Gift" >
-
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Gift-Concat}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
                             <DataGridComboBoxColumn.EditingElementStyle>
                                 <Style TargetType="ComboBox">
-                                    <Setter Property="IsEditable" Value="True"/>
+                                    <Setter Property="TextSearch.TextPath" Value="giN"/>
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Gift-Concat}"/>
                                 </Style>
                             </DataGridComboBoxColumn.EditingElementStyle>
 
-                        </DataGridComboBoxColumn>
+                        </DataGridComboBoxColumn>                        
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

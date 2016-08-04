@@ -22,11 +22,12 @@ namespace IM.Styles.Classes
     /// </summary>
     /// <history>
     /// [erosado] 07/04/2016  Created
+    /// [emoguel] 04/08/2016 modified ahora sólo acepta archivos rtf
     /// </history>
     public static void OnLoadRTF(ref RichTextBox rtb)
     {
       System.Windows.Forms.OpenFileDialog dlg = new System.Windows.Forms.OpenFileDialog();
-      dlg.Filter = "Rich Text Format (*.rtf)|*.rtf|All files (*.*)|*.*";
+      dlg.Filter = "Rich Text Format (*.rtf)|*.rtf";
       if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
       {
         FileStream fileStream = new FileStream(dlg.FileName, FileMode.Open);

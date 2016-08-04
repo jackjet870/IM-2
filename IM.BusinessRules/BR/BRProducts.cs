@@ -111,6 +111,7 @@ namespace IM.BusinessRules.BR
                 }
                 else
                 {
+                  productLegend.pxpr = product.prID;
                   dbContext.ProductsLegends.Add(productLegend);
                 }
               }
@@ -133,7 +134,7 @@ namespace IM.BusinessRules.BR
             catch
             {
               transacction.Rollback();
-              return 0;
+              throw;
             }
           }
         }

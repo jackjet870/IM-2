@@ -274,8 +274,9 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        if(dgrPersonnels.SelectedItems.Count>0)
-        { 
+        Cursor = Cursors.Wait;
+        if (dgrPersonnels.SelectedItems.Count>0)
+        {          
           txtStatus.Text = "Deleting Data";
           status.Visibility = Visibility.Visible;
           List<PersonnelShort> lstPersonnelsDel=dgrPersonnels.SelectedItems.OfType<PersonnelShort>().ToList();
@@ -312,17 +313,19 @@ namespace IM.Administrator.Forms
               dgrPersonnels.Items.Refresh();
             }
           }
+          status.Visibility = Visibility.Collapsed;
 
-          txtStatus.Visibility = Visibility.Collapsed;
         }
         else
         {
           UIHelper.ShowMessage("Please select a Person.");
         }
+        Cursor = Cursors.Arrow;
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
+        Cursor = Cursors.Arrow;
       }
     }
     #endregion
@@ -338,7 +341,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnTeamLo_Click(object sender, RoutedEventArgs e)
     {
-      Personnel personnel = (Personnel)dgrPersonnels.SelectedItem;
+      PersonnelShort personnel = (PersonnelShort)dgrPersonnels.SelectedItem;
       frmTeamsLog frmTeamsLog = new frmTeamsLog();
       frmTeamsLog.Owner = this;
       frmTeamsLog._teamLogFilter = new TeamLog { tlpe = personnel.peID };
@@ -358,7 +361,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnPostLog_Click(object sender, RoutedEventArgs e)
     {
-      Personnel personnel = (Personnel)dgrPersonnels.SelectedItem;
+      PersonnelShort personnel = (PersonnelShort)dgrPersonnels.SelectedItem;
       frmPostsLog frmPostLog = new frmPostsLog();
       frmPostLog.Owner = this;
       frmPostLog._postLogFilter = new PostLog { pppe = personnel.peID };

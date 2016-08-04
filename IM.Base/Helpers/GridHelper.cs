@@ -577,12 +577,13 @@ namespace IM.Base.Helpers
       var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
       //Obtener la fila en edición
       var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
-
-      
-      //Fila a editar o seleccionada
-      var rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex);
-
-      if(rowEdit!=null && rowEdit!=rowSelected)
+      DataGridRow rowSelected = new DataGridRow();
+      if (dgr.SelectedIndex != -1)
+      {
+        //Fila a editar o seleccionada
+        rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;        
+      }
+      if (rowEdit != null && rowEdit != rowSelected)
       {
         return true;
       }

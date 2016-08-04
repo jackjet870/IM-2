@@ -93,6 +93,10 @@ namespace IM.BusinessRules.BR
               {
                 if (dbContext.Programs.Where(pg => pg.pgID == program.pgID).FirstOrDefault() != null)
                 {
+                  return -1;
+                }
+                else
+                {
                   dbContext.Programs.Add(program);
                 }
               }

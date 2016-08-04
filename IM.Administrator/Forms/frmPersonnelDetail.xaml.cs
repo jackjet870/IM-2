@@ -92,24 +92,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] emoguel created 14/06/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if(e.Key==Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
-
     #region Closing
     /// <summary>
     /// Cierra la ventana
@@ -197,7 +179,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Hidden;
-          string strMsj = ValidateHelper.ValidateForm(tbiGeneral, "Personnel",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Personnel",false,blnDatagrids:true);
           string strValidate = ValidateGeneral();
           if (strValidate != "")
           {
@@ -251,22 +233,6 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex);
       }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 14/06/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      Close();  
     }
     #endregion
 
@@ -1211,6 +1177,9 @@ namespace IM.Administrator.Forms
           }
           #endregion
       }
+
+      dgrRoles.Items.Refresh();
+      GridHelper.SelectRow(dgrRoles, 0);
     }
 
     #endregion
