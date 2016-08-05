@@ -170,8 +170,8 @@ namespace IM.ProcessorSales.Classes
       var customList = goals.Select(c => new
       {
         c.SalesRoom,
-        Goal = c.Goal,
-        Difference = (c.Goal - c.SalesAmount),
+        Goal = c.Goals,
+        Difference = (c.Goals - c.SalesAmount),
         UPS = c.UPS,
         Sales = c.Sales,
         Proc = c.SalesAmount - c.SalesAmountOPP,
@@ -333,7 +333,7 @@ namespace IM.ProcessorSales.Classes
       var nlist = lstReport.Select(c =>
       new
       {
-        GR = true,
+       // GR = true,
         c.Liner,
         c.peN,
         c.OOP,
@@ -368,8 +368,8 @@ namespace IM.ProcessorSales.Classes
         AVS = c.TTotal != 0 ? c.TSalesAmount / c.TTotal : 0
       }).ToList();
       var data = TableHelper.GetDataTableFromList(nlist, true, true);
-      return EpplusHelper.CreateExcelCustom(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(), 
-        blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(),  
+        blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
