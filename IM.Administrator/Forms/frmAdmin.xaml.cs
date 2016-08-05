@@ -49,6 +49,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add("frmPeriods", "Periods", "IconDate.png");
         lstMenu.Add("frmSourcePayments", "Sources Payments", "Money.ico");
         lstMenu.Add("frmPaymentTypes", "Payment Types", "Payment.png");
+        lstMenu.Add("frmSeasons", "Seasons", "Season.ico");
       }
       #endregion
 

@@ -770,15 +770,19 @@ namespace IM.ProcessorOuthouse.Forms
     /// </summary>
     /// <history>
     ///   [vku] 05/Abr/2016 Created
+    ///   [vku] 26/Jul/2016 Modified. Ahora se valida el rango de fechas para realizar el reporte
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       string message = ValidateFields();
       if (message == "")
       {
-        _blnOK = true;
-        SaveFrmFilterValues();
-        Close();
+        if(DateHelper.ValidateValueDate(dtmStart, dtmEnd))
+        {
+          _blnOK = true;
+          SaveFrmFilterValues();
+          Close();
+        }
       }
       else
         UIHelper.ShowMessage(message);

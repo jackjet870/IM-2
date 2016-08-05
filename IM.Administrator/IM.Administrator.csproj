@@ -1035,6 +1035,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmSeasonDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSeasons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSegmentByAgencyDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1178,6 +1186,12 @@
     </Compile>
     <Compile Include="Forms\frmSearchPersonnel.xaml.cs">
       <DependentUpon>frmSearchPersonnel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSeasonDetail.xaml.cs">
+      <DependentUpon>frmSeasonDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSeasons.xaml.cs">
+      <DependentUpon>frmSeasons.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSegmentByAgencyDetail.xaml.cs">
       <DependentUpon>frmSegmentByAgencyDetail.xaml</DependentUpon>
