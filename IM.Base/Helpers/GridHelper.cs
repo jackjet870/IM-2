@@ -459,6 +459,53 @@ namespace IM.Base.Helpers
 
     #endregion
 
+    #region Update Source From a Row
+    /// <summary>
+    ///   Actualiza el source de una fila en el grid con valores insertados
+    /// </summary>
+    /// <param name="dtg">DataGrid que vamos a actualizar</param>
+    /// <history>
+    ///   [vku] 03/Ago/2017  Created.
+    /// </history>
+    public static void UpdateSourceFromARow(DataGrid dtg)
+    {
+      //Si el Grid es diferente de NULL
+      if (dtg != null && dtg?.SelectedIndex != -1)
+      {
+        //Obtenemos el DataGridRow seleccionado
+        DataGridRow dtgRow = (DataGridRow)dtg.ItemContainerGenerator.ContainerFromIndex(dtg.SelectedIndex);
+        //Obtenemos la lista de las columnas
+        List<DataGridColumn> columns = dtg?.Columns?.ToList();
+
+        //Si tiene alguna columna
+        if (columns.Any())
+        {
+          columns.ForEach(column =>
+          {
+            //Obtenemos la celda
+            DataGridCell cell = column.GetCellContent(dtgRow).Parent as DataGridCell;
+
+            if (cell != null)
+            {
+
+              Type controlType = cell.Content.GetType();
+
+              switch (controlType.Name)
+              {
+                case "TextBox":
+                  TextBox txtb = cell.Content as TextBox;
+                  var txtBinding = txtb.GetBindingExpression(TextBox.TextProperty);
+                  txtBinding.UpdateSource();
+                  break;
+              }
+            }
+          });
+        }
+      }
+    }
+
+    #endregion
+
     #region SetUpGrid
     /// <summary>
     /// Configura el Estilo de los DataGridTextColumn 

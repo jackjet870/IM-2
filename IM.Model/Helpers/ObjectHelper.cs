@@ -228,6 +228,50 @@ namespace IM.Model.Helpers
       return true;
     }
     #endregion
+
+    #region IsEqualsList
+    /// <summary>
+    ///  Compara si todos los datos de ambas listas son iguales
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="lstNew">Lista nueva</param>
+    /// <param name="lstOld">Lista antigua</param>
+    /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
+    /// <history>
+    ///   [vku] 05/Ago/2016 Created
+    /// </history>
+    private bool IsEqualsList<T>(List<T> lstNew, List<T> lstOld)
+    {
+      var lst1 = lstNew.Where(i => !lstOld.Contains(i)).ToList();
+      var lst2 = lstOld.Where(i => !lstNew.Contains(i)).ToList();
+      if (lst1.Count() > 0 || lst2.Count() > 0)
+      {
+        return false;
+      }
+      return true;
+    }
+    #endregion
+
+    #region IsEqualList2
+    /// <summary>
+    ///   Compara si todos los datos de ambas listas son iguales
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="lstNew">Lista nueva</param>
+    /// <param name="lstOld">Lista antigua</param>
+    /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
+    /// <history>
+    ///   [vku] 05/Ago/2016 Created
+    /// </history>
+    private bool IsEqualsList2<T>(List<T> lstNew, List<T> lstOld)
+    {
+      bool blnIsEqual = false;
+      if (lstNew.All(item => lstOld.Contains(item)) && lstOld.All(item => lstNew.Contains(item)))
+        blnIsEqual = true;
+      return blnIsEqual;
+    }
+    #endregion
+
     #endregion
 
     #region ObjectToList
