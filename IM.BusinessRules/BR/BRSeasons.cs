@@ -257,7 +257,7 @@ namespace IM.BusinessRules.BR
               transaction.Commit();
               return nRes;
             }
-            catch(Exception ex)
+            catch
             {
               transaction.Rollback();
               return 0;
