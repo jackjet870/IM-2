@@ -11,6 +11,9 @@
             <Trigger Property="Border.IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand" />
             </Trigger>
+            <Trigger Property="Border.IsEnabled" Value="False">
+                <Setter Property="Border.Background" Value="Gray"/>
+            </Trigger>
         </Style.Triggers>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5,0,0,0"/>

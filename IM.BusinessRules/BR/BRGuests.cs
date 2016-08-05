@@ -175,14 +175,18 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<GuestStatusType>> GetGuestStatusType(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        bool statusGuestStatus = Convert.ToBoolean(status);
-        return await dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToListAsync();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          bool statusGuestStatus = Convert.ToBoolean(status);
+          return dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToList();
+        }
+      });
     }
     #endregion
 
@@ -195,14 +199,45 @@ namespace IM.BusinessRules.BR
     /// <returns>Guest</returns>
     /// <history>
     /// [jorcanche] created 10/03/2016
+    /// [erosado] 04/08/2016  Modified. Se agregó la bandera withAditional, sirve para obtener guest Adicionales.
     /// </history>
-    public static async Task<Guest> GetGuest(int guestId)
+    public static async Task<Guest> GetGuest(int guestId, bool withAditional = false)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          return (from gu in dbContext.Guests where gu.guID == guestId select gu).FirstOrDefault();
+          if (withAditional)
+          {
+            return dbContext.Guests.Include("GuestsAdditional").SingleOrDefault(g => g.guID == guestId);
+          }
+          else
+          {
+            return (from gu in dbContext.Guests where gu.guID == guestId select gu).FirstOrDefault();
+          }
+
+        }
+      });
+    }
+    #endregion
+
+    #region GetAdditionalGuest
+
+    /// <summary>
+    /// Obtiene los invitados adicionales de una invitacion
+    /// </summary>
+    /// <param name="guestId">Guest ID</param>
+    /// <returns>Lista de invitados adicionales</returns>
+    /// <history>
+    /// [erosado] 04/08/2016  Created. 
+    /// </history>
+    public static async Task<List<Guest>> GetAdditionalGuest(int guestId, bool withAditional = false)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return (from g in dbContext.Guests from a in g.GuestsAdditional where g.guID == guestId select a).ToList();
         }
       });
     }
@@ -239,13 +274,13 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 15/03/2016
     /// </history>
-    public static async Task<int>  SaveGuestMovement(int? guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
+    public static async Task<int> SaveGuestMovement(int? guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-         return dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy,computerName, iPAddress);
+          return dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
         }
       });
     }
@@ -262,13 +297,13 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<GuestMovements>> GetGuestMovement(int guestId)
     {
-      return  await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
-        }
-      });
+      return await Task.Run(() =>
+     {
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+       {
+         return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
+       }
+     });
     }
     #endregion
 
@@ -292,28 +327,6 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion
-
-    #region GetGuestCreditCard
-    /// <summary>
-    /// Obtiene las tarjetas de crédito del invitado
-    /// </summary>
-    /// <param name="guestId">Identificador del invitado</param>
-    /// <returns></returns>
-    /// <history>
-    /// [lchairez] 18/03/2016 Created.
-    /// [aalcocer] 02/08/2016 Modified. se agrego asincronia
-    /// </history>
-    public static async Task<List<GuestCreditCard>> GetGuestCreditCard(int guestId)
-    {
-      return await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
-        }
-      });
-    }
-    #endregion GetGuestCreditCard
 
     #region SaveGuestInvitation
 
@@ -469,7 +482,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 16/03/2016
     /// </history>
-    public static async Task<List<GuestSearched>> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL",string roomNumber = "ALL", string reservation = "ALL", int guestId = 0)
+    public static async Task<List<GuestSearched>> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL", string roomNumber = "ALL", string reservation = "ALL", int guestId = 0)
     {
       return await Task.Run(() =>
       {
@@ -695,16 +708,16 @@ namespace IM.BusinessRules.BR
               return respuesta;
             }
             catch
-            {   
+            {
               transaction.Rollback();
               throw;
-            }          
+            }
           }
         }
       });
     }
-    
-    #endregion   
+
+    #endregion
 
     #region ChangedByExist
     /// <summary>
@@ -761,48 +774,48 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 22/03/2016
     /// </history>    
-    public static async Task<List<GuestPremanifestOuthouse>> GetGuestPremanifestOuthouse(bool bookinvit, DateTime date,string leadSource)
+    public static async Task<List<GuestPremanifestOuthouse>> GetGuestPremanifestOuthouse(bool bookinvit, DateTime date, string leadSource)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return (from g in dbContext.Guests
-            join co in dbContext.Countries on g.guco equals co.coID
-            join ag in dbContext.Agencies on g.guag equals ag.agID
-            where (bookinvit ? g.guBookD : g.guInvitD) == date
-            where g.guls == leadSource
-            orderby g.guBookT, g.guLastName1
-            select new GuestPremanifestOuthouse
-            {
-              guStatus = g.guStatus,
-              guID = g.guID,
-              guCheckIn = g.guCheckIn,
-              guRoomNum = g.guRoomNum,
-              guLastName1 = g.guLastName1,
-              guFirstName1 = g.guFirstName1,
-              guCheckInD = g.guCheckInD,
-              guCheckOutD = g.guCheckOutD,
-              guco = g.guco,
-              coN = co.coN,
-              guag = g.guag,
-              agN = ag.agN,
-              guAvail = g.guAvail,
-              guInfo = g.guInfo,
-              guPRInfo = g.guPRInfo,
-              guInfoD = g.guInfoD,
-              guInvit = g.guInvit,
-              guInvitD = g.guInvitD,
-              guBookD = g.guBookD,
-              guBookT = g.guBookT,
-              guPRInvit1 = g.guPRInvit1,
-              guMembershipNum = g.guMembershipNum,
-              guBookCanc = g.guBookCanc,
-              guShow = g.guShow,
-              guSale = g.guSale,
-              guComments = g.guComments,
-              guPax = g.guPax
-            }).ToList();
+                  join co in dbContext.Countries on g.guco equals co.coID
+                  join ag in dbContext.Agencies on g.guag equals ag.agID
+                  where (bookinvit ? g.guBookD : g.guInvitD) == date
+                  where g.guls == leadSource
+                  orderby g.guBookT, g.guLastName1
+                  select new GuestPremanifestOuthouse
+                  {
+                    guStatus = g.guStatus,
+                    guID = g.guID,
+                    guCheckIn = g.guCheckIn,
+                    guRoomNum = g.guRoomNum,
+                    guLastName1 = g.guLastName1,
+                    guFirstName1 = g.guFirstName1,
+                    guCheckInD = g.guCheckInD,
+                    guCheckOutD = g.guCheckOutD,
+                    guco = g.guco,
+                    coN = co.coN,
+                    guag = g.guag,
+                    agN = ag.agN,
+                    guAvail = g.guAvail,
+                    guInfo = g.guInfo,
+                    guPRInfo = g.guPRInfo,
+                    guInfoD = g.guInfoD,
+                    guInvit = g.guInvit,
+                    guInvitD = g.guInvitD,
+                    guBookD = g.guBookD,
+                    guBookT = g.guBookT,
+                    guPRInvit1 = g.guPRInvit1,
+                    guMembershipNum = g.guMembershipNum,
+                    guBookCanc = g.guBookCanc,
+                    guShow = g.guShow,
+                    guSale = g.guSale,
+                    guComments = g.guComments,
+                    guPax = g.guPax
+                  }).ToList();
         }
       });
     }
@@ -817,18 +830,18 @@ namespace IM.BusinessRules.BR
     /// [jorcanche] 04/05/2016 created
     /// </history>
     /// <param name="guID">Id del Guest</param>
-    public static async Task<int>  DeleteGuest(int guID)
+    public static async Task<int> DeleteGuest(int guID)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-         return  dbContext.USP_OR_DeleteGuest(guID);
+          return dbContext.USP_OR_DeleteGuest(guID);
         }
       });
     }
     #endregion
- 
+
     #region GetSelfGen
     /// <summary>
     /// Devuelve los datos para la busqueda de casos Self Gen

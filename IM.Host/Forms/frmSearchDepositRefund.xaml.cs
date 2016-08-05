@@ -133,7 +133,7 @@ namespace IM.Host.Forms
         _refundID = RefundID;
 
       // Ejecutamos el procedimiento
-      List<DepositToRefund> lstResult = await BRBookingDeposits.GetBookingDepositsByGuest(_guestID, _refundID);
+      List<DepositToRefund> lstResult = await BRBookingDeposits.GetDepositsToRefund(_guestID, _refundID);
 
       // Cargamos la informacion al Grid
       CollectionViewSource _dsDeposits = ((CollectionViewSource)(this.FindResource("dsDeposits")));

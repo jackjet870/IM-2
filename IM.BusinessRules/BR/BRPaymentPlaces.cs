@@ -21,6 +21,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 05/04/2016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// [aalcocer] 02/08/2016 Modified. Se modifica la asincronía con Task
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public static async Task<List<PaymentPlace>> GetPaymentPlaces(int nStatus = -1, PaymentPlace paymentPlaces = null)
     {
@@ -52,7 +53,6 @@ namespace IM.BusinessRules.BR
         }
       });
     }
-
     #endregion GetPaymentPlaces
   }
 }

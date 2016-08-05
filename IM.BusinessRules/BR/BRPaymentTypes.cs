@@ -21,12 +21,11 @@ namespace IM.BusinessRules.BR
     /// [lchairez] created 10/03/2016
     /// [emoguel] modified 06/04/2016 Se agregaron mas filtros
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<PaymentType>> GetPaymentTypes(int status = -1, PaymentType paymentType = null)
     {
-      List<PaymentType> Result = null;
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
@@ -49,11 +48,9 @@ namespace IM.BusinessRules.BR
               query = query.Where(pt => pt.ptN.Contains(paymentType.ptN));
             }
           }
-          Result = query.OrderBy(pt => pt.ptN).ToList();
+          return query.OrderBy(pt => pt.ptN).ToList();
         }
       });
-
-      return Result;
     }
     #endregion
 

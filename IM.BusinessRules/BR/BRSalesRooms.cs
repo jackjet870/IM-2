@@ -17,6 +17,9 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
     /// <returns>List<Model.GetSalesRooms></returns>
+    /// <history>
+    /// [erosado] 24/02/2016  Created.
+    /// </history>
     public async static Task<List<SalesRoomShort>> GetSalesRooms(int status)
     {
       return await Task.Run(() =>

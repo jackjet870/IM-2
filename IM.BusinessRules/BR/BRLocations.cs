@@ -19,18 +19,17 @@ namespace IM.BusinessRules.BR
     /// <param name="programs"> Programa o default('ALL') </param>
     /// <history>
     /// [wtorres]  07/Mar/2016 Created
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<LocationByUser>> GetLocationsByUser(string user = "All", string programs = "All")
     {
-      List<LocationByUser> result = null;
-      await Task.Run(() =>
+      return await Task.Run(() =>
      {
        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
        {
-         result = dbContext.USP_OR_GetLocationsByUser(user, programs).ToList();
+         return dbContext.USP_OR_GetLocationsByUser(user, programs).ToList();
        }
      });
-      return result;
     }
 
     #endregion

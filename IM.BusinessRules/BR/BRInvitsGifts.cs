@@ -92,15 +92,16 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region GetInvitGift
+    #region GetInvitsGiftsByGuestID
     /// <summary>
     /// Obtienen el InvitationGift de un Guest especifico
     /// </summary>
-    /// <param name="guestID"></param>
-    /// <returns></returns>
+    /// <param name="guestID">clave del huesped</param>
+    /// <returns>List<InvitationGift></returns>
     /// <history>
     /// [vipacheco] 13/Mayo/2016 Created
     /// [aalcocer]  03/08/2016 Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016  Modified. Se agregó descripcion de los campos y se corrigio el nombre de la region.
     /// </history>
     public static async Task<List<InvitationGift>> GetInvitsGiftsByGuestID(int guestID)
     {
