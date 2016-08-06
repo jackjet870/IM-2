@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesmenChanges"
         mc:Ignorable="d"
-        Background="Beige"  ResizeMode="NoResize"
+        Background="#147F79"  ResizeMode="NoResize"
         Title="IM Salesmen Changes" ShowInTaskbar="False"  Height="297.736" Width="860" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
 
@@ -14,7 +14,7 @@
 
     </Window.Resources>
     <Grid DataContext="{StaticResource salesmenChangesViewSource}">
-        <DataGrid x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="7" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
+        <DataGrid x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="3" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="White">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="schDTColumn" Header="Date / Time" Width="auto" Binding="{Binding schDT,StringFormat= 0:dd/MM/yyyy}"/>
                 <DataGridTextColumn x:Name="schAuthorizedByColumn" Binding="{Binding schAuthorizedBy}" Header="Authorized By" Width="auto"/>

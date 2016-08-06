@@ -24,12 +24,11 @@ namespace IM.ProcessorSales.Forms
     #region Atributos
     private string _salesRoom = string.Empty;
     private EnumPeriod _period;
-    private bool _onePeriod;
+    private bool _onePeriod, _shWeeks;
     private readonly List<SalesRoomByUser> _lstSalesRoomByUsers = new List<SalesRoomByUser>();
     private List<Program> _lstPrograms;
     private List<SegmentByAgency> _lstSegmentByAgencies;
-    private List<Efficiency> _lstWeeks;
-    private List<WeeksHelpper> _lstWeeksHelpp;
+    private List<EfficiencyData> _lstEfficiencyWeeks;
     private readonly ObservableCollection<GoalsHelpper> _lstGoals = new ObservableCollection<GoalsHelpper>();
     private readonly ObservableCollection<MultiDateHelpper> _lstMultiDate = new ObservableCollection<MultiDateHelpper>();
     private readonly List<PersonnelShort> _lstPersonnels = new List<PersonnelShort>();
@@ -160,31 +159,21 @@ namespace IM.ProcessorSales.Forms
     /// <summary>
     /// Carga el grid de Eficiencias semanales
     /// </summary>
-    /// <param name="shWeeks"></param>
     /// <history>
     /// [ecanul] 02/05/2016 Created
     /// </history>
-    private async void LoadEfficiencyWeek(bool shWeeks)
+    private async void LoadEfficiencyWeek()
     {
-      if (!shWeeks)
+      if (!_shWeeks)
       {
         pnlWeeks.Visibility = Visibility.Collapsed;
         return;
       }
+      _lstEfficiencyWeeks = await BREfficiency.GetEfficiencyByWeeks(_salesRoom, dtmStart.Value.Value.Date, dtmEnd.Value.Value.Date);
+      
+      dtgWeeks.ItemsSource = _lstEfficiencyWeeks;
 
-      _lstWeeks = await BREfficiency.GetEffificencyBySr(_salesRoom, frmPrs._clsFilter.DtmStart, frmPrs._clsFilter.DtmEnd);
-      _lstWeeksHelpp = new List<WeeksHelpper>();
-      foreach (var week in _lstWeeks)
-      {
-        WeeksHelpper w = new WeeksHelpper
-        {
-          dtStart = week.efDateFrom,
-          dtEnd = week.efDateTo,
-          include = true
-        };
-        _lstWeeksHelpp.Add(w);
-      }
-      dtgWeeks.ItemsSource = _lstWeeksHelpp;
+      lblDate.Content = $"Weeks of {dtmStart.Value.Value.ToString("MMMM")} of {dtmStart.Value.Value.Year}";
     }
 
     #endregion
@@ -376,6 +365,7 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void SaveFilterValues()
     {
+      #region SalesRooms
       if (pnlSalesRoom.IsVisible)
         if (chkAllSalesRoom.IsChecked.Value)
         {
@@ -385,21 +375,32 @@ namespace IM.ProcessorSales.Forms
         else
           frmPrs._clsFilter.LstSalesRooms = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
 
+      #endregion
+
+      #region programs
       if (pnlPrograms.IsVisible)
         frmPrs._clsFilter.EnumProgram = (dtgPrograms.Items.Count == dtgPrograms.SelectedItems.Count || dtgPrograms.SelectedItems.Count == 0)
           ? EnumProgram.All : EnumToListHelper.GetList<EnumProgram>().SingleOrDefault(x => x.Value == ((Program)dtgPrograms.SelectedItem).pgID).Key;
+      #endregion
 
+      #region segments
       if (pnlSegments.IsVisible)
       {
         frmPrs._clsFilter.LstSegments = dtgSegments.SelectedItems.Cast<SegmentByAgency>().Select(c => c.seID).ToList();
         frmPrs._clsFilter.BlnAllSegments = dtgSegments.Items.Count == dtgSegments.SelectedItems.Count;
       }
+      #endregion
 
+      #region Concentrate
       if (pnlSalesRoomConcentrate.IsVisible)
         frmPrs._clsFilter.LstGoals = _lstGoals.Where(g => g.IsCheck).ToList();
+      #endregion
+      #region Multidate
       if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible)
         frmPrs._clsFilter.LstMultiDate = _lstMultiDate.Where(x => !string.IsNullOrWhiteSpace(x.SalesRoom)).OrderByDescending(x => x.IsMain).ToList();
+      #endregion
 
+      #region Dates
       //Mandar los datos de fechas
       if (grdDates.IsVisible)
       {
@@ -407,15 +408,21 @@ namespace IM.ProcessorSales.Forms
         frmPrs._clsFilter.DtmStart = Convert.ToDateTime(dtmStart.Value);
         frmPrs._clsFilter.DtmEnd = Convert.ToDateTime(dtmEnd.Value);
       }
+      #endregion
 
+      #region Goal
       //si goal esta visible
       if (grdGoal.Visibility == Visibility.Visible)
         frmPrs._clsFilter.Goal = Convert.ToDecimal(txtGoal.Text.Trim());
+      #endregion
 
+      #region Checks
       //Region de checks
       frmPrs._clsFilter.BlnGroupedByTeams = Convert.ToBoolean(chkGroupedByTeams.IsChecked);
       frmPrs._clsFilter.BlnIncludeAllSalesmen = Convert.ToBoolean(chkIncludeAllSalesmen.IsChecked);
+      #endregion
 
+      #region Salesman Filters
       //si es de salesman 
       if (grdSalesman.Visibility == Visibility.Visible)
       {
@@ -439,6 +446,12 @@ namespace IM.ProcessorSales.Forms
           }
         }
       }
+      #endregion
+
+      #region EfficiencyWeekly
+      if(pnlWeeks.IsVisible)
+        frmPrs._clsFilter.lstEfficiency = _lstEfficiencyWeeks.Where(g => g.Include == true).ToList();
+      #endregion
     }
 
     #endregion
@@ -497,7 +510,7 @@ namespace IM.ProcessorSales.Forms
           {
             IsCheck = false,
             SalesRoomByUser = item,
-            Goal = 0
+            Goals = 0
           };
           _lstGoals.Add(goal);
         }
@@ -613,6 +626,7 @@ namespace IM.ProcessorSales.Forms
       _salesRoom = salesRoom;
       _period = period;
       _onePeriod = onePeriod;
+      _shWeeks = shWeeks;
       //Configura Fechas
       ConfigureDates(multiDate, period);
       //configura la visibilidad de los filtros 
@@ -622,7 +636,7 @@ namespace IM.ProcessorSales.Forms
       LoadSalesRooms(blnOnlyOneRegister, blnSalesRoom, blnAllSalesRoom, shMultiDateRanges, shConcentrate);
       LoadPrograms(blnPrograms);
       LoadSegments(blnSegments, blnAllSegments);
-      LoadEfficiencyWeek(shWeeks);
+      LoadEfficiencyWeek();
       #endregion Configuracion de Grids.
 
       //Toma la configuracion del padre
@@ -671,15 +685,18 @@ namespace IM.ProcessorSales.Forms
     #region btnOk_Click
     private void btnOk_Click(object sender, RoutedEventArgs e)
     {
-      string message = ValidateFields();
-      if (message == "" || message == string.Empty)
+      if (DateHelper.ValidateValueDate(dtmStart, dtmEnd))
       {
-        ok = true;
-        SaveFilterValues();
-        Close();
+        string message = ValidateFields();
+        if (message == "" || message == string.Empty)
+        {
+          ok = true;
+          SaveFilterValues();
+          Close();
+        }
+        else
+          UIHelper.ShowMessage(message);
       }
-      else
-        UIHelper.ShowMessage(message);
     }
     #endregion
 
@@ -756,6 +773,16 @@ namespace IM.ProcessorSales.Forms
       if (picker == null) return;
       DateTime date = (DateTime)picker.Value;
       ChangeDates(date);
+    }
+
+    private void dateTimeEnd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      var picker = sender as DateTimePicker;
+      if (picker == null) return;
+      DateTime date = (DateTime)picker.Value;
+      ChangeDates(date);
+      if (_shWeeks)
+        LoadEfficiencyWeek();
     }
     #endregion
 

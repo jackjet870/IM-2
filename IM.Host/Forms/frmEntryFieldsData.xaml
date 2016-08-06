@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms" Loaded="Window_Loaded"
         mc:Ignorable="d" Closed="Window_Closed" ShowInTaskbar="False"
-        Title="IM Salesmen Changes Authorization" SizeToContent="WidthAndHeight" Background="Bisque">
+        Title="IM Salesmen Changes Authorization" SizeToContent="WidthAndHeight" Background="White">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -18,12 +18,16 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Changes:" Grid.Row="0" Margin="10,5"/>
-        <ListView Name="lviSaleMan" BorderBrush="Black" BorderThickness="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Background="Beige" />
+        <ListView Name="lviSaleMan"  BorderBrush="#147F79" BorderThickness="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Background="White" />
         <TextBlock Text="Authorized By" Grid.Row="2"  VerticalAlignment="Center" Margin="10"/>
-        <ComboBox Name="cboAuthorizedBy" Grid.Row="2" Grid.Column="1" Margin="10" DisplayMemberPath="peN" SelectedValuePath="peID" />
+        <ComboBox Name="cmbAuthorizedBy" Grid.Row="2" Grid.Column="1" Margin="10"  SelectedValuePath="peID"
+                                               TextSearch.TextPath="peID"
+                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
         <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Name="btnOk" Click="btnOk_Click" Content="OK" Width="60" Margin="10,0"/>
-            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Grid.ColumnSpan="2" Grid.Row="3" Width="60" Margin="10,0"/>
+            <Button Name="btnOk" Click="btnOk_Click" Content="OK" Width="60" Margin="10,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Grid.ColumnSpan="2" Grid.Row="3" Width="60" Margin="10,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
         </StackPanel>
     </Grid>
 </Window>

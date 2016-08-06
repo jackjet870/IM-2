@@ -15,6 +15,7 @@ namespace IM.ProcessorSales.Classes
     public List<string> LstSegments { get; set; } = new List<string>();
     public List<MultiDateHelpper> LstMultiDate { get; set; } = new List<MultiDateHelpper>();
     public List<GoalsHelpper> LstGoals { get; set; } = new List<GoalsHelpper>();
+    public List<EfficiencyData> lstEfficiency { get; set; } = new List<EfficiencyData>();
 
     public bool BlnAllSalesRooms { get; set; }
 

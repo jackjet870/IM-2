@@ -25,7 +25,7 @@ namespace IM.ProcessorSales.Classes
 
     private decimal _goal;
 
-    public decimal Goal
+    public decimal Goals
     {
       get { return _goal; }
       set { SetField(ref _goal, value); }

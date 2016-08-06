@@ -545,7 +545,7 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private void btnTransfer_Click(object sender, RoutedEventArgs e)
+    private async void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
       try
       {
@@ -568,7 +568,7 @@ namespace IM.Outhouse.Forms
           //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
           //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
           //se realizo, es decir ni se guardo el Guest ni el Log
-          if (BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
+          if (await BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
           {
             //De no ser así informamos que no se guardo la información por algun motivo
             UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",

@@ -293,7 +293,7 @@ namespace IM.InvitConfig.Forms
       guest.guls = cmbLeadSource.SelectedValue.ToString();
       guest.gula = cmbLanguage.SelectedValue.ToString();
       await BRGuests.SaveGuest(guest);
-      RptInvitationHelper.RptInvitation(frm: this);
+      RptInvitationHelper.RptInvitation();
       StaEnd();
     }
 

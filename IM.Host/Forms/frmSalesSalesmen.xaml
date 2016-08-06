@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Classes="clr-namespace:IM.Host.Classes" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesSalesmen"
         mc:Ignorable="d" ShowInTaskbar="False"
-        Title="IM Salesmen" SizeToContent="Height" Width="420" Background="Bisque" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
+        Title="IM Salesmen" SizeToContent="Height" Width="420" Background="White" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
     <Window.Resources>
         <CollectionViewSource x:Key="salesSalesmanViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SalesSalesman}, CreateList=True}"/>
     </Window.Resources>
@@ -19,9 +19,9 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Button Name="btnEdit" Content="Edit" Margin="10,5,10,5" Width="70" Click="btnEdit_Click"/>
-            <Button Name="btnSave" Content="Save" Margin="10,5,10,5" Width="70" Click="btnSave_Click"/>
-            <Button Name="btnCancel" Content="Cancel" Margin="10,5,10,5" Width="70" Click="btnCancel_Click"/>
+            <Button Name="btnEdit" Content="Edit" Margin="10,5,10,5" Width="70" Click="btnEdit_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button Name="btnSave" Content="Save" Margin="10,5,10,5" Width="70" Click="btnSave_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button Name="btnCancel" Content="Cancel" Margin="10,5,10,5" Width="70" Click="btnCancel_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
         </StackPanel>
         <DataGrid x:Name="saleManDataGrid" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource salesSalesmanViewSource}}"  RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>

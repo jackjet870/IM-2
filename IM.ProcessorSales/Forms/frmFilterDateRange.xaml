@@ -9,51 +9,56 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        ShowInTaskbar="False" >
+        ShowInTaskbar="False">
     <Window.Resources>
-        <Style TargetType="{x:Type DataGrid}">
-            <Setter Property="AutoGenerateColumns" Value="False" />
-            <Setter Property="GridLinesVisibility" Value="None" />
-            <Setter Property="Width" Value="200" />
-            <Setter Property="Height" Value="220" />
-            <Setter Property="Margin" Value="10 5 10 25" />
-            <Setter Property="AlternatingRowBackground" Value="LightGray" />
-            <!-- <EventSetter Event="SelectionChanged" Handler="grd_SelectionChanged" /> -->
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
-            </Style.Resources>
-        </Style>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type DataGrid}">
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="GridLinesVisibility" Value="None" />
+                <Setter Property="Width" Value="200" />
+                <Setter Property="Height" Value="220" />
+                <Setter Property="Margin" Value="10 5 10 25" />
+                <Setter Property="AlternatingRowBackground" Value="LightGray" />
+                <!-- <EventSetter Event="SelectionChanged" Handler="grd_SelectionChanged" /> -->
+                <Style.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+                </Style.Resources>
+            </Style>
 
-        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
+            <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
 
-        <Style x:Key="StatusBarStyle" TargetType="{x:Type StatusBar}">
-            <Setter Property="Width" Value="200" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
-        </Style>
+            <Style x:Key="StatusBarStyle" TargetType="{x:Type StatusBar}">
+                <Setter Property="Width" Value="200" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
 
-        <Style x:Key="StatusBarItemStyle" TargetType="{x:Type StatusBarItem}">
-            <Setter Property="Width" Value="200" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-        </Style>
+            <Style x:Key="StatusBarItemStyle" TargetType="{x:Type StatusBarItem}">
+                <Setter Property="Width" Value="200" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+            </Style>
 
-        <Style x:Key="CheckBoxSelectAll" TargetType="{x:Type CheckBox}">
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Margin" Value="10" />
-            <EventSetter Event="Checked" Handler="chbx_Checked" />
-            <EventSetter Event="Unchecked" Handler="chbx_Checked" />
-        </Style>
-        <Style x:Key="TextBoxNumeric" TargetType="{x:Type TextBox}">
-            <EventSetter Event="PreviewTextInput" Handler="TextBoxNumeric_PreviewTextInput" />
-            <EventSetter Event="LostFocus" Handler="TextBoxNumeric_LostFocus" />
-        </Style>
-        <CollectionViewSource x:Key="ObjMultiDateHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:MultiDateHelpper}, CreateList=True}" />
-        <CollectionViewSource x:Key="ObjSalesRoomByUser" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomByUser}, CreateList=True}" />
-        <CollectionViewSource x:Key="ObjGoalsHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:GoalsHelpper}, CreateList=True}" />
-        <CollectionViewSource x:Key="ObjPersonnelShort" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+            <Style x:Key="CheckBoxSelectAll" TargetType="{x:Type CheckBox}">
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Margin" Value="10" />
+                <EventSetter Event="Checked" Handler="chbx_Checked" />
+                <EventSetter Event="Unchecked" Handler="chbx_Checked" />
+            </Style>
+            <Style x:Key="TextBoxNumeric" TargetType="{x:Type TextBox}">
+                <EventSetter Event="PreviewTextInput" Handler="TextBoxNumeric_PreviewTextInput" />
+                <EventSetter Event="LostFocus" Handler="TextBoxNumeric_LostFocus" />
+            </Style>
+            <CollectionViewSource x:Key="ObjMultiDateHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:MultiDateHelpper}, CreateList=True}" />
+            <CollectionViewSource x:Key="ObjSalesRoomByUser" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomByUser}, CreateList=True}" />
+            <CollectionViewSource x:Key="ObjGoalsHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:GoalsHelpper}, CreateList=True}" />
+            <CollectionViewSource x:Key="ObjPersonnelShort" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <StackPanel Orientation ="Horizontal">
@@ -252,7 +257,8 @@
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn Header="Sales Room" Width="Auto"  Binding="{Binding SalesRoomByUser.srN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Goals" Width="Auto" Binding="{Binding Goal, TargetNullValue=0}" EditingElementStyle="{StaticResource TextBoxNumeric}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="False"/>
+                    <DataGridTextColumn x:Name="txtGoals" Header="Goals" Width="Auto" Binding="{Binding Goals, TargetNullValue=-1,StringFormat={}{0:#,#.00}}" 
+                                        EditingElementStyle="{StaticResource TextBoxNumeric}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="False"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
@@ -283,13 +289,13 @@
                     <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="From: " FontWeight="Bold"/>
                     <Grid Name="grdDtmStart" Grid.Row="1" Grid.Column="1">
                         <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" 
-                                             Value="{x:Static sys:DateTime.Today}" Format="Custom" FormatString="ddd d MMM yyyy" Width="130" ValueChanged="dateTime_ValueChanged"/>
+                                             Value="{x:Static sys:DateTime.Today}" Style="{StaticResource dtp-DateRange-TK}" Width="130" ValueChanged="dateTime_ValueChanged"/>
                     </Grid>
 
                     <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Content="To: " FontWeight="Bold"/>
                     <Grid Name="grdDtgEnd" Grid.Row="2" Grid.Column="1">
                         <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" 
-                                             Value="{x:Static sys:DateTime.Today}" Format="Custom" FormatString="ddd d MMM yyyy" Width="130" ValueChanged="dateTime_ValueChanged" />
+                                             Value="{x:Static sys:DateTime.Today}" Style="{StaticResource dtp-DateRange-TK}" Width="130" ValueChanged="dateTimeEnd_ValueChanged" />
                     </Grid>
                 </Grid>
             </Border>
@@ -389,11 +395,29 @@
         <!--#region Grid Weeks -->
         <StackPanel Name="pnlWeeks">
             <Label Name="lblDate" Content="Weeks of MM of yyyy" FontWeight="Bold" Margin="5" />
-            <DataGrid Name="dtgWeeks" IsReadOnly="True">
+            <DataGrid Name="dtgWeeks" CanUserAddRows="False" Width="233">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Include" Width="*" Binding="{Binding include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
-                    <DataGridTextColumn Header="From" Width="*" Binding="{Binding dtStart}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
-                    <DataGridTextColumn Header="To" Width="*" Binding="{Binding dtEnd}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
+                    <!--<DataGridTextColumn Header="Include" Width="auto" Binding="{Binding Include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />-->
+                    <DataGridCheckBoxColumn Header="Include" Binding="{Binding Include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"/>
+                    <DataGridTemplateColumn Header="From" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:DateTimePicker Value="{Binding efDateFrom}" Format="Custom" FormatString="dd/MM/yyyy" ShowButtonSpinner="False" ShowDropDownButton="False" IsEnabled="False" FontWeight="Bold">
+
+                                </xctk:DateTimePicker>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="To" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:DateTimePicker Value="{Binding efDateTo}" Format="Custom" FormatString="dd/MM/yyyy" ShowButtonSpinner="False" ShowDropDownButton="False" IsEnabled="False" FontWeight="Bold">
+
+                                </xctk:DateTimePicker>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--<DataGridTextColumn Header="To" Width="auto" Binding="{Binding efDateTo}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />-->
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
