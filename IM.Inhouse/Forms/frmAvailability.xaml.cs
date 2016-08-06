@@ -266,7 +266,7 @@ namespace IM.Inhouse
     #endregion  
 
     #region btnSave_Click
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       try
       {
@@ -282,7 +282,7 @@ namespace IM.Inhouse
           //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
           //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
           //_wasSaved que es el que indica que se guardo el Avail.
-          if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
+          if (await BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
           {
             _wasSaved = true;
           }

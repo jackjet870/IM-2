@@ -25,14 +25,11 @@ namespace IM.Base.Helpers
     /// [jorcanche] 16/04/2016 created
     /// [jorcanche] 12/05/2016 Se cambio de frmInvitaciona RptinvitationHelper
     /// </history>
-    public static async void RptInvitation(int guest = 0, string peID = "USER", Window frm=null)
+    public static async void RptInvitation(int guest = 0, string peID = "USER")
     {
       //Traemos la informacion del store y la almacenamos en un procedimiento
       InvitationData invitationData = await BRInvitation.RptInvitationData(guest);
-
-      //Determinamos el Lenguaje
-      LanguageHelper.IDLanguage = invitationData.Invitation.gula;
-    
+      
       //Le damos memoria al reporte de Invitacion
       var rptInvi = new rptInvitation();
 
@@ -53,78 +50,22 @@ namespace IM.Base.Helpers
       rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
       rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
 
-      //Cargamos las Etiquetas 
-      LblInvitation(rptInvi,peID);
+      //Cambiamos el lenguaje de las etiquetas.
+      CrystalReportHelper.SetLanguage(rptInvi, invitationData.Invitation.gula);
 
-     //Cargamos el Viewer
+      //Fecha y hora
+      rptInvi.SetParameterValue("lblDateTime", BRHelpers.GetServerDateTime());
+
+      //Cambiado por
+      rptInvi.SetParameterValue("lblChangedBy", peID);
+
+      //Cargamos el Viewer
       var frmViewer = new frmViewer(rptInvi) ;
       frmViewer.ShowDialog();   
     }
     #endregion
 
-    #region lblInvitation
-    /// <summary>
-    /// Cargas la etiquetas del Reporte
-    /// </summary>
-    /// <param name="rptInv">Instancia del reporte Invitacion </param>
-    /// <history>
-    /// [jorcanche] 16/04/2016 created
-    /// [jorcanche] 12/05/2016 Se cambio de frmInvitaciona RptinvitationHelper
-    /// </history>
-    private static void LblInvitation(rptInvitation rptInv, string _peID)
-    {
-      //Etiquetas de Depositos
-      rptInv.SetParameterValue("lblDeposits", LanguageHelper.GetMessage(EnumMessage.msgLblDeposits));
-      rptInv.SetParameterValue("lblDeposit", LanguageHelper.GetMessage(EnumMessage.msgLblDeposit));
-      rptInv.SetParameterValue("lblCurrency", LanguageHelper.GetMessage(EnumMessage.msgLblCurrency));
-      //Depositos quemados
-      rptInv.SetParameterValue("lblDepositBurned", LanguageHelper.GetMessage(EnumMessage.msgLblDepositBurned));
-      //************************************************************************************************
-
-      //Etiquetas de Regalos      
-      rptInv.SetParameterValue("lblGifts", LanguageHelper.GetMessage(EnumMessage.msgLblGifts));
-      rptInv.SetParameterValue("lblQuantityGifts", LanguageHelper.GetMessage(EnumMessage.msgLblQuantityAbbreviation));
-      rptInv.SetParameterValue("lblGift", LanguageHelper.GetMessage(EnumMessage.msgLblGift));
-      //************************************************************************************************
-
-      //Etiquetas Invitados
-      rptInv.SetParameterValue("lblGuests", LanguageHelper.GetMessage(EnumMessage.msgLblGuests));
-      rptInv.SetParameterValue("lblLastName", LanguageHelper.GetMessage(EnumMessage.msgLblLastName));
-      rptInv.SetParameterValue("lblFirstName", LanguageHelper.GetMessage(EnumMessage.msgLblFirstName));
-      rptInv.SetParameterValue("lblAge", LanguageHelper.GetMessage(EnumMessage.msgLblAge));
-      rptInv.SetParameterValue("lblMaritalStatus", LanguageHelper.GetMessage(EnumMessage.msgLblMaritalStatus));
-      rptInv.SetParameterValue("lblOccupation", LanguageHelper.GetMessage(EnumMessage.msgLblOccupation));
-      //************************************************************************************************
-
-      //Numero de membresia
-      rptInv.SetParameterValue("lblMembershipNum", LanguageHelper.GetMessage(EnumMessage.msgLblMembershipNum));
-      //Fecha
-      rptInv.SetParameterValue("lblDate", LanguageHelper.GetMessage(EnumMessage.msgLblDate));
-      //Hora
-      rptInv.SetParameterValue("lblTime", LanguageHelper.GetMessage(EnumMessage.msgLblTime));
-      //Agencia
-      rptInv.SetParameterValue("lblAgency", LanguageHelper.GetMessage(EnumMessage.msgLblAgency));
-      //Pais
-      rptInv.SetParameterValue("lblCountry", LanguageHelper.GetMessage(EnumMessage.msgLblCountry));
-      //Hotel
-      rptInv.SetParameterValue("lblHotel", LanguageHelper.GetMessage(EnumMessage.msgLblHotel));
-      //Numero de habitación
-      rptInv.SetParameterValue("lblRoomNum", LanguageHelper.GetMessage(EnumMessage.msgLblRoomNum));
-      //Pax
-      rptInv.SetParameterValue("lblPax", LanguageHelper.GetMessage(EnumMessage.msgLblPax));
-      //Location
-      rptInv.SetParameterValue("lblLocation", LanguageHelper.GetMessage(EnumMessage.msgLblLocation));
-      //Guest Service
-      rptInv.SetParameterValue("lblGuestService", LanguageHelper.GetMessage(EnumMessage.msgLblGuestService));
-      //Notas
-      rptInv.SetParameterValue("lblNotes", LanguageHelper.GetMessage(EnumMessage.msgLblNotes));
-      //Fecha y hora
-      rptInv.SetParameterValue("lblDateTime", BRHelpers.GetServerDateTime());
-      //Cambiado por
-      rptInv.SetParameterValue("lblChangedBy", _peID);
-    }
-
-    #endregion
+   
 
   }
 }

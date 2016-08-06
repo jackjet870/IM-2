@@ -60,7 +60,7 @@ namespace IM.Host
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.UserData;
-       // frmSales frmMain = new frmSales(Enums.EnumSale.Sale);
+       //frmSales frmMain = new frmSales();
         frmHost frmMain = new frmHost();
         frmMain.ShowDialog();
         frmSplash.Close();

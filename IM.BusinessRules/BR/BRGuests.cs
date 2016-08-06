@@ -643,31 +643,34 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] 07/04/2016 Created
     /// </history>
-    public static int SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
+    public static async Task<int> SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            //Guardamos los cambios en el Guest
-            dbContext.Entry(guest).State = EntityState.Modified;
+            try
+            {
+              //Guardamos los cambios en el Guest
+              dbContext.Entry(guest).State = EntityState.Modified;
 
-            //Guardamos el Log del guest
-            dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
+              //Guardamos el Log del guest
+              dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
 
-            var respuesta = dbContext.SaveChanges();
-            transaction.Commit();
-            return respuesta;
-          }
-          catch
-          {
-            transaction.Rollback();
-            throw;
+              var respuesta = dbContext.SaveChanges();
+              transaction.Commit();
+              return respuesta;
+            }
+            catch
+            {
+              transaction.Rollback();
+              throw;
+            }
           }
         }
-      }
+      });
     }
     #endregion
 

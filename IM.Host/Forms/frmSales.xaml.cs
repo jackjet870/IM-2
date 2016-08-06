@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using IM.Host.Enums;
@@ -31,6 +29,8 @@ namespace IM.Host.Forms
     DateTime _serverDate, _closeD;
     ////int txtsaCompany = 0;
 
+    private bool isPressedbtnUndo;
+
     // Indica si se esta cargando el detalle de una venta
     private bool _loading;
 
@@ -55,16 +55,16 @@ namespace IM.Host.Forms
     private decimal _SaleAmount;
 
     //Vendedores
-    List<SalesSalesman> _saleMen;
+    private List<SalesSalesman> _saleMen;
 
     //Objeto con los valores iniciales
-    Sale _oldSale = new Sale();
+    private Sale _saleOld = new Sale();
 
     //Objeto para llenar el formulario
-    Sale _sale = new Sale();
+    private Sale _saleNew = new Sale();
 
     //Payments
-    private ObservableCollection<Payment> _payments = new ObservableCollection<Payment>();
+    private ObservableCollection<Payment> _payments;
 
     //Sale Type Category 
     private string _saleTypeCategory;
@@ -72,25 +72,31 @@ namespace IM.Host.Forms
     //Es una actualización de saled 
     private bool _isSaleUpdate;
 
-    // Variable que indica si se encontro el tipo de membresia global
-    //private bool _validateMembershipTypeGlobal;
+    //Si esta buscando PR por TextBox
+    //private bool _searchPRbyTxt;
 
-    private bool _searchPRbyTxt;
-
-    //private ValidationData _validateExist;
-
-    //private bool _validateGeneral;
-
+    //Listado de SalesSalesman de Intelligence Contracts
     private List<MemberSalesmen> _lstMemberSalesmens;
+
+   
 
     #region frmSales
 
+    /// <summary>
+    /// Contructor de Pruebas 
+    /// </summary>
+    public frmSales()
+    {
+      InitializeComponent();     
+      gprCriteria.Visibility = Visibility.Collapsed ;
+      _guId = 7754745;
+    }
+
     public frmSales(EnumSale typeSale, int guId = 0)
     {
-      InitializeComponent();
-      typeSale = EnumSale.Sale;
+      InitializeComponent();     
       gprCriteria.Visibility = typeSale == EnumSale.Sale ? Visibility.Collapsed : Visibility.Visible;
-      _guId = guId = 7754745;
+      _guId = guId;
     }
 
     #endregion
@@ -132,6 +138,7 @@ namespace IM.Host.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      
       UIHelper.SetUpControls(new Sale(), this);
       LoadCombosPayment();
       //Cargamos los ComboBox
@@ -140,12 +147,19 @@ namespace IM.Host.Forms
       LoadCloser();
       LoadExit();
       //Cargamos el DataGrid
-      LoadGrid();
+      if (gprCriteria.Visibility == Visibility.Collapsed)
+      {
+        LoadGrid();
+      }
+      else
+      {
+        SetMode(EnumMode.modDisplay);
+      }
 
       //obtenemos la fecha de cierre
       CloseDate();
-
-      //si el sistema esta en modo de solo lectura, no permitimos modificar, ni eliminar ventas           
+      _serverDate = BRHelpers.GetServerDate();
+      //si el sistema esta en modo de solo lectura, no permitimos modificar, ni eliminar ventas 
     }
 
     #endregion
@@ -161,8 +175,8 @@ namespace IM.Host.Forms
     private async void LoadExit()
     {
       //Exit Closers
-      cbosaExit1.ItemsSource =
-        cbosaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "EXIT");
+      cmbsaExit1.ItemsSource =
+        cmbsaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "EXIT");
     }
 
     #endregion
@@ -178,12 +192,12 @@ namespace IM.Host.Forms
     private async void LoadCloser()
     {
       //Closers
-      cbosaCloser1.ItemsSource =
-        cbosaCloser2.ItemsSource =
-          cbosaCloser3.ItemsSource =
+      cmbsaCloser1.ItemsSource =
+        cmbsaCloser2.ItemsSource =
+          cmbsaCloser3.ItemsSource =
             await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSER");
       //Capitan de Closers
-      cbosaCloserCaptain1.ItemsSource =
+      cmbsaCloserCaptain1.ItemsSource =
         await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
     }
 
@@ -204,13 +218,13 @@ namespace IM.Host.Forms
       //Tipo de venta
       cbosast.ItemsSource = await BRSaleTypes.GetSalesTypes(1);
       //PR´s
-      cbosaPR1.ItemsSource =
-        cbosaPR2.ItemsSource =
-          cbosaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
+      cmbsaPR1.ItemsSource =
+        cmbsaPR2.ItemsSource =
+          cmbsaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
       //Capitanes de PRs
-      cbosaPRCaptain1.ItemsSource =
-        cbosaPRCaptain2.ItemsSource =
-          cbosaPRCaptain3.ItemsSource =
+      cmbsaPRCaptain1.ItemsSource =
+        cmbsaPRCaptain2.ItemsSource =
+          cmbsaPRCaptain3.ItemsSource =
             await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PRCAPT");
     }
 
@@ -227,15 +241,15 @@ namespace IM.Host.Forms
     private async void LoadLiner()
     {
       //Liners
-      cbosaLiner1.ItemsSource =
-        cbosaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINER");
+      cmbsaLiner1.ItemsSource =
+        cmbsaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINER");
       //Capitan de Liners
-      cbosaLinerCaptain1.ItemsSource =
+      cmbsaLinerCaptain1.ItemsSource =
         await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINERCAPT");
       //Podium
-      cbosaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PODIUM");
+      cmbsaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PODIUM");
       //VLO
-      cbosaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "VLO");
+      cmbsaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "VLO");
     }
 
     #endregion
@@ -250,11 +264,12 @@ namespace IM.Host.Forms
     /// </history>
     private async void LoadGrid()
     {
+      BusyIndicator.IsBusy = true;
       //si se esta buscando
       if (_guId.Equals(0))
       {
         //establecemos los criterios de busqueda
-        grdSale.ItemsSource =
+        dtgSale.ItemsSource =
           await BRSales.GetSalesShort(string.IsNullOrEmpty(txtCsagu.Text) ? 0 : Convert.ToInt32(txtCsagu.Text),
             string.IsNullOrEmpty(txtCsaID.Text) ? 0 : Convert.ToInt32(txtCsaID.Text),
             string.IsNullOrEmpty(txtCsaMembershipNum.Text) ? "ALL" : txtCsaMembershipNum.Text,
@@ -265,13 +280,14 @@ namespace IM.Host.Forms
       }
       else
       {
-        grdSale.ItemsSource = await BRSales.GetSalesShort(_guId);
+        dtgSale.ItemsSource = await BRSales.GetSalesShort(_guId);
       }
       //Establecemos el modo de solo lectura
       SetMode(Enums.EnumMode.modDisplay);
       //Cargamos el detalle de la venta
       //de la primera venta que aparece en el grid
       await LoadRecord();
+      BusyIndicator.IsBusy = false;
     }
 
     #endregion
@@ -287,24 +303,24 @@ namespace IM.Host.Forms
     private async Task LoadRecord()
     {
       //Si hay alguna venta
-      if (grdSale.Items.Count > 0)
+      if (dtgSale.Items.Count > 0)
       {
         //Limpiamos los Source ya que seran nuevos Datos para los Trgets
-        _oldSale = new Sale();
-        _sale = new Sale();
+        _saleOld = new Sale();
+        _saleNew = new Sale();
 
         //Cargamos el OldSale Que sera la info Original q esta en la base   
-        var sale = grdSale.SelectedItem != null
-          ? (grdSale.SelectedItem as SaleShort)?.saID
-          : (grdSale.Items[0] as SaleShort)?.saID;
-        _oldSale = await BRSales.GetSalesbyId(sale);
+        var sale = dtgSale.SelectedItem != null
+          ? (dtgSale.SelectedItem as SaleShort)?.saID
+          : (dtgSale.Items[0] as SaleShort)?.saID;
+        _saleOld = await BRSales.GetSalesbyId(sale);
 
         //Y Cargamos el Sale que aditará y sera el que se guardara en la base                        
-        ObjectHelper.CopyProperties(_sale, _oldSale);
+        ObjectHelper.CopyProperties(_saleNew, _saleOld);
 
         //Asignamos el datacontext para cargar los controles        
         _loading = true;
-        DataContext = _sale;
+        grdSaleGeneral.DataContext = _saleNew;
         _loading = false;
 
         //Se respalda el reference
@@ -314,11 +330,11 @@ namespace IM.Host.Forms
         SetOutOfPending();
 
         //Cargamos los pagos de la venta      
-        _payments = new ObservableCollection<Payment>(await BRPayments.GetPaymentsbySale(_sale.saID)); 
+        _payments = new ObservableCollection<Payment>(await BRPayments.GetPaymentsbySale(_saleNew.saID));
         dgpayment.DataContext = _payments;
 
         //Nombre del huesped
-        GetGuestName(_sale.sagu);
+        GetGuestName(_saleNew.sagu);
 
         //Respaldamos el Guest ID Original        
         //_GuestIDOriginal = _sale.sagu;
@@ -332,27 +348,30 @@ namespace IM.Host.Forms
         //si la venta es de una fecha cerrada, no permitomos eliminar ventas
         if (IsClosed()) btnDelete.IsEnabled = false;
       }
+      else
+      {
+        //Limpiamos los Source ya que seran nuevos Datos para los Trgets
+        _saleOld = new Sale();
+        _saleNew = new Sale();
+
+        //Asignamos el datacontext para cargar los controles        
+        _loading = true;
+        grdSaleGeneral.DataContext = _saleNew;
+        _loading = false;
+
+        //Cargamos los pagos de la venta      
+        _payments = new ObservableCollection<Payment>();
+        dgpayment.DataContext = _payments;
+
+        lblGuestName.Text = string.Empty;
+
+
+      }
     }
 
     #endregion
 
-    #region LoadSale
-
-    /// <summary>
-    /// Carga la variable de Sale
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 12/07/2016
-    /// </history>
-    private async void LoadSale()
-    {
-      var sale = grdSale.SelectedItem != null
-        ? (grdSale.SelectedItem as SaleShort)?.saID
-        : (grdSale.Items[0] as SaleShort)?.saID;
-      _oldSale = await BRSales.GetSalesbyId(sale);
-    }
-
-    #endregion
+ 
 
     #region LoadComboPayment
 
@@ -377,12 +396,12 @@ namespace IM.Host.Forms
     /// </summary>
     /// <param name="guestId">Id del Guest</param>
     ///<history>
-    ///[jorcanche] created 24/06/2016
+    /// [jorcanche] created 24/06/2016
     ///</history> 
     private async void GetGuestName(int? guestId)
     {
       if (guestId == null) return;
-      var guest = await BRGuests.GetGuest((int) guestId);
+      var guest = await BRGuests.GetGuest((int)guestId);
       if (guest != null && guestId != 0)
       {
         lblGuestName.Text = $"{guest.guLastName1} {guest.guFirstName1}";
@@ -411,28 +430,27 @@ namespace IM.Host.Forms
     {
       var salemen = new List<SalesSalesman>();
 
-      if (!string.IsNullOrEmpty(txtsaLiner1.Text) && salemen.Find(sm => sm.smpe == txtsaLiner1.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaLiner1.Text});
-      if (!string.IsNullOrEmpty(txtsaLiner2.Text) && salemen.Find(sm => sm.smpe == txtsaLiner2.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaLiner2.Text});
-      if (!string.IsNullOrEmpty(txtsaCloser1.Text) && salemen.Find(sm => sm.smpe == txtsaCloser1.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaCloser1.Text});
-      if (!string.IsNullOrEmpty(txtsaCloser2.Text) && salemen.Find(sm => sm.smpe == txtsaCloser2.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaCloser2.Text});
-      if (!string.IsNullOrEmpty(txtsaCloser3.Text) && salemen.Find(sm => sm.smpe == txtsaCloser3.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaCloser3.Text});
-      if (!string.IsNullOrEmpty(txtsaExit1.Text) && salemen.Find(sm => sm.smpe == txtsaExit1.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaExit1.Text});
-      if (!string.IsNullOrEmpty(txtsaExit2.Text) && salemen.Find(sm => sm.smpe == txtsaExit2.Text) == null)
-        salemen.Add(new SalesSalesman {smpe = txtsaExit2.Text});
+      if (!string.IsNullOrEmpty(cmbsaLiner1.Text) && salemen.Find(sm => sm.smpe == cmbsaLiner1.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaLiner1.Text });
+      if (!string.IsNullOrEmpty(cmbsaLiner2.Text) && salemen.Find(sm => sm.smpe == cmbsaLiner2.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaLiner2.Text });
+      if (!string.IsNullOrEmpty(cmbsaCloser1.Text) && salemen.Find(sm => sm.smpe == cmbsaCloser1.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaCloser1.Text });
+      if (!string.IsNullOrEmpty(cmbsaCloser2.Text) && salemen.Find(sm => sm.smpe == cmbsaCloser2.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaCloser2.Text });
+      if (!string.IsNullOrEmpty(cmbsaCloser3.Text) && salemen.Find(sm => sm.smpe == cmbsaCloser3.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaCloser3.Text });
+      if (!string.IsNullOrEmpty(cmbsaExit1.Text) && salemen.Find(sm => sm.smpe == cmbsaExit1.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaExit1.Text });
+      if (!string.IsNullOrEmpty(cmbsaExit2.Text) && salemen.Find(sm => sm.smpe == cmbsaExit2.Text) == null)
+        salemen.Add(new SalesSalesman { smpe = cmbsaExit2.Text });
       //Agregamos los datos del los SaleMen
 
       _saleMen = new List<SalesSalesman>();
 
       foreach (var item in salemen)
       {
-        var salesSalesMens =
-          BRSalesSalesmen.GetSalesSalesmens(new SalesSalesman {smpe = item.smpe, smsa = Convert.ToInt32(txtsaID.Text)});
+        var salesSalesMens =BRSalesSalesmen.GetSalesSalesmens(new SalesSalesman { smpe = item.smpe, smsa = Convert.ToInt32(txtsaID.Text) });
         if (salesSalesMens != null)
         {
           salesSalesMens.Personnel = BRPersonnel.GetPersonnelById(salesSalesMens.smpe);
@@ -444,7 +462,7 @@ namespace IM.Host.Forms
           item.smSaleAmountOwn = item.smSaleAmountWith = saleAmount < 0 ? -saleAmount : saleAmount;
           item.Personnel = BRPersonnel.GetPersonnelById(item.smpe);
           item.smSale = true;
-          item.smsa = _sale.saID;
+          item.smsa = _saleNew.saID;
           _saleMen.Add(item);
         }
       }
@@ -464,9 +482,7 @@ namespace IM.Host.Forms
     {
       //si la venta no es un Dwngrade       
       GetSaleTypeCategory();
-      return _saleTypeCategory != "DG"
-        ? _sale.saGrossAmount
-        : _sale.saNewAmount ?? 0;
+      return _saleTypeCategory != "DG" ? _saleNew.saGrossAmount: _saleNew.saNewAmount ?? 0;
     }
 
     #endregion
@@ -481,7 +497,7 @@ namespace IM.Host.Forms
     /// </history>
     private async void GetSaleTypeCategory()
     {
-      _saleTypeCategory = await BRSaleTypes.GetStstcOfSaleTypeById(_sale.sast);
+      _saleTypeCategory = await BRSaleTypes.GetStstcOfSaleTypeById(_saleNew.sast);
     }
 
     #endregion
@@ -515,17 +531,19 @@ namespace IM.Host.Forms
     /// </history>
     private void SetMode(EnumMode mode)
     {
+     
+
       var blnEnable = mode != EnumMode.modDisplay ? true : false;
       //Grid principal
-      grdSale.IsEnabled = !blnEnable;
+      dtgSale.IsEnabled = !blnEnable;
       //criterios de busqueda
       //brincamos este paso ya que segun el modo si es Global o Sale se ocultara los criterios de busqueda asi que no ha necesidad de inabilitarlos
       //Botones
       btnEdit.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard) &&
-                           grdSale.Items.Count > 0);
+                           dtgSale.Items.Count > 0);
       //Solo permite eliminar ventanas si tiene permiso super especial de ventas
       btnDelete.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.SuperSpecial) &&
-                             grdSale.Items.Count > 0);
+                             dtgSale.Items.Count > 0);
       btnSave.IsEnabled = btnUndo.IsEnabled = blnEnable;
       btnClose.IsEnabled = !blnEnable;
       //Autenticacion automatica
@@ -545,7 +563,26 @@ namespace IM.Host.Forms
       //deshabilitamos los datos generales
       EnabledGeneral(false);
       //Vendedores
-      gSalesmen.IsEnabled = blnEnable;
+      grdSalesmen.IsEnabled = 
+      cmbsaPR1.IsEnabled =
+      cmbsaPR2.IsEnabled =
+      cmbsaPR3.IsEnabled =
+      cmbsaLiner1.IsEnabled =
+      cmbsaLiner2.IsEnabled =
+      cmbsaCloser1.IsEnabled =
+      cmbsaCloser2.IsEnabled =
+      cmbsaCloser3.IsEnabled =
+      cmbsaExit1.IsEnabled =
+      cmbsaExit2.IsEnabled =
+      cmbsaPodium.IsEnabled =
+      cmbsaVLO.IsEnabled =
+      cmbsaPRCaptain1.IsEnabled =
+      cmbsaPRCaptain2.IsEnabled =
+      cmbsaPRCaptain3.IsEnabled =
+      cmbsaPRCaptain3.IsEnabled =
+      cmbsaCloserCaptain1.IsEnabled =
+      cmbsaLinerCaptain1.IsEnabled =
+      blnEnable;
       //boton de venta de vendedores
       btnSalesSalesmen.IsEnabled = blnEnable;
       //Capitanes
@@ -555,7 +592,7 @@ namespace IM.Host.Forms
       {
         // gGeneral.IsEnabled = true;
         //Numero de memebresia
-        txtsaMembershipNum.IsEnabled = true;
+        //txtsaMembershipNum.IsEnabled = true;
         //Guest ID
         txtsagu.IsEnabled = true;
         //Venta por telefono
@@ -584,8 +621,14 @@ namespace IM.Host.Forms
           chksaCancel.IsEnabled = true;
         }
         //Comentarios
-        txtsaComments.IsEnabled = false;
+       txtsaComments.IsEnabled = true;
+
+
+       
       }
+
+      //Se Inhabilita el membershipNum
+      txtsaMembershipNum.IsEnabled = false;
     }
 
     #endregion
@@ -682,14 +725,14 @@ namespace IM.Host.Forms
     private bool ValidateSalesSalesmen()
     {
       //Validamos el tipo de venta
-      if (string.IsNullOrEmpty(_sale.sast))
+      if (string.IsNullOrEmpty(_saleNew.sast))
       {
         UIHelper.ShowMessage("Specify a Sale Type");
         cbosast.Focus();
         return false;
       }
       //Validamos el nuevo monto
-      if (_sale.saNewAmount != 0) return true;
+      if (_saleNew.saNewAmount != 0) return true;
       UIHelper.ShowMessage("Specify the new amount");
       txtsaNewAmount.Focus();
       return false;
@@ -717,9 +760,8 @@ namespace IM.Host.Forms
           //Obtenermos los vendedores
           GetSalemen();
           var saleAmount = GetSaleAmount();
-          var salessalesmen = new frmSalesSalesmen
-            (_saleMen, _sale.saID, saleAmount < 0 ? -saleAmount : saleAmount, _saleAmountOriginal)
-          {Owner = this};
+          var salessalesmen = new frmSalesSalesmen(_saleMen, _saleNew.saID, saleAmount < 0 ? -saleAmount : saleAmount, _saleAmountOriginal)
+          { Owner = this };
           salessalesmen.ShowDialog();
         }
         else
@@ -733,25 +775,7 @@ namespace IM.Host.Forms
       }
     }
 
-    #endregion
-
-    #region grdSale_MouseLeftButtonDown
-
-    /// <summary>
-    /// Cuando se selecciona un row en el grid 
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 28062016
-    /// </history>
-    private async void grdSale_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (btnClose.IsEnabled)
-      {
-        await LoadRecord();
-      }
-    }
-
-    #endregion
+    #endregion  
 
     #region cbo_SelectionChanged
 
@@ -763,21 +787,34 @@ namespace IM.Host.Forms
     /// </history>
     private void cbo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var cbo = sender as ComboBox;
-      if (cbo == null) return;
-      var txt = (TextBox) FindName(cbo.Name.Replace("cbo", "txt"));
-      if (txt == null) return;
-      if (cbo.SelectedIndex != -1 || txt.Text == string.Empty)
+      var cmb = sender as ComboBox;
+      if (cmb == null || _loading) return;      
+
+      var personnelValidando = cmb.Name.Substring(5).Replace("Captain", "CAPT").ToUpper();
+      var lstcmb = UIHelper.GetChildParentCollection<ComboBox>(grdSalesmen);
+      if (cmb.SelectedIndex == -1) return;
+      foreach (var item in lstcmb)
       {
-        if (cbo.SelectedValue != null)
+        var personnelFound = item.Name.Substring(5).Replace("Captain", "CAPT").ToUpper();
+        //Validacion que sirve para saber si no es mismo ComboBox que se esta validando, PR1 == PR1 
+        if (personnelFound != personnelValidando)
         {
-          if (!_searchPRbyTxt)
+          //Validacion que sirve para siempre se compare los del mismo rol PR == PR
+          if (personnelValidando.Trim('1', '2', '3') == personnelFound.Trim('1', '2', '3'))
           {
-            txt.Text = cbo.SelectedValue.ToString();
+            //Ahora como ya se sabe que no es mismo ComboBox y es el mismo rol entonces ya podemos hacer 
+            //la validacion de ser el mismo texto no permitimos que se seleccione
+            var rol = personnelValidando.Trim('1', '2', '3');
+            if (cmb.SelectedValue.ToString() == item.Text)
+            {              
+              UIHelper.ShowMessage($"Please select another person. \nThe person with the Id: {item.Text} already selected with the role of {rol}");
+              cmb.SelectedIndex = -1;
+              break;
+            }
           }
         }
       }
-    }
+    }  
 
     #endregion
 
@@ -791,36 +828,37 @@ namespace IM.Host.Forms
     /// </history>
     private void txt_LostFocus(object sender, RoutedEventArgs e)
     {
-      var txt = (TextBox) sender;
-      var cbo = (ComboBox) FindName(txt.Name.Replace("txt", "cbo"));
-      if (cbo == null) return;
-      _searchPRbyTxt = true;
-      if (!string.IsNullOrEmpty(txt.Text))
-      {
-        //Validamos si existe la Persona si es un capitan o un pr o un liner o un closer o un vlo 
-        var name = txt.Name.Trim('1', '2', '3').Substring(5).Replace("Captain", "CAPT").ToUpper();
-        var pr = BRPersonnel.GetPersonnelById(txt.Text, name);
-        if (pr == null)
-        {
-          UIHelper.ShowMessage($"The {name.Replace("CAPT", " Captain")} not exist");
-          txt.Text = string.Empty;
-          txt.Focus();
-        }
-        else
-        {
-          cbo.SelectedValue = pr.peID;
-          txt.Text = pr.peID;
-        }
-      }
-      else
-      {
-        cbo.SelectedIndex = -1;
-      }
-      _searchPRbyTxt = false;
+      //var txt = (TextBox)sender;
+      //var cbo = (ComboBox)FindName(txt.Name.Replace("txt", "cbo"));
+      //if (cbo == null) return;
+      //_searchPRbyTxt = true;
+      //if (!string.IsNullOrEmpty(txt.Text))
+      //{
+      //  //Validamos si existe la Persona si es un capitan o un pr o un liner o un closer o un vlo 
+      //  var name = txt.Name.Trim('1', '2', '3').Substring(5).Replace("Captain", "CAPT").ToUpper();
+      //  var pr = BRPersonnel.GetPersonnelById(txt.Text, name);
+      //  if (pr == null)
+      //  {
+      //    UIHelper.ShowMessage($"The {name.Replace("CAPT", " Captain")} not exist");
+      //    txt.Text = string.Empty;
+      //    txt.Focus();
+      //  }
+      //  else
+      //  {
+      //    cbo.SelectedValue = pr.peID;
+      //    txt.Text = pr.peID;
+      //  }
+      //}
+      //else
+      //{
+      //  cbo.SelectedIndex = -1;
+      //}
+      //_searchPRbyTxt = false;
     }
 
     #endregion
 
+    #region CloseDate
     /// <summary>
     /// Obtiene la fecha de cierre
     /// </summary>
@@ -831,6 +869,7 @@ namespace IM.Host.Forms
     {
       _closeD = await BRSales.GetSalesCloseD(App.User.SalesRoom.srID);
     }
+    #endregion
 
     #region ValidatePagos
 
@@ -842,46 +881,30 @@ namespace IM.Host.Forms
     ///</history>
     private bool ValidatePagos()
     {
-
-      
-      _payments.ToList().ForEach(x =>
-      {
-        if (x.papt == null && x.pacc == null)
-        {
-        _payments.Remove(x);
-        }
-      });
-
       bool foundbad = false;
-      if (_payments.Count == 0) return true;
-      foreach (var item in _payments)
+      _payments.ToList().ForEach(payment =>
       {
-        if (item.papt == "CC" && item.pacc == null)
+        payment.pasa = _saleNew.saID;
+        payment.pacc = string.IsNullOrEmpty(payment.pacc) ? string.Empty : payment.pacc;
+
+        if (string.IsNullOrEmpty(payment.papt) && string.IsNullOrEmpty(payment.pacc))
+        {
+          _payments.Remove(payment);
+        }
+        if (payment.papt == "CC" && string.IsNullOrEmpty(payment.pacc))
         {
           foundbad = true;
-        }
-      }
-      if (foundbad)
-      {
-        UIHelper.ShowMessage("Please specify the Credit Card Type");
-        return false;
-      }
-      return true;
-    }
+        }                
+      });
 
+      if (!foundbad) return true;
+
+      UIHelper.ShowMessage("Please specify the Credit Card Type");
+      return false;
+    }
     #endregion
 
-    /// <summary>
-    /// Valida el Grid:
-    /// 1.- Que tenga al menos unregistro
-    /// 2.- Que no tenga registros repetidos
-    /// </summary>
-    /// <returns></returns>
-    private bool ValidateGrid()
-    {
-      return true;
-    }
-
+    #region IsSaleUpdate
     /// <summary>
     /// Indica si un tipo de venta es una actualizacion de otra venta
     /// </summary>
@@ -891,8 +914,9 @@ namespace IM.Host.Forms
     private async void IsSaleUpdate()
     {
       if (cbosast.SelectedValue != null)
-        _isSaleUpdate = await BRSaleTypes.GetstUpdateOfSaleTypeById(_sale.sast, 1);
+        _isSaleUpdate = await BRSaleTypes.GetstUpdateOfSaleTypeById(_saleNew.sast, 1);
     }
+    #endregion
 
     #region ValidateCancelDate
 
@@ -1050,7 +1074,7 @@ namespace IM.Host.Forms
       //Ojo: No validar cuando sea PHONE SALE
       if (chksaByPhone.IsChecked != null && !chksaByPhone.IsChecked.Value)
       {
-        var validateSalesmen = ValidateHelper.ValidateForm(gSalesmen, "SalesSalesmen");
+        var validateSalesmen = ValidateHelper.ValidateForm(grdSalesmen, "SalesSalesmen");
         if (!string.IsNullOrEmpty(validateSalesmen))
         {
           UIHelper.ShowMessage(validateSalesmen);
@@ -1079,12 +1103,12 @@ namespace IM.Host.Forms
     private async Task<bool> ValidateExist()
     {
       var validateExist =
-        await BRSales.ValidateSale(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), _sale.saID,
-          _sale.saMembershipNum, _sale.sagu, _sale.sast, _sale.sasr, _sale.salo, _sale.saPR1, _sale.saPR2, _sale.saPR3,
-          _sale.saPRCaptain1, _sale.saPRCaptain2, _sale.saPRCaptain2, _sale.saLiner1, _sale.saLiner2,
-          _sale.saLinerCaptain1,
-          _sale.saCloser1, _sale.saCloser2, _sale.saCloser3, _sale.saCloserCaptain1, _sale.saExit1, _sale.saExit2,
-          _sale.saPodium, _sale.saVLO);
+        await BRSales.ValidateSale(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), _saleNew.saID,
+          _saleNew.saMembershipNum, _saleNew.sagu, _saleNew.sast, _saleNew.sasr, _saleNew.salo, _saleNew.saPR1, _saleNew.saPR2, _saleNew.saPR3,
+          _saleNew.saPRCaptain1, _saleNew.saPRCaptain2, _saleNew.saPRCaptain2, _saleNew.saLiner1, _saleNew.saLiner2,
+          _saleNew.saLinerCaptain1,
+          _saleNew.saCloser1, _saleNew.saCloser2, _saleNew.saCloser3, _saleNew.saCloserCaptain1, _saleNew.saExit1, _saleNew.saExit2,
+          _saleNew.saPodium, _saleNew.saVLO);
 
       if (string.IsNullOrEmpty(validateExist.Focus)) return true;
       //Desplegamos el mensaje de error
@@ -1114,55 +1138,55 @@ namespace IM.Host.Forms
           txtsalo.Focus();
           break;
         case "PR1":
-          txtsaPR1.Focus();
+          cmbsaPR1.Focus();
           break;
         case "PR2":
-          txtsaPR2.Focus();
+          cmbsaPR2.Focus();
           break;
         case "PR3":
-          txtsaPR3.Focus();
+          cmbsaPR3.Focus();
           break;
         case "PRCaptain1":
-          txtsaPRCaptain1.Focus();
+          cmbsaPRCaptain1.Focus();
           break;
         case "PRCaptain2":
-          txtsaPRCaptain2.Focus();
+          cmbsaPRCaptain2.Focus();
           break;
         case "PRCaptain3":
-          txtsaPRCaptain3.Focus();
+          cmbsaPRCaptain3.Focus();
           break;
         case "Liner1":
-          txtsaLiner1.Focus();
+          cmbsaLiner1.Focus();
           break;
         case "Liner2":
-          txtsaLiner2.Focus();
+          cmbsaLiner2.Focus();
           break;
         case "LinerCaptain":
-          txtsaLinerCaptain1.Focus();
+          cmbsaLinerCaptain1.Focus();
           break;
         case "Closer1":
-          txtsaCloser1.Focus();
+          cmbsaCloser1.Focus();
           break;
         case "Closer2":
-          txtsaCloser2.Focus();
+          cmbsaCloser2.Focus();
           break;
         case "Closer3":
-          txtsaCloser3.Focus();
+          cmbsaCloser3.Focus();
           break;
         case "CloserCaptain":
-          txtsaCloserCaptain1.Focus();
+          cmbsaCloserCaptain1.Focus();
           break;
         case "Exit1":
-          txtsaExit1.Focus();
+          cmbsaExit1.Focus();
           break;
         case "Exit2":
-          txtsaExit2.Focus();
+          cmbsaExit2.Focus();
           break;
         case "Podium":
-          txtsaPodium.Focus();
+          cmbsaPodium.Focus();
           break;
         case "VLO":
-          txtsaVLO.Focus();
+          cmbsaVLO.Focus();
           break;
       }
       return false;
@@ -1194,7 +1218,7 @@ namespace IM.Host.Forms
       if (!ValidateCancelDate()) return false;
 
       //Validamos el si existe el ID del huesped
-      if (_sale.sagu == 0)
+      if (_saleNew.sagu == 0)
       {
         txtsagu.Focus();
         return false;
@@ -1229,7 +1253,7 @@ namespace IM.Host.Forms
       }
 
       //Validamos el nuevo monto que no sea igual a 0
-      if (_sale.saNewAmount == 0)
+      if (_saleNew.saNewAmount == 0)
       {
         UIHelper.ShowMessage("Specify the new amount");
         txtsaNewAmount.Focus();
@@ -1291,7 +1315,6 @@ namespace IM.Host.Forms
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       SetMode(EnumMode.modEdit);
-
     }
 
     #endregion
@@ -1343,12 +1366,12 @@ namespace IM.Host.Forms
     private async void btnUndo_Click(object sender, RoutedEventArgs e)
     {
       //si no hay ventas
-      if (grdSale.Items.Count == 0)
+      if (dtgSale.Items.Count == 0)
       {
         //si no se esta buscando
         if (_guId > 0)
         {
-          _sale = new Sale();
+          _saleNew = new Sale();
           DataContext = null;
           return;
         }
@@ -1375,8 +1398,8 @@ namespace IM.Host.Forms
       //txtsaCancelD.Text = chksaCancel.IsChecked != null && chksaCancel.IsChecked.Value ? BRHelpers.GetServerDate().ToString("dd/MM/yyyy") : string.Empty;
       //MessageBox.Show(_sale.saCancelD.ToString());   
       if (_loading) return;
-      _sale.saCancelD = _sale.saCancel ? (DateTime?) BRHelpers.GetServerDate() : null;
-      txtsaCancelD.Text = _sale.saCancelD.ToString();
+      _saleNew.saCancelD = _saleNew.saCancel ? (DateTime?)BRHelpers.GetServerDate() : null;
+      txtsaCancelD.Text = _saleNew.saCancelD.ToString();
     }
 
     #endregion
@@ -1413,97 +1436,59 @@ namespace IM.Host.Forms
     /// </history>
     private async void Save(IEnumerable<SalesmenChanges> salesmenChanges, string authorizedBy)
     {
-      //Procesable     
-      if (_sale.saProcD == null) _sale.saProc = false;
-      //Cancelada
-      if (_sale.saCancelD == null) _sale.saCancel = false;
+      try
+      {
+        //Procesable     
+        if (_saleNew.saProcD == null) _saleNew.saProc = false;
+        //Cancelada
+        if (_saleNew.saCancelD == null) _saleNew.saCancel = false;
 
-      //Establecemos los procentajes de volumen de venta de los vendedores
-      SetVolumenPercentage();
-      IsSaleUpdate();
-      //Establecemos la fecha de procesable de referencia
-      if (!_isSaleUpdate && _sale.saProcRD != _sale.saProcD)
-      {
-        _sale.saProcRD = _sale.saProcD;
-      }
-      if (_isSaleUpdate && _sale.saProcRD != null)
-      {
-        _sale.saProcRD = _sale.saProcD;
-      }
-      //Si son diferentes los Objetos es que hubo cambios 
-      if (!ObjectHelper.IsEquals(_sale, _oldSale))
-      {
-        var nRes = await BREntities.OperationEntity(_sale, Model.Enums.EnumMode.edit);
-        //Disparamos el mensaje que nos arroja  la operación del guardado
-        UIHelper.ShowMessageResult("Sale", nRes);
-      }
-      //Guardamosa los pagos
-      PaymentsSave();
-
-      //Si cambio de venta anterior
-      if (txtsaRefMember.IsEnabled && _sale.saReference != _oldSale.saReference)
-      {
-        //si tenia venta anterior, la marcamos como actualizada
-        if (_oldSale.saReference != null)
+        //Establecemos los procentajes de volumen de venta de los vendedores
+        SetVolumenPercentage();
+        IsSaleUpdate();
+        //Establecemos la fecha de procesable de referencia
+        if (!_isSaleUpdate && _saleNew.saProcRD != _saleNew.saProcD)
         {
-          //marcamos la venta anterior actual como actualizada
-          await BRSales.UpdateSaleUpdated(_oldSale.saReference, false);
+          _saleNew.saProcRD = _saleNew.saProcD;
         }
-        //actualizamos los vendedores del huesped en base a los vendedores de la venta 
-        await BRSales.UpdateSaleUpdated(_sale.saReference, true);
-      }
-
-      //Actualiza los vendedores del huesped en base a los vendedores de la venta 
-      await BRSalesSalesmen.UpdateGuestSalesmen(_sale.sagu, _sale.saID);
-
-      //Si cambio de guest ID      
-
-      if (_oldSale.sagu != _sale.sagu)
-      {
-        //marcamos como venta el guest Id Nuevo
-        await BRSales.UpdateGuestSale(_sale.sagu, true);
-
-        //Desmarcamos como venta el Guest Id anterior si ya no le quedan ventas
-        var sales = await BRSales.GetCoutSalesbyGuest(_sale.sagu);
-        if (sales == 0)
+        if (_isSaleUpdate && _saleNew.saProcRD != null)
         {
-          await BRSales.UpdateGuestSale(_oldSale.sagu, false);
+          _saleNew.saProcRD = _saleNew.saProcD;
         }
-      }
 
-      //Recargamos la información
-      await LoadRecord();
+        //Guardamos todos los movimientos que estan relacionados con Sale
+        var saleAmounts = GetSaleAmount();
+        await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
+                                          txtChangedBy.Text, saleAmounts < 0 ? -saleAmounts : saleAmounts, _saleMen, _saleAmountOriginal,
+                                          ComputerHelper.GetIpMachine(), salesmenChanges, authorizedBy);
 
-      //Guardamos el historico de la venta
-      await BRSales.SaveSaleLog(_sale.sagu, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+        //Recargamos la información
+        await LoadRecord();
 
-      //Guardamos las ventas de los vendedores 
-      var saleAmount = GetSaleAmount();
-      Classes.SalesSalesmen.SaveSalesSalesmen(_saleMen, _sale.saID, saleAmount < 0 ? -saleAmount : saleAmount,
-        _saleAmountOriginal);
-
-      //Guardamos el movimiento de venta del huesped
-      await
-        BRGuests.SaveGuestMovement(_sale.sagu, EnumGuestsMovementsType.Sale, txtChangedBy.Text, Environment.MachineName,
-          ComputerHelper.GetIpMachine());
-
-      //Guardamos los cambios de vendedores y la persona que autorizo los cambiuos
-      if (!string.IsNullOrEmpty(authorizedBy))
-      {
-        //SaveSalesmenChanges(salesmenChanges, authorizedBy);
-        foreach (var salesmenChange in salesmenChanges)
+        //Validamos si existe el MemberShipNum en Intelligence Contracts
+        if (await BRMemberSalesman.ExistsMembershipNum(_saleNew.saMembershipNum))
         {
-          await BRSalesSalesmen.SaveSalesmenChanges
-            (_sale.sagu, authorizedBy, txtChangedBy.Text, salesmenChange.roN, salesmenChange.schPosition,
-              salesmenChange.schOldSalesman, salesmenChange.schNewSalesman);
+          //Actualizamos vendedores en Intelligence Contracts
+          List<string> mensajes = await BRMemberSalesman.SaveMemberSalesmenClubes(_saleNew, txtChangedBy.Text);
+          foreach (var item in mensajes)
+          {
+            UIHelper.ShowMessage(item);
+          }
+          //await SaveMemberSalesmenClubes();
         }
+        else
+        {
+          UIHelper.ShowMessage($"The Membership Num {_saleNew.saMembershipNum} do not exists on Intelligence Contracts \n" +
+                                "Can not save the Salesmen in Intelligence Contracts");
+        }
+        //Establecemos el modos de solo lectura
+        SetMode(EnumMode.modDisplay);
+
       }
-      //Actualizamos vendedores en Intelligence Contracts
-      SaveMemberSalesmenClubes();
-
-      //Establecemos el modos de solo lectura
-      SetMode(EnumMode.modDisplay);
-
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
     }
 
     #endregion
@@ -1516,33 +1501,33 @@ namespace IM.Host.Forms
     /// <history>/
     /// [jorcanche] created 08/07/2016
     /// </history>
-    private async void SaveMemberSalesmenClubes()
-    {
+    private async Task SaveMemberSalesmenClubes()
+    {     
       string sPRs = string.Empty, sLiners = string.Empty, sClosers = string.Empty, sExits = string.Empty;
 
       //Obtenemos los vendedores de Intelligence Contracts 
       _lstMemberSalesmens =
-        await BRMemberSalesman.GetMemberSalesmen(_sale.saMembershipNum, "ALL", "ALL", "OPC,LINER,CLOSER,EXIT");
+        await BRMemberSalesman.GetMemberSalesmen(_saleNew.saMembershipNum, "ALL", "ALL", "OPC,LINER,CLOSER,EXIT");
 
-      //Agregamos / Actualizamos los vendedores de Origos den Intelligence contracts
+      //Agregamos  Actualizamos los vendedores de Origos den Intelligence contracts
 
       //PR's
-      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _sale.saPR1, sPRs);
-      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _sale.saPR2, sPRs);
-      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _sale.saPR3, sPRs);
+      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _saleNew.saPR1, sPRs);
+      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _saleNew.saPR2, sPRs);
+      sPRs = await SaveMemberSalesmanClubesByRole("OPC", "OPC", _saleNew.saPR3, sPRs);
 
       //Liners
-      sLiners = await SaveMemberSalesmanClubesByRole("LINER", "LIN", _sale.saLiner1, sLiners);
-      sLiners = await SaveMemberSalesmanClubesByRole("LINER", "LIN", _sale.saLiner2, sLiners);
+      sLiners = await SaveMemberSalesmanClubesByRole("LINER", "LIN", _saleNew.saLiner1, sLiners);
+      sLiners = await SaveMemberSalesmanClubesByRole("LINER", "LIN", _saleNew.saLiner2, sLiners);
 
       //Closers
-      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _sale.saCloser1, sClosers);
-      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _sale.saCloser2, sClosers);
-      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _sale.saCloser3, sClosers);
+      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _saleNew.saCloser1, sClosers);
+      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _saleNew.saCloser2, sClosers);
+      sClosers = await SaveMemberSalesmanClubesByRole("CLOSER", "CLOS", _saleNew.saCloser3, sClosers);
 
       //Exit Closers
-      sExits = await SaveMemberSalesmanClubesByRole("EXIT", "JR", _sale.saExit1, sExits);
-      sExits = await SaveMemberSalesmanClubesByRole("EXIT", "JR", _sale.saExit2, sExits);
+      sExits = await SaveMemberSalesmanClubesByRole("EXIT", "JR", _saleNew.saExit1, sExits);
+      sExits = await SaveMemberSalesmanClubesByRole("EXIT", "JR", _saleNew.saExit2, sExits);
 
       //Eliminamos los vendedores en Intelligence Contracts que no estan en Intelligence Marketing
       DeleteSalesmenClubes("OPC", sPRs);
@@ -1566,7 +1551,7 @@ namespace IM.Host.Forms
     private async void DeleteSalesmenClubes(string role, string salesmen)
     {
       //Obtenemos vendedores actuales de Intelligence Contracts
-      var memberSalesmens = await BRMemberSalesman.GetMemberSalesmen(_sale.saMembershipNum, "ALL", "ALL", role);
+      var memberSalesmens = await BRMemberSalesman.GetMemberSalesmen(_saleNew.saMembershipNum, "ALL", "ALL", role);
       if (memberSalesmens.Any())
       {
         //si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
@@ -1594,7 +1579,7 @@ namespace IM.Host.Forms
     {
       //si tiene una clave de vendedor de origos
       if (!string.IsNullOrEmpty(id))
-      {
+      {      
         //agregamos la clave de vendedor en origos
         salesmen = salesmen + id + " ";
         //select peID, peN, peSalesmanID from Personnel order by peN
@@ -1614,12 +1599,12 @@ namespace IM.Host.Forms
           return salesmen;
         }
         //Validamos si existe la clave de intelligence Contracts
-        var zone = _sale.sasr;
+        var zone = _saleNew.sasr;
         if (!await BRMemberSalesman.ExistsSalesman(zone, salemanId))
         {
           UIHelper.ShowMessage($"The salesman  {salemanId} from zone {zone} does not exists on Intelligence Contracts");
           return salesmen;
-        }
+        }               
         //Localizamos el vendedor de Intelligence contracts
         var memberSalesmens = _lstMemberSalesmens.FirstOrDefault(sa => sa.OPC == salemanId && sa.CLAOPC_ID == job);
         //si no se localizo 
@@ -1635,7 +1620,7 @@ namespace IM.Host.Forms
           {
             memberSalesmens.CLAOPC_ID = job;
             memberSalesmens.STATUS = "A";
-            memberSalesmens.ZONA = _sale.sasr;
+            memberSalesmens.ZONA = _saleNew.sasr;
             //Actualizamos el vendedor de Intelligence contracts 
             await BRMemberSalesman.SaveMemberSalesman(memberSalesmens.RECNUM, memberSalesmens, txtChangedBy.Text);
             //App.User.User.peID);
@@ -1668,13 +1653,13 @@ namespace IM.Host.Forms
       var memberSalesmen = new MemberSalesmen
       {
         CLMEMOPC_ID = 0,
-        APPLICATION = _sale.saMembershipNum,
+        APPLICATION = _saleNew.saMembershipNum,
         CLAOPC_ID = job,
         OPC1 = string.Empty,
         OPC_PCT = 0,
         OPC_PCT2 = 0,
         OPC_CPT3 = 0,
-        OPC_PCT4 = 4,
+        OPC_PCT4 = 0,
         STATUS = "A",
         ZONA = zone,
         OPC = salemanId
@@ -1694,24 +1679,20 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche] 07/06/2016 created
     /// </history>
-    private async void PaymentsSave()
+    private async Task PaymentsSave()
     {
       //Disparamos el mensaje que nos arroja  la operación del eliminado
-      if (_payments.Any())
-      {
-        int resDelete = await BRPayments.DeletePaymentsbySale(_sale.saID);
-        if (resDelete > 0) return;
-        UIHelper.ShowMessageResult("Payments", resDelete);
-      }
+
+      int resDelete = await BRPayments.DeletePaymentsbySale(_saleNew.saID);      
+      if(resDelete < 1) UIHelper.ShowMessageResult("Payments", resDelete);
       foreach (var paysale in _payments)
-      {
-        paysale.pasa = _sale.saID;
+      {       
         int resOperationEntity = await BREntities.OperationEntity(paysale, Model.Enums.EnumMode.add);
         //Disparamos el mensaje que nos arroja  la operación del guardado
-        if (resOperationEntity > 0) return;
+        if (resOperationEntity > 0) continue;
         UIHelper.ShowMessageResult("Payments", resOperationEntity);
       }
-    } 
+    }
     #endregion
 
     #region SetVolumenPercentage
@@ -1726,28 +1707,28 @@ namespace IM.Host.Forms
     {
       var closers = 1;
       //Obtenemos el numero de Closer + Exits
-      if (_sale.saCloser2 != null) closers = closers + 1;
-      if (_sale.saCloser3 != null) closers = closers + 1;
-      if (_sale.saExit1 != null) closers = closers + 1;
-      if (_sale.saExit2 != null) closers = closers + 1;
+      if (_saleNew.saCloser2 != null) closers = closers + 1;
+      if (_saleNew.saCloser3 != null) closers = closers + 1;
+      if (_saleNew.saExit1 != null) closers = closers + 1;
+      if (_saleNew.saExit2 != null) closers = closers + 1;
       //Obtenemos el porcentaje incial del volumen
-      var vol = closers == 3 ? 34 : 100/closers;
+      var vol = closers == 3 ? 34 : 100 / closers;
 
       //Porcentaje de volumen del closer 1
-      _sale.saCloser1P = (byte) vol;
+      _saleNew.saCloser1P = (byte)vol;
 
       //Porcentaje de volumen del closer 2
       if (vol == 34) vol = 33;
-      _sale.saCloser2P = (byte) (_sale.saCloser2 != null ? vol : 0);
+      _saleNew.saCloser2P = (byte)(_saleNew.saCloser2 != null ? vol : 0);
 
       //Porcentaje de volumen del Closer 3
-      _sale.saCloser3P = (byte) (_sale.saCloser3 != null ? vol : 0);
+      _saleNew.saCloser3P = (byte)(_saleNew.saCloser3 != null ? vol : 0);
 
       //Porcentaje de volumen del Exit 1
-      _sale.saExit1P = (byte) (_sale.saExit1 != null ? vol : 0);
+      _saleNew.saExit1P = (byte)(_saleNew.saExit1 != null ? vol : 0);
 
       //Porcentaje de volumen del Exit 2
-      _sale.saExit2P = (byte) (_sale.saExit2 != null ? vol : 0);
+      _saleNew.saExit2P = (byte)(_saleNew.saExit2 != null ? vol : 0);
     }
 
     #endregion
@@ -1765,27 +1746,28 @@ namespace IM.Host.Forms
     private bool GetSalesmenChanges(ref List<SalesmenChanges> salesmenChanges, ref string authorizedBy)
     {
       //PR´s
-      SalesmanChanged(txtsaPR1, cbosaPR1.Text, 1, "PR", ref salesmenChanges);
-      SalesmanChanged(txtsaPR2, cbosaPR2.Text, 2, "PR", ref salesmenChanges);
-      SalesmanChanged(txtsaPR3, cbosaPR3.Text, 3, "PR", ref salesmenChanges);
+      SalesmanChanged(cmbsaPR1, cmbsaPR1.Text, 1, "PR", ref salesmenChanges);
+      SalesmanChanged(cmbsaPR2, cmbsaPR2.Text, 2, "PR", ref salesmenChanges);
+      SalesmanChanged(cmbsaPR3, cmbsaPR3.Text, 3, "PR", ref salesmenChanges);
       //Liners
-      SalesmanChanged(txtsaLiner1, cbosaLiner1.Text, 1, "LINER", ref salesmenChanges);
-      SalesmanChanged(txtsaLiner2, cbosaLiner2.Text, 2, "LINER", ref salesmenChanges);
+      SalesmanChanged(cmbsaLiner1, cmbsaLiner1.Text, 1, "LINER", ref salesmenChanges);
+      SalesmanChanged(cmbsaLiner2, cmbsaLiner2.Text, 2, "LINER", ref salesmenChanges);
       //Closers
-      SalesmanChanged(txtsaCloser1, cbosaCloser1.Text, 1, "CLOSER", ref salesmenChanges);
-      SalesmanChanged(txtsaCloser2, cbosaCloser2.Text, 2, "CLOSER", ref salesmenChanges);
-      SalesmanChanged(txtsaCloser3, cbosaCloser3.Text, 3, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(cmbsaCloser1, cmbsaCloser1.Text, 1, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(cmbsaCloser2, cmbsaCloser2.Text, 2, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(cmbsaCloser3, cmbsaCloser3.Text, 3, "CLOSER", ref salesmenChanges);
       //Exit Closers
-      SalesmanChanged(txtsaExit1, cbosaExit1.Text, 1, "EXIT", ref salesmenChanges);
-      SalesmanChanged(txtsaExit2, cbosaExit2.Text, 2, "EXIT", ref salesmenChanges);
+      SalesmanChanged(cmbsaExit1, cmbsaExit1.Text, 1, "EXIT", ref salesmenChanges);
+      SalesmanChanged(cmbsaExit2, cmbsaExit2.Text, 2, "EXIT", ref salesmenChanges);
 
       //si hubo cambios de vendedores y no es el dia de la venta 
-      if (salesmenChanges.Count <= 0 || _sale.saD >= _serverDate) return true;
+      if (salesmenChanges.Count <= 0 || _saleNew.saD >= _serverDate) return true;
       //Desplegamos el formulario para solicitar la persona que autorizo los cambios
-      var frmEntryFieldData = new frmEntryFieldsData(salesmenChanges);
+      var frmEntryFieldData = new frmEntryFieldsData(salesmenChanges) {Owner = this };
       frmEntryFieldData.ShowDialog();
       authorizedBy = frmEntryFieldData.AuthorizedBy;
       // si esta vacio el cambio de autorizado por 
+
       if (string.IsNullOrEmpty(authorizedBy)) return false;
       //si se presiono el boton de cancelar 
       if (!frmEntryFieldData.cancel) return false;
@@ -1807,10 +1789,10 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche] created 24062016
     /// </history>
-    private void SalesmanChanged(TextBox txt, string newSalesman, byte position, string role,
+    private void SalesmanChanged(ComboBox txt, string newSalesman, byte position, string role,
       ref List<SalesmenChanges> salesmenChanges)
     {
-      var salesSalesmenOld = _oldSale.GetType().GetProperty(txt.Name.Substring(3)).GetValue(_oldSale);
+      var salesSalesmenOld = _saleOld.GetType().GetProperty(txt.Name.Substring(3)).GetValue(_saleOld);
       var strSalesSalesmen = salesSalesmenOld?.ToString() ?? string.Empty;
       if (txt.Text != strSalesSalesmen)
       {
@@ -1839,7 +1821,7 @@ namespace IM.Host.Forms
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      var salesLog = new frmSalesLog(_sale.saID, _sale.saMembershipNum) {Owner = this};
+      var salesLog = new frmSalesLog(_saleNew.saID, _saleNew.saMembershipNum) { Owner = this };
       salesLog.Show();
     }
 
@@ -1864,12 +1846,12 @@ namespace IM.Host.Forms
       // si no es un Upgrade o un Downgrade
       if (!_isSaleUpdate)
       {
-        _sale.saReference = null;
-        _sale.saOriginalAmount = 0;
+        _saleNew.saReference = null;
+        _saleNew.saOriginalAmount = 0;
         //se resta y se agrega a _sale.saGrossAmount, Como el resultado puede ser nulo hacemos una validación antes de asignarla
-        var monto = _sale.saNewAmount - _sale.saOriginalAmount;
+        var monto = _saleNew.saNewAmount - _saleNew.saOriginalAmount;
         if (monto != null)
-          _sale.saGrossAmount = (decimal) monto;
+          _saleNew.saGrossAmount = (decimal)monto;
       }
       //habilitamos el editor de tipo de membresia global si es un Upgrade o un Downgrade
       cbosamtGlobal.IsEnabled = _isSaleUpdate;
@@ -1882,51 +1864,29 @@ namespace IM.Host.Forms
       }
     }
 
-
-    #endregion
-
-    #region Txtsagu_OnLostFocus
-
-    /// <summary>
-    /// Valida si existe el Id del Guest
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05072016
-    /// </history>
-    private void Txtsagu_OnLostFocus(object sender, RoutedEventArgs e)
-    {
-      GetGuestName(_sale.sagu);
-    }
-
-    #endregion
-
-
+    #endregion 
 
     #region Dgpayment_OnRowEditEnding
 
     /// <summary>
-    /// Si existe una fila vacia cancela el evento 
-    /// Elimina los Rows Vacios y me agrega uno al final
+    /// Elimina los Rows Vacios, y como no se cancela el evento al final me agrega un nuevo row
+    /// dejando así al final siempre un Row vacio
     /// </summary>
     /// <history>
     /// [jorcanche]  created 05/Jul/016
     /// </history>
     private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-    {
-      e.Cancel = _payments.ToList().Exists(x => x.papt == null && x.pacc == null);
-      
-      _payments.ToList().ForEach(x =>
       {
-        if (x.papt == null && x.pacc == null)
+      _payments.ToList().ForEach(payment =>
+      {
+        if (string.IsNullOrEmpty(payment.papt) && string.IsNullOrEmpty(payment.pacc))
         {
-          _payments.Remove(x);
+          _payments.Remove(payment);
         }
       });
-      _payments.ToList().Add(new Payment());
     }
 
     #endregion
-
 
     #region Dgpayment_OnLostKeyboardFocus
     /// <summary>
@@ -1945,14 +1905,14 @@ namespace IM.Host.Forms
     #region LoadedPaccColumn_OnHandler
 
     /// <summary>
-    /// Habilita ó deshabilita Payment Type segun si selecciono Tarjeta de Credito 
+    /// Habilita ó deshabilita la columna Credit Card según si selecciono Tarjeta de Credito (CC)
     /// </summary>
     /// <history>
     /// [jorcanche]  created 05/Jul/016
     /// </history>
     private void LoadedPaccColumn_OnHandler(object sender, RoutedEventArgs e)
     {
-      var payment = (Payment) dgpayment.CurrentItem;
+      var payment = (Payment)dgpayment.CurrentItem;
       paccColumn.IsReadOnly = payment.papt != "CC";
     }
 
@@ -1963,25 +1923,27 @@ namespace IM.Host.Forms
     /// <summary>
     /// Valida la primera columna papt de modo que:
     /// 1.- Si selecciona CC habilita la segunda columana pacc y selecciona por default el primer registro.
-    /// 2.- Si selecciona uno diferenta a CC dehabilita la segunda columna pacc y y quita la seleccion dejandolo en SelectedIndex = -1;
+    /// 2.- Si selecciona uno diferente a CC deshabilita la segunda columna pacc y quita la seleccion dejandolo en SelectedIndex = -1;
     /// </summary>
     /// <history>
     /// [jorcanche]  created 05/Jul/016
     /// </history>
     private void SelectionChangedPaptColumn_OnHandler(object sender, SelectionChangedEventArgs e)
     {
-      var payment = (ComboBox) e.Source;
+      var payment = (ComboBox)e.Source;
       if (payment.SelectedValue == null) return;
 
       var drSelected = dgpayment.ItemContainerGenerator.ContainerFromIndex(dgpayment.SelectedIndex) as DataGridRow;
       var dcCreditCard = dgpayment.Columns[1].GetCellContent(drSelected).Parent as DataGridCell;
       var combo = dcCreditCard.Content as ComboBox;
 
-      if (combo != null)
-      {
-        combo.SelectedIndex = payment.SelectedValue.ToString() != "CC" ? -1 : 1;
-      }
-
+      //Si se escogio el Credit Card en la columana Payment Type automaticamente en la columan Credit Card te escogera
+      //el primer registro de ser lo contrario lo dejara vacio
+      if (combo != null) combo.SelectedIndex = payment.SelectedValue.ToString() != "CC" ? -1 : 1;
+       
+      //Valida que no se repitan en la columan Payment Type.
+      //Al momento de seleccionar uno que ya existe te manda un mensaje 
+      //y deja el combobox.SelectedIndex con  el valor -1 para que quede vacio el control
       if (_payments.Count(pay => pay.papt == payment.SelectedValue.ToString()) != 1)
       {
         UIHelper.ShowMessage("Payment Type must not be repeated");
@@ -1992,60 +1954,82 @@ namespace IM.Host.Forms
 
     #endregion
 
+    #region btnUndo_PreviewMouseLeftButtonDown
 
-    private void PreviewGotKeyboardFocusPaccColumn_OnHandler(object sender, KeyboardFocusChangedEventArgs e)
+    /// <summary>
+    /// Indica si se presiono el boton btnUndo
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 30/jul/2015
+    /// </history>
+    private void btnUndo_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-
-    }
-  
-    private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-
-    }
-
-    private void dgpayment_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
+      isPressedbtnUndo = true;
     }
 
-    private void dgpayment_InitializingNewItem(object sender, InitializingNewItemEventArgs e)
-    {
+    #endregion
 
+    #region dtgSale_SelectionChanged
+    /// <summary>
+    /// Carga el Sale segun la seleccion del datagrid
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/jul/2016  created 
+    /// </history>
+    private async void dtgSale_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (btnClose.IsEnabled)
+      {
+        await LoadRecord();
+      }
+    }
+    #endregion
+
+    #region txt_PreviewTextInput
+    /// <summary>
+    /// Valida que solo se ingresen Numeros en los campos
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/jul/2016  created 
+    /// </history>
+    private void txt_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = !char.IsDigit(Convert.ToChar(e.Text));
     }
 
-    private void dgpayment_KeyDown(object sender, KeyEventArgs e)
+    #endregion
+
+    #region txt_KeyDown
+    /// <summary>
+    /// Si presiono la tecla enter busca 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/jul/2016  created 
+    /// </history>
+    private void txt_KeyDown(object sender, KeyEventArgs e)
     {
+      if (e.Key == Key.Enter)
+      {
+        LoadGrid();
+      }
+    } 
+    #endregion
 
-    }   
+    #region Txtsagu_OnLostFocus
 
-    private void dgpayment_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e)
+    /// <summary>
+    /// Valida si existe el Id del Guest
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05072016
+    /// </history>
+    private void Txtsagu_OnLostFocus(object sender, RoutedEventArgs e)
     {
-
+      if (!isPressedbtnUndo) GetGuestName(_saleNew.sagu);
+      isPressedbtnUndo = false;
     }
 
-    private void Dgpayment_OnLostFocus(object sender, RoutedEventArgs e)
-    {
-    
-    }
-
-    private void LostFocusPaccColumn_OnHandler(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private void Dgpayment_OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-    {
-
-    }
-
-    private void LostFocusPaptColumn_OnHandler(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-    {
-
-    }
+    #endregion
+   
   }
 }
