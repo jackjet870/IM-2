@@ -10,8 +10,7 @@ namespace IM.BusinessRules.BR
 {
    public class BREfficiency
   {
-    #region GetEffificencyBySr
-
+    #region GetEfficiencyByWeeks
     /// <summary>
     /// Obtiene una lista de Efficiency 
     /// </summary>
@@ -19,28 +18,19 @@ namespace IM.BusinessRules.BR
     /// <param name="dateFrom">Fecha de inicio </param>
     /// <param name="dateTo">Fecha final</param>
     /// <history>
-    /// [ecanul] 26/04/2016 Created
-    /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 30/07/2016 Created
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
-    public async static Task<List<Efficiency>> GetEffificencyBySr(string sr, DateTime dateFrom, DateTime dateTo)
+    public async static Task<List<EfficiencyData>> GetEfficiencyByWeeks(string sr, DateTime dateFrom, DateTime dateTo)
     {
-      List<Efficiency> result = new List<Efficiency>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          var query = from ef in dbContext.Efficiencies
-                      where ef.efsr == sr &&
-                            ((ef.efDateFrom.Year == dateFrom.Year && ef.efDateFrom.Month == dateFrom.Month) ||
-                             (ef.efDateTo.Year == dateTo.Year && ef.efDateTo.Month == dateTo.Month))
-                            && ef.efDateTo < dateTo
-                      orderby ef.efDateFrom
-                      select (ef);
-          result.AddRange(query.ToList());
+          return dbContext.USP_IM_GetEfficiencyByWeeks(sr, dateFrom, dateTo).ToList();
         }
       });
-      return result;
-      }
+    }
     #endregion
   }
 }

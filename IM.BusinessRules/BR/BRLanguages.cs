@@ -20,18 +20,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [aalcocer] 24/02/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<LanguageShort>> GetLanguages(int status)
     {
-      List<LanguageShort> result = null;
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
+          return dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
         }
       });
-      return result;
     }
 
     #region GetLanguages

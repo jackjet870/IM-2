@@ -47,17 +47,18 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<int> DeletePaymentsbySale(int saleId)
     {
-      int res = 0;
-      await Task.Run(() =>
+
+     return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstPayments = dbContext.Payments.Where(p => p.pasa == saleId);
+          if (!lstPayments.Any()) return 1;
+
           dbContext.Payments.RemoveRange(lstPayments);
-          res =  dbContext.SaveChanges();
+          return  dbContext.SaveChanges();
         }
-      });
-      return res;
+      });    
     } 
     #endregion
   }

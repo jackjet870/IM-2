@@ -109,21 +109,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  12/Mar/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<PersonnelShort>> GetPersonnel(string leadSources = "ALL", string salesRooms = "ALL",
       string roles = "ALL", int status = 1, string permission = "ALL",
       string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL" , string idPersonnel = "ALL")
     {
-      List<PersonnelShort> result = null;
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator,
-              ((int)level), dept, idPersonnel).ToList();
+          return dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator, ((int)level), dept, idPersonnel).ToList();
         }
       });
-      return result;
     }
 
     #endregion
@@ -274,6 +272,7 @@ namespace IM.BusinessRules.BR
             {
               try
               {
+                dbContext.Database.CommandTimeout = Settings.Default.USP_OR_DeletePersonnel;
                 lstPersonnels.ForEach(pe =>
                 {
                   dbContext.USP_OR_DeletePersonnel(pe.peID);
@@ -286,7 +285,7 @@ namespace IM.BusinessRules.BR
               catch
               {
                 transacction.Rollback();
-                return 0;
+                throw;
               }
             }
           }

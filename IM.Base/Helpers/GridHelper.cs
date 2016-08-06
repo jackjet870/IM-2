@@ -370,7 +370,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void ValidateEditNumber(int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
+    public static void ValidateEditNumber(ref int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
       if (pNumber >= 0)
@@ -395,6 +395,7 @@ namespace IM.Base.Helpers
       else
       {
         // si se envio un valor default
+        //TODO: revisar si se asigna esta validacion Tony pNumber no esta por referencia
         if (pDefaultValue != 0)
           pNumber = pDefaultValue;
         else
@@ -448,6 +449,53 @@ namespace IM.Base.Helpers
                   cmbBinding.UpdateTarget();
                   break;
                 default:
+                  break;
+              }
+            }
+          });
+        }
+      }
+    }
+
+    #endregion
+
+    #region Update Source From a Row
+    /// <summary>
+    ///   Actualiza el source de una fila en el grid con valores insertados
+    /// </summary>
+    /// <param name="dtg">DataGrid que vamos a actualizar</param>
+    /// <history>
+    ///   [vku] 03/Ago/2017  Created.
+    /// </history>
+    public static void UpdateSourceFromARow(DataGrid dtg)
+    {
+      //Si el Grid es diferente de NULL
+      if (dtg != null && dtg?.SelectedIndex != -1)
+      {
+        //Obtenemos el DataGridRow seleccionado
+        DataGridRow dtgRow = (DataGridRow)dtg.ItemContainerGenerator.ContainerFromIndex(dtg.SelectedIndex);
+        //Obtenemos la lista de las columnas
+        List<DataGridColumn> columns = dtg?.Columns?.ToList();
+
+        //Si tiene alguna columna
+        if (columns.Any())
+        {
+          columns.ForEach(column =>
+          {
+            //Obtenemos la celda
+            DataGridCell cell = column.GetCellContent(dtgRow).Parent as DataGridCell;
+
+            if (cell != null)
+            {
+
+              Type controlType = cell.Content.GetType();
+
+              switch (controlType.Name)
+              {
+                case "TextBox":
+                  TextBox txtb = cell.Content as TextBox;
+                  var txtBinding = txtb.GetBindingExpression(TextBox.TextProperty);
+                  txtBinding.UpdateSource();
                   break;
               }
             }
@@ -576,11 +624,13 @@ namespace IM.Base.Helpers
       var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
       //Obtener la fila en edición
       var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
-
-      //Fila a editar o seleccionada
-      var rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex);
-
-      if(rowEdit!=null && rowEdit!=rowSelected)
+      DataGridRow rowSelected = new DataGridRow();
+      if (dgr.SelectedIndex != -1)
+      {
+        //Fila a editar o seleccionada
+        rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;        
+      }
+      if (rowEdit != null && rowEdit != rowSelected)
       {
         return true;
       }

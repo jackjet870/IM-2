@@ -11,6 +11,9 @@
             <Trigger Property="Border.IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand" />
             </Trigger>
+            <Trigger Property="Border.IsEnabled" Value="False">
+                <Setter Property="Border.Background" Value="Gray"/>
+            </Trigger>
         </Style.Triggers>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5,0,0,0"/>
@@ -25,6 +28,24 @@
 
     <!--#region  Estilo Borde lista catalogos PRStatistics-->
     <Style TargetType="{x:Type Border}" x:Key="brd-Catalogs" >
+        <Style.Resources>
+            <Style TargetType="CheckBox">
+                <Setter Property="Foreground" Value="Black"/>
+                <Style.Triggers>
+                    <Trigger Property="Border.IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="White" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+                <Style.Triggers>
+                    <Trigger Property="Border.IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
         <Setter Property="CornerRadius" Value="5"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="BorderThickness" Value="1"/>

@@ -1384,19 +1384,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 07/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptStatisticsByLocation>> GetRptStatisticsByLocation(DateTime dtStart, DateTime dtEnd,
       IEnumerable<string> salesRoom)
     {
-      var result = new List<RptStatisticsByLocation>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptStatsByLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1410,19 +1409,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 06/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptStatisticsBySalesRoomLocation>> GetRptStatisticsBySalesRoomLocation(DateTime dtStart,
       DateTime dtEnd, IEnumerable<string> salesRoom)
     {
-      var result = new List<RptStatisticsBySalesRoomLocation>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbcontext.USP_OR_RptStatsBySalesRoomLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+          return dbcontext.USP_OR_RptStatsBySalesRoomLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
 
     #endregion
@@ -1437,19 +1435,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptStatisticsByLocationMonthly>> GetRptStaticsByLocationMonthly(DateTime dtStart, DateTime dtEnd,
       IEnumerable<string> salesRoom)
     {
-      var result = new List<RptStatisticsByLocationMonthly>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_RptStatsByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+          return dbContext.USP_OR_RptStatsByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1463,19 +1460,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptSalesByLocationMonthly>> GetRptSalesByLocationMonthly(DateTime dtStart, DateTime dtEnd,
       IEnumerable<string> salesRoom)
     {
-      var result = new List<RptSalesByLocationMonthly>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_RptSalesByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+          return dbContext.USP_OR_RptSalesByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1489,18 +1485,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 16/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptDailySalesHeader>> GetRptDailySalesHeader(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom)
     {
-      var result = new List<RptDailySalesHeader>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_RptDailySalesHeader(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+          return dbContext.USP_OR_RptDailySalesHeader(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1514,20 +1509,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 11/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptDailySalesDetail>> GetRptDailySalesDetail(DateTime dtStart, DateTime dtEnd,
       IEnumerable<string> salesRoom)
     {
-      var result = new List<RptDailySalesDetail>();
-      await Task.Run(() =>
+     return await Task.Run(() =>
      {
        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
        {
          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptDailySalesDetail_Timeout;
-         result = dbContext.USP_OR_RptDailySalesDetail(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+         return dbContext.USP_OR_RptDailySalesDetail(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
        }
      });
-      return result;
     }
     #endregion
 
@@ -1541,20 +1535,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 11/05/2016 Created
     /// [ecanul] 06/06/2016 Modified Implementado asincronia
+    /// [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptConcentrateDailySales>> GetRptConcentrateDailySales(DateTime dtStart, DateTime dtEnd,
       IEnumerable<string> salesRoom)
     {
-      var result = new List<RptConcentrateDailySales>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptConcentrateDailySales_TimeOut;
-          result = dbContext.USP_IM_RptConcentrateDailySales(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+          return dbContext.USP_IM_RptConcentrateDailySales(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1574,20 +1567,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [ecanul] 07/06/2016 Created
     ///   [ecanul] 12/07/2016 Modified. Cambie el parametro salesmanRoles (string) por  roles (EnumRole)
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptManifest>> GetRptManiest(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom, string salesmanID = "ALL",
       List<EnumRole> roles = null, string segments = "ALL", string programs = "ALL", bool bySegmentsCategories = false, bool byLocationCategories = false)
     {
-      var result = new List<RptManifest>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           string r = roles == null ? "ALL" : roles.EnumListToString();
-          result = dbContext.USP_IM_RptManifest(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID, roles ==  null ? "All" : roles.EnumListToString() , segments, programs, bySegmentsCategories, byLocationCategories).ToList();
+          return dbContext.USP_IM_RptManifest(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID, roles ==  null ? "All" : roles.EnumListToString() , segments, programs, bySegmentsCategories, byLocationCategories).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1601,18 +1593,17 @@ namespace IM.BusinessRules.BR
     /// <param name="salesmanID">ID del salesman</param>
     /// <history>
     ///   [ecanul] 02/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public async static Task<List<RptFTMInOutHouse>> GetRptFTMInOutHouse(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRooms, string salesmanID = "ALL")
     {
-      var result = new List<RptFTMInOutHouse>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptFTMInOutHouse(dtStart, dtEnd, string.Join(",", salesRooms), salesmanID).ToList();
+          return dbContext.USP_IM_RptFTMInOutHouse(dtStart, dtEnd, string.Join(",", salesRooms), salesmanID).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1630,20 +1621,19 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptStatisticsBySegments"></list></returns>
     /// <history>
     ///   [aalcocer] 04/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsBySegments>> GetStatisticsBySegments(IEnumerable<DateTime> ltsDtmStart, IEnumerable<DateTime> ltsDtmEnd, 
       IEnumerable<string> salesRooms, string salesmanID = "ALL", bool bySegmentsCategories=false, bool own = false, bool includeAllSalesmen= false )
     {
-      var result = new List<RptStatisticsBySegments>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptStatisticsBySegments(string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")), string.Join(",", ltsDtmEnd.Select(x=> $"{x:yyyyMMdd}")), 
+          return dbContext.USP_IM_RptStatisticsBySegments(string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")), string.Join(",", ltsDtmEnd.Select(x=> $"{x:yyyyMMdd}")), 
             string.Join(",", salesRooms), salesmanID, bySegmentsCategories, own, includeAllSalesmen).ToList();
         }
       });
-      return result;
     }
     #endregion GetStatsBySegment
 
@@ -1661,22 +1651,20 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptStatisticsByCloser"></list></returns>
     /// <history>
     ///   [aalcocer] 13/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsByCloser>> GetStatisticsByCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
       string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
     {
-      var result = new List<RptStatisticsByCloser>();
-
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+          return dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
             EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
       });
-      return result;
     }
     #endregion GetStatisticsByCloser
 
@@ -1694,22 +1682,20 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptStatisticsByExitCloser"></list></returns>
     /// <history>
     ///   [aalcocer] 18/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsByExitCloser>> GetStatisticsByExitCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
       string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
     {
-      var result = new List<RptStatisticsByExitCloser>();
-
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptStatisticsByExitCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+          return dbContext.USP_IM_RptStatisticsByExitCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
             EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
       });
-      return result;
     }
     #endregion GetStatisticsByExitCloser
 
@@ -1723,18 +1709,17 @@ namespace IM.BusinessRules.BR
     /// <param name="salesmanID">ID del personal</param>
     /// <history>
     ///   [ecanul] 25/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptSelfGenTeam>> GetRptSelfGenAndSelfGenTeam (DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom, string salesmanID = "ALL")
     {
-      var result = new List<RptSelfGenTeam>();
-      await Task.Run(()=>
+      return await Task.Run(()=>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptSelfGenTeam(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID).ToList();
+          return dbContext.USP_IM_RptSelfGenTeam(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID).ToList();
         }
       });
-      return result;
     }
     #endregion
 
@@ -1755,24 +1740,22 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptStatisticsByFTB"></list></returns>
     /// <history>
     ///   [michan] 21/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsByFTB>> GetStatisticsByFTB(DateTime dtStart, DateTime dtEnd, string salesRoom,
       string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All,
       bool byLocations= false, bool byLocationsCategories=false , bool includeAllSalesmen = false)
     {
-      var result = new List<RptStatisticsByFTB>();
-
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
-          result = dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
+          return dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
           EnumToListHelper.GetEnumDescription(program), byLocations, byLocationsCategories, includeAllSalesmen).ToList();
         }
       });
-      return result;
     }
     #endregion GetStatisticsByFTB
 

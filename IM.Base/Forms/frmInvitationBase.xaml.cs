@@ -2212,7 +2212,7 @@ namespace IM.Base.Forms
     /// </summary>
     private async void LoadDepositGrid()
     {
-      var deposits = await BRBookingDeposits.GetBookingDeposits(_guestID);
+      var deposits = await BRBookingDeposits.GetBookingDeposits(_guestID, true);
 
       _lstObjInvitBookingDeposit = deposits.Select(c => new objInvitBookingDeposit
       {
@@ -2244,7 +2244,7 @@ namespace IM.Base.Forms
     /// </summary>
     private async void LoadCreditCardGrid()
     {
-      var creditCard = await BRGuests.GetGuestCreditCard(_guestID);
+      var creditCard = await BRGuestCreditCard.GetGuestCreditCard(_guestID);
 
       _lstObjInvitCreditCard = creditCard.Select(c => new objInvitCreditCard
       {
@@ -2259,9 +2259,9 @@ namespace IM.Base.Forms
     }
     /// Carga la información del Grid de los invitados extra
     /// </summary>
-    private void LoadAdditionalInformartionGrid()
+    private async void LoadAdditionalInformartionGrid()
     {
-      var aGuests = IM.BusinessRules.BR.BRGuestsAdditional.GetGuestsAdditional(_guestID);
+      var aGuests = await BRGuests.GetAdditionalGuest(_guestID);
 
       _lstObjInvitAdditionalGuest = aGuests.Select(c => new objInvitAdditionalGuest
       {

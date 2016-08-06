@@ -28,24 +28,26 @@ namespace IM.Base.Forms
     private readonly int _guestId;
     private readonly EnumInvitationMode _invitationMode;
     //Grids Banderas
-    private DataGridCellInfo _IGCurrentCell;
-    private bool _hasError = false;
-    private bool _isCellCancel = false;
+    private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
+    private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
+    private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
+    private bool _dontShowAgainGuestStatus = false;
     #endregion
     public frmInvitation(EnumInvitationType InvitationType, UserData User, int GuestId, EnumInvitationMode InvitationMode, bool AllowReschedule = true)
     {
       try
       {
-        //var catObj = new CommonCatObject(User, GuestId, InvitationMode);
+        //var catObj = new CommonCatObject(User, GuestId, InvitationMode); SE USA PARA PRUEBAS
         var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit);
         _invitationType = InvitationType;
         _guestId = GuestId;
+        //_guestId = 6547022; SE USA PARA PRUEBAS
         _user = User;
         _invitationMode = InvitationMode;
         DataContext = catObj;
         InitializeComponent();
 
-
+        #region Inicializar Grids
         dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
         {
           if (e.NewItem != null)
@@ -53,9 +55,8 @@ namespace IM.Base.Forms
             ((InvitationGift)e.NewItem).igQty = 1;
           }
         });
-
         GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
-
+        #endregion
       }
       catch (Exception ex)
       {
@@ -63,26 +64,50 @@ namespace IM.Base.Forms
       }
     }
 
+    #region Eventos de la Forma 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
       ControlsConfiguration(_invitationType);
+      //Configuramos los controles (Maxlength, caracteres etc.)
       UIHelper.SetUpControls(new Guest(), this);
     }
 
     private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      CommonCatObject k = DataContext as CommonCatObject;
-      var h = k.GuestObj.guID;
+      CommonCatObject k = DataContext as CommonCatObject;//PRUEBAS
+      var h = k.GuestObj.guID;//PRUEBAS
+      k.BookingDepositList[0].bddr = 25; //PRUEBAS
+      var j = k.CBookingDepositList[0].bddr;//PRUEBAS
+      var ñp = k.BookingDepositList[0].bddr;//PRUEBAS
+    }
 
+    private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
 
     }
+    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    private void imgButtonCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    #endregion
+
     #region Metodos Privados
     /// <summary>
     /// Prepara los controles para cada invitacion
     /// </summary>
     /// <param name="_invitationType">EnumInvitationType</param>
+    /// <history>
     /// [erosado] 16/05/2016  Created
+    /// </history>
     private void ControlsConfiguration(EnumInvitationType _invitationType)
     {
       txtUserName.Text = _user.User.peN;
@@ -109,8 +134,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-
-    #region ControlsConfig
+    #region ControlsConfig Hide, Visible, Collapse
     /// <summary>
     /// Prepara los controles para que trabaje con InHouseInvitation
     /// </summary>
@@ -170,6 +194,8 @@ namespace IM.Base.Forms
     }
 
     #endregion
+
+    #region Controls Enables or Disables
 
     private void EnableControlsExternal()
     {
@@ -269,60 +295,143 @@ namespace IM.Base.Forms
 
     }
 
+    #endregion
+
     #region Eventos del GRID Invitation Gift
+    #region BeginningEdit
+    /// <summary>
+    /// Se ejecuta antes de que entre en modo edicion alguna celda
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private void dtgGifts_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      //Preguntamos si desea agregar GuestStatusType para el calculo de costos
+      if (cmbGuestStatus.SelectedValue == null && !_dontShowAgainGuestStatus)
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("We recommend first select the status of the guest, that would help us calculate costs and prices, do you want to select it now?", MessageBoxImage.Question, "Intelligence Marketing");
+        if (result == MessageBoxResult.Yes)
+        {
+          e.Cancel = true;
+          _hasError = true;
+          _isCellCancel = true;
+          _dontShowAgainGuestStatus = false;
+          cmbGuestStatus.Focus();
+        }
+        else
+        {
+          _dontShowAgainGuestStatus = true;
+        }
+
+      }
+      else
+      {
+        _hasError = false;
+        _isCellCancel = false;
+      }
+
+      //Si el grid no esta en modo edicion, permite hacer edicion.
+      if (!GridHelper.IsInEditMode(dtgGifts) && !_hasError)
+      {
+        dtgGifts.BeginningEdit -= dtgGifts_BeginningEdit;
+        //Obtenemos el objeto de la fila que se va a editar
+        InvitationGift invitationGift = e.Row.Item as InvitationGift;
+        //Obtenemos la celda que vamos a validar
+        _IGCurrentCell = dtgGifts.CurrentCell;
+        //Hacemos la primera validacion 
+        InvitationValidationRules.StartEdit(ref invitationGift, ref _IGCurrentCell, dtgGifts, ref _hasError);
+        //Si tuvo algun error de validacion cancela la edicion de la celda.
+        e.Cancel = _hasError;
+        dtgGifts.BeginningEdit += dtgGifts_BeginningEdit;
+      }
+      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+    #endregion
+
+    #region PreparingCellForEdit
+    /// <summary>
+    /// Se ejecuta cuando la celda entra en modo edicion
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
     private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
       //Sirve para agregar el Focus a las celdas
       Control ctrl = e.EditingElement as Control;
       ctrl.Focus();
-      //DataGrid dataGrid = sender as DataGrid;
-      //InvitationGift invitationGiftCustom = dataGrid.Items.CurrentItem as InvitationGift;
-      //_IGCurrentCell = dtgGifts.CurrentCell;
-      //InvitationValidationRules.StartEdit(_invitationMode, invitationGiftCustom, _IGCurrentCell, dataGrid, _hasError);
     }
+    #endregion
 
-    private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    #region CellEditEnding
+    /// <summary>
+    /// Se ejecuta cuando la celda en edicion pierde el foco
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private async void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       //Si paso las validaciones del preparingCellForEdit
       if (!_hasError)
       {
+        //Si viene en modo Commit
         if (e.EditAction == DataGridEditAction.Commit)
         {
+          //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
           _isCellCancel = false;
-          //Obtenemos el acceso a los controles que necesitamos
-          DataGrid dtg = sender as DataGrid;
           //Obtenemos el Objeto 
           InvitationGift invitationGift = e.Row.Item as InvitationGift;
 
+          //Bandera que checata que todo salga bien en la validacion siguiente.
           bool _hasErrorValidateEdit = false;
           //Validamos la celda
-          InvitationValidationRules.ValidateEdit(invitationGift, _hasErrorValidateEdit, _IGCurrentCell);
-          e.Cancel = true;
+          // InvitationValidationRules.ValidateEdit(ref invitationGift, ref _hasErrorValidateEdit, ref _IGCurrentCell);
+
           //Si Paso las validaciones
           if (!_hasErrorValidateEdit)
           {
-            InvitationValidationRules.AfterEdit(dtg, invitationGift, _IGCurrentCell, txtGiftTotalCost, txtGiftTotalPrice, txtGiftMaxAuth);
+            //Obtenemos el program 
+            var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
+
+            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, program);
           }
+          //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else
           {
             e.Cancel = true;
           }
         }
+        //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
         else
         {
           _isCellCancel = true;
         }
       }
     }
+    #endregion
 
+    #region RowEditEnding
+    /// <summary>
+    /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
+    /// </summary>
+    /// <history>
+    /// [erosado] 02/08/2016  Created.
+    /// </history>
     private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+
     {
       DataGrid dtg = sender as DataGrid;
-      InvitationGift invitationGift = e.Row.Item as InvitationGift; 
+      InvitationGift invitationGift = e.Row.Item as InvitationGift;
 
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if(_isCellCancel)
+        if (_isCellCancel)
         {
           dtg.RowEditEnding -= dtgGifts_RowEditEnding;
           dtg.CancelEdit();
@@ -332,10 +441,10 @@ namespace IM.Base.Forms
         {
           if (invitationGift.igQty == 0 || string.IsNullOrEmpty(invitationGift.iggi))
           {
-            UIHelper.ShowMessage("Llena esa onda");
+            UIHelper.ShowMessage("Please enter the required fields Qty and Gift to continue", MessageBoxImage.Exclamation, "Intelligence Marketing");
             e.Cancel = true;
           }
-        }        
+        }
       }
       else
       {
@@ -345,28 +454,32 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #endregion
+
+    #region Eventos de la ventana 
+    /// <summary>
+    /// Evento del Combobox GuestStatus
+    /// Sirve para actualizar la caja de texto txtGiftMaxAuth
+    /// dependiendo del GuestStatus que elija el usuario.
+    /// </summary>
+    ///<history>
+    ///[erosado]  02/08/2016  Created.
+    /// </history>    
     private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       //Obtenemos el GuestStatusType del combobox cmbGuestStatus
       var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
 
-      txtGiftMaxAuth.Text = string.Format("{0:C2}", guStatusType != null ? guStatusType.gsMaxAuthGifts: 0);
-       
+      txtGiftMaxAuth.Text = string.Format("{0:C2}", guStatusType != null ? guStatusType.gsMaxAuthGifts : 0);
+
+      //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
+      //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
+      //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
+      //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
     }
 
-    private void dtgGifts_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-      if(!GridHelper.IsInEditMode(dtgGifts))
-      { 
-        InvitationGift invitationGiftCustom = e.Row.Item as InvitationGift;//dataGrid.Items.CurrentItem as InvitationGift;
-        _IGCurrentCell = dtgGifts.CurrentCell;
-        InvitationValidationRules.StartEdit(_invitationMode, invitationGiftCustom, _IGCurrentCell, dtgGifts, ref _hasError);
-        e.Cancel = _hasError;        
-      }
-      else
-      {
-        e.Cancel = true;
-      }
-    }
+    #endregion
+
+
   }
 }

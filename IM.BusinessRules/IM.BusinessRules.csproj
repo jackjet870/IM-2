@@ -108,6 +108,7 @@
     <Compile Include="BR\BRGiftsReceiptsPayments.cs" />
     <Compile Include="BR\BRGoals.cs" />
     <Compile Include="BR\BRGraph.cs" />
+    <Compile Include="BR\BRGuestCreditCard.cs" />
     <Compile Include="BR\BRGuestsAdditional.cs" />
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRGuestsGroups.cs" />

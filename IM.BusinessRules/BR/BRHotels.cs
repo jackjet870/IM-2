@@ -22,12 +22,11 @@ namespace IM.BusinessRules.BR
     /// [lchairez] 10/03/2016 Created.
     /// [emoguel] modified 29/03/2016 se agregaron parametros de busqueda
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
-    public async static Task<List<Hotel>> GetHotels(Hotel hotel = null, int nStatus = -1,bool blnInclude = false)
+    public async static Task<List<Hotel>> GetHotels(Hotel hotel = null, int nStatus = -1, bool blnInclude = false)
     {
-      List<Hotel> Result = null;
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
@@ -59,12 +58,11 @@ namespace IM.BusinessRules.BR
               query = query.Where(ho => ho.hoar == hotel.hoar);
             }
           }
-          Result = query.OrderBy(ho => ho.hoID).ToList();
+          return query.OrderBy(ho => ho.hoID).ToList();
         }
       });
-      return Result;
     }
     #endregion
 
-    }
   }
+}

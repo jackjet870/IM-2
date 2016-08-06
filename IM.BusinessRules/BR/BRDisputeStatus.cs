@@ -17,18 +17,18 @@ namespace IM.BusinessRules.BR
     /// <returns>Task<List<DisputeStatus>></returns>
     /// <history>
     /// [erosado] 27/06/2016  Created
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </history>
     public async static Task<List<DisputeStatus>> GetDisputeStatus(bool status = true)
     {
-      List<DisputeStatus> result = new List<DisputeStatus>();
-      await Task.Run(() => {
+      return await Task.Run(() =>
+      {
         using (var db = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from x in db.DisputeStatusList where x.dsA == status select x).OrderBy(x => x.dsID);
-          result = query.ToList();
+          return query.ToList();
         }
       });
-      return result;
     }
   }
 }

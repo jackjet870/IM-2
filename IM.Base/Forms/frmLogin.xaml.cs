@@ -345,7 +345,7 @@ namespace IM.Base.Forms
           cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
         }
       }
-      cmbPlace.IsEnabled = data.Count > 1 && _invitationMode == false;
+      cmbPlace.IsEnabled = data.Count > 1 && !_invitationMode;
     }
     #endregion
 

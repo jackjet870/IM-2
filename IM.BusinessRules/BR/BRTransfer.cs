@@ -27,7 +27,20 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          listData = dbContext.USP_OR_TransferStart().ToList();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              listData = dbContext.USP_OR_TransferStart().ToList();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
+          
         }
       });
       return listData;
@@ -49,7 +62,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferStop();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferStop();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -72,7 +97,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferStopZone(zone);
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferStopZone(zone);
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -94,7 +131,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddCountries();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddCountries();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -115,7 +164,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddCountriesHotel();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddCountriesHotel();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -136,7 +197,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateCountriesNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateCountriesNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -178,7 +251,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddAgencies();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddAgencies();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -199,7 +284,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddAgenciesHotel();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddAgenciesHotel();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       }); 
       return response;
@@ -220,7 +317,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateAgenciesNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateAgenciesNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -241,7 +350,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -262,7 +383,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddRoomTypes();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddRoomTypes();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -283,7 +416,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -304,7 +449,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddContracts();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddContracts();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -325,7 +482,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateContractsNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateContractsNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -346,7 +515,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddGroups();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddGroups();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -368,7 +549,19 @@ namespace IM.BusinessRules.BR
         {
           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
-            response = dbContext.USP_OR_TransferUpdateGroupsNames();
+            using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            {
+              try
+              {
+                response = dbContext.USP_OR_TransferUpdateGroupsNames();
+                dbContextTransactionction.Commit();
+              }
+              catch
+              {
+                dbContextTransactionction.Rollback();
+                throw;
+              }
+            }
           }
         });
       
@@ -391,7 +584,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferCountries();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferCountries();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -413,7 +618,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferAgencies();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferAgencies();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -435,7 +652,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferLanguages();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferLanguages();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -457,7 +686,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferMarkets();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferMarkets();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -479,7 +720,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -501,7 +754,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -523,7 +788,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -544,7 +821,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -566,7 +855,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -588,7 +889,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -610,7 +923,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -633,7 +958,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -654,7 +991,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -676,7 +1025,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateTransferAvailability();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateTransferAvailability();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -699,7 +1060,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -721,7 +1094,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -743,7 +1128,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -766,7 +1163,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -789,7 +1198,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -812,7 +1233,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -834,7 +1267,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -858,7 +1303,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -880,7 +1337,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsEmails();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsEmails();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -902,7 +1371,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCities();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCities();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -924,7 +1405,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsStates();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsStates();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -946,7 +1439,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCountries();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCountries();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -968,7 +1473,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -990,7 +1507,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1012,7 +1541,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsContracts();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsContracts();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1034,7 +1575,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1056,7 +1609,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsAges();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsAges();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1078,7 +1643,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsPax();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsPax();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         } 
       });
       return response;
@@ -1100,7 +1677,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          } 
         }
       });
       return response;
@@ -1122,7 +1711,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          } 
         }
       });
       return response;
@@ -1144,7 +1745,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          } 
         }
       });
       return response;
@@ -1165,7 +1778,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1188,7 +1813,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1210,7 +1847,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1234,7 +1883,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom, dateTo);
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom.Value, dateTo.Value);
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1255,7 +1916,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1276,15 +1949,20 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
-            response = dbContext.USP_OR_TransferDeleteReservationsCancelled();
+            try
+            {
+              dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
+              response = dbContext.USP_OR_TransferDeleteReservationsCancelled();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
           }
-          catch (Exception)
-          {
-            throw;
-          } 
         }
       });
       return response;
@@ -1305,7 +1983,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferDeleteTransfer();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferDeleteTransfer();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1326,7 +2016,19 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          response = dbContext.USP_OR_TransferGetTransfer().ToList();
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              response = dbContext.USP_OR_TransferGetTransfer().ToList();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
       });
       return response;
@@ -1342,13 +2044,25 @@ namespace IM.BusinessRules.BR
     public async static Task<int>  AddReservation(Transfer transfer)
     {
       int response = 0;
-      
+      await Task.Run(() => {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Transfers.Add(transfer);
-          response = await dbContext.SaveChangesAsync(); //SaveChanges()
+          using (var dbContextTransactionction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              dbContext.Transfers.Add(transfer);
+              response = dbContext.SaveChanges();
+              dbContextTransactionction.Commit();
+            }
+            catch
+            {
+              dbContextTransactionction.Rollback();
+              throw;
+            }
+          }
         }
-      
+      });
       return response;
     }
     #endregion
@@ -1425,7 +2139,7 @@ namespace IM.BusinessRules.BR
             catch
             {
               transaction.Rollback();
-              return 0;
+              throw;
             }
           }
         }

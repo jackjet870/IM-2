@@ -562,4 +562,26 @@
         </Border>
     </DataTemplate>
     <!--#endregion-->
+    <!--#region Gift-->
+    <DataTemplate x:Key="cbx-Gift-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="giID" />
+                            <Binding Path="giN" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
 </ResourceDictionary>

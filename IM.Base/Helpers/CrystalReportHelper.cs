@@ -26,14 +26,8 @@ namespace IM.Base.Helpers
     /// </history>
     public static void SetLanguage(ReportDocument report, string Language = "")
     {
-
       //Determinamos el Lenguaje
-      LanguageHelper.IDLanguage = Language;
-      var controles = report.ReportDefinition.ReportObjects
-        .Cast<object>()
-        .Where(c => c.GetType() == typeof(FieldHeadingObject) || c.GetType() == typeof(TextObject) || c.GetType() == typeof(FieldObject))
-        .Select(c => c)
-        .ToList();
+      LanguageHelper.IDLanguage = Language;    
       //Buscamos en el reporte principal
       report.ReportDefinition.ReportObjects
         .Cast<object>()

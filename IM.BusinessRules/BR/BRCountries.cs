@@ -19,18 +19,17 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [erosado] 08/03/2016  created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
     /// </hystory>
     public async static Task<List<CountryShort>> GetCountries(int status)
     {
-      List<CountryShort> result = null;
-      await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          result = dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
-        }
-      });
-      return result;
+      return await Task.Run(() =>
+       {
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+         {
+           return dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
+         }
+       });
     }
     #endregion
 
@@ -56,20 +55,20 @@ namespace IM.BusinessRules.BR
                         select ct;
 
             if (nStatus != -1)//Filtro por status
-          {
+            {
               bool blnStatus = Convert.ToBoolean(nStatus);
               query = query.Where(ct => ct.coA == blnStatus);
             }
 
             if (country != null)//Valida si se tiene un objeto
-          {
-              if (!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
             {
+              if (!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+              {
                 query = query.Where(ct => ct.coID == country.coID);
               }
 
               if (!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
-            {
+              {
                 query = query.Where(ct => ct.coN.Contains(country.coN));
               }
             }
