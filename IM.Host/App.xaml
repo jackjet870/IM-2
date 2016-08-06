@@ -17,6 +17,8 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Host;component/Styles/ExpanderTemplate.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTabControl.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styImage.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

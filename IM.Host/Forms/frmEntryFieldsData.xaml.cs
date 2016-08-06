@@ -52,6 +52,7 @@ namespace IM.Host.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      cmbAuthorizedBy.IsEnabled = true;
       LoadCloserCapt();
       var sales = new List<string>();
       foreach (var item in _saleman)
@@ -72,7 +73,7 @@ namespace IM.Host.Forms
     private async void LoadCloserCapt()
     {
       //Capitan de Closers
-      cboAuthorizedBy.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
+      cmbAuthorizedBy.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
     }
 
 
@@ -95,9 +96,9 @@ namespace IM.Host.Forms
     /// </history>
     private void btnOk_Click(object sender, RoutedEventArgs e)
     {
-      if (!cboAuthorizedBy.SelectedIndex.Equals(-1))
+      if (!cmbAuthorizedBy.SelectedIndex.Equals(-1))
       {
-        AuthorizedBy = cboAuthorizedBy.SelectedValue.ToString();
+        AuthorizedBy = cmbAuthorizedBy.SelectedValue.ToString();
         cancel = false;
         Close();
       }

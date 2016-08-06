@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesLog"
-         mc:Ignorable="d" Background="Beige"  ResizeMode="NoResize"  
+         mc:Ignorable="d" Background="White"  ResizeMode="NoResize"  
         Title="Guest Log" ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
     <CollectionViewSource x:Key="saleLogDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SaleLogData}, CreateList=True}"/>
@@ -15,7 +15,7 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" x:Name="saleLogDataDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="7" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
+        <DataGrid Grid.Row="0" BorderBrush="#147F79" BorderThickness="2" x:Name="saleLogDataDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="7" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="White">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="slChangedByColumn" Binding="{Binding slChangedBy}" Header="By" Width="auto"/>
                 <DataGridTextColumn x:Name="changedByNColumn" Binding="{Binding ChangedByN}" Header="Name" Width="auto"/>
@@ -79,8 +79,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Name="btnSalesMan" Content="Sales Man" Margin="0,10,15,5" Width="150" Click="btnSalesMan_Click"/>
-            <Button  Name="btnPrintGuestlog" Content="Print Sale Log" Width="150" Margin="0,10,0,5" Click="btnPrintGuestLog_Click"/>
+            <Button Name="btnSalesMan" Content="Sales Man" Margin="0,10,15,5" Width="150" Click="btnSalesMan_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button  Name="btnPrintGuestlog" Content="Print Sale Log" Width="150" Margin="0,10,0,5" Click="btnPrintGuestLog_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
         </StackPanel>
             
     </Grid>

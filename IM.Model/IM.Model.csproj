@@ -126,6 +126,7 @@
     <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\ItemsList.cs" />
     <Compile Include="Classes\Item.cs" />
+    <Compile Include="Classes\MemberSalesmanClubles.cs" />
     <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\InvitationData.cs" />
     <Compile Include="Classes\GuestPremanifestOuthouse.cs" />
