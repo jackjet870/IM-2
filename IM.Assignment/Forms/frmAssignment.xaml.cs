@@ -380,8 +380,7 @@ namespace IM.Assignment
       if (ValidatePR()) {
         filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
-        filters.Add(Tuple.Create("PR", _strgPRs));
-        filters.Add(Tuple.Create("PR Name", _strgNamePR));
+        filters.Add(Tuple.Create("PR", _strgPRs + " - " + _strgNamePR));
         List<RptAssignmentByPR> lstAssignmentByPR = await BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
         if (lstAssignmentByPR.Count > 0)
         {       
