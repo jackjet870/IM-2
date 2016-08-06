@@ -64,8 +64,8 @@ namespace IM.Assignment
     private async void LoadListMarkets()
     {  
       lstMarkets = await BRMarkets.GetMarkets(1);
-      grdListMarkets.ItemsSource = lstMarkets;
-      grdListMarkets.SelectAll();
+      dtgListMarkets.ItemsSource = lstMarkets;
+      dtgListMarkets.SelectAll();
     }
     #endregion
 
@@ -83,7 +83,7 @@ namespace IM.Assignment
       status.Visibility = Visibility.Visible;
       _guestUnassignedViewSource.Source = await BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
       status.Visibility = Visibility.Collapsed;
-      grdGuestUnassigned.UnselectAll();
+      dtgGuestUnassigned.UnselectAll();
     }
     #endregion
 
@@ -117,19 +117,19 @@ namespace IM.Assignment
     {
       txtStatus.Text = "Loading Guests Assigned...";
       status.Visibility = Visibility.Visible;
-      var selectedItems = grdPRAssigned.SelectedItems;
+      var selectedItems = dtgPRAssigned.SelectedItems;
       if (selectedItems.Count > 0)
       {
         _guestAssignedViewSource.Source = await BRAssignment.GetGuestAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _strgPRs, _markets);
         status.Visibility = Visibility.Collapsed;
       }
       int sumAssign = 0;
-      foreach (PRAssigned item in grdPRAssigned.ItemsSource)
+      foreach (PRAssigned item in dtgPRAssigned.ItemsSource)
       {
         sumAssign += Convert.ToInt32(item.Assigned);
       }
-      lblTotalAssign.Content = sumAssign;
-      lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
+      txbTotalAssign.Text = sumAssign.ToString();
+      txbTotalW.Text = (sumAssign + dtgGuestUnassigned.Items.Count).ToString();
     }
 
     #endregion
@@ -147,9 +147,9 @@ namespace IM.Assignment
       filters.Clear();
 
       weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
-      lblWeek.Content = "Week " + weekYear;
+      txbWeek.Text = "Week " + weekYear;
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
-      lblDataRange.Content = dateRange;
+      txbDateRange.Text = dateRange;
       LoadListGuestsUnassigned();
       LoadPRs();
     }
@@ -168,7 +168,7 @@ namespace IM.Assignment
       blnValid = true;
 
       ///valida que haya al menos un huesped seleccionado
-      if (grdGuestUnassigned.SelectedItems.Count == 0)
+      if (dtgGuestUnassigned.SelectedItems.Count == 0)
       {
         UIHelper.ShowMessage("Select at least one guest.",MessageBoxImage.Warning);
         blnValid = false;
@@ -198,7 +198,7 @@ namespace IM.Assignment
       Boolean blnValid;
       blnValid = true;
 
-      if (grdGuestAssigned.SelectedItems.Count == 0)
+      if (dtgGuestAssigned.SelectedItems.Count == 0)
       {
         UIHelper.ShowMessage("Select at leas one guest",MessageBoxImage.Warning);
         blnValid = false;
@@ -227,7 +227,7 @@ namespace IM.Assignment
       Boolean blnValid;
       blnValid = true;
       //validamos que haya un PR seleccionado
-      if (grdPRAssigned.SelectedItems.Count == 0)
+      if (dtgPRAssigned.SelectedItems.Count == 0)
       {
         UIHelper.ShowMessage("Select a PR.", MessageBoxImage.Warning);
         blnValid = false;
@@ -235,7 +235,7 @@ namespace IM.Assignment
       else
       {
         //validamos que solo haya un PR seleccionado
-        if (grdPRAssigned.SelectedItems.Count > 1)
+        if (dtgPRAssigned.SelectedItems.Count > 1)
         {
           UIHelper.ShowMessage("Select only one PR", MessageBoxImage.Warning);
           blnValid = false;
@@ -269,11 +269,11 @@ namespace IM.Assignment
 
       ///Obtiene numero de la semana a partir de una fecha
       weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
-      lblWeek.Content = "Week " + weekYear;
+      txbWeek.Text = "Week " + weekYear;
 
       ///Rango de fechas
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
-      lblDataRange.Content = dateRange;
+      txbDateRange.Text = dateRange;
 
       chkMemberPRs.IsChecked = true;
 
@@ -509,7 +509,7 @@ namespace IM.Assignment
     private void grdListMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _markets = string.Empty;
-      var selectedItems = grdListMarkets.SelectedItems;
+      var selectedItems = dtgListMarkets.SelectedItems;
       foreach (MarketShort selectedItem in selectedItems)
       {
         cont = cont + 1;
@@ -582,7 +582,7 @@ namespace IM.Assignment
     private void grdPRAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _strgPRs = string.Empty; _strgNamePR = string.Empty;
-      var selectedItems = grdPRAssigned.SelectedItems;
+      var selectedItems = dtgPRAssigned.SelectedItems;
       foreach (PRAssigned selectedItem in selectedItems)
       {
         cont = cont + 1;
@@ -609,12 +609,12 @@ namespace IM.Assignment
     private void grdGuestUnassigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestUnassigned.Clear();
-      var selectedItems = grdGuestUnassigned.SelectedItems;
+      var selectedItems = dtgGuestUnassigned.SelectedItems;
       foreach (GuestUnassigned selectedItem in selectedItems)
       {
         _strgGuestUnassigned.Add(selectedItem.guID);
       }
-      StatusBarReg.Content = string.Format("{0}/{1}", grdGuestUnassigned.SelectedItems.Count, grdGuestUnassigned.Items.Count);
+      StatusBarReg.Content = string.Format("{0}/{1}", dtgGuestUnassigned.SelectedItems.Count, dtgGuestUnassigned.Items.Count);
     }
     #endregion
 
@@ -628,7 +628,7 @@ namespace IM.Assignment
     private void grdGuestAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestAssigned.Clear();
-      var selectedItems = grdGuestAssigned.SelectedItems;
+      var selectedItems = dtgGuestAssigned.SelectedItems;
       foreach (GuestAssigned selectedItem in selectedItems)
       {
         _strgGuestAssigned.Add(selectedItem.guID);
