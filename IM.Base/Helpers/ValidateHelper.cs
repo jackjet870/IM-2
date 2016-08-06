@@ -163,7 +163,7 @@ namespace IM.Base.Helpers
       }
       return true;
     }
-    #endregion  
+    #endregion
 
     #region ValidateForm
 
@@ -177,24 +177,26 @@ namespace IM.Base.Helpers
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
-    /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
+    /// [erosado] 02/05/2016  Modified. Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// [jorcanche] Modified 19/07/2016 Se simplifico el metodo, se documento el parametro validateVisible
     /// [emoguel] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
     /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
+    /// [erosado] 05/08/2016  Modified. Se corrigió la validacion del DateTimePicker, y se agrego una bandera para que el metodo se encargue de mandar el ShowMessage
     /// </history>
-public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
+    public static string ValidateForm(UIElement container, string strForm, bool validateVisible = true, bool blnDatagrids = false, bool showMessage = false)
+    {
       var strMsj = "";
       var lstControls = UIHelper.GetChildParentCollection<Control>(container);
-        //buscamos todos los controles de la ventana
+      //buscamos todos los controles de la ventana
       if (blnDatagrids)
       {
-        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co=>co as DataGrid).ToList();
+        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co => co as DataGrid).ToList();
         if (lstGrids != null)
         {
-          foreach(DataGrid dgr in lstGrids)
-          { 
-            
+          foreach (DataGrid dgr in lstGrids)
+          {
+
             if (GridHelper.IsInEditMode(dgr))
             {
               strMsj += "Please finish editing the list. \n";
@@ -210,67 +212,69 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
 
         if (control is TextBox) //Si es Textbox
         {
-          var txt = (TextBox) control;
+          var txt = (TextBox)control;
           #region Remover espacios
-          txt.Text= txt.Text.Trim();
+          txt.Text = txt.Text.Trim();
           var binding = txt.GetBindingExpression(TextBox.TextProperty);
-          if(binding!=null)
-          {
-            binding.UpdateSource();
-          }
-          #endregion
-          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
-          if ((validateVisible && txt.IsVisible) || !validateVisible)          
-            strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
-        }
-          #endregion
-
-          #region Combobox
-
-        else if (control is ComboBox)
-        {
-          var cmb = (ComboBox) control;
-          if (cmb.SelectedIndex > -1) continue;
-          if ((validateVisible && cmb.IsVisible) || !validateVisible)         
-            strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";          
-        }        
-          #endregion
-
-          #region PasswordBox
-
-        else if (control is PasswordBox)
-        {
-          var pwd = (PasswordBox) control;
-          #region Remover espacios
-          pwd.Password=pwd.Password.Trim();
-          #endregion
-          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
-          if ((validateVisible && pwd.IsVisible) || !validateVisible)
-            strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
-        }                
-          #endregion
-
-        else if (control is DateTimePicker)
-        {
-          var dtp = (DateTimePicker) control;
-          #region Remover espacios
-          dtp.Text=dtp.Text.Trim();
-          var binding = dtp.GetBindingExpression(TextBox.TextProperty);
           if (binding != null)
           {
             binding.UpdateSource();
           }
           #endregion
-          if (!string.IsNullOrWhiteSpace(dtp.Text.Trim())) continue;
-          if ((validateVisible && dtp.IsVisible) || !validateVisible)                
-              strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
+          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
+          if ((validateVisible && txt.IsVisible) || !validateVisible)
+            strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";
         }
+        #endregion
+
+        #region Combobox
+
+        else if (control is ComboBox)
+        {
+          var cmb = (ComboBox)control;
+          if (cmb.SelectedIndex > -1) continue;
+          if ((validateVisible && cmb.IsVisible) || !validateVisible)
+            strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";
+        }
+        #endregion
+
+        #region PasswordBox
+
+        else if (control is PasswordBox)
+        {
+          var pwd = (PasswordBox)control;
+          #region Remover espacios
+          pwd.Password = pwd.Password.Trim();
+          #endregion
+          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
+          if ((validateVisible && pwd.IsVisible) || !validateVisible)
+            strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
+        }
+        #endregion
+
+        #region DateTimePicker
+        else if (control is DateTimePicker)
+        {
+          var dtp = (DateTimePicker)control;
+         
+          if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
+          if ((validateVisible && dtp.IsVisible) || !validateVisible)
+            strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";
+        }
+        #endregion
       }
       if (strMsj != "") //Mandamos el foco al primer campo
       {
         lstControls.FirstOrDefault().Focus();
       }
       container.UpdateLayout();
+
+      //Si la showMessage viene activa muestra el mensaje
+      if (showMessage)
+      {
+        UIHelper.ShowMessage(strMsj.TrimEnd('\n'), title: "Intelligence Marketing");
+      }
+
       return strMsj.TrimEnd('\n');
     }
 
@@ -345,6 +349,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
     }
     #endregion
 
+    #region validateCharacters
     /// <summary>
     /// Valida que el texto no contenga los caracteres de una lista
     /// </summary>
@@ -356,8 +361,9 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
     public static bool validateCharacters(string text)
     {
       bool _blnValid = true;
-      List<string> lstCharacters = new List<string> { "", "%", "'","-","_" };
-      text.ToCharArray().ToList().ForEach(c => {
+      List<string> lstCharacters = new List<string> { "", "%", "'", "-", "_" };
+      text.ToCharArray().ToList().ForEach(c =>
+      {
         if (lstCharacters.Contains(c.ToString()))
         {
           _blnValid = false;
@@ -366,5 +372,28 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
       });
       return _blnValid;
     }
+    #endregion
+
+    #region  ValidateNumber
+    /// <summary>
+    /// Valida que un numero este en un determinado rango
+    /// </summary>
+    /// <param name="number">Numero</param>
+    /// <param name="lowerBound">Limite inferior</param>
+    /// <param name="upperBound">Limite superior</param>
+    /// <param name="description">Nombre del campo</param>
+    /// <returns>True is Valid | False No</returns>
+    /// [erosado] 06/08/2016  Created.
+    public static bool ValidateNumber(int number, int lowerBound, int upperBound, string description)
+    {
+      bool _isValid = true;
+      if (!(lowerBound <= number && number <= upperBound))
+      {
+        UIHelper.ShowMessage($"{description} is out of range. Allowed values are {lowerBound} to {upperBound}." );
+        _isValid = false;
+      }
+      return _isValid;
+    }
+    #endregion
   }
 }
