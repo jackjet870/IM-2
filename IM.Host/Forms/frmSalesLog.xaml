@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesLog"
          mc:Ignorable="d" Background="White"  ResizeMode="NoResize"  
-        Title="Guest Log" ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="Sale Log"  ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
     <CollectionViewSource x:Key="saleLogDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SaleLogData}, CreateList=True}"/>
     </Window.Resources>

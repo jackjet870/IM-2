@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms" Loaded="Window_Loaded"
         mc:Ignorable="d" Closed="Window_Closed" ShowInTaskbar="False"
-        Title="IM Salesmen Changes Authorization" SizeToContent="WidthAndHeight" Background="White">
+        Title="Salesmen Changes Authorization" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Background="White">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>

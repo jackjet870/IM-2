@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Classes="clr-namespace:IM.Host.Classes" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesSalesmen"
         mc:Ignorable="d" ShowInTaskbar="False"
-        Title="IM Salesmen" SizeToContent="Height" Width="420" Background="White" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
+        Title="Salesmen" SizeToContent="Height" WindowStartupLocation="CenterOwner" Width="420" Background="White" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
     <Window.Resources>
         <CollectionViewSource x:Key="salesSalesmanViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SalesSalesman}, CreateList=True}"/>
     </Window.Resources>

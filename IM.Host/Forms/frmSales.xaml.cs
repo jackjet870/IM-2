@@ -14,6 +14,7 @@ using System.Windows.Input;
 using IM.Model.Helpers;
 using IM.BusinessRules.BRIC;
 using EnumMode = IM.Host.Enums.EnumMode;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Forms
 {
@@ -25,28 +26,17 @@ namespace IM.Host.Forms
   /// </history>
   public partial class frmSales : Window
   {
+    //Id del huesped
     int _guId;
-    DateTime _serverDate, _closeD;
-    ////int txtsaCompany = 0;
 
+    //Fechas servidor y Fecha de Cierre de la venta
+    DateTime _serverDate, _closeD;
+
+    // Para indicar si se presiono el boton Undo
     private bool isPressedbtnUndo;
 
     // Indica si se esta cargando el detalle de una venta
-    private bool _loading;
-
-    // Numero original de membresia anterior
-    ////private string _membershipPreviousOriginal;
-
-    // Clave original de la venta anterior
-    /**************************************/
-    //private int? _salePreviousOriginal;
-
-    //Clave del huesped original
-    /**************************************/
-    //private int? _GuestIDOriginal;
-
-    //Clave original de la venta anterior
-    //private int _txtsaReference;
+    private bool _loading;   
 
     // Respaldamos el monto de la venta original
     private decimal _saleAmountOriginal;
@@ -70,15 +60,10 @@ namespace IM.Host.Forms
     private string _saleTypeCategory;
 
     //Es una actualización de saled 
-    private bool _isSaleUpdate;
-
-    //Si esta buscando PR por TextBox
-    //private bool _searchPRbyTxt;
+    private bool _isSaleUpdate;   
 
     //Listado de SalesSalesman de Intelligence Contracts
-    private List<MemberSalesmen> _lstMemberSalesmens;
-
-   
+    private List<MemberSalesmen> _lstMemberSalesmens;   
 
     #region frmSales
 
@@ -137,8 +122,7 @@ namespace IM.Host.Forms
     /// [jorcanche]  created 29062016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-      
+    {      
       UIHelper.SetUpControls(new Sale(), this);
       LoadCombosPayment();
       //Cargamos los ComboBox
@@ -321,10 +305,7 @@ namespace IM.Host.Forms
         //Asignamos el datacontext para cargar los controles        
         _loading = true;
         grdSaleGeneral.DataContext = _saleNew;
-        _loading = false;
-
-        //Se respalda el reference
-        //_salePreviousOriginal = _sale.saReference; 
+        _loading = false;     
 
         //Indicamos si es una venta Out of Pendsing
         SetOutOfPending();
@@ -334,10 +315,7 @@ namespace IM.Host.Forms
         dgpayment.DataContext = _payments;
 
         //Nombre del huesped
-        GetGuestName(_saleNew.sagu);
-
-        //Respaldamos el Guest ID Original        
-        //_GuestIDOriginal = _sale.sagu;
+        GetGuestName(_saleNew.sagu);     
 
         //Respaldamos el monto de la venta original
         _SaleAmount = _saleAmountOriginal = GetSaleAmount();
@@ -354,24 +332,21 @@ namespace IM.Host.Forms
         _saleOld = new Sale();
         _saleNew = new Sale();
 
-        //Asignamos el datacontext para cargar los controles        
+        //Asignamos el datacontext para cargar los controles en este caso seran vacios       
         _loading = true;
         grdSaleGeneral.DataContext = _saleNew;
         _loading = false;
 
-        //Cargamos los pagos de la venta      
+        //Dejamos vacios los tipos de pago     
         _payments = new ObservableCollection<Payment>();
         dgpayment.DataContext = _payments;
 
+        //Limpiamos el nombre
         lblGuestName.Text = string.Empty;
-
-
       }
     }
 
     #endregion
-
- 
 
     #region LoadComboPayment
 
@@ -753,14 +728,14 @@ namespace IM.Host.Forms
       //si existe la venta 
       if (string.IsNullOrEmpty(txtsaID.Text)) return;
       //si es una secretaria 
-      if (!App.User.HasRole(EnumRole.Secretary))
+      if (App.User.HasRole(EnumRole.Secretary))
       {
         if (ValidateSalesSalesmen())
         {
           //Obtenermos los vendedores
           GetSalemen();
           var saleAmount = GetSaleAmount();
-          var salessalesmen = new frmSalesSalesmen(_saleMen, _saleNew.saID, saleAmount < 0 ? -saleAmount : saleAmount, _saleAmountOriginal)
+          var salessalesmen = new frmSalesSalesmen(_saleMen, _saleNew, saleAmount < 0 ? -saleAmount : saleAmount, _saleAmountOriginal)
           { Owner = this };
           salessalesmen.ShowDialog();
         }
@@ -815,46 +790,6 @@ namespace IM.Host.Forms
         }
       }
     }  
-
-    #endregion
-
-    #region txt_LostFocus
-
-    /// <summary>
-    /// Valida cuando se pierde el focus de los vendedores y de los capitanes 
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 24062016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      //var txt = (TextBox)sender;
-      //var cbo = (ComboBox)FindName(txt.Name.Replace("txt", "cbo"));
-      //if (cbo == null) return;
-      //_searchPRbyTxt = true;
-      //if (!string.IsNullOrEmpty(txt.Text))
-      //{
-      //  //Validamos si existe la Persona si es un capitan o un pr o un liner o un closer o un vlo 
-      //  var name = txt.Name.Trim('1', '2', '3').Substring(5).Replace("Captain", "CAPT").ToUpper();
-      //  var pr = BRPersonnel.GetPersonnelById(txt.Text, name);
-      //  if (pr == null)
-      //  {
-      //    UIHelper.ShowMessage($"The {name.Replace("CAPT", " Captain")} not exist");
-      //    txt.Text = string.Empty;
-      //    txt.Focus();
-      //  }
-      //  else
-      //  {
-      //    cbo.SelectedValue = pr.peID;
-      //    txt.Text = pr.peID;
-      //  }
-      //}
-      //else
-      //{
-      //  cbo.SelectedIndex = -1;
-      //}
-      //_searchPRbyTxt = false;
-    }
 
     #endregion
 
@@ -1058,15 +993,13 @@ namespace IM.Host.Forms
       if (!string.IsNullOrEmpty(validate))
       {
         UIHelper.ShowMessage(validate);
-        //_validateGeneral =  false;
         return false;
       }
 
       //Validamos los datos generales
       if (!await ValidateGeneral())
       {
-        Panel.SetZIndex(gGeneral, 1);
-        //_validateGeneral = false;
+        Panel.SetZIndex(gGeneral, 1);    
         return false;
       }
 
@@ -1078,8 +1011,7 @@ namespace IM.Host.Forms
         if (!string.IsNullOrEmpty(validateSalesmen))
         {
           UIHelper.ShowMessage(validateSalesmen);
-          Panel.SetZIndex(gGeneral, 1);
-          //_validateGeneral = false;
+          Panel.SetZIndex(gGeneral, 1);        
           return false;
         }
       }
@@ -1330,8 +1262,7 @@ namespace IM.Host.Forms
     private async void btnDelete_Click(object sender, RoutedEventArgs e)
     {
       //Preguntamos al usuario si en verdad desea eliminar la venta
-      var result = MessageBox.Show("Are you sure you want to delete this sale ?", "Delete", MessageBoxButton.OKCancel,
-        MessageBoxImage.Exclamation, MessageBoxResult.OK);
+      var result = UIHelper.ShowMessage("Are you sure you want to delete this sale ?");
       if (result != MessageBoxResult.OK) return;
       await BRSales.DeleteSale(Convert.ToInt32(txtsaID.Text));
       //LoadRecord();
@@ -1458,9 +1389,13 @@ namespace IM.Host.Forms
 
         //Guardamos todos los movimientos que estan relacionados con Sale
         var saleAmounts = GetSaleAmount();
-        await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
+       var res = await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
                                           txtChangedBy.Text, saleAmounts < 0 ? -saleAmounts : saleAmounts, _saleMen, _saleAmountOriginal,
                                           ComputerHelper.GetIpMachine(), salesmenChanges, authorizedBy);
+
+        //Si no ocurrio un problema al momento de guardar, mostramos el mensaje
+        //de los contrario se iria al catch y alli nos mostraria el mensaje en especifico
+        UIHelper.ShowMessageResult("Sale", res);
 
         //Recargamos la información
         await LoadRecord();
@@ -1475,11 +1410,12 @@ namespace IM.Host.Forms
             UIHelper.ShowMessage(item);
           }
           //await SaveMemberSalesmenClubes();
+          
         }
         else
         {
           UIHelper.ShowMessage($"The Membership Num {_saleNew.saMembershipNum} do not exists on Intelligence Contracts \n" +
-                                "Can not save the Salesmen in Intelligence Contracts");
+                                "Can not save the Salesmens in Intelligence Contracts");
         }
         //Establecemos el modos de solo lectura
         SetMode(EnumMode.modDisplay);
@@ -2001,18 +1937,26 @@ namespace IM.Host.Forms
 
     #region txt_KeyDown
     /// <summary>
-    /// Si presiono la tecla enter busca 
+    /// Tiene dos funciones 
+    /// 1.- Si es un ComboBox funcionara nada mas cuando presionen la tecla eliminar
+    ///     para quitar el registro que esta actualmente seleccionado y dejarlo vacio
+    /// 2.- Si es un DateTimePicker ó un TextBox funcionara nada mas cuando presionen la tecla enter y 
+    ///     cargara el Datagrid segun los Criterios ingresados.
     /// </summary>
     /// <history>
     /// [jorcanche] 05/jul/2016  created 
     /// </history>
     private void txt_KeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Enter)
+      if (sender is ComboBox && e.Key == Key.Delete)
+      {
+        ((ComboBox)sender).SelectedIndex = -1;
+      }
+      else if ((sender is DateTimePicker || sender is TextBox) && e.Key == Key.Enter)
       {
         LoadGrid();
       }
-    } 
+    }
     #endregion
 
     #region Txtsagu_OnLostFocus

@@ -468,7 +468,7 @@ namespace IM.Host
     private void btnSales_Click(object sender, RoutedEventArgs e)
     {
       var sales = new frmSales(EnumSale.GlobalSale) { Owner = this };
-      sales.Show();
+      sales.ShowDialog();
     }
     #endregion
 
@@ -930,7 +930,7 @@ namespace IM.Host
 
       if (ValidateGuest(guestHost, EnumPermission.Sales, EnumEntities.Sales))
       {
-        var frmSales = new frmSales(EnumSale.Sale, guestHost.guID);
+        var frmSales = new frmSales(EnumSale.Sale, guestHost.guID) { Owner = this };
         frmSales.ShowDialog();
 
         if (chekedValue.IsChecked.Value == false && !string.IsNullOrEmpty(frmSales.txtsaID.Text)

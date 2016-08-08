@@ -41,7 +41,7 @@ namespace IM.Host.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      Title = $"IM Salesmen Changes - Sale ID {_sale} / Membership Number {_membership}";
+      Title = $"Salesmen Changes - Sale ID {_sale} / Membership Number {_membership}";
       var salesSalesMan = await BRSalesSalesmen.GetSalesmenChanges(_sale);         
       var salesmenChangesViewSource = (CollectionViewSource)FindResource("salesmenChangesViewSource");
       salesmenChangesViewSource.Source = salesSalesMan;      

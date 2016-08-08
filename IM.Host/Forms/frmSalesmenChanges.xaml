@@ -7,7 +7,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesmenChanges"
         mc:Ignorable="d"
         Background="#147F79"  ResizeMode="NoResize"
-        Title="IM Salesmen Changes" ShowInTaskbar="False"  Height="297.736" Width="860" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Salesmen Changes" ShowInTaskbar="False"  Height="297.736" Width="860" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
     <Window.Resources>
 
         <CollectionViewSource x:Key="salesmenChangesViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SalesmenChanges}, CreateList=True}"/>

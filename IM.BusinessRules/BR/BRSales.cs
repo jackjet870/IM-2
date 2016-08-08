@@ -189,13 +189,13 @@ namespace IM.BusinessRules.BR
     /// <hitory>
     /// [jorcanche] 20/05/2016
     /// </hitory>
-    public static async Task<string> GetMembershipType (string memebershipNum = "")
+    public static async Task<string> GetMembershipType(string memebershipNum = "")
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          return  (from gu in dbContext.Sales where gu.saMembershipNum == memebershipNum select gu.samtGlobal).FirstOrDefault();         
+          return (from gu in dbContext.Sales where gu.saMembershipNum == memebershipNum select gu.samtGlobal).FirstOrDefault();
         }
       });
     }
@@ -218,8 +218,8 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return (from gu in dbContext.SaleTypes
-            where gu.stA && gu.stID == stId
-            select gu).ToList();
+                  where gu.stA && gu.stID == stId
+                  select gu).ToList();
         }
       });
     }
@@ -297,7 +297,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  creted 28062016
     /// </history>
-    public static  async Task<int> SaveChangedSale(Sale sale)
+    public static async Task<int> SaveChangedSale(Sale sale)
     {
       return await Task.Run(() =>
       {
@@ -366,11 +366,11 @@ namespace IM.BusinessRules.BR
     /// [jorcanche] created 01072016
     /// </history>
     public static async Task<int> DeleteSale(int saleId)
-    {      
+    {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))        
-          return dbContext.USP_OR_DeleteSale(saleId);        
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+          return dbContext.USP_OR_DeleteSale(saleId);
       });
     }
     #endregion
@@ -440,13 +440,14 @@ namespace IM.BusinessRules.BR
     /// <param name="ipMachine">Ip de la maquina en el que se hizo el cambio</param>
     /// <param name="lstSalesSalesmenChanges">Listadoque SalesSalesmen que se remplazaron</param>
     /// <param name="authorizedBy">Quien autorizo los cambios</param>
+    /// <param name="isOnlySaveSalesSalesmen">Cuando este parametro esta en "True" indica que solo se guardara los SalesSalesmens</param>
     /// <history>
     /// [jorcanche]  created 02/ago/2016 
     /// </history>
     public static async Task<int> SaveSale(Sale saleOld, Sale saleNew, ObservableCollection<Payment> obpayments, bool isEnabledsaRefMember,
                                             short hoursDifSalesRoom, string user, decimal saleAmount,
                                             IEnumerable<SalesSalesman> lstSalesSalesman, decimal saleAmountOriginal, string ipMachine,
-                                            IEnumerable<SalesmenChanges> lstSalesSalesmenChanges, string authorizedBy)
+                                            IEnumerable<SalesmenChanges> lstSalesSalesmenChanges, string authorizedBy, bool isOnlySaveSalesSalesmen = false)
     {
       return await Task.Run(() =>
       {
@@ -456,76 +457,95 @@ namespace IM.BusinessRules.BR
           {
             try
             {
-              //*****************************************************************************************************
-              //                                      Guardamos el Sale
-              //*****************************************************************************************************
-              //1.- Guardamos cambios en el Sale si hubo cambios
-              if (!ObjectHelper.IsEquals(saleNew, saleOld))
+              //Si el parametro isOnlySaveSalesSalesmen esta en "True" No permitira hacer ningun movimiento mas que el de 
+              //"Guardo de los movimientos de los SalesSalesmen"
+              if (!isOnlySaveSalesSalesmen)
               {
-                dbContext.Entry(saleNew).State = EntityState.Modified;
-              }
-
-              //*****************************************************************************************************
-              //                                      Guardamos los pagos
-              //*****************************************************************************************************
-              //2.- Eliminamos uno o mas registros que contengan el Id Sale en la tabla Payments
-              //2.1.-  Obtenemos los Payments que estan actualmente en la base con este Sale 
-              var lstPayments = dbContext.Payments.Where(p => p.pasa == saleNew.saID);
-              //2.2 Si hubo Payments los eliminamos 
-              if (lstPayments.Any())
-              {
-                dbContext.Payments.RemoveRange(lstPayments);
-              }
-              //2.3 Guardamos los nuevos Payments.               
-              foreach (var payment in obpayments)
-              {
-                dbContext.Entry(payment).State = EntityState.Added;
-              }
-
-              //*****************************************************************************************************
-              //                                   Marcamos las ventas como actualizada  
-              //*****************************************************************************************************
-              //3.-Si hubo cambio con la anterior venta se procede
-              if (isEnabledsaRefMember && saleNew.saReference != saleOld.saReference)
-              {
-                //3.1.- si tenia venta anterior, la marcamos como actualizada
-                if (saleOld.saReference != null)
+                #region   Guardamos el Sale
+                //*****************************************************************************************************
+                //                                      Guardamos el Sale
+                //*****************************************************************************************************
+                //1.- Guardamos cambios en el Sale si hubo cambios
+                if (!ObjectHelper.IsEquals(saleNew, saleOld))
                 {
-                  //3.2.- marcamos la venta anterior actual como actualizada
-                  dbContext.USP_OR_UpdateSaleUpdated(saleOld.saReference, false);
+                  dbContext.Entry(saleNew).State = EntityState.Modified;
                 }
-                //3.3.- actualizamos los vendedores del huesped en base a los vendedores de la venta 
-                dbContext.USP_OR_UpdateSaleUpdated(saleNew.saReference, true);
-              }
+                #endregion
 
-              //*****************************************************************************************************
-              //          Actualizamos los vendedores del huesped en base a los vendedores de la venta 
-              //*****************************************************************************************************
-              //4.- Actualizamos
-              dbContext.USP_OR_UpdateGuestSalesmen(saleNew.sagu, saleNew.saID);
-
-              //*****************************************************************************************************
-              //                              Si cambio de Guest ID realizamos lo cambios
-              //*****************************************************************************************************
-              //5.- Si hubo cambio en el sagu
-              if (saleOld.sagu != saleNew.sagu)
-              {
-                //5.1.- Marcamos como venta el guest Id Nuevo
-                dbContext.USP_OR_UpdateGuestSale(saleNew.sagu, true);
-
-                //5.2.- Desmarcamos como venta el Guest Id anterior si ya no le quedan ventas                
-                if ((from s in dbContext.Sales where s.sagu == saleNew.sagu select s).Count() == 0)
+                #region Guardamos los pagos
+                //*****************************************************************************************************
+                //                                      Guardamos los pagos
+                //*****************************************************************************************************
+                //2.- Eliminamos uno o mas registros que contengan el Id Sale en la tabla Payments
+                //2.1.-  Obtenemos los Payments que estan actualmente en la base con este Sale 
+                var lstPayments = dbContext.Payments.Where(p => p.pasa == saleNew.saID);
+                //2.2 Si hubo Payments los eliminamos 
+                if (lstPayments.Any())
                 {
-                  dbContext.USP_OR_UpdateGuestSale(saleOld.sagu, false);
+                  dbContext.Payments.RemoveRange(lstPayments);
                 }
+                //2.3 Guardamos los nuevos Payments.               
+                foreach (var payment in obpayments)
+                {
+                  dbContext.Entry(payment).State = EntityState.Added;
+                }
+                #endregion
+
+                #region  Marcamos las ventas como actualizadas 
+                //*****************************************************************************************************
+                //                                   Marcamos las ventas como actualizada  
+                //*****************************************************************************************************
+                //3.-Si hubo cambio con la anterior venta se procede
+                if (isEnabledsaRefMember && saleNew.saReference != saleOld.saReference)
+                {
+                  //3.1.- si tenia venta anterior, la marcamos como actualizada
+                  if (saleOld.saReference != null)
+                  {
+                    //3.2.- marcamos la venta anterior actual como actualizada
+                    dbContext.USP_OR_UpdateSaleUpdated(saleOld.saReference, false);
+                  }
+                  //3.3.- actualizamos los vendedores del huesped en base a los vendedores de la venta 
+                  dbContext.USP_OR_UpdateSaleUpdated(saleNew.saReference, true);
+                }
+                #endregion
+
+                #region  Actualizamos los vendedores del huesped en base a los vendedores de la venta 
+                //*****************************************************************************************************
+                //          Actualizamos los vendedores del huesped en base a los vendedores de la venta 
+                //*****************************************************************************************************
+                //4.- Actualizamos
+                dbContext.USP_OR_UpdateGuestSalesmen(saleNew.sagu, saleNew.saID);
+                #endregion
+
+                #region Si cambio de Guest ID realizamos lo cambios
+                //*****************************************************************************************************
+                //                              Si cambio de Guest ID realizamos lo cambios
+                //*****************************************************************************************************
+                //5.- Si hubo cambio en el sagu
+                if (saleOld.sagu != saleNew.sagu)
+                {
+                  //5.1.- Marcamos como venta el guest Id Nuevo
+                  dbContext.USP_OR_UpdateGuestSale(saleNew.sagu, true);
+
+                  //5.2.- Desmarcamos como venta el Guest Id anterior si ya no le quedan ventas                
+                  if ((from s in dbContext.Sales where s.sagu == saleNew.sagu select s).Count() == 0)
+                  {
+                    dbContext.USP_OR_UpdateGuestSale(saleOld.sagu, false);
+                  }
+                }
+                #endregion
+
+                #region Guardamos el historico de la venta
+                //*****************************************************************************************************
+                //                               Guardamos el historico de la venta
+                //*****************************************************************************************************
+                //6.1.- Guardamos SaleLog
+                dbContext.USP_OR_SaveSaleLog(saleNew.sagu, hoursDifSalesRoom, user);
+
+                #endregion
               }
 
-              //*****************************************************************************************************
-              //                               Guardamos el historico de la venta
-              //*****************************************************************************************************
-              //6.1.- Guardamos SaleLog
-              dbContext.USP_OR_SaveSaleLog(saleNew.sagu, hoursDifSalesRoom, user);
-
+              #region Guarda los movimientos de los SalesSalesmen
               //*****************************************************************************************************
               //                             Guarda los movimientos de los SalesSalesmen
               //*****************************************************************************************************
@@ -552,27 +572,39 @@ namespace IM.BusinessRules.BR
               {
                 dbContext.Entry(salesSalesSaleman).State = EntityState.Added;
               }
+              #endregion
 
-              //*****************************************************************************************************
-              //                             Guardamos el movimiento de venta del huesped
-              //*****************************************************************************************************
-              //8.- Guardamos
-              dbContext.USP_OR_SaveGuestMovement(saleNew.sagu, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Sale),
-                                                  user, Environment.MachineName, ipMachine);
-
-              //*****************************************************************************************************
-              //               Guardamos los cambios de vendedores y la persona que autorizo los cambios
-              //*****************************************************************************************************
-              //9.- Si No se autorizo no hacemos ningun cambio
-              if (!string.IsNullOrEmpty(authorizedBy))
+              //Si el parametro isOnlySaveSalesSalesmen esta en "True" No permitira hacer ningun movimiento mas que el de 
+              //"Guardo de los movimientos de los SalesSalesmen"
+              if (!isOnlySaveSalesSalesmen)
               {
-                //9.1.- Guardamos cambios
-                foreach (var salesmenChange in lstSalesSalesmenChanges)
+                #region Guardamos el movimiento de venta del huesped
+                //*****************************************************************************************************
+                //                             Guardamos el movimiento de venta del huesped
+                //*****************************************************************************************************
+
+                //8.- Guardamos
+                dbContext.USP_OR_SaveGuestMovement(saleNew.sagu, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Sale),
+                                                  user, Environment.MachineName, ipMachine);
+                #endregion
+
+                #region Guardamos los cambios de vendedores y la persona que autorizo los cambios
+                //*****************************************************************************************************
+                //               Guardamos los cambios de vendedores y la persona que autorizo los cambios
+                //*****************************************************************************************************
+                //9.- Si No se autorizo no hacemos ningun cambio
+                if (!string.IsNullOrEmpty(authorizedBy))
                 {
-                  dbContext.USP_OR_SaveSalesmenChanges
-                     (saleNew.saID, authorizedBy, user, salesmenChange.roN, salesmenChange.schPosition,
-                      salesmenChange.schOldSalesman, salesmenChange.schNewSalesman);
+                  //9.1.- Guardamos cambios
+                  foreach (var salesmenChange in lstSalesSalesmenChanges)
+                  {
+                    dbContext.USP_OR_SaveSalesmenChanges
+                       (saleNew.saID, authorizedBy, user, salesmenChange.roN, salesmenChange.schPosition,
+                        salesmenChange.schOldSalesman, salesmenChange.schNewSalesman);
+                  }
                 }
+
+                #endregion
               }
 
               //Si no hubo ningun problema guardamoa cambios 
@@ -582,7 +614,7 @@ namespace IM.BusinessRules.BR
             }
             catch (Exception)
             {
-              //De lo contrario mandamos el mensaje de error en la interfaz 
+              //De lo contrario mandamos el mensaje de error en la interfaz y realizamos un Rollback 
               transaction.Rollback();
               throw;
             }

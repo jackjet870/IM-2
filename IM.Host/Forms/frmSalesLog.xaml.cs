@@ -35,7 +35,7 @@ namespace IM.Host.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      Title = $"IM Sales Log - Sale ID {_sale} / Membership Number {_membership}"; 
+      Title = $"Sales Log - Sale ID {_sale} / Membership Number {_membership}"; 
       var saleLog = await BRSales.GetSaleLog(_sale);
      // var saleLogDataViewSource = (CollectionViewSource)FindResource("saleLogDataViewSource");
      // saleLogDataViewSource.Source = saleLog;

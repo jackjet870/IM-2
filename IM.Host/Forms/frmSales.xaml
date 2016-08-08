@@ -90,11 +90,11 @@
                         </StackPanel>
                         <StackPanel >
                             <TextBlock x:Name="lblCStartD" Text="From"/>
-                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDFrom" Width="110"  DefaultValue="2012/01/01" DisplayDefaultValueOnEmptyText="True"/>
+                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDFrom" Width="110"  DefaultValue="2012/01/01" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown"/>
                         </StackPanel>
                         <StackPanel >
                             <TextBlock x:Name="lblCEndD" Text="To"/>
-                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" DefaultValue="{x:Static sys:DateTime.Today}" DisplayDefaultValueOnEmptyText="True"/>
+                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" DefaultValue="{x:Static sys:DateTime.Today}" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown"/>
                         </StackPanel>
                         <Button  x:Name="btnSearch" Content="Search" VerticalAlignment="Center" Click="btnSearch_Click" Width="60" FontSize="12" FontWeight="Black" Margin="5,0,5,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
                     </StackPanel>
@@ -110,7 +110,7 @@
                     </Grid.RowDefinitions>
                     <Button x:Name="btnGeneral" Content="General" Grid.Column="0" Grid.Row="0" Click="btnGeneral_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
                     <Button x:Name="btnSalesmen" Content="Salesmen" Grid.Column="1" Grid.Row="0" Click="btnSalesmen_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                    <Grid Background="White" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="1" x:Name="gGeneral" >
+                    <Grid Background="White" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="0" x:Name="gGeneral" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  />
                             <ColumnDefinition />
@@ -326,12 +326,12 @@
                                 <TextBox x:Name="txtsaPR3" LostFocus="txt_LostFocus" Text="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>-->
                                 <StackPanel Width="Auto">
-                                    <ComboBox x:Name="cmbsaPR1" Margin="0,0,0,4" SelectedValue="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaPR1" Margin="0,0,0,4" SelectedValue="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaPR2" Margin="0,0,0,3" SelectedValue="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaPR2" Margin="0,0,0,3" SelectedValue="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
@@ -357,7 +357,7 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <TextBlock x:Name="lblsaLiner1" Text="Liner 1" Margin="0,0,3,0" />
                                         <!--    <TextBox x:Name="txtsaLiner1" Tag="Liner 1" Text="{Binding saLiner1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" Width="100" LostFocus="txt_LostFocus"/>-->
-                                        <ComboBox x:Name="cmbsaLiner1"  SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"  SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaLiner1"  SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"  SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                          TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
@@ -387,42 +387,42 @@
                                 <TextBox x:Name="txtsaVLO" LostFocus="txt_LostFocus" Text="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>-->
                                 <StackPanel Width="auto">
-                                    <ComboBox x:Name="cmbsaLiner2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saLiner2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaLiner2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saLiner2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                              TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaCloser1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaCloser1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaCloser2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaCloser2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaCloser3" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaCloser3" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                              TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaExit1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaExit1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                            TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaPodium" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaPodium" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                          TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaVLO" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaVLO" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                           TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
@@ -448,27 +448,27 @@
                                     <TextBox x:Name="txtsaCloserCaptain1" Text="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
                                 </StackPanel>-->
                                     <StackPanel Width="auto">
-                                        <ComboBox x:Name="cmbsaPRCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaPRCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                                TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaPRCaptain2" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaPRCaptain2" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                                TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaPRCaptain3" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaPRCaptain3" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                                TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaLinerCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaLinerCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                                 TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaCloserCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
+                                        <ComboBox x:Name="cmbsaCloserCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                                TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"

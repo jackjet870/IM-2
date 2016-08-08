@@ -22,16 +22,17 @@ namespace IM.Host.Forms
     List<SalesSalesman> _salesSalesmans;
     List<SalesSalesman> _oldList = new List<SalesSalesman>();
     decimal _amount,_amountOriginal, cantidadWithOwn;
-    int _sale;
+    Sale _sale;
     CollectionViewSource _saleLogDataViewSource;
 
+    #region frmSalesSalesmen
     /// <summary>
     /// Contructor del formulario 
     /// </summary>
     /// <history>
     /// [jorcanche] 14/06/2016 created
     /// </history>
-    public frmSalesSalesmen(List<SalesSalesman> salesSalesmans, int sale, decimal amount, decimal amountOriginal)
+    public frmSalesSalesmen(List<SalesSalesman> salesSalesmans, Sale sale, decimal amount, decimal amountOriginal)
     {
       InitializeComponent();
       _salesSalesmans = salesSalesmans;
@@ -39,8 +40,9 @@ namespace IM.Host.Forms
       _amountOriginal = amountOriginal;
       _sale = sale;
     }
+    #endregion
 
-    //"smsa, smpe, peN, smSale, smSaleAmountOwn, smSaleAmountWith"
+    #region Window_Loaded
     /// <summary>
     /// Carga e inicializa las variables y listados 
     /// </summary>
@@ -52,9 +54,10 @@ namespace IM.Host.Forms
       _saleLogDataViewSource = ((CollectionViewSource)(FindResource("salesSalesmanViewSource")));
       _saleLogDataViewSource.Source = _salesSalesmans;
       btnCancel.IsEnabled = btnSave.IsEnabled = false; smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
+    }
+    #endregion
 
-    }  
-
+    #region TextBox_Loaded
     /// <summary>
     /// Se produce el evento cuando se selecciona la celda y agrega el focus
     /// </summary>
@@ -67,7 +70,9 @@ namespace IM.Host.Forms
       txt.Focus();
       cantidadWithOwn = Convert.ToDecimal(txt.Text);
     }
+    #endregion
 
+    #region btnEdit_Click
     /// <summary>
     ///Modo edicion  
     /// </summary>
@@ -88,21 +93,37 @@ namespace IM.Host.Forms
         _oldList.Add(ss);
       });
     }
+    #endregion
 
+    #region btnSave_Click
     /// <summary>
     /// Modo para guardar
     /// </summary>
     /// <history>
     /// [jorcanche] 14/06/2016 created
     /// </history>
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.IsEnabled = btnSave.IsEnabled = false; btnEdit.IsEnabled = true;
       smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
       //Guardamos los SalesSalesmen
-      SalesSalesmen.SaveSalesSalesmen(_salesSalesmans,_sale,_amount,_amountOriginal);
-    }
+      try
+      {
+        var res = await BRSales.SaveSale(null, _sale, null, false, 0, null, _amount, _salesSalesmans, _amountOriginal, null, null, null, true);
 
+        //Si no ocurrio un problema al momento de guardar, mostramos el mensaje
+        //de los contrario se ira al catch y alli nos mostrara el mensaje de error en especifico
+        UIHelper.ShowMessageResult("SalesSalesmen", res);
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+
+    }
+    #endregion
+
+    #region btnCancel_Click
     /// <summary>
     /// Modo cancel
     /// </summary>
@@ -113,12 +134,13 @@ namespace IM.Host.Forms
     {
       btnCancel.IsEnabled = btnSave.IsEnabled = false; btnEdit.IsEnabled = true;
       smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
-      _salesSalesmans = new List<SalesSalesman>();     
+      _salesSalesmans = new List<SalesSalesman>();
       _salesSalesmans = _oldList;
       _saleLogDataViewSource.Source = _salesSalesmans;
-
     }
+    #endregion
 
+    #region smSaleAmountOwnWith_PreviewTextInput
     /// <summary>
     /// Valida la tecla presionada antes de que se visualice en el textbox
     /// </summary>
@@ -133,7 +155,9 @@ namespace IM.Host.Forms
         e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
       }
     }
+    #endregion
 
+    #region TextBox_LostFocus
     /// <summary>
     /// Cuando se pierde el focus del  smSaleAmountWith o del smSaleAmountOwn
     /// </summary>
@@ -151,6 +175,7 @@ namespace IM.Host.Forms
         e.Handled = true;
         txt.Text = cantidadWithOwn.ToString();
       }
-    }
+    } 
+    #endregion
   }
 }

@@ -56,8 +56,7 @@ namespace IM.Host.Forms
       LoadCloserCapt();
       var sales = new List<string>();
       foreach (var item in _saleman)
-      {
-        //sales.Add($" {item.role} {item.position} from '{item.oldSalesmanValue} - {item.oldSalesmanDisplay}' to '{item.newSalesmanValue} - {item.newSalesmanDisplay}' ");
+      {        
         sales.Add($" {item.roN} {item.schPosition} from '{item.schOldSalesman} - {item.OldSalesmanN}' to '{item.schNewSalesman} - {item.NewSalesmanN}' ");
       }
       lviSaleMan.ItemsSource = sales;    
