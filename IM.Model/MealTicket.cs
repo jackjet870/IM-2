@@ -40,5 +40,6 @@ namespace IM.Model
         public virtual Personnel Personnel { internal get; set; }
         public virtual RateType RateType { internal get; set; }
         public virtual SalesRoom SalesRoom { internal get; set; }
+        public virtual Personnel PersonnelAuthorizedBy { get; set; }
     }
 }

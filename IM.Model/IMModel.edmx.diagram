@@ -462,6 +462,7 @@
         <AssociationConnector Association="IMModel.FK_SalesRooms_Zones" />
         <EntityTypeShape EntityType="IMModel.RefundTypeFolio" Width="1.5" PointX="36" PointY="129" />
         <AssociationConnector Association="IMModel.FK_RefundTypeFolios_RefundTypes" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_Personnel_AuthorizedBy" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -149,6 +149,7 @@ namespace IM.Model
             this.Sales_FTM1 = new HashSet<Sale>();
             this.Sales_FTM2 = new HashSet<Sale>();
             this.Sales_Liner3 = new HashSet<Sale>();
+            this.MealTickets_AuthorizedBy = new HashSet<MealTicket>();
         }
     
         public string peID { get; set; }
@@ -435,5 +436,7 @@ namespace IM.Model
         public virtual ICollection<Sale> Sales_FTM2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales_Liner3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MealTicket> MealTickets_AuthorizedBy { get; set; }
     }
 }
