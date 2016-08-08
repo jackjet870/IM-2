@@ -17,13 +17,17 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [lchairez] 10/03/2016 Created.
+    /// [erosado] 05/08//2016 Modified. Se agregó async
     /// </history>
-    public static DateTime? GetCloseDate()
+    public async static Task<DateTime?> GetCloseDate()
     {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.Configurations.Single().ocInvitationsCloseD;
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.Configurations.Single().ocInvitationsCloseD;
+        }
+      });
     }
     #endregion
 

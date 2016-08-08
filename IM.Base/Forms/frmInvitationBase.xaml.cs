@@ -135,12 +135,13 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [lchairez] 29/02/2016 Crated.
+    /// [erosado] 05/08/2016  Modified. Se agregó async
     /// </history>
-    private void frmInvitationBase_Loaded(object sender, RoutedEventArgs e)
+    private async void frmInvitationBase_Loaded(object sender, RoutedEventArgs e)
     {
       _serverDateTime = BRHelpers.GetServerDateTime();
       _bookingDate = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
-      _closeDate = BRConfiguration.GetCloseDate();
+      _closeDate = await BRConfiguration.GetCloseDate();
 
       if (!_closeDate.HasValue && _bookingDate.HasValue && (_bookingDate <= _closeDate.Value)) //no permitimos modificar invitaciones en fechas cerradas
       {

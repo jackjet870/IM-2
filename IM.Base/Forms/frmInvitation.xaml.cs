@@ -37,8 +37,8 @@ namespace IM.Base.Forms
     {
       try
       {
-        //var catObj = new CommonCatObject(User, GuestId, InvitationMode); SE USA PARA PRUEBAS
-        var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit);
+        var catObj = new CommonCatObject(User, GuestId, InvitationMode); 
+        //var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit); SE USA PARA PRUEBAS
         _invitationType = InvitationType;
         _guestId = GuestId;
         //_guestId = 6547022; SE USA PARA PRUEBAS
@@ -73,13 +73,25 @@ namespace IM.Base.Forms
       UIHelper.SetUpControls(new Guest(), this);
     }
 
-    private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private async void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      CommonCatObject k = DataContext as CommonCatObject;//PRUEBAS
-      var h = k.GuestObj.guID;//PRUEBAS
-      k.BookingDepositList[0].bddr = 25; //PRUEBAS
-      var j = k.CBookingDepositList[0].bddr;//PRUEBAS
-      var ñp = k.BookingDepositList[0].bddr;//PRUEBAS
+      //Obtenemos el DataContext
+      CommonCatObject dataContext = DataContext as CommonCatObject;
+
+      //Obtenemos el program
+      var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
+
+      //Si paso la primera validacion 
+      if (!InvitationValidationRules.ValidateGeneral(this,dataContext, program))
+      {
+
+
+      }
+      //Guardar Guest
+      //GUardar InvitsGift
+      //Guardar BookingDeposits
+      //Guardar CreditCardList
+      //Guardar AdditionalGuest
     }
 
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -247,7 +259,7 @@ namespace IM.Base.Forms
       cmbLocation.IsEnabled = false;
       chkguAntesIO.IsEnabled =
       dtpBookDate.IsEnabled =
-      cbxBookTime.IsEnabled = true;
+      cbmBookTime.IsEnabled = true;
       chkDirect.IsEnabled = false;
       dtpRescheduleDate.IsEnabled =
       cbxReschudeleTime.IsEnabled =
@@ -396,7 +408,7 @@ namespace IM.Base.Forms
           //Si Paso las validaciones
           if (!_hasErrorValidateEdit)
           {
-            //Obtenemos el program 
+            //Obtenemos el program
             var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
 
             InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, program);

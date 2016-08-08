@@ -617,22 +617,26 @@ namespace IM.Base.Helpers
     /// <returns>True. está en modo edición | False. No está en modo edición</returns>
     /// <history>
     /// [emoguel] created 29/07/2016
+    /// [erosado] 05/08/2016  Modified. Se agregó validacion, para prevenir Datagrid.ItemSource = NULL
     /// </history>
     public static bool IsInEditMode(DataGrid dgr)
     {
-      List<object> lstObject = dgr.ItemsSource.OfType<object>().ToList();
-      var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
-      //Obtener la fila en edición
-      var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
-      DataGridRow rowSelected = new DataGridRow();
-      if (dgr.SelectedIndex != -1)
+      if (dgr != null && dgr?.ItemsSource != null)
       {
-        //Fila a editar o seleccionada
-        rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;        
-      }
-      if (rowEdit != null && rowEdit != rowSelected)
-      {
-        return true;
+        List<object> lstObject = dgr.ItemsSource.OfType<object>().ToList();
+        var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+        //Obtener la fila en edición
+        var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
+        DataGridRow rowSelected = new DataGridRow();
+        if (dgr.SelectedIndex != -1)
+        {
+          //Fila a editar o seleccionada
+          rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;
+        }
+        if (rowEdit != null && rowEdit != rowSelected)
+        {
+          return true;
+        }
       }
       return false;
     }
