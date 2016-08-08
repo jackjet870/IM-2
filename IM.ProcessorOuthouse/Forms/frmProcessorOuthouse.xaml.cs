@@ -438,7 +438,7 @@ namespace IM.ProcessorOuthouse.Forms
             EnumProgram.Outhouse,
             string.Join(",", _frmFilter.grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
             EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptDepositsPaymentByPR != null)
+            if (lstRptDepositsPaymentByPR.DepositsPaymentByPR.Any())
               finfo = clsReports.ExportRptDepositsPaymentByPR(strReport, fileFullPath, filters, lstRptDepositsPaymentByPR);
             break;
 
@@ -457,7 +457,7 @@ namespace IM.ProcessorOuthouse.Forms
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             _frmFilter.chkAllChargeTo.IsChecked.Value ? "ALL" : string.Join(",", _frmFilter.grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList()),
             _frmFilter.chkAllGifts.IsChecked.Value ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()));
-            if (lstRptGiftsReceivedBySR != null)
+            if (lstRptGiftsReceivedBySR.GiftsReceivedBySR.Any())
               finfo = clsReports.ExportRptGiftsReceivedBySR(strReport, fileFullPath, filters, lstRptGiftsReceivedBySR);
             break;
 
@@ -472,7 +472,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation = await BRReportsByLeadSource.GetRptGuestsShowNoPresentedInvitation(
               _dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-            if (lstRptGuestsShowNoPresentedInvitation.Count > 0)
+            if (lstRptGuestsShowNoPresentedInvitation.Any())
               finfo = clsReports.ExportRptGuestsShowNoPresentedInvitation(strReport, fileFullPath, filters, lstRptGuestsShowNoPresentedInvitation);
             break;
 
@@ -507,7 +507,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgeOuthouse.Count > 0)
+            if (lstRptProductionByAgeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeOuthouse);
             break;
 
@@ -524,7 +524,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgeSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByAgeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeSalesRoomOuthouse);
             break;
 
@@ -542,7 +542,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
-            if (lstRptProductionByAgencyOuthouse != null)
+            if (lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
             break;
 
@@ -559,7 +559,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgencySalesRoomOuthouse != null)
+            if (lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencySalesRoomOuthouse);
             break;
 
@@ -576,7 +576,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgencyMarketHotelOuthouse.Count > 0)
+            if (lstRptProductionByAgencyMarketHotelOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgencyMarketHotelOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgencyMarketHotelOuthouse);
             break;
 
@@ -593,7 +593,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByCoupleTypeOuthouse.Count > 0)
+            if (lstRptProductionByCoupleTypeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeOuthouse);
             break;
 
@@ -610,7 +610,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeSalesRoomOuthouse);
             break;
 
@@ -626,7 +626,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByFlightSalesRoom.Count > 0)
+            if (lstRptProductionByFlightSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByFlightSalesRoom(strReport, fileFullPath, filters, lstRptProductionByFlightSalesRoom);
             break;
           #endregion
@@ -644,7 +644,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
              EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByGiftInvitation.Count > 0)
+            if (lstRptProductionByGiftInvitation.Any())
               finfo = clsReports.ExportRptProductionByGiftInvitation(strReport, fileFullPath, filters, lstRptProductionByGiftInvitation);
             break;
 
@@ -663,7 +663,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
              EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByGiftInvitationSalesRoom.Count > 0)
+            if (lstRptProductionByGiftInvitationSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByGiftInvitationSalesRoom(strReport, fileFullPath, filters, lstRptProductionByGiftInvitationSalesRoom);
             break;
 
@@ -680,7 +680,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdAll);
-            if (lstRptProductionByGuestStatusOuthouse.Count > 0)
+            if (lstRptProductionByGuestStatusOuthouse.Any())
               finfo = clsReports.ExportRptProductionByGuestStatusOuthouse(strReport, fileFullPath, filters, lstRptProductionByGuestStatusOuthouse);
             break;
 
@@ -696,7 +696,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotel.Count > 0)
+            if (lstRptProductionByHotel.Any())
               finfo = clsReports.ExportRptProductionByHotel(strReport, fileFullPath, filters, lstRptProductionByHotel);
             break;
           #endregion
@@ -711,7 +711,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelSalesRoom.Count > 0)
+            if (lstRptProductionByHotelSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelSalesRoom);
             break;
           #endregion
@@ -726,7 +726,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelGroup.Count > 0)
+            if (lstRptProductionByHotelGroup.Any())
               finfo = clsReports.ExportRptProductionByHotelGroup(strReport, fileFullPath, filters, lstRptProductionByHotelGroup);
             break;
           #endregion
@@ -741,7 +741,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelGroupSalesRoom.Count > 0)
+            if (lstRptProductionByHotelGroupSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelGroupSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelGroupSalesRoom);
             break;
           #endregion
@@ -758,7 +758,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSaveCourtesyTours);
-            if (lstRptProductionByNationalityOuthouse.Count > 0)
+            if (lstRptProductionByNationalityOuthouse.Any())
               finfo = clsReports.ExportRptProductionByNationalityOuthouse(strReport, fileFullPath, filters, lstRptProductionByNationalityOuthouse);
             break;
 
@@ -776,7 +776,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumSaveCourtesyTours);
-            if (lstRptProductionByNationalitySalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByNationalitySalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByNationalitySalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByNationalitySalesRoomOuthouse);
             break;
 
@@ -794,7 +794,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdAll,
                _enumBasedOnBooking);
-            if (lstRptProductionByPROuthouse.Count > 0)
+            if (lstRptProductionByPROuthouse.Any())
               finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
             break;
 
@@ -812,7 +812,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdAll,
                _enumBasedOnBooking);
-            if (lstRptProductionByPRSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByPRSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPRSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRSalesRoomOuthouse);
             break;
 
@@ -830,7 +830,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumBasedOnBooking);
-            if (lstRptProductionByPRSalesRoomDepositsFlyersShow.Count > 0)
+            if (lstRptProductionByPRSalesRoomDepositsFlyersShow.Any())
               finfo = clsReports.ExportRptProductionByPRSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRSalesRoomDepositsFlyersShow);
             break;
 
@@ -848,7 +848,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdDeposit,
                _enumBasedOnBooking);
-            if (lstRptProductionByPRSalesRoomDeposits.Count > 0)
+            if (lstRptProductionByPRSalesRoomDeposits.Any())
               finfo = clsReports.ExportRptProductionByPRSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRSalesRoomDeposits);
             break;
 
@@ -866,7 +866,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdNoDeposit,
                _enumBasedOnBooking);
-            if (lstRptProductionByPRSalesRoomFlyers.Count > 0)
+            if (lstRptProductionByPRSalesRoomFlyers.Any())
               finfo = clsReports.ExportRptProductionByPRSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRSalesRoomFlyers);
             break;
 
@@ -884,7 +884,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumBasedOnBooking);
-            if (lstRptProductionByPRDepositsFlyersShowOuthouse.Count > 0)
+            if (lstRptProductionByPRDepositsFlyersShowOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsFlyersShowOuthouse);
             break;
 
@@ -902,7 +902,7 @@ namespace IM.ProcessorOuthouse.Forms
                  EnumProgram.Outhouse,
                  EnumFilterDeposit.fdDeposit,
                  _enumBasedOnBooking);
-            if (lstRptProductionByPRDepositsOuthouse.Count > 0)
+            if (lstRptProductionByPRDepositsOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsOuthouse);
             break;
 
@@ -920,7 +920,7 @@ namespace IM.ProcessorOuthouse.Forms
                  EnumProgram.Outhouse,
                  EnumFilterDeposit.fdNoDeposit,
                  _enumBasedOnBooking);
-            if (lstRptProductionByPRFlyersOuthouse.Count > 0)
+            if (lstRptProductionByPRFlyersOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRFlyersOuthouse);
             break;
 
@@ -937,7 +937,7 @@ namespace IM.ProcessorOuthouse.Forms
                  "ALL",
                  EnumProgram.Outhouse,
                  EnumFilterDeposit.fdAll);
-            if (lstRptProductionByPRContactOuthouse.Count > 0)
+            if (lstRptProductionByPRContactOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPRContactOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRContactOuthouse);
             break;
 
@@ -953,7 +953,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByWave.Count > 0)
+            if (lstRptProductionByWave.Any())
               finfo = clsReports.ExportRptProductionByWave(strReport, fileFullPath, filters, lstRptProductionByWave);
             break;
           #endregion
@@ -968,7 +968,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByWaveSalesRoom.Count > 0)
+            if (lstRptProductionByWaveSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByWaveSalesRoom(strReport, fileFullPath, filters, lstRptProductionByWaveSalesRoom);
             break;
             #endregion
@@ -1086,7 +1086,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgeOuthouse.Count > 0)
+            if (lstRptProductionByAgeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeOuthouse);
             break;
 
@@ -1102,7 +1102,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgeSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByAgeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeSalesRoomOuthouse);
             break;
           #endregion
@@ -1117,7 +1117,7 @@ namespace IM.ProcessorOuthouse.Forms
                string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
                EnumProgram.Outhouse,
                EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByAgencyMarketHotelOuthouse.Count > 0)
+            if (lstRptProductionByAgencyMarketHotelOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgencyMarketHotelOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgencyMarketHotelOuthouse);
             break;
           #endregion
@@ -1132,7 +1132,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByCoupleTypeOuthouse.Count > 0)
+            if (lstRptProductionByCoupleTypeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeOuthouse);
             break;
           #endregion
@@ -1147,7 +1147,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeSalesRoomOuthouse);
             break;
           #endregion
@@ -1164,7 +1164,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
              EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByGiftInvitation.Count > 0)
+            if (lstRptProductionByGiftInvitation.Any())
               finfo = clsReports.ExportRptProductionByGiftInvitation(strReport, fileFullPath, filters, lstRptProductionByGiftInvitation);
             break;
           #endregion
@@ -1181,7 +1181,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByGiftInvitationSalesRoom.Count > 0)
+            if (lstRptProductionByGiftInvitationSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByGiftInvitationSalesRoom(strReport, fileFullPath, filters, lstRptProductionByGiftInvitationSalesRoom);
             break;
           #endregion
@@ -1196,7 +1196,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByGuestStatusOuthouse.Count > 0)
+            if (lstRptProductionByGuestStatusOuthouse.Any())
               finfo = clsReports.ExportRptProductionByGuestStatusOuthouse(strReport, fileFullPath, filters, lstRptProductionByGuestStatusOuthouse);
             break;
           #endregion
@@ -1211,7 +1211,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotel.Count > 0)
+            if (lstRptProductionByHotel.Any())
               finfo = clsReports.ExportRptProductionByHotel(strReport, fileFullPath, filters, lstRptProductionByHotel);
             break;
           #endregion
@@ -1226,7 +1226,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelSalesRoom.Count > 0)
+            if (lstRptProductionByHotelSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelSalesRoom);
             break;
           #endregion
@@ -1241,7 +1241,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelGroup.Count > 0)
+            if (lstRptProductionByHotelGroup.Any())
               finfo = clsReports.ExportRptProductionByHotelGroup(strReport, fileFullPath, filters, lstRptProductionByHotelGroup);
             break;
           #endregion
@@ -1256,7 +1256,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByHotelGroupSalesRoom.Count > 0)
+            if (lstRptProductionByHotelGroupSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelGroupSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelGroupSalesRoom);
             break;
           #endregion
@@ -1271,7 +1271,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByNationalityOuthouse.Count > 0)
+            if (lstRptProductionByNationalityOuthouse.Any())
               finfo = clsReports.ExportRptProductionByNationalityOuthouse(strReport, fileFullPath, filters, lstRptProductionByNationalityOuthouse);
             break;
           #endregion
@@ -1287,7 +1287,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByNationalitySalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByNationalitySalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByNationalitySalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByNationalitySalesRoomOuthouse);
             break;
           #endregion
@@ -1302,7 +1302,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByPRSalesRoomOuthouse.Count > 0)
+            if (lstRptProductionByPRSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPRSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRSalesRoomOuthouse);
             break;
           #endregion
@@ -1317,7 +1317,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByPROuthouse.Count > 0)
+            if (lstRptProductionByPROuthouse.Any())
               finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
             break;
           #endregion
@@ -1332,7 +1332,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByWave.Count > 0)
+            if (lstRptProductionByWave.Any())
               finfo = clsReports.ExportRptProductionByWave(strReport, fileFullPath, filters, lstRptProductionByWave);
             break;
           #endregion
@@ -1347,7 +1347,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
-            if (lstRptProductionByWaveSalesRoom.Count > 0)
+            if (lstRptProductionByWaveSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByWaveSalesRoom(strReport, fileFullPath, filters, lstRptProductionByWaveSalesRoom);
             break;
             #endregion
@@ -1443,7 +1443,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())
               );
-            if (lstRptFoliosInvitationByDateFolio.Count > 0)
+            if (lstRptFoliosInvitationByDateFolio.Any())
               finfo = clsReports.ExportRptFoliosInvitationByDateFolio(strReport, fileFullPath, filters, lstRptFoliosInvitationByDateFolio);
             break;
           #endregion
@@ -1460,7 +1460,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())
               );
-            if (lstRptFoliosInvitationsOuthouseByPR.Count > 0)
+            if (lstRptFoliosInvitationsOuthouseByPR.Any())
               finfo = clsReports.ExportRptFoliosInvitationOuthouseByPR(strReport, fileFullPath, filters, lstRptFoliosInvitationsOuthouseByPR);
             break;
           #endregion
@@ -1476,7 +1476,7 @@ namespace IM.ProcessorOuthouse.Forms
               _folTo,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               _frmFilter.chkAllPR.IsChecked.Value ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()));
-            if (lstRptFoliosCxCByPR.Count > 0)
+            if (lstRptFoliosCxCByPR.Any())
               finfo = clsReports.ExportRptFoliosCxCByPR(strReport, fileFullPath, filters, lstRptFoliosCxCByPR);
             break;
           #endregion
@@ -1492,7 +1492,7 @@ namespace IM.ProcessorOuthouse.Forms
               _folTo,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()));
-            if (lstRptFoliosCXC.Count > 0)
+            if (lstRptFoliosCXC.Any())
               finfo = clsReports.ExportRptFoliosCXC(strReport, fileFullPath, filters, lstRptFoliosCXC);
             break;
             #endregion
