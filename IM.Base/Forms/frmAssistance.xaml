@@ -82,7 +82,7 @@
         <!--#region DataGrid-->
         <Grid x:Name="grdGrid" Grid.Row="1" DataContext="{StaticResource assistanceViewSource}">
             <DataGrid x:Name="assistanceDataDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" 
-                      ItemsSource="{Binding Source={StaticResource assistanceDataViewSource}}"
+                      ItemsSource="{Binding Source={StaticResource assistanceDataViewSource}}" CanUserAddRows="False"
                       Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" >
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="aspeColumn" Width=".7*" Header="ID" Binding="{Binding aspe}" IsReadOnly="True"/>
