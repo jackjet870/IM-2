@@ -904,6 +904,7 @@
           <Property Name="guFTB2" Type="varchar" MaxLength="10" />
           <Property Name="guCloser4" Type="varchar" MaxLength="10" />
           <Property Name="guExit3" Type="varchar" MaxLength="10" />
+          <Property Name="guNotifiedEmailShowNotInvited" Type="bit" />
         </EntityType>
         <EntityType Name="GuestsAdditional">
           <Key>
@@ -1260,7 +1261,7 @@
           <Property Name="mePrinted" Type="bit" Nullable="false" />
           <Property Name="meag" Type="varchar" MaxLength="35" />
           <Property Name="merep" Type="varchar" MaxLength="60" />
-          <Property Name="meAuthorizedBy" Type="varchar" MaxLength="35" />
+          <Property Name="meAuthorizedBy" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="MealTicketTypes">
           <Key>
@@ -4391,6 +4392,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MealTickets_Personnel_AuthorizedBy">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="MealTickets" Type="Self.MealTickets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="MealTickets">
+              <PropertyRef Name="meAuthorizedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MealTickets_RateTypes">
           <End Role="RateTypes" Type="Self.RateTypes" Multiplicity="1" />
           <End Role="MealTickets" Type="Self.MealTickets" Multiplicity="*" />
@@ -6378,10 +6391,6 @@
         <Function Name="USP_OR_GetLocationsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Program" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetMailOutTextsByLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="mtls" Type="varchar" Mode="In" />
-          <Parameter Name="mtA" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
@@ -8520,6 +8529,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="MealTickets" EntitySet="MealTickets" />
           </AssociationSet>
+          <AssociationSet Name="FK_MealTickets_Personnel_AuthorizedBy" Association="Self.FK_MealTickets_Personnel_AuthorizedBy">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="MealTickets" EntitySet="MealTickets" />
+          </AssociationSet>
           <AssociationSet Name="FK_MealTickets_RateTypes" Association="Self.FK_MealTickets_RateTypes">
             <End Role="RateTypes" EntitySet="RateTypes" />
             <End Role="MealTickets" EntitySet="MealTickets" />
@@ -10085,6 +10098,7 @@
           <NavigationProperty Name="Personnel_FTM1" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle1" FromRole="Guest" ToRole="Personnel" />
           <NavigationProperty Name="Personnel_FTM2" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle2" FromRole="Guest" ToRole="Personnel" />
           <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_Guests_Personnel_Liner3" FromRole="Guest" ToRole="Personnel" />
+          <Property Name="guNotifiedEmailShowNotInvited" Type="Boolean" />
         </EntityType>
         <EntityType Name="GuestCreditCard">
           <Key>
@@ -10475,13 +10489,14 @@
           <Property Name="mePrinted" Type="Boolean" Nullable="false" />
           <Property Name="meag" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="merep" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="meAuthorizedBy" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="meAuthorizedBy" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agency" Relationship="Self.FK_MealTickets_Agencies" FromRole="MealTickets" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guest" Relationship="Self.FK_MealTickets_Guests" FromRole="MealTickets" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="MealTicketType" Relationship="Self.FK_MealTickets_MealTicketTypes" FromRole="MealTickets" ToRole="MealTicketTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnel" Relationship="Self.FK_MealTickets_Personnel" FromRole="MealTickets" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="RateType" Relationship="Self.FK_MealTickets_RateTypes" FromRole="MealTickets" ToRole="RateTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRoom" Relationship="Self.FK_MealTickets_SalesRooms" FromRole="MealTickets" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="PersonnelAuthorizedBy" Relationship="IMModel.FK_MealTickets_Personnel_AuthorizedBy" FromRole="MealTicket" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="MealTicketType">
           <Key>
@@ -10821,6 +10836,7 @@
           <NavigationProperty Name="Sales_FTM1" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="Sales_FTM2" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="Sales_Liner3" Relationship="IMModel.FK_Sales_Personnel_Liner3" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="MealTickets_AuthorizedBy" Relationship="IMModel.FK_MealTickets_Personnel_AuthorizedBy" FromRole="Personnel" ToRole="MealTicket" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -16241,10 +16257,6 @@
             <Parameter Name="LeadSource" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetMailOutTextsByLeadSource" ReturnType="Collection(IMModel.MailOutTextByLeadSource)">
-            <Parameter Name="mtls" Mode="In" Type="String" />
-            <Parameter Name="mtA" Mode="In" Type="Boolean" />
-          </FunctionImport>
           <FunctionImport Name="USP_OR_GetMarkets" ReturnType="Collection(IMModel.MarketShort)">
           <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
@@ -18090,6 +18102,10 @@
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <AssociationSet Name="FK_MealTickets_Personnel_AuthorizedBy" Association="IMModel.FK_MealTickets_Personnel_AuthorizedBy">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="MealTicket" EntitySet="MealTickets" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -18338,13 +18354,6 @@
           <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="lspg" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="lsrg" Nullable="true" MaxLength="10" />
-        </ComplexType>
-        <ComplexType Name="MailOutTextByLeadSource">
-          <Property Type="String" Name="mtmoCode" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="mtla" Nullable="false" MaxLength="2" />
-          <Property Type="String" Name="mtRTF" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="laMrMrs" Nullable="false" MaxLength="15" />
-          <Property Type="String" Name="laRoom" Nullable="false" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="MarketShort">
           <Property Type="String" Name="mkID" Nullable="false" MaxLength="10" />
@@ -22931,6 +22940,18 @@
           <Property Type="DateTime" Name="efDateFrom" Nullable="false" Precision="23" />
           <Property Type="DateTime" Name="efDateTo" Nullable="false" Precision="23" />
         </ComplexType>
+        <Association Name="FK_MealTickets_Personnel_AuthorizedBy">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.MealTicket" Role="MealTicket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="MealTicket">
+              <PropertyRef Name="meAuthorizedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23610,6 +23631,7 @@
           <EntitySetMapping Name="Guests">
             <EntityTypeMapping TypeName="IMModel.Guest">
               <MappingFragment StoreEntitySet="Guests">
+                <ScalarProperty Name="guNotifiedEmailShowNotInvited" ColumnName="guNotifiedEmailShowNotInvited" />
                 <ScalarProperty Name="guExit3" ColumnName="guExit3" />
                 <ScalarProperty Name="guCloser4" ColumnName="guCloser4" />
                 <ScalarProperty Name="guFTM2" ColumnName="guFTM2" />
@@ -25406,17 +25428,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spProcessMailOuts" FunctionName="IMModel.Store.spProcessMailOuts" />
-          <FunctionImportMapping FunctionImportName="USP_OR_GetMailOutTextsByLeadSource" FunctionName="IMModel.Store.USP_OR_GetMailOutTextsByLeadSource">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.MailOutTextByLeadSource">
-                <ScalarProperty Name="mtmoCode" ColumnName="mtmoCode" />
-                <ScalarProperty Name="mtla" ColumnName="mtla" />
-                <ScalarProperty Name="mtRTF" ColumnName="mtRTF" />
-                <ScalarProperty Name="laMrMrs" ColumnName="laMrMrs" />
-                <ScalarProperty Name="laRoom" ColumnName="laRoom" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetMarkets" FunctionName="IMModel.Store.USP_OR_GetMarkets">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.MarketShort">

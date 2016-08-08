@@ -358,19 +358,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProcessMailOuts", leadSourceParameter, dateParameter);
         }
     
-        public virtual ObjectResult<MailOutTextByLeadSource> USP_OR_GetMailOutTextsByLeadSource(string mtls, Nullable<bool> mtA)
-        {
-            var mtlsParameter = mtls != null ?
-                new ObjectParameter("mtls", mtls) :
-                new ObjectParameter("mtls", typeof(string));
-    
-            var mtAParameter = mtA.HasValue ?
-                new ObjectParameter("mtA", mtA) :
-                new ObjectParameter("mtA", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MailOutTextByLeadSource>("USP_OR_GetMailOutTextsByLeadSource", mtlsParameter, mtAParameter);
-        }
-    
         public virtual ObjectResult<MarketShort> USP_OR_GetMarkets(Nullable<byte> status)
         {
             var statusParameter = status.HasValue ?
