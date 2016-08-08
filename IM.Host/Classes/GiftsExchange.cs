@@ -42,9 +42,18 @@ namespace IM.Host.Classes
     public static List<string> GetItems(DataGrid Grid)
     {
       return GridHelper.GetItems(Grid, "gegi");
-    } 
+    }
     #endregion
 
+    #region Save
+    /// <summary>
+    /// Guarda recibos de intercambio
+    /// </summary>
+    /// <param name="ReceiptID"></param>
+    /// <param name="Grid"></param>
+    /// <history>
+    /// [vipacheco] 01/Julio/2016 Created
+    /// </history>
     public async static void Save(int ReceiptID, DataGrid Grid)
     {
       bool MustSave = false;
@@ -56,9 +65,39 @@ namespace IM.Host.Classes
       {
         // Asignamos el ID generado
         Current.gegr = ReceiptID;
-        await BREntities.OperationEntity(Current, Model.Enums.EnumMode.add);
+
+        // Si se ingreso los campos obligatorios.
+        if (Current.geQty > 0 && Current.gegi != null)
+        {
+          await BREntities.OperationEntity(Current, Model.Enums.EnumMode.add);
+
+          // Buscamos el regalo
+          Gift gift = frmHost._lstGifts.Where(x => x.giID == Current.gegi).Single();
+
+          // Verificamos si tiene regalos del paquete
+          if (gift.giPack)
+          {
+            // Buscamos los regalos del paquete
+            var packs = frmHost._lstGiftsPacks.Where(x => x.gpPack == gift.giID).ToList();
+            var giftsPacks = packs.Select(x => new GiftsReceiptPackageItem
+            {
+              gkgr = ReceiptID,
+              gkPack = x.gpPack,
+              gkgi = x.gpgi,
+              gkQty = 1,
+              gkAdults = 1,
+              gkMinors = 0,
+              gkPriceA = frmHost._lstGifts.Where(f => f.giID == x.gpgi).Select(s => s.giPrice1).Single(),
+              gkPriceM = 0
+            }).ToList();
+
+            // Guardamos los regalos
+            await BREntities.OperationEntities(giftsPacks, Model.Enums.EnumMode.add);
+          }
+        }
       }
     }
+    #endregion
 
   }
 }

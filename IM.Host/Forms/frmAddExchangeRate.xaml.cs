@@ -7,7 +7,7 @@ using System.Windows;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-
+using System.Windows.Controls;
 
 namespace IM.Host.Forms
 {
@@ -77,7 +77,7 @@ namespace IM.Host.Forms
         ExchangeRate _exchangeRate = new ExchangeRate
         {
           excu = _exD.cuID,
-          exD = frmHost._dtpServerDate.Date,
+          exD = frmHost.dtpServerDate.Date,
           exExchRate = Convert.ToDecimal(txtBoxRate.Text),
         };
 
@@ -85,7 +85,7 @@ namespace IM.Host.Forms
         BRExchangeRate.SaveExchangeRate(true,_exchangeRate);
 
         //Guadarmos el Log del cambio.
-        BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost._dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+        BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
 
         // Cerramos la ventana
         Close();
@@ -103,23 +103,7 @@ namespace IM.Host.Forms
     /// </history>
     private void txtBoxRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-      string _value = e.Text;
-
-      // Se valida que solamente sean Digitos Numericos
-      if (!char.IsDigit(Convert.ToChar(_value)) && !_value.Equals(".") || !_boolDecimal && !char.IsDigit(Convert.ToChar(_value)))
-      {
-        e.Handled = true;
-      }
-      if (_value.Equals(".") && _boolDecimal)
-      {
-        _boolDecimal = false;
-      }
-
-      // Se verifica que no sea un enter
-      if (_value.Equals("\r"))
-      {
-        ValidateTextRate();
-      }
+      e.Handled = !ValidateHelper.OnlyDecimals(e.Text, sender as TextBox);
     }
 
     /// <summary>
@@ -143,5 +127,12 @@ namespace IM.Host.Forms
       }
     }
 
+    private void txtBoxRate_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        ValidateTextRate();
+      }
+    }
   }
 }

@@ -43,65 +43,43 @@ namespace IM.Host.Forms
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// [edgrodriguez] 21/05/2016 Modified. El método GetRateTypes se volvió asincrónico.
     /// </history>
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsRateType = ((CollectionViewSource)(this.FindResource("dsRateType")));
       _dsPersonnel = ((CollectionViewSource)(this.FindResource("dsPersonnel")));
       _dsAgency = ((CollectionViewSource)(this.FindResource("dsAgency")));
       _dsMealTicketType = ((CollectionViewSource)(this.FindResource("dsMealTicketType")));
 
+      //  Obtenemos los tipos de tarifa
+      _dsRateType.Source = frmHost._lstRateType;
+      // Obtenemos los colaboradores
+      _dsPersonnel.Source = frmHost._lstPersonnel;
+      // Obtenemos las agencias
+      _dsAgency.Source = frmHost._lstAgencies;
+      // Obtenemos los tipos de cupones de comida.
+      _dsMealTicketType.Source = frmHost._lstMealTicketType;
+
       #region switch
       switch (modeOpen)
       {
-        #region EnumModeOpen.Add
         case EnumModeOpen.Add:
-          dtpDate.Value = frmHost._dtpServerDate.Date;
+          dtpDate.Value = frmHost.dtpServerDate.Date;
           break;
-        #endregion
-        #region EnumModeOpen.Edit
         case EnumModeOpen.Edit:
           DataContext = _mealTicketCurrency;
           dtpDate.Value = _mealTicketCurrency.meD.Date;
           break;
-        #endregion
-        /*#region EnumModeOpen.Preview
-        case EnumModeOpen.Preview:
-          DataContext = _mealTicketCurrency;
-          dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost._dtpServerDate : _mealTicketCurrency.meD.Date;
-          lblRateType.Visibility = Visibility.Hidden;
-          cboRateType.Visibility = Visibility.Hidden;
-          cboRateType.SelectedItem = null;
-          lblAgency.Visibility = Visibility.Hidden;
-          cboAgency.Visibility = Visibility.Hidden;
-          cboAgency.SelectedItem = null;
-          lblCollaborator.Visibility = Visibility.Hidden;
-          cboCollaborator.Visibility = Visibility.Hidden;
-          cboCollaborator.SelectedItem = null;
-          lblRepresentative.Visibility = Visibility.Hidden;
-          txtRepresentative.Visibility = Visibility.Hidden;
-          txtRepresentative.Text = "";
-          break;
-        #endregion*/
         case EnumModeOpen.PreviewEdit: 
           HiddenControls();
-          dtpDate.Value = frmHost._dtpServerDate.Date;
+          dtpDate.Value = frmHost.dtpServerDate.Date;
           break;
         case EnumModeOpen.Preview: 
           HiddenControls();
           DataContext = _mealTicketCurrency;
-          dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost._dtpServerDate : _mealTicketCurrency.meD.Date;
+          dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
           break;
       } 
       #endregion
-
-      //  Obtenemos los tipos de tarifa
-      _dsRateType.Source = await BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
-      // Obtenemos los colaboradores
-      _dsPersonnel.Source = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
-      // Obtenemos las agencias
-      _dsAgency.Source =await BRAgencies.GetAgencies(1);
-      // Obtenemos los tipos de cupones de comida.
-      _dsMealTicketType.Source = await BRMealTicketTypes.GetMealTicketType();
     }
     #endregion
 

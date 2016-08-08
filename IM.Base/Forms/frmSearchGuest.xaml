@@ -6,122 +6,134 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
-        Title="Search Guest" Background="Beige"  Width="904" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
-    <Window.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Label">
-                <Setter Property="FontSize" Value="11"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-            <Style TargetType="StackPanel" x:Key="sp">
-                <Setter Property="Margin" Value="3,0,3,0"/>
-            </Style>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <!--#region Search Criteria   -->
-        <GroupBox Grid.Row="0" Name="gprCriteria" Header="Search Criteria" Margin="5" Background="Bisque" HorizontalAlignment="Center" >
-            <StackPanel x:Name="grdCriteria" Orientation="Horizontal" >
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblLeadSourse" Content="Lead Sourse" />
-                    <ComboBox x:Name="cmbLeadSourse" DisplayMemberPath="lsN" SelectedValuePath="lsID" Width="120"/>
-                </StackPanel>
-                <StackPanel Name="spSR" Style="{StaticResource ResourceKey=sp}" Visibility="Collapsed">
-                    <Label x:Name="lblSalesRoom" Content="Sales Room" />
-                    <ComboBox x:Name="cmbSalesRoom" DisplayMemberPath="srN" SelectedValuePath="srID" Width="120" />
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblName"  Content="Name"/>
-                    <TextBox x:Name="txtName"  VerticalAlignment="Center" Width="100"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblRoom" Content="Room"/>
-                    <TextBox x:Name="txtRoom" Width="80"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}" Name="spPR"  Visibility="Collapsed">
-                    <Label x:Name="lblPr" Content="PR"/>
-                    <TextBox x:Name="txtPR" Width="80"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}" Name="spReservation">
-                    <Label x:Name="lblReservation" Content="Reservation" Width="80" />
-                    <TextBox x:Name="txtReservation"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblGUID" Content="GUID" />
-                    <TextBox x:Name="txtGUID"  Width="80" KeyDown="txtGUID_KeyDown"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblDateFrom" Content="Arrival Date From"  />
-                    <wpftk:DateTimePicker x:Name="dtpFrom" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblDateTo" Content="Arrival Date To" />
-                    <wpftk:DateTimePicker x:Name="dtpTo" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged"/>
-                </StackPanel>
-                <Button  x:Name="btnSearch" Content="Search" Click="btnSearch_Click"  VerticalAlignment="Center" Width="60" FontSize="12" FontWeight="Black" Margin="5,0,5,0"/>
-            </StackPanel>
-        </GroupBox>
-        <!--#endregion-->
+        Title="Search Guest" Width="1109.537" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+  <Window.Resources>
+    <ResourceDictionary>
+      <Style TargetType="Label">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+      </Style>
+      <Style TargetType="StackPanel" x:Key="stk-style">
+        <Setter Property="Margin" Value="5,0,0,5"/>
+      </Style>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styBorder.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
+    <!--#region Search Criteria   -->
+    <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Background="#147F79" Margin="10,0,10,0">
+      <GroupBox x:Name="grbCriteria" Grid.Row="0" Header="Search Criteria" Margin="5" HorizontalAlignment="Center" FontWeight="Bold">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <StackPanel x:Name="stkLeadSource" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbLeadSourse" Text="Lead Sourse" TextAlignment="Center" Margin="0,5,0,5"/>
+            <ComboBox x:Name="cmbLeadSourse" DisplayMemberPath="lsN" SelectedValuePath="lsID" Width="125"/>
+          </StackPanel>
+          <StackPanel x:Name="stkSalesRoom" Style="{StaticResource ResourceKey=stk-style}" >
+            <TextBlock x:Name="txbSalesRoom" Text="Sales Room" TextAlignment="Center" Margin="0,5,0,5"/>
+            <ComboBox x:Name="cmbSalesRoom" DisplayMemberPath="srN" SelectedValuePath="srID" Width="125" />
+          </StackPanel>
+          <StackPanel x:Name="stkName" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbName"  Text="Name" TextAlignment="Center" Margin="0,5,0,5"/>
+            <TextBox x:Name="txtName"  VerticalAlignment="Center" Width="100"/>
+          </StackPanel>
+          <StackPanel x:Name="stkRoom" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbRoom" Text="Room" TextAlignment="Center" Margin="0,5,0,5"/>
+            <TextBox x:Name="txtRoom" Width="80"/>
+          </StackPanel>
+          <StackPanel x:Name="stkReservation" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbReservation" Text="Reservation" TextAlignment="Center" Margin="0,5,0,5"/>
+            <TextBox x:Name="txtReservation"/>
+          </StackPanel>
+          <StackPanel x:Name="stkPR" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbPR" Text="PR" TextAlignment="Center" Margin="0,5,0,5"/>
+            <TextBox x:Name="txtPR" Width="80" />
+          </StackPanel>
+          <StackPanel x:Name="stkGUID" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbGUID" Text="GUID" TextAlignment="Center" Margin="0,5,0,5"/>
+            <TextBox x:Name="txtGUID"  Width="80" KeyDown="txtGUID_KeyDown"/>
+          </StackPanel>
+          <StackPanel x:Name="stkDateFrom" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbDateFrom" Text="Arrival Date From"  TextAlignment="Center" Margin="0,5,0,2"/>
+            <wpftk:DateTimePicker x:Name="dtpFrom" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged" TextAlignment="Center"/>
+          </StackPanel>
+          <StackPanel x:Name="stkDateTo" Style="{StaticResource ResourceKey=stk-style}">
+            <TextBlock x:Name="txbDateTo" Text="Arrival Date To" TextAlignment="Center" Margin="0,5,0,2"/>
+            <wpftk:DateTimePicker x:Name="dtpTo" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged" TextAlignment="Center"/>
+          </StackPanel>
+          <StackPanel VerticalAlignment="Center" Style="{StaticResource stk-style}">
+            <Border x:Name="btnSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSearch_MouseLeftButtonDown" Background="White">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+                <Viewbox Stretch="Uniform" Width="20">
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
+                </Viewbox>
+                <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </StackPanel>
+      </GroupBox>
+    </StackPanel>
+    <!--#endregion-->
 
-        <!--#region gridGuests-->
-        
-            <DataGrid Grid.Row="1" x:Name="dtgGuests" FontSize="13"  AutoGenerateColumns="False" Background="Bisque" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False" Margin="5,0,5,0" MouseDoubleClick="dtgGuests_MouseDoubleClick" >
-                <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="guIDColumn" Width="auto" Header="GUID" Binding="{Binding guID}" IsReadOnly="True" />
-                    <DataGridTextColumn x:Name="guLastName1Column" Width="auto" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guFirstName1Column" Width="auto" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="gulsColumn" Width="auto" Header="LS" Binding="{Binding guls}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guHReservIDColumn" Width="auto" Header="Reservation" Binding="{Binding guHReservID}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guHotelColumn" Width="auto" Header="Hotel" Binding="{Binding guHotel}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guRoomNumColumn" Width="auto" Header="Room" Binding="{Binding guRoomNum}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="gusrColumn" Width="auto" Header="SR" Binding="{Binding gusr}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guPRInvit1Column" Width="auto" Header="PR" Binding="{Binding guPRInvit1}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guCheckInDColumn" Width="auto" Header="Arrival" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guCheckOutDColumn" Width="auto" Header="Departure" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guAccountGiftsCardColumn" Width="auto" Header="Account" Binding="{Binding guAccountGiftsCard}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="guBookD" Width="auto" Header="Book Date" Binding="{Binding guBookD, StringFormat= dd/MM/yyyy}" IsReadOnly="True" Visibility="Collapsed" />
-            </DataGrid.Columns>
-            </DataGrid>
- 
-        <!--#endregion-->
+    <!--#region gridGuests-->
 
-        <!--#region Buttons-->
-        <Grid Grid.Row="2" x:Name="grdButtons">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width="1.5*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="btnOK" Content="OK" Grid.Column="1" VerticalAlignment="Center" Margin="5,5" Click="btnOK_Click"/>
-            <Button x:Name="btnCancel" Content="Cancel" Grid.Column="2" VerticalAlignment="Center" Margin="5,5" Click="btnCancel_Click"/>
-        </Grid>
-        <!--#endregion-->
+    <DataGrid Grid.Row="1" x:Name="dtgGuests" FontSize="13"  AutoGenerateColumns="False" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False" Margin="10,0,10,0" MouseDoubleClick="dtgGuests_MouseDoubleClick" >
+      <DataGrid.Columns>
+        <DataGridTextColumn x:Name="guIDColumn" Width="auto" Header="GUID" Binding="{Binding guID}" IsReadOnly="True" />
+        <DataGridTextColumn x:Name="guLastName1Column" Width="*" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guFirstName1Column" Width="*" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="gulsColumn" Width="*" Header="LS" Binding="{Binding guls}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guHReservIDColumn" Width="*" Header="Reservation" Binding="{Binding guHReservID}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guHotelColumn" Width="*" Header="Hotel" Binding="{Binding guHotel}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guRoomNumColumn" Width="*" Header="Room" Binding="{Binding guRoomNum}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="gusrColumn" Width="*" Header="SR" Binding="{Binding gusr}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guPRInvit1Column" Width="*" Header="PR" Binding="{Binding guPRInvit1}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guCheckInDColumn" Width="*" Header="Arrival" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guCheckOutDColumn" Width="*" Header="Departure" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guAccountGiftsCardColumn" Width="*" Header="Account" Binding="{Binding guAccountGiftsCard}" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guBookD" Width="*" Header="Book Date" Binding="{Binding guBookD, StringFormat= dd/MM/yyyy}" IsReadOnly="True" Visibility="Collapsed" />
+      </DataGrid.Columns>
+    </DataGrid>
 
-        <!--#region Status Bar-->
-        <Grid Grid.Row="3">
-            <StatusBar x:Name="stbStatusBar">
-                <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-                <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
-                <StatusBarItem x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
-                <Separator />
-                <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
-                        <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
-                    </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="80" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
-            </StatusBar>
-        </Grid>
-        <!--#endregion Status Bar-->
+    <!--#endregion-->
+
+    <!--#region Buttons-->
+    <Grid Grid.Row="2" x:Name="grdButtons">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="7*"/>
+        <ColumnDefinition Width="1.5*"/>
+        <ColumnDefinition Width="1.5*"/>
+      </Grid.ColumnDefinitions>
+      <Button x:Name="btnOK" Content="OK" Grid.Column="1" VerticalAlignment="Center" Margin="5,11,10,10" Click="btnOK_Click"/>
+      <Button x:Name="btnCancel" Content="Cancel" Grid.Column="2" VerticalAlignment="Center" Margin="5,10,10,10" Click="btnCancel_Click"/>
     </Grid>
+    <!--#endregion-->
+
+    <!--#region Status Bar-->
+    <Grid Grid.Row="3">
+      <StatusBar x:Name="stbStatusBar">
+        <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+        <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
+        <StatusBarItem x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
+        <Separator />
+        <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+          <StackPanel Orientation="Horizontal">
+            <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+            <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+          </StackPanel>
+        </StatusBarItem>
+        <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="80" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+      </StatusBar>
+    </Grid>
+    <!--#endregion Status Bar-->
+  </Grid>
 </Window>

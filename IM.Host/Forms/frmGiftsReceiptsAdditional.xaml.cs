@@ -1,4 +1,5 @@
 ﻿using IM.BusinessRules.BR;
+using IM.Host.Classes;
 using IM.Model;
 using PalaceResorts.Common.PalaceTools;
 using System.Collections.Generic;
@@ -149,8 +150,10 @@ namespace IM.Host.Forms
     {
       // Obtenemos los datos del huesped
       Guest _Guest = await BRGuests.GetGuest(GuestID);
-      string _FullName = GetFullName(_Guest.guLastName1, _Guest.guFirstName1);
-      string _FullName2 = GetFullName(_Guest.guLastname2, _Guest.guFirstName2);
+      string _FullName = Common.GetFullName(_Guest.guLastName1, _Guest.guFirstName1);
+      string _FullName2 = Common.GetFullName(_Guest.guLastname2, _Guest.guFirstName2);
+      var hostess = _frmGiftsReceipt.cbogrHost.SelectedItem as PersonnelShort;
+      var offered = _frmGiftsReceipt.cbogrpe.SelectedItem as PersonnelShort;
 
       bool boolTemp = false;
 
@@ -164,13 +167,13 @@ namespace IM.Host.Forms
         grPax = _Guest.guPax,
         grHotel = _Guest.guHotel,
         grRoomNum = _Guest.guRoomNum,
-        grpe = _frmGiftsReceipt.txtgrpe.Text,
+        grpe = offered.peID,
         grlo = _frmGiftsReceipt.cbogrlo.SelectedValue.ToString(),
         grls = _frmGiftsReceipt.cbogrlo.SelectedValue.ToString(),
         grsr = _frmGiftsReceipt.cboSalesRoom.SelectedValue.ToString(),
         grWh = _frmGiftsReceipt.cboSalesRoom.SelectedValue.ToString(),
         grMemberNum = null,
-        grHost = _frmGiftsReceipt.txtgrHost.Text,
+        grHost = hostess.peID,
         grComments = null,
         grDeposit = 0,
         grDepositTwisted = 0,
@@ -290,34 +293,6 @@ namespace IM.Host.Forms
     } 
     #endregion
 
-    #region GetFullName
-    /// <summary>
-    /// Obtiene el nombre completo de un huesped
-    /// </summary>
-    /// <param name="LastName"></param>
-    /// <param name="FirstName"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 13/Mayo/2016 Created
-    /// </history>
-    private string GetFullName(string LastName, string FirstName)
-    {
-      string FullName = "";
-
-      // si tiene apellido
-      if (!string.IsNullOrEmpty(LastName) && LastName != "")
-      {
-        FullName = LastName;
-
-        // si tiene nombre
-        if (!string.IsNullOrEmpty(FirstName) && FirstName != "")
-        {
-          FullName = FullName + " " + FirstName;
-        }
-      }
-      return FullName;
-    } 
-    #endregion
 
   }
 }

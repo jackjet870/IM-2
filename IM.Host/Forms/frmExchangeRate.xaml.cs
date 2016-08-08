@@ -197,9 +197,7 @@ namespace IM.Host.Forms
     {
       // Habilitamos los botones correspondientes.
       btnCancel.IsEnabled = true;
-      //btnSave.IsEnabled = true;
       btnEdit.IsEnabled = false;
-      //exExchRateColumn.IsReadOnly = false;
 
       string valor = "";
 

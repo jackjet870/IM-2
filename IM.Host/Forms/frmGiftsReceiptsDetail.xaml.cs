@@ -68,7 +68,7 @@ namespace IM.Host.Forms
     #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cboGift.ItemsSource  = frmHost._lstGiftsWithPackage;
+      //cboGift.ItemsSource  = frmHost._lstGiftsWithPackage;
 
       switch (modeOpen)
       {

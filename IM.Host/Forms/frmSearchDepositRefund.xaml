@@ -8,7 +8,8 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSearchDepositRefund"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Deposit Refund" Height="450" Width="960" Loaded="Window_Loaded" ShowInTaskbar="False">
+        Closing="Window_Closing"
+        Title="Deposit Refund" Height="450" Width="974" Loaded="Window_Loaded" ShowInTaskbar="False">
 
   <Window.Resources>
     <CollectionViewSource x:Key="dsRefundTypes" d:DesignSource="{d:DesignInstance {x:Type Model:RefundType}, CreateList=True}"/>
@@ -58,19 +59,19 @@
           <TextBox x:Name="txtPR" AcceptsReturn="False" Width="50"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-          <TextBlock Text="Date From"/>
-          <xctk:DateTimePicker x:Name="dtpStart" Format="LongDate" Width="150" TextAlignment="Left"/>
+          <TextBlock Text="Date From" Margin="10,0,0,0"/>
+          <xctk:DateTimePicker x:Name="dtpStart" Format="LongDate" Width="150" TextAlignment="Left" Style="{Binding Source={StaticResource dtp-DateRange-TK}}"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-          <TextBlock Text="Date To"/>
-          <xctk:DateTimePicker x:Name="dtpEnd" Format="LongDate" Width="150" TextAlignment="Left"/>
+          <TextBlock Text="Date To" Margin="10,0,0,0"/>
+          <xctk:DateTimePicker x:Name="dtpEnd" Format="LongDate" Width="150" TextAlignment="Left" Style="{Binding Source={StaticResource dtp-DateRange-TK}}"/>
         </StackPanel>
-        <Button x:Name="btnSearch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,5" Width="Auto" Background="Aquamarine" Height="32" Click="btnSearch_Click" >
+        <Button x:Name="btnSearch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,5" Width="90" Background="Aquamarine" Height="32" Click="btnSearch_Click" Template="{Binding Source={StaticResource ButtonTemplate}}">
           <StackPanel Orientation="Horizontal">
             <Viewbox Stretch="Uniform" Width="20">
               <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.png"/>
             </Viewbox>
-            <TextBlock Text=" Search" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text=" Search" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
           </StackPanel>
         </Button>
       </StackPanel>
@@ -90,9 +91,9 @@
           </Style>
         </DataGrid.Resources>
         <DataGrid.Columns>
-          <DataGridTextColumn x:Name="drIDColumn" Binding="{Binding drID}" Header="ID" Width="SizeToHeader"/>
-          <DataGridTextColumn x:Name="drFolioColumn" Binding="{Binding drFolio}" Header="Folio" Width="SizeToHeader"/>
-          <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="SizeToHeader"/>
+          <DataGridTextColumn x:Name="drIDColumn" Binding="{Binding drID}" Header="ID" Width="Auto"/>
+          <DataGridTextColumn x:Name="drFolioColumn" Binding="{Binding drFolio}" Header="Folio" Width="Auto"/>
+          <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="Auto"/>
         </DataGrid.Columns>
       </DataGrid>
       <!--#endregion-->
@@ -130,11 +131,14 @@
 
         <!--#region Grid Desposits-->
         <GroupBox x:Name="grbDeposits" Header="Deposits" HorizontalAlignment="Stretch" Margin="0,6,0,4" VerticalAlignment="Stretch" Grid.Row="1">
-          <DataGrid x:Name="grdDeposits" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsDeposits}}" Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False">
+          <DataGrid x:Name="grdDeposits" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsDeposits}}" Margin="5,5,5,5" 
+                    RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False"
+                    PreparingCellForEdit="grdDeposits_PreparingCellForEdit"
+                    CellEditEnding="grdDeposits_CellEditEnding">
             <DataGrid.Columns>
               <DataGridTextColumn x:Name="drIDColumn1" Binding="{Binding drID}" Header="ID" Width="Auto" IsReadOnly="True"/>
               <DataGridTextColumn x:Name="drFolioColumn1" Binding="{Binding drFolio}" Header="Folio" Width="SizeToHeader" IsReadOnly="True"/>
-              <DataGridCheckBoxColumn x:Name="bdRefundColumn" Binding="{Binding bdRefund}" Header="Refund" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridCheckBoxColumn x:Name="bdRefundColumn" Binding="{Binding bdRefund}" Header="Refund" Width="SizeToHeader" IsReadOnly="True" />
               <DataGridTextColumn x:Name="srNColumn" Binding="{Binding srN}" Header="Sales Room" Width="Auto" IsReadOnly="True"/>
               <DataGridTextColumn x:Name="drDColumn" Binding="{Binding drD, StringFormat=d}" Header="Refund Date" Width="Auto" IsReadOnly="True"/>
               <DataGridTextColumn x:Name="bdAmountColumn" Binding="{Binding bdAmount}" Header="Amount" Width="SizeToHeader" IsReadOnly="True"/>
@@ -153,11 +157,11 @@
 
         <!--#region Botones-->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-          <Button x:Name="btnNew" Content="New" Margin="10,0" Width="50" Click="btnNew_Click" Height="20" VerticalAlignment="Top"/>
-          <Button x:Name="btnSave" Content="Save" Margin="10,0" Width="50"/>
-          <Button x:Name="btnPrint" Content="Print" Margin="10,0" Width="50" Click="btnPrint_Click"/>
-          <Button x:Name="btnCancel" Content="Cancel" Margin="10,0" Width="50" Click="btnCancel_Click"/>
-          <Button x:Name="btnClose" Content="Close" Margin="10,0" Width="50" Click="btnClose_Click"/>
+          <Button x:Name="btnNew" Content="New" Margin="10,0" Width="50" Click="btnNew_Click" Height="20" VerticalAlignment="Top" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+          <Button x:Name="btnSave" Content="Save" Margin="10,0" Width="50" Click="btnSave_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+          <Button x:Name="btnPrint" Content="Print" Margin="10,0" Width="50" Click="btnPrint_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+          <Button x:Name="btnCancel" Content="Cancel" Margin="10,0" Width="50" Click="btnCancel_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+          <Button x:Name="btnClose" Content="Close" Margin="10,0" Width="50" Click="btnClose_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
         </StackPanel>
 
       </Grid>

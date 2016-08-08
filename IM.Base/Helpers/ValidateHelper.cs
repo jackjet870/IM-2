@@ -35,10 +35,10 @@ namespace IM.Base.Helpers
     /// <history>
     /// [vipacheco] created 30/Junio/2016 Created
     /// </history>
-    public static bool OnlyDecimals(string text, TextBox sender)
+    public static bool OnlyDecimals(string text, TextBox control)
     {
       Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
-      return regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, text));
+      return regex.IsMatch((control).Text.Insert((control).SelectionStart, text));
     }
     #endregion
 
@@ -172,7 +172,7 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="container">Contenedor</param>   
     /// <param name="strForm">Nombre del formulario</param>
-    /// <param name="validateVisible">valida los controles visibles</param>
+    /// <param name="blnValidateVisibility">valida la visibilidad de los controles (TRUE - Para validar solo los controles visibles | FALSE - Para validar todos los controles) </param>
     /// <param name="blnDatagrids">Valida que los datagrids ya eno estén en modo edición</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
@@ -184,7 +184,7 @@ namespace IM.Base.Helpers
     /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
     /// [erosado] 05/08/2016  Modified. Se corrigió la validacion del DateTimePicker, y se agrego una bandera para que el metodo se encargue de mandar el ShowMessage
     /// </history>
-    public static string ValidateForm(UIElement container, string strForm, bool validateVisible = true, bool blnDatagrids = false, bool showMessage = false)
+    public static string ValidateForm(UIElement container, string strForm, bool blnValidateVisibility = true, bool blnDatagrids = false, bool showMessage = false)
     {
       var strMsj = "";
       var lstControls = UIHelper.GetChildParentCollection<Control>(container);
@@ -222,7 +222,7 @@ namespace IM.Base.Helpers
           }
           #endregion
           if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
-          if ((validateVisible && txt.IsVisible) || !validateVisible)
+          if ((blnValidateVisibility && txt.IsVisible) || !blnValidateVisibility)
             strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";
         }
         #endregion
@@ -233,7 +233,7 @@ namespace IM.Base.Helpers
         {
           var cmb = (ComboBox)control;
           if (cmb.SelectedIndex > -1) continue;
-          if ((validateVisible && cmb.IsVisible) || !validateVisible)
+          if ((blnValidateVisibility && cmb.IsVisible) || !blnValidateVisibility)
             strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";
         }
         #endregion
@@ -247,7 +247,7 @@ namespace IM.Base.Helpers
           pwd.Password = pwd.Password.Trim();
           #endregion
           if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
-          if ((validateVisible && pwd.IsVisible) || !validateVisible)
+          if ((blnValidateVisibility && pwd.IsVisible) || !blnValidateVisibility)
             strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
         }
         #endregion
@@ -258,7 +258,7 @@ namespace IM.Base.Helpers
           var dtp = (DateTimePicker)control;
          
           if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
-          if ((validateVisible && dtp.IsVisible) || !validateVisible)
+          if ((blnValidateVisibility && dtp.IsVisible) || !blnValidateVisibility)
             strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";
         }
         #endregion

@@ -132,7 +132,7 @@ namespace IM.Host.Forms
       _dsGuest = ((CollectionViewSource)(this.FindResource("guestViewSource")));
 
       // Obtenemos la fecha actual
-      _dateCurrent = frmHost._dtpServerDate;
+      _dateCurrent = frmHost.dtpServerDate;
 
       #region Build Reference to Resources XAML
       // Obtemos las referencias de los datasource a utilizar

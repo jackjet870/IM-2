@@ -16,8 +16,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Data;
 using IM.Base.Reports;
-using System.Windows.Threading;
-using System.Threading;
 using System.Diagnostics;
 
 namespace IM.Host
@@ -29,8 +27,7 @@ namespace IM.Host
   public partial class frmHost : Window
   {
     private DateTime? _dtpCurrent = null;
-    public static DateTime _dtpServerDate = new DateTime();
-    CollectionViewSource _Host;
+    public static DateTime dtpServerDate = new DateTime();
 
     #region Listas Globales
     public static List<Currency> _lstCurrencies;
@@ -64,15 +61,17 @@ namespace IM.Host
     public static List<Program> _lstPrograms;
     public static List<LeadSource> _lstLeadSources;
     public static List<RefundType> _lstRefundTypes;
-    public static IEnumerable<object> _lstGiftsWithPackage;
     public static List<GiftPackageItem> _lstGiftsPacks;
+    public static List<RateType> _lstRateType;
+    public static List<MealTicketType> _lstMealTicketType;
     #endregion
 
-
+    #region Constructor
     public frmHost()
     {
       InitializeComponent();
     }
+    #endregion
 
     #region Métodos de controles en el formulario
 
@@ -81,7 +80,7 @@ namespace IM.Host
     /// Realiza las configuraciones de los controles de la forma
     /// </summary>
     /// <history>
-    /// [lchairez] 09/Feb/2016 Created
+    /// [vipacheco] 09/Feb/2016 Created
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -113,31 +112,10 @@ namespace IM.Host
     }
     #endregion
 
-    /// <summary>
-    /// Funcion del evento Changed del DatePicker
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 26/02/2016 Created
-    /// </history>
-    private void dtpDateChanged()
-    {
-      if (_dtpCurrent != dtpDate.Value)
-      {
-        // Asignamos la fecha seleccionada.
-        _dtpCurrent = dtpDate.Value.Value.Date;
-
-        _Host = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-        _Host.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
-      }
-    }
-
+    #region dtgPremanifestHost_SelectionChanged
     /// <summary>
     /// Funcion que se encarga de validar el total de datos obtenidos en el datagrid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 03/03/2016 Created
     /// </history>
@@ -150,51 +128,13 @@ namespace IM.Host
       }
       StatusBarReg.Content = string.Format("{0}/{1}", dtgPremanifestHost.Items.IndexOf(dtgPremanifestHost.CurrentItem) + 1, dtgPremanifestHost.Items.Count);
     }
-
-    /// <summary>
-    /// Función encargada de aplicar efecto a la ventana
-    /// </summary>
-    /// <param name="win"></param>
-    /// <history>
-    /// [vipacheco] 26-02-2016 Created
-    /// </history>
-    private void AplicarEfecto(Window win)
-    {
-      var objBlur = new System.Windows.Media.Effects.BlurEffect();
-      objBlur.Radius = 5;
-      win.Effect = objBlur;
-    }
+    #endregion
 
     #endregion
 
     #region Métodos privados
 
-    /// <summary>
-    /// Manda llamar a todos los métodos de configuración de los controles al ser cargada la forma
-    /// </summary>
-    /// <history>
-    /// [lchairez] 09/Feb/2016 Created
-    /// </history>
-    private void ConfigControls()
-    {
-      ConfigDataGrid();
-      KeyDefault(StatusBarCap);
-      KeyDefault(StatusBarIns);
-      KeyDefault(StatusBarNum);
-    }
-
-    /// <summary>
-    /// Configura el Datagrid al cargar la forma
-    /// </summary>
-    /// <history>
-    /// [lchairez] 09/Feb/2016 Created
-    /// </history>
-    private void ConfigDataGrid()
-    {
-      var heigthgrdMenu = grdPanel.ActualHeight;
-      var heightStatusBar = stbStatusBar.ActualHeight;
-    }
-
+    #region KeyDefault
     /// <summary>
     /// Asigna valores por defecto a los StatusBarItem cuando se carga el form
     /// </summary>
@@ -207,7 +147,9 @@ namespace IM.Host
       statusBar.FontWeight = FontWeights.Normal;
       statusBar.Foreground = Brushes.Gray;
     }
+    #endregion
 
+    #region CkeckKeysPress
     /// <summary>
     /// Revisa si alguna de las teclas Bloq Mayús, Bloq Núm o Insert está activo
     /// </summary>
@@ -230,6 +172,7 @@ namespace IM.Host
         KeyDefault(statusBar);
       }
     }
+    #endregion
 
     #endregion
 
@@ -237,8 +180,6 @@ namespace IM.Host
     /// <summary>
     /// Verifica si los botones estan activos
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 09/Feb/2016 Created
     /// </history>
@@ -250,74 +191,21 @@ namespace IM.Host
     }
     #endregion
 
-    #region Métodos públicos
-
-    public void PrintReport()
-    {
-    }
-
-    public void ShowReport()
-    {
-    }
-
-    public void ShowReportDesigner()
-    {
-      frmHostReports frm = new frmHostReports(dtpDate.Value.Value) { Owner = this };
-      frm.ShowDialog();
-    }
-
-    #endregion
-
-    #region ShowShow_Click
-    /// <summary>
-    /// Método que despliega el formulario Show
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 30/Abril/2016 Created
-    /// </history>
-    private void ShowShow_Click(object sender, RoutedEventArgs e)
-    {
-      // Obtenemos el row seleccionado!
-      DataGridRow row = sender as DataGridRow;
-      CheckBox _chekedValue = sender as CheckBox;
-      GuestPremanifestHost guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
-
-      //CheckBox _chekedValue = sender as CheckBox;
-
-      //Validamos que sea un invitado valido
-      if (ValidateGuest(guestHost, EnumPermission.Show, "guShow"))
-      {
-        // Desplegamos el formulario Show
-        frmShow _frmShow = new frmShow(guestHost.guID);
-        _frmShow.ShowInTaskbar = false;
-        _frmShow.Owner = this;
-        _frmShow.ShowDialog();
-
-      }
-      else
-      {
-        if (!guestHost.guShow)
-        {
-          _chekedValue.IsChecked = false;
-        }
-      }
-    }
-    #endregion
-
     #region ValidateGuest
     /// <summary>
     /// Función encargada de validar que sea un usuario valido con sus respectivos permisos
     /// </summary>
-    /// <param name="guestHost"></param>
+    /// <param name="guest"> Objeto de del Guest </param>
+    /// <param name="permission"> Permiso que se requiere validar</param>
+    /// <param name="source">Formulario del cual se esta invocando</param>
     /// <returns> true - user valid | false - user no valid </returns>
     /// <history>
     /// [vipacheco] 02/15/2016 Created
+    /// [vipacheco] 29/Julio/2016 Modified --> Se cambio el tipo de parametro string por un EnumEntities, para hacer mas entendible el metodo.
     /// </history>
-    private bool ValidateGuest(GuestPremanifestHost guestHost, EnumPermission permission, string strField)
+    private bool ValidateGuest(GuestPremanifestHost guest, EnumPermission permission, EnumEntities source)
     {
-      if (guestHost.guBookCanc) // Validamos que no sea un booking cancelado
+      if (guest.guBookCanc) // Validamos que no sea un booking cancelado
       {
         UIHelper.ShowMessage("Cancelled booking.", MessageBoxImage.Exclamation);
         return false;
@@ -329,146 +217,33 @@ namespace IM.Host
       }
       else if (!App.User.HasPermission(permission, EnumPermisionLevel.Standard)) // PERMISO - Solo Lectura
       {
-        if (!guestHost.guMealTicket && strField == "guMealTicket")
+        if (!guest.guMealTicket && source == EnumEntities.MealTickets)
         {
           UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
           return false;
         }
-        else if (!guestHost.guGiftsReceived && strField == "guGiftsReceived")
+        else if (!guest.guGiftsReceived && source == EnumEntities.GiftsReceipts)
         {
           UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
           return false;
         }
-        else if (!guestHost.guShow && strField == "guShow")
+        else if (!guest.guShow && source == EnumEntities.Shows)
+        {
+          UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
+          return false;
+        }
+        else if (!guest.guSale && source == EnumEntities.Sales)
         {
           UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
           return false;
         }
       }
-      else if (guestHost.guShow == false && (strField == "guMealTicket" || strField == "guSale"))
+      else if (guest.guShow == false && (source == EnumEntities.MealTickets || source == EnumEntities.Sales))
       {
         UIHelper.ShowMessage("This option should have a show marked.", MessageBoxImage.Exclamation);
         return false;
       }
       return true;
-    }
-    #endregion
-
-    #region guMealTickets_Click
-    /// <summary>
-    /// Invoca el formulario Meal Ticket por medio del CheckBox correspondiente!
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 18/03/2016 Created
-    /// </history>
-    private void guMealTickets_Click(object sender, RoutedEventArgs e)
-    {
-      // Obtenemos el row seleccionado!
-      CheckBox _chekedValue = sender as CheckBox;
-      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
-
-      //Validamos que sea un invitado valido
-      if (ValidateGuest(guestHost, EnumPermission.MealTicket, "guMealTicket"))
-      {
-        // Desplegamos el formulario Show
-        frmMealTickets _frmMealTickets = new frmMealTickets(guestHost.guID);
-        _frmMealTickets.ShowInTaskbar = false;
-
-        List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(guestHost.guID);
-        SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
-
-        if (guestHost.guMealTicket)
-        {
-          // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
-          _valuePreview.ForEach(x =>
-                                    {
-                                      if (IsClosed_MealTicket(x.meD, _closeSalesRoom.srMealTicketsCloseD))
-                                      {
-                                        _frmMealTickets.modeOpen = EnumModeOpen.Preview;
-                                        return;
-                                      }
-                                      else
-                                        _frmMealTickets.modeOpen = EnumModeOpen.PreviewEdit;
-                                    });
-        }
-        else
-          _frmMealTickets.modeOpen = EnumModeOpen.PreviewEdit;
-
-        _frmMealTickets.Owner = this;
-        _frmMealTickets.ShowDialog();
-
-        //dtgPremanifestHost.Items.Refresh();
-      }
-      else
-        _chekedValue.IsChecked = false;
-
-      dtgPremanifestHost.Items.Refresh();
-      dtpDateChanged();
-
-    }
-    #endregion
-
-    #region IsClosed_MealTicket
-    /// <summary>
-    /// Evalua si el Mealticket no se ha cerrado!
-    /// </summary>
-    /// <param name="pdtmDate"></param>
-    /// <param name="pdtmClose"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 23/03/2016 Created
-    /// </history>
-    private bool IsClosed_MealTicket(DateTime pdtmDate, DateTime pdtmClose)
-    {
-      bool blnClosed = false;
-      DateTime _pdtmDate;
-
-      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
-      {
-        if (_pdtmDate <= pdtmClose)
-        {
-          blnClosed = true;
-        }
-      }
-      return blnClosed;
-    }
-    #endregion
-
-    #region ShowGiftsReceived_Click
-    /// <summary>
-    /// Invoca el formulario Gifts Received
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 04/04/2016 Created
-    /// </history>
-    private void ShowGiftsReceived_Click(object sender, RoutedEventArgs e)
-    {
-      // Obtenemos el row seleccionado!
-      CheckBox _chekedValue = sender as CheckBox;
-      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
-
-      //Validamos que sea un invitado valido
-      if (ValidateGuest(guestHost, EnumPermission.GiftsReceipts, "guGiftsReceived"))
-      {
-        bool _edit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
-
-        frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts(guestHost.guID);
-        _frmGiftsReceipts.ShowInTaskbar = false;
-        _frmGiftsReceipts.Owner = this;
-        _frmGiftsReceipts.modeOpenBy = EnumOpenBy.Checkbox;
-        _frmGiftsReceipts.modeOpen = (_edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview;
-        _frmGiftsReceipts.ShowDialog();
-
-        _chekedValue.IsChecked = true;
-      }
-      else
-      {
-        _chekedValue.IsChecked = guestHost.guGiftsReceived;
-      }
     }
     #endregion
 
@@ -479,7 +254,7 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 02/Mayo/2016 Created
     /// </history>
-    private async void GetAllCatalogsHost()
+    private async Task GetAllCatalogsHost()
     {
       // Obtenemos el id de la sala de ventas.
       string _salesRoom = App.User.SalesRoom.srID;
@@ -488,132 +263,99 @@ namespace IM.Host
       _lstCurrencies = await BRCurrencies.GetCurrencies(null, 1);
       //Payment Types
       _lstPaymentsType = await BRPaymentTypes.GetPaymentTypes(1);
-      
+
       // Marital Status
       _lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(1);
-      
+
       // Agencies
       _lstAgencies = await BRAgencies.GetAgencies(1);
 
       // Countries
       _lstCountries = await BRCountries.GetCountries(1);
-      
+
       // Languajes
       _lstLanguaje = await BRLanguages.GetLanguages(1);
-      
+
       // Hotels
       _lstHotel = await BRHotels.GetHotels(null, 1);
-      
+
       // Team Sales Men
       _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
-      
+
       // Personnel
       _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
-      
+
       // Host (ess) de llegada
       _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
-      
+
       // Host (ess) de regalos
       _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
 
       // Host (ess) de salida
       _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
-      
+
       // PR's
       _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
-      
+
       // Closer´s
       _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
-      
+
       // Exit Closer´s
       _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
 
       // Podium
       _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
-      
+
       // Verificador Legal
       _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
-      
+
       // Liner's
       _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
-      
+
       // Gifts
       _lstGifts = await BRGifts.GetGifts(1);
-      
+
       // Banks
       _lstBanks = await BRBanks.GetBanks(1);
 
       // Source Payments
       _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
-      
+
       // SalesRoomShort
       _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
-     
+
       // Locations
       _lstLocations = await BRLocations.GetLocations(1);
-      
+
       // Charge To
       _lstChargeTo = await BRChargeTos.GetChargeTos();
-      
+
       // Capitanes de PR's
       _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
-      
+
       // Capitanes de Liner's
       _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
-      
+
       // Capitanes de Closer's
       _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
-      
+
       // Program's
       _lstPrograms = await BRPrograms.GetPrograms();
-      
+
       // LeadSources
       _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
-      
+
       // Refund Types
-      _lstRefundTypes =await BRRefundTypes.GetRefundTypes(1);
-      
-      // GiftsWithPackages
-      _lstGiftsWithPackage = BRGifts.GetGiftsWithPackages();
-      
+      _lstRefundTypes = await BRRefundTypes.GetRefundTypes(1);
+
       // GiftsPacks
-      _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks(); 
-    }
-    #endregion
+      _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks();
 
-    #region ShowSale_Click
-    /// <summary>
-    /// Despliega el formulario Sales pulsado desde el CheckBox del grid
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 18/03/2016 Created
-    /// </history>
-    private void ShowSale_Click(object sender, RoutedEventArgs e)
-    {
-      // Obtenemos el row seleccionado!
-      var row = sender as DataGridRow;
-      var chekedValue = sender as CheckBox;
-      chekedValue.IsChecked = !chekedValue.IsChecked;
-      if ( chekedValue.IsChecked == false) return; 
-      var guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
+      // Tipos de tarifa
+      _lstRateType = await BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
 
-      if (ValidateGuest(guestHost, EnumPermission.Sales, "guSale"))
-      {
-        var frmSales = new frmSales(EnumSale.Sale,guestHost.guID);
-        frmSales.ShowDialog();
-
-        if (chekedValue.IsChecked.Value == false && !string.IsNullOrEmpty(frmSales.txtsaID.Text)
-          || chekedValue.IsChecked.Value  && string.IsNullOrEmpty(frmSales.txtsaID.Text))
-        {
-          chekedValue.IsChecked = true;
-        }
-      }
-      else
-      {
-        if (chekedValue != null) chekedValue.IsChecked = false;
-      }
+      //Tipos de cupones de comida.
+      _lstMealTicketType = await BRMealTicketTypes.GetMealTicketType();
     }
     #endregion
 
@@ -621,13 +363,14 @@ namespace IM.Host
     /// <summary>
     /// Funcion que evalua cuando se pulsa enter dentro del datepicker
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 26/02/2016 Created
+    /// </history>
     private void dtpDate_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Enter)
       {
-        dtpDateChanged();
+        dtpDate_ValueChanged(null, null);
       }
     }
     #endregion
@@ -641,48 +384,56 @@ namespace IM.Host
     /// </history>
     private async void Host_Load()
     {
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Loading catalogs...";
+
       // Agregamos la informacion del usuario
       txtUser.Text = App.User.User.peN.ToString();
       txtSalesRoom.Text = App.User.SalesRoom.srN.ToString();
 
       // Obtenemos los catalogos
-      GetAllCatalogsHost();
+      await GetAllCatalogsHost();
 
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);
       CkeckKeysPress(StatusBarNum, Key.NumLock);
 
-      _dtpServerDate = BRHelpers.GetServerDate();
+      dtpServerDate = BRHelpers.GetServerDate();
 
       // Se verifica que el tipo de permiso del usuario para habilitar y/o deshabilitar opciones necesarias.
-      if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.ReadOnly))// 
-      {
-        guShowSeqColumn.IsReadOnly = true;
-        guQuinellaColumn.IsReadOnly = true;
+      if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.ReadOnly))
         guWCommentsColumn.IsReadOnly = true;
-      }
 
       // Actualizamos los tipos de cambio de monedas hasta el dia de hoy
-      await BRExchangeRate.InsertExchangeRate(_dtpServerDate.Date);
+      _busyIndicator.BusyContent = "Updating exchange rate...";
+      await BRExchangeRate.InsertExchangeRate(dtpServerDate.Date);
 
       // Actualizamos las fechas de temporada hasta el año actual
-      await BRSeasons.UpdateSeasonDates(_dtpServerDate.Year);
+      _busyIndicator.BusyContent = "Updating seasons's dates...";
+      await BRSeasons.UpdateSeasonDates(dtpServerDate.Year);
 
+      _busyIndicator.IsBusy = false;
     }
     #endregion
 
+    #region dtpDate_ValueChanged
+    /// <summary>
+    /// Recarga los resultados del grid principal conforme a la fecha ingresada
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 26/02/2016 Created
+    /// </history>
     private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       if (_dtpCurrent != dtpDate.Value)
       {
         // Asignamos la fecha seleccionada.
         _dtpCurrent = dtpDate.Value.Value.Date;
-
-        _Host = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-        _Host.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
-
+        CollectionViewSource hostInfo = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
+        hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
       }
     }
+    #endregion
 
     #region Metodos de Botones
 
@@ -690,8 +441,6 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de tipos de cambio de monedas
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 04/03/2016 Created
     /// </history>
@@ -704,10 +453,8 @@ namespace IM.Host
         return;
       }
 
-      frmExchangeRate _frExtChangeRate = new frmExchangeRate(_dtpServerDate);
-      _frExtChangeRate.ShowInTaskbar = false;
-      _frExtChangeRate.Owner = this;
-      _frExtChangeRate.ShowDialog();
+      var exchange = new frmExchangeRate(dtpServerDate) { Owner = this };
+      exchange.ShowDialog();
     }
     #endregion
 
@@ -715,14 +462,12 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de ventas en modo busqueda
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 18/03/2016 Created
     /// </history>
     private void btnSales_Click(object sender, RoutedEventArgs e)
     {
-      var sales = new frmSales(EnumSale.GlobalSale) {Owner = this};
+      var sales = new frmSales(EnumSale.GlobalSale) { Owner = this };
       sales.Show();
     }
     #endregion
@@ -731,8 +476,6 @@ namespace IM.Host
     /// <summary>
     /// Despliega el reporte de manifiesto por Lead Source para Excel
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// [edgrodriguez] 22/Junio/2016 Modified. Se agregó el proceso de creación del reporte Manifest By LS
@@ -765,7 +508,7 @@ namespace IM.Host
 
         filters.Add(new Tuple<string, string>("Date Range", dateRange));
         filters.Add(new Tuple<string, string>("Sales Room", App.User.SalesRoom.srID));
-        var fileinfo=EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
+        var fileinfo = EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
@@ -774,19 +517,6 @@ namespace IM.Host
           Process.Start(fileinfo.FullName);
       }
       _busyIndicator.IsBusy = false;
-    }
-    #endregion
-
-    #region btnPreview_Click
-    /// <summary>
-    /// Muestra una vista previa del reporte
-    /// </summary>
-    /// <history>
-    /// [lchairez] 09/Feb/2016 Created
-    /// </history>
-    private void btnPreview_Click(object sender, RoutedEventArgs e)
-    {
-      ShowReport();
     }
     #endregion
 
@@ -805,11 +535,12 @@ namespace IM.Host
       bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
 
       // Se invoca el formulario de acuerdo al permiso del usuario!
-      frmMealTickets _frmMealTickets = new frmMealTickets();
-      _frmMealTickets.ShowInTaskbar = false;
-      _frmMealTickets.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search);
-      _frmMealTickets.Owner = this;
-      _frmMealTickets.ShowDialog();
+      var mealTickets = new frmMealTickets()
+      {
+        Owner = this,
+        modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search)
+      };
+      mealTickets.ShowDialog();
     }
     #endregion
 
@@ -817,8 +548,6 @@ namespace IM.Host
     /// <summary>
     /// Función para madar ejecutar el formulario Gifts Receipts
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 03/17/2016 Created
     /// </history>
@@ -828,12 +557,13 @@ namespace IM.Host
       bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
 
       // Se invoca el formulario de acuerdo al permiso del usuario!
-      frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts();
-      _frmGiftsReceipts.ShowInTaskbar = false;
-      _frmGiftsReceipts.modeOpenBy = EnumOpenBy.Button;
-      _frmGiftsReceipts.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Preview);
-      _frmGiftsReceipts.Owner = this;
-      StartProcess(_frmGiftsReceipts, "Loading Gifts Receipt");
+      var giftsReceipts = new frmGiftsReceipts()
+      {
+        modeOpenBy = EnumOpenBy.Button,
+        modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Preview),
+        Owner = this
+      };
+      giftsReceipts.ShowDialog();
     }
     #endregion
 
@@ -841,8 +571,6 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de autorizacion de CxC
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// [michan] 14/Junio/2016 Modified --> Se agrego el formulario correspondiente.
@@ -858,9 +586,7 @@ namespace IM.Host
 
       // Desplegamos el formulario de autorizacion de CxC
       frmCxCAuthorization _frmCxCAuthorization = new frmCxCAuthorization();
-      _frmCxCAuthorization.ShowInTaskbar = false;
       _frmCxCAuthorization.Owner = this;
-      _frmCxCAuthorization.WindowStartupLocation = WindowStartupLocation.CenterOwner;
       _frmCxCAuthorization.ShowDialog();
 
     }
@@ -872,17 +598,13 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de busqueda
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
     private void btnDepositRefund_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchDepositRefund _frmSearch = new frmSearchDepositRefund();
-      _frmSearch.ShowInTaskbar = false;
-      _frmSearch.Owner = this;
-      _frmSearch.ShowDialog();
+      var depositRefund = new frmSearchDepositRefund() { Owner = this };
+      depositRefund.ShowDialog();
     }
     #endregion
 
@@ -890,26 +612,21 @@ namespace IM.Host
     /// <summary>
     /// Función para mostrar el formulario Close sales Room
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 26-02-2016 Created
     /// </history>
     private void btnCloseSalesRoom_Click(object sender, RoutedEventArgs e)
     {
       // Validamos que tenga permiso de lectura de cierre de sala de ventas
-      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly)) //  _userData.Permissions.Exists(c => c.pppm == "CLOSESR" && c.pppl >= 1))
+      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly))
       {
         MessageBox.Show("Access denied.", "Close Sales Room");
         return;
       }
 
       // Mostramos el formulario Close Sales Room
-      frmCloseSalesRoom mfrCloseSalesRoom = new frmCloseSalesRoom(this, _dtpServerDate);
-      mfrCloseSalesRoom.ShowInTaskbar = false;
-      mfrCloseSalesRoom.Owner = this;
-      AplicarEfecto(this);
-      mfrCloseSalesRoom.ShowDialog();
+      var closeSalesRoom = new frmCloseSalesRoom(dtpServerDate) { Owner = this };
+      closeSalesRoom.ShowDialog();
     }
     #endregion
 
@@ -917,17 +634,16 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de asistencias
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      frmAssistance _frmAssistance = new frmAssistance(EnumPlaceType.SalesRoom, App.User);
-      _frmAssistance.ShowInTaskbar = false;
-      _frmAssistance.Owner = this;
-      _frmAssistance.ShowDialog();
+      var assistance = new frmAssistance(EnumPlaceType.SalesRoom, App.User)
+      {
+        Owner = this
+      }
+      .ShowDialog();
     }
     #endregion
 
@@ -942,10 +658,11 @@ namespace IM.Host
     /// </history>
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      frmDaysOff _frmDaysOff = new frmDaysOff(EnumTeamType.TeamSalesmen, App.User);
-      _frmDaysOff.ShowInTaskbar = false;
-      _frmDaysOff.Owner = this;
-      _frmDaysOff.ShowDialog();
+      var _frmDaysOff = new frmDaysOff(EnumTeamType.TeamSalesmen, App.User)
+      {
+        Owner = this
+      }
+      .ShowDialog();
     }
     #endregion
 
@@ -955,10 +672,15 @@ namespace IM.Host
     /// </summary>
     /// <history>
     /// [lchairez] 09/Feb/2016 Created
+    /// [vipacheco] 29/Julio/2016 Modified --> Se agregó la invocacion del formulario Host Reports
     /// </history>
     private void btnReport_Click(object sender, RoutedEventArgs e)
     {
-      ShowReportDesigner();
+      var frm = new frmHostReports(dtpDate.Value.Value)
+      {
+        Owner = this
+      }
+      .ShowDialog();
     }
     #endregion
 
@@ -981,14 +703,38 @@ namespace IM.Host
     /// <summary>
     /// Permite transferir invitaciones
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void btnTransfer_Click(object sender, RoutedEventArgs e)
+    private async void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
+      try
+      {
+        var frmsearchGuest = new frmSearchGuest(App.User, EnumModule.Host)
+        {
+          Owner = this,
+          ShowInTaskbar = false
+        };
+        //Valida que haya sido un OK y no un Cancel
+        frmsearchGuest.ShowDialog();
+        if (!frmsearchGuest.cancel)
+        {
+          var guest = frmsearchGuest.lstGuestAdd[0];
+          guest.gusr = App.User.SalesRoom.srID;
+          guest.guBookCanc = false;
 
+          if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
+          {
+            //De no ser así informamos que no se guardo la información por algun motivo
+            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+              MessageBoxImage.Error, "Information can not keep");
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
     }
     #endregion
 
@@ -1084,73 +830,165 @@ namespace IM.Host
 
     #endregion
 
+    #region Metodos de CheckBox
+
     #region ShowDepositsRefund_Click
     /// <summary>
     /// Despliega el formulario de depositos devueltos
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 23/Junio/2016 Created
     /// </history>
     private void ShowDepositsRefund_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
-      CheckBox _chekedValue = sender as CheckBox;
-      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
+      CheckBox chkDepositsRefund = sender as CheckBox;
+      GuestPremanifestHost guestHost = chkDepositsRefund.DataContext as GuestPremanifestHost;
 
       frmSearchDepositRefund frmSearchDeposit = new frmSearchDepositRefund(guestHost.guID);
-      frmSearchDeposit.ShowInTaskbar = false;
       frmSearchDeposit.Owner = this;
       frmSearchDeposit.ShowDialog();
 
-      DepositToRefund _result = frmSearchDeposit.grdDeposits.SelectedValue as DepositToRefund;
-
-      if (_result != null)
+      // Si se cambio el status
+      if (frmSearchDeposit.HasRefund)
       {
-        if (_result.bdRefund == true)
-          _chekedValue.IsChecked = true;
-        else
-          _chekedValue.IsChecked = false;
+        chkDepositsRefund.IsChecked = true;
       }
       else
-        _chekedValue.IsChecked = false;
-
+      {
+        chkDepositsRefund.IsChecked = false;
+      }
     }
     #endregion
 
-    #region StartProcess
+    #region ShowShow_Click
     /// <summary>
-    /// Muestra el Loading con el mensaje correspondiente cuando se desean abrir ventanas nuevas.
+    /// Método que despliega el formulario Show
     /// </summary>
-    /// <param name="pWindow"> Ventaha la cual se abrira </param>
-    /// <param name="pMessage"> mensaje del loading </param>
     /// <history>
-    /// [vipacheco] 29/Junio/2016 Created
+    /// [vipacheco] 30/Abril/2016 Created
     /// </history>
-    private void StartProcess(Window pWindow, string pMessage)
+    private void ShowShow_Click(object sender, RoutedEventArgs e)
     {
-      _busyIndicator.IsBusy = true;
+      // Obtenemos el row seleccionado!
+      CheckBox chkSelected = sender as CheckBox;
+      GuestPremanifestHost guest = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
 
-      Task.Factory.StartNew(() =>
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guest, EnumPermission.Show, EnumEntities.Shows))
       {
-        Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-        {
-          {
-            for (int i = 0; i <= 10; i++)
-            {
-              _busyIndicator.BusyContent = pMessage;
-            }
-          }
-        }));
-        Thread.Sleep(10000);
-      }).ContinueWith((task) =>
-      {
-        _busyIndicator.IsBusy = false;
-        pWindow.ShowDialog();
-      }, TaskScheduler.FromCurrentSynchronizationContext());
+        // Desplegamos el formulario Show
+
+      }
     }
     #endregion
 
+    #region ShowMealTickets_Click
+    /// <summary>
+    /// Invoca el formulario Meal Ticket por medio del CheckBox correspondiente!
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 18/03/2016 Created
+    /// </history>
+    private void ShowMealTickets_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      CheckBox chkSelected = sender as CheckBox;
+      GuestPremanifestHost guest = chkSelected.DataContext as GuestPremanifestHost;
+
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guest, EnumPermission.MealTicket, EnumEntities.MealTickets))
+      {
+        // Desplegamos el formulario Show
+        frmMealTickets _frmMealTickets = new frmMealTickets(guest.guID) { Owner = this };
+        _frmMealTickets.ShowDialog();
+      }
+      else
+      {
+        chkSelected.IsChecked = false;
+      }
+
+      dtgPremanifestHost.Items.Refresh();
+    }
+    #endregion
+
+    #region ShowSale_Click
+    /// <summary>
+    /// Despliega el formulario Sales pulsado desde el CheckBox del grid
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 18/03/2016 Created
+    /// </history>
+    private void ShowSale_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      var row = sender as DataGridRow;
+      var chekedValue = sender as CheckBox;
+      chekedValue.IsChecked = !chekedValue.IsChecked;
+      if (chekedValue.IsChecked == false) return;
+      var guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
+
+      if (ValidateGuest(guestHost, EnumPermission.Sales, EnumEntities.Sales))
+      {
+        var frmSales = new frmSales(EnumSale.Sale, guestHost.guID);
+        frmSales.ShowDialog();
+
+        if (chekedValue.IsChecked.Value == false && !string.IsNullOrEmpty(frmSales.txtsaID.Text)
+          || chekedValue.IsChecked.Value && string.IsNullOrEmpty(frmSales.txtsaID.Text))
+        {
+          chekedValue.IsChecked = true;
+        }
+      }
+      else
+      {
+        if (chekedValue != null) chekedValue.IsChecked = false;
+      }
+    }
+    #endregion
+
+    #region ShowGiftsReceived_Click
+    /// <summary>
+    /// Invoca el formulario Gifts Received
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 04/04/2016 Created
+    /// </history>
+    private void ShowGiftsReceived_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      CheckBox chkSelected = sender as CheckBox;
+      GuestPremanifestHost guest = chkSelected.DataContext as GuestPremanifestHost;
+
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guest, EnumPermission.GiftsReceipts, EnumEntities.GiftsReceipts))
+      {
+        bool canEdit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
+
+        frmGiftsReceipts frmGiftsReceipts = new frmGiftsReceipts(guest.guID)
+        {
+          Owner = this,
+          modeOpenBy = EnumOpenBy.Checkbox,
+          modeOpen = (canEdit) ? EnumModeOpen.Edit : EnumModeOpen.Preview
+        };
+        frmGiftsReceipts.ShowDialog();
+
+        // si cambio el estatus de regalos recibidos
+        if (chkSelected.IsChecked == true && !string.IsNullOrEmpty(frmGiftsReceipts.txtgrID.Text.Trim()))
+        {
+          chkSelected.IsChecked = true;
+        }
+        else
+        {
+          chkSelected.IsChecked = false;
+        }
+      }
+      else
+      {
+        chkSelected.IsChecked = guest.guGiftsReceived;
+      }
+    }
+    #endregion
+
+    #endregion
   }
 }

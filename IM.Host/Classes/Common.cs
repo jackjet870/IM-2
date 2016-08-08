@@ -4,11 +4,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Classes
@@ -168,17 +164,13 @@ namespace IM.Host.Classes
     /// [vipacheco] 23/03/2016 Created
     /// [vipacheco] 29/Julio/2016 Modified --> Migrado a esta clase comun
     /// </history>
-    public static bool IsClosed(DateTime pdtmDate, DateTime pdtmClose)
+    public static bool IsClosed(DateTime dtmDate, DateTime dtmClose)
     {
       bool blnClosed = false;
-      DateTime _pdtmDate;
 
-      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
+      if (dtmDate <= dtmClose)
       {
-        if (_pdtmDate <= pdtmClose)
-        {
-          blnClosed = true;
-        }
+        blnClosed = true;
       }
       return blnClosed;
     }

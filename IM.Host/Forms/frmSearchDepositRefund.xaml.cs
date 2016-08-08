@@ -1,5 +1,4 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -7,9 +6,12 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -20,7 +22,17 @@ namespace IM.Host.Forms
   {
 
     private int _GuestID = 0;
+    private DataGridCellInfo _currentCell;
+    private List<DepositsRefund> _lstRefund;
 
+    public List<DepositToRefund> lstDeposits;
+    public bool HasRefund = false; // Variable utilizada para saber si existen depositos
+
+    #region Contructor
+    /// <summary>
+    /// Contructor
+    /// </summary>
+    /// <param name="GuestID"></param>
     public frmSearchDepositRefund(int GuestID = 0)
     {
       // Se asigna el GuestID
@@ -28,31 +40,41 @@ namespace IM.Host.Forms
 
       InitializeComponent();
     }
+    #endregion
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    #region Window_Loaded
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 07/Junio/2016 Created
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Load_RefundTypes();
+      cborefundType.SelectedValue = "CS";
 
       // Fechas
-      dtpStart.Value = frmHost._dtpServerDate.AddDays(-30);
-      dtpEnd.Value = frmHost._dtpServerDate;
+      dtpStart.Value = frmHost.dtpServerDate.AddDays(-30);
+      dtpEnd.Value = frmHost.dtpServerDate;
 
       if (HasGuest())
       {
-        Load_Refund();
-        Load_BookingDeposits();
+        await Load_Refund();
+        //Load_BookingDeposits();
         txtID.Text = $"{_GuestID}";
-        Controls_Mode(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
       }
       else
       {
-        Load_Refund();
-        Load_BookingDeposits(-1);
-        Controls_Mode(Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Visible);
+        Controls_Mode(false, false, false, false, true);
+
       }
 
       ChangeLookUpStatus(!HasGuest());
     }
+    #endregion
 
     #region Load_RefundTypes
     /// <summary>
@@ -75,7 +97,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
-    private async void Load_Refund()
+    private async Task Load_Refund()
     {
       int Guest = 0, RefundID = 0;
       string Folio = "", Name = "", Reservation = "", OutInv = "", PR = "";
@@ -100,11 +122,13 @@ namespace IM.Host.Forms
         Guest = _GuestID;
       }
       // Ejecutamos el procedimiento
-      List<DepositsRefund> lstRefund = await BRDepositsRefund.GetDepositsRefund(Guest, RefundID, Folio, Name, Reservation, OutInv, PR, dateFrom, dateTo);
+      _lstRefund = await BRDepositsRefund.GetDepositsRefund(Guest, RefundID, Folio, Name, Reservation, OutInv, PR, dateFrom, dateTo);
 
       // Asignamos el resultado al grid
       CollectionViewSource _dsDepositsRefund = ((CollectionViewSource)(this.FindResource("dsRefund")));
-      _dsDepositsRefund.Source = lstRefund;
+      _dsDepositsRefund.Source = _lstRefund;
+
+      Load_BookingDeposits();
 
     }
     #endregion
@@ -120,25 +144,48 @@ namespace IM.Host.Forms
     /// </history>
     private async void Load_BookingDeposits(int GuestID = -1, int RefundID = -1)
     {
-      int _guestID = 0, _refundID = 0;
+      //if (_lstRefund.Count > 0)
+      //{
+        int guestID = 0, refundID = 0, folio = 0;
 
       // Si no esta asociado a un Guest
       if (!HasGuest())
-        _guestID = GuestID;
+        {
+          // Obtenemos el selected del grid
+          if (grdRefund.SelectedItem == null && grdRefund.Items.Count > 0)
+          {
+            grdRefund.SelectedIndex = 0;
+          }
+          DepositsRefund selected = grdRefund.SelectedItem as DepositsRefund;
+          guestID = selected.guID;
+          refundID = selected.drID;
+          folio = selected.drFolio;
+        }
       else
-        _guestID = _GuestID;
+          guestID = _GuestID;
 
       // Checamos si envio refund
       if (RefundID > 0)
-        _refundID = RefundID;
+          refundID = RefundID;
+
+        txtFolio.Text = $"{folio}";
+        txtID.Text = $"{guestID}";
 
       // Ejecutamos el procedimiento
-      List<DepositToRefund> lstResult = await BRBookingDeposits.GetDepositsToRefund(_guestID, _refundID);
+      List<DepositToRefund> lstResult = await BRBookingDeposits.GetDepositsToRefund(guestID, refundID);
 
       // Cargamos la informacion al Grid
       CollectionViewSource _dsDeposits = ((CollectionViewSource)(this.FindResource("dsDeposits")));
-      _dsDeposits.Source = lstResult;
+        _dsDeposits.Source = lstDeposits;
 
+        // Verificamos si aun quedan Depositos por guardar
+        var depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList();
+
+        if (depositsID.Any(x => !x.bdRefund.Value))
+          Controls_Mode(true, false, false, false, true, false);
+        else
+          Controls_Mode(false, false, depositsID.Any(x => x.bdRefund.Value) ? true : false, false, true, ValidateGuest: true);
+      //}
     }
     #endregion
 
@@ -158,13 +205,7 @@ namespace IM.Host.Forms
         return;
       }
 
-
-      txtFolio.Text = $"{Selected.drFolio}";
-      txtID.Text = $"{Selected.guID}";
-
       Load_BookingDeposits(Selected.guID, Selected.drID);
-      Controls_Mode(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Visible, Visibility.Visible, ValidateGuest:true);
-
     }
     #endregion
 
@@ -185,7 +226,14 @@ namespace IM.Host.Forms
     }
     #endregion
 
-
+    #region ChangeLookUpStatus
+    /// <summary>
+    /// Habilita o Deshabilita las cajas de texto necesarias
+    /// </summary>
+    /// <param name="Enable"></param>
+    /// <history>
+    /// [vipacheco] 07/Junio/2016 Created
+    /// </history>
     private void ChangeLookUpStatus(bool Enable)
     {
       txtRefundID.IsReadOnly = !Enable;
@@ -200,97 +248,59 @@ namespace IM.Host.Forms
       dtpEnd.IsEnabled = Enable;
       cborefundType.IsEnabled = !Enable;
     }
+    #endregion
 
-    private void Controls_Mode(Visibility _btnNew, Visibility _btnSave, Visibility _btnPrint, Visibility _btnCancel, Visibility _btnClose, Visibility _btnSearch = Visibility.Visible, bool ValidateGuest = false)
+    #region Controls_Mode
+    /// <summary>
+    /// Habilita o Deshabilita los botones del formulario
+    /// </summary>
+    /// <param name="pNew"></param>
+    /// <param name="pSave"></param>
+    /// <param name="pPrint"></param>
+    /// <param name="pCancel"></param>
+    /// <param name="pClose"></param>
+    /// <param name="pSearch"></param>
+    /// <param name="ValidateGuest"></param>
+    /// <history>
+    /// [vipacheco] 07/Junio/2016 Created
+    /// </history>
+    private void Controls_Mode(bool pNew, bool pSave, bool pPrint, bool pCancel, bool pClose, bool pSearch = true, bool ValidateGuest = false)
     {
-      btnNew.Visibility = _btnNew;
-      btnSave.Visibility = _btnSave;
-      btnPrint.Visibility = _btnPrint;
-      btnCancel.Visibility = _btnCancel;
-      btnClose.Visibility = _btnClose;
+      btnNew.IsEnabled = pNew;
+      btnSave.IsEnabled = pSave;
+      btnPrint.IsEnabled = pPrint;
+      btnCancel.IsEnabled = pCancel;
+      btnClose.IsEnabled = pClose;
 
       // solo para cuando se selecciona un row se realiza esta validacion.
       if (ValidateGuest)
       {
         if (HasGuest())
-          btnSearch.Visibility = Visibility.Hidden;
+          btnSearch.IsEnabled = false;
         else
-          btnSearch.Visibility = Visibility.Visible;
+          btnSearch.IsEnabled = true;
       }
       else
       {
-        btnSearch.Visibility = _btnSearch;
+        btnSearch.IsEnabled = pSearch;
       }
     }
-
-    #region Read_Mode
-    /// <summary>
-    /// Activa los controles correspondientes a modo lectura
-    /// </summary>
-    /// <history>
-    /// [vipacheco] 07/Junio/2016 Created
-    /// </history>
-    private void Read_Mode()
-    {
-      btnNew.Visibility = Visibility.Visible;
-      btnSave.Visibility = Visibility.Hidden;
-      btnPrint.Visibility = Visibility.Hidden;
-      btnCancel.Visibility = Visibility.Hidden;
-      btnClose.Visibility = Visibility.Visible;
-      btnSearch.Visibility = Visibility.Hidden;
-    }
-    #endregion
-
-    #region Search_Mode
-    /// <summary>
-    /// Activa los controles correspondientes a modo lectura
-    /// </summary>
-    /// <history>
-    /// [vipacheco] 07/Junio/2016 Created
-    /// </history>
-    private void Search_Mode()
-    {
-      btnNew.Visibility = Visibility.Hidden;
-      btnSave.Visibility = Visibility.Hidden;
-      btnPrint.Visibility = Visibility.Hidden;
-      btnCancel.Visibility = Visibility.Hidden;
-      btnClose.Visibility = Visibility.Visible;
-      btnSearch.Visibility = Visibility.Visible;
-    }
-
-    #endregion
-
-    #region Edit_Mode
-    /// <summary>
-    /// Activa los controles correspondientes a modo edicion
-    /// </summary>
-    /// <history>
-    /// [vipacheco] 07/Junio/2016 Created
-    /// </history>
-    private void Edit_Mode()
-    {
-      btnNew.Visibility = Visibility.Hidden;
-      btnSave.Visibility = Visibility.Visible;
-      btnPrint.Visibility = Visibility.Hidden;
-      btnCancel.Visibility = Visibility.Visible;
-      btnClose.Visibility = Visibility.Visible;
-      btnSearch.Visibility = Visibility.Hidden;
-    }
-
     #endregion
 
     #region btnSearch_Click
     /// <summary>
     /// Busca los Deposits Refund con los criterios ingresados
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
-    private void btnSearch_Click(object sender, RoutedEventArgs e)
+    private async void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      Load_Refund();
+      // Validamos las fechas
+      if (DateHelper.ValidateValueDate(dtpStart, dtpEnd))
+      {
+        await Load_Refund();
+    }
     }
     #endregion
 
@@ -298,14 +308,17 @@ namespace IM.Host.Forms
     /// <summary>
     /// Agregar un nuevo refund
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
     private void btnNew_Click(object sender, RoutedEventArgs e)
     {
-      Controls_Mode(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Visible, Visibility.Visible, Visibility.Hidden);
+      Controls_Mode(false, true, false, true, true, false);
+
+      // eliminamos los ya marcados
+      var lstChecked = grdDeposits.Items.Cast<DepositToRefund>().ToList().Where(x => x.bdRefund == true).ToList();
+      lstChecked.ForEach(x => lstDeposits.Remove(x));
+      grdDeposits.Items.Refresh();
 
       // Habilitamos la columna
       bdRefundColumn.IsReadOnly = false;
@@ -316,8 +329,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Cierra el formulario
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
@@ -331,14 +342,12 @@ namespace IM.Host.Forms
     /// <summary>
     /// Función encargada de Cargar la informacion de acuerdo al refund seleccionado!
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
     private void grdRefund_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Load_Selected();
+      Load_BookingDeposits();
     }
     #endregion
 
@@ -347,8 +356,6 @@ namespace IM.Host.Forms
     /// Carga la informacion del refund seleccionado
     /// cambia de fila con el boton tab
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
@@ -376,8 +383,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Cancela la seleccion actual del Grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
@@ -385,19 +390,53 @@ namespace IM.Host.Forms
     {
       if (HasGuest())
       {
-        Controls_Mode(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
+        // Verificamos si aun quedan Depositos por guardar
+        var depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList();
+
+        Load_BookingDeposits();
+        if (depositsID.Any(x => !x.bdRefund.Value))
+          Controls_Mode(true, false, false, false, true, false);
+        else
+          Controls_Mode(false, false, true, false, true, false);
       }
       else
       {
         Load_BookingDeposits(-1);
-        Controls_Mode(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Visible, Visibility.Visible, ValidateGuest: true);
-        btnCancel.Visibility = Visibility.Hidden;
-        btnPrint.Visibility = Visibility.Hidden;
+        Controls_Mode(false, false, true, true, true, ValidateGuest: true);
+        btnCancel.IsEnabled = false;
+        btnPrint.IsEnabled = false;
         grdRefund.SelectedItem = null;
 
         txtID.Text = "";
         txtFolio.Text = "";
       }
+    }
+    #endregion
+
+    #region btnSave_Click
+    /// <summary>
+    /// Guarda el refund
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 21/Julio/2016 Created
+    /// </history>
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos los Deposit Autorizados
+      List<int> depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList().Where(x => x.bdRefund == true).Select(s => s.bdID).ToList();
+      string deposits = string.Join(",", depositsID);
+
+      if (string.IsNullOrEmpty(deposits))
+      {
+        UIHelper.ShowMessage("Mark at least one deposit to create a refund.", MessageBoxImage.Information);
+        return;
+      }
+
+      if (UIHelper.ShowMessage("Are you sure you want to refund this deposits? \r\n This change can not be undone.", MessageBoxImage.Question) == MessageBoxResult.Yes)
+      {
+        await Save(deposits);
+      }
+      await Load_Refund();
     }
     #endregion
 
@@ -449,5 +488,101 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("Select a Refund from the list.");
     } 
     #endregion
+
+    #region Save
+    /// <summary>
+    /// Realiza el guardado total del proceso
+    /// Actualiza los booking deposits, genera el depositrefund y lo asocia a los bookingdeposits
+    /// Aumenta el contados de folios
+    /// </summary>
+    /// <param name="pDeposits"></param>
+    /// <history>
+    /// [vipacheco] 21/Junio/2016 Created
+    /// </history>
+    private async Task Save(string pDeposits)
+    {
+      // Obtenemos el folio a crear
+      int folio = await BRRefundTypeFolios.GetRefundFolio(cborefundType.SelectedValue.ToString());
+
+      // guardamos la devolucion de depositos y marcamos los depositos como devueltos
+      await BRDepositsRefund.SaveDepositsRefund(Convert.ToInt32(txtID.Text), folio, cborefundType.SelectedValue.ToString(), pDeposits);
+
+      // actualizamos el folio usado
+      await BRRefundTypeFolios.UpdateRefundFolio(cborefundType.SelectedValue.ToString(), folio);
+
+      HasRefund = true;
+  }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica si existe algun deposito refund guardado.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 30/Julio/2016 Created
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      // Verificamos si esta en modo edicion
+      if (btnSave.IsEnabled)
+      {
+        UIHelper.ShowMessage("This form is currently in edit mode. Please save or cancel your changes before closing it.", MessageBoxImage.Information, "Intelligence Marketing");
+        e.Cancel = true;
+}
+      else
+      {
+        // Verificamos si aun quedan Depositos por guardar
+        var depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList();
+
+        if (depositsID.Any(x => x.bdRefund.Value))
+        {
+          HasRefund = true;
+        }
+        else
+        {
+          HasRefund = false;
+        }
+      }
+    }
+    #endregion
+
+    #region grdDeposits_PreparingCellForEdit
+    /// <summary>
+    /// valida la celda
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 29/Julio/2016 Created
+    /// </history>
+    private void grdDeposits_PreparingCellForEdit(object sender, System.Windows.Controls.DataGridPreparingCellForEditEventArgs e)
+    {
+      DataGrid dataGrid = sender as DataGrid;
+      DepositToRefund selectedDeposit = dataGrid.Items.CurrentItem as DepositToRefund;
+      _currentCell = grdDeposits.CurrentCell;
+
+      switch (_currentCell.Column.SortMemberPath)
+      {
+        case "bdRefund":
+          if ((bool)selectedDeposit.bdRefund)
+          {
+            _currentCell.Column.IsReadOnly = true;
+          }
+          break;
+      }
+    }
+    #endregion
+
+    #region grdDeposits_CellEditEnding
+    /// <summary>
+    /// Habilita la celda para su verificacion.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 29/Julio/2016 Created
+    /// </history>
+    private void grdDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      _currentCell.Column.IsReadOnly = false;
+    } 
+    #endregion
+
   }
 }

@@ -11,12 +11,10 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         ResizeMode="NoResize"
-        Height="725" Width="1048" WindowStartupLocation="CenterScreen">
+        Height="725" Width="1058.476" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
 
   <Window.Resources>
     <CollectionViewSource x:Key="dsReceipts" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptsShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnel_Offered" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnel_Gifts" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsChargeTo" d:DesignSource="{d:DesignInstance {x:Type Model:ChargeTo}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsPaymentType" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsCurrencyPRDeposit" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
@@ -53,7 +51,7 @@
       <StackPanel x:Name="Head" Grid.Row="1">
         <Grid>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="175"/>
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
           <Border Grid.Column="0"  x:Name="brdExchange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="17,3,3,7" >
@@ -107,7 +105,7 @@
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="175"/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
 
@@ -123,7 +121,7 @@
             <DataGrid.Columns>
               <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt ID" Width="Auto"/>
               <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Receipt #" Width="Auto"/>
-              <DataGridCheckBoxColumn x:Name="grExchangeColumn" Binding="{Binding grExchange}" Header="Exch." Width="SizeToHeader"/>
+              <DataGridCheckBoxColumn x:Name="grExchangeColumn" Binding="{Binding grExchange}" Header="Exch." Width="*"/>
             </DataGrid.Columns>
           </DataGrid>
           <!--#endregion-->
@@ -170,13 +168,13 @@
                 <TextBox x:Name="txtgrGuest2" HorizontalAlignment="Left" Height="23" Margin="50,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="170" Text="{Binding GiftsReceiptDetail.grGuest2, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MaxLength="20" Grid.Column="2"/>
                 <TextBlock x:Name="lblgrHotel" HorizontalAlignment="Left" Margin="230,81,0,0" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBlock x:Name="lblgrRoomNum" HorizontalAlignment="Left" Margin="374,81,0,0" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="374,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grRoomNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" PreviewTextInput="int_PreviewTextInput" Grid.Column="2"/>
+                <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="374,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grRoomNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" PreviewTextInput="int_PreviewTextInput" Grid.Column="2" MaxLength="6"/>
                 <TextBlock x:Name="lblgrPax" HorizontalAlignment="Left" Margin="447,81,0,0" TextWrapping="Wrap" Text="Pax" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="447,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grPax,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.0}, FallbackValue=0.0}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2"/>
+                <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="447,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grPax,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:0.0}, FallbackValue=0.0}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" MaxLength="4"/>
                 <TextBlock x:Name="lblgrTaxiOut" HorizontalAlignment="Left" Margin="519,81,0,0" TextWrapping="Wrap" Text="Taxi Out" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="519,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOut, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2"/>
+                <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="519,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOut, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" MaxLength="19"/>
                 <TextBlock x:Name="lblgrTaxiOutDiff" HorizontalAlignment="Left" Margin="592,81,0,0" TextWrapping="Wrap" Text="Taxi Out Diff" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrTaxiOutDiff" HorizontalAlignment="Left" Height="23" Margin="592,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOutDiff, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2"/>
+                <TextBox x:Name="txtgrTaxiOutDiff" HorizontalAlignment="Left" Height="23" Margin="592,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOutDiff, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" />
                 <CheckBox x:Name="chkgrExchange" Content="Exchange" HorizontalAlignment="Left" Margin="618,5,0,0" VerticalAlignment="Top" IsChecked="{Binding GiftsReceiptDetail.grExchange, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" Grid.Column="2"/>
                 <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="612,23,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2">
                   <Grid Margin="-6,0,5,0">
@@ -189,11 +187,14 @@
                   </Grid>
                 </Border>
                 <TextBlock x:Name="lblgrpe" HorizontalAlignment="Left" Margin="0.182,124,0,0" TextWrapping="Wrap" Text="Offered by" VerticalAlignment="Top" Grid.Column="1"/>
-                <TextBox x:Name="txtgrpe" HorizontalAlignment="Left" Height="20" Margin="68.182,121,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding GiftsReceiptDetail.grpe, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MaxLength="10" Grid.ColumnSpan="2" Grid.Column="1"/>
-                <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="30,121,0,0" VerticalAlignment="Top" Width="158" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnel_Offered}}" SelectedValuePath="peID" SelectedValue="{Binding GiftsReceiptDetail.grpe, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="false" SelectionChanged="cbogrpe_SelectionChanged" Grid.Column="2"/>
+                <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="68,121,0,0" VerticalAlignment="Top" Width="244" TextSearch.TextPath="peID"
+                          ItemTemplate="{StaticResource cbx-Personnel-Concat}"
+                          IsEnabled="false"
+                          SelectionChanged="cbogrpe_SelectionChanged" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <TextBlock x:Name="lblgrHost" HorizontalAlignment="Left" Margin="0.182,151,0,0" TextWrapping="Wrap" Text="Gifts Hostess" VerticalAlignment="Top" Grid.Column="1"/>
-                <TextBox x:Name="txtgrHost" HorizontalAlignment="Left" Height="20" Margin="68.182,149,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding GiftsReceiptDetail.grHost}" IsReadOnly="True" MaxLength="10" Grid.ColumnSpan="2" Grid.Column="1"/>
-                <ComboBox x:Name="cbogrHost" HorizontalAlignment="Left" Margin="30,147,0,0" VerticalAlignment="Top" Width="158" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnel_Gifts}}" SelectedValuePath="peID" SelectedValue="{Binding GiftsReceiptDetail.grHost, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="false" Tag="host(ess)" SelectionChanged="cbogrHost_SelectionChanged" Grid.Column="2"/>
+                <ComboBox x:Name="cbogrHost" HorizontalAlignment="Right" Margin="0,147,509,0" VerticalAlignment="Top" Width="244" 
+                          IsEnabled="false" Tag="host(ess)" SelectionChanged="cbogrHost_SelectionChanged" Grid.Column="1" TextSearch.TextPath="peID"
+                          ItemTemplate="{StaticResource cbx-Personnel-Concat}" Grid.ColumnSpan="2"/>
                 <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="226,125,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="292,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding GiftsReceiptDetail.grComments, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
                 <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="812" Height="177" Grid.ColumnSpan="3">
@@ -207,7 +208,15 @@
                     <TextBlock x:Name="lblTotalToPayCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Bottom" Margin="617,0,0,2"/>
                     <TextBox x:Name="txtTotalToPay" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" Margin="685,0,0,-3"/>
 
-                    <DataGrid x:Name="grdGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" Margin="0,2,0,23" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" PreparingCellForEdit="grdGifts_PreparingCellForEdit" CellEditEnding="grdGifts_CellEditEnding" CanUserResizeRows="False">
+                    <DataGrid x:Name="grdGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                              ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, UpdateSourceTrigger=PropertyChanged}"
+                              IsSynchronizedWithCurrentItem="True" Margin="0,2,0,23" RowDetailsVisibilityMode="Collapsed"
+                              CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" 
+                              PreparingCellForEdit="grdGifts_PreparingCellForEdit" 
+                              CellEditEnding="grdGifts_CellEditEnding"
+                              RowEditEnding="grdGifts_RowEditEnding"
+                              CanUserResizeRows="False"
+                              SelectionChanged="grdGifts_SelectionChanged">
                       <!--#region Resources-->
                       <DataGrid.Resources>
                         <!--#region ESTILOS DEL DATAGRID-->
@@ -236,15 +245,26 @@
                       </DataGrid.CellStyle>
 
                       <DataGrid.RowHeaderTemplate>
-                      <DataTemplate>
+                        <DataTemplate>
                           <Expander Expanded="GiftsPacks_Expanded" Collapsed="GiftsPacks_Collapsed" Style="{StaticResource ExpanderTemplate}"/>
-                      </DataTemplate>
-                    </DataGrid.RowHeaderTemplate>
-
+                        </DataTemplate>
+                      </DataGrid.RowHeaderTemplate>
 
                       <DataGrid.Columns>
                         <!--#region Cantidad-->
-                        <DataGridTemplateColumn x:Name="QtyColumn" Header="Qty" SortMemberPath="geQty">
+                        <DataGridTextColumn Header="Qty" Width="Auto" Binding="{Binding geQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                              <Setter Property="MaxLength" Value="4"/>
+                            </Style>
+                          </DataGridTextColumn.EditingElementStyle>
+                          <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                              <Setter Property="ToolTip" Value="Quantity"/>
+                            </Style>
+                          </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <!--<DataGridTemplateColumn x:Name="QtyColumn" Header="Qty" SortMemberPath="geQty">
                           <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                               <TextBlock Text="{Binding geQty}"/>
@@ -260,7 +280,7 @@
                               <Setter Property="ToolTip" Value="Quantity"/>
                             </Style>
                           </DataGridTemplateColumn.HeaderStyle>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
                         <!--#endregion-->
                         <!--#region Unit-->
                         <DataGridTextColumn x:Name="qtyUnitColumn" Binding="{Binding QtyUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Unit" Width="SizeToHeader" IsReadOnly="True">
@@ -432,7 +452,7 @@
                                   <TextBlock/>
                                   <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>
                                 </WrapPanel>
-                        </DataTemplate>
+                              </DataTemplate>
                             </ListView.ItemTemplate>
                           </ListView>
                         </DataTemplate>
@@ -444,7 +464,12 @@
                   <Grid Margin="0,2,0,-2">
                     <TextBlock x:Name="lblTotalPaymentsCaption" HorizontalAlignment="Left" Margin="708,26,0,0" TextWrapping="Wrap" Text="Total Payments" VerticalAlignment="Top" Width="88"/>
                     <TextBox x:Name="txtTotalPayments" HorizontalAlignment="Left" Height="23" Margin="708,39,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="78" IsReadOnly="True" Text="0.00"/>
-                    <DataGrid x:Name="grdPayments" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsPayments}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,98,0" IsReadOnly="True" CanUserAddRows="True" CanUserDeleteRows="True" CanUserReorderColumns="False" AddingNewItem="dgGiftsReceiptPaymentShort_AddingNewItem" CommandManager.PreviewExecuted="dgGiftsReceiptPaymentShort_PreviewExecuted">
+                    <DataGrid x:Name="grdPayments" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                              ItemsSource="{Binding Source={StaticResource dsPayments}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,98,0" IsReadOnly="True" CanUserAddRows="True" CanUserDeleteRows="True" CanUserReorderColumns="False"
+                              AddingNewItem="dgGiftsReceiptPaymentShort_AddingNewItem" 
+                              CommandManager.PreviewExecuted="dgGiftsReceiptPaymentShort_PreviewExecuted"
+                              SelectionChanged="grdPayments_SelectionChanged">
                       <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridRow}">
                           <Style.Resources>
@@ -456,21 +481,21 @@
                         </Style>
                       </DataGrid.Resources>
                       <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="gyAmountColumn" Binding="{Binding gyAmount, StringFormat={}{0:0.00}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Header="Paid" Width="Auto">
+                        <DataGridTextColumn x:Name="gyAmountColumn" Binding="{Binding gyAmount, StringFormat={}{0:F2}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Header="Paid" Width="Auto">
                           <DataGridTextColumn.EditingElementStyle>
-                          <Style TargetType="TextBox">
-                            <EventSetter Event="PreviewTextInput" Handler="Decimal_PreviewTextInput"/>
-                            <EventSetter Event="LostFocus" Handler="Update_LostFocus" />
-                          </Style>
-                        </DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                              <EventSetter Event="PreviewTextInput" Handler="Decimal_PreviewTextInput"/>
+                              <EventSetter Event="LostFocus" Handler="Update_LostFocus" />
+                            </Style>
+                          </DataGridTextColumn.EditingElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn x:Name="gyRefundColumn" Binding="{Binding gyRefund, StringFormat={}{0:0.00}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Header="Refund" Width="Auto">
                           <DataGridTextColumn.EditingElementStyle>
-                          <Style TargetType="TextBox">
-                            <EventSetter Event="PreviewTextInput" Handler="Decimal_PreviewTextInput"/>
-                            <EventSetter Event="LostFocus" Handler="Update_LostFocus" />
-                          </Style>
-                        </DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                              <EventSetter Event="PreviewTextInput" Handler="Decimal_PreviewTextInput"/>
+                              <EventSetter Event="LostFocus" Handler="Update_LostFocus" />
+                            </Style>
+                          </DataGridTextColumn.EditingElementStyle>
                         </DataGridTextColumn>
                         <DataGridComboBoxColumn x:Name="gycu" SelectedValueBinding="{Binding gycu}" Header="Currency" Width="Auto" SelectedValuePath="cuID" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrency}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridComboBoxColumn x:Name="gypt" SelectedValueBinding="{Binding gypt}" Header="Payment Type" Width="Auto" SelectedValuePath="ptID" DisplayMemberPath="ptN" ItemsSource="{Binding Source={StaticResource dsPaymentType}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>

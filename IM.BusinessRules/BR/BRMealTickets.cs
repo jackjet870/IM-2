@@ -3,6 +3,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -21,39 +22,43 @@ namespace IM.BusinessRules.BR
     /// <returns> Lista de tipo MealTicket </returns>
     /// <history>
     /// [vipacheco] 18/03/2016 Created
+    /// [vipacheco] 29/Julio/2016 Modified --> Se agrego asyncronia
     /// </history>
-    public static List<MealTicket> GetMealTickets(int mealTicket = 0, string folio = "", int rateType = 0, DateTime? dateIni = null, DateTime? dateFinal = null)
+    public async static Task<List<MealTicket>> GetMealTickets(int mealTicket = 0, string folio = "", int rateType = 0, DateTime? dateIni = null, DateTime? dateFinal = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<MealTicket> lstResult = new List<MealTicket>();
+
+      await Task.Run(() =>
       {
-        var query = new List<MealTicket>();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          #region Meal Ticket ID
+          if (mealTicket != 0) // Busqueda solo con el Meal Ticket ID
+            lstResult = dbContext.MealTickets.Where(x => x.meID == mealTicket).ToList();
+          #endregion
 
-        #region Meal Ticket ID
-        if (mealTicket != 0) // Busqueda solo con el Meal Ticket ID
-          query = dbContext.MealTickets.Where(x => x.meID == mealTicket).ToList();
-        #endregion
+          #region Folio
+          if (lstResult.Count == 0 && folio != "") // Busqueda solo con el Folio
+            lstResult = dbContext.MealTickets.Where(x => x.meFolios == folio).ToList();
+          else if (folio != "")
+            lstResult = lstResult.Where(x => x.meFolios == folio).ToList();
+          #endregion
 
-        #region Folio
-        if (query.Count == 0 && folio != "") // Busqueda solo con el Folio
-          query = dbContext.MealTickets.Where(x => x.meFolios == folio).ToList();
-        else if(folio != "")
-          query = query.Where(x => x.meFolios == folio).ToList();
-        #endregion
+          #region RateType
+          if (lstResult.Count == 0 && rateType != 0) // Busqueda solo con el Rate Type
+            lstResult = dbContext.MealTickets.Where(x => x.mera == rateType).ToList();
+          else if (rateType != 0)
+            lstResult = lstResult.Where(x => x.mera == rateType).ToList();
+          #endregion
 
-        #region RateType
-        if (query.Count == 0 && rateType != 0) // Busqueda solo con el Rate Type
-          query = dbContext.MealTickets.Where(x => x.mera == rateType).ToList();
-        else if(rateType != 0)
-          query = query.Where(x => x.mera == rateType).ToList();
-        #endregion
+          #region Fechas
+          if (dateIni != null && dateFinal != null) // Busqueda solo con el rango de fechas
+            lstResult = lstResult.Where(x => x.meD >= dateIni && x.meD <= dateFinal).ToList();
+          #endregion
+        }
+      });
 
-        #region Fechas
-        if (dateIni != null && dateFinal != null) // Busqueda solo con el rango de fechas
-          query = query.Where(x => x.meD >= dateIni && x.meD <= dateFinal).ToList();
-        #endregion
-
-        return query;
-      }
+      return lstResult;
     }
     #endregion
 

@@ -64,7 +64,7 @@
                               ItemTemplate="{StaticResource cbx-Personnel-img}" IsEnabled="True" Height="Auto" Width="300">
                     </ComboBox>
                     <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
                             </Viewbox>

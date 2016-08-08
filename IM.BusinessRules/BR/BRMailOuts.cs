@@ -3,10 +3,7 @@ using IM.Model;
 using IM.Model.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Base;
-using System.Data.Entity.Validation;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace IM.BusinessRules.BR
 {

@@ -68,16 +68,18 @@
                   <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
                 </Style.Resources>
               </Style>
-              <Style TargetType="{x:Type DataGridCell}">
-                <Setter Property="IsEditing" Value="True" />
-              </Style>
+
               <!--#endregion-->
             </DataGrid.Resources>
           <DataGrid.Columns>
-              <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+              <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <DataGridCheckBoxColumn.EditingElementStyle>
                   <Style TargetType="CheckBox">
-                    <EventSetter Event="Click" Handler="Cancel_Click"/>
+                    <!--<EventSetter Event="Click" Handler="Cancel_Click"/>-->
+                    <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
+                    <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
                   </Style>
                 </DataGridCheckBoxColumn.EditingElementStyle>
                 <DataGridCheckBoxColumn.HeaderStyle>
@@ -89,7 +91,11 @@
               <DataGridCheckBoxColumn x:Name="geCancelPVPPromoColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGridCheckBoxColumn.EditingElementStyle>
                   <Style TargetType="CheckBox">
-                    <EventSetter Event="Click" Handler="Cancel_Click"/>
+                    <!--<EventSetter Event="Click" Handler="Cancel_Click"/>-->
+                    <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
+                    <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
                   </Style>
                 </DataGridCheckBoxColumn.EditingElementStyle>
                 <DataGridCheckBoxColumn.HeaderStyle>
@@ -197,7 +203,14 @@
         <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="82,7,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="231,10,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top"/>
         <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="40" Margin="290,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalScrollBarVisibility="Visible"/>
-          <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,52,10,10" IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserResizeRows="False" PreparingCellForEdit="grdExchange_PreparingCellForEdit" CellEditEnding="grdExchange_CellEditEnding">
+          <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                    ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,52,10,10" 
+                    IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" 
+                    CanUserSortColumns="False" SelectionMode="Single" CanUserResizeRows="False" 
+                    PreparingCellForEdit="grdExchange_PreparingCellForEdit" 
+                    CellEditEnding="grdExchange_CellEditEnding" 
+                    RowEditEnding="grdGifts_RowEditEnding"
+                    CommandManager.PreviewExecuted="grdExchange_PreviewExecuted">
           
             <DataGrid.RowHeaderTemplate >
               <DataTemplate>
