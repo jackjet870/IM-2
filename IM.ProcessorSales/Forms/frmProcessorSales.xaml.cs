@@ -286,7 +286,7 @@ namespace IM.ProcessorSales.Forms
             break;
           #endregion
 
-          #region FtmIn&OutHouse
+          #region FTM In & Out House
           case EnumRptRoomSales.FtmInAndOutHouse:
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
@@ -366,6 +366,7 @@ namespace IM.ProcessorSales.Forms
               file = Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break;
           #endregion
+
           #region Stats by F.T.B
           case EnumRptRoomSales.StatsByFtb:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
@@ -391,7 +392,11 @@ namespace IM.ProcessorSales.Forms
             if (list.Any())
               file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
-            #endregion
+          #endregion
+
+          case EnumRptRoomSales.EfficiencyWeekly:
+            
+            break;
         }
         if (file == null)
         {

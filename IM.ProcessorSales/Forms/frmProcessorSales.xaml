@@ -88,7 +88,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
-                <Button Name="btnPrintSr" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" Click="BtnPrintSr_Click">
+                <Button Name="btnPrintSr" Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" Click="BtnPrintSr_Click" Width="117">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left" />
                         <AccessText Text="_Print" />
@@ -114,8 +114,17 @@
             </Grid>
 
             <Grid Grid.Row="3" Grid.Column="2">
-                <Button VerticalAlignment="Center" Content="_Report Queue" Width="100" HorizontalAlignment="Left" Margin="10 0 10 0" Click="btnReportQueue_Click" />
-                <Button VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button VerticalAlignment="Center" Content="_Report Queue" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" Width="117" Height="22" HorizontalAlignment="Left" Click="btnReportQueue_Click" />
+                <Button VerticalAlignment="Center" Content="_Exit" Width="117" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click" Height="22" />
             </Grid>
             <!--#endregion-->
         </Grid>

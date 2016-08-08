@@ -30,7 +30,7 @@ namespace IM.Model.Enums
     StatsByFtbAndLocatiosCategories,
     [Description("Daily Sales")]
     DailySales,
-    [Description("Concretate Daily Sales")]
+    [Description("Concentrate Daily Sales")]
     ConcerntrateDailySales,
     [Description("Stats by Location")]
     StatsByLocation,

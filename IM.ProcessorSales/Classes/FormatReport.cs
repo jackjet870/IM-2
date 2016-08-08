@@ -647,41 +647,33 @@ namespace IM.ProcessorSales.Classes
     {
       return new List<ExcelFormatTable>()
       {
-         new ExcelFormatTable()
-        {
-          Title = " ", PropertyName = "GR",
-          Format = EnumFormatTypeExcel.Boolean,
-          Axis = ePivotFieldAxis.Values,
-          Order = 1,
-          IsGroup = true
-        },
         new ExcelFormatTable() { Title = "ID", PropertyName = "Liner", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 1},
         new ExcelFormatTable() { Title = "Salesman Name", PropertyName = "peN", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 2},
-        new ExcelFormatTable() { Title = "OOP", PropertyName = "OOP", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 3 ,SubTotalFunctions = eSubTotalFunctions.Count },
+        new ExcelFormatTable() { Title = "OOP", PropertyName = "OOP", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 3 , Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Count },
         //OVERFLOW
-        new ExcelFormatTable() { Title = "VOL", PropertyName = "OFSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 4, SuperHeader = "Overflow",SubTotalFunctions = eSubTotalFunctions.Count },
-        new ExcelFormatTable() { Title = "UPS", PropertyName = "OFShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 5, SuperHeader = "Overflow" ,SubTotalFunctions = eSubTotalFunctions.Count},
-        new ExcelFormatTable() { Title = "Sale", PropertyName = "OFSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 6, SuperHeader = "Overflow",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "Exit", PropertyName = "OFExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 7, SuperHeader = "Overflow",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "Total", PropertyName = "OFTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 8, SuperHeader = "Overflow",SubTotalFunctions = eSubTotalFunctions.Sum },
+        new ExcelFormatTable() { Title = "VOL", PropertyName = "OFSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 4, SuperHeader = "Overflow", Function = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = "UPS", PropertyName = "OFShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 5, SuperHeader = "Overflow" ,Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Sale", PropertyName = "OFSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 6, SuperHeader = "Overflow",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Exit", PropertyName = "OFExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 7, SuperHeader = "Overflow",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Total", PropertyName = "OFTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 8, SuperHeader = "Overflow",Function = DataFieldFunctions.Sum },
         //REGEN
-        new ExcelFormatTable() { Title = "VOL ", PropertyName = "RSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 9, SuperHeader = "Regen" ,SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "UPS ", PropertyName = "RShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 10, SuperHeader = "Regen",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "Sale ", PropertyName = "RSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 11, SuperHeader = "Regen",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "Exit ", PropertyName = "RExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 12, SuperHeader = "Regen",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = "Total ", PropertyName = "RTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 13, SuperHeader = "Regen",SubTotalFunctions = eSubTotalFunctions.Sum },
+        new ExcelFormatTable() { Title = "VOL ", PropertyName = "RSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 9, SuperHeader = "Regen" , Function = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = "UPS ", PropertyName = "RShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 10, SuperHeader = "Regen",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Sale ", PropertyName = "RSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 11, SuperHeader = "Regen",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Exit ", PropertyName = "RExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 12, SuperHeader = "Regen",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = "Total ", PropertyName = "RTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 13, SuperHeader = "Regen",Function = DataFieldFunctions.Sum },
          //Normal
-        new ExcelFormatTable() { Title = " VOL", PropertyName = "NSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 14, SuperHeader = "Normal",SubTotalFunctions = eSubTotalFunctions.Sum },
-        new ExcelFormatTable() { Title = " UPS", PropertyName = "NShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 15, SuperHeader = "Normal",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = " Sale", PropertyName = "NSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 16, SuperHeader = "Normal",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = " Exit", PropertyName = "NExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 17, SuperHeader = "Normal",SubTotalFunctions = eSubTotalFunctions.Sum},
-        new ExcelFormatTable() { Title = " Total", PropertyName = "NTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 18, SuperHeader = "Normal",SubTotalFunctions = eSubTotalFunctions.Sum },
+        new ExcelFormatTable() { Title = " VOL", PropertyName = "NSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 14, SuperHeader = "Normal", Function = DataFieldFunctions.Sum  },
+        new ExcelFormatTable() { Title = " UPS", PropertyName = "NShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 15, SuperHeader = "Normal",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = " Sale", PropertyName = "NSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 16, SuperHeader = "Normal",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = " Exit", PropertyName = "NExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 17, SuperHeader = "Normal",Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable() { Title = " Total", PropertyName = "NTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 18, SuperHeader = "Normal",Function = DataFieldFunctions.Sum },
         //Total
-        new ExcelFormatTable() { Title = " VOL ", PropertyName = "TSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 19, SuperHeader = "Total",SubTotalFunctions = eSubTotalFunctions.Sum  },
-        new ExcelFormatTable() { Title = " UPS ", PropertyName = "TShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 20, SuperHeader = "Total",SubTotalFunctions = eSubTotalFunctions.Sum },
-        new ExcelFormatTable() { Title = " Sale ", PropertyName = "TSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 21, SuperHeader = "Total" ,SubTotalFunctions = eSubTotalFunctions.Sum },
-        new ExcelFormatTable() { Title = " Exit ", PropertyName = "TExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 22, SuperHeader = "Total" ,SubTotalFunctions = eSubTotalFunctions.Sum },
-        new ExcelFormatTable() { Title = " Total ", PropertyName = "TTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 23, SuperHeader = "Total"  ,SubTotalFunctions = eSubTotalFunctions.Sum },
+        new ExcelFormatTable() { Title = " VOL ", PropertyName = "TSalesAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 19, SuperHeader = "Total", Function = DataFieldFunctions.Sum  },
+        new ExcelFormatTable() { Title = " UPS ", PropertyName = "TShows", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 20, SuperHeader = "Total",Function = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = " Sale ", PropertyName = "TSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 21, SuperHeader = "Total" ,Function = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = " Exit ", PropertyName = "TExit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 22, SuperHeader = "Total" ,Function = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = " Total ", PropertyName = "TTotal", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 23, SuperHeader = "Total", Function = DataFieldFunctions.Sum },
 
         new ExcelFormatTable
         {
@@ -713,7 +705,6 @@ namespace IM.ProcessorSales.Classes
           Format = EnumFormatTypeExcel.Percent,
           IsCalculated = true,
           Formula = "IF([TShows]=0,0,[TTotal]/[TShows])"
-         // Formula = "IF(' UPS '=0,0,' Total '/ ' UPS ')"
         },
 
         new ExcelFormatTable
@@ -725,7 +716,6 @@ namespace IM.ProcessorSales.Classes
           Format = EnumFormatTypeExcel.DecimalNumber,
           IsCalculated = true,
           Formula = "IF([TTotal]=0,0,[TSalesAmount]/[TTotal])"
-          //Formula = "IF(' Sale '=0,0,' VOL '/' Sale ')"
         }
       };
     }
@@ -912,6 +902,13 @@ namespace IM.ProcessorSales.Classes
     }
     #endregion RptStatisticsByExitCloserGroupedByTeams
 
+    #region RptSelfGenAndSelfGenTeam
+    /// <summary>
+    /// Formato para el reporte SelfGen & SelfGenTeam
+    /// </summary>
+    /// <history>
+    ///   [ecanul] 28/07/2016 Created
+    /// </history>
     public static List<ExcelFormatTable> RptSelfGenAndSelfGenTeam()
     {
       return new List<ExcelFormatTable>()
@@ -935,7 +932,7 @@ namespace IM.ProcessorSales.Classes
         new ExcelFormatTable() { Title = " VOL ", PropertyName = "TVol", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 13, SuperHeader = "Total",SubTotalFunctions = eSubTotalFunctions.Sum  },
         new ExcelFormatTable() { Title = " UPS ", PropertyName = "TUPS", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 14, SuperHeader = "Total",SubTotalFunctions = eSubTotalFunctions.Sum },
         new ExcelFormatTable() { Title = " Sales ", PropertyName = "TSales", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 15, SuperHeader = "Total" ,SubTotalFunctions = eSubTotalFunctions.Sum },
-        
+
         new ExcelFormatTable()
         {
           Title = "SelfGenType", PropertyName = "SelfGenType",
@@ -977,7 +974,8 @@ namespace IM.ProcessorSales.Classes
           Formula = "IF([TSales]=0,0,[TVol]/[TSales])"
         }
       };
-    }
+    } 
+    #endregion
 
     #region RptStatisticsByFTB
     /// <summary>

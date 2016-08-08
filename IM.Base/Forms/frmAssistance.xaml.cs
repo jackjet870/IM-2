@@ -204,7 +204,10 @@ namespace IM.Base.Forms
             _listAssistData.Add(assistance);
           });
           _isNew = true;
+          btnEdit.IsEnabled = true;
         }
+        else
+          btnEdit.IsEnabled = false;
         assistanceDataDataGrid.ItemsSource = _listAssistData;
       }
       StaEnd();

@@ -47,6 +47,9 @@ namespace IM.Base.Classes
     public List<LocationByUser> Locations => _locations;
     private List<DisputeStatus> _disputeStatus;
     public List<DisputeStatus> DisputeStatus => _disputeStatus;
+    private DateTime? _closeDate;
+    public DateTime? CloseDate => _closeDate;
+
     #endregion
 
     #region Lectura & Escritura
@@ -118,6 +121,7 @@ namespace IM.Base.Classes
       LoadLocations(user);
       LoadDisputeStatus();
       LoadGifts(user);
+      LoadCloseDate();
       #endregion
 
       //Si se va a Generar una Nueva Invitacion
@@ -129,16 +133,27 @@ namespace IM.Base.Classes
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
         SetField(ref _additionalGuestList, new ObservableCollection<Guest>(), nameof(AdditionalGuestList));
         SetField(ref _guestObj, new Guest(), nameof(GuestObj));
+        DefaultValueForGuest(user);
+        
       }
       //Si se va a modificar una Invitacion
       else
       {
-        LoadGuest(guId);
+        LoadGuest(user, guId);
         LoadInvitationGift(guId);
         LoadBookingDeposit(guId);
         LoadGuestCreditCard(guId);
         LoadAdditionalGuest(guId);
       }
+    }
+
+    /// <summary>
+    /// Si ingresan valores default a los campos del Guest
+    /// </summary>
+    /// <param name="user"></param>
+    private void DefaultValueForGuest(UserData user)
+    {
+      _guestObj.guloInvit = user.LeadSource.lsID;
     }
 
     #endregion
@@ -232,6 +247,7 @@ namespace IM.Base.Classes
       var result = await BRCreditCardTypes.GetCreditCardTypes();
       SetField(ref _creditCardTypes, result, nameof(CreditCardTypes));
     }
+   
     #endregion
 
     #region Gifts
@@ -266,12 +282,20 @@ namespace IM.Base.Classes
     }
     #endregion
 
+    #region LoadCloseDate
+    private async void LoadCloseDate()
+    {
+      var result = await BRConfiguration.GetCloseDate();
+      SetField(ref _closeDate, result, nameof(CloseDate));
+    }
+    #endregion
+
     #endregion
 
     #region Invitation Info
 
     #region Load Guest
-    private async void LoadGuest(int guID)
+    private async void LoadGuest(UserData user ,int guID)
     {
       var result =  await BRGuests.GetGuest(guID,true);
       SetField(ref _guestObj, result, nameof(GuestObj));

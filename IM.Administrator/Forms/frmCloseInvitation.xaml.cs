@@ -110,13 +110,16 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     ///   [vku] 16/Jun/2016 Created
+    ///   [erosado] 05/08/2016  Modified. Se agregó async.
     /// </history>
-    protected void GetCloseDate()
+    protected async void GetCloseDate()
     {
       try
       {
-       lastClosedDate = (DateTime) BRConfiguration.GetCloseDate();
-       dtpkLastClose.SelectedDate = lastClosedDate;
+        var result = await BRConfiguration.GetCloseDate();
+        lastClosedDate = (DateTime)result;
+
+        dtpkLastClose.SelectedDate = lastClosedDate;
       }
       catch (Exception ex)
       {
