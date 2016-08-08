@@ -142,6 +142,7 @@
     <Compile Include="BR\BRProductsLegends.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRReasonCancellationFolios.cs" />
+    <Compile Include="BR\BRRefundTypeFolios.cs" />
     <Compile Include="BR\BRRefundTypes.cs" />
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRReimpresionMotives.cs" />

@@ -298,10 +298,13 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Abre el formulario frmSearchGuest y agrega los guespedes buscados al grid
     /// </summary>
-    /// <history>[ECANUL] 01-04-2016 Created</history>
+    /// <history>
+    /// [ECANUL] 01-04-2016 Created
+    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumModule al frmSearchGuest
+    /// </history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(App.User,EnumProgram.Inhouse);
+      frmSearchGuest frmSGuest = new frmSearchGuest(App.User,EnumModule.InHouse);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
       frmSGuest.lstGuestAdd = new List<Guest>();

@@ -560,7 +560,7 @@ namespace IM.BusinessRules.BR
     /// <param name="guid"></param>
     /// <param name="from"></param>
     /// <param name="to"></param>
-    /// <param name="program"></param>
+    /// <param name="program"> Enumerado que indica el program de origen </param>
     /// <returns>Listado de Guest</returns>
     /// <history>
     /// [ECANUL] 01-04-2016 Created

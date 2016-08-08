@@ -59,14 +59,14 @@ namespace IM.Host.Forms
 
       ExchangeRate _exchangeRate = new ExchangeRate {
                                                     excu = _exchangeRateRow.excu,
-                                                    exD = frmHost._dtpServerDate.Date,
+                                                    exD = frmHost.dtpServerDate.Date,
                                                     exExchRate = Convert.ToDecimal(txtRate.Text)
                                                     };
 
       BRExchangeRate.SaveExchangeRate(false, _exchangeRate);
 
       //Guadarmos el Log del cambio.
-      BRExchangeRatesLogs.SaveExchangeRateLog(_exchangeRateRow.excu, frmHost._dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+      BRExchangeRatesLogs.SaveExchangeRateLog(_exchangeRateRow.excu, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
 
       Close();
     }

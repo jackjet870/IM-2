@@ -188,7 +188,8 @@ namespace IM.Base.Classes
             if (program == EnumToListHelper.GetEnumDescription(EnumProgram.Outhouse) && guestStatusType != null)
             {
               //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour 
-              _passValidate = Gifts.ValidateMaxQuantityGiftTour(dtg, guestStatusType, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
+              // TODO:  EDDER-> Cambiar el tipo de parametro guestStatusType por GuestStatusValidateData
+              //_passValidate = Gifts.ValidateMaxQuantityGiftTour(dtg, guestStatusType, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
 
             }
 

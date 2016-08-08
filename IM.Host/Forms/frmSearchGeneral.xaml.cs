@@ -5,18 +5,11 @@ using IM.Model;
 using IM.Model.Enums;
 using PalaceResorts.Common.PalaceTools;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IM.Host.Forms
 {
@@ -32,7 +25,7 @@ namespace IM.Host.Forms
     #region Variables
 
     CollectionViewSource _dsSalesRoom;
-    CollectionViewSource _dsLeadSource; 
+    CollectionViewSource _dsLeadSource;
 
     #endregion
 
@@ -42,8 +35,8 @@ namespace IM.Host.Forms
       InitializeComponent();
 
       // Fechas
-      dtpStart.Value = frmHost._dtpServerDate.AddDays(-15);
-      dtpEnd.Value = frmHost._dtpServerDate;
+      dtpStart.Value = frmHost.dtpServerDate.AddDays(-15);
+      dtpEnd.Value = frmHost.dtpServerDate;
     }
     #endregion
 
@@ -104,8 +97,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Permite buscar huespedes
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -139,13 +130,13 @@ namespace IM.Host.Forms
 
       #region Fechas
       // validamos la fecha inicial
-      if (dtpStart.Value.Value == null)
+      if (dtpStart.Value == null)
       {
         UIHelper.ShowMessage("Specify the Start Date.", MessageBoxImage.Information, "Self Gen");
         return false;
       }
       // validamos la fecha final
-      else if (dtpEnd.Value.Value == null)
+      else if (dtpEnd.Value == null)
       {
         UIHelper.ShowMessage("Specify the End Date.", MessageBoxImage.Information, "Self Gen");
         return false;
@@ -166,8 +157,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Funcion que se encarga de validar el total de datos obtenidos en el datagrid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -302,8 +291,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Despliega el formulario de recibos de regalos
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -314,12 +301,13 @@ namespace IM.Host.Forms
       {
         bool _edit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
 
-        frmGiftsReceipts _frmGiftsReceipt = new frmGiftsReceipts(GuestID);
-        _frmGiftsReceipt.ShowInTaskbar = false;
-        _frmGiftsReceipt.modeOpenBy = EnumOpenBy.Checkbox;
-        _frmGiftsReceipt.modeOpen = (_edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview;
-        _frmGiftsReceipt.Owner = this;
-        _frmGiftsReceipt.ShowDialog();
+        frmGiftsReceipts giftsReceipt = new frmGiftsReceipts(GuestID)
+        {
+          Owner = this,
+          modeOpenBy = EnumOpenBy.Checkbox,
+          modeOpen = (_edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview
+        };
+        giftsReceipt.ShowDialog();
       }
     }
     #endregion
@@ -328,8 +316,9 @@ namespace IM.Host.Forms
     /// <summary>
     /// Despliega el formulario de show
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <hsitory>
+    /// [vipacheco] 06/Junio/2016 Created
+    /// </hsitory>
     private void btnShow_Click(object sender, RoutedEventArgs e)
     {
       int GuestID = 0;
@@ -348,71 +337,17 @@ namespace IM.Host.Forms
     /// <summary>
     /// Despliega el formulario de tickets de comida
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <hsitory>
     /// [vipacheco] 06/Junio/2016 Created
     /// </hsitory>
-    private async void btnMealTicket_Click(object sender, RoutedEventArgs e)
+    private void btnMealTicket_Click(object sender, RoutedEventArgs e)
     {
       int GuestID = 0;
       if (ValidatePermissions(EnumPermission.MealTicket, ref GuestID))
       {
-        frmMealTickets _frmMealTicket = new frmMealTickets(GuestID);
-        _frmMealTicket.ShowInTaskbar = false;
-        _frmMealTicket.Owner = this;
-
-        Guest guestHost = await BRGuests.GetGuest(GuestID);
-
-        List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(guestHost.guID);
-        SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
-
-        if (guestHost.guMealTicket)
-        {
-          // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
-          _valuePreview.ForEach(x =>
-          {
-            if (IsClosed_MealTicket(x.meD, _closeSalesRoom.srMealTicketsCloseD))
-            {
-              _frmMealTicket.modeOpen = EnumModeOpen.Preview;
-              return;
-            }
-            else
-              _frmMealTicket.modeOpen = EnumModeOpen.PreviewEdit;
-          });
-        }
-        else
-          _frmMealTicket.modeOpen = EnumModeOpen.PreviewEdit;
-
-        _frmMealTicket.ShowDialog();
-
+        frmMealTickets mealticket = new frmMealTickets(GuestID) { Owner = this };
+        mealticket.ShowDialog();
       }
-    }
-    #endregion
-
-    #region IsClosed_MealTicket
-    /// <summary>
-    /// Evalua si el Mealticket no se ha cerrado!
-    /// </summary>
-    /// <param name="pdtmDate"></param>
-    /// <param name="pdtmClose"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 23/03/2016 Created
-    /// </history>
-    private bool IsClosed_MealTicket(DateTime pdtmDate, DateTime pdtmClose)
-    {
-      bool blnClosed = false;
-      DateTime _pdtmDate;
-
-      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
-      {
-        if (_pdtmDate <= pdtmClose)
-        {
-          blnClosed = true;
-        }
-      }
-      return blnClosed;
     }
     #endregion
 
@@ -420,8 +355,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Despliega el formulario de ventas
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -432,7 +365,7 @@ namespace IM.Host.Forms
       {
 
       }
-    } 
+    }
     #endregion
 
   }

@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Obtenemos los resultados del Stored
-           List<GiftsReceiptDetailShort> lstShort = dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
+          List<GiftsReceiptDetailShort> lstShort = dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
 
           // Contruimos la entidad pura
           lstShort.ForEach(x => lstResult.Add(dbContext.GiftsReceiptsDetails.Where(w => w.gegi == x.gegi && w.gegr == x.gegr).Single()));
@@ -84,19 +84,20 @@ namespace IM.BusinessRules.BR
     /// <param name="ReceiptID"></param>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
+    /// [vipacheco] 25/Julio/2016 Modified --> Se agrego asyncronia
     /// </history>
-    public static List<GiftsReceiptDetailPromotionsSistur> GetGiftsReceiptDetailPromotionsPVP(int ReceiptID)
+    public async static Task<List<GiftsReceiptDetailPromotionsSistur>> GetGiftsReceiptDetailPromotionsPVP(int ReceiptID)
     {
-      //List<GiftsReceiptDetailPromotionsSistur> Result = null;
-      //await Task.Run(() =>
-      //{
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<GiftsReceiptDetailPromotionsSistur> lstResult = new List<GiftsReceiptDetailPromotionsSistur>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGiftsReceiptDetailPromotionsPVP(ReceiptID).ToList();
-      }
-      //});
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          lstResult = dbContext.USP_OR_GetGiftsReceiptDetailPromotionsPVP(ReceiptID).ToList();
+        }
+      });
 
-      //return Result;
+      return lstResult;
     }
     #endregion
 
@@ -116,6 +117,27 @@ namespace IM.BusinessRules.BR
       {
         dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVP(Receipt, Gift, Promotion);
       }
+    }
+    #endregion
+
+    #region UpdateGiftsPromotionSisturCancel
+    /// <summary>
+    /// Indica que a un regalo se le cancelo su promocion en Sistur
+    /// </summary>
+    /// <param name="Receipt"></param>
+    /// <param name="Gift"></param>
+    /// <history>
+    /// [vipacheco] 25/Julio/2016 Created
+    /// </history>
+    public async static Task UpdateGiftsPromotionSisturCancel(int Receipt, string Gift)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel(Receipt, Gift);
+        }
+      });
     }
     #endregion
 
@@ -172,7 +194,7 @@ namespace IM.BusinessRules.BR
       {
         dbContext.USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera(Receipt, Gift, Transaction);
       }
-    } 
+    }
     #endregion
 
     #region GetGiftsReceiptDetailRoomChargesOpera
@@ -220,7 +242,7 @@ namespace IM.BusinessRules.BR
 
         }
       });
-    } 
+    }
     #endregion
 
   }

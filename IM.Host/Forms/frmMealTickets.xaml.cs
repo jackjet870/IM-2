@@ -10,6 +10,8 @@ using IM.Model.Helpers;
 using System.Linq;
 using IM.Base.Helpers;
 using System.Collections.Generic;
+using IM.Host.Classes;
+using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -29,11 +31,8 @@ namespace IM.Host.Forms
     public bool _reanOnly = true;
     public EnumModeOpen modeOpen;
     public GuestPremanifestHost _guestPremanifestHost = new GuestPremanifestHost();
-    CollectionViewSource _dsRateType;
-    CollectionViewSource _dsMealTicket;
-    CollectionViewSource _dsPersonnel;
-    CollectionViewSource _dsAgency;
-    CollectionViewSource _dsMealTicketType;
+    List<MealTicket> lstMealTicket;
+    CollectionViewSource dsMealTicket;
     #endregion
 
     #region Contructor
@@ -41,11 +40,40 @@ namespace IM.Host.Forms
     {
       _pguId = pguID;
 
+      if (pguID != 0)
+      {
+        lstMealTicket = BRMealTickets.GetMealTickets(pguID);
+        SalesRoomCloseDates closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+
+        // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
+        lstMealTicket.ForEach(x =>
+        {
+          if (Common.IsClosed(x.meD, closeSalesRoom.srMealTicketsCloseD))
+          {
+            modeOpen = EnumModeOpen.Preview;
+            return;
+          }
+        });
+      }
+
+      if (modeOpen == 0)
+      {
+        // Verificamos los permisos del usuario
+        if (App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard))
+        {
+          modeOpen = EnumModeOpen.PreviewEdit;
+        }
+        else
+        {
+          modeOpen = EnumModeOpen.Preview;
+        }
+      }
+
       // Se verifica si tiene permisos de edición!
       InitializeComponent();
 
-      dtpFrom.Value = frmHost._dtpServerDate;
-      dtpTo.Value = frmHost._dtpServerDate;
+      dtpFrom.Value = frmHost.dtpServerDate;
+      dtpTo.Value = frmHost.dtpServerDate;
     }
     #endregion
 
@@ -59,52 +87,46 @@ namespace IM.Host.Forms
     /// [erosado] 19/05/2016  Modified. Se agregó Asincronía
     /// [edgrodriguez] 21/05/2016 Modified. El método GetRateTypes se volvió asincrónico.
     /// </history>
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _dsRateType = ((CollectionViewSource)(this.FindResource("dsRateType")));
-      _dsMealTicket = ((CollectionViewSource)(this.FindResource("dsMealTicket")));
-      _dsPersonnel = ((CollectionViewSource)(this.FindResource("dsPersonnel")));
-      _dsAgency = ((CollectionViewSource)(this.FindResource("dsAgency")));
-      _dsMealTicketType = ((CollectionViewSource)(this.FindResource("dsMealTicketType")));
+      CollectionViewSource rateType = ((CollectionViewSource)(this.FindResource("dsRateType")));
+      dsMealTicket = ((CollectionViewSource)(this.FindResource("dsMealTicket")));
+      CollectionViewSource personnel = ((CollectionViewSource)(this.FindResource("dsPersonnel")));
+      CollectionViewSource agency = ((CollectionViewSource)(this.FindResource("dsAgency")));
+      CollectionViewSource mealTicketType = ((CollectionViewSource)(this.FindResource("dsMealTicketType")));
 
       //  Obtenemos los tipos de tarifa
-      _dsRateType.Source = await BRRateTypes.GetRateTypes(new RateType { raID=1}, 1, true, true);
+      rateType.Source = frmHost._lstRateType;
 
       // Obtenemos los colaboradores
-      _dsPersonnel.Source = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+      personnel.Source = frmHost._lstPersonnel;
 
       // Obtenemos las agencias
-      _dsAgency.Source = await BRAgencies.GetAgencies(1);
+      agency.Source = frmHost._lstAgencies;
 
       // Obtenemos los tipos de cupones de comida.
-      _dsMealTicketType.Source = await BRMealTicketTypes.GetMealTicketType();
+      mealTicketType.Source = frmHost._lstMealTicketType;
 
       // Verificamos si es usuario estandar o de solo lectura!
       switch (modeOpen)
       {
         case EnumModeOpen.Add:
         case EnumModeOpen.Edit:
-          ControlsVisibility(Visibility.Visible, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
+          ControlsVisibility(true, Visibility.Visible, false, Visibility.Hidden);
           break;
         case EnumModeOpen.Search:
-          ControlsVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
+          ControlsVisibility(false, Visibility.Visible, false, Visibility.Hidden);
           break;
         case EnumModeOpen.Preview:
           // Se muestran y ocultan los controles necesarios
-          ControlsVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
-
-          // Se busca la informacion con guestID proporcionado
-          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
-
+          ControlsVisibility(false, Visibility.Hidden, true, Visibility.Hidden);
           AdjustsControlsAndColumns();
+          dsMealTicket.Source = lstMealTicket;
           break;
         case EnumModeOpen.PreviewEdit:
-          ControlsVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
-
-          // Se busca la informacion con guestID proporcionado
-          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
-
+          ControlsVisibility(true, Visibility.Hidden, true, Visibility.Hidden);
           AdjustsControlsAndColumns();
+          dsMealTicket.Source = lstMealTicket;
           break;
       }
     }
@@ -134,13 +156,15 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 18/03/2016 Created
     /// </history>
-    private void btnSearch_Click(object sender, RoutedEventArgs e)
+    private async void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       int _mealTicket = 0;
       string _folio = "";
       int _rateType = 0;
       DateTime? _dtpFrom = null;
       DateTime? _dtpTo = null;
+
+      _busyIndicator.IsBusy = true;
 
       if (txtMealTicket.Text != "") // Obtenemos el ID de Meal Ticket
       {
@@ -165,7 +189,9 @@ namespace IM.Host.Forms
       }
 
       // Realizamos la busqueda con los parametros ingresados!
-      _dsMealTicket.Source = BRMealTickets.GetMealTickets(_mealTicket, _folio, _rateType, _dtpFrom, _dtpTo);
+      dsMealTicket.Source = await BRMealTickets.GetMealTickets(_mealTicket, _folio, _rateType, _dtpFrom, _dtpTo);
+
+      _busyIndicator.IsBusy = false;
     }
     #endregion
 
@@ -190,7 +216,7 @@ namespace IM.Host.Forms
 
       if (modeOpen == EnumModeOpen.PreviewEdit)
       {
-        _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+        dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
       }
       else
         btnSearch_Click(null, null);
@@ -229,7 +255,7 @@ namespace IM.Host.Forms
 
         if (modeOpen == EnumModeOpen.PreviewEdit)
         {
-          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+          dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
         }
 
       }
@@ -272,10 +298,10 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 22/03/2016 Created
     /// </history>
-    private void ControlsVisibility(Visibility controlAdd, Visibility selectionCriteria, Visibility controlPrinted, Visibility checkTicket)
+    private void ControlsVisibility(bool controlAdd, Visibility selectionCriteria, bool controlPrinted, Visibility checkTicket)
     {
-      btnAdd.Visibility = controlAdd;
-      btnPrint.Visibility = controlPrinted;
+      btnAdd.IsEnabled = controlAdd;
+      btnPrint.IsEnabled = controlPrinted;
       grbSelectionCriteria.Visibility = selectionCriteria;
       chkTicket.Visibility = checkTicket;
     }
@@ -296,7 +322,7 @@ namespace IM.Host.Forms
 
       if (_rateType != null) // Se verifica que el SelectedItem no sea null
       {
-        _dsMealTicket.Source = null;
+        dsMealTicket.Source = null;
 
         if (_rateType.raID != 4 && modeOpen != EnumModeOpen.Preview) // Si es diferente de tipo External!
         {
@@ -348,6 +374,7 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    #region btnPrint_Click
     /// <summary>
     /// Imprime el ticket de comida.
     /// </summary>
@@ -357,7 +384,7 @@ namespace IM.Host.Forms
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       List<string> notPrinted = new List<string>();
-      (_dsMealTicket.Source as List<MealTicket>)
+      (dsMealTicket.Source as List<MealTicket>)
         .Where(c => !c.mePrinted)
         .ToList().ForEach(async c =>
         {
@@ -407,5 +434,6 @@ namespace IM.Host.Forms
         });
       if (notPrinted.Any()) { UIHelper.ShowMessage($"Could not print these meal tickets.\n{string.Join("\n", notPrinted)}"); }
     }
+    #endregion
   }
 }

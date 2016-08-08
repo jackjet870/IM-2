@@ -38,7 +38,8 @@ namespace IM.Host.Forms
 
     private EnumExternalProduct _EnumExternalProduct;
     private int _ReceiptID, _GuestID;
-    public bool _ValidateMaxAuthGifts, useCxCCost, _Exchange, _Cancelled;
+    private GiftsReceipt _giftsDataContext;
+    public bool _ValidateMaxAuthGifts, useCxCCost, _Exchange, _Cancelled, _isExchangeReceipt, _applicationAdj;
     public MessageBoxResult _Result = MessageBoxResult.Cancel; // Variable encargado de devolver la respuesta del usuario.
     public int ReceiptExchangeID = 0;
     public frmGiftsReceipts _FrmGiftsReceipt;
@@ -59,23 +60,27 @@ namespace IM.Host.Forms
 
     ObservableCollection<GiftsReceiptDetail> _obsGifts;
     ObservableCollection<GiftsReceiptDetail> _obsGiftsComplet;
+    ObservableCollection<GiftsReceiptDetailCancel> _obsGiftsCancel;
+
 
     #endregion
 
     #region Contructor
     public frmCancelExternalProducts(EnumExternalProduct enumExternalProducts, int ReceiptID, int GuestID,
                                  string NameGuest, decimal MaxAuthGifts, decimal TotalGifts, decimal CurAdjustment,
-                                 bool ValidateMaxAuthGifts, bool pUseCxCCost, bool Exchange, frmGiftsReceipts FrmGiftsReceipt)
+                                 bool ValidateMaxAuthGifts, bool pUseCxCCost, bool Exchange, frmGiftsReceipts FrmGiftsReceipt, GiftsReceipt pGiftsDataContext, bool pIsExchangeReceipt)
     {
       _EnumExternalProduct = enumExternalProducts;
       _ReceiptID = ReceiptID;
       _GuestID = GuestID;
       _ValidateMaxAuthGifts = ValidateMaxAuthGifts;
       useCxCCost = pUseCxCCost;
-      _Exchange = Exchange;
+      _Exchange = Exchange; 
+      _isExchangeReceipt = pIsExchangeReceipt;
       _Cancelled = false;
       _FrmGiftsReceipt = FrmGiftsReceipt;
       _FrmCancelExternalProducts = this;
+      _giftsDataContext = pGiftsDataContext;
 
       InitializeComponent();
 
@@ -155,7 +160,10 @@ namespace IM.Host.Forms
       // Totales del cargo
       txtgrcxcAdj.Text = string.Format("{0:C2}", CurAdjustment);
 
-      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, _Exchange, ref txtgrcxcGifts,
+      // Activamos la bandera para saber si se ajustaran costos CxC
+      _applicationAdj = CurAdjustment > 0 ? true : false;
+
+      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
                                               ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
                                               ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.lblgrMaxAuthGifts);
 
@@ -199,7 +207,9 @@ namespace IM.Host.Forms
       _dsGifts.Source = frmHost._lstGifts;
 
       // Obtenemos los regalos a cancelar.
-      _dsGiftsReceiptDetailCancel.Source = BRGiftsReceiptDetail.GetGiftsReceiptDetailCancel(_ReceiptID, _EnumExternalProduct);
+      List<GiftsReceiptDetailCancel> lstResultCancel = BRGiftsReceiptDetail.GetGiftsReceiptDetailCancel(_ReceiptID, _EnumExternalProduct);
+      _obsGiftsCancel = new ObservableCollection<GiftsReceiptDetailCancel>(lstResultCancel);
+      _dsGiftsReceiptDetailCancel.Source = _obsGiftsCancel;
 
       // si se debe generar un recibo exchange
       if (_Exchange)
@@ -249,10 +259,10 @@ namespace IM.Host.Forms
     /// </history>
     private async Task Save()
     {
-      List<string> aGiftsCancelled = null;
+      List<string> aGiftsCancelled = await CancelGifts();
 
       // si se cancelo al menos un regalo
-      if (CancelGifts(ref aGiftsCancelled))
+      if (aGiftsCancelled.Count > 0)
       {
         _Cancelled = true;
 
@@ -269,9 +279,20 @@ namespace IM.Host.Forms
             GiftsExchange.Save(ReceiptExchangeID, grdExchange);
 
             // Guardamos las promociones en Sistur
-            SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
-
+            await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
           }
+        }
+
+        // guardamos los regalos cancelados
+        await GiftsCancel.Save(_ReceiptID, ReceiptExchangeID, aGiftsCancelled, useCxCCost, _giftsDataContext, _obsGifts, _obsGiftsCancel, _Exchange, _CancelField);
+
+        // si se maneja el monto maximo de regalos
+        if (_ValidateMaxAuthGifts)
+        {
+          // actualizamos el cargo del recibo de regalos
+          decimal Charge = Convert.ToDecimal(txtgrcxcGifts.Text.TrimStart('$'));
+          decimal Adjustment = Convert.ToDecimal(txtgrcxcAdj.Text.TrimStart('$'));
+          await BRGiftsReceipts.UpdateCharge(_GuestID, Charge, Adjustment);
         }
       }
     }
@@ -293,7 +314,7 @@ namespace IM.Host.Forms
       GiftsReceipt _GiftsReceipt = new GiftsReceipt()
       {
         grNum = txtgrNum.Text,
-        grD = frmHost._dtpServerDate,
+        grD = frmHost.dtpServerDate,
         grgu = _GRResult.grgu,
         grExchange = true,
         grGuest = _GRResult.grGuest,
@@ -345,11 +366,12 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 26/Mayo/2016 Created
     /// </history>
-    private bool CancelGifts(ref List<string> GiftsCancelled)
+    private async Task<List<string>> CancelGifts()
     {
       bool blnOk = false;
       string strGift = "", GiftsCancellled = "", GiftsNotCancellled = "";
       List<string> aGiftsToCancel = new List<string>();
+      List<string> GiftsCancelled = new List<string>();
 
       // recorremos los regalos
       foreach (var item in grdCancel.Items)
@@ -377,21 +399,17 @@ namespace IM.Host.Forms
             }
             else
             {
-              if (SisturHelper.CancelPromotionSistur(strGift, (string)type.GetProperty("gePVPPromotion").GetValue(item, null), cboProgram.SelectedValue.ToString(),
-                                                               cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, _PromotionsSystem, ref GiftsCancelled) && !blnOk)
+              if (await SisturHelper.CancelPromotionSistur(strGift, (string)type.GetProperty("gePVPPromotion").GetValue(item, null), cboProgram.SelectedValue.ToString(),
+                                                               cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, _PromotionsSystem, GiftsCancelled) && !blnOk)
               {
                 // Cancelamos el regalo en origos
-                BRGiftsReceipts.CancelGiftPromotionSistur(_ReceiptID, strGift);
+                await BRGiftsReceipts.CancelGiftPromotionSistur(_ReceiptID, strGift);
                 blnOk = true;
               }
             }
           }
         }
       }
-      // si es el monedero electronico
-      //****************************************************>
-
-      //****************************************************>
 
       // Si no hubo error
       if (blnOk)
@@ -442,7 +460,7 @@ namespace IM.Host.Forms
       {
         UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
       }
-      return blnOk;
+      return GiftsCancelled;
     }
     #endregion
 
@@ -580,11 +598,11 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 16/Mayo/2016 Created
     /// </history>
-    private void CalculateTotalGifts()
+    public void CalculateTotalGifts()
     {
       decimal TotalGiftsInvitation = string.IsNullOrEmpty(txtTotalGiftsInvitation.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsInvitation.Text.Trim(new char[] { '$' }));
       decimal TotalGiftsCancel = string.IsNullOrEmpty(txtTotalGiftsCancel.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsCancel.Text.Trim(new char[] { '$' }));
-      decimal TotalGiftsExchange = string.IsNullOrEmpty(txtTotalGiftsExchange.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsExchange.Text.Trim(new char[] { '$' }));
+      decimal TotalGiftsExchange = string.IsNullOrEmpty(txtTotalGiftsExchange.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsExchange.Text.Trim(new char[] { '$', '(', ')' }));
 
       txtTotalCost.Text = string.Format("{0:C2}", (TotalGiftsInvitation - TotalGiftsCancel) + TotalGiftsExchange);
     }
@@ -669,6 +687,28 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    #region grdExchange_PreviewExecuted
+    /// <summary>
+    /// Recalcula los costos cuando se elimina un item del grid Exchange
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 18/Julio/2016 Created
+    /// </history>
+    private void grdExchange_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+      if (e.Command == DataGrid.DeleteCommand)
+      {
+        GiftsReceiptDetail _deleteGift = grdExchange.SelectedItem as GiftsReceiptDetail;
+        decimal TotalGiftsExchange = string.IsNullOrEmpty(txtTotalGiftsExchange.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsExchange.Text.Trim(new char[] { '$' }));
+        decimal result = TotalGiftsExchange - _deleteGift.gePriceA;
+        txtTotalGiftsExchange.Text = string.Format("{0:C2}", result > 0 ? result : 0);
+        CalculateTotalGifts();
+      }
+    }
+    #endregion
+
     #region GiftsPacks_Collapsed
     /// <summary>
     /// Colapsa los gifts de regalo del grid
@@ -697,8 +737,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Determina si se puede editar la informacion del grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 25/Junio/2016 Created
     /// </history>
@@ -716,12 +754,10 @@ namespace IM.Host.Forms
     /// <summary>
     /// Evento para validar los cambios de una celda en el grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created 
     /// </history>
-    private void grdExchange_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    private async void grdExchange_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (!bandCancel)
       {
@@ -731,24 +767,30 @@ namespace IM.Host.Forms
         GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
 
         // Validamos la celda
-        bool cancel = false;
-        ReceiptsGifts.ValidateEdit(giftsReceiptDetail, cancel, true, _currentCell);
+        bool HasErrorValidate = await ReceiptsGifts.ValidateEdit(dataGrid, giftsReceiptDetail, true, _currentCell);
 
         // Si se cancela la edicion
-        if (!cancel)
+        if (!HasErrorValidate)
         {
-          TextBox _null = null;
           ChargeTo pChargeTo = frmHost._lstChargeTo.Where(x => x.ctID.ToUpper() == "MARKETING").Single();
           LeadSource pLeadSource = cboLeadSource.SelectedItem as LeadSource;
 
-          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
-                                        pExtraAdultsField: "geExtraAdults", pCostAdultsField: "gePriceA", pCostMinorsField: "gePriceM", pPriceAdultsField: "gePriceAdult",
-                                        pPriceMinorsField: "gePriceMinor", pPriceExtraAdultsField: "gePriceExtraAdult", pLstGifts: frmHost._lstGifts, pRow: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: true,
-                                        pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: ref txtTotalCost, pTxtTotalPrice: ref _null, pTxtTotalToPay: ref _null, pTxtgrCxCGifts: ref txtgrcxcGifts,
-                                        pTxtTotalCxC: ref txtTotalCxC, pTxtgrCxCAdj: ref txtgrcxcAdj, pTxtgrMaxAuthGifts: ref txtMaxAuthGifts, pLblgrMaxAuthGifts: ref lblMaxAuthGiftsCaption);
+          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
+                                        pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: txtTotalGiftsExchange, pTxtgrCxCGifts: txtgrcxcGifts,
+                                        pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrcxcAdj, pTxtgrMaxAuthGifts: txtMaxAuthGifts, pLblgrMaxAuthGifts: lblMaxAuthGiftsCaption);
 
-          dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-          grdGifts_RowEditEnding(sender, null);
+          CalculateTotalGifts();
+          lblMaxAuthGiftsCaption.Visibility = Visibility.Visible;
+          txtMaxAuthGifts.Visibility = Visibility.Visible;
+
+          // Verificamos si se actualiza los costs CxC
+          if (_applicationAdj)
+          {
+            txtgrcxcGifts.Text = txtTotalCost.Text;
+            decimal cxcGifts = string.IsNullOrEmpty(txtgrcxcGifts.Text) ? 0 : Convert.ToDecimal(txtgrcxcGifts.Text.TrimStart('$'));
+            decimal cxcAdj = string.IsNullOrEmpty(txtgrcxcAdj.Text) ? 0 : Convert.ToDecimal(txtgrcxcAdj.Text.TrimStart('$'));
+            txtTotalCxC.Text = string.Format("{0:C2}", cxcAdj + cxcGifts);
+          }
         }
         else
         {
@@ -766,18 +808,28 @@ namespace IM.Host.Forms
     /// <summary>
     /// Evento para finalizar la edicion de un row en el grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created 
     /// </history>
     private void grdGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      var dataGrid = sender as DataGrid;
-      dataGrid.RowEditEnding -= grdGifts_RowEditEnding;
-      dataGrid.CommitEdit();
-      dataGrid.Items.Refresh();
-      dataGrid.RowEditEnding += grdGifts_RowEditEnding;
+      DataGrid dataGrid = sender as DataGrid;
+
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        GiftsReceiptDetail giftsReceipt = dataGrid.SelectedItem as GiftsReceiptDetail;
+
+        // validamos que los campos obligatorio ya se encuentren ingresados.
+        if (giftsReceipt.geQty > 0 && giftsReceipt.gegi != null)
+        {
+          e.Cancel = false;
+        }
+        // Si aun faltan campos obligatorios se cancela el commit de la fila
+        else
+        {
+          e.Cancel = true;
+        }
+      }
     }
     #endregion
 

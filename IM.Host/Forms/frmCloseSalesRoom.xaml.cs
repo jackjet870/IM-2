@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
+using Xceed.Wpf.Toolkit;
+using IM.Base.Helpers;
 
 namespace IM.Host.Forms
 {
@@ -16,7 +18,6 @@ namespace IM.Host.Forms
   public partial class frmCloseSalesRoom : Window
   {
     #region VARIABLES
-    private Window _frmHost = null;
     //private UserData _userData;
     private DateTime _serverDate;
     #endregion
@@ -30,14 +31,12 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 27/02/2106 Created
     /// </history>
-    public frmCloseSalesRoom(Window pHost, DateTime serverDate)
+    public frmCloseSalesRoom(DateTime serverDate)
     {
       //_userData = UserData;
       _serverDate = serverDate;
 
-      InitializeComponent();
-      _frmHost = pHost;
-      validateUserPermissions(App.User);
+      InitializeComponent();      validateUserPermissions(App.User);
     }
 
     #region EVENTOS DE TIPO WINDOW
@@ -46,23 +45,10 @@ namespace IM.Host.Forms
       var _getSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
 
       //Se agrega Binding a los controles correspondientes
-      dtpCloseShowsLast.SelectedDate = _getSalesRoom.srShowsCloseD;
-      dtpCloseMealTicketsLast.SelectedDate = _getSalesRoom.srMealTicketsCloseD;
-      dtpCloseSalesLast.SelectedDate = _getSalesRoom.srSalesCloseD;
-      dtpCloseGiftsReceiptsLast.SelectedDate = _getSalesRoom.srGiftsRcptCloseD;
-    }
-
-    /// <summary>
-    /// Funcion para quitar el efecto de la ventana Host al momento de cerrar!
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 01/03/2016 Created
-    /// </history>
-    private void Window_Closed(object sender, EventArgs e)
-    {
-      _frmHost.Effect = null;
+      dtpCloseShowsLast.Value = _getSalesRoom.srShowsCloseD;
+      dtpCloseMealTicketsLast.Value = _getSalesRoom.srMealTicketsCloseD;
+      dtpCloseSalesLast.Value = _getSalesRoom.srSalesCloseD;
+      dtpCloseGiftsReceiptsLast.Value = _getSalesRoom.srGiftsRcptCloseD;
     }
     #endregion
 
@@ -116,10 +102,10 @@ namespace IM.Host.Forms
     /// </history>
     private void dtpClose_Loaded()
     {
-      dtpCloseShows.SelectedDate = _serverDate.AddDays(-1);
-      dtpCloseGiftsReceipts.SelectedDate = _serverDate.AddDays(-1);
-      dtpCloseSales.SelectedDate = _serverDate.AddDays(-1);
-      dtpCloseMealTicket.SelectedDate = _serverDate.AddDays(-1);
+      dtpCloseShows.Value = _serverDate.AddDays(-1);
+      dtpCloseGiftsReceipts.Value = _serverDate.AddDays(-1);
+      dtpCloseSales.Value = _serverDate.AddDays(-1);
+      dtpCloseMealTicket.Value = _serverDate.AddDays(-1);
     }
 
     #endregion
@@ -134,28 +120,27 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 01/03/2016 Created
     /// </history>
-    private void CloseSalesRoom(EnumEntities _closeType, ref DatePicker _dateClose, DatePicker _dateCloseLast)
+    private void CloseSalesRoom(EnumEntities _closeType, ref DateTimePicker _dateClose, DateTimePicker _dateCloseLast)
     {
       //verificacion de fechas no mayores a la actual
-      if (_dateClose.SelectedDate.Value > _serverDate)
+      if (_dateClose.Value.Value > _serverDate)
       {
-        MessageBox.Show("Closing date con not be greater than today.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Closing date con not be greater than today.", MessageBoxImage.Exclamation);
         return;
       }
       //Se pregunta si en verdad desea realizar el cierre
-      if (MessageBox.Show("Are you sure you want to close all  " + _closeType.ToString() + " until " + _dateClose.Text + "? You wont't be able to modify that " + _closeType.ToString() + " anymore.",
-                          "Warning",
-                          MessageBoxButton.OKCancel, MessageBoxImage.Exclamation) == MessageBoxResult.Cancel)
+      if (UIHelper.ShowMessage("Are you sure you want to close all  " + _closeType.ToString() + " until " + _dateClose.Text + "? You wont't be able to modify that " + _closeType.ToString() + " anymore.",
+                              MessageBoxImage.Question) == MessageBoxResult.Cancel)
         return;
 
       //Realizamos el cierre
-      BRSalesRooms.SetCloseSalesRoom(_closeType, App.User.SalesRoom.srID, _dateClose.SelectedDate);
+      BRSalesRooms.SetCloseSalesRoom(_closeType, App.User.SalesRoom.srID, _dateClose.Value);
 
       //Guardamos la accion en el historico de sala de ventas
       BRSalesRoomsLogs.SaveSalesRoomLog(App.User.SalesRoom.srID, Convert.ToInt16(App.User.SalesRoom.srHoursDif), App.User.User.peID);
 
       //Actualizamos datos de UI
-      updateDate(_closeType, _dateClose.SelectedDate);
+      updateDate(_closeType, _dateClose.Value);
     }
 
     /// <summary>
@@ -171,23 +156,23 @@ namespace IM.Host.Forms
       switch (salesRoomType)
       {
         case EnumEntities.Shows:
-          dtpCloseShows.SelectedDate = _serverDate.AddDays(-1);
-          dtpCloseShowsLast.SelectedDate = dateUpdate;
+          dtpCloseShows.Value = _serverDate.AddDays(-1);
+          dtpCloseShowsLast.Value = dateUpdate;
           break;
         case EnumEntities.MealTickets:
-          dtpCloseMealTicket.SelectedDate = _serverDate.AddDays(-1);
-          dtpCloseMealTicketsLast.SelectedDate = dateUpdate;
+          dtpCloseMealTicket.Value = _serverDate.AddDays(-1);
+          dtpCloseMealTicketsLast.Value = dateUpdate;
           break;
         case EnumEntities.Sales:
-          dtpCloseSales.SelectedDate = _serverDate.AddDays(-1);
-          dtpCloseSalesLast.SelectedDate = dateUpdate;
+          dtpCloseSales.Value = _serverDate.AddDays(-1);
+          dtpCloseSalesLast.Value = dateUpdate;
           break;
         case EnumEntities.GiftsReceipts:
-          dtpCloseGiftsReceipts.SelectedDate = _serverDate.AddDays(-1);
-          dtpCloseGiftsReceiptsLast.SelectedDate = dateUpdate;
+          dtpCloseGiftsReceipts.Value = _serverDate.AddDays(-1);
+          dtpCloseGiftsReceiptsLast.Value = dateUpdate;
           break;
       }
-      MessageBox.Show("Closing process completed.", salesRoomType.ToString() + " Process", MessageBoxButton.OK, MessageBoxImage.Information);
+      UIHelper.ShowMessage("Closing process completed.", MessageBoxImage.Information, salesRoomType.ToString() + " Process");
     }
 
     /// <summary>

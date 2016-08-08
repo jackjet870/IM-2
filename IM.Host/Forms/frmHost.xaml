@@ -164,7 +164,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
           <GroupBox x:Name="grbDate" Header="Date" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Stretch" FontWeight="Bold" Margin="1,0,0,10" Width="212" Foreground="White">
             <Grid VerticalAlignment="Center" HorizontalAlignment="Left">
-              <xctk:DateTimePicker x:Name="dtpDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="30" Format="LongDate" Value="{x:Static sys:DateTime.Today}" FontSize="10" TextAlignment="Justify" PreviewKeyDown="dtpDate_PreviewKeyDown" ValueChanged="dtpDate_ValueChanged"/>
+              <xctk:DateTimePicker x:Name="dtpDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="30" Format="LongDate" Value="{x:Static sys:DateTime.Today}" FontSize="10" TextAlignment="Justify" PreviewKeyDown="dtpDate_PreviewKeyDown" ValueChanged="dtpDate_ValueChanged" Style="{StaticResource dtp-DateRange-TK}" Margin="10,0"/>
             </Grid>
           </GroupBox>
           <Border Margin="10,3,3,3" BorderBrush="White" BorderThickness="1" CornerRadius="2">
@@ -260,7 +260,7 @@
                 </Style>
               </DataGridTextColumn.HeaderStyle>
             </DataGridTextColumn>
-            <DataGridCheckBoxColumn x:Name="guQuinellaColumn" Binding="{Binding guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Qui" Width="SizeToHeader">
+            <DataGridCheckBoxColumn x:Name="guQuinellaColumn" Binding="{Binding guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Qui" Width="SizeToHeader" IsReadOnly="True">
               <DataGridCheckBoxColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Quinella"/>
@@ -281,14 +281,14 @@
                 </Style>
               </DataGridTextColumn.HeaderStyle>
             </DataGridTextColumn>
-            <DataGridCheckBoxColumn x:Name="guReschColumn" Binding="{Binding guResch}" Header="Rch" Width="SizeToHeader">
+            <DataGridCheckBoxColumn x:Name="guReschColumn" Binding="{Binding guResch}" Header="Rch" Width="SizeToHeader" IsReadOnly="True">
               <DataGridCheckBoxColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Reschedule"/>
                 </Style>
               </DataGridCheckBoxColumn.HeaderStyle>
             </DataGridCheckBoxColumn>
-            <DataGridCheckBoxColumn x:Name="guBookCancColumn" Binding="{Binding guBookCanc}" Header="C.Bk" Width="SizeToHeader">
+            <DataGridCheckBoxColumn x:Name="guBookCancColumn" Binding="{Binding guBookCanc}" Header="C.Bk" Width="SizeToHeader" IsReadOnly="True">
               <DataGridCheckBoxColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Cancelled book"/>
@@ -355,7 +355,7 @@
             <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
               <DataGridTemplateColumn.CellTemplate >
                 <DataTemplate>
-                  <CheckBox x:Name="guMealTickets" IsChecked="{Binding guMealTicket}"  Click="guMealTickets_Click"  HorizontalAlignment="Center" />
+                  <CheckBox x:Name="guMealTickets" IsChecked="{Binding guMealTicket}"  Click="ShowMealTickets_Click"  HorizontalAlignment="Center" />
                 </DataTemplate>
               </DataGridTemplateColumn.CellTemplate>
               <DataGridTemplateColumn.HeaderStyle>
@@ -462,10 +462,10 @@
             <RowDefinition Height="25"/>
           </Grid.RowDefinitions>
           <TextBlock Text="Pax." HorizontalAlignment="Center" FontSize="12"/>
-          <TextBox x:Name="txtPax" Grid.Row="1" Width="50" Height="25" Background="White" Text="{Binding guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>
+          <TextBox Grid.Row="1" Width="50" Height="25" Background="White" Text="{Binding guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>
 
           <TextBlock Grid.Column="1" Text="Companion Last  " HorizontalAlignment="Right" FontSize="12"/>
-          <TextBox x:Name="txtLastCompanion" Grid.Column="1" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="5,0,5,0" IsReadOnly="True" Text="{Binding guLastName2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+          <TextBox Grid.Column="1" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="5,0,5,0" IsReadOnly="True" Text="{Binding guLastName2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
           <TextBlock Grid.Column="2" Text="&amp; First Name" HorizontalAlignment="Left" FontSize="12"/>
           <TextBox Grid.Column="2" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="10,0,5,0" IsReadOnly="True" Text="{Binding guFirstName2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
@@ -477,7 +477,7 @@
           <TextBox Grid.Column="4" Grid.Row="1" Width="70" Height="25" Background="White" Margin="5,0,5,0" Text="{Binding guRoomNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>
 
           <TextBlock Grid.Column="5" Text="Country" HorizontalAlignment="Center" FontSize="12"/>
-          <TextBox x:Name="txtCountry" Grid.Column="5" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="5,0,5,0" Text="{Binding guco, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>
+          <TextBox Grid.Column="5" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="5,0,5,0" Text="{Binding guco, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>
 
           <TextBlock Grid.Column="6" Text="Agency" HorizontalAlignment="Center" FontSize="12"/>
           <TextBox Grid.Column="6" Grid.Row="1" Width="Auto" Height="25" Background="White" Margin="5,0,5,0" Text="{Binding guag, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True"/>

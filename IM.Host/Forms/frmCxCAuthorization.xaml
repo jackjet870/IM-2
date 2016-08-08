@@ -8,7 +8,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCxCAuthorization"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-    
+        WindowStartupLocation="CenterOwner" 
         KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="CxC Authorization" Height="435.554" Width="1027" MinHeight="500" MinWidth="1027" Loaded="Window_Loaded" ShowInTaskbar="False">
 

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using IM.Model;
 using IM.Model.Helpers;
-using IM.Base;
 
 namespace IM.BusinessRules.BR
 {
   public class BRGuestsGroups
   {
-     #region GetGuestsGroup
+    #region GetGuestsGroup
     /// <summary>
     /// Obtiene un GuestsGroup segun el Id Mandado, Incluye Los guests integrantes del grupo
     /// </summary>
@@ -33,7 +30,7 @@ namespace IM.BusinessRules.BR
         }
       });
       return gGroup;
-    } 
+    }
     #endregion
 
     #region GetGuestsGroups
@@ -53,60 +50,60 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-            //lstGuestsGroups = new List<GuestsGroup>();
-            if (guestsGroup.gxID != 0) //Si mandan el ID del Grupo
+          //lstGuestsGroups = new List<GuestsGroup>();
+          if (guestsGroup.gxID != 0) //Si mandan el ID del Grupo
+          {
+            lstGuestsGroups = (from gg in dbContext.GuestsGroups
+                               where gg.gxID == guestsGroup.gxID
+                               select gg).Distinct().ToList();
+          }
+          else
+          {
+            if (!string.IsNullOrEmpty(guestsGroup.gxN))//Si envian el nombre del grupo
             {
-              lstGuestsGroups = (from gg in dbContext.GuestsGroups
-                                 where gg.gxID == guestsGroup.gxID
+              lstGuestsGroups = (from gu in dbContext.Guests
+                                 from ggi in gu.GuestsGroups
+                                 join gg in dbContext.GuestsGroups
+                                 on ggi.gxID equals gg.gxID
+                                 where gg.gxN.Contains(guestsGroup.gxN)
+                                 && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
                                  select gg).Distinct().ToList();
             }
-            else
+            else if (guest.guID != 0) //Si se manda el ID de Guest
             {
-              if (!string.IsNullOrEmpty(guestsGroup.gxN))//Si envian el nombre del grupo
-              {
-                lstGuestsGroups = (from gu in dbContext.Guests
-                                   from ggi in gu.GuestsGroups
-                                   join gg in dbContext.GuestsGroups
-                                   on ggi.gxID equals gg.gxID
-                                   where gg.gxN.Contains(guestsGroup.gxN)
-                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                                   select gg).Distinct().ToList();
-              }
-              else if (guest.guID != 0) //Si se manda el ID de Guest
-              {
-                lstGuestsGroups = (from gu in dbContext.Guests
-                                   from ggi in gu.GuestsGroups
-                                   join gg in dbContext.GuestsGroups
-                                   on ggi.gxID equals gg.gxID
-                                   where gu.guID == guest.guID
-                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                                   select gg).Distinct().ToList();
-              }
+              lstGuestsGroups = (from gu in dbContext.Guests
+                                 from ggi in gu.GuestsGroups
+                                 join gg in dbContext.GuestsGroups
+                                 on ggi.gxID equals gg.gxID
+                                 where gu.guID == guest.guID
+                                 && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                                 select gg).Distinct().ToList();
+            }
             //Si se manda Last o First name 1 o 2 (Solo se valida LastName1 porque es el unico que recibe informacuion de la interfaz
-              else if (!string.IsNullOrEmpty( guest.guLastName1)) 
-              {
-                lstGuestsGroups = (from gu in dbContext.Guests
-                                   from ggi in gu.GuestsGroups
-                                   join gg in dbContext.GuestsGroups
-                                   on ggi.gxID equals gg.gxID
-                                   //se usa solo guLastName1 por que es el campo en el que se manda todo el texto
-                                   where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guLastName1)
-                                   || gu.guLastname2.Contains(guest.guLastName1) || gu.guFirstName2.Contains(guest.guLastName1)
-                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                                   select gg).Distinct().ToList();
-              }
-              else//Si no puso nada en los texbox se hace una busqueda unicamente entre el rango de fechas
-              {
-                lstGuestsGroups = (from gu in dbContext.Guests
-                                   from ggi in gu.GuestsGroups
-                                   join gg in dbContext.GuestsGroups
-                                   on ggi.gxID equals gg.gxID
-                                   //Se usa guCheckOutD que trae la "guest" pero en realidad deberia ser otro rango de fechas para guCheckInD
-                                   where gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
-                                   select gg).Distinct().ToList();
-              }
+            else if (!string.IsNullOrEmpty(guest.guLastName1))
+            {
+              lstGuestsGroups = (from gu in dbContext.Guests
+                                 from ggi in gu.GuestsGroups
+                                 join gg in dbContext.GuestsGroups
+                                 on ggi.gxID equals gg.gxID
+                                 //se usa solo guLastName1 por que es el campo en el que se manda todo el texto
+                                 where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guLastName1)
+                                 || gu.guLastname2.Contains(guest.guLastName1) || gu.guFirstName2.Contains(guest.guLastName1)
+                                 && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                                 select gg).Distinct().ToList();
+            }
+            else//Si no puso nada en los texbox se hace una busqueda unicamente entre el rango de fechas
+            {
+              lstGuestsGroups = (from gu in dbContext.Guests
+                                 from ggi in gu.GuestsGroups
+                                 join gg in dbContext.GuestsGroups
+                                 on ggi.gxID equals gg.gxID
+                                 //Se usa guCheckOutD que trae la "guest" pero en realidad deberia ser otro rango de fechas para guCheckInD
+                                 where gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
+                                 select gg).Distinct().ToList();
             }
           }
+        }
       });
       return lstGuestsGroups;
     }
@@ -167,11 +164,12 @@ namespace IM.BusinessRules.BR
               if (gGroup != null)
               {
                 //Agrega los Guest Nuevos al Grupo
-                lstGuestsAdd.ForEach(gu => {
+                lstGuestsAdd.ForEach(gu =>
+                {
                   gu.guGroup = true;
                   dbContext.Entry(gu).State = EntityState.Modified;
-                  gGroup.Guests.Add(gu);                  
-                  }
+                  gGroup.Guests.Add(gu);
+                }
                 //dbContext.Guests
                 );
 
@@ -179,7 +177,7 @@ namespace IM.BusinessRules.BR
                 #region Delete
                 lstGuestsDelete.ForEach(gu =>
                 {
-                  gGroup.Guests.Remove(gGroup.Guests.Where(gd=>gd.guID==gu.guID).FirstOrDefault());
+                  gGroup.Guests.Remove(gGroup.Guests.Where(gd => gd.guID == gu.guID).FirstOrDefault());
                 });
 
                 lstGuestsDelete.ForEach(async gu =>
@@ -204,7 +202,7 @@ namespace IM.BusinessRules.BR
         }
       });
       return res;
-    } 
+    }
     #endregion
 
   }

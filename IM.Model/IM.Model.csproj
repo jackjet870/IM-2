@@ -219,6 +219,7 @@
     <Compile Include="Enums\EnumCheckedStatus.cs" />
     <Compile Include="Enums\EnumClub.cs" />
     <Compile Include="Enums\EnumConfiguration.cs" />
+    <Compile Include="Enums\EnumEntities.cs" />
     <Compile Include="Enums\EnumExternalProduct.cs" />
     <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
@@ -254,7 +255,6 @@
     <Compile Include="Enums\EnumRptPR.cs" />
     <Compile Include="Enums\EnumRptRoomSales.cs" />
     <Compile Include="Enums\EnumRptSalesRoomAndSalesman.cs" />
-    <Compile Include="Enums\EnumSalesRoomType.cs" />
     <Compile Include="Enums\EnumPredefinedDate.cs" />
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
     <Compile Include="Enums\EnumPrintDevice.cs" />

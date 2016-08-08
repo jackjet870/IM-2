@@ -69,5 +69,30 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion
+
+    #region SaveDepositsRefund
+    /// <summary>
+    /// Genera una devolucion de depositos y marca los depositos como devueltos
+    /// </summary>
+    /// <param name="pGuestID"></param>
+    /// <param name="pFolio"></param>
+    /// <param name="pRefundType"></param>
+    /// <param name="pDeposits"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 21/Julio/2016 Created
+    /// </history>
+    public async static Task SaveDepositsRefund(int pGuestID, int pFolio, string pRefundType, string pDeposits)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.USP_OR_SaveDepositsRefund(pGuestID, pFolio, pRefundType, pDeposits);
+        }
+      });
+    } 
+    #endregion
+
   }
 }

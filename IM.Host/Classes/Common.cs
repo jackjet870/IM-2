@@ -4,11 +4,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Classes
@@ -154,7 +150,59 @@ namespace IM.Host.Classes
       }
 
       return true;
-    } 
+    }
+    #endregion
+
+    #region IsClosed
+    /// <summary>
+    /// Evalua si el Mealticket no se ha cerrado!
+    /// </summary>
+    /// <param name="pdtmDate"></param>
+    /// <param name="pdtmClose"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// [vipacheco] 29/Julio/2016 Modified --> Migrado a esta clase comun
+    /// </history>
+    public static bool IsClosed(DateTime dtmDate, DateTime dtmClose)
+    {
+      bool blnClosed = false;
+
+      if (dtmDate <= dtmClose)
+      {
+        blnClosed = true;
+      }
+      return blnClosed;
+    }
+    #endregion
+
+    #region GetFullName
+    /// <summary>
+    /// Obtiene el nombre completo de un huesped
+    /// </summary>
+    /// <param name="LastName"></param>
+    /// <param name="FirstName"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 13/Mayo/2016 Created
+    /// </history>
+    public static string GetFullName(string LastName, string FirstName)
+    {
+      string FullName = "";
+
+      // si tiene apellido
+      if (!string.IsNullOrEmpty(LastName) && LastName != "")
+      {
+        FullName = LastName;
+
+        // si tiene nombre
+        if (!string.IsNullOrEmpty(FirstName) && FirstName != "")
+        {
+          FullName = FullName + " " + FirstName;
+        }
+      }
+      return FullName;
+    }
     #endregion
 
   }
