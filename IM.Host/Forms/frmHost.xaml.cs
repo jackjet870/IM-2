@@ -706,35 +706,33 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void btnTransfer_Click(object sender, RoutedEventArgs e)
+    private async void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
       try
       {
+        frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumModule.Transfer) { Owner = this };
+        bool blnResult = (bool)frmSearch.ShowDialog();
 
-        frmSearchGeneral _frmSearch = new frmSearchGeneral(EnumModule.Transfer) { Owner = this };
-        _frmSearch.ShowDialog();
+        // Verificamos si se debe realizar alguna tranferencia
+        if (blnResult == true)
+        {
+          Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
+          guest.gusr = App.User.SalesRoom.srID;
+          guest.guBookCanc = false;
 
+          if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
+          {
+            //De no ser así informamos que no se guardo la información por algun motivo
+            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+              MessageBoxImage.Error, "Information can not keep");
 
-        //var frmsearchGuest = new frmSearchGuest(App.User, EnumModule.Host)
-        //{
-        //  Owner = this,
-        //  ShowInTaskbar = false
-        //};
-        ////Valida que haya sido un OK y no un Cancel
-        //frmsearchGuest.ShowDialog();
-        //if (!frmsearchGuest.cancel)
-        //{
-        //  var guest = frmsearchGuest.lstGuestAdd[0];
-        //  guest.gusr = App.User.SalesRoom.srID;
-        //  guest.guBookCanc = false;
-
-        //  if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
-        //  {
-        //    //De no ser así informamos que no se guardo la información por algun motivo
-        //    UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-        //      MessageBoxImage.Error, "Information can not keep");
-        //  }
-        //}
+            // TODO: Falta implemetar la creacion de cebes y cecos, esta en fase de prueba actualmente 09/Agosto/2016
+            //With mAccountingCode
+            //  .Load CStr(lngGuestID)
+            //  .SetAccountingCode "MK"
+            //End With
+          }
+        }
       }
       catch (Exception ex)
       {
@@ -767,9 +765,36 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void btnInvitationInhouse_Click(object sender, RoutedEventArgs e)
+    private async void btnInvitationInhouse_Click(object sender, RoutedEventArgs e)
     {
+      frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumModule.Invit) { Owner = this };
+      bool blnResult = (bool)frmSearch.ShowDialog();
 
+      // Verificamos si se debe realizar alguna tranferencia
+      if (blnResult == true)
+      {
+        Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
+
+        var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse,
+       validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
+       switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.SalesRoom.srID);
+
+        if (App.User.AutoSign)
+        {
+          login.UserData = App.User;
+        }
+        await login.getAllPlaces();
+        login.ShowDialog();
+
+        if (login.IsAuthenticated)
+        {
+          var invitacion = new frmInvitation(EnumInvitationType.InHouse, login.UserData, guest.guID, EnumInvitationMode.modAdd)
+          {
+            Owner = this
+          };
+          invitacion.ShowDialog();
+        }
+      }
     }
     #endregion
 
@@ -799,7 +824,7 @@ namespace IM.Host
     /// </history>
     private void btnGuests_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchGeneral _frmSearch = new frmSearchGeneral() { Owner = this};
+      frmSearchGeneral _frmSearch = new frmSearchGeneral(dtpDate.Value.Value) { Owner = this};
       _frmSearch.ShowDialog();
     }
     #endregion

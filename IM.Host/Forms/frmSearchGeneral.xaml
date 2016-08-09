@@ -9,8 +9,8 @@
         mc:Ignorable="d"
         KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         WindowStartupLocation="CenterScreen"
-        Title="Search General" Height="300" Width="1138.436" Loaded="Window_Loaded" ShowInTaskbar="False">
-  
+        Title="Search General" Height="390.879" Width="1138.436" Loaded="Window_Loaded" ShowInTaskbar="False">
+
   <Window.Resources>
     <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsLeadSource" d:DesignSource="{d:DesignInstance {x:Type Model:LeadSource}, CreateList=True}"/>
@@ -32,15 +32,15 @@
     <!--#endregion-->
 
     <!--#region Menú-->
-    <GroupBox x:Name="grdSearch" Header="Guest Search Criteria" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,0,5,5">
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+    <GroupBox x:Name="grbSearch" Header="Guest Search Criteria" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="5,0,5,5" FontWeight="Black">
+      <StackPanel x:Name="stkSearch" Orientation="Horizontal" HorizontalAlignment="Center">
         <StackPanel Orientation="Vertical" Margin="0,0,5,0">
           <TextBlock Text="Lead Source"/>
-          <ComboBox x:Name="cboLeadSource" Width="150"  SelectedValuePath="lsID" DisplayMemberPath="lsN"/>
+          <ComboBox x:Name="cboLeadSource" Width="150"  SelectedValuePath="lsID" DisplayMemberPath="lsN" ItemsSource="{Binding Source={StaticResource dsLeadSource}}"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,0,5,0" >
           <TextBlock Text="Sales Room"/>
-          <ComboBox x:Name="cboSalesRoom" Width="120" SelectedValuePath="srID" DisplayMemberPath="srN"/>
+          <ComboBox x:Name="cboSalesRoom" Width="120" SelectedValuePath="srID" DisplayMemberPath="srN" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,0,5,0">
           <TextBlock Text="Name"/>
@@ -62,13 +62,13 @@
           <TextBlock Text="GUID"/>
           <TextBox x:Name="txtguID" AcceptsReturn="False" Width="50"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-          <TextBlock Text="Book D. From"/>
-          <xctk:DateTimePicker x:Name="dtpStart" Width="150" Format="LongDate"/>
+        <StackPanel x:Name="stkStartDate" Orientation="Vertical" Margin="0,0,5,0">
+          <TextBlock x:Name="txbStartDate" Text="Book D. From" Margin="10,0,0,0"/>
+          <xctk:DateTimePicker x:Name="dtpStart" Width="150" Format="LongDate" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Justify"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-          <TextBlock Text="Book D. To"/>
-          <xctk:DateTimePicker x:Name="dtpEnd" Width="150" Format="LongDate"/>
+        <StackPanel x:Name="stkEndDate" Orientation="Vertical" Margin="0,0,5,0">
+          <TextBlock x:Name="txbEndDate" Text="Book D. To" Margin="10,0,0,0"/>
+          <xctk:DateTimePicker x:Name="dtpEnd" Width="150" Format="LongDate" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Justify"/>
         </StackPanel>
         <Button x:Name="btnSearch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="70" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnSearch_Click">
           <StackPanel Orientation="Horizontal">
@@ -80,7 +80,7 @@
         </Button>
       </StackPanel>
     </GroupBox>
-    <DataGrid x:Name="grdGuest" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Margin="5,0,5,5" Grid.Row="1" VerticalAlignment="Stretch" Height="209" IsReadOnly="True" SelectionChanged="grdGuest_SelectionChanged">
+    <DataGrid x:Name="grdGuest" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Margin="5,16,5,10" Grid.Row="1" VerticalAlignment="Stretch" IsReadOnly="True" SelectionChanged="grdGuest_SelectionChanged" SelectionUnit="FullRow" SelectionMode="Single">
       <DataGrid.Columns>
         <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="Auto" >
           <DataGridTextColumn.HeaderStyle>
@@ -103,7 +103,7 @@
             </Style>
           </DataGridTextColumn.HeaderStyle>
         </DataGridTextColumn>
-        <DataGridTextColumn x:Name="guLastName2Column" Binding="{Binding guLastName2}" Header="Last Name 2" Width="1*" >
+        <DataGridTextColumn x:Name="guLastName2Column" Binding="{Binding guLastName2}" Header="Last Name 2" Width="1*">
           <DataGridTextColumn.HeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
               <Setter Property="ToolTip" Value="Last Name 2"/>
@@ -134,41 +134,44 @@
             </Style>
           </DataGridCheckBoxColumn.HeaderStyle>
         </DataGridCheckBoxColumn>
-        <DataGridComboBoxColumn x:Name="gusrColumn" SelectedValueBinding="{Binding gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="lsID" DisplayMemberPath="lsN" Header="Sales Room" Width="Auto" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}">
+        <DataGridComboBoxColumn x:Name="gusrColumn" SelectedValueBinding="{Binding gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="lsID" DisplayMemberPath="lsN" Header="SR" Width="Auto" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}">
           <DataGridComboBoxColumn.HeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
               <Setter Property="ToolTip" Value="Sales Room"/>
             </Style>
           </DataGridComboBoxColumn.HeaderStyle>
         </DataGridComboBoxColumn>
-        <DataGridTextColumn x:Name="guShowD1Column" Binding="{Binding guShowD}" Header="PR" Width="Auto" />
-        <DataGridCheckBoxColumn x:Name="guShowColumn" Binding="{Binding guShow, Mode=OneWay}" Header="Sh." Width="SizeToHeader">
+        <DataGridTextColumn x:Name="guShowD1Column" Binding="{Binding guShowD}" Header="Show Date" Width="Auto" />
+        <DataGridCheckBoxColumn x:Name="guShowColumn" Binding="{Binding guShow, Mode=OneWay}" Header="Sh" Width="SizeToHeader">
           <DataGridCheckBoxColumn.HeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
               <Setter Property="ToolTip" Value="Show"/>
             </Style>
           </DataGridCheckBoxColumn.HeaderStyle>
         </DataGridCheckBoxColumn>
-        <DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket, Mode=OneWay}" Header="MT" Width="SizeToHeader">
+        <DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket, Mode=OneWay}" Header="MT" Width="SizeToHeader" >
           <DataGridCheckBoxColumn.HeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
               <Setter Property="ToolTip" Value="Meal Tickets"/>
             </Style>
           </DataGridCheckBoxColumn.HeaderStyle>
         </DataGridCheckBoxColumn>
-        <DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived, Mode=OneWay}" Header="Gifts" Width="SizeToHeader"/>
+        <DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived, Mode=OneWay}" Header="Gifts" Width="SizeToHeader" />
         <DataGridCheckBoxColumn x:Name="guSaleColumn" Binding="{Binding guSale, Mode=OneWay}" Header="Sales" Width="SizeToHeader"/>
+        <DataGridTextColumn x:Name="guCheckInDColumn" Width="*" Header="Check In Date" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}"/>
+        <DataGridTextColumn x:Name="guCheckOutDColumn" Width="*" Header="Check Out Date" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" />
+        <DataGridTextColumn x:Name="guBookD" Width="*" Header="Book Date" Binding="{Binding guBookD, StringFormat= dd/MM/yyyy}"/>
       </DataGrid.Columns>
 
     </DataGrid>
 
     <!--#region Botones-->
-    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,5,0">
       <!--#region Transfer OR Invit-->
       <!--Este BOTON se activa cuando es invocado para realizar una invitacion o un transferencia del modulo HOST-->
-      <Button x:Name="btnOk" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnShow_Click">
+      <Button x:Name="btnOk" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnOk_Click">
         <StackPanel Orientation="Horizontal">
-          <TextBlock Text="Transfer || Invit" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" />
+          <TextBlock Text="Transfer or Invit" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" />
         </StackPanel>
       </Button>
       <!--#endregion-->
@@ -201,7 +204,7 @@
       <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
       <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
       <Separator />
-      <StatusBarItem x:Name="StatusBarReg" Content="0 Guests" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+      <StatusBarItem x:Name="StatusBarReg" Content="0 Guests" Width="Auto" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
     </StatusBar>
 
   </Grid>
