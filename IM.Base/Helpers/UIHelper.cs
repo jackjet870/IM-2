@@ -334,7 +334,7 @@ namespace IM.Base.Helpers
     /// <summary>
     /// busca todos los controles contenedores para recorrerlos
     /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <typeparam name="T">tipo de "child" a buscar </typeparam>
     /// <param name="parent">contenedor</param>
     /// <returns>devuelve una lista de controles</returns>
     /// <history>
@@ -352,7 +352,7 @@ namespace IM.Base.Helpers
     /// <summary>
     /// Obtiene todos los controles dentro de los contenedores
     /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <typeparam name="T">tipo de control</typeparam>
     /// <param name="parent">Contenedor</param>
     /// <param name="logicalCollection">lista de controles</param>
     /// <history>
@@ -374,6 +374,52 @@ namespace IM.Base.Helpers
         }
       }
     }
+    #endregion
+
+    #region GetParentCollection
+    /// <summary>
+    /// Obtiene los contenedores del control o sus "parents"
+    /// </summary>
+    /// <typeparam name="T">Tipo de contenedor a buscar</typeparam>
+    /// <param name="child">control a buscar sus parents</param>
+    /// <returns>Lista de contenedores</returns>
+    /// <history>
+    /// [emoguel] created 09/08/2016
+    /// </history>
+    public static List<T> GetParentCollection<T>(object child) where T : DependencyObject
+    {
+      List<T> logicalCollection = new List<T>();
+      GetParentCollection(child as DependencyObject, logicalCollection);
+      return logicalCollection;
+    }
+    #endregion
+
+    #region GetParentCollection
+
+    /// <summary>
+    /// Obtiene todos los controles dentro de los contenedores
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="child">control</param>
+    /// <param name="logicalCollection">lista de controles</param>
+    /// <history>
+    /// [emoguel] created 09/08/2016
+    /// </history>
+    public static void GetParentCollection<T>(DependencyObject child, List<T> logicalCollection) where T : DependencyObject
+    {
+      //Get parent parent
+      var parent = LogicalTreeHelper.GetParent(child);
+
+      if (parent is DependencyObject)
+      {
+        DependencyObject depParent = child as DependencyObject;
+        if (parent is T)
+        {
+          logicalCollection.Add(parent as T);
+        }
+        GetParentCollection(parent, logicalCollection);
+      }
+    } 
     #endregion
 
     #region UiSetDatacontext

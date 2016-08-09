@@ -224,14 +224,17 @@ namespace IM.Administrator.Forms
           else
           {
             UIHelper.ShowMessage(strMsj);
-          }
-          skpStatus.Visibility = Visibility.Collapsed;
-          btnAccept.Visibility = Visibility.Visible;
+          }          
         }
       }
       catch(Exception ex)
       {
         UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
     #endregion

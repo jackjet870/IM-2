@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Base.Helpers
@@ -264,10 +266,13 @@ namespace IM.Base.Helpers
         #endregion
       }
       if (strMsj != "") //Mandamos el foco al primer campo
-      {
-        lstControls.FirstOrDefault().Focus();
-      }
-      container.UpdateLayout();
+      {        
+        var control=lstControls.FirstOrDefault(); 
+        var parents = UIHelper.GetParentCollection<TabItem>(control);
+        parents.ForEach(tb => tb.IsSelected = true);
+        container.UpdateLayout();
+        control.Focus();
+      }     
 
       //Si la showMessage viene activa muestra el mensaje
       if (showMessage)
@@ -277,7 +282,7 @@ namespace IM.Base.Helpers
 
       return strMsj.TrimEnd('\n');
     }
-
+    
     #endregion
 
     #region IsValidEmail

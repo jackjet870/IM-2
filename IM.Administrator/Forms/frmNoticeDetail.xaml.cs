@@ -508,14 +508,18 @@ namespace IM.Administrator.Forms
       try
       {
         cmbLeadSources.ItemsSource = await BRLeadSources.GetLeadSources(-1,-1,-1);
-        List<LeadSource> lstLeadSources = await BRLeadSources.GetLeadsourcesByNotice(notice.noID);
-        dgrLeadSources.ItemsSource = lstLeadSources;
-        _lstOldLeadSources = lstLeadSources.Select(ls => {
-          LeadSource lss = new LeadSource();
-          ObjectHelper.CopyProperties(lss, ls);
-          return lss;
-        }).ToList();
-        cmbLeadSources.Header = "Lead Sources (" + lstLeadSources.Count + ")";
+        if (enumMode != EnumMode.add)
+        {
+          List<LeadSource> lstLeadSources = await BRLeadSources.GetLeadsourcesByNotice(notice.noID);
+          dgrLeadSources.ItemsSource = lstLeadSources;
+          _lstOldLeadSources = lstLeadSources.Select(ls =>
+          {
+            LeadSource lss = new LeadSource();
+            ObjectHelper.CopyProperties(lss, ls);
+            return lss;
+          }).ToList();
+          cmbLeadSources.Header = "Lead Sources (" + lstLeadSources.Count + ")";
+        }        
         skpStatus.Visibility = Visibility.Collapsed;
         btnAccept.Visibility = Visibility.Visible;
         GridHelper.SelectRow(dgrLeadSources, 0);

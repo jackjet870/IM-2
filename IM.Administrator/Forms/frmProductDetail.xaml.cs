@@ -172,40 +172,50 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 21/05/2016
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
-    {      
-      string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
-      List<Gift> lstGift = (List<Gift>)dgrGift.ItemsSource;
-      if(enumMode!=EnumMode.add && _productLegend.pxText==richText.Trim() && ObjectHelper.IsEquals(product,oldProduct) && ObjectHelper.IsListEquals(lstGift,_oldlstGifts))
-      {
-        blnClosing = true;
-        Close();
-      }
-      else
-      {
-        StaStart("Saving Data...");
-        string strMsj = ValidateHelper.ValidateForm(this, "Product",blnDatagrids:true);
-        if (strMsj == "")
-        {          
-          _productLegend.pxText = richText;
-          List<Gift> lstAdd = lstGift.Where(gi => !_oldlstGifts.Any(gii => gii.giID == gi.giID)).ToList();
-          List<Gift> lstDel = _oldlstGifts.Where(gi => !lstGift.Any(gii => gii.giID == gi.giID)).ToList();          
-          int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);                    
-          UIHelper.ShowMessageResult("Product", nRes);
-
-          if (nRes > 0)
+    {
+      try
+        {
+          string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
+          List<Gift> lstGift = (List<Gift>)dgrGift.ItemsSource;
+          if (enumMode != EnumMode.add && _productLegend.pxText == richText.Trim() && ObjectHelper.IsEquals(product, oldProduct) && ObjectHelper.IsListEquals(lstGift, _oldlstGifts))
           {
             blnClosing = true;
-            DialogResult = true;
             Close();
           }
+          else
+          {
+            StaStart("Saving Data...");
+            string strMsj = ValidateHelper.ValidateForm(this, "Product", blnDatagrids: true);
+            if (strMsj == "")
+            {
+              _productLegend.pxText = richText;
+              List<Gift> lstAdd = lstGift.Where(gi => !_oldlstGifts.Any(gii => gii.giID == gi.giID)).ToList();
+              List<Gift> lstDel = _oldlstGifts.Where(gi => !lstGift.Any(gii => gii.giID == gi.giID)).ToList();
+              int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);
+              UIHelper.ShowMessageResult("Product", nRes);
+
+              if (nRes > 0)
+              {
+                blnClosing = true;
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }          
+          }
         }
-        else
+        catch(Exception ex)
         {
-          UIHelper.ShowMessage(strMsj);
+          UIHelper.ShowMessage(ex);
         }
-        StaEnd();
+        finally
+        {
+          StaEnd();
+        }
       }
-    }
     #endregion
 
     #region IrichTextBox
