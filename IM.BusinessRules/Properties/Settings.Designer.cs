@@ -814,5 +814,41 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_DeletePersonnel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_IM_RptStatisticsBySegments_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptStatisticsBySegments_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptStatisticsBySegments_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_IM_RptStatisticsByCloser_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptStatisticsByCloser_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptStatisticsByCloser_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_IM_RptStatisticsByExitCloser_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptStatisticsByExitCloser_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptStatisticsByExitCloser_Timeout"] = value;
+            }
+        }
     }
 }

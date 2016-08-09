@@ -7,7 +7,6 @@ using IM.Model.Helpers;
 using IM.Model.Enums;
 using System.Collections;
 using System.Threading.Tasks;
-using System.Data;
 
 namespace IM.BusinessRules.BR
 {
@@ -1630,6 +1629,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsBySegments_Timeout;
           return dbContext.USP_IM_RptStatisticsBySegments(string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")), string.Join(",", ltsDtmEnd.Select(x=> $"{x:yyyyMMdd}")), 
             string.Join(",", salesRooms), salesmanID, bySegmentsCategories, own, includeAllSalesmen).ToList();
         }
@@ -1661,6 +1661,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByCloser_Timeout;
           return dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
             EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
@@ -1692,6 +1693,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByExitCloser_Timeout;
           return dbContext.USP_IM_RptStatisticsByExitCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
             EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
