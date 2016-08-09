@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace IM.Model.Helpers
 {
   public class ObjectHelper
@@ -50,7 +51,7 @@ namespace IM.Model.Helpers
     /// <history>
     /// [erosado, emoguel]  04/08/2016  Created.
     /// </history>
-    public static T CopyProperties<T>( T ObjToClone, bool includeVirtualProperties = false) where T: class,new()
+    public static T CopyProperties<T>(T ObjToClone, bool includeVirtualProperties = false) where T : class, new()
     {
       T objNew = new T();
       if (ObjToClone != null)
@@ -78,7 +79,7 @@ namespace IM.Model.Helpers
     /// <history>
     /// [erosado, emoguel]  04/08/2016  Created.
     /// </history>
-    public static List<T> CopyProperties<T>(List<T> lstToClone) where T : class,new()
+    public static List<T> CopyProperties<T>(List<T> lstToClone) where T : class, new()
     {
       List<T> lstClone = new List<T>();
       if (lstToClone != null)
@@ -158,7 +159,7 @@ namespace IM.Model.Helpers
               case TypeCode.SByte:
               case TypeCode.UInt16:
               case TypeCode.UInt32:
-              case TypeCode.UInt64:                   
+              case TypeCode.UInt64:
                 {
                   newValue = (newValue == null) ? -1 : newValue;
                   oldValue = (oldValue == null) ? -1 : oldValue;
@@ -202,7 +203,7 @@ namespace IM.Model.Helpers
     /// [emoguel] created 15/04/2016
     /// [emoguel] Modified--Ignora registros vacios y verifica si las lista son null
     /// </history>
-    public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld,string id="")
+    public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld, string id = "")
     {
       if (lstNew != null && lstOld != null)
       {
@@ -240,7 +241,7 @@ namespace IM.Model.Helpers
     /// <history>
     ///   [vku] 05/Ago/2016 Created
     /// </history>
-    private bool IsEqualsList<T>(List<T> lstNew, List<T> lstOld)
+    public static bool IsEqualsList<T>(List<T> lstNew, List<T> lstOld)
     {
       var lst1 = lstNew.Where(i => !lstOld.Contains(i)).ToList();
       var lst2 = lstOld.Where(i => !lstNew.Contains(i)).ToList();
@@ -263,7 +264,7 @@ namespace IM.Model.Helpers
     /// <history>
     ///   [vku] 05/Ago/2016 Created
     /// </history>
-    private bool IsEqualsList2<T>(List<T> lstNew, List<T> lstOld)
+    public static bool IsEqualsList2<T>(List<T> lstNew, List<T> lstOld)
     {
       bool blnIsEqual = false;
       if (lstNew.All(item => lstOld.Contains(item)) && lstOld.All(item => lstNew.Contains(item)))
@@ -293,7 +294,49 @@ namespace IM.Model.Helpers
 
     #endregion
 
+    #region AreAnyDuplicates
+    /// <summary>
+    /// Valida que no se repitan los elementos en una lista
+    /// </summary>
+    /// <typeparam name="T">Object</typeparam>
+    /// <param name="list">List<Object></param>
+    /// <returns>True Hay duplicados| False no hay</returns>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    public static bool AreAnyDuplicates<T>(List<T> list, string specificField = "")
+    {
+      return list.GroupBy(e => e.GetType().GetProperty(specificField).GetValue(e)).Any(x => x.Count() > 1);
+    }
+    /// <summary>
+    ///  Valida que no se repitan los elementos en una lista
+    /// </summary>
+    /// <typeparam name="T">Object</typeparam>
+    /// <param name="list">List<Object></param>
+    /// <param name="lstFieldName"> Field Name List</param></param>
+    /// <returns>string message Hay duplicados| string.Empty no hay duplicados</returns>
+    /// <history>
+    /// [erosado] 09/08/2016  Created.
+    /// </history>
+    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName)
+    {
+      bool _isValid = false;
+      string _message = string.Empty;
+      if (list.Any() && lstFieldName.Any())
+      {
+        foreach (var item in lstFieldName)
+        {
+          _isValid = list.GroupBy(e => e.GetType().GetProperty(item).GetValue(e)).Any(x => x.Count() > 1);
 
-
+          if (_isValid)
+          {
+            _message = $"We found a duplicate element on {item} column";
+            break;
+          }
+        }
+      }
+      return _message;
+    }
+    #endregion
   }
 }

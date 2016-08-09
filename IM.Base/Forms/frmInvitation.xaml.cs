@@ -24,29 +24,40 @@ namespace IM.Base.Forms
   {
     #region Propiedades, Atributos
     public UserData _user;
-    private readonly EnumInvitationType _invitationType;
+    public readonly EnumInvitationType _invitationType;
     private readonly int _guestId;
-    private readonly EnumInvitationMode _invitationMode;
+    public readonly EnumInvitationMode _invitationMode;
+    public readonly bool _allowReschedule;
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
     private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
     private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
     private bool _dontShowAgainGuestStatus = false;
     #endregion
+    /// <summary>
+    /// Inicializa en formulario de invitacion
+    /// </summary>
+    /// <param name="InvitationType">Tipo de invitacion</param>
+    /// <param name="User">Usuario Login</param>
+    /// <param name="GuestId">guID - valor default 0</param>
+    /// <param name="InvitationMode">Tipo de acceso a la invitacion</param>
+    /// <param name="AllowReschedule">Si permite Reschedule</param>
+    /// <history>
+    /// [erosado] 09/08/2016  Created.
+    /// </history>
     public frmInvitation(EnumInvitationType InvitationType, UserData User, int GuestId, EnumInvitationMode InvitationMode, bool AllowReschedule = true)
     {
       try
       {
-        var catObj = new CommonCatObject(User, GuestId, InvitationMode); 
-        //var catObj = new CommonCatObject(User, GuestId, EnumInvitationMode.modEdit); SE USA PARA PRUEBAS
+        var catObj = new CommonCatObject(User, GuestId, InvitationType, InvitationMode);
         _invitationType = InvitationType;
         _guestId = GuestId;
-        //_guestId = 6547022; SE USA PARA PRUEBAS
         _user = User;
         _invitationMode = InvitationMode;
         DataContext = catObj;
+        _allowReschedule = AllowReschedule;
         InitializeComponent();
-
+                
         #region Inicializar Grids
         dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
         {
@@ -63,8 +74,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage(ex);
       }
     }
-
-    #region Eventos de la Forma 
+    #region Eventos de la ventana
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
@@ -73,30 +83,30 @@ namespace IM.Base.Forms
       UIHelper.SetUpControls(new Guest(), this);
     }
 
-    private async void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      bool _isValid = true;
+
       //Obtenemos el DataContext
       CommonCatObject dataContext = DataContext as CommonCatObject;
 
-      //Obtenemos el program
-      var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
-
-      //Si paso la primera validacion 
-      if (!InvitationValidationRules.ValidateGeneral(this,dataContext, program))
+      //Validamos controles comunes y validaciones basicas
+      if (!InvitationValidationRules.ValidateGeneral(this, dataContext))
       {
-
-
+        _isValid = false;
+        tabGeneral.TabIndex = 0;
       }
-      //Guardar Guest
-      //GUardar InvitsGift
-      //Guardar BookingDeposits
-      //Guardar CreditCardList
-      //Guardar AdditionalGuest
+      //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
+      if (_isValid)
+      {
+        _isValid = InvitationValidationRules.ValidateInformationGrids(this, dataContext);
+      }
+
     }
 
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-
+      
     }
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -108,11 +118,36 @@ namespace IM.Base.Forms
     }
     private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      //Si viene de Host la invitacion le mandamos el SalesRoom, en lugar del leadsource, es solo informativo.
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestId, _user.LeadSource != null ? _user.LeadSource.lsID : _user.SalesRoom.srID);
+      frmGuestLog.Owner = this;
+      frmGuestLog.ShowDialog();
+    }
+    /// <summary>
+    /// Evento del Combobox GuestStatus
+    /// Sirve para actualizar la caja de texto txtGiftMaxAuth
+    /// dependiendo del GuestStatus que elija el usuario.
+    /// </summary>
+    ///<history>
+    ///[erosado]  02/08/2016  Created.
+    /// </history>    
+    private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      //Obtenemos el GuestStatusType del combobox cmbGuestStatus
+      var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
 
+      txtGiftMaxAuth.Text = string.Format("{0:C2}", guStatusType != null ? guStatusType.gsMaxAuthGifts : 0);
+
+      //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
+      //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
+      //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
+      //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
     }
     #endregion
 
-    #region Metodos Privados
+    #region Controls Configuration
+
+    #region ControlsConfiguration
     /// <summary>
     /// Prepara los controles para cada invitacion
     /// </summary>
@@ -129,6 +164,7 @@ namespace IM.Base.Forms
       {
         case EnumInvitationType.InHouse:
           InHouseControlsConfig();
+          EnableControlsInHouse();
           break;
         case EnumInvitationType.OutHouse:
           OutHouseControlsConfig();
@@ -207,10 +243,17 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Controls Enables or Disables
-
+    #region EnableControlsExternal
     private void EnableControlsExternal()
     {
+      #region Barra de Menu
+      imgButtonEdit.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
+      imgButtonPrint.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
+      imgButtonSave.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
+      imgButtonCancel.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
+      imgButtonLog.IsEnabled = !string.IsNullOrWhiteSpace(txtguID.Text) && txtguID.Text != "0" ? true : false;
+      #endregion
+
       #region Guest Information
       txtguID.IsEnabled =
       txtguHReservID.IsEnabled = false;
@@ -259,10 +302,10 @@ namespace IM.Base.Forms
       cmbLocation.IsEnabled = false;
       chkguAntesIO.IsEnabled =
       dtpBookDate.IsEnabled =
-      cbmBookTime.IsEnabled = true;
+      cmbBookT.IsEnabled = true;
       chkDirect.IsEnabled = false;
       dtpRescheduleDate.IsEnabled =
-      cbxReschudeleTime.IsEnabled =
+      cmbReschT.IsEnabled =
       chkReschedule.IsEnabled = false;
       #endregion
 
@@ -282,14 +325,14 @@ namespace IM.Base.Forms
       #endregion
 
       #region Gifts
-      dtgGifts.IsEnabled = true;
+      dtgGifts.IsEnabled =
       txtGiftMaxAuth.IsReadOnly =
       txtGiftTotalCost.IsReadOnly =
-      txtGiftTotalPrice.IsReadOnly = false;
+      txtGiftTotalPrice.IsReadOnly = true;
       #endregion
 
       #region Deposits
-      dtgDeposits.IsEnabled =
+      dtgBookingDeposits.IsEnabled =
       txtBurned.IsEnabled =
       cmbCurrency.IsEnabled =
       cmbPaymentType.IsEnabled =
@@ -306,10 +349,122 @@ namespace IM.Base.Forms
       #endregion
 
     }
+    #endregion
+
+    #region EnableControlsInHouse
+    private void EnableControlsInHouse()
+    {
+      
+      #region Barra de Menu
+      imgButtonEdit.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
+      imgButtonPrint.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
+      imgButtonSave.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
+      imgButtonCancel.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
+      //imgButtonLog.IsEnabled = dbcontex && txtguID.Text != "0" ? true : false;
+      #endregion
+
+      #region Guest Information
+      txtguID.IsEnabled =
+      txtguHReservID.IsEnabled =
+      btnSearch.IsEnabled =
+      txtguRef.IsEnabled =
+      txtguInvitD.IsEnabled =
+      txtguInvitT.IsEnabled = false;
+      #endregion
+
+      #region Invitation Type & Languages
+      chkguQuinella.IsEnabled = true;
+      chkguShow.IsEnabled =
+      chkguInterval.IsEnabled = false;
+      cmbLanguage.IsEnabled = true;
+      #endregion
+
+      #region Profile Opera
+      txtguIdProfileOpera.IsEnabled =
+      txtguLastNameOriginal.IsEnabled =
+      txtguFirstNameOriginal.IsEnabled = false;
+      #endregion
+
+      #region Guest1 & Guest 2
+      txtguLastName1.IsEnabled =
+      txtguFirstName1.IsEnabled =
+      txtguAge1.IsEnabled =
+      cbogums1.IsEnabled =
+      txtguOccup1.IsEnabled =
+      txtguEmail1.IsEnabled = true;
+
+      txtguLastName2.IsEnabled =
+      txtguFirstName2.IsEnabled =
+      txtguAge2.IsEnabled =
+      cbogums2.IsEnabled =
+      txtguOccup2.IsEnabled =
+      txtguEmail2.IsEnabled = true;
+      #endregion
+
+      #region PR, SalesRoom, etc..
+      btnChange.IsEnabled =
+      btnReschedule.IsEnabled =
+      btnRebook.IsEnabled = false;
+      cmbPRContact.IsEnabled =
+      cmbPR.IsEnabled =
+      cmbSalesRooms.IsEnabled = true;
+      cmbLocation.IsEnabled = false;
+      chkguAntesIO.IsEnabled =
+      dtpBookDate.IsEnabled =
+      cmbBookT.IsEnabled = true;
+      chkDirect.IsEnabled = false;
+      dtpRescheduleDate.IsEnabled =
+      cmbReschT.IsEnabled =
+      chkReschedule.IsEnabled = false;
+      #endregion
+
+      #region OtherInfo
+      txtguExtraInfo.IsEnabled =
+      txtguRoomNum.IsEnabled =
+      cmbOtherInfoHotel.IsEnabled =
+      cmbOtherInfoAgency.IsEnabled =
+      cmbOtherInfoCountry.IsEnabled =
+      txtguPax.IsEnabled =
+      dtpOtherInfoArrivalD.IsEnabled =
+      dtpOtherInfoDepartureD.IsEnabled = true;
+      #endregion
+
+      #region GuestStatus
+      cmbGuestStatus.IsEnabled = true;
+      #endregion
+
+      #region Gifts
+      dtgGifts.IsEnabled =
+      txtGiftMaxAuth.IsReadOnly =
+      txtGiftTotalCost.IsReadOnly =
+      txtGiftTotalPrice.IsReadOnly = true;
+      #endregion
+
+      #region Deposits
+      dtgBookingDeposits.IsEnabled =
+      txtBurned.IsEnabled =
+      cmbCurrency.IsEnabled =
+      cmbPaymentType.IsEnabled =
+      cmbResorts.IsEnabled = true;
+      #endregion
+
+      #region Credit Cards
+      txtguCCType.IsEnabled = false;
+      dtgCCCompany.IsEnabled = true;
+      #endregion
+
+      #region Rooms Qty And ElectronicPurse
+      txtguAccountGiftsCard.IsEnabled = false;
+      txtguRoomsQty.IsEnabled = true;
+      #endregion
+
+    }
+    #endregion
 
     #endregion
 
     #region Eventos del GRID Invitation Gift
+
     #region BeginningEdit
     /// <summary>
     /// Se ejecuta antes de que entre en modo edicion alguna celda
@@ -467,31 +622,6 @@ namespace IM.Base.Forms
     #endregion
 
     #endregion
-
-    #region Eventos de la ventana 
-    /// <summary>
-    /// Evento del Combobox GuestStatus
-    /// Sirve para actualizar la caja de texto txtGiftMaxAuth
-    /// dependiendo del GuestStatus que elija el usuario.
-    /// </summary>
-    ///<history>
-    ///[erosado]  02/08/2016  Created.
-    /// </history>    
-    private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      //Obtenemos el GuestStatusType del combobox cmbGuestStatus
-      var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
-
-      txtGiftMaxAuth.Text = string.Format("{0:C2}", guStatusType != null ? guStatusType.gsMaxAuthGifts : 0);
-
-      //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
-      //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
-      //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
-      //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
-    }
-
-    #endregion
-
 
   }
 }

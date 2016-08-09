@@ -2,6 +2,7 @@
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,6 +50,8 @@ namespace IM.Base.Classes
     public List<DisputeStatus> DisputeStatus => _disputeStatus;
     private DateTime? _closeDate;
     public DateTime? CloseDate => _closeDate;
+    private EnumProgram _program;
+    public EnumProgram Program => _program;
 
     #endregion
 
@@ -103,12 +106,12 @@ namespace IM.Base.Classes
     #endregion
 
     #region Constructor
-    public CommonCatObject(UserData user, int guId, EnumInvitationMode invitationType = EnumInvitationMode.modAdd)
+    public CommonCatObject(UserData user, int guId, EnumInvitationType invitationType, EnumInvitationMode invitationMode = EnumInvitationMode.modAdd)
     {
       #region Inicializar Catalogos
       LoadLenguages();
       LoadMaritalStatus();
-      LoadPersonnel(user);
+      LoadPersonnel(user, invitationType);
       LoadHotels();
       LoadAgencies();
       LoadCountries();
@@ -122,10 +125,11 @@ namespace IM.Base.Classes
       LoadDisputeStatus();
       LoadGifts(user);
       LoadCloseDate();
+      LoadProgram(user);
       #endregion
 
       //Si se va a Generar una Nueva Invitacion
-      if (invitationType == EnumInvitationMode.modAdd) 
+      if (invitationMode == EnumInvitationMode.modAdd && guId == 0)
       {
         //Asignamos memoria para que pueden usarse
         SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList));
@@ -134,9 +138,8 @@ namespace IM.Base.Classes
         SetField(ref _additionalGuestList, new ObservableCollection<Guest>(), nameof(AdditionalGuestList));
         SetField(ref _guestObj, new Guest(), nameof(GuestObj));
         DefaultValueForGuest(user);
-        
       }
-      //Si se va a modificar una Invitacion
+      //Si se va a modificar una Invitacion o se va hacer una nueva con los datos de un GuestID
       else
       {
         LoadGuest(user, guId);
@@ -146,7 +149,7 @@ namespace IM.Base.Classes
         LoadAdditionalGuest(guId);
       }
     }
-
+    #region DefaultValueForGuest
     /// <summary>
     /// Si ingresan valores default a los campos del Guest
     /// </summary>
@@ -155,6 +158,8 @@ namespace IM.Base.Classes
     {
       _guestObj.guloInvit = user.LeadSource.lsID;
     }
+
+    #endregion
 
     #endregion
 
@@ -177,10 +182,29 @@ namespace IM.Base.Classes
     #endregion
 
     #region Personnel
-    private async void LoadPersonnel(UserData _user)
+    /// <summary>
+    /// carga al personal dependiendo del tipo de invitacion
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="inviType"></param>
+    /// <history>
+    /// [erosado] 09/08/2016
+    /// </history>
+    private async void LoadPersonnel(UserData user, EnumInvitationType inviType)
     {
-      var result = await BRPersonnel.GetPersonnel(_user.LeadSource.lsID, roles: "PR");
-      SetField(ref _personnel, result, nameof(Personnel));
+      List<PersonnelShort> personnel = new List<PersonnelShort>();
+      //Si es Host carga al personal con la sala de venta
+      if (inviType == EnumInvitationType.Host)
+      {
+        personnel = await BRPersonnel.GetPersonnel(salesRooms: user.SalesRoom.srID, roles: "PR");
+      }
+      //Si es cualquier otro lo hace con el leadSource
+      else
+      {
+        personnel = await BRPersonnel.GetPersonnel(user.LeadSource.lsID, roles: "PR");
+      }
+
+      SetField(ref _personnel, personnel, nameof(Personnel));
     }
     #endregion
 
@@ -247,7 +271,7 @@ namespace IM.Base.Classes
       var result = await BRCreditCardTypes.GetCreditCardTypes();
       SetField(ref _creditCardTypes, result, nameof(CreditCardTypes));
     }
-   
+
     #endregion
 
     #region Gifts
@@ -290,16 +314,35 @@ namespace IM.Base.Classes
     }
     #endregion
 
+    #region LoadProgram
+    private async void LoadProgram(UserData user)
+    {
+      var result = await BRLeadSources.GetLeadSourceProgram(user.LeadSource.lsID);
+      EnumProgram program;
+
+      if (result == EnumToListHelper.GetEnumDescription(EnumProgram.Inhouse))
+      {
+        program = EnumProgram.Inhouse;
+      }
+      else
+      {
+        program = EnumProgram.Outhouse;
+      }
+
+      SetField(ref _program, program, nameof(Program));
+    }
+    #endregion
+
     #endregion
 
     #region Invitation Info
 
     #region Load Guest
-    private async void LoadGuest(UserData user ,int guID)
+    private async void LoadGuest(UserData user, int guID)
     {
-      var result =  await BRGuests.GetGuest(guID,true);
+      var result = await BRGuests.GetGuest(guID, true);
       SetField(ref _guestObj, result, nameof(GuestObj));
-      
+
       Guest copyGuest = new Guest();
       IM.Model.Helpers.ObjectHelper.CopyProperties(copyGuest, result);
 

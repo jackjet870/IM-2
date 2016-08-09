@@ -1805,35 +1805,62 @@ namespace IM.Inhouse.Forms
     #endregion
     
     #region ChkInvit_Click
-
+    /// <summary>
+    /// Sirve para realizar una invitacion, o abrirla en modo lectura
+    /// </summary>
+    /// <history>
+    /// [erosado] 09/08/2016  Modified. Se habilito para que se inivie el nuevo formulario de invitacion.
+    /// </history>
     private async void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
       //luis
-      GuestArrival itema =
-        dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+      GuestArrival guestArrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+
       var chk = sender as CheckBox;
-      if (!itema.guCheckIn)
+      if (!guestArrival.guCheckIn)
       {
         MessageBox.Show("Guest has not made Check In");
         chk.IsChecked = false;
         return;
       }
-      this.Cursor = Cursors.Wait;
+      //this.Cursor = Cursors.Wait;
       var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
-      chk.IsChecked = itema.guInvit;
+      chk.IsChecked = guestArrival.guInvit;
       //var UserData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.InHouse, App.User, itema.guID,
-        !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
-      invit.Owner = this;
-      invit.ShowInTaskbar = false;
-      if (await invit.AccessValidate())
+      //var invit = new frmInvitationBase(EnumInvitationType.InHouse, App.User, guestArrival.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
+      //invit.Owner = this;
+      //invit.ShowInTaskbar = false;
+      //if (await invit.AccessValidate())
+      ////{
+      ////  this.Cursor = null;
+      ////  var res = invit.ShowDialog();
+      ////  guestArrival.guInvit = guestArrival.guInvit || (res.HasValue && res.Value);
+      ////  chk.IsChecked = guestArrival.guInvit;
+      ////}
+      //this.Cursor = null;
+
+      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
+       validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
+       switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
+
+      if (App.User.AutoSign)
       {
-        this.Cursor = null;
-        var res = invit.ShowDialog();
-        itema.guInvit = itema.guInvit || (res.HasValue && res.Value);
-        chk.IsChecked = itema.guInvit;
+        login.UserData = App.User;
       }
-      this.Cursor = null;
+      await login.getAllPlaces();
+      login.ShowDialog();
+
+      if (login.IsAuthenticated)
+      {
+        var invitacion = new frmInvitation(EnumInvitationType.InHouse, login.UserData, guestArrival.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd)
+        {
+          Owner = this
+        };
+        invitacion.ShowDialog();
+      }
+
+
+
     }
 
     #endregion

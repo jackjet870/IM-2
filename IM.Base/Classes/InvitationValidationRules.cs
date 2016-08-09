@@ -9,6 +9,8 @@ using IM.Model.Helpers;
 using IM.Base.Forms;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace IM.Base.Classes
 {
@@ -122,6 +124,7 @@ namespace IM.Base.Classes
       }
       return _hasError;
     }
+
     #endregion
 
     #region AfterEdit
@@ -137,7 +140,7 @@ namespace IM.Base.Classes
     internal static void AfterEdit(DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
       ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, string program = "")
     {
-      bool _passValidate = false;
+      //bool _passValidate = false;
       //Obtenemos el Gift
       var gift = BRGifts.GetGiftId(invitationGift.iggi);
 
@@ -242,6 +245,8 @@ namespace IM.Base.Classes
     #endregion
 
     #region Save Validation
+
+    #region ValidateGeneral
     /// <summary>
     /// Validamos informacion general del formulario
     /// </summary>
@@ -249,14 +254,11 @@ namespace IM.Base.Classes
     /// <param name="guest">GuestObj</param>
     /// <param name="program">Program</param>
     /// <returns>True is valid | False No</returns>
-    public static bool ValidateGeneral(frmInvitation form, CommonCatObject dbContext, string program)
+    public static bool ValidateGeneral(frmInvitation form, CommonCatObject dbContext)
     {
-      bool _isValid = true;
       string _res = string.Empty;
-      //Validamos folio invitacion OutHouse
-      if (!validateFolioOutHouse(ref form, dbContext.GuestObj, program)) return false;
-      //Validamos folio de reservacion inhouse
-      if (!ValidateFolioInHouse(ref form, dbContext.GuestObj, program)) return false;
+      //Validamos el folio de reservacion (InHouse & OutHouse)
+      if (!ValidateFolio(ref form, dbContext)) return false;
       //Si la fecha de Arrival esta en fecha Cerrada
       if (!ValidateCloseDate(dbContext)) return false;
       //Validamos que el Numero de habitaciones este en el rango permitido
@@ -264,47 +266,312 @@ namespace IM.Base.Classes
       //Validamos que se ingresen datos en los campos obligatorios
       if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(form, "Invitation", blnDatagrids: true, showMessage: true))) return false;
       //Validamos el Booking y el Reschedule
-      if (!ValidateBookReschedule(ref form,dbContext)) return false;
+      if (!ValidateBookReschedule(ref form, dbContext)) return false;
+
+      return true;
+    }
+
+    #endregion
+
+    public static bool ValidateInformationGrids(frmInvitation form, CommonCatObject dbContext)
+    {
+      bool _isValid = true;
+      //Validamos el Status del invitado
+      if (string.IsNullOrWhiteSpace(dbContext.GuestObj.guGStatus))
+      {
+        UIHelper.ShowMessage("Specify the Guest Status");
+        form.cmbGuestStatus.Focus();
+        _isValid = false;
+      }
+      //Validamos los regalos de la invitacion
+      else if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
+      else if (!BookingDepositsValidation(ref form, dbContext)) _isValid = false;
 
       return _isValid;
     }
 
-    #region validateFolioOutHouse
+    private static bool BookingDepositsValidation(ref frmInvitation form, CommonCatObject dbContext)
+    {
+      bool _isValid = true;
+      List<string> _fieldNameToValidate = new List<string>(){nameof(BookingDeposit.bdcu), nameof(BookingDeposit.bdpt), nameof(BookingDeposit.bdcc), nameof(BookingDeposit.bdCardNum)};
+      //Validamos que no esten repetidos los campos Moneda, Forma de pago, Tipo de tarjeta de credito y numero de tarjeta de credito
+      if (!string.IsNullOrWhiteSpace(ObjectHelper.AreAnyDuplicates(dbContext.BookingDepositList.ToList(),_fieldNameToValidate)))
+      {
+        UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
+        form.dtgBookingDeposits.Focus();
+        _isValid = false;
+      }
+      //Validamos campo por campo que se hayan ingresado
+      else
+      {
+
+      }
+      return _isValid;
+    }
+
+    #region ValidateFolio
     /// <summary>
-    /// Valida que el folio ingresado en el control txtguOutInvitNum sea valido.
+    /// Valida el Folio dependiendo del tipo de programa que sea InHouse o OutHouse
+    /// Valida que el folio de reservacion InHouse no haya sido utilizado anteriormente
+    /// Valida que el folio de reservacion OutHouse ingresado en el control txtguOutInvitNum sea valido.
     /// </summary>
     /// <param name="form">ref frmInvitation</param>
-    /// <param name="guest">Guest Obj</param>
+    /// <param name="dbContext">CommonCatObject</param>
     /// <returns>True is valid | False No</returns>
-    /// <history>
-    /// [erosado] 05/08/2016  Created.
+    ///<history>
+    ///[erosado]  08/08/2016  Created.
     /// </history>
-    private static bool validateFolioOutHouse(ref frmInvitation form, Guest guest, string program)
+    private static bool ValidateFolio(ref frmInvitation form, CommonCatObject dbContext)
     {
-      bool _valid = true;
+      bool _isValid = true;
       string _serie = "";
       int _numero = 0;
 
-      if (program == EnumToListHelper.GetEnumDescription(EnumProgram.Outhouse))
+      if (dbContext.Program == EnumProgram.Inhouse)
+      {
+        //Si el boton de busqueda de Guest esta activo
+        if (form.imgSearch.IsEnabled == true)
+        {
+          //Validamos que el folio no haya sido utilizado por otra invitacion
+          _isValid = BRFolios.ValidateFolioReservation(dbContext.GuestObj.guls, dbContext.GuestObj.guHReservID, dbContext.GuestObj.guID);
+
+          //Si el folio de reservacion NO es valido hay que escoger otro
+          if (!_isValid)
+          {
+            UIHelper.ShowMessage("The Reservation Folio was already used for Guest ID");
+            form.imgSearch.Focus();
+          }
+        }
+      }
+      else
       {
         //Validamos que se ingrese el folio
         if (!ValidateHelper.ValidateRequired(form.txtguOutInvitNum, "Outhouse Invitation Folio"))
         {
-          _valid = false;
+          _isValid = false;
         }
         else if (!ValidateFolioOuthouseFormat(ref form, ref _serie, ref _numero))
         {
           UIHelper.ShowMessage("Please specify a Outhouse invitation folio valid in the format 'AA-0000'");
-          _valid = false;
+          _isValid = false;
         }
         else
         {
           //Verificamos que sea valido.
-          _valid = BRFolios.ValidateFolioInvitationOutside(guest.guID, _serie, _numero);
+          _isValid = BRFolios.ValidateFolioInvitationOutside(dbContext.GuestObj.guID, _serie, _numero);
+        }
+
+      }
+
+      return _isValid;
+    }
+    #endregion
+
+    #region ValidateCloseDate
+    /// <summary>
+    //Valida que la fecha de Arrival se encuentreno se encuentre en fecha cerrada
+    /// </summary>
+    /// <param name="dbContext">CommonCatObject</param>
+    /// <returns>True is Valid | False No</returns>
+    private static bool ValidateCloseDate(CommonCatObject dbContext)
+    {
+      bool _isValid = true;
+      if (dbContext.GuestObj.guBookD == null)
+      {
+        UIHelper.ShowMessage("Please select an Arrival date");
+        _isValid = false;
+      }
+      //Si la fecha de Arrival esta en fecha Cerrada
+      if (dbContext.GuestObj.guBookD < dbContext.CloseDate)
+      {
+        UIHelper.ShowMessage("It's not allowed to make Invitations for a closed date.");
+        _isValid = false;
+      }
+      return _isValid;
+    }
+    #endregion
+
+    #region  ValidateBookReschedule
+    /// <summary>
+    /// Valida el booking y el reschedule
+    /// </summary>
+    /// <param name="form">ref frmInvitation</param>
+    /// <param name="dbContext">CommonCatObject</param>
+    /// <returns>True is valid | False No</returns>
+    /// <history>
+    /// [erosado] 06/08/2016  Created.
+    /// </history>
+    private static bool ValidateBookReschedule(ref frmInvitation form, CommonCatObject dbContext)
+    {
+      //Validamos BookingDateTime Si no pasa la validacion retorna false
+      if (!ValidateBookingDateTime(ref form, dbContext)) return false;
+      //Validamos RescheduleDateTime Si no pasa la validacion retorna false 
+      if (ValidateRescheduleDateTime(ref form, dbContext)) return false;
+
+      return true;
+    }
+    #endregion
+
+    #region ValidateRescheduleDateTime
+    /// <summary>
+    /// Valida la fecha y hora de reschedule
+    /// </summary>
+    /// <param name="form">ref frmInvitation</param>
+    /// <param name="dbContext">CommonCatObject</param>
+    /// <returns>True is valid | False No</returns>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private static bool ValidateRescheduleDateTime(ref frmInvitation form, CommonCatObject dbContext)
+    {
+      bool _isValid = true;
+      //Si se permite reschedule
+      if (form._allowReschedule)
+      {
+        //Si se puede modificar la fecha de Reschedule
+        if (form.dtpRescheduleDate.IsEnabled)
+        {
+          //Validamos que tenga seleccionada una fecha y que no sea el valor default
+          if (dbContext.GuestObj.guReschD == null || dbContext.GuestObj.guReschD == DateTime.MinValue)
+          {
+            UIHelper.ShowMessage("Specify a valid reschedule date.");
+            form.dtpRescheduleDate.Focus();
+            _isValid = false;
+          }
+          //validamos que la fecha de reschedule no sea despues de la fecha de salida
+          else if (dbContext.GuestObj.guReschD > dbContext.GuestObj.guCheckOutD)
+          {
+            UIHelper.ShowMessage("Reschedule date can not be after check out date.");
+            form.dtpRescheduleDate.Focus();
+            _isValid = false;
+          }
+          //validamos que la fecha de reschedule no sea antes de la fecha de llegada
+          else if (dbContext.GuestObj.guReschD < dbContext.GuestObj.guCheckInD)
+          {
+            UIHelper.ShowMessage("Reschedule date can not be before Check-in date.");
+            form.dtpRescheduleDate.Focus();
+            _isValid = false;
+          }
+          else if (dbContext.GuestObj.guReschD < dbContext.GuestObj.guBookD)
+          {
+            UIHelper.ShowMessage("Reschedule date can not be before booking date.");
+            form.dtpRescheduleDate.Focus();
+            _isValid = false;
+          }
+          else if (dbContext.GuestObj.guReschD < BRHelpers.GetServerDate())
+          {
+            UIHelper.ShowMessage("Reschedule date can not be before today.");
+            form.dtpRescheduleDate.Focus();
+            _isValid = false;
+          }
+          else if (!ValidateHelper.ValidateRequired(form.cmbReschT, "Reschedule Time"))
+          {
+            _isValid = false;
+          }
+          //Si la fecha del Reschedule es la misma que BookinD
+          else if (dbContext.GuestObj.guReschD == dbContext.GuestObj.guBookD)
+          {
+            //validamos que la hora de reschedule no sea la misma o antes de la hora de booking
+            if (dbContext.GuestObj.guReschT <= dbContext.GuestObj.guBookT)
+            {
+              UIHelper.ShowMessage("Reschedule time can not be before booking time.");
+              form.cmbReschT.Focus();
+              _isValid = false;
+            }
+          }
         }
       }
-      return _valid;
+      return _isValid;
     }
+
+    #endregion
+
+    #region ValidateBookingDateTime
+    /// <summary>
+    /// Valida la fecha y hora de booking
+    /// </summary>
+    /// <param name="form">ref frmInvitation</param>
+    /// <param name="dbContext">CommonCatObject</param>
+    /// <returns>True is Valid | False No</returns>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private static bool ValidateBookingDateTime(ref frmInvitation form, CommonCatObject dbContext)
+    {
+      bool _isValid = true;
+      EnumPermission _permission = EnumPermission.PRInvitations;
+
+      //Si el control dtpBookDate esta disponible podemos editar la fecha si no retornamos True
+      if (form.dtpBookDate.IsEnabled)
+      {
+        //Si tiene un valor y No es el valor default
+        if (dbContext.GuestObj.guBookD != null && dbContext.GuestObj.guBookD != DateTime.MinValue)
+        {
+          //Si el tipo de invitacion viene de host se cambia el permiso a HostInvitation
+          if (form._invitationType == EnumInvitationType.Host)
+          {
+            _permission = EnumPermission.HostInvitations;
+          }
+
+          #region Validaciones Comunes CON y SIN permisos
+          //validamos que la fecha de booking no sea despues de la fecha de salida
+          if (dbContext.GuestObj.guBookD > dbContext.GuestObj.guCheckOutD)
+          {
+            UIHelper.ShowMessage("Booking date can not be after Check Out date.");
+            form.dtpBookDate.Focus();
+            _isValid = false;
+          }
+          //validamos que la fecha de booking no sea antes de la fecha de llegada
+          else if (dbContext.GuestObj.guBookD < dbContext.GuestObj.guCheckOutD)
+          {
+            UIHelper.ShowMessage("Booking date can not be before Check In date.");
+            form.dtpBookDate.Focus();
+            _isValid = false;
+          }
+          #endregion
+
+          /*Si si nivel de permiso es SuperSpecial
+           * y su permiso es de PRInvitation o HostInvitation dependiendo del tipo
+           * y La invitacion es Nueva (InvitationMode.modAdd)
+           * */
+          if (form._user.HasPermission(_permission, EnumPermisionLevel.SuperSpecial) && form._invitationMode == EnumInvitationMode.modAdd)
+          {
+            //Valida que el invitado no tenga un mes de haber salido
+            if (BRHelpers.GetServerDate() >= dbContext.GuestObj.guCheckOutD.AddDays(30))
+            {
+              UIHelper.ShowMessage("Guest already made check out.");
+              form.dtpOtherInfoDepartureD.Focus();
+              _isValid = false;
+            }
+          }
+          //Si NO tiene permiso
+          else
+          {
+            //Validamos que la fecha de booking no sea antes de hoy
+            if (dbContext.GuestObj.guBookD < BRHelpers.GetServerDate())
+            {
+              UIHelper.ShowMessage("Booking date can not be before today.");
+              form.dtpOtherInfoDepartureD.Focus();
+              _isValid = false;
+            }
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage("Specify a valid booking date.");
+          form.dtpOtherInfoDepartureD.Focus();
+          _isValid = false;
+        }
+
+        if (_isValid)
+        {
+          if (ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { _isValid = false; }
+        }
+
+      }
+      return _isValid;
+    }
+
     #endregion
 
     #region ValidateFolioOuthouseFormat
@@ -343,184 +610,46 @@ namespace IM.Base.Classes
     }
     #endregion
 
-    #region ValidateFolioInHouse
+    #region InvitationGiftValidation
     /// <summary>
-    /// Valida que el folio de reservacion inhouse no haya sido utilizado anteriormente
+    /// Valida la informacion de los regalos de invitacion
     /// </summary>
     /// <param name="form">ref frmInvitation</param>
-    /// <param name="guest">Guest Obj</param>
-    /// <param name="program">Program</param>
+    /// <param name="dbContext">CommonCatObject</param>
     /// <returns>True is valid | False NO</returns>
-    private static bool ValidateFolioInHouse(ref frmInvitation form, Guest guest, string program)
-    {
-      bool _isValid = true;
-
-      if (program == EnumToListHelper.GetEnumDescription(EnumProgram.Inhouse))
-      {
-        //Si el boton de busqueda de Guest esta activo
-        if (form.imgSearch.IsEnabled == true)
-        {
-          //Validamos que el folio no haya sido utilizado por otra invitacion
-          _isValid = BRFolios.ValidateFolioReservation(guest.guls, guest.guHReservID, guest.guID);
-
-          //Si el folio de reservacion NO es valido hay que escoger otro
-          if (!_isValid)
-          {
-            UIHelper.ShowMessage("The Reservation Folio was already used for Guest ID");
-            form.imgSearch.Focus();
-          }
-        }
-      }
-      return _isValid;
-    }
-    #endregion
-
-    #region ValidateCloseDate
-    /// <summary>
-    //Valida que la fecha de Arrival se encuentreno se encuentre en fecha cerrada
-    /// </summary>
-    /// <param name="dbContext">CommonCatObject</param>
-    /// <returns>True is Valid | False No</returns>
-    private static bool ValidateCloseDate(CommonCatObject dbContext)
-    {
-      bool _isValid = true;
-      if (dbContext.GuestObj.guBookD == null)
-      {
-        UIHelper.ShowMessage("Please select an Arrival date");
-        _isValid = false;
-      }
-      //Si la fecha de Arrival esta en fecha Cerrada
-      if (dbContext.GuestObj.guBookD < dbContext.CloseDate)
-      {
-        UIHelper.ShowMessage("It's not allowed to make Invitations for a closed date.");
-        _isValid = false;
-      }
-      return _isValid;
-    }
-    #endregion
-
-    /// <summary>
-    /// Valida el booking y el reschedule
-    /// </summary>
-    /// <param name="form">ref frmInvitation</param>
-    /// <param name="dbContext">CommonCatObject</param>
-    /// <returns>True is valid | False No</returns>
     /// <history>
-    /// [erosado] 06/08/2016  Created.
+    /// [erosado] 09/08/2016  Created.
     /// </history>
-    private static bool ValidateBookReschedule(ref frmInvitation form, CommonCatObject dbContext)
+    public static bool InvitationGiftValidation(ref frmInvitation form, CommonCatObject dbContext)
     {
       bool _isValid = true;
-      //Validamos fecha y hora del booking
-      _isValid = ValidateBookingDateTime(ref form);
-
+      //Validamos gift duplicados
+      if (ObjectHelper.AreAnyDuplicates(dbContext.InvitationGiftList.ToList(), nameof(InvitationGift.iggi)))
+      {
+        UIHelper.ShowMessage("Repeated gift");
+        form.dtgGifts.Focus();
+        _isValid = false;
+      }
+      //Si pasó la validacion de Registros duplicados
       if (_isValid)
       {
-        //ValidateRescheduleDateTime();
-      }
+        //Validamos el GuestStatus
+        var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(dbContext.GuestObj.guID);
 
+        //Si tiene informacion de GuestStatus y se desea aplicar la validacion de Tours
+        if (guestStatusInfo != null && guestStatusInfo.gsMaxQtyTours > 0)
+        {
+          _isValid = Gifts.ValidateGiftsGuestStatus(form.dtgGifts, guestStatusInfo, nameof(InvitationGift.igQty), nameof(InvitationGift.iggi));
+        }
+      }
+      //Si pasó la validacion de GuestStatus  validamos  monto maximo de regalos
+      if (_isValid)
+      {
+        _isValid = Gifts.ValidateMaxAuthGifts(form.txtGiftTotalCost.Text, form.txtGiftMaxAuth.Text);
+      }
       return _isValid;
-      //Validamos la fecha y hora del Reschedule
     }
-
-    /// <summary>
-    /// Valida fecha y hora del Booking
-    /// </summary>
-    /// <param name="form">ref frmInvitation</param>
-    /// <returns>True is valid | False No</returns>
-    /// <history>
-    /// [lchairez]  ? Created.
-    /// [erosado] 06/08/2016  Modified, agregamos parametros y optimizamos el codigo.
-    /// </history>
-    private static bool ValidateBookingDateTime(ref frmInvitation form)
-    {
-      bool _IsValid = true;
-
-      //Si se puede modificar la fecha del booking
-      if (form.dtpBookDate.IsEnabled)
-      {
-        if (form.dtpBookDate.Value.HasValue)
-        {
-          //Si tiene permiso de PRInvitations y su nivel es Super Special
-          if (form._user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.SuperSpecial))
-          {
-
-          }
-        }
-        else
-        {
-
-        }
-      }
-      else
-      {
-
-      }
-
-      if (!form.dtpBookDate.Value.HasValue)
-      {
-        UIHelper.ShowMessage("Specify a Booking Date");
-        form.dtpBookDate.Focus();
-        _IsValid = false;
-      }
-      // si tiene permiso super especial de invitaciones
-      else if (form._user.Permissions.Where(p => p.plN == "SuperSpecial").Any())
-      {
-        #region Instrucciones
-        /*
-        Permiso super especial (4) cuando hace una nueva.
-        1. No puede hacer invitacion antes de la fecha de llegada
-        2. Si puede hacer invitaciones despues de la fecha de salida pero la fecha de booking debe estar dentro del periodo de estadia del huesped
-        3. Si puede hacer invitaciones de dias anteriores
-        4. Tiene un periodo de 30 dias despues de la fecha de salida para hacer la invitacion
-        */
-        #endregion
-        //validamos que el invitado no tenga un mes de que haya salido
-        if (DateTime.Today >= form.dtpBookDate.Value.Value.AddDays(30))
-        {
-          UIHelper.ShowMessage("Guest already made check out.");
-          form.dtpBookDate.Focus();
-          _IsValid = false;
-        }
-      }
-      else
-      {
-        //validamos que la fecha de booking no sea antes de hoy
-        if (form.dtpBookDate.Value.Value.Date < DateTime.Today.Date)
-        {
-          UIHelper.ShowMessage("Booking date can not be before today.");
-          form.dtpBookDate.Focus();
-          _IsValid = false;
-        }
-      }
-
-      if (!_IsValid) return _IsValid;
-      //Validamos que la fecha de entrada no sea mayor a la fecha de salida
-      if ((DateTime.Compare(form.dtpBookDate.Value.Value, form.dtpOtherInfoDepartureD.Value.Value)) > 0)
-      {
-        UIHelper.ShowMessage("Booking date can not be after Check Out date");
-        form.dtpBookDate.Focus();
-        _IsValid = false;
-      }
-      if (form.dtpOtherInfoDepartureD.Value.HasValue && (form.dtpOtherInfoDepartureD.Value.Value.Date < form.dtpBookDate.Value.Value.Date))
-      {
-
-      }
-      else if (form.dtpOtherInfoArrivalD.Value.HasValue && (form.dtpOtherInfoArrivalD.Value.Value.Date > form.dtpBookDate.Value.Value.Date))
-      {
-        UIHelper.ShowMessage("Booking date can not be before Check In date.");
-        form.dtpBookDate.Focus();
-        _IsValid = false;
-      }
-      if (form.cbmBookTime.SelectedValue == null || String.IsNullOrEmpty(form.cbmBookTime.SelectedValue.ToString()) || form.cbmBookTime.SelectedIndex == -1)
-      {
-        UIHelper.ShowMessage("Specify a Booking Time.");
-        form.cbmBookTime.Focus();
-        _IsValid = false;
-      }
-
-      return _IsValid;
-    }
+    #endregion
 
     #endregion
 

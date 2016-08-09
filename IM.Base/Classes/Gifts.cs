@@ -212,16 +212,16 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida el monto maximo de regalos
     /// </summary>
-    /// <param name="totalGifts">Total de costo de los regalos</param>
+    /// <param name="totalCostGifts">Total de costo de los regalos</param>
     /// <param name="maxAuthGifts">Máximo autorizado de los regalos</param>
-    /// <returns></returns>
+    /// <returns>True totalCostGift Autorizado | False No autorizado</returns>
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
     /// [vipacheco] 26/Mayo/2016 Modified --> Se migro a esta clase generica
     /// </history>
-    public static bool ValidateMaxAuthGifts(string totalGifts, string maxAuthGifts)
+    public static bool ValidateMaxAuthGifts(string totalCostGifts, string maxAuthGifts)
     {
-      decimal pcurTotalGifts = Convert.ToDecimal(totalGifts.TrimStart('$'));
+      decimal pcurTotalGifts = Convert.ToDecimal(totalCostGifts.TrimStart('$'));
       decimal pcurMaxAuthGifts = Convert.ToDecimal(maxAuthGifts.TrimStart('$'));
 
       // si se rebasa el monto maximo de regalos
