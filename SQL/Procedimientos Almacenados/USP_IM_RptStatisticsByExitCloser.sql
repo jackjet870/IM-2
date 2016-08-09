@@ -533,7 +533,7 @@ DECLARE @StatsByExitCloser table (
 	dbo.UFN_OR_SecureDivision(SUM (Sales),sum(UPS)) ClosingFactor,
 	dbo.UFN_OR_SecureDivision(SUM (Amount),SUM (Sales)) SaleAverage
 	FROM(
-		SELECT DISTINCT m.guID, s.SalemanID,s.SalemanName,s.SalemanType,
+		SELECT DISTINCT m.guID, m.saID, s.SalemanID,s.SalemanName,s.SalemanType,
 		s.UPS, s.Amount, m.Opp,	s.Sales , snN AS SalesAmountRange, 
 		CASE WHEN m.saGrossAmount BETWEEN snFrom AND snTo THEN S.Sales ELSE 0 END SalesRange,
 		CASE WHEN t.SalesRoom = @SalesRoom AND ISNULL(CONVERT(varchar(1),tc.tsN),'') <> ISNULL(CONVERT(varchar(1),t.TeamN),'') THEN 'INACTIVE' ELSE 'ACTIVE'  END AS SalesmanStatus,

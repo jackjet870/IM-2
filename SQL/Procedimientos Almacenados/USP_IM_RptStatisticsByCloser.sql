@@ -562,7 +562,7 @@ DECLARE @StatsByCloser table (
 	dbo.UFN_OR_SecureDivision(SUM (Sales + [Exit]),sum(UPS)) ClosingFactor,
 	dbo.UFN_OR_SecureDivision(SUM (Amount),SUM (Sales + [Exit])) SaleAverage
 	FROM(
-		SELECT DISTINCT m.guID, s.SalemanID,s.SalemanName,s.SalemanType,
+		SELECT DISTINCT m.guID, m.saID, s.SalemanID,s.SalemanName,s.SalemanType,
 		s.UPS, s.Amount, m.Opp,
 		CASE WHEN m.MembershipGroup='EXIT' THEN 0 ELSE s.Sales END AS Sales,
 		CASE WHEN m.MembershipGroup='EXIT' THEN s.Sales ELSE 0 END AS [Exit],

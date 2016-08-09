@@ -601,7 +601,7 @@ DECLARE @StatsByFTB table (
 	dbo.UFN_OR_SecureDivision(SUM (Sales + [Exit]),sum(UPS)) ClosingFactor,
 	dbo.UFN_OR_SecureDivision(SUM (Amount),SUM (Sales + [Exit])) SaleAverage
 	FROM(
-		SELECT DISTINCT m.guID, s.SalemanID,s.SalemanName,m.Locations, s.SalemanType,
+		SELECT DISTINCT m.guID, m.saID, s.SalemanID,s.SalemanName,m.Locations, s.SalemanType,
 		CASE WHEN dbo.UFN_IM_IsSelfGen(s.SalemanID,s.Role,m.guSelfGen)=1 THEN 
 			CASE WHEN m.guOverflow = 1 THEN 'Overflow' ELSE 'Front To Middle' END
 		ELSE ISNULL(CONVERT(varchar(40),PO.poN ),'NO POST')  END AS PostName,
