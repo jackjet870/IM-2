@@ -133,10 +133,10 @@ namespace IM.Host.Forms
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
-          break;
 
           if (fileinfo != null)
             Process.Start(fileinfo.FullName);
+          break;         
       }
     }
     #endregion 
