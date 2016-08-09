@@ -63,7 +63,6 @@ namespace IM.BusinessRules.BR
                       blIdentity = true;
                       break;
                     }
-
                   }
                 }
                 #endregion

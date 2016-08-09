@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Classes\FormatInputPropertyClass.cs" />
     <Compile Include="Classes\MaxLengthPropertyClass.cs" />
+    <Compile Include="Classes\PrecisionPropertyClass.cs" />
     <Compile Include="Classes\RichTextBoxToolBar.cs" />
     <Compile Include="Classes\TagPropertyClass.cs" />
     <Compile Include="Enums\EnumFormatInput.cs" />

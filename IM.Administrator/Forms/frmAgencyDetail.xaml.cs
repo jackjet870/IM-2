@@ -55,15 +55,15 @@ namespace IM.Administrator.Forms
         txtagN.IsEnabled = true;
         txtagSalePay.IsEnabled = true;
         txtagShowPay.IsEnabled = true;
-        cmbClub.IsEnabled = true;
-        cmbCountri.IsEnabled = true;
-        cmbMarket.IsEnabled = true;
-        cmbRep.IsEnabled = true;
-        cmbSegment.IsEnabled = true;
-        cmbUnavMot.IsEnabled = true;
-        chkA.IsEnabled = true;
-        chkIncTour.IsEnabled = true;
-        chkShowInLst.IsEnabled = true;
+        cmbagcl.IsEnabled = true;
+        cmbagco.IsEnabled = true;
+        cmbagmk.IsEnabled = true;
+        cmbagrp.IsEnabled = true;
+        cmbagse.IsEnabled = true;
+        cmbagum.IsEnabled = true;
+        chkagA.IsEnabled = true;
+        chkagIncludeTour.IsEnabled = true;
+        chkagList.IsEnabled = true;
         UIHelper.SetUpControls(agency, this);
       }
       #endregion      
@@ -84,7 +84,7 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();//Para actualizar el datacontext
-      if (cmbUnavMot.SelectedValue!=null && ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add )
+      if (cmbagum.SelectedValue!=null && ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add )
       {
         _isClosing = true;
         Close();
@@ -207,7 +207,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<UnavailableMotive> lstUnavailableMotive = await BRUnavailableMotives.GetUnavailableMotives();
-        cmbUnavMot.ItemsSource = lstUnavailableMotive;
+        cmbagum.ItemsSource = lstUnavailableMotive;
       }
       catch(Exception ex)
       {
@@ -228,7 +228,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<MarketShort> lstMarkestShort = await BRMarkets.GetMarkets(1);
-        cmbMarket.ItemsSource = lstMarkestShort;
+        cmbagmk.ItemsSource = lstMarkestShort;
       }
       catch(Exception ex)
       {
@@ -250,7 +250,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Rep> lstReps = await BRReps.GetReps(new Rep(), 1);
-        cmbRep.ItemsSource = lstReps;
+        cmbagrp.ItemsSource = lstReps;
       }
       catch(Exception ex)
       {
@@ -271,7 +271,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<SegmentByAgency> lstSegmentsByAgencies =await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
-        cmbSegment.ItemsSource = lstSegmentsByAgencies;
+        cmbagse.ItemsSource = lstSegmentsByAgencies;
       }
       catch(Exception ex)
       {
@@ -293,7 +293,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Club> lstClubs = await BRClubs.GetClubs(new Club());        
-        cmbClub.ItemsSource = lstClubs;
+        cmbagcl.ItemsSource = lstClubs;
       }
       catch(Exception ex)
       {
@@ -314,7 +314,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<CountryShort> lstCountries = await BRCountries.GetCountries(1);
-        cmbCountri.ItemsSource = lstCountries;
+        cmbagco.ItemsSource = lstCountries;
       }
       catch(Exception ex)
       {
@@ -352,6 +352,5 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-
   }
 }

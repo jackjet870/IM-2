@@ -11,15 +11,15 @@ namespace IM.Base.Helpers
     /// <summary>
     /// Cambiar el formato number currency a formato int
     /// </summary>
-    /// <param name="textCurrency"></param>
+    /// <param name="textCurrency">texto a convertir</param>
     /// <returns>Numero en formato estandar</returns>
     /// <history>
     /// [emoguel] created 28/03/2016
+    /// [emoguel] modified 09/08/2016
     /// </history>
     public static string DoubleCurrencyToStandar(string textCurrency)
-    {
-      double dRes = 0;
-      return double.TryParse(textCurrency, NumberStyles.Currency, CultureInfo.CurrentCulture, out dRes) ? dRes.ToString() : "0";
+    {      
+      return new string(textCurrency.Where(c => char.IsNumber(c) || c=='.' ).ToArray());
     }
 
     /// <summary>

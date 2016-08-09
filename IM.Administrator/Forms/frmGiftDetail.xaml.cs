@@ -61,7 +61,7 @@ namespace IM.Administrator.Forms
       dgrGiftInPack.IsReadOnly = gift.giPack;
       if (enumMode != EnumMode.preview)
       {
-        UIHelper.SetUpControls(gift, this, blnCharacters: true);      
+        UIHelper.SetUpControls(gift, this);      
         grdCost.IsEnabled = true;
         grdGeneral.IsEnabled = true;
         grdLocations.IsEnabled = true;
@@ -70,6 +70,7 @@ namespace IM.Administrator.Forms
       DataContext = gift;
       dgrLocations.BeginningEdit += GridHelper.dgr_BeginningEdit;
       dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      GridHelper.SetUpGrid(dgrGiftInPack, new GiftPackageItem());
     }
     #endregion    
 
@@ -534,21 +535,6 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(strMsj);
       }
-    }
-    #endregion
-
-    #region Preview TextInput
-    /// <summary>
-    /// Verifica que solo se inserten números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 15/07/2016
-    /// </history>
-    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }
     #endregion
 

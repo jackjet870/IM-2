@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:styClass="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="Gift Detail" Height="480" Width="490" Name="ed">
+        Title="Gift Detail" Height="480" Width="490">
     <Window.Resources>
         <CollectionViewSource x:Key="cvsLocations"/>
         <CollectionViewSource x:Key="cvsGiftsPackage"/>
@@ -46,7 +47,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="ID" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                         <TextBlock Grid.Column="1" Text="Description" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0"/>
-                        <TextBox Grid.Column="0" Tag="ID" Name="txtgiID" Text="{Binding giID}" Margin="60,0,0,0" VerticalAlignment="Top" CharacterCasing="Upper"/>
+                        <TextBox Grid.Column="0" Tag="ID" Name="txtgiID" styClass:FormatInputPropertyClass.FormatInput="NotSpecialCharacters" Text="{Binding giID}" Margin="60,0,0,0" VerticalAlignment="Top" CharacterCasing="Upper"/>
                         <TextBox Grid.Column="1" Tag="Description" Name="txtgiN" Text="{Binding giN}" Margin="60,0,0,0" VerticalAlignment="Top"/>
                     </Grid>
                     <!--#endregion-->
@@ -315,6 +316,7 @@
                                 <DataGridComboBoxColumn x:Name="cmbAgencies" Header="Agencies (0)" SelectedValuePath="agID" DisplayMemberPath="agN" SelectedValueBinding="{Binding agID}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
+                        
                         <DataGrid Name="dgrGiftInPack"  CanUserReorderColumns="False" PreparingCellForEdit="dgrGiftInPack_PreparingCellForEdit" SelectionMode="Single" AutoGenerateColumns="False" BeginningEdit="dgr_BeginningEdit" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" CanUserResizeColumns="False" Grid.Column="1" Margin="5" Visibility="Collapsed" >
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridRow}">
@@ -322,14 +324,7 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <DataGridTextColumn  x:Name="txtQty" Header="Qty"  Binding="{Binding gpQty}">
-                                    <DataGridTextColumn.EditingElementStyle>
-                                        <Style TargetType="{x:Type TextBox}">
-                                            <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"/>
-                                            <Setter Property="MaxLength" Value="4"/>
-                                        </Style>
-                                    </DataGridTextColumn.EditingElementStyle>
-                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="txtQty" Header="Qty"  Binding="{Binding gpQty}"/>
                                 <DataGridTemplateColumn  x:Name="dtcGiftPack" Width="*" SortMemberPath="GiftItem.giN" Header="Gift In Pack (0)" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>

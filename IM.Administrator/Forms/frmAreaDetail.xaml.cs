@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Region> lstRegions = await BRRegions.GetRegions(1);
-        cmbRegion.ItemsSource = lstRegions;
+        cmbarrg.ItemsSource = lstRegions;
         skpStatus.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
@@ -71,8 +71,8 @@ namespace IM.Administrator.Forms
       if(mode!=EnumMode.preview)
       {
         txtarN.IsEnabled = true;
-        chkA.IsEnabled = true;
-        cmbRegion.IsEnabled = true;
+        chkarA.IsEnabled = true;
+        cmbarrg.IsEnabled = true;
         txtarID.IsEnabled = (mode == EnumMode.add);
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(area, this);

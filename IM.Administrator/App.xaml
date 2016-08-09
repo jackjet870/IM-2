@@ -8,7 +8,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

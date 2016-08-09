@@ -44,9 +44,9 @@
             <!--#region Datos-->
             <TextBox Name="txtagID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding agID}" CharacterCasing="Upper" IsEnabled="False"/>
             <TextBox Name="txtagN" Grid.Column="1" Grid.Row="1" Tag="description"  Height="27" VerticalAlignment="Top" Text="{Binding agN}"  IsEnabled="False" />
-            <ComboBox Name="cmbUnavMot" Grid.Column="1" Grid.Row="2" Tag="unavailable motive" Height="27" VerticalAlignment="Top" SelectedValuePath="umID" DisplayMemberPath="umN" SelectedValue="{Binding agum}" IsEnabled="False"/>
-            <ComboBox Name="cmbMarket" Grid.Column="1" Grid.Row="3" Tag="market"  Height="27" VerticalAlignment="Top" SelectedValuePath="mkID" DisplayMemberPath="mkN" SelectedValue="{Binding agmk}" IsEnabled="False"/>
-            <TextBox Name="txtagShowPay"  Grid.Column="1" Grid.Row="4" Height="27" Tag="show pay"  VerticalAlignment="Top"  Text="{Binding agShowPay,StringFormat={}{0:C}}" IsEnabled="False" />            
+            <ComboBox Name="cmbagum" Grid.Column="1" Grid.Row="2" Tag="unavailable motive" Height="27" VerticalAlignment="Top" SelectedValuePath="umID" DisplayMemberPath="umN" SelectedValue="{Binding agum}" IsEnabled="False"/>
+            <ComboBox Name="cmbagmk" Grid.Column="1" Grid.Row="3" Tag="market"  Height="27" VerticalAlignment="Top" SelectedValuePath="mkID" DisplayMemberPath="mkN" SelectedValue="{Binding agmk}" IsEnabled="False"/>
+            <TextBox Name="txtagShowPay" Grid.Column="1" Grid.Row="4" Height="27" Tag="show pay"  VerticalAlignment="Top"  Text="{Binding agShowPay,StringFormat={}{0:C}}" IsEnabled="False" />            
             <TextBox Name="txtagSalePay" Grid.Column="1" Grid.Row="5" Height="27" Tag="salePay" VerticalAlignment="Top" Text="{Binding agSalePay,StringFormat={}{0:C}}" IsEnabled="False" />
             <!--#endregion--> 
         </Grid>
@@ -73,19 +73,19 @@
             <Label Grid.Column="0" Grid.Row="3">Country</Label>
             <!--#endregion-->
             <!--#region Data-->            
-            <ComboBox Name="cmbRep" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" SelectedValuePath="rpID" DisplayMemberPath="rpID" SelectedValue="{Binding agrp}" IsEnabled="False"/>
-            <ComboBox Name="cmbSegment" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" SelectedValuePath="seID" DisplayMemberPath="seN" SelectedValue="{Binding agse}" IsEnabled="False"/>
-            <ComboBox Name="cmbClub" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValuePath="clID" DisplayMemberPath="clN" SelectedValue="{Binding agcl}" IsEnabled="False"/>
-            <ComboBox Name="cmbCountri" Tag="country" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValue="{Binding agco}" IsEnabled="False"/>
+            <ComboBox Name="cmbagrp" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" SelectedValuePath="rpID" DisplayMemberPath="rpID" SelectedValue="{Binding agrp}" IsEnabled="False"/>
+            <ComboBox Name="cmbagse" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" SelectedValuePath="seID" DisplayMemberPath="seN" SelectedValue="{Binding agse}" IsEnabled="False"/>
+            <ComboBox Name="cmbagcl" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValuePath="clID" DisplayMemberPath="clN" SelectedValue="{Binding agcl}" IsEnabled="False"/>
+            <ComboBox Name="cmbagco" Tag="country" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValue="{Binding agco}" IsEnabled="False"/>
             <Grid Grid.Column="1" Grid.Row="4" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>
                     <RowDefinition Height="20*"/>
                     <RowDefinition Height="20*"/>
                 </Grid.RowDefinitions>
-                <CheckBox Name="chkA" VerticalAlignment="Top" Grid.Row="0" IsChecked="{Binding agA}"  IsEnabled="False">Active</CheckBox>
-                <CheckBox Name="chkShowInLst" Grid.Row="1" VerticalAlignment="Top" Height="13" IsChecked="{Binding agList}" IsEnabled="False">Show In List</CheckBox>
-                <CheckBox Name="chkIncTour" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding agIncludedTour}" Height="13" IsEnabled="False">Included Tour</CheckBox>
+                <CheckBox Name="chkagA" VerticalAlignment="Top" Grid.Row="0" IsChecked="{Binding agA}"  IsEnabled="False">Active</CheckBox>
+                <CheckBox Name="chkagList" Grid.Row="1" VerticalAlignment="Top" Height="13" IsChecked="{Binding agList}" IsEnabled="False">Show In List</CheckBox>
+                <CheckBox Name="chkagIncludeTour" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding agIncludedTour}" Height="13" IsEnabled="False">Included Tour</CheckBox>
             </Grid>
             <!--#endregion-->
         </Grid>

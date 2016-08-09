@@ -28,8 +28,8 @@
         <!--#region Datos-->
         <TextBox Name="txtarID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding arID}" CharacterCasing="Upper" IsEnabled="False" />
         <TextBox Name="txtarN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding arN}"  IsEnabled="False" />
-        <ComboBox Name="cmbRegion" Grid.Column="1" Grid.Row="2" Tag="region" Height="27" VerticalAlignment="Top" DisplayMemberPath="rgN" SelectedValuePath="rgID" SelectedValue="{Binding arrg}" IsEnabled="False"/>        
-        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>
+        <ComboBox Name="cmbarrg" Grid.Column="1" Grid.Row="2" Tag="region" Height="27" VerticalAlignment="Top" DisplayMemberPath="rgN" SelectedValuePath="rgID" SelectedValue="{Binding arrg}" IsEnabled="False"/>        
+        <CheckBox Name="chkarA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Name="skpStatus" Visibility="Visible" Margin="0,0,0,7" HorizontalAlignment="Left" Grid.ColumnSpan="2">
             <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>

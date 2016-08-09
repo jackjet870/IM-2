@@ -60,7 +60,7 @@ namespace IM.BusinessRules.BR
             bool blnStatus = Convert.ToBoolean(nStatus);
             query = query.Where(wh => wh.whA == blnStatus);
           }
-
+          #region Warehouse
           if (wareHouse != null)//Validamos que se tenga el objeto
           {
             if (!string.IsNullOrWhiteSpace(wareHouse.whID))//filtro por ID
@@ -78,7 +78,7 @@ namespace IM.BusinessRules.BR
               query = query.Where(wh => wh.whar == wareHouse.whar);
             }
           }
-
+          #endregion
           return query.OrderBy(wh => wh.whN).ToList();
         }
       });

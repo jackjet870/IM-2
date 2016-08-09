@@ -119,6 +119,7 @@
     <Compile Include="ChargeTo.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\ColumnDefinition.cs" />
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />

@@ -11,6 +11,9 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using IM.Model.Helpers;
 using System.Data.Entity.Validation;
+using IM.BusinessRules.BR;
+using IM.Styles.Classes;
+using IM.Styles.Enums;
 
 namespace IM.Base.Helpers
 {
@@ -180,33 +183,43 @@ namespace IM.Base.Helpers
     /// [emoguel] created 08/04/2016
     /// [emoguel] modified 11/07/2016
     /// </history>
-    public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false)
+    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor
+      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(obj,database);
 
       Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
       {
         #region Obtenemos el MaxLength
-        EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);
         foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
-        {            
-          EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember                      
-          Facet facet;
-          Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control          
-          if (control != null)//Verifcamos que tengamos un control
+        {
+          //buscamos si existe el control
+          Control control = lstControls.FirstOrDefault(cl => cl.Name == "txt" + pi.Name);
+          //Buscamos la descripción de la columna
+          var columnDefinition = lstColumnsDefinitions.FirstOrDefault(cd => cd.column == pi.Name);
+          #region tooltip
+          //var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
+          //if(controlTooltip!=null && columnDefinition!=null && !string.IsNullOrWhiteSpace(columnDefinition.description))
+          //{
+          //  controlTooltip.ToolTip = columnDefinition.description;
+          //}
+          #endregion
+
+          if (control != null && columnDefinition!=null)//Verifcamos que tengamos un control
           {            
             TextBox txt = control as TextBox;//Convertimos el control a texbox
-            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);            
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
+            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt);            
+            EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(txt);//Formato del campo de texto
             switch (typeCode)
             {
               #region String
               case TypeCode.String:
               case TypeCode.Char:
-                {
-                  facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
-                  txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
-                  if(blnCharacters)
+                {                  
+                  txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;//Asignamos el maxLength                  
+                  if(formatInput==EnumFormatInput.NotSpecialCharacters)
                   {
                     txt.PreviewTextInput += TextBoxHelper.TextInputSpecialCharacters;
                   }
@@ -218,28 +231,33 @@ namespace IM.Base.Helpers
               case TypeCode.Decimal:
               case TypeCode.Double:                
                 {
-                  int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
-                  int Scale = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Scale").FirstOrDefault().Value);
-                  if(Scale>0)
+                  //Si permite decimales
+                  if (columnDefinition.scale>0)
                   {
-                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;
+                    if(string.IsNullOrWhiteSpace(PrecisionPropertyClass.GetPrecision(txt)))
+                    {
+                      PrecisionPropertyClass.SetPrecision(txt, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale);
+                    }
+                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;                    
+                    txt.PreviewKeyDown += TextBoxHelper.Decimal_PreviewKeyDown;
+                    txt.GotFocus += TextBoxHelper.DecimalGotFocus;
                     if (enumMode != EnumMode.search)
                     {
-                      txt.LostFocus += TextBoxHelper.LostFocus;
-                      txt.GotFocus += TextBoxHelper.DecimalGotFocus;
+                      txt.LostFocus += TextBoxHelper.LostFocus;                      
                     }
                   }
+                  //Si sólo permite enteros
                   else
                   {
                     txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                    txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                     if (enumMode != EnumMode.search)
                     {
                       txt.LostFocus += TextBoxHelper.LostFocus;
                       txt.GotFocus += TextBoxHelper.IntGotFocus;
-                    }
-                  }
-                  
-                  txt.MaxLength = Precision;                  
+                    }                    
+                  }                  
+                  txt.MaxLength = (maxLengthProp > 0)?maxLengthProp: columnDefinition.maxLength;                  
                   break;
                 }
               #endregion
@@ -261,9 +279,19 @@ namespace IM.Base.Helpers
               case TypeCode.Int16:
               case TypeCode.Int32:
               case TypeCode.Int64:
-                {
-                  txt.MaxLength = 10;
-                  txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                {                 
+                  
+                  switch (formatInput)
+                  {
+                    case EnumFormatInput.Number:
+                      txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;
+                      break;
+                    case EnumFormatInput.NumberNegative:
+                      txt.PreviewTextInput += TextBoxHelper.IntWithNegativeTextInput;
+                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp+1 : columnDefinition.maxLength+1;
+                      break;
+                  }                  
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.search)
                   {
