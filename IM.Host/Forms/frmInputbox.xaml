@@ -13,10 +13,20 @@
         WindowStyle="SingleBorderWindow" 
         ResizeMode="NoResize" 
         ShowInTaskbar="False">
-    <Grid>
-        <TextBox x:Name="Input" HorizontalAlignment="Left" Height="23" Margin="10,53,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="246"/>
-        <TextBlock x:Name="tbkMessage" HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="246"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="200,90,0,0" VerticalAlignment="Top" Width="56" Click="btnCancel_Click"/>
-        <Button x:Name="btnAccept" Content="Accept" HorizontalAlignment="Left" Margin="132,90,0,0" VerticalAlignment="Top" Width="57" Click="btnAccept_Click"/>
+    <Grid Margin="10,10,10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="119*"/>
+            <ColumnDefinition Width="75*"/>
+            <ColumnDefinition Width="72*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" MinHeight="27"/>
+            <RowDefinition Height="auto" MinHeight="36"/>
+            <RowDefinition Height="auto" MinHeight="34"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="Input" HorizontalAlignment="Left" Margin="5,5,0,0" TextWrapping="WrapWithOverflow" Text="" VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3" Width="231"/>
+        <TextBlock x:Name="tbkMessage" HorizontalAlignment="Left" Margin="5,5,5,5" TextWrapping="WrapWithOverflow" Text="Indicasiones" VerticalAlignment="Center" Width="231" Grid.ColumnSpan="3"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="5,5,5,5" VerticalAlignment="Top" Click="btnCancel_Click" Grid.Row="2" Grid.Column="2" Width="45"/>
+        <Button x:Name="btnAccept" Content="Accept" HorizontalAlignment="Left" Margin="15,6,0,0" VerticalAlignment="Top" Click="btnAccept_Click" Grid.Row="2" Grid.Column="1" Width="45"/>
     </Grid>
 </Window>

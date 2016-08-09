@@ -34,18 +34,27 @@ namespace IM.Host.Forms
     decimal dcUSD;
     decimal dcMXN;
     string previousText = String.Empty;
+    bool blnResult = false;
+    decimal amountToPay = 0;
+    decimal amountPay = 0;
     #endregion
 
     #region Constructores y Destructores
-    public frmCxCPayments(int iGiftReceiptID)
+    public frmCxCPayments(int iGiftReceiptID, decimal dcAmountToPay, decimal dcAmountPay, decimal balance)
     {
       InitializeComponent();
+      
       cxCPaymentShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("cxCPaymentShortViewSource")));
       giftReceiptID = iGiftReceiptID;
       _dtpServerDate = BRHelpers.GetServerDate();
       _lstExchangeRate = BRExchangeRate.GetExchangeRatesByDate(DateTime.Now, "MEX").FirstOrDefault();
       dbExchange = (double)_lstExchangeRate.exExchRate;
-      
+      amountToPay = dcAmountToPay;
+      amountPay = dcAmountPay;
+      textBalance.Text = String.Format("{0:C}", balance);
+      textTotal.Text = String.Format("{0:C}", dcAmountToPay);
+      tbxUSD.IsEnabled = tbxMXN.IsEnabled = imgButtonSave.IsEnabled = (dcAmountToPay == dcAmountPay) ? false : true;
+     
     }
     #endregion
 
@@ -65,9 +74,9 @@ namespace IM.Host.Forms
       strUserID = App.User.User.peID;
       strUserName = App.User.User.peN;
       tbxReceivedBy.Text = $"{strUserName}";
-      lblReceiptID.Content = $"{giftReceiptID}";
-      lblPaymentDt.Content = String.Format("{0:dd/MM/yyyy}", _dtpServerDate);
-      lblExchangeRate.Content = String.Format("{0:C}", (1/dbExchange));// $"{dbExchange}"; 
+      textReceiptID.Text = $"{giftReceiptID}";
+      textPaymentDt.Text = String.Format("{0:dd/MM/yyyy}", _dtpServerDate);
+      textExchangeRate.Text = String.Format("{0:C}", (1/dbExchange));// $"{dbExchange}"; 
       
     }
 
@@ -113,6 +122,7 @@ namespace IM.Host.Forms
     /// </history>
     private void Decimal_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
+      
       e.Handled = !ValidateHelper.OnlyDecimals(e.Text, sender as TextBox);
       if(!e.Handled)
         switch (((TextBox)sender).Name)
@@ -151,6 +161,7 @@ namespace IM.Host.Forms
         ApplyRate("MXN", dbTextExchange);
       }
       tbx.TextChanged -= tbx_TextChanged;
+      
     }
     #endregion
 
@@ -163,6 +174,7 @@ namespace IM.Host.Forms
     ///</history>
     private void btnSave_Click(object sender, MouseButtonEventArgs e)
     {
+
       Save();
     }
     #endregion
@@ -259,6 +271,8 @@ namespace IM.Host.Forms
         dcUSD = Convert.ToDecimal(dbAmount * dbExchange);
         tbxUSD.Text = String.Format("{0:C}", dcUSD);
       }
+      textBalance.Text =  
+      textBalance.Text = String.Format("{0:C}", amountToPay - (dcUSD + amountPay));
     }
     #endregion
 
@@ -297,6 +311,7 @@ namespace IM.Host.Forms
           message = "Transaction Added.";
           LoadTexBox();
           LoadPayments();
+          blnResult = true;
         }
 
       }
@@ -304,5 +319,9 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      DialogResult = blnResult;
+    }
   }
 }

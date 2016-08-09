@@ -17,6 +17,24 @@ using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
+  // This returns true if sale is on or above targe, otherwise false
+  public class AmountConverter : IValueConverter
+  {
+
+    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+      double amountpay;
+      string convert = (value != null) ? value.ToString() : "0";
+      Double.TryParse(convert, out amountpay);
+      return (amountpay > 0.00) ? true : false;
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+      throw new NotImplementedException();
+    }
+  }
+
+
   /// <summary>
   /// Interaction logic for frmCxCAuthorization.xaml
   /// </summary>
@@ -67,10 +85,10 @@ namespace IM.Host.Forms
       CxCDataViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("cxCDataViewSource")));
       LoadAtributes();
       underPaymentMotiveViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("underPaymentMotiveViewSource")));
-      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
+      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.Standard))
       {
         imgButtonSave.IsEnabled = false;
-        cxCDataDataGrid.Columns.SingleOrDefault(c => c.Header.ToString() == "Auth.").IsReadOnly = true;
+        dtgCxC.Columns.SingleOrDefault(c => c.Header.ToString() == "Auth.").IsReadOnly = true;
       }
     }
     #endregion
@@ -165,34 +183,18 @@ namespace IM.Host.Forms
     public void SetNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
-      //txtbUserName.Text = App.User.User.peN;
-      //txtbLocation.Text = App.User.Location.loN;
-      //Validamos permisos y restricciones para el combobox
-      if (App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
+      
+      cbxPersonnel.IsEnabled = true;
+      if (cbxPersonnel.Items.Count > 0)
       {
-        cbxPersonnel.IsEnabled = true;
-        if (cbxPersonnel.Items.Count > 0)
-        {
-          cbxPersonnel.SelectedIndex = 0;
-          selectPersonnelInCombobox(App.User.User.peID);
-        }
-        else
-        {
-          cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
-        }
+        cbxPersonnel.SelectedIndex = 0;
+        selectPersonnelInCombobox(App.User.User.peID);
       }
       else
       {
-        cbxPersonnel.IsEnabled = false;
-        if (cbxPersonnel.Items.Count > 0)
-        {
-          selectPersonnelInCombobox(App.User.User.peID);
-        }
-        else
-        {
-          cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
-        }
+        cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
       }
+     
     }
     #endregion
 
@@ -214,7 +216,7 @@ namespace IM.Host.Forms
       }
       else
       {
-        cbxPersonnel.SelectedItem = 1;
+        cbxPersonnel.SelectedItem = 0;
       }
     }
     #endregion
@@ -289,10 +291,8 @@ namespace IM.Host.Forms
           cbxLeadSource.ItemsSource = data;
           cbxLeadSource.IsEnabled = true;
         }
-        if (ComboBoxPermision(cbxLeadSource, EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
-        {
-          selectInCombobox(cbxLeadSource);
-        }
+        selectInCombobox(cbxLeadSource);
+        
       }
       catch (Exception ex)
       {
@@ -368,12 +368,13 @@ namespace IM.Host.Forms
       //var CxCFilter = lstCxCData.Where(cxc => cxc.Page.Value == minPage).ToList();
       CxCDataViewSource.Source = null;
       CxCDataViewSource.Source = lstCxCData.Where(cxc => cxc.Page.Value == minPage).ToList(); ;
-      cxCDataDataGrid.Items.Refresh();
-      var totalCollumns = cxCDataDataGrid.Items.Count;
-      var from = (totalRows > 100 && minPage > 1) ? (100 * (minPage)) + 1 : 1;
-      var to = (totalRows > 100 && minPage > 1) ? (100 * minPage) + totalCollumns : (totalCollumns * minPage);
+      dtgCxC.Items.Refresh();
+      var totalCollumns = dtgCxC.Items.Count;
+      var from = (totalRows > 100 && minPage > 1) ? (100 * (minPage - 1)) + 1 : 1;
+      var to = (totalRows > 100 && minPage > 1) ? (minPage != lastPage) ? (100 * minPage) : totalRows : (totalCollumns * minPage);
       lblPagText.Content = $"{from} / {to} of {totalRows}";
       StatusBarReg.Content = $"{minPage} / {lastPage}";
+      
     }
     #endregion
 
@@ -384,6 +385,7 @@ namespace IM.Host.Forms
       GetLeadSources();
       underPaymentMotiveViewSource.Source = lstUnderPaymentMotive = await BRUnderPaymentMotives.getUnderPaymentMotives(1);
       SetNewUserLogin();
+      await GetCxCAuthorized();
 
     }
     #endregion
@@ -397,13 +399,22 @@ namespace IM.Host.Forms
     /// </history>
     private void AuthorizedBox_Click(object sender, RoutedEventArgs e)
     {
-      var item = cxCDataDataGrid.SelectedItem as CxCData;
-      var columns = cxCDataDataGrid.CurrentCell.Column.DisplayIndex;
+      var item = dtgCxC.SelectedItem as CxCData;
+      var columns = dtgCxC.CurrentCell.Column.DisplayIndex;
       
       decimal convertToDecimal = 0;
-    
-      if (item.Authorized.Value)
+
+      string convert = (item.grAmountPaid != null) ? item.grAmountPaid.Value.ToString() : "0";
+      decimal amount = (Decimal.TryParse(convert, out convertToDecimal)) ? convertToDecimal : 0;
+      if (amount > 0 && blnFilterAuthorized)
       {
+        UIHelper.ShowMessage("the record can not be Unauthorized because there has been a paymen.", MessageBoxImage.Information, "CxC Authorized");
+        item.Authorized = true;
+      }
+      else
+      {
+        if (item.Authorized.Value)
+        {
           var defaultValue = String.Format("{0:0.00}", item.CxC);
           frmInputbox _inputBox = new frmInputbox("Amount to pay", "Insert the amount to pay", defaultvalue: defaultValue, isString: false, maxLength: (double)item.CxC);
           if (_inputBox.ShowDialog() == true)
@@ -414,7 +425,7 @@ namespace IM.Host.Forms
             item.grAuthorizedName = strUserName;
             item.grAmountToPay = amountPay;
             item.grBalance = amountPay;
-            if((lstUnderPaymentMotive.Count > 0) && (amountPay < item.CxC)) item.grup = lstUnderPaymentMotive.FirstOrDefault().upID;
+            if ((lstUnderPaymentMotive.Count > 0) && (amountPay < item.CxC)) item.grup = lstUnderPaymentMotive.FirstOrDefault().upID;
             iTotalchanges++;
           }
           else
@@ -422,22 +433,24 @@ namespace IM.Host.Forms
             item.Authorized = false;
           }
           _inputBox.Close();
+        }
+        else
+        {
+          item.Authorized = false;
+          item.grCxCAppD = null;
+          item.grAuthorizedBy = "";
+          item.grAuthorizedName = "";
+          item.grup = null;
+          item.grcxcAuthComments = "";
+          item.grAmountToPay = 0;
+          item.grBalance = 0;
+          iTotalchanges = (blnFilterAuthorized) ? iTotalchanges + 1 : iTotalchanges - 1;
+        }
       }
-      else
-      {
-        item.Authorized = false;
-        item.grCxCAppD = null;
-        item.grAuthorizedBy = "";
-        item.grAuthorizedName = "";
-        item.grup = null;
-        item.grcxcAuthComments = "";
-        item.grAmountToPay = 0;
-        item.grBalance = 0;
-        iTotalchanges = (blnFilterAuthorized) ? iTotalchanges + 1 : iTotalchanges - 1;
-      }
-      cxCDataDataGrid.CommitEdit();
-      cxCDataDataGrid.CancelEdit();
-      cxCDataDataGrid.Items.Refresh();
+      dtgCxC.CommitEdit();
+      dtgCxC.CancelEdit();
+      dtgCxC.Items.Refresh();
+
     }
     #endregion
 
@@ -453,7 +466,7 @@ namespace IM.Host.Forms
 
       if (blnDatePiker && blnOpenCalendar)
       {
-        var item = cxCDataDataGrid.SelectedItem as CxCData;
+        var item = dtgCxC.SelectedItem as CxCData;
         var dtp = sender as DatePicker;
 
         if (item.grCxCAppD != null)
@@ -466,9 +479,9 @@ namespace IM.Host.Forms
             {
               if (UIHelper.ShowMessage("To apply the changes you have made?", MessageBoxImage.Question, "CxC Autorizathion") == MessageBoxResult.Yes)
               {
-                cxCDataDataGrid.CommitEdit();
-                cxCDataDataGrid.CancelEdit();
-                cxCDataDataGrid.Items.Refresh();
+                dtgCxC.CommitEdit();
+                dtgCxC.CancelEdit();
+                dtgCxC.Items.Refresh();
                 blnDatePiker = false;
                 blnOpenCalendar = false;
                 UIHelper.ShowMessage("Saving Process Completed.", MessageBoxImage.Information, "CxC Application");
@@ -529,7 +542,7 @@ namespace IM.Host.Forms
       if (newTab != tbcAuthorized.SelectedItem)
       {
         e.Handled = true;
-        var listCxCModifield = (cxCDataDataGrid.Items.SourceCollection).Cast<CxCData>().ToList();
+        var listCxCModifield = (dtgCxC.Items.SourceCollection).Cast<CxCData>().ToList();
         
         if (iTotalchanges > 0)
         {
@@ -576,7 +589,7 @@ namespace IM.Host.Forms
     /// </history>
     public void ColumnVisibility(string header, bool visibility)
     {
-      cxCDataDataGrid.Columns.SingleOrDefault(c => c.Header.ToString() == header).Visibility = (visibility) ? Visibility.Visible : Visibility.Hidden;
+      dtgCxC.Columns.SingleOrDefault(c => c.Header.ToString() == header).Visibility = (visibility) ? Visibility.Visible : Visibility.Hidden;
     }
     #endregion
 
@@ -591,7 +604,7 @@ namespace IM.Host.Forms
     {
       imgButtonSave.IsEnabled = false;
       StaStart("Saving changes... Please wait");
-      foreach (CxCData cxcData in cxCDataDataGrid.Items)
+      foreach (CxCData cxcData in dtgCxC.Items)
       {
         if (cxcData.Authorized.Value == !blnFilterAuthorized)
         {
@@ -656,16 +669,29 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 20/06/2016 Created
     /// </history>
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private async void Button_Click(object sender, RoutedEventArgs e)
     {
-      var item = cxCDataDataGrid.SelectedItem as CxCData;
+      var item = dtgCxC.SelectedItem as CxCData;
+      var idexselected = dtgCxC.SelectedIndex;
       switch (((Button)sender).Name)
       {
         case "btnPay":
-          frmCxCPayments _frmCxCPayments = new frmCxCPayments(item.grID);
-          _frmCxCPayments.ShowInTaskbar = false;
-          _frmCxCPayments.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-          _frmCxCPayments.ShowDialog();
+          if(item.grAmountToPay != null && item.grAmountToPay.Value > 0)
+          {
+            frmCxCPayments _frmCxCPayments = new frmCxCPayments(item.grID, item.grAmountToPay.Value, (item.grAmountPaid != null) ? item.grAmountPaid.Value : 0, (item.grBalance != null) ? item.grBalance.Value : 0);
+            _frmCxCPayments.ShowInTaskbar = false;
+            _frmCxCPayments.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //_frmCxCPayments.ShowDialog();
+            if (_frmCxCPayments.ShowDialog() == true)
+            {
+              await GetCxCAuthorized(blnFilterAuthorized);
+              GridHelper.SelectRow(dtgCxC, idexselected);
+            };
+          }
+          else
+          {
+            UIHelper.ShowMessage("It is not valid amount to pay", MessageBoxImage.Error, "CxC Payments" );
+          }
           break;
         case "btnLog":
           frmGiftsReceiptsLog _frmGiftsReceiptsLog = new frmGiftsReceiptsLog(item.grID);
@@ -749,7 +775,7 @@ namespace IM.Host.Forms
     /// </history>
     private void AuthComments_LostFocus(object sender, RoutedEventArgs e)
     {
-      var item = cxCDataDataGrid.SelectedItem as CxCData;
+      var item = dtgCxC.SelectedItem as CxCData;
       var txt = sender as TextBox;
       item.grcxcAuthComments = txt.Text;
     }
@@ -849,5 +875,12 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    
+    private void dtgCxC_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      
+    }
+    
   }
+  
 }
