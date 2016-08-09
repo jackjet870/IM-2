@@ -33,14 +33,14 @@
 
     <!--#region Menú-->
     <GroupBox x:Name="grdSearch" Header="Guest Search Criteria" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,0,5,5">
-      <StackPanel Orientation="Horizontal">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
         <StackPanel Orientation="Vertical" Margin="0,0,5,0">
           <TextBlock Text="Lead Source"/>
-          <ComboBox x:Name="cboLeadSource" Width="150"  SelectedValuePath="lsID" ItemsSource="{Binding Source={StaticResource dsLeadSource}}" DisplayMemberPath="lsN"/>
+          <ComboBox x:Name="cboLeadSource" Width="150"  SelectedValuePath="lsID" DisplayMemberPath="lsN"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,0,5,0" >
           <TextBlock Text="Sales Room"/>
-          <ComboBox x:Name="cboSalesRoom" Width="120" SelectedValuePath="srID" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}" DisplayMemberPath="srN"/>
+          <ComboBox x:Name="cboSalesRoom" Width="120" SelectedValuePath="srID" DisplayMemberPath="srN"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,0,5,0">
           <TextBlock Text="Name"/>
@@ -164,28 +164,36 @@
 
     <!--#region Botones-->
     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-      <Button x:Name="btnShow" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnShow_Click">
+      <!--#region Transfer OR Invit-->
+      <!--Este BOTON se activa cuando es invocado para realizar una invitacion o un transferencia del modulo HOST-->
+      <Button x:Name="btnOk" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnShow_Click">
         <StackPanel Orientation="Horizontal">
-          <TextBlock Text="Show" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" />
+          <TextBlock Text="Transfer || Invit" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" />
         </StackPanel>
       </Button>
-      <Button x:Name="btnMealTicket" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnMealTicket_Click">
-        <StackPanel Orientation="Horizontal">
-  
-          <TextBlock Text="Meal Ticket" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
-        </StackPanel>
-      </Button>
-      <Button x:Name="btnReceipt" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnReceipt_Click">
-        <StackPanel Orientation="Horizontal">
-
-          <TextBlock Text="Receipt" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
-        </StackPanel>
-      </Button>
-      <Button x:Name="btnSale" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,5,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnSale_Click">
-        <StackPanel Orientation="Horizontal">
-          <TextBlock Text="Sale" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
-        </StackPanel>
-      </Button>
+      <!--#endregion-->
+      <StackPanel x:Name="stkButtons" Orientation="Horizontal">
+        <Button x:Name="btnShow" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnShow_Click">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Show" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" />
+          </StackPanel>
+        </Button>
+        <Button x:Name="btnMealTicket" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnMealTicket_Click">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Meal Ticket" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
+          </StackPanel>
+        </Button>
+        <Button x:Name="btnReceipt" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnReceipt_Click">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Receipt" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
+          </StackPanel>
+        </Button>
+        <Button x:Name="btnSale" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,5,0" Width="100" Background="Aquamarine" Height="32" Template="{Binding Source={StaticResource ButtonTemplate}}" Click="btnSale_Click">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Sale" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
+          </StackPanel>
+        </Button>
+      </StackPanel>
     </StackPanel>
     <!--#region  Estatus Bar-->
     <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="3" Margin="5,5,5,0" >

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using IM.Model.Classes;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
+using System.Windows.Media;
 
 namespace IM.Base.Forms
 {
@@ -20,8 +21,7 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private EnumModule _module;
-    private bool _transferORInvit;
+    private EnumProgram _program;
     private UserData user;
 
     #endregion
@@ -39,18 +39,11 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="userdata"> Informacion del Usuario </param>
     /// <param name="module"> Enumerado que identifica el modulo origen</param>
-    /// <param name="transferORInvit"> Bandera que aplica sólo cuando el module es de tipo HOST (TRUE - De tipo transfer | FALSE - De tipo Invitation ) </param>
-    /// <history>
-    /// <history>
-    /// [vipacheco] 04/Agosto/2016 Modified - Se modifico el parametro EnumProgram a EnumModule, y se agrego el parametro transferORInvit
-    /// </history>
-    /// </history>
-    public frmSearchGuest(UserData userdata, EnumModule module, bool transferORInvit = true)
+    public frmSearchGuest(UserData userdata, EnumProgram program)
     {
       InitializeComponent();
       user = userdata;
-      _module = module;
-      _transferORInvit = transferORInvit;
+      _program = program;
     }
     #endregion
 
@@ -70,7 +63,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Select at least one Guest", title:"IM Search");
         return;
       }
-      if (_module == EnumModule.OutHouse && !user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
+      if (_program == EnumProgram.Outhouse && !user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
       {
         UIHelper.ShowMessage("Account has only read access.");
         return;
@@ -157,18 +150,16 @@ namespace IM.Base.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-     
-
-      switch (_module)
+      switch (_program)
       {
-        case EnumModule.InHouse:
+        case EnumProgram.Inhouse:
           // Cargamos el combo de LeadSource
           cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID);
           cmbLeadSourse.SelectedIndex = -1;
           // Ocultamos los criterios de busqueda no necesarios para el caso
           stkSalesRoom.Visibility = stkPR.Visibility = Visibility.Collapsed;
           break;
-        case EnumModule.OutHouse:
+        case EnumProgram.Outhouse:
           stkReservation.Visibility = btnCancel.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;
           btnOK.Content = "Transfer";
           guBookD.Visibility = stkSalesRoom.Visibility = Visibility.Visible;
@@ -188,59 +179,58 @@ namespace IM.Base.Forms
           cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRoomsByUser(user.User.peID);
           cmbSalesRoom.SelectedIndex = -1;
           break;
-        case EnumModule.Host:
-          // Verificamos de si es de tipo transfer
-          if (_transferORInvit)
-          {
-            // Cambiamos la etiqueta del boton OK
-            btnOK.Content = "Transfer";
-
-
-            cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
-            cmbLeadSourse.SelectedIndex = -1;
-          }
-          // De tipo Invit
-          else
-          {
-            // Cambiamos la etiqueta del boton OK
-            btnOK.Content = "Invit";
-            // Cargamos el combo de LeadSource
-            cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID);
-            cmbLeadSourse.SelectedIndex = -1;
-          }
-
-
-          // Cargamos el combo de Sales Room
-          cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRoomsByUser(user.User.peID);
-          cmbSalesRoom.SelectedIndex = -1;
-          break;
-        default:
-          break;
       }
-
 
       DateTime serverDate = BRHelpers.GetServerDate();
       dtpTo.Value = serverDate;
       dtpFrom.Value = serverDate.AddDays(-7);
       StatusBarReg.Content = "0 Guests";
-      //cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
 
-      //if (_module == EnumModule.OutHouse)
-      //{
-      //  cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRooms(1);
-      //  cmbSalesRoom.SelectedIndex = -1;
-      //  stkReservation.Visibility = btnCancel.Visibility = guBookD.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;
-      //  btnOK.Content = "Transfer";
-      //  stkSalesRoom.Visibility = guBookD.Visibility = stkSalesRoom.Visibility = Visibility.Visible;
-      //  txbDateFrom.Text = "Book D. From";
-      //  txbDateTo.Text = "Book D. To";
-      //  guIDColumn.Header = "ID";
-      //  dtgGuests.SelectionUnit = DataGridSelectionUnit.FullRow;
-      //  dtgGuests.SelectionMode = DataGridSelectionMode.Single;
-      //  guCheckInDColumn.Header = "Check In Date";
-      //  guCheckOutDColumn.Header = "Check Out Date";
-      //} 
-  
+      // Activamos los metodos encargado de verificar los bloq
+      CkeckKeysPress(StatusBarCap, Key.Capital);
+      CkeckKeysPress(StatusBarIns, Key.Insert);
+      CkeckKeysPress(StatusBarNum, Key.NumLock);
+
+    }
+    #endregion
+
+     #region CkeckKeysPress
+    /// <summary>
+    /// Revisa si alguna de las teclas Bloq Mayús, Bloq Núm o Insert está activo
+    /// </summary>
+    /// <param name="statusBar">StatusBarItem al que se le asignaran valores si está activa la tecla</param>
+    /// <param name="key">tecla que revisaremos si se encuentra activa</param>
+    /// <history>
+    /// [vipacheco] 08/Ago/2016 Created
+    /// </history>
+    private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
+    {
+      var keyPess = Keyboard.GetKeyStates(key).ToString();
+
+      if (keyPess.Contains("Toggled")) //si está activo el Bloq Mayús
+      {
+        statusBar.FontWeight = FontWeights.Bold;
+        statusBar.Foreground = Brushes.Black;
+      }
+      else
+      {
+        KeyDefault(statusBar);
+      }
+    }
+    #endregion
+
+    #region KeyDefault
+    /// <summary>
+    /// Asigna valores por defecto a los StatusBarItem cuando se carga el form
+    /// </summary>
+    /// <param name="statusBar">StatusBarItem al que se le asignaran los valores</param>
+    /// <history>
+    /// [vipacheco] 08/Ago/2016 Created
+    /// </history>
+    private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
+    {
+      statusBar.FontWeight = FontWeights.Normal;
+      statusBar.Foreground = Brushes.Gray;
     }
     #endregion
 
@@ -328,8 +318,6 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #endregion
-
     #region btnSearch_MouseLeftButtonDown
     /// <summary>
     /// Metodo de busqueda de acuerdo a los criterios ingresados.
@@ -339,26 +327,29 @@ namespace IM.Base.Forms
     /// </history>
     private void btnSearch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      //if (ValidateCriteria())
-      //{
-      //  StaStart("Loading Guests...");
+      if (ValidateCriteria())
+      {
+        StaStart("Loading Guests...");
 
-      //  dtgGuests.ItemsSource = BRGuests.GetSearchGuestByLS(
-      //                          cmbLeadSourse.SelectedValue != null ? cmbLeadSourse.SelectedValue.ToString() : string.Empty,
-      //                          _module == EnumModule.InHouse ? string.Empty : cmbSalesRoom.SelectedIndex == -1 ? string.Empty : cmbSalesRoom.SelectedValue.ToString(),
-      //                          txtName.Text,
-      //                          txtRoom.Text,
-      //                          txtReservation.Text,
-      //                          (!txtGUID.Text.Equals(string.Empty) ? Convert.ToInt32(txtGUID.Text) : 0),
-      //                          dtpFrom.Value.Value,
-      //                          dtpTo.Value.Value,
-      //                          _module,
-      //                          txtPR.Text);
+        dtgGuests.ItemsSource = BRGuests.GetSearchGuestByLS(
+                                cmbLeadSourse.SelectedValue != null ? cmbLeadSourse.SelectedValue.ToString() : string.Empty,
+                                _program == EnumProgram.Inhouse ? string.Empty : cmbSalesRoom.SelectedIndex == -1 ? string.Empty : cmbSalesRoom.SelectedValue.ToString(),
+                                txtName.Text,
+                                txtRoom.Text,
+                                txtReservation.Text,
+                                (!txtGUID.Text.Equals(string.Empty) ? Convert.ToInt32(txtGUID.Text) : 0),
+                                dtpFrom.Value.Value,
+                                dtpTo.Value.Value,
+                                _program,
+                                txtPR.Text);
 
-      //  StatusBarReg.Content = dtgGuests.Items.Count.ToString() + (dtgGuests.Items.Count == 1 ? " Guest" : " Guests");
-      //  StaEnd();
-      //}
-    } 
+        StatusBarReg.Content = dtgGuests.Items.Count.ToString() + (dtgGuests.Items.Count == 1 ? " Guest" : " Guests");
+        StaEnd();
+      }
+    }
     #endregion
+
+    #endregion
+
   }
 }

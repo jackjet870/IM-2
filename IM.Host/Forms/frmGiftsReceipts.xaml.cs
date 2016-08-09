@@ -58,7 +58,6 @@ namespace IM.Host.Forms
     private bool _newExchangeGiftReceipt = false, _newGiftReceipt = false;
     private short _reimpresion = 0;
     public bool _validateMaxAuthGifts;  // Variable para saber si se valida el maximo autorizado de gifts
-    private bool _applyGuestStatusValidation;  //Varibale para la validacion del guest status
     private GuestStatusValidateData _guesStatusInfo;  //Variable que contendra la informacion del guest status info
     private GuestShort _guestShort;  //Variable que contendra la infomacion del guest status
     private List<ExchangeRateShort> _lstExchangeRate;  //Variable para las tasas de cambio!
@@ -834,7 +833,8 @@ namespace IM.Host.Forms
       // configuramos la informacion de GuestStatus que se validara
       if (_guestID > 0 || txtgrID.Text != "")
       {
-        ReceiptsGifts.LoadGuesStatusInfo(string.IsNullOrEmpty(txtgrID.Text) ? 0 : Convert.ToInt32(txtgrID.Text), _guestID, ref _applyGuestStatusValidation, ref _guesStatusInfo);
+        //ReceiptsGifts.LoadGuesStatusInfo(string.IsNullOrEmpty(txtgrID.Text) ? 0 : Convert.ToInt32(txtgrID.Text), _guestID, ref _applyGuestStatusValidation, ref _guesStatusInfo);
+        _guesStatusInfo = BRGuestStatus.GetGuestStatusInfo(_guestID, string.IsNullOrEmpty(txtgrID.Text) ? 0 : Convert.ToInt32(txtgrID.Text));
       }
     }
     #endregion
@@ -1893,12 +1893,11 @@ namespace IM.Host.Forms
       {
         UIHelper.ShowMessage("Who offered the gifts?", MessageBoxImage.Information);
         tbMain.SelectedIndex = 0;
-        FocusManager.SetFocusedElement(tbMain, cbogrpe);
-        IInputElement focusedElement = FocusManager.GetFocusedElement(tbMain);
+        cbogrpe.Focus();
         return false;
       }
       // Validamos los regalos
-      else if (!ReceiptsGifts.Validate(obsGifts, _validateMaxAuthGifts, _applyGuestStatusValidation, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, grdGifts))
+      else if (!ReceiptsGifts.Validate(obsGifts, _validateMaxAuthGifts, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, grdGifts))
       {
         return false;
       }
@@ -2115,43 +2114,6 @@ namespace IM.Host.Forms
       _lstPaymentsDelete.Clear();
       _newExchangeGiftReceipt = false;
       _newGiftReceipt = false;
-    }
-    #endregion
-
-    #region cbogrpe_SelectionChanged
-    /// <summary>
-    /// Actualiza los campos del Offered By
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 25/Abril/2016 Created
-    /// </history>
-    private void cbogrpe_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      PersonnelShort _personnel = (PersonnelShort)cbogrpe.SelectedItem;
-
-      //if (_personnel != null)
-        //txtgrpe.Text = _personnel.peID;
-    }
-    #endregion
-
-    #region cbogrHost_SelectionChanged
-    /// <summary>
-    /// Actualiza los campos de los Hostess
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 25/Abril/2016 Created
-    /// </history>
-    private void cbogrHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      PersonnelShort _personnel = (PersonnelShort)cbogrHost.SelectedItem;
-
-      //if (_personnel != null)
-      //  txtgrHost.Text = _personnel.peID;
-
     }
     #endregion
 

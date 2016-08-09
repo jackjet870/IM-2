@@ -940,28 +940,28 @@ namespace IM.Host.Classes
     }
     #endregion
 
-    #region LoadGuesStatusInfo
-    /// <summary>
-    /// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
-    /// </summary>
-    /// <param name="receiptID"></param>
-    /// <param name="pGuestID"></param>
-    /// <history>
-    /// [vipacheco] 19/Abril/2016 Created
-    /// [vipacheco] 29/Junio/2016 Modified --> Migrado a esta clase  y agregado un parametro mas de referencia
-    /// </history>
-    public static void LoadGuesStatusInfo(int pReceiptID, int pGuestID, ref bool pApplyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo)
-    {
-      pApplyGuestStatusValidation = false;
+    //#region LoadGuesStatusInfo
+    ///// <summary>
+    ///// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
+    ///// </summary>
+    ///// <param name="receiptID"></param>
+    ///// <param name="pGuestID"></param>
+    ///// <history>
+    ///// [vipacheco] 19/Abril/2016 Created
+    ///// [vipacheco] 29/Junio/2016 Modified --> Migrado a esta clase  y agregado un parametro mas de referencia
+    ///// </history>
+    //public static void LoadGuesStatusInfo(int pReceiptID, int pGuestID, ref bool pApplyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo)
+    //{
+    //  pApplyGuestStatusValidation = false;
 
-      pGuestStatusInfo = BRGuestStatus.GetStatusValidateInfo(pGuestID, pReceiptID);
+    //  pGuestStatusInfo = BRGuestStatus.GetGuestStatusInfo(pGuestID, pReceiptID);
 
-      // Solo si esta configurado se realiza la revision
-      if (pGuestStatusInfo != null)
-        if (pGuestStatusInfo.gsMaxQtyTours > 0)
-          pApplyGuestStatusValidation = true;
-    }
-    #endregion
+    //  // Solo si esta configurado se realiza la revision
+    //  if (pGuestStatusInfo != null)
+    //    if (pGuestStatusInfo.gsMaxQtyTours > 0)
+    //      pApplyGuestStatusValidation = true;
+    //}
+    //#endregion
 
     #region CalculateCharge
     /// <summary>
@@ -1360,7 +1360,7 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 12/Julio/2016 Created
     /// </history>
-    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, bool pApplyGuestStatusValidation, GuestStatusValidateData pGuestStatus, 
+    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, GuestStatusValidateData pGuestStatus, 
                                 string pTotalCost, string pMaxAuthGifts, DataGrid dtg)
     {
       bool blnvalid = true;
@@ -1397,11 +1397,10 @@ namespace IM.Host.Classes
       }
 
       // Si hay GuestStatus o se debe validar
-      if (pApplyGuestStatusValidation)
+      if (pGuestStatus != null && pGuestStatus.gsMaxQtyTours > 0)
       {
-        // TODO: TONY -> Eliminar cuando se hayan hecho las pruebas sucientes con el metodo generico.
-        //blnvalid = ValidateGiftsGuestStatus(pRows, pGuestStatus);
-        blnvalid = Gifts.ValidateMaxQuantityGiftTour(dtg, pGuestStatus, "geQty", "gegi");
+        // TODO: Eliminar cuando se hayan hecho las pruebas suficientes con el metodo generico.
+        blnvalid = Gifts.ValidateGiftsGuestStatus(dtg, pGuestStatus, "geQty", "gegi");
       }
 
       return blnvalid;
@@ -1416,7 +1415,7 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
     /// </history>
-    /// TODO: TONY -> Eliminar este metodo cuando se hayan realizado las pruebas necesarias con el metodo generico
+    /// TODO: Eliminar este metodo cuando se hayan realizado las pruebas necesarias con el metodo generico
     private static bool ValidateGiftsGuestStatus(ObservableCollection<GiftsReceiptDetail> pGridGifts, GuestStatusValidateData pGuestStatus)
     {
       int iToursUsed, iDiscsUsed, iTourAllowed, iTours, iTCont = 0, iDCont = 0, iMaxTours;

@@ -544,13 +544,13 @@ namespace IM.Outhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] created 05/05/2016
-    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumModule al frmSearchGuest
+    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumProgram al frmSearchGuest
     /// </history>
     private async void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        var frmsearchGuest = new frmSearchGuest(App.User, EnumModule.OutHouse)
+        var frmsearchGuest = new frmSearchGuest(App.User, EnumProgram.Outhouse)
         {
           Owner = this,
           ShowInTaskbar = false

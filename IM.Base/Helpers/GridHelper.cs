@@ -373,19 +373,19 @@ namespace IM.Base.Helpers
     public static void ValidateEditNumber(ref int pNumber, bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
-      if ((int)pNumber >= 0)
+      if (pNumber >= 0)
       {
         // si se desea validar los limites
         if (pValidateBounds)
         {
           // validamos que no sea mayor al limite superior
-          if ((int)pNumber > pUpperBound)
+          if (pNumber > pUpperBound)
           {
             UIHelper.ShowMessage("Quantity can not be greater than " + pUpperBound, MessageBoxImage.Information, "Intelligence Marketing");
             pCancel = true;
           }
           // validamos que no sea menor al limite inferior
-          else if ((int)pNumber < pLowerBound)
+          else if (pNumber < pLowerBound)
           {
             UIHelper.ShowMessage("Quantity can not be lower than " + pLowerBound, MessageBoxImage.Information, "Intelligence Marketing");
             pCancel = true;
@@ -395,7 +395,6 @@ namespace IM.Base.Helpers
       else
       {
         // si se envio un valor default
-        //TODO: revisar si se asigna esta validacion Tony pNumber no esta por referencia
         if (pDefaultValue != 0)
           pNumber = pDefaultValue;
         else

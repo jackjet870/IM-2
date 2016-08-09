@@ -528,11 +528,11 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [lchairez] 29/02/2016 Crated.
-    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el EnumModule
+    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el EnumProgram
     /// </history>
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      var search = new frmSearchGuest(_user, EnumModule.InHouse);
+      var search = new frmSearchGuest(_user, EnumProgram.Inhouse);
       search.Owner = this;
       bool? res = search.ShowDialog();
       if (res.HasValue && res.Value && search.lstGuestAdd[0] != null)
@@ -849,11 +849,11 @@ namespace IM.Base.Forms
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [vipacheco] 04/Agosto/2016 Modified -> se agrego el EnumModulo
+    /// [vipacheco] 04/Agosto/2016 Modified -> se agrego el EnumProgram
     /// </history>
     private void btnSearchAdditional_Click(object sender, RoutedEventArgs e)
     {
-      var search = new frmSearchGuest(_user, EnumModule.InHouse);
+      var search = new frmSearchGuest(_user, EnumProgram.Inhouse);
       search.Owner = this;
       bool? res = search.ShowDialog();
       if (res.HasValue && res.Value && search.lstGuestAdd != null)
@@ -872,7 +872,7 @@ namespace IM.Base.Forms
     /// Agrega un invitado adicional
     /// </summary>
     /// <history>
-    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumModule al frmSearchGuest
+    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumProgram al frmSearchGuest
     /// </history>
     private void imgSearchGuest_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
@@ -884,7 +884,7 @@ namespace IM.Base.Forms
       if (dtgAdditionalGuest.CurrentItem is objInvitAdditionalGuest)
         item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
 
-      var search = new frmSearchGuest(_user, EnumModule.InHouse);
+      var search = new frmSearchGuest(_user, EnumProgram.Inhouse);
       search.Owner = this;
       bool? res = search.ShowDialog();
       if (res.HasValue && res.Value && search.lstGuestAdd != null)

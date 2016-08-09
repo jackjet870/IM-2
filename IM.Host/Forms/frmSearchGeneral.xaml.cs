@@ -21,17 +21,13 @@ namespace IM.Host.Forms
   /// </history>
   public partial class frmSearchGeneral : Window
   {
-
-    #region Variables
-
-    CollectionViewSource _dsSalesRoom;
-    CollectionViewSource _dsLeadSource;
-
-    #endregion
+    EnumModule _module;
 
     #region Contructor
-    public frmSearchGeneral()
+    public frmSearchGeneral(EnumModule module = EnumModule.Search)
     {
+      _module = module;
+
       InitializeComponent();
 
       // Fechas
@@ -51,14 +47,27 @@ namespace IM.Host.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _dsSalesRoom = ((CollectionViewSource)(this.FindResource("dsSalesRoom")));
-      _dsLeadSource = ((CollectionViewSource)(this.FindResource("dsLeadSource")));
+      CollectionViewSource dsSalesRoom = ((CollectionViewSource)(this.FindResource("dsSalesRoom")));
+      CollectionViewSource dsLeadSource = ((CollectionViewSource)(this.FindResource("dsLeadSource")));
 
       // Lead Sources
-      _dsLeadSource.Source = frmHost._lstLeadSources;
+      dsSalesRoom.Source = frmHost._lstLeadSources;
+      // Sales Room 
+      dsSalesRoom.Source = frmHost._lstSalesRoom;
 
-      // Sales
-      _dsSalesRoom.Source = frmHost._lstSalesRoom;
+
+      switch (_module)
+      {
+        case EnumModule.Search:
+          btnOk.Visibility = Visibility.Collapsed;
+          break;
+        case EnumModule.Transfer:
+          stkButtons.Visibility = Visibility.Collapsed;
+          break;
+        case EnumModule.Invit:
+          stkButtons.Visibility = Visibility.Collapsed;
+          break;
+      }
 
       // Impedimos modificar los datos si el sistema esta en modo de solo lectura
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
@@ -80,16 +89,9 @@ namespace IM.Host.Forms
     /// </history>
     private async void Load_Grid()
     {
-      int GuestID = string.IsNullOrEmpty(txtguID.Text) ? 0 : Convert.ToInt32(txtguID.Text);
-      string GuestName = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text;
-      string LeadSource = cboLeadSource.SelectedValue.ToString();
-      string SalesRoom = cboSalesRoom.SelectedValue.ToString();
-      string RoomNum = string.IsNullOrEmpty(txtRoomNum.Text) ? "" : txtRoomNum.Text;
-      string Reservation = string.IsNullOrEmpty(txtReservation.Text) ? "" : txtReservation.Text;
-      string PR = string.IsNullOrEmpty(txtPR.Text) ? "" : txtPR.Text;
-
-
-      grdGuest.ItemsSource = await BRGuests.GetSearchGuest_General(dtpStart.Value.Value.Date, dtpEnd.Value.Value.Date, GuestID, GuestName, LeadSource, SalesRoom, RoomNum, Reservation, PR);
+      grdGuest.ItemsSource = await BRGuests.GetSearchGuestGeneral(dtpStart.Value.Value.Date, dtpEnd.Value.Value.Date, string.IsNullOrEmpty(txtguID.Text) ? 0 : Convert.ToInt32(txtguID.Text),
+                                                                  string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text, cboLeadSource.SelectedValue.ToString(), cboSalesRoom.SelectedValue.ToString(),
+                                                                  string.IsNullOrEmpty(txtRoomNum.Text) ? "" : txtRoomNum.Text, string.IsNullOrEmpty(txtReservation.Text) ? "" : txtReservation.Text,                                                                  string.IsNullOrEmpty(txtPR.Text) ? "" : txtPR.Text);
     }
     #endregion
 

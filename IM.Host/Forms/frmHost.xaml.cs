@@ -706,30 +706,35 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private async void btnTransfer_Click(object sender, RoutedEventArgs e)
+    private void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        var frmsearchGuest = new frmSearchGuest(App.User, EnumModule.Host)
-        {
-          Owner = this,
-          ShowInTaskbar = false
-        };
-        //Valida que haya sido un OK y no un Cancel
-        frmsearchGuest.ShowDialog();
-        if (!frmsearchGuest.cancel)
-        {
-          var guest = frmsearchGuest.lstGuestAdd[0];
-          guest.gusr = App.User.SalesRoom.srID;
-          guest.guBookCanc = false;
 
-          if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
-          {
-            //De no ser así informamos que no se guardo la información por algun motivo
-            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-              MessageBoxImage.Error, "Information can not keep");
-          }
-        }
+        frmSearchGeneral _frmSearch = new frmSearchGeneral(EnumModule.Transfer) { Owner = this };
+        _frmSearch.ShowDialog();
+
+
+        //var frmsearchGuest = new frmSearchGuest(App.User, EnumModule.Host)
+        //{
+        //  Owner = this,
+        //  ShowInTaskbar = false
+        //};
+        ////Valida que haya sido un OK y no un Cancel
+        //frmsearchGuest.ShowDialog();
+        //if (!frmsearchGuest.cancel)
+        //{
+        //  var guest = frmsearchGuest.lstGuestAdd[0];
+        //  guest.gusr = App.User.SalesRoom.srID;
+        //  guest.guBookCanc = false;
+
+        //  if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
+        //  {
+        //    //De no ser así informamos que no se guardo la información por algun motivo
+        //    UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+        //      MessageBoxImage.Error, "Information can not keep");
+        //  }
+        //}
       }
       catch (Exception ex)
       {
@@ -794,9 +799,7 @@ namespace IM.Host
     /// </history>
     private void btnGuests_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchGeneral _frmSearch = new frmSearchGeneral();
-      _frmSearch.ShowInTaskbar = false;
-      _frmSearch.Owner = this;
+      frmSearchGeneral _frmSearch = new frmSearchGeneral() { Owner = this};
       _frmSearch.ShowDialog();
     }
     #endregion
@@ -973,7 +976,7 @@ namespace IM.Host
         frmGiftsReceipts.ShowDialog();
 
         // si cambio el estatus de regalos recibidos
-        if (chkSelected.IsChecked == true && !string.IsNullOrEmpty(frmGiftsReceipts.txtgrID.Text.Trim()))
+        if (!chkSelected.IsChecked.Value && !string.IsNullOrEmpty(frmGiftsReceipts.txtgrID.Text.Trim()))
         {
           chkSelected.IsChecked = true;
         }
@@ -984,7 +987,7 @@ namespace IM.Host
       }
       else
       {
-        chkSelected.IsChecked = guest.guGiftsReceived;
+        chkSelected.IsChecked = false;
       }
     }
     #endregion

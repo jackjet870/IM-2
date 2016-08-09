@@ -110,8 +110,8 @@
     <Grid Grid.Row="2" x:Name="grdButtons">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="7*"/>
-        <ColumnDefinition Width="1.5*"/>
-        <ColumnDefinition Width="1.5*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Button x:Name="btnOK" Content="OK" Grid.Column="1" VerticalAlignment="Center" Margin="5,11,10,10" Click="btnOK_Click"/>
       <Button x:Name="btnCancel" Content="Cancel" Grid.Column="2" VerticalAlignment="Center" Margin="5,10,10,10" Click="btnCancel_Click"/>

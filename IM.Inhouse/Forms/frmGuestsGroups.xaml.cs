@@ -300,11 +300,11 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [ECANUL] 01-04-2016 Created
-    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumModule al frmSearchGuest
+    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumProgram al frmSearchGuest
     /// </history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(App.User,EnumModule.InHouse);
+      frmSearchGuest frmSGuest = new frmSearchGuest(App.User, EnumProgram.Inhouse);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
       frmSGuest.lstGuestAdd = new List<Guest>();

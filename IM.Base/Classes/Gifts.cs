@@ -404,7 +404,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
     /// </history>
-    public static bool ValidateMaxQuantityGiftTour(DataGrid dtg, GuestStatusValidateData guestStatus, string qtyField, string giftField)
+    public static bool ValidateGiftsGuestStatus(DataGrid dtg, GuestStatusValidateData guestStatus, string qtyField, string giftField)
     {
       int iToursUsed, iDiscsUsed, iTourAllowed, iTours, iTCont = 0, iDCont = 0, iMaxTours;
       decimal iPax, iDiscAllowed, iDisc, iAdults = 0, iMinors = 0, TotPax = 0;
@@ -507,5 +507,29 @@ namespace IM.Base.Classes
       piMinors = (pcurPax - piAdults) * 10;
     }
     #endregion
+
+    //#region LoadGuesStatusInfo
+    ///// <summary>
+    ///// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
+    ///// </summary>
+    ///// <param name="guestID"> Clave del Guest</param>
+    ///// <param name="applyGuestStatusValidation"></param>
+    ///// <history>
+    ///// [vipacheco] 19/Abril/2016 Created
+    ///// [vipacheco] 08/Agosto/2016 Modified --> Migrado a esta clase  para el uso generico
+    ///// </history>
+    //public static void LoadGuesStatusInfo(int guestID, ref bool applyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo, int pReceiptID = 0)
+    //{
+    //  applyGuestStatusValidation = false;
+
+    //  pGuestStatusInfo = BRGuestStatus.GetStatusValidateInfo(pGuestID, pReceiptID);
+
+    //  // Solo si esta configurado se realiza la revision
+    //  if (pGuestStatusInfo != null)
+    //    if (pGuestStatusInfo.gsMaxQtyTours > 0)
+    //      applyGuestStatusValidation = true;
+    //}
+    //#endregion
+
   }
 }
