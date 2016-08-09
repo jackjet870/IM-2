@@ -22,11 +22,21 @@ namespace IM.Host.Forms
   public partial class frmSearchGeneral : Window
   {
     EnumModule _module;
+    DateTime _dateParent;
 
     #region Contructor
-    public frmSearchGeneral(EnumModule module = EnumModule.Search)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hostDate"></param>
+    /// <param name="module"></param>
+    /// <history>
+    /// [vipacheco] 09/Agosto/2016 Modified --> Se agrego el parametro hostDate.
+    /// </history>
+    public frmSearchGeneral(DateTime hostDate, EnumModule module = EnumModule.Search)
     {
       _module = module;
+      _dateParent = hostDate;
 
       InitializeComponent();
 
@@ -45,37 +55,46 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      CollectionViewSource dsSalesRoom = ((CollectionViewSource)(this.FindResource("dsSalesRoom")));
-      CollectionViewSource dsLeadSource = ((CollectionViewSource)(this.FindResource("dsLeadSource")));
-
-      // Lead Sources
-      dsSalesRoom.Source = frmHost._lstLeadSources;
-      // Sales Room 
-      dsSalesRoom.Source = frmHost._lstSalesRoom;
-
+      CollectionViewSource dsSalesRoom = ((CollectionViewSource)(FindResource("dsSalesRoom")));
+      CollectionViewSource dsLeadSource = ((CollectionViewSource)(FindResource("dsLeadSource")));
 
       switch (_module)
       {
         case EnumModule.Search:
-          btnOk.Visibility = Visibility.Collapsed;
+          // Lead Sources
+          dsLeadSource.Source = frmHost._lstLeadSources;
+          btnOk.Visibility = guCheckInDColumn.Visibility = guCheckOutDColumn.Visibility = guBookD.Visibility = Visibility.Collapsed;
           break;
         case EnumModule.Transfer:
-          stkButtons.Visibility = Visibility.Collapsed;
+          btnOk.Content = "Tranfer";
+          // Ocultamos las columnas y los botones no utilizados en este caso
+          stkButtons.Visibility = guLastName2Column.Visibility = guBookCancColumn.Visibility = guShowD1Column.Visibility = guMealTicketColumn.Visibility =
+          guShowColumn.Visibility = guGiftsReceivedColumn.Visibility = guSaleColumn.Visibility = Visibility.Collapsed;
+          // Lead Sources
+          dsLeadSource.Source = frmHost._lstLeadSources;
           break;
         case EnumModule.Invit:
-          stkButtons.Visibility = Visibility.Collapsed;
+          btnOk.Content = "Invit";
+          // Ocultamos las columnas y los botones no utilizados en este caso
+          stkButtons.Visibility = guLastName2Column.Visibility = guBookCancColumn.Visibility = guShowD1Column.Visibility = guMealTicketColumn.Visibility =
+          guShowColumn.Visibility = guGiftsReceivedColumn.Visibility = guSaleColumn.Visibility = Visibility.Collapsed;
+          // Ocultamos las fechas
+          stkStartDate.Visibility = stkEndDate.Visibility = Visibility.Collapsed;
+          // Lead Sources
+          dsLeadSource.Source = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
           break;
       }
+      cboLeadSource.SelectedIndex = -1;
+      // Sales Room 
+      dsSalesRoom.Source = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+      cboSalesRoom.SelectedIndex = -1;
 
       // Impedimos modificar los datos si el sistema esta en modo de solo lectura
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
       {
-        btnShow.Visibility = Visibility.Hidden;
-        btnMealTicket.Visibility = Visibility.Hidden;
-        btnReceipt.Visibility = Visibility.Hidden;
-        btnSale.Visibility = Visibility.Hidden;
+        stkButtons.Visibility = btnOk.Visibility = Visibility.Collapsed;
       }
     }
     #endregion
@@ -89,9 +108,11 @@ namespace IM.Host.Forms
     /// </history>
     private async void Load_Grid()
     {
-      grdGuest.ItemsSource = await BRGuests.GetSearchGuestGeneral(dtpStart.Value.Value.Date, dtpEnd.Value.Value.Date, string.IsNullOrEmpty(txtguID.Text) ? 0 : Convert.ToInt32(txtguID.Text),
-                                                                  string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text, cboLeadSource.SelectedValue.ToString(), cboSalesRoom.SelectedValue.ToString(),
-                                                                  string.IsNullOrEmpty(txtRoomNum.Text) ? "" : txtRoomNum.Text, string.IsNullOrEmpty(txtReservation.Text) ? "" : txtReservation.Text,                                                                  string.IsNullOrEmpty(txtPR.Text) ? "" : txtPR.Text);
+      grdGuest.ItemsSource = await BRGuests.GetSearchGuestGeneral(_dateParent, dtpStart.Value.Value.Date, dtpEnd.Value.Value.Date, string.IsNullOrEmpty(txtguID.Text) ? 0 : Convert.ToInt32(txtguID.Text),
+                                                                  string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text, cboLeadSource.SelectedValue == null ? "" : cboLeadSource.SelectedValue.ToString(),
+                                                                  cboSalesRoom.SelectedValue == null ? "" : cboSalesRoom.SelectedValue.ToString(), string.IsNullOrEmpty(txtRoomNum.Text) ? "" : txtRoomNum.Text,
+                                                                  string.IsNullOrEmpty(txtReservation.Text) ? "" : txtReservation.Text, string.IsNullOrEmpty(txtPR.Text) ? "" : txtPR.Text, _module);
+
     }
     #endregion
 
@@ -122,36 +143,50 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateCriteria()
     {
-      // validamos que se haya ingresado algun criterio de busqueda
-      if (cboLeadSource.SelectedValue == null && cboSalesRoom.SelectedValue == null && txtRoomNum.Text == "" && txtReservation.Text == "" &&
-          txtPR.Text == "" && txtguID.Text == "" && dtpStart.Value.Value == null && dtpEnd.Value.Value == null)
+      bool blnResult = true;
+
+      // Validamos los campos comunes en los tres tipos de apertura del formulario
+      if (cboLeadSource.SelectedValue == null && cboSalesRoom.SelectedValue == null && txtPR.Text == "" && txtguID.Text == "" && txtRoomNum.Text == "" && txtguID.Text == "")
       {
-        UIHelper.ShowMessage("Please specify a search criteria.", MessageBoxImage.Information, "Search General");
-        return false;
+        blnResult = false;
+      }
+     
+      switch (_module)
+      {
+        case EnumModule.Transfer:
+          if (!blnResult && txtName.Text == "")
+          {
+            UIHelper.ShowMessage("Enter a search criteria.", MessageBoxImage.Information);
+            blnResult = false;
+          }
+          // Se verifica los datetime
+          else if (!DateHelper.ValidateValueDate(dtpStart, dtpEnd))
+          {
+            blnResult = false;
+          }
+          break;
+        case EnumModule.Invit:
+          if (!blnResult && txtName.Text == "")
+          {
+            UIHelper.ShowMessage("Enter a search criteria.", MessageBoxImage.Information);
+            blnResult = false;
+          }
+          break;
+        case EnumModule.Search:
+          // validamos que se haya ingresado algun criterio de busqueda
+          if (!blnResult && txtReservation.Text == "" )
+          {
+            UIHelper.ShowMessage("Please specify a search criteria.", MessageBoxImage.Information, "Search General");
+            blnResult = false;
+          }
+          else if (!DateHelper.ValidateValueDate(dtpStart, dtpEnd))
+          {
+            blnResult = false;
+          }
+          break;
       }
 
-      #region Fechas
-      // validamos la fecha inicial
-      if (dtpStart.Value == null)
-      {
-        UIHelper.ShowMessage("Specify the Start Date.", MessageBoxImage.Information, "Self Gen");
-        return false;
-      }
-      // validamos la fecha final
-      else if (dtpEnd.Value == null)
-      {
-        UIHelper.ShowMessage("Specify the End Date.", MessageBoxImage.Information, "Self Gen");
-        return false;
-      }
-      // validamos que no se traslapen las fechas
-      else if (dtpStart.Value.Value > dtpEnd.Value.Value)
-      {
-        UIHelper.ShowMessage("Start Date can not be greater than End Date.", MessageBoxImage.Information, "Self Gen");
-        return false;
-      }
-      #endregion
-
-      return true;
+      return blnResult;
     }
     #endregion
 
@@ -366,6 +401,37 @@ namespace IM.Host.Forms
       if (ValidatePermissions(EnumPermission.Sales, ref GuestID))
       {
 
+      }
+    }
+    #endregion
+
+    #region btnOk_Click
+    /// <summary>
+    /// Permite transferir invitaciones o invitar a huespedes inhouse
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 09/Agosto/2016 Created
+    /// </history>
+    private void btnOk_Click(object sender, RoutedEventArgs e)
+    {
+      if (grdGuest.SelectedItems.Count < 1)
+      {
+        UIHelper.ShowMessage("Select at least one Guest.", MessageBoxImage.Information);
+        grdGuest.Focus();
+        return;
+      }
+      else
+      {
+        if (!App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
+        {
+          UIHelper.ShowMessage("Account has only read access.", MessageBoxImage.Information);
+          return;
+        }
+        else
+        {
+          DialogResult = true;
+          Close();
+        }
       }
     }
     #endregion

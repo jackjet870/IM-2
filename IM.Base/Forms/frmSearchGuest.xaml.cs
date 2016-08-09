@@ -38,7 +38,7 @@ namespace IM.Base.Forms
     /// 
     /// </summary>
     /// <param name="userdata"> Informacion del Usuario </param>
-    /// <param name="module"> Enumerado que identifica el modulo origen</param>
+    /// <param name="program"> Enumerado que identifica el tipo de programa origen</param>
     public frmSearchGuest(UserData userdata, EnumProgram program)
     {
       InitializeComponent();

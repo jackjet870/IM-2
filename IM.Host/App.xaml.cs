@@ -3,6 +3,8 @@ using IM.Host.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace IM.Host
@@ -40,11 +42,14 @@ namespace IM.Host
     /// </summary>
     /// <history>
     ///   [erosado] 01/06/2016  Modified. Se agrego async
+    ///   [vipacheco] 09/Agosto/2016 Modified -> Se agrego el manejador de eventos.
     /// </history>
     protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      
+
+      EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
+
       //Creamos el Splash Base!
       frmSplash frmSplash = new frmSplash("Host");
 
@@ -67,6 +72,21 @@ namespace IM.Host
       }
     }
     #endregion
+
+    #region dataGrid_MouseLeftButtonUp
+    /// <summary>
+    /// Evento que actualiza el field de busqueda en los grid
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 08/Agosto/2016 Created
+    /// </history>
+    private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+    } 
+    #endregion
+
 
     #region App_UnhandledException
     /// <summary>

@@ -20,7 +20,6 @@ namespace IM.Host.Forms
     private List<string> _listExchangeRate;
     CollectionViewSource _dsCurrenciesAvailable;
     private decimal _exchangeMEX;
-    private bool _boolDecimal = true;
 
     public frmAddExchangeRate(List<string> listExchangeRateData, decimal exchangeRateMEX)
     {

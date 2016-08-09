@@ -31,22 +31,20 @@ namespace IM.Transfer.Forms
   /// Interaction logic for frmTransfer.xaml
   /// </summary>
   public partial class frmTransferLauncher : Window
-  { 
+  {
     #region Atributos
 
     #region Parametros para trasnferencia de Reservaciones
+    
+    DispatcherTimer dispathcerTransferReservations = new DispatcherTimer();//INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER PARA EL TEIMPO DE EJECUCION DE LAS ACTUALIZACIONES
     private static TimeSpan _startTimeReservations;//Hora inicial del proceso de transferencia de reservaciones
     private static TimeSpan _endTimeReservations;//Hora final del proceso de transferencia de reservaciones
     private static TimeSpan _intervalTimeReservations;//Intervalo de tiempo del proceso de transferencia de reservaciones
     private static int _daysBeforeDAY;//Numero de dias anteriores al dia de hoy para obtener reservaciones
-    private static int _daysAfterDAY;//Numero de dias posteriores al dia de hoy para obtener reservaciones
-    private static int _retrys;//Numero de reintentos
-    private static string _timeOutT;//Tiempo de espera del proceso 7,200,000 = 2 horas
-    private static string _timeOutWebServiceT;//Tiempo de espera del servicio web 300,000 = 5 minutos
-    private static TimeSpan _standbyIntervalTimeReservations; //Tiempo de espera para verificar el tiempo de ejecucion de la transferencia de reservaciones = 5 segundos
+    private static int _daysAfterDAY;//Numero de dias posteriores al dia de hoy para obtener reservacione
     private DateTime _lastReservations;//Fecha de ultima transferencia de reservaciones
     private DateTime _nextReservations; // Fecha proxima que se ejecutara la transferencia de reservaciones
-    private static DispatcherTimer dispatcherBlinkLabelReservations = null; //Dispacher para dar efecto blink a label de status
+    
     #endregion
 
     #region Parametros para trasnferencias de Exchange Rate
@@ -56,8 +54,7 @@ namespace IM.Transfer.Forms
     private static TimeSpan _tranferExchangeRatesIntervalTime;//Intervalo de tiempo del proceso de actualización de tipos de cambio
     private DateTime _lastExchangeRate;//Ultima hora que se ejecuto el proceso de actualización de tipos de cambio
     private DateTime _nextExchangeRate;//Hora que se volvera a ejecutar Exchange rate
-    private static TimeSpan _standbyIntervalTimeExchangeRate; //Tiempo de espera para verificar el tiempo de ejecucion de la actualizacion de exchange rate = 5 segundos
-    private static DispatcherTimer dispatcherBlinkLabelExchangeRate = null; //Dispacher para dar efecto blink a label de status
+    DispatcherTimer dispathcerExchangeRate = new DispatcherTimer(); //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
     #endregion
 
     #region _dtmServerDate
@@ -146,27 +143,27 @@ namespace IM.Transfer.Forms
     ///</history>
     private void InitializeValuesParameters() {
       //Se inicializan los valores de los parametros para la transferencia de reservaciones.
-      _startTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("StartTime"));
-      _endTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("EndTime"));
-      _intervalTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("IntervalTime"));
-      _daysBeforeDAY = Convert.ToInt32(ConfigHelper.GetString("DaysBefore"));
-      _daysAfterDAY = Convert.ToInt32(ConfigHelper.GetString("DaysAfter"));
-      _retrys = Convert.ToInt32(ConfigHelper.GetString("Retrys"));
-      _timeOutT = ConfigHelper.GetString("TimeOut");
-      _timeOutWebServiceT = ConfigHelper.GetString("TimeOutWebService");
-      _standbyIntervalTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("StandbyIntervalTimeReservations"));
+      _startTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("StartTimeReservations"));
+      _endTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("EndTimeReservations"));
+      _intervalTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("IntervalTimeReservations"));
+      _daysBeforeDAY = Convert.ToInt32(ConfigHelper.GetString("DaysBeforeReservations"));
+      _daysAfterDAY = Convert.ToInt32(ConfigHelper.GetString("DaysAfterReservations"));
+      //EL INTERVALO DEL TIMER CON LA CLASE DISPATCHERTIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO  PARA EJECUTAR LAS ACTUALIZACION DE RESERVACIONES
+      dispathcerTransferReservations.Interval = TimeSpan.FromSeconds(1); ;
 
       // fecha actual
       _dateToday = DateTime.Now;
 
       //se inicializan los parametros para ejecutar ExchangeRate
-      _tranferExchangeRatesStartTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesStartTime"));
-      _tranferExchangeRatesEndTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesEndTime"));
-      _tranferExchangeRatesIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesIntervalTime"));
-      _standbyIntervalTimeExchangeRate = TimeSpan.Parse(ConfigHelper.GetString("StandbyIntervalTimeExchangeRate"));
+      _tranferExchangeRatesStartTime = TimeSpan.Parse(ConfigHelper.GetString("StartTimeExchangeRates"));
+      _tranferExchangeRatesEndTime = TimeSpan.Parse(ConfigHelper.GetString("EndTimeExchangeRates"));
+      _tranferExchangeRatesIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("IntervalTimeExchangeRates"));
+      
       _lastExchangeRate = DateTime.Now;
       _lastReservations = DateTime.Now;
-      //_notifyIconFormTransfers = NotifyIconHelper.Notify(form: this);
+      //EL INTERVALO DEL TIMER CON LA CLASE DISPATCHERTIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO PARA EJECUTAR EL EXCHANGE RATE
+      dispathcerExchangeRate.Interval = TimeSpan.FromSeconds(1); ;
+      
 
       // archivo para inicializar los valores booleanos de trasnferencia de reservaciones.
       string strArchivo = Path.Combine(AppContext.BaseDirectory, "Configuration.ini");
@@ -181,53 +178,58 @@ namespace IM.Transfer.Forms
     }
     #endregion
 
-    #region InitializeTransfers
+    #region InitializeTransfersExchangeRate
     ///<summary>Metodo que inicializa y ejecuta las actualizaciones</summary>
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public void InitializeTransfers() {
-      //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
-      DispatcherTimer dispathcerT = new DispatcherTimer();
-      //EL INTERVALO DEL TIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO 
-      dispathcerT.Interval = _standbyIntervalTimeExchangeRate;
+    public void InitializeTransfersExchangeRate() {
       //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
-      dispathcerT.Tick += (s, a) =>
+      dispathcerExchangeRate.Tick += async (s, a) =>
       {
+        dispathcerExchangeRate.Stop();
         //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
-        
-        DateTime _currentTime = DateTime.Now;
-        // validamos si la ultima fecha de la actualizacion es del dia de hoy, si no lo es agrega la fecha actual.
-        if (!DateHelper.isDateEquals(_currentTime, _nextExchangeRate))
-          _nextExchangeRate = _currentTime;
-        
-        if (!DateHelper.isDateEquals(_currentTime, _nextReservations))
-          _nextReservations = _currentTime;
-        
         // validamos que la hora actual este en el rango de fechas para realizar la actualizacion
-        if (DateHelper.IsRangeHours(_currentTime.TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime))
+        if (DateHelper.IsRangeHours(DateTime.Now.TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime) && (!blnRunOrCancelExchangeRate))
         {
-          // validamos que ha transcurrido el tiempo para ejecutar la actualizacion
-          if ((DateHelper.IsRangeTime(_currentTime, _nextExchangeRate) || DateHelper.IsRangeHours(_nextExchangeRate.TimeOfDay, _tranferExchangeRatesStartTime, _currentTime.TimeOfDay)) && (!blnRunOrCancelExchangeRate))
-          {
-            // se ejecuta el proceso de actualizacion de exchange rate.
-            StartExchangeRate(); 
-          }
+          // se ejecuta el proceso de actualizacion de exchange rate.
+          await StartExchangeRate(); 
         }
-        // validamos que la hora actual este en el rango de fechas para realizar la actualizacion
-        if (DateHelper.IsRangeHours(_currentTime.TimeOfDay, _startTimeReservations, _endTimeReservations))
-        {
-          // validamos que ha transcurrido el tiempo para ejecutar la actualizacion
-          if ((DateHelper.IsRangeTime(_currentTime, _nextReservations) || DateHelper.IsRangeHours(_nextReservations.TimeOfDay, _startTimeReservations, _currentTime.TimeOfDay)) && (!blnRunOrCancelReservations))
-          {
-            // se ejecuta el proceso de actualizacion de reservaciones
-            StartReservations();
-          }
-        }
-        
+        // asigmamos el interval time en caso de que sea la primera vez que se este iniciando
+        if (dispathcerExchangeRate.Interval == TimeSpan.FromSeconds(1))
+          dispathcerExchangeRate.Interval = _tranferExchangeRatesIntervalTime;
+        dispathcerExchangeRate.Start();
       };
-      dispathcerT.Start();
+      dispathcerExchangeRate.Start();
 
+    }
+    #endregion
+
+    #region InitializeTransfers Reservations
+    ///<summary>Metodo que inicializa y ejecuta las actualizaciones</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void InitializeTransfersReservations()
+    {
+      //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
+      dispathcerTransferReservations.Tick += async (s, a) =>
+      {
+        dispathcerTransferReservations.Stop();
+        //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
+       
+        // validamos que la hora actual este en el rango de fechas para realizar la actualizacion
+        if (DateHelper.IsRangeHours(DateTime.Now.TimeOfDay, _startTimeReservations, _endTimeReservations) && !blnRunOrCancelReservations)
+        {          
+          // se ejecuta el proceso de actualizacion de reservaciones
+          await StartReservations();
+        }
+        // Asignamos el interval time en caso de estar iniciandose
+        if (dispathcerTransferReservations.Interval == TimeSpan.FromSeconds(1))
+          dispathcerTransferReservations.Interval = _intervalTimeReservations;
+        dispathcerTransferReservations.Start();
+      };
+      dispathcerTransferReservations.Start();
     }
     #endregion
 
@@ -242,6 +244,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task StartReservations()
     {
+      //dispathcerTransferReservations.Stop();
       // Se valida el estatus del formulario
       StatusForm();
       cancelTokenReservations = new CancellationTokenSource();
@@ -273,6 +276,7 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Finish", "Process Finished.");
         cancelTokenReservations.Dispose();
         cancelTokenReservations = null;
+        //dispathcerTransferReservations.Start();
       }
       
       
@@ -1938,7 +1942,6 @@ namespace IM.Transfer.Forms
       // ponemos en stand by el label de estatus
       UpdateLabelStatusReservations("STAND BY");
       btnReservations.IsEnabled = true;
-
     }
     #endregion
 
@@ -1973,6 +1976,8 @@ namespace IM.Transfer.Forms
       OnOffBlinkExchangeRate(false);
       // Pone en stand by el label de estatus.
       UpdateLabelStatusExchangeRate("STAND BY");
+
+      
 
     }
     #endregion
@@ -2278,12 +2283,12 @@ namespace IM.Transfer.Forms
       // inicializamos los valores default de los progres bar.
       InitializerProgressBar();
         
-      // ontenemos el titulo y version del transfer
+      // obtenemos el titulo y version del transfer
       var thisApp = Assembly.GetExecutingAssembly();
       AssemblyName name = new AssemblyName(thisApp.FullName);
       this.Title = " Inteligence Marketing Transfer v" + name.Version;
 
-      // inicializamos la fecha actual en el form.
+      #region inicializamos la fecha actual en el form.
       lblDate.Content = DateTime.Now.ToString("dd/MM/yyyy");
       lblStatusExchangeRate.Content = "STAND BY";
       lblStatusReservations.Content = "STAND BY";
@@ -2292,9 +2297,14 @@ namespace IM.Transfer.Forms
       lblNextTransferExchangeRate.Content = "";
       lblLastTransferExchangeRate.Content = lblTextLast + _lastExchangeRate.ToString();
       lblNextTransferReservations.Content = "";
-      
-      InitializeTransfers();
-      
+      #endregion
+
+      #region inicializamos las transferencias
+      InitializeTransfersExchangeRate();
+      InitializeTransfersReservations();
+      #endregion
+
+
     }
     #endregion
 
@@ -2338,7 +2348,7 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan] 28/04/2016 Created
     /// </history>
-    private void btnReservations_Click(object sender, RoutedEventArgs e)
+    private async void btnReservations_Click(object sender, RoutedEventArgs e)
     {
       // valida si se esta realizando la actualización de reservaciones.
       if (blnRunOrCancelReservations)
@@ -2356,15 +2366,13 @@ namespace IM.Transfer.Forms
         if (!blnRunOrCancelReservations)
         {
           // se ejecuta metodo para iniciar las actualizaciones.
-          StartReservations();
+          
+          await StartReservations();
         }
         else
         {
           // en caso de que se este actualizando se muestra mensaje de espera.
-          Task.Factory.StartNew(() =>
-          {
-            UIHelper.ShowMessage("An update is running , please wait...", MessageBoxImage.Error, "RunReservations");
-          });
+          UIHelper.ShowMessage("An update is running , please wait...", MessageBoxImage.Error, "RunReservations");
         }
 
       }
@@ -2378,7 +2386,7 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan] 28/04/2016 Created
     /// </history>
-    private void btnExchangeRate_Click(object sender, RoutedEventArgs e)
+    private async void btnExchangeRate_Click(object sender, RoutedEventArgs e)
     {
       // valida si se esta realizando la actualización
       if (blnRunOrCancelExchangeRate)
@@ -2396,16 +2404,12 @@ namespace IM.Transfer.Forms
         if (!blnRunOrCancelExchangeRate)
         {
           // si no se esta ejecutnado la actualizacion, se invoca el metodo para ejecutar las aactualizaciones.
-          StartExchangeRate();
+          await StartExchangeRate();
         }
         else
         {
           // en caso de que se este ejecutando se muestra el mensaje de que se esta actualizando.l
-          Task.Factory.StartNew(() =>
-          {
-            UIHelper.ShowMessage("An update is running , please wait...", MessageBoxImage.Error, "RunExchangeRate");
-          });
-          
+          UIHelper.ShowMessage("An update is running , please wait...", MessageBoxImage.Error, "RunExchangeRate");
         }
 
       }
