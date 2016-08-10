@@ -720,14 +720,14 @@
                                                 <TextBlock Text="CC Company"/>
                                                 <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                             </StackPanel>
-                                            <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding CreditCardList}" 
+                                            <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Qty" Binding="{Binding gdQuantity}" Width="40"/>
                                                     <DataGridTextColumn Header="gdcc" Binding="{Binding gdcc}" Visibility="Hidden"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"                                                                           
-                                                                            SelectedValueBinding="{Binding iggi}"
-                                                                            DisplayMemberPath="ccN" 
+                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"
+                                                                            SelectedValueBinding="{Binding gdcc, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                            DisplayMemberPath="ccN"
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}" />
                                                 </DataGrid.Columns>

@@ -55,6 +55,12 @@ namespace IM.Base.Forms
 
     #region Validate
 
+    /// <summary>
+    /// Valida 
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 25/04/2016
+    /// </history>
     public bool Validate()
     {
       // validamos el PR

@@ -122,11 +122,11 @@ namespace IM.Outhouse.Forms
     private async void LoadGrid()
     {
       if (_outPremanifestViewSource == null) return;
-      BusyIndicator.IsBusy = true;
+      //BusyIndicator.IsBusy = true;
       _outPremanifestViewSource.Source =
         await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
       StaEnd();
-      BusyIndicator.IsBusy = false;
+     // BusyIndicator.IsBusy = false;
     }
 
     #endregion
@@ -215,7 +215,7 @@ namespace IM.Outhouse.Forms
       if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;
       StaStart("Loading OutHouse...");
       _serverDate = dtpDate.Value.Value;
-      LoadGrid();
+      LoadGrid();    
     }
 
     #endregion
@@ -408,20 +408,25 @@ namespace IM.Outhouse.Forms
     {
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
 
-      if (e.Key != Key.Delete) return;
-      if (row != null && row.guShow)
+      //Si no es una tecla Delete ó si row es igual a null Retornamos
+      if(e.Key != Key.Delete || row  == null) return;
+
+      // Si se esta editando alguna celda del row no dejamos que elimine el registro
+      if (((DataGridRow)dgGuestPremanifest.ItemContainerGenerator.ContainerFromItem(row)).IsEditing) return;
+
+      //Si se presiono la tecla Delte y si  diferente de Null el row y si tiene Show el guest 
+      //No lo permitimos eliminar y retornamos 
+      if (row.guShow)
       {
         e.Handled = true;
+        UIHelper.ShowMessage("You can not delete the Guest because has 'Show Up'");
         return;
       }
-      var dgr =
-        (DataGridRow) dgGuestPremanifest.ItemContainerGenerator.ContainerFromIndex(dgGuestPremanifest.SelectedIndex);
-
+    
       var result = MessageBox.Show("Are you sure you want to delete this invitation?", "Delete", MessageBoxButton.YesNo,
-        MessageBoxImage.Question, MessageBoxResult.No);
+        MessageBoxImage.Question, MessageBoxResult.No);           
 
-      if (dgGuestPremanifest != null && e.Key == Key.Delete && !dgr.IsEditing && result == MessageBoxResult.Yes &&
-          row != null)
+      if (result == MessageBoxResult.Yes )
       {
         await BRGuests.DeleteGuest(row.guID);
       }

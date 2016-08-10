@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         mc:Ignorable="d" Loaded="Window_Loaded"
-        Title="Notices" MinHeight="350" MinWidth="300" Height="350" Width="300" Background="Beige"  ResizeMode="CanResizeWithGrip"  WindowStyle="ToolWindow"   >
+        Title="Notices" MinHeight="350" MinWidth="300" Height="350" Width="300" Background="Beige"  ResizeMode="CanResizeWithGrip"  WindowStyle="ToolWindow" 
+        KeyDown="Window_KeyDown" WindowStartupLocation="Manual" Topmost="True" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="85*"/>
@@ -34,7 +35,7 @@
         </StatusBar>
 
 
-        <StackPanel Grid.Column="1" Grid.Row="1">
+        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Width="146">
             <Button Name="btnUpSpeed" MouseDown="btnUpSpeed_MouseDown"  Grid.Row="0" HorizontalAlignment="Center"  Width="30" Height="20" Margin="40,0,0,2"  ToolTip="Up Speed AutoScroll" Click="UpSpeed_Click" Visibility="Hidden">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" >
                     <Image Source="pack://application:,,,/IM.Styles;component/Images/Up.png" />

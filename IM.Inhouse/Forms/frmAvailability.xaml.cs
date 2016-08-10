@@ -354,11 +354,22 @@ namespace IM.Inhouse
 
     #endregion
 
-    #endregion
-
+    #region txtguum_PreviewTextInput
+    /// <summary>
+    /// Valida que solo se ingresen numeros
+    /// </summary>
+    /// <history>
+    /// [JORCANCHE]  28/06/2016
+    /// </history>
     private void txtguum_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);      
+      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }
   }
+
+  #endregion
+
+  #endregion
+
+
 }

@@ -115,10 +115,10 @@
                         <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtLocation" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="NOMBRE LOCACION"/></TextBlock>
                     </Grid>
                 </GroupBox>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <GroupBox x:Name="grpDate" Header="Date" Width="130">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                    <GroupBox x:Name="grpDate" Header="Date" Width="auto" >
                         <StackPanel VerticalAlignment="Center" Margin="5,0,5,0">
-                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpDate" ValueChanged="dtpDate_ValueChanged" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                            <xctk:DateTimePicker Width="150"  Style="{StaticResource dtp-DateRange-TK}"  x:Name="dtpDate" ValueChanged="dtpDate_ValueChanged" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
                             <Button x:Name="btnRefresh" Click="btnRefresh_Click" Height="20" Margin="0,4,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" Width="14" Height="14"/>
@@ -139,9 +139,9 @@
                   Grid.Row="1" Background="#FFF4F5E2" x:Name="dgGuestPremanifest" SelectionUnit ="FullRow"  
                   SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"
                   AlternationCount="2" ItemsSource="{Binding}" Margin="7,0"  AutoGenerateColumns="False" CanUserDeleteRows="true" FontSize="14" FontWeight="Medium"
-                  EnableRowVirtualization="True"  SelectionChanged="dgGuestPremanifest_SelectionChanged" HorizontalScrollBarVisibility="Visible">
+                  EnableRowVirtualization="True"  SelectionChanged="dgGuestPremanifest_SelectionChanged" >
                 <DataGrid.Resources>
-                    <Style TargetType="DataGridRow">
+                    <Style TargetType="{x:Type DataGridRow}">
                         <EventSetter Event="PreviewKeyDown" Handler="dgGuestPremanifest_PreviewKeyDown"/>
                     </Style>
                 </DataGrid.Resources>
@@ -218,7 +218,7 @@
                     <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding guComments}"  />
+                                <TextBlock Text="{Binding guComments}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>

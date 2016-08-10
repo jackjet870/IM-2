@@ -1,42 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.BusinessRules.BR;
 using System.Windows.Threading;
-using IM.Model;
 using IM.Base.Helpers;
 
 namespace IM.Inhouse.Forms
 {
   /// <summary>
-  /// Interaction logic for frmNotices.xaml
+  /// Formulario que sirve para visualizar las noticias 
   /// </summary>
+  /// <history>
+  /// [jorcanche] 19/04/2016
+  /// </history>
   public partial class frmNotices : Window
   {
-    //string RTFNotices = string.Empty;
-    //string RTFNotice = string.Empty;
-
+    #region Atributos
     string RTFNotices = string.Empty;
     string RTFNotice = string.Empty;
     DispatcherTimer timer;
-    double speed = 0;
-    //bool speedChanged = false;
+    double speed = 0; 
+    #endregion
 
+    #region Contructor
+
+    /// <summary>
+    /// Contructor
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// </history>
     public frmNotices()
     {
       InitializeComponent();
-    }
+    } 
+    #endregion
 
+    #region GetNotices
     /// <summary>
     /// Trae las noticias y las carga en el rtb
     /// </summary>
@@ -44,26 +47,27 @@ namespace IM.Inhouse.Forms
     /// [jorcanche] 19/04/2016
     /// </history>
     private async void GetNotices()
-    {     
+    {
       rtbViewerNotice.Document.Blocks.Clear();
       RTFNotices = string.Empty;
       RTFNotice = string.Empty;
 
-      var notices =await BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
+      var notices = await BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
 
       if (notices.Count > 0)
       {
         foreach (var notice in notices)
-        {                   
+        {
           RTFNotices = RTFNotices + Title(notice.noTitle);
           RTFNotices = RTFNotices + Text(notice.noText);
         }
         UIRichTextBoxHelper.LoadRTF(ref rtbViewerNotice, RTFNotices);
         RTFNotice = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbViewerNotice);
-        //rtbViewerNotice.Document.Blocks.Add(new Paragraph(new Run("\u2028 \u2028")));
       }
     }
+    #endregion
 
+    #region Text
     /// <summary>
     /// Devuelve el text en el estilo RTF
     /// </summary>
@@ -77,10 +81,12 @@ namespace IM.Inhouse.Forms
       rtb.Document.Foreground = Brushes.Black;
       rtb.Document.FontSize = 10;
       //Agregamos dos saltos de pagina
-      rtb.Document.Blocks.Add(new Paragraph(new Run("\u2028 \u2028")));      
+      rtb.Document.Blocks.Add(new Paragraph(new Run("\u2028 \u2028")));
       return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb);
     }
+    #endregion
 
+    #region Title
     /// <summary>
     /// Agrega titulo a las noticias con su formato correspondiente
     /// </summary>
@@ -95,7 +101,7 @@ namespace IM.Inhouse.Forms
       var paragraph = new Paragraph();
       //Agregamos el titulo
       paragraph.Inlines.Add(new Underline(new Run(titulo)));
-      paragraph.Inlines.Add(new Run("\u2028"));      
+      paragraph.Inlines.Add(new Run("\u2028"));
       //Lo agregamos el documento
       flowDocument.Blocks.Add(paragraph);
       //Aplicamos el estilo      
@@ -104,10 +110,12 @@ namespace IM.Inhouse.Forms
       flowDocument.FontSize = 20;
       flowDocument.TextAlignment = TextAlignment.Center;
       flowDocument.FontWeight = FontWeights.Bold;
-      var rtb = new RichTextBox {Document = flowDocument};
-      return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb); 
+      var rtb = new RichTextBox { Document = flowDocument };
+      return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb);
     }
+    #endregion
 
+    #region btnRefresh_Click
     /// <summary>
     /// Vuelve a cargar las noticias del día en el rtb
     /// </summary>
@@ -126,7 +134,9 @@ namespace IM.Inhouse.Forms
         AutoScroll();
       }
     }
+    #endregion
 
+    #region Window_Loaded
     /// <summary>
     /// Carga todas las notices del día en el rtb
     /// </summary>
@@ -137,7 +147,9 @@ namespace IM.Inhouse.Forms
     {
       GetNotices();
     }
+    #endregion
 
+    #region chkAutoscroll_Checked
     /// <summary>
     /// inicia el tiempo y manipula el scrollViewer.
     /// </summary>
@@ -151,10 +163,11 @@ namespace IM.Inhouse.Forms
       RiniciarTimer();
       AutoScroll();
       //Habilitamos botones de velocidad
-      btnUpSpeed.Visibility = btnDownSpeed.Visibility =  Visibility.Visible;
-      //speedChanged = false;
+      btnUpSpeed.Visibility = btnDownSpeed.Visibility = Visibility.Visible;
     }
+    #endregion
 
+    #region chkAutoscroll_Unchecked
     /// <summary>
     /// Termina el tiempo y manipula el scrollViewer.
     /// </summary>
@@ -167,10 +180,11 @@ namespace IM.Inhouse.Forms
       _scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
       //deshabilitamos botones de velocidad
       btnUpSpeed.Visibility = btnDownSpeed.Visibility = Visibility.Hidden;
-      //speedChanged = false;
       GetNotices();
     }
+    #endregion
 
+    #region AutoScroll
     /// <summary>
     /// Inicia el tiempo y manipula el scrollViewer.
     /// </summary>
@@ -179,16 +193,14 @@ namespace IM.Inhouse.Forms
     /// </history>
     public void AutoScroll()
     {
-      //PrepareRTB();
-      //_scrollViewer.MaxHeight = 10000;
       double scroll = 0;
       _scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
       timer = new DispatcherTimer();
-      timer.Interval = new TimeSpan(0, 0, 3/4);
+      timer.Interval = new TimeSpan(0, 0, 3 / 4);
       timer.Tick += ((sender, e) =>
-      {     
+      {
         scroll = scroll + speed;
-        _scrollViewer.ScrollToVerticalOffset(scroll);      
+        _scrollViewer.ScrollToVerticalOffset(scroll);
 
         if (_scrollViewer.VerticalOffset == _scrollViewer.ScrollableHeight)
         {
@@ -198,27 +210,9 @@ namespace IM.Inhouse.Forms
       });
       timer.Start();
     }
+    #endregion
 
-    private void PrepareRTB()
-    {
-      string espace = agregarespacios();
-      espace = espace + RTFNotice;
-      UIRichTextBoxHelper.LoadRTF(ref rtbViewerNotice, espace);
-    }
-
-    private string agregarespacios()
-    {
-      string espacio = string.Empty;
-      double tamaño = Height; //rtb 248
-      //double resultado = (((tamaño-120) * 11)/230);
-      double resultado = (((tamaño -100) * 12) / 248);
-      //double resultado = 12;
-      for (int i = 1; i<= resultado; i++)
-      {
-        espacio = espacio + string.Format(@"Linea {0} \par ",i );
-      }
-      return espacio;
-    }
+    #region ViewerNotice_MouseEnter
     /// <summary>
     /// Detiene el tiempo cuando entrea el Mouse al control
     /// </summary>
@@ -230,7 +224,9 @@ namespace IM.Inhouse.Forms
       if (timer != null)
         timer.Stop();
     }
+    #endregion
 
+    #region ViewerNotice_MouseLeave
     /// <summary>
     /// Prosigue con el tiempo cuando sale el Mouse del control
     /// </summary>
@@ -242,7 +238,9 @@ namespace IM.Inhouse.Forms
       if (timer != null)
         timer.Start();
     }
+    #endregion
 
+    #region RiniciarTimer
     /// <summary>
     /// Detiene el tiempo 
     /// </summary>
@@ -262,7 +260,9 @@ namespace IM.Inhouse.Forms
         }
       }
     }
+    #endregion
 
+    #region UpSpeed_Click
     /// <summary>
     /// Aumenta la velocidad del tiempo en .0002 segundos
     /// </summary>
@@ -275,7 +275,9 @@ namespace IM.Inhouse.Forms
       //speed = speed + .0002;
       speed = speed + .0008;
     }
+    #endregion
 
+    #region DownSpeed_Click
     /// <summary>
     /// Disminuye la velocidad del tiempo en .0002 segundos
     /// </summary>
@@ -288,19 +290,36 @@ namespace IM.Inhouse.Forms
       //if((speed-.0008) >= 0)
       speed = speed - .0008;
     }
+    #endregion
 
+    #region btnUpSpeed_MouseDown
+    /// <summary>
+    /// Agrega velocidad al Scroll
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void btnUpSpeed_MouseDown(object sender, MouseButtonEventArgs e)
     {
       speed = speed + .0002;
     }
 
+    #endregion
 
+    #region btnDownSpeed_MouseDown
+    /// <summary>
+    /// Quita velocidad al Scroll
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void btnDownSpeed_MouseDown(object sender, MouseButtonEventArgs e)
     {
       speed = speed - .0002;
     }
+    #endregion
 
-
+    #region stbStatusBar_MouseLeftButtonDown
     /// <summary>
     /// Para porder mover la ventana con el status bar
     /// </summary>
@@ -311,5 +330,19 @@ namespace IM.Inhouse.Forms
     {
       DragMove();
     }
+    #endregion
+
+    #region Window_KeyDown
+    /// <summary>
+    /// Cierra la ventana al precionar la tecla Esc
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 10/08/2016
+    /// <history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Escape) Close();
+    } 
+    #endregion
   }
 }

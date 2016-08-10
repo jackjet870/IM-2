@@ -155,7 +155,7 @@
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
                 <!-- <GroupBox Grid.Row="0" x:Name="grbDate" Header="Date" FontWeight="Bold" Margin="2,0,2,0">-->
-                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True" Format="ShortDate" Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged" />
+                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"  Style="{StaticResource dtp-DateRange-TK}"  Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged" />
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
                 <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" >
