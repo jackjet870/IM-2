@@ -11479,7 +11479,7 @@
           <Property Name="shpe" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="shUp" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Guest" Relationship="Self.FK_ShowsSalesmen_Guests" FromRole="ShowsSalesmen" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Personnel" Relationship="Self.FK_ShowsSalesmen_Personnel" FromRole="ShowsSalesmen" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Personnel" Relationship="Self.FK_ShowsSalesmen_Personnel" FromRole="ShowsSalesmen" ToRole="Personnel" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="SourcePayment">
           <Key>
