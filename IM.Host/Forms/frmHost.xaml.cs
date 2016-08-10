@@ -777,7 +777,7 @@ namespace IM.Host
 
         var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse,
        validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
-       switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.SalesRoom.srID);
+       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
 
         if (App.User.AutoSign)
         {
@@ -788,7 +788,8 @@ namespace IM.Host
 
         if (login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumInvitationType.Host, login.UserData, guest.guID, EnumInvitationMode.modAdd)
+          //TODO: Tony revisar los parametros por favor, yo los cambie para que no de error- Edder.
+          var invitacion = new frmInvitation(EnumModule.Host, EnumInvitationType.newExternal, login.UserData, guest.guID)
           {
             Owner = this
           };

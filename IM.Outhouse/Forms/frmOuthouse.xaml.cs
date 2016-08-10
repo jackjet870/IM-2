@@ -363,7 +363,7 @@ namespace IM.Outhouse.Forms
       //Si los datos son validos
       if (ValidateInvitation(row.guCheckIn))
       {
-        var inv = new frmInvitationBase(EnumInvitationType.OutHouse, App.User, row.guID, EnumInvitationMode.modEdit);
+        var inv = new frmInvitationBase(EnumInvitationType2.OutHouse, App.User, row.guID, EnumInvitationMode.modEdit);
         inv.ShowDialog();
       }
     }
@@ -517,7 +517,7 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void btnNewInv_Click(object sender, RoutedEventArgs e)
     {
-      var invit = new frmInvitationBase(EnumInvitationType.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
+      var invit = new frmInvitationBase(EnumInvitationType2.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
       {
         Owner = this,
         ShowInTaskbar = false

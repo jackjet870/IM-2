@@ -508,7 +508,7 @@ namespace IM.Base.Classes
         if (dbContext.GuestObj.guBookD != null && dbContext.GuestObj.guBookD != DateTime.MinValue)
         {
           //Si el tipo de invitacion viene de host se cambia el permiso a HostInvitation
-          if (form._invitationType == EnumInvitationType.Host)
+          if (form._module == EnumModule.Host)
           {
             _permission = EnumPermission.HostInvitations;
           }
@@ -534,7 +534,7 @@ namespace IM.Base.Classes
            * y su permiso es de PRInvitation o HostInvitation dependiendo del tipo
            * y La invitacion es Nueva (InvitationMode.modAdd)
            * */
-          if (form._user.HasPermission(_permission, EnumPermisionLevel.SuperSpecial) && form._invitationMode == EnumInvitationMode.modAdd)
+          if (form._user.HasPermission(_permission, EnumPermisionLevel.SuperSpecial) && form._invitationType != EnumInvitationType.existing)
           {
             //Valida que el invitado no tenga un mes de haber salido
             if (BRHelpers.GetServerDate() >= dbContext.GuestObj.guCheckOutD.AddDays(30))

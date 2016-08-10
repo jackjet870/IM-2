@@ -106,12 +106,13 @@ namespace IM.Base.Classes
     #endregion
 
     #region Constructor
-    public CommonCatObject(UserData user, int guId, EnumInvitationType invitationType, EnumInvitationMode invitationMode = EnumInvitationMode.modAdd)
+    public CommonCatObject(EnumModule module, EnumInvitationType invitationType, UserData user, int guID = 0)
     {
+      //Cargamos los catalogos comunes
       #region Inicializar Catalogos
       LoadLenguages();
       LoadMaritalStatus();
-      LoadPersonnel(user, invitationType);
+      LoadPersonnel(user, module);
       LoadHotels();
       LoadAgencies();
       LoadCountries();
@@ -121,17 +122,41 @@ namespace IM.Base.Classes
       LoadPaymentPlaces();
       LoadCreditCardTypes();
       LoadSalesRooms();
-      LoadLocations(user);
+      LoadLocations(user, module);
       LoadDisputeStatus();
       LoadGifts(user);
       LoadCloseDate();
-      LoadProgram(user);
+      LoadProgram(module, invitationType, guID);
       #endregion
 
-      //Si se va a Generar una Nueva Invitacion
-      if (invitationMode == EnumInvitationMode.modAdd && guId == 0)
+      //Cargamos la invitacion
+      DefaultValueInvitation(user, guID);
+    }
+    #endregion
+
+    #region DefaultValues
+
+    #region DefaultValueInvitation
+    /// <summary>
+    /// Carga la informacion del Guest, InvitationGift, BookingDeposit, CreditCardList, AdditionalGuest
+    /// dependiento del tipo de invitacion.
+    /// </summary>
+    /// <param name="user">UserData</param>
+    /// <param name="guID">Guest ID</param>
+    private void DefaultValueInvitation(UserData user, int guID)
+    {
+      //Si trae GuestID, Nueva o existente.
+      if (guID != 0)
       {
-        //Asignamos memoria para que pueden usarse
+        LoadGuest(user, guID);
+        LoadInvitationGift(guID);
+        LoadBookingDeposit(guID);
+        LoadGuestCreditCard(guID);
+        LoadAdditionalGuest(guID);
+      }
+      //Si No trae GuestID Invitacion Nueva       
+      else
+      {
         SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList));
         SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), nameof(BookingDepositList));
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
@@ -139,19 +164,12 @@ namespace IM.Base.Classes
         SetField(ref _guestObj, new Guest(), nameof(GuestObj));
         DefaultValueForGuest(user);
       }
-      //Si se va a modificar una Invitacion o se va hacer una nueva con los datos de un GuestID
-      else
-      {
-        LoadGuest(user, guId);
-        LoadInvitationGift(guId);
-        LoadBookingDeposit(guId);
-        LoadGuestCreditCard(guId);
-        LoadAdditionalGuest(guId);
-      }
     }
+    #endregion
+
     #region DefaultValueForGuest
     /// <summary>
-    /// Si ingresan valores default a los campos del Guest
+    /// Si ingresan valores default a los campos del Guest Cuando es una invitacion sin GuestID
     /// </summary>
     /// <param name="user"></param>
     private void DefaultValueForGuest(UserData user)
@@ -160,7 +178,6 @@ namespace IM.Base.Classes
     }
 
     #endregion
-
     #endregion
 
     #region Metodos Carga de Catalogos
@@ -183,18 +200,18 @@ namespace IM.Base.Classes
 
     #region Personnel
     /// <summary>
-    /// carga al personal dependiendo del tipo de invitacion
+    /// Carga al personal dependiendo del tipo de invitacion
     /// </summary>
-    /// <param name="user"></param>
-    /// <param name="inviType"></param>
+    /// <param name="user">UserData</param>
+    /// <param name="module">EnumModule</param>
     /// <history>
     /// [erosado] 09/08/2016
     /// </history>
-    private async void LoadPersonnel(UserData user, EnumInvitationType inviType)
+    private async void LoadPersonnel(UserData user, EnumModule module)
     {
       List<PersonnelShort> personnel = new List<PersonnelShort>();
       //Si es Host carga al personal con la sala de venta
-      if (inviType == EnumInvitationType.Host)
+      if (module == EnumModule.Host)
       {
         personnel = await BRPersonnel.GetPersonnel(salesRooms: user.SalesRoom.srID, roles: "PR");
       }
@@ -203,7 +220,6 @@ namespace IM.Base.Classes
       {
         personnel = await BRPersonnel.GetPersonnel(user.LeadSource.lsID, roles: "PR");
       }
-
       SetField(ref _personnel, personnel, nameof(Personnel));
     }
     #endregion
@@ -268,7 +284,7 @@ namespace IM.Base.Classes
     #region CreditCardTypes
     private async void LoadCreditCardTypes()
     {
-      var result = await BRCreditCardTypes.GetCreditCardTypes();
+      var result = await BRCreditCardTypes.GetCreditCardTypes(nStatus: 1);
       SetField(ref _creditCardTypes, result, nameof(CreditCardTypes));
     }
 
@@ -291,9 +307,15 @@ namespace IM.Base.Classes
     #endregion
 
     #region Locations
-    private async void LoadLocations(UserData _user)
+    /// <summary>
+    /// Carga las locaciones del usuario logeado (Todas)
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="module"></param>
+    private async void LoadLocations(UserData user, EnumModule module)
     {
-      var result = await BRLocations.GetLocationsByUser(_user.User.peID);
+      var result = await BRLocations.GetLocationsByUser(user.User.peID);
+
       SetField(ref _locations, result, nameof(Locations));
     }
     #endregion
@@ -315,20 +337,67 @@ namespace IM.Base.Classes
     #endregion
 
     #region LoadProgram
-    private async void LoadProgram(UserData user)
+    /// <summary>
+    /// Carga el Program para la invitacion
+    /// </summary>
+    /// <param name="module">EnumModule</param>
+    /// <param name="invitationType">EnumInvitationType</param>
+    /// <param name="guID">GuestID</param>
+    /// <history>
+    /// [erosado] 10/08/2016  Created.
+    /// </history>
+    private async void LoadProgram(EnumModule module, EnumInvitationType invitationType, int guID)
     {
-      var result = await BRLeadSources.GetLeadSourceProgram(user.LeadSource.lsID);
-      EnumProgram program;
-
-      if (result == EnumToListHelper.GetEnumDescription(EnumProgram.Inhouse))
+      EnumProgram program = EnumProgram.All;
+      //Si se tiene el GuestID
+      if (guID != 0 && module != EnumModule.Host)
       {
-        program = EnumProgram.Inhouse;
+        //Obtenemos la informacion del Guest
+        var guest = await BRGuests.GetGuest(guID);
+        //Obtenemos la informacion de program 
+        var result = await BRLeadSources.GetLeadSourceProgram(guest.gulsOriginal);
+        //Asignamos el Program
+        if (result == EnumToListHelper.GetEnumDescription(EnumProgram.Inhouse))
+        {
+          program = EnumProgram.Inhouse;
+        }
+        else
+        {
+          program = EnumProgram.Outhouse;
+        }
       }
+      //Si NO hay un Guest para obtener el program 
       else
       {
-        program = EnumProgram.Outhouse;
+        //De que modulo me estan hablando
+        switch (module)
+        {
+          case EnumModule.InHouse:
+            if (invitationType == EnumInvitationType.newExternal)
+            {
+              program = EnumProgram.Inhouse;
+            }
+            break;
+          case EnumModule.OutHouse:
+            if (invitationType == EnumInvitationType.newOutHouse)
+            {
+              program = EnumProgram.Outhouse;
+            }
+            break;
+          case EnumModule.Host:
+            if (invitationType == EnumInvitationType.newOutHouse)
+            {
+              program = EnumProgram.Outhouse;
+            }
+            else
+            {
+              program = EnumProgram.Inhouse;
+            }
+            break;
+          default:
+            break;
+        }
       }
-
       SetField(ref _program, program, nameof(Program));
     }
     #endregion
