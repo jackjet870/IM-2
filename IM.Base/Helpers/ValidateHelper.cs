@@ -225,7 +225,7 @@ namespace IM.Base.Helpers
           #endregion
           if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
           if ((blnValidateVisibility && txt.IsVisible) || !blnValidateVisibility)
-            strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";
+            strMsj += $"Specify the {strForm}  { txt.Tag }. \n";
         }
         #endregion
 
@@ -236,7 +236,7 @@ namespace IM.Base.Helpers
           var cmb = (ComboBox)control;
           if (cmb.SelectedIndex > -1) continue;
           if ((blnValidateVisibility && cmb.IsVisible) || !blnValidateVisibility)
-            strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";
+            strMsj += $"Specify the {strForm } {cmb.Tag}. \n";
         }
         #endregion
 
@@ -250,7 +250,7 @@ namespace IM.Base.Helpers
           #endregion
           if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
           if ((blnValidateVisibility && pwd.IsVisible) || !blnValidateVisibility)
-            strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
+            strMsj += $"Specify the {strForm } {pwd.Tag}. \n";
         }
         #endregion
 
@@ -261,7 +261,7 @@ namespace IM.Base.Helpers
          
           if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
           if ((blnValidateVisibility && dtp.IsVisible) || !blnValidateVisibility)
-            strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";
+            strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
         }
         #endregion
       }

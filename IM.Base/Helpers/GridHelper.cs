@@ -563,7 +563,7 @@ namespace IM.Base.Helpers
                   if (columnDefinition.scale > 0)
                   {
                     style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput)));//Validar texto
-                    if (string.IsNullOrWhiteSpace(PrecisionPropertyClass.GetPrecision(dgc)))
+                    if (PrecisionPropertyClass.GetPrecision(dgc)=="0,0")
                     {
                       style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale));//Agregar Presicion
                     }                    

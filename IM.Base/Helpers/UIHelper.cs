@@ -234,7 +234,7 @@ namespace IM.Base.Helpers
                   //Si permite decimales
                   if (columnDefinition.scale>0)
                   {
-                    if(string.IsNullOrWhiteSpace(PrecisionPropertyClass.GetPrecision(txt)))
+                    if(PrecisionPropertyClass.GetPrecision(txt)=="0,0")
                     {
                       PrecisionPropertyClass.SetPrecision(txt, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale);
                     }
