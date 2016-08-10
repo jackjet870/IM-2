@@ -710,7 +710,7 @@ namespace IM.Host
     {
       try
       {
-        frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumModule.Transfer) { Owner = this };
+        frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumSearchHostType.Transfer) { Owner = this };
         bool blnResult = (bool)frmSearch.ShowDialog();
 
         // Verificamos si se debe realizar alguna tranferencia
@@ -767,7 +767,7 @@ namespace IM.Host
     /// </history>
     private async void btnInvitationInhouse_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumModule.Invit) { Owner = this };
+      frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumSearchHostType.Invit) { Owner = this };
       bool blnResult = (bool)frmSearch.ShowDialog();
 
       // Verificamos si se debe realizar alguna tranferencia
@@ -788,7 +788,7 @@ namespace IM.Host
 
         if (login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumInvitationType.InHouse, login.UserData, guest.guID, EnumInvitationMode.modAdd)
+          var invitacion = new frmInvitation(EnumInvitationType.Host, login.UserData, guest.guID, EnumInvitationMode.modAdd)
           {
             Owner = this
           };

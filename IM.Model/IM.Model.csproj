@@ -248,7 +248,6 @@
     <Compile Include="Enums\EnumGiftsReceiptType.cs" />
     <Compile Include="Enums\EnumGuestsMovementsType.cs" />
     <Compile Include="Enums\EnumLoginType.cs" />
-    <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPeriod.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />
     <Compile Include="Enums\EnumRptGeneral.cs" />
@@ -263,6 +262,7 @@
     <Compile Include="Enums\EnumSalesByMemberShipType.cs" />
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
     <Compile Include="Enums\EnumScreen.cs" />
+    <Compile Include="Enums\EnumSearchHostType.cs" />
     <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
     <Compile Include="Enums\EnumInvitationType.cs" />

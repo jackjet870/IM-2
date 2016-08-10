@@ -870,7 +870,7 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 09/Agosto/2016 Modified -> Se agrego el estandar del return, se agregaron nuevos parametros al metodo, se agrego un switch para validar tipos de busqueda, se agrego timeout.
     /// </history>
     public async static Task<List<Guest>> GetSearchGuestGeneral(DateTime hostDateSelected, DateTime dtpStart, DateTime dtpEnd, int guestID = 0, string guestName = "", string leadSource = "", string salesRoom = "", string roomNum = "",
-                                                                string reservation = "", string PR = "", EnumModule module = EnumModule.Search)
+                                                                string reservation = "", string PR = "", EnumSearchHostType module = EnumSearchHostType.General)
     {
       return await Task.Run(() =>
       {
@@ -919,14 +919,14 @@ namespace IM.BusinessRules.BR
             switch (module)
             {
               // Si es de tipo transfer
-              case EnumModule.Transfer:
+              case EnumSearchHostType.Transfer:
                 query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false);
                 break;
               // Si la busqueda es general 
-              case EnumModule.Search:
+              case EnumSearchHostType.General:
                 query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true);
                 break;
-              case EnumModule.Invit:
+              case EnumSearchHostType.Invit:
                 query = query.Any() ? query.Where(x => x.guCheckOutD > hostDateSelected && x.guCheckIn == true) : dbContext.Guests.Where(x => x.guCheckOutD > hostDateSelected  && x.guCheckIn == true);
                 break;
             }

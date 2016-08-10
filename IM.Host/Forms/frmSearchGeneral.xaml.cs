@@ -21,7 +21,7 @@ namespace IM.Host.Forms
   /// </history>
   public partial class frmSearchGeneral : Window
   {
-    EnumModule _module;
+    EnumSearchHostType _module;
     DateTime _dateParent;
 
     #region Contructor
@@ -33,7 +33,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 09/Agosto/2016 Modified --> Se agrego el parametro hostDate.
     /// </history>
-    public frmSearchGeneral(DateTime hostDate, EnumModule module = EnumModule.Search)
+    public frmSearchGeneral(DateTime hostDate, EnumSearchHostType module = EnumSearchHostType.General)
     {
       _module = module;
       _dateParent = hostDate;
@@ -62,12 +62,12 @@ namespace IM.Host.Forms
 
       switch (_module)
       {
-        case EnumModule.Search:
+        case EnumSearchHostType.General:
           // Lead Sources
           dsLeadSource.Source = frmHost._lstLeadSources;
           btnOk.Visibility = guCheckInDColumn.Visibility = guCheckOutDColumn.Visibility = guBookD.Visibility = Visibility.Collapsed;
           break;
-        case EnumModule.Transfer:
+        case EnumSearchHostType.Transfer:
           btnOk.Content = "Tranfer";
           // Ocultamos las columnas y los botones no utilizados en este caso
           stkButtons.Visibility = guLastName2Column.Visibility = guBookCancColumn.Visibility = guShowD1Column.Visibility = guMealTicketColumn.Visibility =
@@ -75,7 +75,7 @@ namespace IM.Host.Forms
           // Lead Sources
           dsLeadSource.Source = frmHost._lstLeadSources;
           break;
-        case EnumModule.Invit:
+        case EnumSearchHostType.Invit:
           btnOk.Content = "Invit";
           // Ocultamos las columnas y los botones no utilizados en este caso
           stkButtons.Visibility = guLastName2Column.Visibility = guBookCancColumn.Visibility = guShowD1Column.Visibility = guMealTicketColumn.Visibility =
@@ -153,7 +153,7 @@ namespace IM.Host.Forms
      
       switch (_module)
       {
-        case EnumModule.Transfer:
+        case EnumSearchHostType.Transfer:
           if (!blnResult && txtName.Text == "")
           {
             UIHelper.ShowMessage("Enter a search criteria.", MessageBoxImage.Information);
@@ -165,14 +165,14 @@ namespace IM.Host.Forms
             blnResult = false;
           }
           break;
-        case EnumModule.Invit:
+        case EnumSearchHostType.Invit:
           if (!blnResult && txtName.Text == "")
           {
             UIHelper.ShowMessage("Enter a search criteria.", MessageBoxImage.Information);
             blnResult = false;
           }
           break;
-        case EnumModule.Search:
+        case EnumSearchHostType.General:
           // validamos que se haya ingresado algun criterio de busqueda
           if (!blnResult && txtReservation.Text == "" )
           {
