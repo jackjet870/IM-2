@@ -55,32 +55,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void btnCloseShows_Click(object sender, RoutedEventArgs e)
     {
-      try
+      if (ValidateCloseInvitationDate())
       {
-        btnCloseShows.Focus();
-        if (closeInvit == lastClosedDate)
+        try
         {
-          Close();
-        }
-        else
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("Are you sure you want to close all Invitations until " + closeInvit.ToLongDateString() + " ? " +
-            "You won’t be able to modifiy that Invitations anymore.", MessageBoxImage.Question, "Close Invitation");
-          if (result == MessageBoxResult.Yes)
+          btnCloseShows.Focus();
+          if (closeInvit == lastClosedDate)
           {
-            int nRes = 0;
-            nRes = await BRConfiguration.SaveCloseDate(closeInvit);
-            UIHelper.ShowMessageResult("Close Invitation", nRes);
-            if (nRes > 0)
+            Close();
+          }
+          else
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("Are you sure you want to close all Invitations until " + closeInvit.ToLongDateString() + " ? " +
+              "You won’t be able to modifiy that Invitations anymore.", MessageBoxImage.Question, "Close Invitation");
+            if (result == MessageBoxResult.Yes)
             {
-              Close();
+              int nRes = 0;
+              nRes = await BRConfiguration.SaveCloseDate(closeInvit);
+              UIHelper.ShowMessageResult("Close Invitation", nRes);
+              if (nRes > 0)
+              {
+                Close();
+              }
             }
           }
         }
-      }
-      catch (Exception ex)
-      {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Close Invitation");
+        catch (Exception ex)
+        {
+          UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Close Invitation");
+        }
       }
     }
     #endregion
@@ -125,6 +128,26 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
       }
+    }
+    #endregion
+
+    #region ValidateCloseInvitationDate
+    /// <summary>
+    ///   Valida que la fecha de cierre no sea mayor a la fecha de hoy
+    /// </summary>
+    /// <returns></returns>
+    /// <history>
+    ///   [vku] 11/Ago/2016 Created
+    /// </history>
+    protected bool ValidateCloseInvitationDate()
+    {
+      bool blnValid = true;
+      if (dtpkCloseInvit.SelectedDate > BRHelpers.GetServerDate())
+      {
+        blnValid = false;
+        UIHelper.ShowMessage("Close date can't be greater than today");
+      }
+      return blnValid;
     }
     #endregion
 
