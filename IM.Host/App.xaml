@@ -21,8 +21,9 @@
         <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styImage.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
-        
-      </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataErrorInfo.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

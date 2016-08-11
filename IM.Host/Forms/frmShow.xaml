@@ -4,354 +4,1089 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmShow"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        xmlns:Helpers="clr-namespace:IM.Base.Helpers;assembly=IM.Base"
+        xmlns:styClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        x:Class="IM.Host.Forms.frmShow"
         mc:Ignorable="d"
-        Title="frmShow" Height="708.976" Width="625.707" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
-  <Window.Resources>
-    <CollectionViewSource x:Key="guestViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Guest}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsMaritalStatus" d:DesignSource="{d:DesignInstance {x:Type Model:MaritalStatus}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsAgencies" d:DesignSource="{d:DesignInstance {x:Type Model:AgencyShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsCountries" d:DesignSource="{d:DesignInstance {x:Type Model:CountryShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsLanguajes" d:DesignSource="{d:DesignInstance {x:Type Model:LanguageShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsHotels" d:DesignSource="{d:DesignInstance {x:Type Model:Hotel}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsCurrencies" d:DesignSource="{d:DesignInstance {x:Type Model:CurrencyShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPaymentTypes" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsTeamsSalesMen" d:DesignSource="{d:DesignInstance {x:Type Model:TeamSalesmen}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelPR" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelLINER" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelCLOSER" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelEXITCLOSER" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelPODIUM" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelVLO" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelHOSTSENTRY" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelHOSTSGIFTS" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsPersonnelHOSTSEXIT" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
+        Title="Show" d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen"  WindowStyle="SingleBorderWindow" WindowState="Maximized"
+        Loaded="Window_Loaded" ShowInTaskbar="False" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" KeyDown="Window_KeyDown"
+        d:DataContext="{d:DesignInstance local:frmShow}">
+    <Window.Resources>
+        <CollectionViewSource x:Key="dsMaritalStatus" d:DesignSource="{d:DesignInstance {x:Type Model:MaritalStatus}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsAgencies" d:DesignSource="{d:DesignInstance {x:Type Model:AgencyShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCountries" d:DesignSource="{d:DesignInstance {x:Type Model:CountryShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsLanguajes" d:DesignSource="{d:DesignInstance {x:Type Model:LanguageShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsHotels" d:DesignSource="{d:DesignInstance {x:Type Model:Hotel}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCurrencies" d:DesignSource="{d:DesignInstance {x:Type Model:CurrencyShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPaymentTypes" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsTeamsSalesMen" d:DesignSource="{d:DesignInstance {x:Type Model:TeamSalesmen}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnelPR" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnelLiner" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelCloser" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelExitCloser" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelPodium" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelVlo" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelHostsEntry" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelHostsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPersonnelHostsExit" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsCreditCardTypes" d:DesignSource="{d:DesignInstance {x:Type Model:CreditCardType}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsGuestStatusTypes" d:DesignSource="{d:DesignInstance {x:Type Model:GuestStatusType}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsDisputeStatus" d:DesignSource="{d:DesignInstance {x:Type Model:DisputeStatus}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsPaymentPlaces" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentPlace}, CreateList=True}" />
+        <CollectionViewSource x:Key="dsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:Gift}, CreateList=True}"/>
 
-  </Window.Resources>
-  <Grid>
-    <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="682" Width="618">
-      <TabItem Header="General">
-        <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
-          <GroupBox x:Name="groupBox1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="37" Width="588">
-            <StackPanel Orientation="Horizontal" DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguID" HorizontalAlignment="Left" Margin="4,10,0,0" TextWrapping="Wrap" Text="GUID" VerticalAlignment="Top"/>
-              <TextBox x:Name="txtguID" Height="22" TextWrapping="Wrap" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guID, Mode=TwoWay, NotifyOnValidationError=False, ValidatesOnExceptions=False}"/>
-              <TextBlock x:Name="txbguHReservID" Margin="10,10,0,0" TextWrapping="Wrap" Text="Rsrv. Num."/>
-              <TextBox x:Name="txtguHReservID" Height="22" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guHReservID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <Button x:Name="btnSearchReservation" Content="Search" Width="76" Height="22" Margin="10,4,0,5"/>
-              <TextBlock x:Name="txbguOutInvitNum" HorizontalAlignment="Left" Margin="4,10,0,0" TextWrapping="Wrap" Text="Out. Invit." VerticalAlignment="Top"/>
-              <TextBox x:Name="txtguOutInvitNum" Height="22" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guOutInvitNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+        <CollectionViewSource x:Key="dsGuestCreditCardList" d:DesignSource="{d:DesignInstance {x:Type Model:GuestCreditCard}, CreateList=True}" Source="{Binding GuestCreditCardList}" />
+        <CollectionViewSource x:Key="dsBookingDepositList" d:DesignSource="{d:DesignInstance {x:Type Model:BookingDeposit}, CreateList=True}" Source="{Binding BookingDepositList}" />
+        <CollectionViewSource x:Key="dsInvitationGiftList" d:DesignSource="{d:DesignInstance {x:Type Model:InvitationGift}, CreateList=True}" Source="{Binding InvitationGiftList}" />
+        <Helpers:ByteToBoleanValueConverterHelper x:Key="byteToBoleanValueC"/>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!--#region Barra decoracion -->
+        <Border Background="#147F79" Height="42" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0" Grid.ColumnSpan="2">
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="21" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
+                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png" />
+                </Viewbox>
+                <TextBlock x:Name="txtUserName" VerticalAlignment="Center"
+                           Foreground="White" Grid.Column="1" Grid.Row="0" />
+                <TextBlock x:Name="txtPlaces" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2" />
+            </Grid>
+        </Border>
+        <!--#endregion-->
+
+        <!--#region  TabControl-->
+        <Border CornerRadius="5" Padding="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,5" Grid.ColumnSpan="2">
+            <TabControl Style="{StaticResource TabControlStyle}">
+                <TabItem Name="tabGeneral" Style="{StaticResource TabItemStyle}" Header="General">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--#region Guest Info  Row 0-->
+                            <Border x:Name="brdGuestInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Guest Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="GUID" TextAlignment="Center" />
+                                                <TextBox Name="txtguID" Width="100" Text="{Binding GuestObj.guID, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
+                                                <TextBlock Text="Rsrv. Num." TextAlignment="Center" />
+                                                <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay}" IsEnabled="False" />
+                                            </StackPanel>
+                                            <Border x:Name="brdSearchReservation" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" Margin="3,0">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Viewbox Stretch="Uniform" Width="20">
+                                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" />
+                                                    </Viewbox>
+                                                    <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+                                                </StackPanel>
+                                            </Border>
+                                            <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
+                                                <TextBlock Text="Out Invit." TextAlignment="Center" />
+                                                <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding GuestObj.guOutInvitNum, Mode=TwoWay}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+
+                            <!--#region Profile Opera Row 1-->
+                            <Border x:Name="brdProfileOpera" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Profile Opera" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Name="stkProfileOpera" Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="ID" TextAlignment="Center" />
+                                                <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera, Mode=TwoWay}" MaxLength="15" IsEnabled="False" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3">
+                                                <TextBlock Text="Last Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding GuestObj.guLastNameOriginal, Mode=TwoWay}" MaxLength="65" IsEnabled="False" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="First Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding GuestObj.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40" IsEnabled="False" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+
+                            <!--#region Show Row 2-->
+                            <Border x:Name="brdShow" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Show" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0">
+                                                        <CheckBox x:Name="chkguShow" Content="Shows" IsChecked="{Binding GuestObj.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Margin="3"  Click="chkguShow_OnClick" />
+                                                        <xctk:DateTimePicker x:Name="dtpguShowD" HorizontalAlignment="Left" VerticalAlignment="Top" Width="104" Margin="3" Value="{Binding GuestObj.guShowD, Mode=TwoWay}" Style="{StaticResource dtp-DateRange-TK}"  FormatString="dd/MM/yyyy" DisplayDefaultValueOnEmptyText="False" KeyDown="Control_KeyDown" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0" Grid.Column="1">
+                                                        <TextBlock Text="Book" TextAlignment="Center" VerticalAlignment="Center" Margin="3" />
+                                                        <xctk:DateTimePicker x:Name="dtpguBookD" VerticalAlignment="Center" Width="104" Text="{Binding GuestObj.guBookD, Mode=TwoWay}" Margin="3" IsEnabled="False" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy"/>
+                                                    </StackPanel>
+                                                    <StackPanel  Orientation="Horizontal" Margin="3,0" Grid.Row="1" Grid.ColumnSpan="2">
+                                                        <CheckBox x:Name="chkguPresentedInvitation" Content="Presented Invitation" HorizontalAlignment="Center" IsChecked="{Binding GuestObj.guPresentedInvitation, Mode=TwoWay}" Margin="3" />
+                                                    </StackPanel>
+                                                </Grid>
+                                                <Separator Height="7" />
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0">
+                                                        <CheckBox x:Name="chkguDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0" Grid.Column="1">
+                                                        <CheckBox x:Name="chkguQuinella" Content="Quinella" IsChecked="{Binding GuestObj.guQuinella, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0" Grid.Column="2">
+                                                        <CheckBox x:Name="chkguQuinellaSplit" Content="Quinella Split" IsChecked="{Binding GuestObj.guQuinellaSplit, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" Click="chkguQuinellaSplit_Click" />
+                                                    </StackPanel>
+                                                    <StackPanel  Orientation="Horizontal" Margin="3,0" Grid.Row="1" Grid.ColumnSpan="3">
+                                                        <TextBlock  Text="Main Invit." TextAlignment="Center" Margin="3" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguMainInvit" Height="23"  AcceptsReturn="False"  Width="53" Text="{Binding GuestObj.guMainInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" IsEnabled="False" />
+                                                        <TextBox x:Name="txtMainInvitName" Height="23"  AcceptsReturn="False"  Width="91" Margin="3" IsEnabled="False" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0" Grid.Row="2" Grid.ColumnSpan="3">
+                                                        <CheckBox x:Name="chkguAntesIO" Content="Before In &amp; Out" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                            <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                            <StackPanel HorizontalAlignment="Center" Grid.Column="2">
+                                                <Grid Margin="3,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <RadioButton x:Name="rdbguTour" Content="Tour" IsChecked="{Binding GuestObj.guTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" />
+                                                    <RadioButton x:Name="rdbguCTour" Content="CT" IsChecked="{Binding GuestObj.guCTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Margin="3" />
+                                                    <RadioButton x:Name="rdbguInOut" Content="In &amp; Out" IsChecked="{Binding GuestObj.guInOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Column="1" Margin="3" />
+                                                    <RadioButton x:Name="rdbguSaveProgram" Content="Save" IsChecked="{Binding GuestObj.guSaveProgram, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="1" Margin="3" />
+                                                    <RadioButton x:Name="rdbguWalkOut" Content="Walk Out" IsChecked="{Binding GuestObj.guWalkOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Column="2" Margin="3" />
+                                                    <RadioButton x:Name="rdbguWithQuinella" Content="WQ" IsChecked="{Binding GuestObj.guWithQuinella, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Column="2" Grid.Row="1" Margin="3" />
+                                                </Grid>
+                                                <Separator Height="7" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0">
+                                                        <TextBlock Text="Time In" Margin="3" VerticalAlignment="Center" />
+                                                        <Button x:Name="btnIn" Width="20" Height="15" Background="LightGreen" Margin="3" Click="btnIn_Click" />
+                                                        <xctk:TimePicker x:Name="tpkguTimeInT" Width="80" Text="{Binding GuestObj.guTimeInT, Mode=TwoWay}" Margin="3" Format="Custom" FormatString="HH:mm" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0">
+                                                        <TextBlock Text="Time Out" Margin="3" VerticalAlignment="Center" />
+                                                        <Button x:Name="btnOut" Width="20" Height="15" Background="Red" Margin="3" Click="btnOut_Click" />
+                                                        <xctk:TimePicker x:Name="tpkguTimeOutT"  Width="80" Text="{Binding GuestObj.guTimeOutT, Mode=TwoWay}" Margin="3" Format="Custom" FormatString="HH:mm"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <Separator Height="7" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel Orientation="Horizontal"  Margin="3,0">
+                                                        <TextBlock Text="Arrival" Margin="3" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguCheckInD" Height="23" AcceptsReturn="False" Width="66" Text="{Binding GuestObj.guCheckInD, StringFormat=dd/MM/yyyy, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0">
+                                                        <TextBlock Text="Departure" Margin="3" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguCheckOutD" Height="23" AcceptsReturn="False"  Width="66" Text="{Binding GuestObj.guCheckOutD, StringFormat=dd/MM/yyyy, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion Show Row 2-->
+
+                            <!--#region Places Row 3-->
+                            <Border x:Name="brdTaxi" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Taxi" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center"  Margin="3,0">
+                                                <TextBlock Text="Taxi In" TextAlignment="Center" />
+                                                <TextBox x:Name="txtguTaxiIn" Height="23"   Width="80" Text="{Binding GuestObj.guTaxiIn, Mode=TwoWay, StringFormat=N2}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Taxi In Rcpt." TextAlignment="Center" />
+                                                <TextBox x:Name="txtguTaxiIngr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiIngr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                            </StackPanel>
+                                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                            <StackPanel VerticalAlignment="Center"  Margin="3,0">
+                                                <TextBlock Text="Taxi Out" TextAlignment="Center" />
+                                                <TextBox x:Name="txtguTaxiOut" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOut, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center"  Margin="3,0">
+                                                <TextBlock Text="Taxi Out Rcpt." TextAlignment="Center" />
+                                                <TextBox x:Name="txtguTaxiOutgr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOutgr, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion -->
+                            
+                            <!--#region Places Row 4-->
+                            <Border x:Name="brdPlaces" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Places" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center"  Margin="3,0">
+                                                <TextBlock Text="Lead Source" TextAlignment="Center" />
+                                                <TextBox Name="txtguls" Width="100" Text="{Binding GuestObj.guls, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Location" TextAlignment="Center" />
+                                                <TextBox x:Name="txtguloInvit" Width="100" Text="{Binding GuestObj.guloInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center"  Margin="3,0">
+                                                <TextBlock Text="Sales Room" TextAlignment="Center" />
+                                                <TextBox x:Name="txtgusr" Width="100" Text="{Binding GuestObj.gusr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+
+                            <!--#region Guest1 Row 5-->
+                            <Border x:Name="brdGuest1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Guest 1" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Name="stkGuest1" Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Last Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguLastName1" Width="100" Text="{Binding GuestObj.guLastName1, Mode=TwoWay}" MaxLength="65" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="First Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguFirstName1" Width="100" Text="{Binding GuestObj.guFirstName1, Mode=TwoWay}" MaxLength="40" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Age" TextAlignment="Center" />
+                                                <TextBox Name="txtguAge1" Width="50" Text="{Binding GuestObj.guAge1, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Marital Status" TextAlignment="Center" />
+                                                <ComboBox Name="cbogums1" Width="100" TextSearch.TextPath="msID"
+                                                          ItemsSource="{Binding Source={StaticResource dsMaritalStatus}}"  Style="{StaticResource cbx-General}"
+                                                          ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
+                                                          ToolTip="{Binding Path=SelectedItem.(Model:MaritalStatus.msN), RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="msID" IsSynchronizedWithCurrentItem="False"
+                                                          SelectedValue="{Binding GuestObj.gums1,Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Ocupation" TextAlignment="Center" />
+                                                <TextBox Name="txtguOccup1" Width="100" Text="{Binding GuestObj.guOccup1, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Email" TextAlignment="Center" />
+                                                <TextBox Name="txtguEmail1" Width="100" Text="{Binding GuestObj.guEmail1, Mode=TwoWay}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+
+                            <!--#region Guest2 Row 6-->
+                            <Border x:Name="brdGuest2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="6" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Guest 2" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Name="stkGuest2" Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Last Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguLastName2" Width="100" Text="{Binding GuestObj.guLastname2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="First Name" TextAlignment="Center" />
+                                                <TextBox Name="txtguFirstName2" Width="100" Text="{Binding GuestObj.guFirstName2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Age" TextAlignment="Center" />
+                                                <TextBox Name="txtguAge2" Width="50" Text="{Binding GuestObj.guAge2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Marital Status" TextAlignment="Center" />
+                                                <ComboBox Name="cbogums2" Width="100" TextSearch.TextPath="msID"
+                                                          ItemsSource="{Binding Source={StaticResource dsMaritalStatus}}" Style="{StaticResource cbx-General}"
+                                                          ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
+                                                          ToolTip="{Binding Path=SelectedItem.(Model:MaritalStatus.msN), RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="msID" IsSynchronizedWithCurrentItem="False"
+                                                          SelectedValue="{Binding GuestObj.gums2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Ocupation" TextAlignment="Center" />
+                                                <TextBox Name="txtguOccup2" Width="100" Text="{Binding GuestObj.guOccup2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="Email" TextAlignment="Center" />
+                                                <TextBox Name="txtguEmail2" Width="100" Text="{Binding GuestObj.guEmail2, Mode=TwoWay}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+
+                            <!--#region Additional Guest Row 7-->
+                            <Border x:Name="brdGuestsAdditional" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7"  Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Additional Guest" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <DataGrid  Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False" MaxHeight="80" Height="80">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn Header="Search" Width="55">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn Header="GUID" Binding="{Binding GuestObj.guID, ValidatesOnDataErrors=True}" />
+                                                    <DataGridTextColumn Header="Last Name" Binding="{Binding GuestObj.guLastName1}" IsReadOnly="True" />
+                                                    <DataGridTextColumn Header="First Name" Binding="{Binding GuestObj.guFirstName1}" IsReadOnly="True" />
+                                                    <DataGridTemplateColumn Width="55">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Name="tabOtherInfoGiftsCreditCardsGuestStatus" Header="Other Info, Gifts, Credit Cards, Status &amp; Comments" Style="{StaticResource TabItemStyle}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--#region OtherInformation  Row 0-->
+                            <Border x:Name="brdOtherInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"  Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Other Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition  Height="Auto" />
+                                                <RowDefinition  Height="*" />
+                                                <RowDefinition  Height="*" />
+                                            </Grid.RowDefinitions>
+
+                                            <StackPanel Grid.ColumnSpan="4">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Member #" TextAlignment="Center" />
+                                                        <TextBox Name="txtguMembershipNum" Width="200" Text="{Binding GuestObj.guMembershipNum, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="C. Code" TextAlignment="Center" />
+                                                        <TextBox Name="txtguO1" Width="80" Text="{Binding GuestObj.guO1, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Children" TextAlignment="Center" />
+                                                        <TextBox Name="txtguChildren" Width="80" Text="{Binding GuestObj.guChildren, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Age(s)" TextAlignment="Center" />
+                                                        <TextBox Name="txtguChildrenAges" Width="80" Text="{Binding GuestObj.guChildrenAges, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="City" TextAlignment="Center" />
+                                                        <TextBox x:Name="txtguCity" Width="228" Text="{Binding GuestObj.guCity, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="State" TextAlignment="Center" />
+                                                        <TextBox x:Name="txtguState" Width="228" Text="{Binding GuestObj.guState, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <Separator Height="7" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <CheckBox x:Name="chkguFamily" Content="Family" IsChecked="{Binding GuestObj.guFamily, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <CheckBox x:Name="chkguIdentification" Content="Identification" IsChecked="{Binding GuestObj.guIdentification, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <CheckBox x:Name="chkguInterval" Content="Interval" IsChecked="{Binding GuestObj.guInterval, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="False" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0">
+                                                        <TextBlock Text="Books" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguRoomsQty" Height="23"  Width="26" Text="{Binding GuestObj.guRoomsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" MaxLength="1" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0">
+                                                        <TextBlock Text="Shows" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguShowsQty" Height="23" AcceptsReturn="False" Width="26" Text="{Binding GuestObj.guShowsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" MaxLength="1" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="3,0">
+                                                        <TextBlock Text="Pax" VerticalAlignment="Center" />
+                                                        <TextBox x:Name="txtguPax" Height="23" AcceptsReturn="False" Width="33" Text="{Binding GuestObj.guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
+                                                <TextBlock Text="Hotel" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel HorizontalAlignment="Left">
+                                                        <TextBlock Text="Room #" Margin="0,5" />
+                                                        <TextBox Name="txtguRoomNum" Width="50" Text="{Binding GuestObj.guRoomNum, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
+                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.(Model:Hotel.hoID), StringFormat='Hotel ID: {0}'}" Margin="0,5" />
+                                                        <ComboBox Name="cmbguHotel" Width="200" TextSearch.TextPath="hoID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsHotels}}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Hotel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.(Model:Hotel.hoID), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="hoID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guHotel, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Margin="0,5,10,10">
+                                                <TextBlock Text="Agency" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoAgency, Path=SelectedItem.(Model:AgencyShort.agID), StringFormat='Agency ID: {0}'}" Margin="0,5" />
+                                                        <ComboBox Name="cmbguag" Width="200" TextSearch.TextPath="agID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsAgencies}}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Agency-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.(Model:AgencyShort.agN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="agID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guag, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="0,5,10,10">
+                                                <TextBlock Text="Country" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoCountry, Path=SelectedItem.(Model:CountryShort.coID), StringFormat='Country ID: {0}'}" Margin="0,5" />
+                                                        <ComboBox Name="cmbguco" Width="200" TextSearch.TextPath="coN"
+                                                                  ItemsSource="{Binding Source={StaticResource dsCountries}}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Country-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.(Model:CountryShort.coN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="coID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guco, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
+                                                <TextBlock Text="Languaje" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding ElementName=cmbLanguage, Path=SelectedItem.(Model:LanguageShort.laID), StringFormat='Language ID: {0}'}" Margin="0,5" />
+
+                                                        <ComboBox Name="cmbLanguage" Width="200" TextSearch.TextPath="laN"
+                                                                  ItemsSource="{Binding Source={StaticResource dsLanguajes}}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Languages-Concat}"
+                                                                  ToolTip="{Binding Path=SelectedItem.(Model:LanguageShort.laN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="laID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.gula, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region Gifts Row 1-->
+                            <Border x:Name="brdGifts" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <DataGrid Name="dtgGifts" MaxHeight="80" Height="80" ItemsSource="{Binding Source={StaticResource dsInvitationGiftList}}"
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"
+                                                      CanUserSortColumns="False" SelectionMode="Single" RowValidationErrorTemplate="{x:Null}">
+
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Qty"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
+                                                                                                                                         
+                                                                        ElementStyle="{StaticResource txt-ErrorInfo}"
+                                                                        Binding="{Binding igQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
+                                                                            SelectedValueBinding="{Binding iggi, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                            DisplayMemberPath="giN" SelectedValuePath="giID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsGifts}}" />
+
+                                                    <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="4"
+                                                                        Binding="{Binding igAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                    </DataGridTextColumn>
+
+                                                    <DataGridTextColumn Header="Minors"
+                                                                        styClasses:MaxLengthPropertyClass.MaxLength="2"
+                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
+                                                                        Binding="{Binding igMinors, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger =PropertyChanged}">
+                                                    </DataGridTextColumn>
+
+                                                    <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <DataGridTextColumn Header="Charge To" Binding="{Binding igct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <DataGridTextColumn Header="Receipt" Binding="{Binding iggr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <DataGridTextColumn Header="Folios" Binding="{Binding igFolios, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <DataGridTextColumn Header="Comments" Binding="{Binding igComments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Max Auth" TextAlignment="Center"/>
+                                                    <TextBox Name="txtGiftMaxAuth" Width="100" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0">
+                                                    <TextBlock Text="Total Cost" TextAlignment="Center"/>
+                                                    <TextBox Name="txtGiftTotalCost" Width="100" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Total Price" TextAlignment="Center"/>
+                                                    <TextBox Name="txtGiftTotalPrice" Width="100" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region Credit Card Row 2-->
+                            <Border x:Name="brdCreditCards" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Credit Card" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <StackPanel Name="stkCcCompany">
+                                                <TextBlock Text="CC Company" />
+                                                <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay}" IsEnabled="False" />
+                                            </StackPanel>
+                                            <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding Source={StaticResource dsGuestCreditCardList}}"
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Qty" Binding="{Binding gdQuantity}" Width="40" />
+                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"
+                                                                            SelectedValueBinding="{Binding gdcc}"
+                                                                            DisplayMemberPath="ccN"
+                                                                            SelectedValuePath="ccID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsCreditCardTypes}}" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region Guest Status Row 3-->
+                            <Border x:Name="brdGuestStatus" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="3" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Guest Status" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel HorizontalAlignment="Left">
+                                                <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.(Model:GuestStatusType.gsID), StringFormat='Guest Status ID: {0}'}" Margin="0,5"/>
+                                                <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
+                                                          ItemsSource="{Binding Source={StaticResource dsGuestStatusTypes}}" Style="{StaticResource cbx-General}"
+                                                          ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
+                                                          ToolTip="{Binding Path=SelectedItem.(Model:GuestStatusType.gsN), RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="gsID"
+                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region Comments Row 4-->
+                            <Border x:Name="brdComments" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Grid.Row="4" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Comments" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <Grid HorizontalAlignment="Left">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="PR Comments" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                            <TextBox x:Name="txtguExtraInfo" Height="23" AcceptsReturn="False" Width="435" Text="{Binding GuestObj.guExtraInfo, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Column="1" />
+                                            <TextBlock  Text="Hostess Comments" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="1" />
+                                            <TextBox x:Name="txtguWComments" Height="23"  AcceptsReturn="False"  Width="435" Text="{Binding GuestObj.guWComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Row="1" Grid.Column="1" />
+                                            <TextBlock Text="Exit Hostess Comments" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="2" />
+                                            <TextBox x:Name="txtguEComments" Height="23" AcceptsReturn="False" Width="435" Text="{Binding GuestObj.guEComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Row="2" Grid.Column="1" />
+                                        </Grid>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Name="tabDepositsSalesmen"  Header="Deposits &amp; Salesmen" Style="{StaticResource TabItemStyle}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--#region Deposits Row 0-->
+                            <Border x:Name="brdDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <DataGrid Name="dtgDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding Source={StaticResource dsBookingDepositList}}"
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="ID" Binding="{Binding bdID}" />
+                                                    <DataGridTextColumn Header="Date" Binding="{Binding bdD}" />
+                                                    <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount}" />
+                                                    <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived}" />
+                                                    <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True" />
+                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyDeposits" Header="Currency" Width="90"
+                                                                            SelectedValueBinding="{Binding bdcu}"
+                                                                            DisplayMemberPath="cuN"
+                                                                            SelectedValuePath="cuID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsCurrencies}}" />
+                                                    <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
+                                                                            SelectedValueBinding="{Binding bdpt}"
+                                                                            DisplayMemberPath="ptN"
+                                                                            SelectedValuePath="ptID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsPaymentTypes}}" />
+                                                    <DataGridComboBoxColumn x:Name="cmbDisputeStatusDeposits" Header="Dispute Status" Width="90"
+                                                                            SelectedValueBinding="{Binding bdds}"
+                                                                            DisplayMemberPath="dsN"
+                                                                            SelectedValuePath="dsID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsDisputeStatus}}" />
+                                                    <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"
+                                                                            SelectedValueBinding="{Binding bdpc}"
+                                                                            DisplayMemberPath="pcN"
+                                                                            SelectedValuePath="pcID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsPaymentPlaces}}" />
+                                                    <DataGridComboBoxColumn x:Name="cmbCreditCardTypesDeposits" Header="Credit Card" Width="90"
+                                                                            SelectedValueBinding="{Binding bdcc}"
+                                                                            DisplayMemberPath="ccN"
+                                                                            SelectedValuePath="ccID"
+                                                                            ItemsSource="{Binding Source={StaticResource dsCreditCardTypes}}" />
+                                                    <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum, ValidatesOnDataErrors=True}" />
+                                                    <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD, ValidatesOnDataErrors=True}" />
+                                                    <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth, ValidatesOnDataErrors=True}" />
+                                                    <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC, ValidatesOnDataErrors=True}" />
+                                                    <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC, ValidatesOnDataErrors=True}" IsReadOnly="True" />
+                                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel>
+                                                    <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5" />
+                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5" />
+                                                    <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN"
+                                                              ItemsSource="{Binding Source={StaticResource dsCurrencies}}" Style="{StaticResource cbx-General}"
+                                                              ItemTemplate="{StaticResource cbx-Currency-Concat}"
+                                                              ToolTip="{Binding Path=SelectedItem.(Model:Currency.cuN), RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="cuID" IsSynchronizedWithCurrentItem="False"
+                                                              SelectedValue="{Binding GuestObj.gucu, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Payment Type" TextAlignment="Center" Margin="0,5" />
+                                                    <ComboBox Name="cmbPaymentType" Width="200"  TextSearch.TextPath="ptN"
+                                                              ItemsSource="{Binding Source={StaticResource dsPaymentTypes}}" Style="{StaticResource cbx-General}"
+                                                              ItemTemplate="{StaticResource cbx-PaymentType-Concat}"
+                                                              ToolTip="{Binding Path=SelectedItem.(Model:PaymentTypeShort.ptN), RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="ptID" IsSynchronizedWithCurrentItem="False"
+                                                              SelectedValue="{Binding GuestObj.gupt, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Resorts" TextAlignment="Center" Margin="0,5" />
+                                                    <ComboBox Name="cmbResorts" Width="200"  TextSearch.TextPath="hoID"
+                                                              ItemsSource="{Binding Source={StaticResource dsHotels}}" Style="{StaticResource cbx-General}"
+                                                              ItemTemplate="{StaticResource cbx-Hotel-img}"
+                                                              ToolTip="{Binding Path=SelectedItem.(Model:Hotel.hoID), RelativeSource={RelativeSource Self}}"
+                                                              SelectedValuePath="hoID" IsSynchronizedWithCurrentItem="False"
+                                                              SelectedValue="{Binding GuestObj.guHotelB, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel>
+                                                    <TextBlock Text="Rcpt" TextAlignment="Center" Margin="0,5" />
+                                                    <TextBox Name="txtguDepositgr" Width="120" Text="{Binding GuestObj.guDepositgr, Mode=TwoWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region DepositSale Row 1-->
+                            <Border x:Name="brdDepositSale" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Deposit Sale" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Date" TextAlignment="Center" />
+                                                <TextBox Name="txtguDepositSaleD" Width="71" Text="{Binding GuestObj.guDepositSaleD, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Consecutive" TextAlignment="Center" />
+                                                <TextBox Name="txtguDepositSaleNum" Width="85" Text="{Binding GuestObj.guDepositSaleNum, Mode=TwoWay}" />
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                <TextBlock Text="Amount" TextAlignment="Center" />
+                                                <TextBox Name="txtguDepSale" Width="71" Text="{Binding GuestObj.guDepSale, Mode=TwoWay}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                            <Border x:Name="brdSalesmen"  CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                <StackPanel>
+                                    <TextBlock Text="Salesmen" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="SELF GEN" TextAlignment="Center" />
+                                                    <CheckBox Name="chkguSelfGen" HorizontalAlignment="Center" IsChecked="{Binding GuestObj.guSelfGen, Mode=TwoWay}" Click="chkguSelfGen_Click"  />
+                                                </StackPanel>
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="Overflow" TextAlignment="Center" />
+                                                    <CheckBox Name="chkguOverflow" HorizontalAlignment="Center" IsChecked="{Binding GuestObj.guOverflow, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="Team" TextAlignment="Center" />
+                                                    <ComboBox Name="cmbguts" Width="120"  TextSearch.TextPath="tsID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsTeamsSalesMen}}" Style="{StaticResource cbx-General}"
+                                                                  ToolTip="{Binding Path=SelectedItem.(Model:TeamSalesmen.tsN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="tsID" IsSynchronizedWithCurrentItem="False" DisplayMemberPath="tsN"
+                                                                  SelectedValue="{Binding GuestObj.guts, Mode=TwoWay}" IsEnabled="False" />
+                                                </StackPanel>
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="PR 1" TextAlignment="Center" />
+                                                    <ComboBox x:Name="cmbguPRInvit1" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guPRInvit1, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="PR 2" TextAlignment="Center" />
+                                                    <ComboBox x:Name="cmbguPRInvit2" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guPRInvit2, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel  VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="PR 3" TextAlignment="Center" />
+                                                    <ComboBox x:Name="cmbguPRInvit3" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guPRInvit3, Mode=TwoWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Separator Height="7" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Style="{StaticResource brd-Catalogs}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <RadioButton x:Name="optguLiner1Type" GroupName="LinertType"  Content="Liner" Margin="5" VerticalAlignment="Center" 
+                                                                         IsChecked="{Binding GuestObj.guLiner1Type, Mode=TwoWay, Converter={StaticResource byteToBoleanValueC}, UpdateSourceTrigger=PropertyChanged, ConverterParameter= 0}"/>
+                                                            <RadioButton x:Name="optguLiner2Type" GroupName="LinertType"  Content="Front to Middle" Margin="5" VerticalAlignment="Center" 
+                                                                         IsChecked="{Binding GuestObj.guLiner1Type, Mode=TwoWay, Converter={StaticResource byteToBoleanValueC}, UpdateSourceTrigger=PropertyChanged, ConverterParameter= 1}"/>
+                                                            <RadioButton x:Name="optguLiner3Type" GroupName="LinertType"  Content="Front to Back"  Margin="5" VerticalAlignment="Center"
+                                                                         IsChecked="{Binding GuestObj.guLiner1Type, Mode=TwoWay, Converter={StaticResource byteToBoleanValueC}, UpdateSourceTrigger=PropertyChanged, ConverterParameter= 2}"/>
+                                                        </StackPanel>
+                                                        <StackPanel Margin="5,0,0,0">
+                                                            <TextBlock Text="Liner 1"  TextAlignment="Center" Margin="3" />
+                                                            <ComboBox x:Name="cmbguLiner1" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelLiner}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guLiner1, Mode=TwoWay}" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                                <StackPanel  Margin="5,0,0,0">
+                                                    <TextBlock Text="Liner 2" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguLiner2" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelLiner}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guLiner2, Mode=TwoWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Separator Height="7" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Closer 1" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguCloser1" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelCloser}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guCloser1, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Closer 2" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguCloser2" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelCloser}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guCloser2, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Closer 3" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguCloser3" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelCloser}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guCloser3, Mode=TwoWay}" />
+                                                </StackPanel>
+
+                                            </StackPanel>
+                                            <Separator Height="7" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Exit 1" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguExit1" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelExitCloser}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guExit1, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Exit 2" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguExit2" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelExitCloser}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guExit2, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Podium" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguPodium" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelPodium}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guPodium, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0" Visibility="Collapsed">
+                                                    <TextBlock Text="VLO" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguVLO" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelVlo}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guVLO, Mode=TwoWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Separator Height="7" />
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Hostess" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguEntryHost" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelHostsEntry}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guEntryHost, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Gifts Hostess" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguGiftsHost" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelHostsGifts}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guGiftsHost, Mode=TwoWay}" />
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                    <TextBlock Text="Exit Hostess" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguExitHost" Width="200" TextSearch.TextPath="peID"
+                                                                  ItemsSource="{Binding Source={StaticResource dsPersonnelHostsExit}}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding GuestObj.guExitHost, Mode=TwoWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Separator Height="7" />
+                                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                                <Button x:Name="btnShowsSalesmen" Content="Salesmen"  Width="100" Click="btnShowsSalesmen_Click" Template="{Binding Source={StaticResource ButtonTemplate}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Border>
+        <!--#endregion-->
+
+        <!--#region Barra Logs-->
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="2" Margin="10,5,10,0" HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Left">
+                <TextBlock Text="Changed By" Margin="10,0,0,0" />
+                <StackPanel Orientation="Horizontal" Margin="3">
+                    <TextBox x:Name="txtChangedBy" Height="23" AcceptsReturn="False" Width="100" />
+                    <PasswordBox x:Name="txtPwd" Width="100" Height="23" />
+                    <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonLog_OnMouseLeftButtonDown">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Stretch="Uniform" Width="20">
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png" />
+                            </Viewbox>
+                            <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
             </StackPanel>
-          </GroupBox>
-          <GroupBox x:Name="grbProfileOpera" Header="Profile Opera" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Height="58" Width="480">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguIdProfileOpera"  Text="ID" Canvas.Left="10" Canvas.Top="5" />
-              <TextBox x:Name="txtguIdProfileOpera" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="120" Text="{Binding guIdProfileOpera, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguLastNameOriginal"  Text="Last Name" Canvas.Left="141" Canvas.Top="5" />
-              <TextBox x:Name="txtguLastNameOriginal" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="155" Canvas.Left="135" Text="{Binding guLastNameOriginal, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguFirstNameOriginal"  Text="First Name" Canvas.Left="309" Canvas.Top="5" />
-              <TextBox x:Name="txtguFirstNameOriginal" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="155" Canvas.Left="303" Text="{Binding guFirstNameOriginal, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="grb3" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="242" Width="237">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <CheckBox x:Name="chkguShow" Content="Shows" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.033,-7.404" Canvas.Left="9" Canvas.Top="13" IsChecked="{Binding guShow, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBox x:Name="txtguShowD" HorizontalAlignment="Left" Height="23" Margin="60,10,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="60" Text="{Binding guShowD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguBookD" Canvas.Left="127" TextWrapping="Wrap" Text="Book" Canvas.Top="13"/>
-              <TextBox x:Name="txtguBookD" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="60" Canvas.Left="157" Canvas.Top="10" Text="{Binding guBookD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="chkguPresentedInvitation" Content="Presented Invitation" Canvas.Left="10" Canvas.Top="40" IsChecked="{Binding guPresentedInvitation, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="True"/>
-              <Separator Height="7" Canvas.Left="10" Margin="0" Canvas.Top="54" Width="207"/>
-              <CheckBox x:Name="chkguDirect" Content="Direct" Canvas.Left="10" Canvas.Top="66" IsChecked="{Binding guDirect, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="chkguQuinella" Content="Quinella" Canvas.Left="70" Canvas.Top="66" IsChecked="{Binding guQuinella, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="chkguQuinellaSplit" Content="Quinella Split" Canvas.Left="138" Canvas.Top="66" IsChecked="{Binding guQuinellaSplit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguMainInvit" Canvas.Left="10" TextWrapping="Wrap" Text="Main Invit." Canvas.Top="88"/>
-              <TextBox x:Name="txtguMainInvit" Height="23" Canvas.Left="67" AcceptsReturn="False" Canvas.Top="83" Width="53" Text="{Binding guMainInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBox x:Name="txtMainInvitName" Height="23" Canvas.Left="125" AcceptsReturn="False" Canvas.Top="83" Width="91"/>
-              <CheckBox x:Name="chkguAntesIO" Content="Before In &amp; Out" Canvas.Left="10" Canvas.Top="109" IsChecked="{Binding guAntesIO, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <Separator Height="8" Canvas.Left="10" Margin="0" Canvas.Top="122" Width="207"/>
-              <RadioButton x:Name="optguTour" Content="Tour" Canvas.Left="10" Canvas.Top="135" IsChecked="{Binding guTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguCTour" Content="CT" Canvas.Left="10" Canvas.Top="152" IsChecked="{Binding guCTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguInOut" Content="In &amp; Out" Canvas.Left="66" Canvas.Top="135" IsChecked="{Binding guInOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguSaveProgram" Content="Save" Canvas.Left="66" Canvas.Top="152" IsChecked="{Binding guSaveProgram, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguWalkOut" Content="Walk Out" Canvas.Left="134" Canvas.Top="135" IsChecked="{Binding guWalkOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguWithQuinella" Content="WQ" Canvas.Left="134" Canvas.Top="152" IsChecked="{Binding guWithQuinella, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <Separator Height="7" Canvas.Left="10" Margin="0" Canvas.Top="166" Width="207"/>
-              <TextBlock x:Name="txbguTimeInT" Canvas.Left="12" TextWrapping="Wrap" Text="Time In" Canvas.Top="179"/>
-              <Button x:Name="btnIn" Canvas.Left="53" Canvas.Top="178" Width="20" Height="15" Background="LightGreen"/>
-              <TextBox x:Name="txtguTimeInT" Height="22" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="175" Width="38" Text="{Binding guTimeInT, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguTimeOutT" Canvas.Left="115" TextWrapping="Wrap" Text="Time Out" Canvas.Top="179"/>
-              <Button x:Name="btnOut" Canvas.Left="160" Canvas.Top="178" Width="20" Height="15" Background="Red"/>
-              <TextBox x:Name="txtguTimeOutT" Height="22" Canvas.Left="182" AcceptsReturn="False" Canvas.Top="175" Width="38" Text="{Binding guTimeOutT, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <Separator Height="9" Canvas.Left="10" Margin="0" Canvas.Top="197" Width="207"/>
-              <TextBlock x:Name="txbguCheckInD" Canvas.Left="9" TextWrapping="Wrap" Text="Arrival" Canvas.Top="211"/>
-              <TextBox x:Name="txtguCheckInD" Height="23" Canvas.Left="42" AcceptsReturn="False" Canvas.Top="208" Width="58" Text="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguCheckOutD" Canvas.Left="103" TextWrapping="Wrap" Text="Departure" Canvas.Top="211"/>
-              <TextBox x:Name="txtguCheckOutD" Height="23" Canvas.Left="154" AcceptsReturn="False" Canvas.Top="208" Width="63" Text="{Binding guCheckOutD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <Separator Height="56" Canvas.Left="-13" Margin="0" Canvas.Top="454" Width="598"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox4" Header="Guest 1" HorizontalAlignment="Left" Margin="264,115,0,0" VerticalAlignment="Top" Height="181" Width="333">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguLastName1" HorizontalAlignment="Left" Text="Last Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="10"/>
-              <TextBox x:Name="txtguLastName1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="5" Width="229" Text="{Binding guLastName1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguFirstName1" HorizontalAlignment="Left" Text="First Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="36"/>
-              <TextBox x:Name="txtguFirstName1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="31" Width="229" Text="{Binding guFirstName1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguAge1" HorizontalAlignment="Left" Text="Age" VerticalAlignment="Top" Canvas.Left="50" Canvas.Top="63"/>
-              <TextBox x:Name="txtguAge1" Height="24" Canvas.Left="81" AcceptsReturn="False" Canvas.Top="58" Width="71" Text="{Binding guAge1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="textBlock9_Copy2" HorizontalAlignment="Left" Text="Marital Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="91"/>
-              <ComboBox x:Name="cbogums1" Canvas.Left="82" Canvas.Top="85" Width="229" DisplayMemberPath="msN" ItemsSource="{Binding Source={StaticResource dsMaritalStatus}}" SelectedValuePath="msID" SelectedValue="{Binding gums1, Mode=TwoWay}"/>
-              <TextBlock x:Name="txbguOccup1" HorizontalAlignment="Left" Text="Occupation" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="115"/>
-              <TextBox x:Name="txtguOccup1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="110" Width="229" Text="{Binding guOccup1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguEmail1" HorizontalAlignment="Left" Text="Email" VerticalAlignment="Top" Canvas.Left="47" Canvas.Top="141"/>
-              <TextBox x:Name="txtguEmail1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="136" Width="229" Text="{Binding guEmail1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox5" Header="Guest 2" HorizontalAlignment="Left" Margin="264,302,0,0" VerticalAlignment="Top" Height="181" Width="333">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguLastName2" HorizontalAlignment="Left" Text="Last Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="10"/>
-              <TextBox x:Name="txtguLastName2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="5" Width="229" Text="{Binding guLastname2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguFirstName2" HorizontalAlignment="Left" Text="First Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="36"/>
-              <TextBox x:Name="txtguFirstName2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="31" Width="229" Text="{Binding guFirstName2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguAge2" HorizontalAlignment="Left" Text="Age" VerticalAlignment="Top" Canvas.Left="50" Canvas.Top="63"/>
-              <TextBox x:Name="txtguAge2" Height="24" Canvas.Left="81" AcceptsReturn="False" Canvas.Top="58" Width="71" Text="{Binding guAge2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="textBlock10_Copy2" HorizontalAlignment="Left" Text="Marital Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="91"/>
-              <ComboBox x:Name="comboBox2" Canvas.Left="82" Canvas.Top="85" Width="229" DisplayMemberPath="msN" ItemsSource="{Binding Source={StaticResource dsMaritalStatus}}" SelectedValuePath="msID" SelectedValue="{Binding gums2, Mode=TwoWay}"/>
-              <TextBlock x:Name="txbguOccup2" HorizontalAlignment="Left" Text="Occupation" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="115"/>
-              <TextBox x:Name="txtguOccup2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="110" Width="229" Text="{Binding guOccup2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguEmail2" HorizontalAlignment="Left" Text="Email" VerticalAlignment="Top" Canvas.Left="47" Canvas.Top="141"/>
-              <TextBox x:Name="txtguEmail2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="136" Width="229" Text="{Binding guEmail2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox6" Header="Additional Guest" HorizontalAlignment="Left" Margin="264,488,0,0" VerticalAlignment="Top" Height="99" Width="333"/>
-          <GroupBox x:Name="groupBox8" HorizontalAlignment="Left" Margin="10,365,0,0" VerticalAlignment="Top" Height="118" Width="249">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguTaxiIn" Canvas.Left="40" Text="Taxi In" Canvas.Top="10" Width="35"/>
-              <TextBox x:Name="txtguTaxiIn" Height="23" AcceptsReturn="False" Canvas.Top="24" Width="86" Canvas.Left="15" Text="{Binding guTaxiIn, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguTaxiIngr" Canvas.Left="141" Text="Taxi In Rcpt." Canvas.Top="10" Width="67" Height="13"/>
-              <TextBox x:Name="txtguTaxiIngr" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="24" Width="80" Text="{Binding guTaxiIngr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguTaxiOut" Canvas.Left="40" Text="Taxi Out" Canvas.Top="51" Width="45" Height="14"/>
-              <TextBox x:Name="txtguTaxiOut" Height="23" AcceptsReturn="False" Canvas.Top="65" Width="86" Canvas.Left="15" Text="{Binding guTaxiOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguTaxiOutgr" Canvas.Left="141" Text="Taxi Out Rcpt." Canvas.Top="51" Width="67" Height="13"/>
-              <TextBox x:Name="txtguTaxiOutgr" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="65" Width="80" Text="{Binding guTaxiOutgr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+        </Border>
+        <!--#endregion-->
 
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox9" HorizontalAlignment="Left" Margin="10,488,0,0" VerticalAlignment="Top" Height="99" Width="249">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txguls" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="10"/>
-              <TextBox x:Name="txtguls" Height="23" Canvas.Left="10" AcceptsReturn="False" Canvas.Top="24" Width="91" Text="{Binding guls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguloInvit" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Canvas.Left="150" Canvas.Top="10"/>
-              <TextBox x:Name="txtguloInvit" Height="23" Canvas.Left="130" AcceptsReturn="False" Canvas.Top="23" Width="91" Text="{Binding guloInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbtxtgusr" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Canvas.Left="85" Canvas.Top="52"/>
-              <TextBox x:Name="txtgusr" Height="23" Canvas.Left="70" AcceptsReturn="False" Canvas.Top="66" Width="91" Text="{Binding gusr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
+        <!--#region Barra de Menu Opciones-->
+        <Border x:Name="brdBtn" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="2" Grid.Column="1" Margin="10,5,10,0" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Height="40" Margin="3">
+                <TextBox x:Name="txtCopies"  Height="23"  AcceptsReturn="False" VerticalAlignment="Center" Width="35" Text="{Binding Path=.}"  />
+                <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <Viewbox Stretch="Uniform" Width="20">
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png" />
+                        </Viewbox>
+                        <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <Viewbox Stretch="Uniform" Width="20">
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png" />
+                        </Viewbox>
+                        <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonCancel_OnMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <Viewbox Stretch="Uniform" Width="20">
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png" />
+                        </Viewbox>
+                        <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        <!--#endregion-->
 
-        </Grid>
-      </TabItem>
-      <TabItem Header="Other Info, Gifts, Credit Cards, Status &amp; Comments">
-        <Grid Background="#FFE5E5E5">
-          <GroupBox x:Name="grpOtherInformation" Header="Other Information" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="180" Width="588">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguMembershipNum" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Member #" VerticalAlignment="Top"/>
-              <TextBox x:Name="txtguMembershipNum" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="6" Width="200" Text="{Binding guMembershipNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguCity" HorizontalAlignment="Left" TextWrapping="Wrap" Text="City" VerticalAlignment="Top" Canvas.Left="299" Canvas.Top="10"/>
-              <TextBox x:Name="txtguCity" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="6" Width="228" Text="{Binding guCity, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguO1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="C. Code" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="36"/>
-              <TextBox x:Name="txtguO1" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="32" Width="80" Text="{Binding guO1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguState" HorizontalAlignment="Left" TextWrapping="Wrap" Text="State" VerticalAlignment="Top" Canvas.Left="299" Canvas.Top="36"/>
-              <TextBox x:Name="txtguState" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="32" Width="228" Text="{Binding guState, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguChildren" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Children" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="61"/>
-              <TextBox x:Name="txtguChildren" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="57" Width="56" Text="{Binding guChildren, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguco" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Country" VerticalAlignment="Top" Canvas.Left="293" Canvas.Top="61"/>
-              <TextBox x:Name="txtguco" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="57" Width="75" Text="{Binding guco, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguag" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="87"/>
-              <TextBox x:Name="txtguag" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="83" Width="80" Text="{Binding guag, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbgula" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Languaje" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="111"/>
-              <TextBox x:Name="txtguRoomNum" Height="23" Canvas.Left="333" AcceptsReturn="False" Canvas.Top="133" Width="48" Text="{Binding guRoomNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="textBlock_Copy8" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top" Canvas.Left="301" Canvas.Top="111"/>
-              <TextBlock x:Name="txbguChildrenAges" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Age(s)" VerticalAlignment="Top" Canvas.Left="150" Canvas.Top="61"/>
-              <TextBox x:Name="txtguChildrenAges" Height="23" Canvas.Left="190" AcceptsReturn="False" Canvas.Top="57" Width="81" RenderTransformOrigin="0.5,0.5" Text="{Binding guChildrenAges, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">
-                <TextBox.RenderTransform>
-                  <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.699"/>
-                    <TranslateTransform/>
-                  </TransformGroup>
-                </TextBox.RenderTransform>
-              </TextBox>
-              <ComboBox x:Name="cboguco" Canvas.Left="416" Canvas.Top="57" Width="147" DisplayMemberPath="coN" ItemsSource="{Binding Source={StaticResource dsCountries}}" SelectedValuePath="coID" SelectedValue="{Binding guco}"/>
-              <ComboBox x:Name="cboguag" Canvas.Left="159" Canvas.Top="83" Width="251" DisplayMemberPath="agN" ItemsSource="{Binding Source={StaticResource dsAgencies}}" SelectedValuePath="agID" SelectedValue="{Binding guag}"/>
-              <ComboBox x:Name="cbogula" Canvas.Left="74" Canvas.Top="109" Width="188" DisplayMemberPath="laN" ItemsSource="{Binding Source={StaticResource dsLanguajes}}" SelectedValuePath="laID" SelectedValue="{Binding gula}"/>
-              <ComboBox x:Name="cboguHotel" Canvas.Left="333" Canvas.Top="109" Width="230" DisplayMemberPath="hoID" ItemsSource="{Binding Source={StaticResource dsHotels}}" SelectedValuePath="hoID" SelectedValue="{Binding guHotel}"/>
-              <TextBlock x:Name="txbguRoomNum" HorizontalAlignment="Left" Text="Room" VerticalAlignment="Top" Canvas.Left="300" Canvas.Top="136"/>
-              <TextBox x:Name="txtguRoomsQty" Height="23" Canvas.Left="412" AcceptsReturn="False" Canvas.Top="133" Width="26" Text="{Binding guRoomsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" MaxLength="1"/>
-              <TextBlock x:Name="textBlock_Copy10" HorizontalAlignment="Left" Text="Books" VerticalAlignment="Top" Canvas.Left="381" Canvas.Top="136"/>
-              <TextBox x:Name="txtguShowsQty" Height="23" Canvas.Left="473" AcceptsReturn="False" Canvas.Top="133" Width="26" Text="{Binding guShowsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" MaxLength="1"/>
-              <TextBlock x:Name="txbguShowsQty" HorizontalAlignment="Left" Text="Shows" VerticalAlignment="Top" Canvas.Left="442" Canvas.Top="136"/>
-              <TextBox x:Name="txtguPax" Height="23" Canvas.Left="527" AcceptsReturn="False" Canvas.Top="133" Width="33" Text="{Binding guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguPax" HorizontalAlignment="Left" Text="Pax" VerticalAlignment="Top" Canvas.Left="505" Canvas.Top="136"/>
-              <CheckBox x:Name="checkBox" Content="Family" Canvas.Left="10" Canvas.Top="136" IsChecked="{Binding guFamily, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="checkBox_Copy" Content="Identification" Canvas.Left="69" Canvas.Top="136" IsChecked="{Binding guIdentification, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="checkBox_Copy1" Content="Interval" Canvas.Left="162" Canvas.Top="136" IsChecked="{Binding guInterval, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="grpGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Height="173" Width="588">
-            <Canvas>
-              <TextBlock x:Name="txbMaxAuthGiftsCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Max Auth" VerticalAlignment="Top" Canvas.Left="221" Canvas.Top="135"/>
-              <TextBox x:Name="txbMaxAuthGifts" Height="22" AcceptsReturn="False" Canvas.Left="271" Canvas.Top="131" Width="60" />
-              <TextBlock x:Name="txbTotalPriceCaption" HorizontalAlignment="Left" Text="Total Price" VerticalAlignment="Top" Canvas.Left="455" Canvas.Top="135"/>
-              <TextBox x:Name="txbTotalPrice" Height="22" AcceptsReturn="False" Canvas.Left="510" Canvas.Top="131" Width="60" />
-              <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="135"/>
-              <TextBox x:Name="txbTotalCost" Height="22" Canvas.Left="388" AcceptsReturn="False" Canvas.Top="131" Width="60" />
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox_Copy" Header="Comments" HorizontalAlignment="Left" Margin="10,497,0,0" VerticalAlignment="Top" Height="94" Width="588">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguExtraInfo" HorizontalAlignment="Left" Text="PR Comments" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
-              <TextBox x:Name="txtguExtraInfo" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="5" Width="434" Text="{Binding guExtraInfo, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguWComments" HorizontalAlignment="Left" Text="Hostess Comments" VerticalAlignment="Top" Canvas.Left="11" Canvas.Top="33"/>
-              <TextBox x:Name="txtguWComments" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="28" Width="433" Text="{Binding guWComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguEComments" HorizontalAlignment="Left" Text="Exit Hostess Comments" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="56"/>
-              <TextBox x:Name="txtguEComments" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="52" Width="433" Text="{Binding guEComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox_Copy1" Header="Credit Cards" HorizontalAlignment="Left" Margin="10,373,0,0" VerticalAlignment="Top" Height="119" Width="280">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguCCType" HorizontalAlignment="Left" Text="CC Company" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
-              <TextBox x:Name="txtguCCType" Height="23" Canvas.Left="77" AcceptsReturn="False" Canvas.Top="7" Width="181" Text="{Binding guCCType, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="groupBox_Copy2" Header="Guests Status" HorizontalAlignment="Left" Margin="311,373,0,0" VerticalAlignment="Top" Height="119" Width="286">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguGStatus" HorizontalAlignment="Left" Text="Guest Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
-              <TextBox x:Name="txtguGStatus" Height="23" Canvas.Left="77" AcceptsReturn="False" Canvas.Top="7" Width="181" Text="{Binding guGStatus, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-        </Grid>
-      </TabItem>
-      <TabItem Header="Deposits &amp; Salesmen">
-        <Grid Background="#FFE5E5E5">
-          <GroupBox x:Name="grbDeposits" Header="Deposits" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="260" Width="287">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguDepositTwisted" HorizontalAlignment="Left" Text="Burned" VerticalAlignment="Top" Canvas.Left="5" Canvas.Top="164"/>
-              <TextBox x:Name="txtguDepositTwisted" Height="23" Canvas.Left="43" AcceptsReturn="False" Canvas.Top="161" Width="65" Text="{Binding guDepositTwisted, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbgucu" Canvas.Left="118" TextWrapping="Wrap" Text="Currency" Canvas.Top="164"/>
-              <ComboBox x:Name="cbogucu" Canvas.Left="166" Canvas.Top="164" Width="109" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrencies}}" SelectedValuePath="cuID" SelectedValue="gucu"/>
-              <TextBlock x:Name="txbgupt" Canvas.Left="5" Text="Payment Type" Canvas.Top="193"/>
-              <ComboBox x:Name="cbogupt" Canvas.Left="79" Canvas.Top="189" Width="196" DisplayMemberPath="ptN" ItemsSource="{Binding Source={StaticResource dsPaymentTypes}}" SelectedValuePath="ptID" SelectedValue="gupt"/>
-              <TextBlock x:Name="txbguHotelB" Canvas.Left="5" Text="Resort" Canvas.Top="223"/>
-              <ComboBox x:Name="cboguHotelB" Canvas.Left="43" Canvas.Top="216" Width="120" DisplayMemberPath="hoID" ItemsSource="{Binding Source={StaticResource dsHotels}}" SelectedValuePath="hoID" SelectedValue="{Binding guHotelB}"/>
-              <TextBlock x:Name="txbguDepositgr" Canvas.Left="184" Text="Rcpt." Canvas.Top="223"/>
-              <TextBox x:Name="txtguDepositgr" Height="23" Canvas.Left="210" AcceptsReturn="False" Canvas.Top="215" Width="65" Text="{Binding guDepositgr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="grbSalesmen" Header="Salesmzen" HorizontalAlignment="Left" Margin="311,10,0,0" VerticalAlignment="Top" Height="546" Width="287">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <CheckBox x:Name="chkguSelfGen" Content="SELF GEN" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="76" Canvas.Top="9" IsChecked="{Binding guSelfGen, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <CheckBox x:Name="chkguOverflow" Content="Overflow" Canvas.Left="174" Canvas.Top="9" IsChecked="{Binding guOverflow, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguts" TextWrapping="Wrap" Text="Team" Canvas.Top="31" Canvas.Left="9"/>
-              <ComboBox x:Name="cboguts" Canvas.Left="73" Canvas.Top="27" Width="188" DisplayMemberPath="tsN" ItemsSource="{Binding Source={StaticResource dsTeamsSalesMen}}" SelectedValuePath="tsID" SelectedValue="{Binding guts}"/>
-              <TextBlock x:Name="txbguPRInvit1" Text="PR 1" Canvas.Top="56" Canvas.Left="12"/>
-              <TextBox x:Name="txtguPRInvit1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="51" Width="45" Text="{Binding guPRInvit1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguPRInvit1" Canvas.Left="118" Canvas.Top="51" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" SelectedValuePath="peID" SelectedValue="{Binding guPRInvit1}"/>
-              <TextBlock x:Name="txbguPRInvit2" Text="PR 2" Canvas.Top="80" Canvas.Left="12"/>
-              <TextBox x:Name="txtguPRInvit2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="75" Width="45" Text="{Binding guPRInvit2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguPRInvit2" Canvas.Left="118" Canvas.Top="75" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" SelectedValuePath="peID" SelectedValue="{Binding guPRInvit2}"/>
-              <TextBlock x:Name="txbguPRInvit3" Text="PR 3" Canvas.Top="104" Canvas.Left="12"/>
-              <TextBox x:Name="txtguPRInvit3" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="99" Width="45" Text="{Binding guPRInvit3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguPRInvit3" Canvas.Left="118" Canvas.Top="99" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelPR}}" SelectedValuePath="peID" SelectedValue="{Binding guPRInvit3}"/>
-              <RadioButton x:Name="optguLiner1Type" Content="Line" Canvas.Left="20" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <RadioButton x:Name="optguLiner2Type" Content="Front to Middle" Canvas.Left="75" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-              <RadioButton x:Name="optguLiner3Type" Content="Front to Back" Canvas.Left="181" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-              <TextBlock x:Name="txbguLiner1" Canvas.Left="20" Text="Liner 1" Canvas.Top="172"/>
-              <TextBox x:Name="txtguLiner1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="167" Width="45" Text="{Binding guLiner1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguLiner1" Canvas.Left="118" Canvas.Top="167" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelLINER}}" SelectedValuePath="peID" SelectedValue="{Binding guLiner1}"/>
-
-              <TextBlock x:Name="txbguLiner2" Text="Liner 2" Canvas.Top="212" Canvas.Left="12"/>
-              <TextBox x:Name="txtguLiner2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="207" Width="45" Text="{Binding guLiner2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguLiner2" Canvas.Left="118" Canvas.Top="207" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelLINER}}" SelectedValuePath="peID" SelectedValue="{Binding guLiner2}"/>
-              <TextBlock x:Name="txbguCloser1" Text="Closer 1" Canvas.Top="236" Canvas.Left="12"/>
-              <TextBox x:Name="txtguCloser1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="231" Width="45" Text="{Binding guCloser1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguCloser1" Canvas.Left="118" Canvas.Top="231" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelCLOSER}}" SelectedValuePath="peID" SelectedValue="{Binding guCloser1}"/>
-              <TextBlock x:Name="txbguCloser2" Text="Closer 2" Canvas.Top="259" Canvas.Left="12"/>
-              <TextBox x:Name="txtguCloser2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="254" Width="45" Text="{Binding guCloser2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguCloser2" Canvas.Left="118" Canvas.Top="254" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelCLOSER}}" SelectedValuePath="peID" SelectedValue="{Binding guCloser2}"/>
-              <TextBlock x:Name="txbguCloser3" Text="Closer 3" Canvas.Top="283" Canvas.Left="12"/>
-              <TextBox x:Name="txtguCloser3" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="278" Width="45" Text="{Binding guCloser3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguCloser3" Canvas.Left="118" Canvas.Top="278" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelCLOSER}}" SelectedValuePath="peID" SelectedValue="{Binding guCloser3}"/>
-              <TextBlock x:Name="lblguExit1" Text="Exit 1" Canvas.Top="307" Canvas.Left="12"/>
-              <TextBox x:Name="txtguExit1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="302" Width="45" Text="{Binding guExit1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguExit1" Canvas.Left="118" Canvas.Top="302" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelCLOSER}}" SelectedValuePath="peID" SelectedValue="{Binding guExit1}"/>
-              <TextBlock x:Name="lblguExit2" Text="Exit 2" Canvas.Top="330" Canvas.Left="12"/>
-              <TextBox x:Name="txtguExit2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="325" Width="45" Text="{Binding guExit2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguExit2" Canvas.Left="118" Canvas.Top="325" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelCLOSER}}" SelectedValuePath="peID" SelectedValue="{Binding guExit2}"/>
-              <TextBlock x:Name="txbguPodium" Text="Podium" Canvas.Top="353" Canvas.Left="12"/>
-              <TextBox x:Name="txtguPodium" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="348" Width="45" Text="{Binding guPodium, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguPodium" Canvas.Left="118" Canvas.Top="348" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelPODIUM}}" SelectedValuePath="peID" SelectedValue="{Binding guPodium}"/>
-              <TextBlock x:Name="txbguVLO" Text="VLO" Canvas.Top="377" Canvas.Left="12"/>
-              <TextBox x:Name="txtguVLO" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="372" Width="45" Text="{Binding guVLO, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguVLO" Canvas.Left="118" Canvas.Top="372" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelVLO}}" SelectedValuePath="peID" SelectedValue="{Binding guVLO}"/>
-              <TextBlock x:Name="txbguEntryHost" Text="Hostess" Canvas.Top="414" Canvas.Left="12"/>
-              <TextBox x:Name="txtguEntryHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="409" Width="43" Text="{Binding guEntryHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguEntryHost" Canvas.Left="118" Canvas.Top="409" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelHOSTSENTRY}}" SelectedValuePath="peID" SelectedValue="{Binding guEntryHost}"/>
-              <TextBlock x:Name="txbguGiftsHost" Text="Gifts Hostess" Canvas.Top="438" Canvas.Left="12"/>
-              <TextBox x:Name="txtguGiftsHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="433" Width="43" Text="{Binding guGiftsHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguGiftsHost" Canvas.Left="118" Canvas.Top="433" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelHOSTSGIFTS}}" SelectedValuePath="peID" SelectedValue="{Binding guGiftsHost}"/>
-              <TextBlock x:Name="lblguExitHost" Text="Exit Hostess" Canvas.Top="463" Canvas.Left="12"/>
-              <TextBox x:Name="txtguExitHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="458" Width="43" Text="{Binding guExitHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <ComboBox x:Name="cboguExitHost" Canvas.Left="118" Canvas.Top="458" Width="143" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnelHOSTSEXIT}}" SelectedValuePath="peID" SelectedValue="{Binding guExitHost}"/>
-              <Button x:Name="btnShowsSalesmen" Content="Salesmen" Canvas.Left="100" Canvas.Top="498" Width="75"/>
-              <Separator Height="3" Canvas.Left="12" Margin="0" Canvas.Top="195" Width="249" RenderTransformOrigin="0.5,0.5">
-                <Separator.RenderTransform>
-                  <TransformGroup>
-                    <ScaleTransform ScaleY="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                  </TransformGroup>
-                </Separator.RenderTransform>
-              </Separator>
-              <Separator Height="3" Canvas.Left="12" Margin="0" Canvas.Top="132" Width="249" RenderTransformOrigin="0.5,0.5">
-                <Separator.RenderTransform>
-                  <TransformGroup>
-                    <ScaleTransform ScaleY="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                  </TransformGroup>
-                </Separator.RenderTransform>
-              </Separator>
-            </Canvas>
-          </GroupBox>
-          <GroupBox x:Name="grbDepositSale" Header="GroupBox" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" Width="287" Height="84">
-            <Canvas DataContext="{StaticResource guestViewSource}">
-              <TextBlock x:Name="txbguDepositSaleD" HorizontalAlignment="Left" Text="Date" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="11"/>
-              <TextBox x:Name="txtguDepositSaleD" Height="23" Canvas.Left="52" AcceptsReturn="False" Canvas.Top="8" Width="71" Text="{Binding guDepositSaleD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguDepositSaleNum" HorizontalAlignment="Left" Text="Consecutive" VerticalAlignment="Top" Canvas.Left="126" Canvas.Top="11"/>
-              <TextBox x:Name="txtguDepositSaleD_Copy" Height="23" Canvas.Left="186" AcceptsReturn="False" Canvas.Top="8" Width="85" Text="{Binding guDepositSaleNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-              <TextBlock x:Name="txbguDepSale" HorizontalAlignment="Left" Text="Amount" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="40"/>
-              <TextBox x:Name="txtguDepSale" Height="23" Canvas.Left="52" AcceptsReturn="False" Canvas.Top="37" Width="71" Text="{Binding guDepSale, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-            </Canvas>
-          </GroupBox>
-
-        </Grid>
-      </TabItem>
-
-    </TabControl>
-    <GroupBox x:Name="grbChangedBy" Header="Changed By" HorizontalAlignment="Left" Margin="6,625,0,0" VerticalAlignment="Top" Height="49" Width="297">
-      <Canvas>
-        <TextBox x:Name="txtChangedBy" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="99" Canvas.Left="12" Canvas.Top="3"/>
-        <PasswordBox x:Name="txtPwd" Canvas.Left="116" Canvas.Top="3" Width="101" Height="23"/>
-        <Button x:Name="btnLog" Content="Log" Canvas.Left="230" Canvas.Top="6" Width="45"/>
-      </Canvas>
-    </GroupBox>
-    <TextBox x:Name="txtCopies" HorizontalAlignment="Left" Height="23" Margin="319,644,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="35"/>
-    <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="363,644,0,0" VerticalAlignment="Top" Width="75" Click="btnPrint_Click"/>
-    <Button x:Name="btnSave" Content="Save and Exit" HorizontalAlignment="Left" Margin="444,644,0,0" VerticalAlignment="Top" Width="75"/>
-    <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="526,644,0,0" VerticalAlignment="Top" Width="75"/>
-
-  </Grid>
+        <!--#region  Estatus Bar-->
+        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="3" Margin="10,0,10,0" Grid.ColumnSpan="2">
+            <StatusBarItem x:Name="statusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="statusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="statusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
+            <Separator />
+            <StatusBarItem x:Name="statusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Notice.png"  Height="12" Visibility="Hidden" />
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem x:Name="statusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right"/>
+        </StatusBar>
+        <!--#endregion-->
+    </Grid>
 </Window>

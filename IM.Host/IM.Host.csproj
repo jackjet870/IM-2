@@ -176,6 +176,9 @@
     <Compile Include="Forms\frmSalesSalesmen.xaml.cs">
       <DependentUpon>frmSalesSalesmen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmShowsSalesmen.xaml.cs">
+      <DependentUpon>frmShowsSalesmen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reports\rptBookingDeposits1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -405,6 +408,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmShowsSalesmen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ButtonTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -533,6 +540,7 @@
     <None Include="Properties\DataSources\IM.Model.SalesRoomLog.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomShort.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesSalesman.datasource" />
+    <None Include="Properties\DataSources\IM.Model.ShowSalesman.datasource" />
     <None Include="Properties\DataSources\IM.Model.SourcePayment.datasource" />
     <None Include="Properties\DataSources\IM.Model.UnderPaymentMotive.datasource" />
     <None Include="Properties\Settings.settings">

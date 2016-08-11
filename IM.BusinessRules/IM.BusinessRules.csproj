@@ -165,6 +165,8 @@
     <Compile Include="BR\BRSegmentsOrder.cs" />
     <Compile Include="BR\BRShowPrograms.cs" />
     <Compile Include="BR\BRShowProgramsCategories.cs" />
+    <Compile Include="BR\BRShows.cs" />
+    <Compile Include="BR\BRShowSalesman.cs" />
     <Compile Include="BR\BRSourcePayments.cs" />
     <Compile Include="BR\BRTeamsSalesMen.cs" />
     <Compile Include="BR\BRTeamsGuestServices.cs" />

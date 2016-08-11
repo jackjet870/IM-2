@@ -64,6 +64,11 @@ namespace IM.Host
     public static List<GiftPackageItem> _lstGiftsPacks;
     public static List<RateType> _lstRateType;
     public static List<MealTicketType> _lstMealTicketType;
+    public static List<CreditCardType> _lstCreditCardTypes;
+    public static List<GuestStatusType> _lstGuestStatusTypes;
+    public static List<DisputeStatus> _lstDisputeStatus;
+    public static List<PaymentPlace> _lstPaymentPlaces;
+    public static Configuration _configuration;
     #endregion
 
     #region Constructor
@@ -259,103 +264,200 @@ namespace IM.Host
       // Obtenemos el id de la sala de ventas.
       string _salesRoom = App.User.SalesRoom.srID;
 
+      List<Task> _lstTasks = new List<Task>();
+
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Currencies
       _lstCurrencies = await BRCurrencies.GetCurrencies(null, 1);
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       //Payment Types
       _lstPaymentsType = await BRPaymentTypes.GetPaymentTypes(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Marital Status
       _lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Agencies
       _lstAgencies = await BRAgencies.GetAgencies(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Countries
       _lstCountries = await BRCountries.GetCountries(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Languajes
       _lstLanguaje = await BRLanguages.GetLanguages(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Hotels
       _lstHotel = await BRHotels.GetHotels(null, 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Team Sales Men
       _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Personnel
       _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Host (ess) de llegada
       _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Host (ess) de regalos
       _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Host (ess) de salida
       _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // PR's
       _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Closer´s
       _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Exit Closer´s
       _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Podium
       _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Verificador Legal
       _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Liner's
       _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Gifts
       _lstGifts = await BRGifts.GetGifts(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Banks
       _lstBanks = await BRBanks.GetBanks(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Source Payments
       _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // SalesRoomShort
       _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Locations
       _lstLocations = await BRLocations.GetLocations(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Charge To
       _lstChargeTo = await BRChargeTos.GetChargeTos();
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Capitanes de PR's
       _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Capitanes de Liner's
       _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Capitanes de Closer's
       _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Program's
       _lstPrograms = await BRPrograms.GetPrograms();
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // LeadSources
       _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // Refund Types
       _lstRefundTypes = await BRRefundTypes.GetRefundTypes(1);
-
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
       // GiftsPacks
       _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks();
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        // Tipos de tarifa
+        _lstRateType = await BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Tipos de cupones de comida.
+        _lstMealTicketType = await BRMealTicketTypes.GetMealTicketType();
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Credit Card Types
+        _lstCreditCardTypes = await BRCreditCardTypes.GetCreditCardTypes(nStatus: 1);
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Guest Status Types
+        _lstGuestStatusTypes = await BRGuestStatusTypes.GetGuestStatusTypes(nStatus: 1);
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Payment Places
+        _lstPaymentPlaces = await BRPaymentPlaces.GetPaymentPlaces(1);
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Estatus de disputa
+        _lstDisputeStatus = await BRDisputeStatus.GetDisputeStatus();
+      }));
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        // Configuracion
+        _configuration = (await BRConfiguration.GetConfigurations()).FirstOrDefault();
+      }));
 
-      // Tipos de tarifa
-      _lstRateType = await BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
-
-      //Tipos de cupones de comida.
-      _lstMealTicketType = await BRMealTicketTypes.GetMealTicketType();
+      await Task.WhenAll(_lstTasks);
     }
     #endregion
 
