@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace IM.Model.Enums
 {
-  public enum EnumInvitationType
+  public enum EnumModule
   {
-    existing,
-    newOutHouse,
-    newExternal
+    InHouse,
+    OutHouse,
+    Host,
   }
 }

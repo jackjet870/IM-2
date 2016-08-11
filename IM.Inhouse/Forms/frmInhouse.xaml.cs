@@ -1664,7 +1664,7 @@ namespace IM.Inhouse.Forms
     {
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
-        switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
 
       if (App.User.AutoSign)
       {
@@ -1675,7 +1675,7 @@ namespace IM.Inhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumInvitationType.External, login.UserData, 0, EnumInvitationMode.modAdd)
+        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.newExternal,login.UserData)
         {
           Owner = this
         };
@@ -1841,7 +1841,7 @@ namespace IM.Inhouse.Forms
 
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
        validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
-       switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
+       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
 
       if (App.User.AutoSign)
       {
@@ -1852,7 +1852,7 @@ namespace IM.Inhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumInvitationType.InHouse, login.UserData, guestArrival.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd)
+        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing,login.UserData, guestArrival.guID)
         {
           Owner = this
         };

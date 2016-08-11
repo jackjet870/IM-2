@@ -23,10 +23,11 @@ namespace IM.Base.Forms
   public partial class frmInvitation : Window
   {
     #region Propiedades, Atributos
-    public UserData _user;
+    //Parametros del constructor
+    public readonly EnumModule _module;
     public readonly EnumInvitationType _invitationType;
+    public UserData _user;
     private readonly int _guestId;
-    public readonly EnumInvitationMode _invitationMode;
     public readonly bool _allowReschedule;
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
@@ -37,28 +38,31 @@ namespace IM.Base.Forms
     /// <summary>
     /// Inicializa en formulario de invitacion
     /// </summary>
-    /// <param name="InvitationType">Tipo de invitacion</param>
-    /// <param name="User">Usuario Login</param>
-    /// <param name="GuestId">guID - valor default 0</param>
-    /// <param name="InvitationMode">Tipo de acceso a la invitacion</param>
-    /// <param name="AllowReschedule">Si permite Reschedule</param>
+    /// <param name="module">Tipo de invitacion</param>
+    /// <param name="invitationType">Tipo de acceso a la invitacion</param>
+    /// <param name="user">Usuario Login</param>
+    /// <param name="guestId">guID - valor default 0</param>
+    /// <param name="allowReschedule">Si permite Reschedule - valor default true</param>
     /// <history>
     /// [erosado] 09/08/2016  Created.
     /// </history>
-    public frmInvitation(EnumInvitationType InvitationType, UserData User, int GuestId, EnumInvitationMode InvitationMode, bool AllowReschedule = true)
+    public frmInvitation(EnumModule module, EnumInvitationType invitationType, UserData user, int guestId = 0, bool allowReschedule = true)
     {
       try
       {
-        var catObj = new CommonCatObject(User, GuestId, InvitationType, InvitationMode);
-        _invitationType = InvitationType;
-        _guestId = GuestId;
-        _user = User;
-        _invitationMode = InvitationMode;
+
+        var catObj = new CommonCatObject(module, invitationType, user, guestId);
+        _module = module;
+        _guestId = guestId;
+        _user = user;
+        _invitationType = invitationType;
         DataContext = catObj;
-        _allowReschedule = AllowReschedule;
+        _allowReschedule = allowReschedule;
         InitializeComponent();
-                
+
         #region Inicializar Grids
+
+        #region dtgGift
         dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
         {
           if (e.NewItem != null)
@@ -67,6 +71,8 @@ namespace IM.Base.Forms
           }
         });
         GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
+        #endregion
+
         #endregion
       }
       catch (Exception ex)
@@ -78,7 +84,7 @@ namespace IM.Base.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
-      ControlsConfiguration(_invitationType);
+      ControlsConfiguration();
       //Configuramos los controles (Maxlength, caracteres etc.)
       UIHelper.SetUpControls(new Guest(), this);
     }
@@ -106,7 +112,7 @@ namespace IM.Base.Forms
 
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      
+
     }
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -151,30 +157,30 @@ namespace IM.Base.Forms
     /// <summary>
     /// Prepara los controles para cada invitacion
     /// </summary>
-    /// <param name="_invitationType">EnumInvitationType</param>
+    /// <param name="module">EnumInvitationType</param>
     /// <history>
     /// [erosado] 16/05/2016  Created
     /// </history>
-    private void ControlsConfiguration(EnumInvitationType _invitationType)
+    private void ControlsConfiguration()
     {
-      txtUserName.Text = _user.User.peN;
-      txtPlaces.Text = _invitationType == EnumInvitationType.Host ? _user.SalesRoom.srN : _user.Location.loN;
+      //Configuramos el MenuBar
+      MenuBarConfiguration();
 
-      switch (_invitationType)
+      //Agregamos la informacion del usuario logeado
+      txtUserName.Text = _user.User.peN;
+      txtPlaces.Text = _module == EnumModule.Host ? _user.SalesRoom.srN : _user.Location.loN;
+
+      //Dependiendo de cada modulo 
+      switch (_module)
       {
-        case EnumInvitationType.InHouse:
-          InHouseControlsConfig();
-          EnableControlsInHouse();
+        case EnumModule.InHouse:
+          InHouseControlVisibility();
           break;
-        case EnumInvitationType.OutHouse:
-          OutHouseControlsConfig();
+        case EnumModule.OutHouse:
+          OutHouseControlVisibility();
           break;
-        case EnumInvitationType.Host:
-          HostControlsConfig();
-          break;
-        case EnumInvitationType.External:
-          ExternalControlsConfig();
-          EnableControlsExternal();
+        case EnumModule.Host:
+          HostControlVisibility();
           break;
         default:
           break;
@@ -189,12 +195,20 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 14/05/2016  Created.
     /// </history>
-    private void InHouseControlsConfig()
+    private void InHouseControlVisibility()
     {
-      stkOutInvitation.Visibility = Visibility.Collapsed; //Quitamos Out.Invint de brdGuestInfo
-      stkPRContact.Visibility = Visibility.Collapsed;//Quitamos PRContact de  brdPRInfo - Grid Column 0
-      stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
-      stkLocation.IsEnabled = false;
+      if (_invitationType == EnumInvitationType.newExternal)
+      {
+        stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
+        stkOutInvitation.Visibility = Visibility.Collapsed;//Ocultamos el OutInvitation de brdPRInfo 
+      }
+      else if (_invitationType == EnumInvitationType.existing)
+      {
+        stkOutInvitation.Visibility = Visibility.Collapsed; //Quitamos Out.Invint de brdGuestInfo
+        stkPRContact.Visibility = Visibility.Collapsed;//Quitamos PRContact de  brdPRInfo - Grid Column 0
+        stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
+        imgSearch.Visibility = Visibility.Collapsed; //Quitamos el boton de search.
+      }
     }
     /// <summary>
     /// Prepara los controles para que trabaje con OutHouseInvitation
@@ -202,7 +216,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 14/05/2016  Created.
     /// </history>
-    private void OutHouseControlsConfig()
+    private void OutHouseControlVisibility()
     {
       stkRsrvNum.Visibility = Visibility.Collapsed;
       imgSearch.Visibility = Visibility.Collapsed;
@@ -211,7 +225,6 @@ namespace IM.Base.Forms
       btnRebook.Visibility = Visibility.Collapsed;
       stkRescheduleDate.Visibility = Visibility.Collapsed;
       chkReschedule.Visibility = Visibility.Collapsed;
-      stkFlightNumber.Visibility = Visibility.Visible;
       brdRoomsQtyAndElectronicPurse.Visibility = Visibility.Collapsed;
       brdCreditCard.Visibility = Visibility.Collapsed;
     }
@@ -221,7 +234,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 14/05/2016  Created.
     /// </history>
-    private void HostControlsConfig()
+    private void HostControlVisibility()
     {
       stkPRContact.Visibility = Visibility.Collapsed;
       stkSales.IsEnabled = false;
@@ -229,31 +242,61 @@ namespace IM.Base.Forms
       stkFlightNumber.Visibility = Visibility.Collapsed;
       stkElectronicPurse.Visibility = Visibility.Collapsed;
     }
+    #region  MenuBarConfiguration
     /// <summary>
-    /// Prepara los controles para que trabaje con ExternalInvitation
+    /// Activa o desactiva los botones de la barra de menu dependiendo del tipo de invitacion
     /// </summary>
     /// <history>
-    /// [erosado] 14/05/2016  Created.
+    /// [erosado] 10/08/2016  Created.
     /// </history>
-    private void ExternalControlsConfig()
+    private void MenuBarConfiguration()
     {
-      btnSearch.Visibility = Visibility.Visible; //Se visualiza el boton Search.
-      stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
+      //Modo lectura
+      if (_invitationType == EnumInvitationType.existing)
+      {
+        MenuBarModeReadOnly();
+      }
+      //Modo Nuevo
+      else
+      {
+        MenuBarModeAddOrEdit();
+      }
     }
-
+    /// <summary>
+    /// Activa los controles en modo ReadOnly
+    /// </summary>
+    /// <history>
+    /// [erosado] 10/08/2016  Created.
+    /// </history>
+    private void MenuBarModeReadOnly()
+    {
+      imgButtonEdit.IsEnabled = true;
+      imgButtonPrint.IsEnabled = true;
+      imgButtonSave.IsEnabled = false;
+      imgButtonCancel.IsEnabled = true;
+      imgButtonLog.IsEnabled = true;
+    }
+    /// <summary>
+    /// Activa los controles en modo Add or Edit
+    /// </summary>
+    /// <history>
+    /// [erosado] 10/08/2016  Created.
+    /// </history>
+    private void MenuBarModeAddOrEdit()
+    {
+      imgButtonEdit.IsEnabled = false;
+      imgButtonPrint.IsEnabled = false;
+      imgButtonSave.IsEnabled = false;
+      imgButtonCancel.IsEnabled = true;
+      imgButtonLog.IsEnabled = false;
+    }
     #endregion
+    #endregion
+
 
     #region EnableControlsExternal
     private void EnableControlsExternal()
     {
-      #region Barra de Menu
-      imgButtonEdit.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
-      imgButtonPrint.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
-      imgButtonSave.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
-      imgButtonCancel.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
-      imgButtonLog.IsEnabled = !string.IsNullOrWhiteSpace(txtguID.Text) && txtguID.Text != "0" ? true : false;
-      #endregion
-
       #region Guest Information
       txtguID.IsEnabled =
       txtguHReservID.IsEnabled = false;
@@ -354,12 +397,12 @@ namespace IM.Base.Forms
     #region EnableControlsInHouse
     private void EnableControlsInHouse()
     {
-      
+
       #region Barra de Menu
-      imgButtonEdit.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
-      imgButtonPrint.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? false : true;
-      imgButtonSave.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
-      imgButtonCancel.IsEnabled = _invitationMode == EnumInvitationMode.modAdd ? true : false;
+      //imgButtonEdit.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? false : true;
+      //imgButtonPrint.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? false : true;
+      //imgButtonSave.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? true : false;
+      //imgButtonCancel.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? true : false;
       //imgButtonLog.IsEnabled = dbcontex && txtguID.Text != "0" ? true : false;
       #endregion
 
@@ -460,6 +503,38 @@ namespace IM.Base.Forms
 
     }
     #endregion
+
+
+    #region EnableControls
+    private void IsEnableControls()
+    {
+      #region Guest Information
+      txtguID.IsEnabled = false;
+      txtguHReservID.IsEnabled = false;
+      btnSearch.IsEnabled = false;//Nueva INhouse False|external true|OutHouseNew oculto
+      txtguOutInvitNum.IsEnabled = true; //InHouseExternal oculto| OutHouseNew true
+      txtguRef.IsEnabled = false;//Nueva INHouse false|external false|OutHouseNew oculto
+      txtguInvitD.IsEnabled = false;//Nueva InHouse False|external false|OutHouseNew oculto
+      txtguInvitT.IsEnabled = false;//Nueva InHouse False|external false|OutHouseNew oculto
+      #endregion
+
+      switch (_module)
+      {
+        case EnumModule.InHouse:
+          break;
+        case EnumModule.OutHouse:
+          break;
+        case EnumModule.Host:
+          cmbSalesRooms.IsEnabled = false;
+          break;
+        default:
+          break;
+      }
+
+    }
+
+    #endregion
+
 
     #endregion
 
@@ -622,6 +697,7 @@ namespace IM.Base.Forms
     #endregion
 
     #endregion
+
 
   }
 }

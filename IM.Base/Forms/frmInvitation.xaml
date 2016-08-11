@@ -111,7 +111,7 @@
                             <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Name="txtMode" Text="{Binding ElementName=cmbMaritalStatusGuest1, Path=SelectedItem.msID}" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                    <TextBlock Name="txbMode" Text="Mode Edit" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>

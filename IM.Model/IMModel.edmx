@@ -91,7 +91,7 @@
           <Property Name="bdpt" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="bdpc" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="bdcc" Type="varchar" MaxLength="10" />
-          <Property Name="bdCardNum" Type="varchar" MaxLength="4" />
+          <Property Name="bdCardNum" Type="int" />
           <Property Name="bdExpD" Type="varchar" MaxLength="5" />
           <Property Name="bdAuth" Type="varchar" MaxLength="7" />
           <Property Name="bdRefund" Type="bit" />
@@ -4209,6 +4209,18 @@
             </Principal>
             <Dependent Role="LeadSources">
               <PropertyRef Name="lsrg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadSources_SalesRooms">
+          <End Role="SalesRooms" Type="Self.SalesRooms" Multiplicity="0..1" />
+          <End Role="LeadSources" Type="Self.LeadSources" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesRooms">
+              <PropertyRef Name="srID" />
+            </Principal>
+            <Dependent Role="LeadSources">
+              <PropertyRef Name="lssr" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8469,6 +8481,10 @@
             <End Role="Regions" EntitySet="Regions" />
             <End Role="LeadSources" EntitySet="LeadSources" />
           </AssociationSet>
+          <AssociationSet Name="FK_LeadSources_SalesRooms" Association="Self.FK_LeadSources_SalesRooms">
+            <End Role="SalesRooms" EntitySet="SalesRooms" />
+            <End Role="LeadSources" EntitySet="LeadSources" />
+          </AssociationSet>
           <AssociationSet Name="FK_LeadSources_SegmentsByLeadSource" Association="Self.FK_LeadSources_SegmentsByLeadSource">
             <End Role="SegmentsByLeadSource" EntitySet="SegmentsByLeadSource" />
             <End Role="LeadSources" EntitySet="LeadSources" />
@@ -9130,7 +9146,7 @@
           <Property Name="bdpt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="bdpc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="bdcc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="bdCardNum" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="bdCardNum" Type="Int32" />
           <Property Name="bdAuth" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="true"/>
           <Property Name="bdRefund" Type="Boolean" />
           <Property Name="bddr" Type="Int32" />
@@ -10358,6 +10374,7 @@
           <NavigationProperty Name="ScoreRulesByLeadSourceDetails" Relationship="Self.FK_ScoreRulesByLeadSourceDetail_LeadSources" FromRole="LeadSources" ToRole="ScoreRulesByLeadSourceDetail" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Agencies" Relationship="Self.LeadSourcesByAgencies" FromRole="LeadSources" ToRole="Agencies" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Notices" Relationship="Self.NoticesByLeadSource" FromRole="LeadSources" ToRole="Notices" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SalesRoom" Relationship="IMModel.FK_LeadSources_SalesRooms" FromRole="LeadSource" ToRole="SalesRoom" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -11290,6 +11307,7 @@
           <NavigationProperty Name="Banks" Relationship="Self.BanksBySalesRooms" FromRole="SalesRooms" ToRole="Banks" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="srzn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Zone" Relationship="IMModel.FK_SalesRooms_Zones" FromRole="SalesRoom" ToRole="Zone" />
+          <NavigationProperty Name="LeadSources" Relationship="IMModel.FK_LeadSources_SalesRooms" FromRole="SalesRoom" ToRole="LeadSource" />
         </EntityType>
         <EntityType Name="SalesRoomLog">
           <Key>
@@ -18106,6 +18124,10 @@
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="MealTicket" EntitySet="MealTickets" />
           </AssociationSet>
+          <AssociationSet Name="FK_LeadSources_SalesRooms" Association="IMModel.FK_LeadSources_SalesRooms">
+            <End Role="SalesRoom" EntitySet="SalesRooms" />
+            <End Role="LeadSource" EntitySet="LeadSources" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20688,7 +20710,7 @@
           <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
           <Property Type="String" Name="cuN" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="ccN" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="bdCardNum" Nullable="true" MaxLength="4" />
+          <Property Type="Int32" Name="bdCardNum" Nullable="true" />
           <Property Type="String" Name="bdExpD" Nullable="true" MaxLength="5" />
           <Property Type="String" Name="bdAuth" Nullable="true" MaxLength="7" />
         </ComplexType>
@@ -22949,6 +22971,18 @@
             </Principal>
             <Dependent Role="MealTicket">
               <PropertyRef Name="meAuthorizedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadSources_SalesRooms">
+          <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="0..1" />
+          <End Type="IMModel.LeadSource" Role="LeadSource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesRoom">
+              <PropertyRef Name="srID" />
+            </Principal>
+            <Dependent Role="LeadSource">
+              <PropertyRef Name="lssr" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
