@@ -593,7 +593,7 @@ namespace IM.ProcessorSales.Classes
     internal static FileInfo RptStatisticsByFTB(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
     {
       var lstReportAux = new List<dynamic>();
-      if (groupedByTeams)
+      /*if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
         {
@@ -626,7 +626,7 @@ namespace IM.ProcessorSales.Classes
           c.SalesExit,
           c.Sales
         }));
-      }
+      }*/
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBGroupedByTeams() : FormatReport.RptStatisticsByFTB(), true, showRowHeaders: true, fileFullPath: fileFullPath);
@@ -649,7 +649,7 @@ namespace IM.ProcessorSales.Classes
     internal static FileInfo RptStatisticsByFTBByLocations(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
     {
       var lstReportAux = new List<dynamic>();
-      if (groupedByTeams)
+      /*if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
         {
@@ -681,7 +681,7 @@ namespace IM.ProcessorSales.Classes
           c.SalesExit,
           c.Sales
         }));
-      }
+      }*/
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByLocationsGroupedByTeams() : FormatReport.RptStatisticsByFTBByLocations(), true, showRowHeaders: true, fileFullPath: fileFullPath);

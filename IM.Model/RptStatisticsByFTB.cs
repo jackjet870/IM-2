@@ -15,21 +15,45 @@ namespace IM.Model
     {
         public string SalemanID { get; set; }
         public string SalemanName { get; set; }
-        public string Locations { get; set; }
-        public string SalemanType { get; set; }
-        public string SalemanTypeN { get; set; }
         public string PostName { get; set; }
         public string TeamN { get; set; }
         public string TeamLeaderN { get; set; }
         public string SalesmanStatus { get; set; }
-        public Nullable<decimal> SalesAmount { get; set; }
-        public Nullable<int> OPP { get; set; }
-        public Nullable<decimal> UPS { get; set; }
-        public Nullable<decimal> SalesRegular { get; set; }
-        public Nullable<decimal> SalesExit { get; set; }
-        public Nullable<decimal> Sales { get; set; }
-        public Nullable<decimal> Efficiency { get; set; }
-        public Nullable<decimal> ClosingFactor { get; set; }
-        public Nullable<decimal> SaleAverage { get; set; }
+        public Nullable<decimal> OwnAmount { get; set; }
+        public Nullable<int> OwnOOP { get; set; }
+        public Nullable<decimal> OwnOUPS { get; set; }
+        public Nullable<decimal> OwnSales { get; set; }
+        public Nullable<decimal> OwnExit { get; set; }
+        public Nullable<decimal> OwnTotal { get; set; }
+        public Nullable<decimal> OwnEfficiency { get; set; }
+        public Nullable<decimal> OwnClosingFactor { get; set; }
+        public Nullable<decimal> OwnSaleAverage { get; set; }
+        public Nullable<decimal> WithAmount { get; set; }
+        public Nullable<int> WithOOP { get; set; }
+        public Nullable<decimal> WithUPS { get; set; }
+        public Nullable<decimal> WithSales { get; set; }
+        public Nullable<decimal> WithExit { get; set; }
+        public Nullable<decimal> WithTotal { get; set; }
+        public Nullable<decimal> WithEfficiency { get; set; }
+        public Nullable<decimal> WithClosingFactor { get; set; }
+        public Nullable<decimal> WithSaleAverage { get; set; }
+        public Nullable<decimal> TotalSalesAmount { get; set; }
+        public Nullable<int> TotalOOP { get; set; }
+        public Nullable<decimal> TotalUPS { get; set; }
+        public Nullable<decimal> TotalSalesRegular { get; set; }
+        public Nullable<decimal> TotalSalesExit { get; set; }
+        public Nullable<decimal> TotalSales { get; set; }
+        public Nullable<decimal> TotalEfficiency { get; set; }
+        public Nullable<decimal> TotalClosingFactor { get; set; }
+        public Nullable<decimal> TotalSaleAverage { get; set; }
+        public Nullable<decimal> AsAmount { get; set; }
+        public Nullable<int> AsOOP { get; set; }
+        public Nullable<decimal> AsOUPS { get; set; }
+        public Nullable<decimal> AsSales { get; set; }
+        public Nullable<decimal> AsExit { get; set; }
+        public Nullable<decimal> AsTotal { get; set; }
+        public Nullable<decimal> AsEfficiency { get; set; }
+        public Nullable<decimal> AsClosingFactor { get; set; }
+        public Nullable<decimal> AsSaleAverage { get; set; }
     }
 }
