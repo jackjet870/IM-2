@@ -1186,6 +1186,12 @@
     <Compile Include="RptStatisticsByFTB.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptStatisticsByFTBCategories.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatisticsByFTBLocations.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptStatisticsByLocation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

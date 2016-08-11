@@ -27,7 +27,7 @@ namespace IM.Model
         public decimal bdAmount { get; set; }
         public string cuN { get; set; }
         public string ccN { get; set; }
-        public string bdCardNum { get; set; }
+        public Nullable<int> bdCardNum { get; set; }
         public string bdExpD { get; set; }
         public string bdAuth { get; set; }
     }

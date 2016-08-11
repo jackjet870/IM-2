@@ -1755,7 +1755,7 @@ namespace IM.BusinessRules.BR
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
           return dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
-          EnumToListHelper.GetEnumDescription(program), byLocations, byLocationsCategories, includeAllSalesmen).ToList();
+          EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
       });
     }

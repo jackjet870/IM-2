@@ -6270,7 +6270,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGiftLog", giftParameter, hoursDifParameter, changedByParameter);
         }
     
-        public virtual ObjectResult<RptStatisticsByFTB> USP_IM_RptStatisticsByFTB(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> byLocations, Nullable<bool> byLocationsCategories, Nullable<bool> includeAllSalesmen)
+        public virtual ObjectResult<RptStatisticsByFTB> USP_IM_RptStatisticsByFTB(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> includeAllSalesmen)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -6296,19 +6296,11 @@ namespace IM.Model
                 new ObjectParameter("Programs", programs) :
                 new ObjectParameter("Programs", typeof(string));
     
-            var byLocationsParameter = byLocations.HasValue ?
-                new ObjectParameter("ByLocations", byLocations) :
-                new ObjectParameter("ByLocations", typeof(bool));
-    
-            var byLocationsCategoriesParameter = byLocationsCategories.HasValue ?
-                new ObjectParameter("ByLocationsCategories", byLocationsCategories) :
-                new ObjectParameter("ByLocationsCategories", typeof(bool));
-    
             var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
                 new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
                 new ObjectParameter("IncludeAllSalesmen", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTB>("USP_IM_RptStatisticsByFTB", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, byLocationsParameter, byLocationsCategoriesParameter, includeAllSalesmenParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTB>("USP_IM_RptStatisticsByFTB", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
         }
     
         public virtual ObjectResult<RptGuestRegistration> USP_OR_RptGuestRegistration(Nullable<int> guestID)
@@ -6378,6 +6370,56 @@ namespace IM.Model
                 new ObjectParameter("DateTo", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<EfficiencyData>("USP_IM_GetEfficiencyByWeeks", salesRoomParameter, dateFromParameter, dateToParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByFTBCategories> USP_IM_RptStatisticsByFTBCategories(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTBCategories>("USP_IM_RptStatisticsByFTBCategories", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, includeAllSalesmenParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByFTBLocations> USP_IM_RptStatisticsByFTBLocations(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTBLocations>("USP_IM_RptStatisticsByFTBLocations", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, includeAllSalesmenParameter);
         }
     }
 }
