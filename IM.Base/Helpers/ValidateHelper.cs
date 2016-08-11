@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Base.Helpers
@@ -388,8 +386,11 @@ namespace IM.Base.Helpers
     /// <param name="upperBound">Limite superior</param>
     /// <param name="description">Nombre del campo</param>
     /// <returns>True is Valid | False No</returns>
+    /// <history>
     /// [erosado] 06/08/2016  Created.
-    public static bool ValidateNumber(int number, int lowerBound, int upperBound, string description)
+    /// [aalcocer] 11/08/2016 Modified. Se cambian los parametros a decimales
+    /// </history>
+    public static bool ValidateNumber(decimal number, decimal lowerBound, decimal upperBound, string description)
     {
       bool _isValid = true;
       if (!(lowerBound <= number && number <= upperBound))
