@@ -2938,7 +2938,7 @@ namespace IM.Base.Forms
             res = false;
             break;
           }
-          else if (String.IsNullOrEmpty(row.bdCardNum))
+          else if (row.bdCardNum == null)
           {
             Helpers.UIHelper.ShowMessage("Input the last four numbers", title: title);
             res = false;

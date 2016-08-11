@@ -11,7 +11,7 @@ namespace IM.Base.Classes
       get
       {
         return String.Concat(this[bdAmount.ToString()], " ", this[bdReceived.ToString()], "  ", this[bdcu]
-                            , " ", this[bdpt], " ", this[bdcc], " ", this[bdCardNum], " ", this[bdExpD]
+                            , " ", this[bdpt], " ", this[bdcc], " ", this[bdCardNum.ToString()], " ", this[bdExpD]
                             , " ", this[!string.IsNullOrEmpty(bdAuth) ? bdAuth : String.Empty], " ", this[bdFolioCXC.HasValue ?  bdFolioCXC.Value.ToString() : String.Empty]);
       }
     }
@@ -81,7 +81,7 @@ namespace IM.Base.Classes
           case "bdCardNum":
             if (bdpt != "CC") break;
 
-            if (!String.IsNullOrEmpty(bdCardNum) && bdCardNum.Length > 4)
+            if (bdCardNum != null && bdCardNum > 9999)
             {
               errorMessage = "Type the last four numbers.";
             }
