@@ -1852,11 +1852,13 @@ namespace IM.Inhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing,login.UserData, guestArrival.guID)
-        {
-          Owner = this
-        };
+        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login.UserData, guestArrival.guID);
+        invitacion.Owner = this;
         invitacion.ShowDialog();
+        //{
+        //  Owner = this
+        //};
+
       }
 
 

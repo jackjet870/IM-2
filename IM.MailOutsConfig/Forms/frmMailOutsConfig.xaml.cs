@@ -22,6 +22,8 @@ namespace IM.MailOutsConfig.Forms
     #region Propiedades y Atributos
     public ExecuteCommandHelper RefreshDataSource { get; set; }
     MailOut _selectedMailOut;
+    LeadSourceByUser _lsbyUser;
+
     #endregion
     public frmMailOutsConfig()
     {
@@ -38,6 +40,9 @@ namespace IM.MailOutsConfig.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadDataSource();
+
+      //Configuramos los controles
+      UIHelper.SetUpControls(new MailOut(), this);
     }
     /// <summary>
     /// Guarda los cambios de un MailOut
@@ -126,8 +131,9 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void cbxLeadSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      LeadSourceByUser lsbyUser = cbxLeadSource.SelectedItem as LeadSourceByUser;
-      DoGetMailOuts(lsbyUser?.lsID);
+      _lsbyUser = cbxLeadSource.SelectedItem as LeadSourceByUser;
+
+      DoGetMailOuts(_lsbyUser?.lsID);
       StaStart("Searching MailOut List...");
     }
 
@@ -185,8 +191,9 @@ namespace IM.MailOutsConfig.Forms
     /// <param name="ls">LeadSourceID</param>
     /// <history>
     /// [erosado] 13/04/2016  Created
+    /// [erosado] 12/08/2016  Modified. si el envias un moCod lo busca en la lista y lo selecciona.
     /// </history>
-    public async void DoGetMailOuts(string ls)
+    public async void DoGetMailOuts(string ls, string moCod = "")
     {
       try
       {
@@ -195,7 +202,10 @@ namespace IM.MailOutsConfig.Forms
         {
           lsbxMailOuts.ItemsSource = data;
           txtbMailOutsNumber.Text = data.Count.ToString();
-          lsbxMailOuts.SelectedIndex = 0;
+
+          //Buscamos en la lista el moCod
+          var index = data.FindIndex(x => x.moCode == moCod);
+          lsbxMailOuts.SelectedIndex = index != -1 ? index : 0;
         }
         StaEnd();
       }
@@ -302,7 +312,8 @@ namespace IM.MailOutsConfig.Forms
     /// </summary>
     /// <param name="mo">MailOut</param>
     /// <history>
-    /// [erosado] 20/04/2016 Created
+    /// [erosado] 20/04/2016  Created.
+    /// [erosado] 12/08/2016  Modified. Cuando se guarda la informacion del MailOut se mantiene seleccionado en la lista lsbxMailOuts.
     /// </history>
     public async void DoUpdateMailOut(MailOut mo)
     {
@@ -313,11 +324,7 @@ namespace IM.MailOutsConfig.Forms
         {
           UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
           EditModeOff();
-          cbxLeadSource_SelectionChanged(this, null);
-        }
-        else
-        {
-          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+          DoGetMailOuts(_lsbyUser.lsID, mo.moCode);
         }
         StaEnd();
       }
@@ -371,7 +378,7 @@ namespace IM.MailOutsConfig.Forms
         if (data != 0)
         {
           UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-          cbxLeadSource_SelectionChanged(this, null);
+          DoGetMailOuts(_lsbyUser.lsID, moCode);
         }
         else
         {

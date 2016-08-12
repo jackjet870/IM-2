@@ -34,405 +34,291 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
     </Window.InputBindings>
-    <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
+    <wpftk:BusyIndicator  x:Name="_busyIndicator">
+        <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
 
-        <!--#region Barra decoracion -->
-        <Border Background="#147F79" Height="42" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0">
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="21"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
 
-                <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
-                </Viewbox>
-                <TextBlock x:Name="txtUserName" VerticalAlignment="Center"
+            <!--#region Barra decoracion -->
+            <Border Background="#147F79" Height="42" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0">
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="21"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
+                        <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
+                    </Viewbox>
+                    <TextBlock x:Name="txtUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
-                <TextBlock x:Name="txtPlaces" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2"/>
-            </Grid>
-        </Border>
-        <!--#endregion-->
+                    <TextBlock x:Name="txtPlaces" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
 
-        <!--#region Barra de Menu Opciones-->
-        <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
-            <StackPanel >
-                <TextBlock Text="Option Menu" Margin="10,0,0,0"/>
+            <!--#region Barra de Menu Opciones-->
+            <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
+                <StackPanel >
+                    <TextBlock Text="Option Menu" Margin="10,0,0,0"/>
 
-                <StackPanel Orientation="Horizontal" Height="40">
-                    <Border x:Name="imgButtonEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonEdit_MouseLeftButtonDown">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
-                            </Viewbox>
-                            <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" >
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
-                            </Viewbox>
-                            <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Border>
-                    <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
-                            </Viewbox>
-                            <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Border>
-                    <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonCancel_MouseLeftButtonDown">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
-                            </Viewbox>
-                            <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Border>
-                    <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonLog_MouseLeftButtonDown">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png"/>
-                            </Viewbox>
-                            <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Border>
-                    <TextBlock Name="txbMode" Text="Mode Edit" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                    <StackPanel Orientation="Horizontal" Height="40">
+                        <Border x:Name="imgButtonEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonEdit_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" >
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonCancel_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonLog_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <TextBlock Name="txbMode" Text="" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </Border>
-        <!--#endregion-->
+            </Border>
+            <!--#endregion-->
 
-        <!--#region  TabControl-->
-        <Border CornerRadius="5" Padding="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,5">
-            <TabControl Style="{StaticResource TabControlStyle}">
-                <TabItem Name="tabGeneral" Style="{StaticResource TabItemStyle}" Header="General">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+            <!--#region  TabControl-->
+            <Border CornerRadius="5" Padding="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,5">
+                <TabControl Style="{StaticResource TabControlStyle}">
+                    <TabItem Name="tabGeneral" Style="{StaticResource TabItemStyle}" Header="General">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                            <!--#region Guest Info  Row 0-->
-                            <Border x:Name="brdGuestInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1">
-                                <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                    <StackPanel Orientation="Horizontal">
-                                        <StackPanel Name="stkGuestInfo">
-                                            <TextBlock Text="Guest Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                            <StackPanel Name="stkGuid" Orientation="Horizontal">
-                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                    <TextBlock Text="GUID" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguID" Width="100" Text="{Binding GuestObj.guID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
-                                                    <TextBlock Text="Rsrv. Num.*" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
-                                                </StackPanel>
-                                                <Border x:Name="imgSearch" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Viewbox Stretch="Uniform" Width="20">
-                                                            <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
-                                                        </Viewbox>
-                                                        <TextBlock Name="btnSearch" Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                                <!--#region Guest Info  Row 0-->
+                                <Border x:Name="brdGuestInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1">
+                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel Name="stkGuestInfo">
+                                                <TextBlock Text="Guest Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                <StackPanel Name="stkGuid" Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="GUID" TextAlignment="Center"/>
+                                                        <TextBox Name="txtguID" Width="100" Text="{Binding GuestObj.guID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
-                                                </Border>
-                                                <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
-                                                    <TextBlock Text="Out Invit." TextAlignment="Center"/>
-                                                    <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding GuestObj.guOutInvitNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel Name="stkRebookRef" VerticalAlignment="Center" Margin="3,0">
-                                                    <TextBlock Text="Rebook Ref." TextAlignment="Center"/>
-                                                    <TextBox Name="txtguRef" Width="100" Text="{Binding GuestObj.guRef, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" >
-                                                    <TextBlock Text="Date" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguInvitD" Width="100" Text="{Binding GuestObj.guInvitD, Mode=TwoWay, StringFormat={}{'dd/MM/yyy'} , UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                    <TextBlock Text="Time" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguInvitT" Width="100" Text="{Binding GuestObj.guInvitT, Mode=TwoWay, StringFormat={}{'hh:mm'}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
+                                                        <TextBlock Text="Rsrv. Num.*" TextAlignment="Center"/>
+                                                        <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
+                                                    </StackPanel>
+                                                    <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Viewbox Stretch="Uniform" Width="20">
+                                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
+                                                            </Viewbox>
+                                                            <TextBlock Name="btnSearch" Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
+                                                        <TextBlock Text="Out Invit." TextAlignment="Center"/>
+                                                        <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding GuestObj.guOutInvitNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Name="stkRebookRef" VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Rebook Ref." TextAlignment="Center"/>
+                                                        <TextBox Name="txtguRef" Width="100" Text="{Binding GuestObj.guRef, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" >
+                                                        <TextBlock Text="Date" TextAlignment="Center"/>
+                                                        <TextBox Name="txtguInvitD" Width="100" Text="{Binding GuestObj.guInvitD, Mode=TwoWay, StringFormat={}{'dd/MM/yyy'} , UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Time" TextAlignment="Center"/>
+                                                        <TextBox Name="txtguInvitT" Width="100" Text="{Binding GuestObj.guInvitT, Mode=TwoWay, StringFormat={}{'hh:mm'}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                        <StackPanel Name="stkInvitationTypeAndLenguage">
-                                            <TextBlock Text="Invitation Type &amp; Languages" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Name="stkInvitationTypeAndLenguage">
+                                                <TextBlock Text="Invitation Type &amp; Languages" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <StackPanel  VerticalAlignment="Center" >
-                                                        <TextBlock Text="Quiniella" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkguQuinella" HorizontalAlignment="Center" 
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel  VerticalAlignment="Center" >
+                                                            <TextBlock Text="Quiniella" TextAlignment="Center"/>
+                                                            <CheckBox Name="chkguQuinella" HorizontalAlignment="Center" 
                                                                   IsChecked="{Binding GuestObj.guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </StackPanel>
-                                                    <StackPanel  VerticalAlignment="Center" Margin="3,0">
-                                                        <TextBlock Text="Show" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkguShow" HorizontalAlignment="Center"
+                                                        </StackPanel>
+                                                        <StackPanel  VerticalAlignment="Center" Margin="3,0">
+                                                            <TextBlock Text="Show" TextAlignment="Center"/>
+                                                            <CheckBox Name="chkguShow" HorizontalAlignment="Center"
                                                                   IsChecked="{Binding GuestObj.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </StackPanel>
-                                                    <StackPanel  VerticalAlignment="Center" Margin="3,0">
-                                                        <TextBlock Text="Interval" TextAlignment="Center"/>
-                                                        <CheckBox Name="chkguInterval" HorizontalAlignment="Center"
+                                                        </StackPanel>
+                                                        <StackPanel  VerticalAlignment="Center" Margin="3,0">
+                                                            <TextBlock Text="Interval" TextAlignment="Center"/>
+                                                            <CheckBox Name="chkguInterval" HorizontalAlignment="Center"
                                                                   IsChecked="{Binding GuestObj.guInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </StackPanel>
-                                                    <StackPanel  VerticalAlignment="Center" Margin="3,0">
-                                                        <TextBlock Text="Language" TextAlignment="Center"/>
-                                                        <ComboBox Name="cmbLanguage" Width="120"  TextSearch.TextPath="laID"
+                                                        </StackPanel>
+                                                        <StackPanel  VerticalAlignment="Center" Margin="3,0">
+                                                            <TextBlock Text="Language" TextAlignment="Center"/>
+                                                            <ComboBox Name="cmbLanguage" Width="120"  TextSearch.TextPath="laID"
                                                                   ItemsSource="{Binding Languages}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Languages-Concat}"
                                                                   ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="guID"
                                                                   SelectedValue="{Binding GuestObj.gula, Mode=OneWayToSource}"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </Viewbox>
-                            </Border>
-                            <!--#endregion-->
-
-                            <!--#region Profile Opera Row 1-->
-                            <Border x:Name="brdProfileOpera" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Profile Opera" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel Name="stkProfileOpera" Orientation="Horizontal">
-                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="ID" TextAlignment="Center"/>
-                                                <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera, Mode=TwoWay}" MaxLength="15"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center" Margin="3">
-                                                <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding GuestObj.guLastNameOriginal, Mode=TwoWay}" MaxLength="65"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding GuestObj.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40"/>
-                                            </StackPanel>
-                                        </StackPanel>
                                     </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                </Border>
+                                <!--#endregion-->
 
-                            <!--#region Guest1 Row 2-->
-                            <Border x:Name="brdGuest1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Guest 1" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel Name="stkGuest1" Orientation="Horizontal">
-                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="Last Name*" TextAlignment="Center"/>
-                                                <TextBox Name="txtguLastName1" Width="100" Text="{Binding GuestObj.guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="65" Tag="Guest 1 Last Name "/>
+                                <!--#region Profile Opera Row 1-->
+                                <Border x:Name="brdProfileOpera" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Profile Opera" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel Name="stkProfileOpera" Orientation="Horizontal">
+                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="ID" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera, Mode=TwoWay}" MaxLength="15"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="3">
+                                                    <TextBlock Text="Last Name" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding GuestObj.guLastNameOriginal, Mode=TwoWay}" MaxLength="65"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="First Name" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding GuestObj.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40"/>
+                                                </StackPanel>
                                             </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="First Name*" TextAlignment="Center"/>
-                                                <TextBox Name="txtguFirstName1" Width="100" Text="{Binding GuestObj.guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Tag="Guest 1 First Name "/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="Age" TextAlignment="Center"/>
-                                                <TextBox Name="txtguAge1" Width="50" Text="{Binding GuestObj.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cbogums1" Width="100" TextSearch.TextPath="msID"
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
+
+                                <!--#region Guest1 Row 2-->
+                                <Border x:Name="brdGuest1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Guest 1" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel Name="stkGuest1" Orientation="Horizontal">
+                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="Last Name*" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguLastName1" Width="100" Text="{Binding GuestObj.guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="65" Tag="Guest 1 Last Name "/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="First Name*" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguFirstName1" Width="100" Text="{Binding GuestObj.guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Tag="Guest 1 First Name "/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="Age" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguAge1" Width="50" Text="{Binding GuestObj.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Marital Status" TextAlignment="Center"/>
+                                                    <ComboBox Name="cbogums1" Width="100" TextSearch.TextPath="msID"
                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.msN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="msID"
                                                           SelectedValue="{Binding GuestObj.gums1,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Ocupation" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguOccup1" Width="100" Text="{Binding GuestObj.guOccup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Email" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguEmail1" Width="100" Text="{Binding GuestObj.guEmail1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
                                             </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                <TextBox Name="txtguOccup1" Width="100" Text="{Binding GuestObj.guOccup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Email" TextAlignment="Center"/>
-                                                <TextBox Name="txtguEmail1" Width="100" Text="{Binding GuestObj.guEmail1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                            <!--#region Guest2 Row 3-->
-                            <Border x:Name="brdGuest2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Guest 2" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel Name="stkGuest2" Orientation="Horizontal">
-                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtguLastName2" Width="100" Text="{Binding GuestObj.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                <TextBox Name="txtguFirstName2" Width="100" Text="{Binding GuestObj.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="Age" TextAlignment="Center"/>
-                                                <TextBox Name="txtguAge2" Width="50" Text="{Binding GuestObj.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox x:Name="cbogums2" Width="100" TextSearch.TextPath="msID"
+                                <!--#region Guest2 Row 3-->
+                                <Border x:Name="brdGuest2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Guest 2" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel Name="stkGuest2" Orientation="Horizontal">
+                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="Last Name" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguLastName2" Width="100" Text="{Binding GuestObj.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="First Name" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguFirstName2" Width="100" Text="{Binding GuestObj.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="Age" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguAge2" Width="50" Text="{Binding GuestObj.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Marital Status" TextAlignment="Center"/>
+                                                    <ComboBox x:Name="cbogums2" Width="100" TextSearch.TextPath="msID"
                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
                                                           ToolTip="{Binding SelectedItem.msN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="msID"
                                                           SelectedValue="{Binding GuestObj.gums2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                <TextBox Name="txtguOccup2" Width="100" Text="{Binding GuestObj.guOccup2, Mode=TwoWay}"/>
-                                            </StackPanel>
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock Text="Email" TextAlignment="Center"/>
-                                                <TextBox Name="txtguEmail2" Width="100" Text="{Binding GuestObj.guEmail2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
-
-                            <!--#region PR Row 4-->
-                            <Border x:Name="brdPRInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
-                                <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition  Height="20"/>
-                                            <RowDefinition  Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
-                                            <Button Name="btnChange" Content="Change" Width="100"/>
-                                            <Button Name="btnReschedule" Content="Reschedule" Width="100" Margin="5,0"/>
-                                            <Button Name="btnRebook" Content="Rebook" Width="100"/>
-                                        </StackPanel>
-
-                                        <StackPanel Name="stkPRContactAndPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10" >
-                                            <StackPanel Name="stkPRContact" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                                                <TextBlock Text="PR Contact*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left" >
-                                                        <TextBlock Text="{Binding ElementName=cmbPRContact, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbPRContact" Width="200"  TextSearch.TextPath="peID" 
-                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
-                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="peID"
-                                                                  SelectedValue="{Binding GuestObj.guPRInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR Contact"/>
-                                                    </StackPanel>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Ocupation" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguOccup2" Width="100" Text="{Binding GuestObj.guOccup2, Mode=TwoWay}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Email" TextAlignment="Center"/>
+                                                    <TextBox Name="txtguEmail2" Width="100" Text="{Binding GuestObj.guEmail2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </StackPanel>
-                                            <StackPanel Name="stkPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                                                <TextBlock Text="PR*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding ElementName=cmbPR, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbPR" Width="200"  TextSearch.TextPath="peID" 
-                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
-                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="peID"
-                                                                  SelectedValue="{Binding GuestObj.guPRInvit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR"/>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </StackPanel>
-
-                                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="0,5,10,10">
-                                            <StackPanel Name="stkSales" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                                                <TextBlock Text="Sales Room*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left" >
-                                                        <TextBlock Text="{Binding ElementName=cmbSalesRooms, Path=SelectedItem.srID, StringFormat='SalesRoom ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbSalesRooms" Width="200"  TextSearch.TextPath="srID" 
-                                                                  ItemsSource="{Binding SalesRoom}" Style="{StaticResource cbx-General}"
-                                                                  ItemTemplate="{StaticResource cbx-SaleRoom-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="srID"
-                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Sales Room"/>
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <StackPanel Name="stkLocation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                                                <TextBlock Text="Location*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding ElementName=cmbLocation, Path=SelectedItem.loID, StringFormat='Location ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbLocation" Width="200"  TextSearch.TextPath="loID" 
-                                                                  ItemsSource="{Binding Locations}" 
-                                                                  ItemTemplate="{StaticResource cbx-Location-img}"
-                                                                  ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="loID"
-                                                                  SelectedValue="{Binding GuestObj.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location">
-                                                        </ComboBox>
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </StackPanel>
-                                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
-                                            <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                            <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <TextBlock Text="Time" Margin="0,5"/>
-                                            <ComboBox Name="cmbBookT" Width="130"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                            <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </StackPanel>
-                                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
-                                            <TextBlock Text="Reschedule Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                            <StackPanel Orientation="Horizontal" >
-                                                <StackPanel Name="stkRescheduleDate">
-                                                    <TextBlock Text="Reschedule Date" Margin="0,5"/>
-                                                    <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"  Value="{Binding GuestObj.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <TextBlock Text="Time" Margin="0,5"/>
-                                                    <ComboBox Name="cmbReschT" Width="130" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel Name="stkFlightNumber" Margin="5,0">
-                                                    <TextBlock Text="Flight Number" Margin="0,5"/>
-                                                    <TextBox Name="txtguFlight" Width="120" Text="{Binding GuestObj.guFlight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding GuestObj.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Viewbox>
-                            </Border>
-                            <!--#endregion-->
-
-                            <!--#region Guest2 Row 5-->
-                            <Border x:Name="brdOtherInformation" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Other Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                <!--#region PR Row 4-->
+                                <Border x:Name="brdPRInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <Grid >
                                             <Grid.ColumnDefinitions>
@@ -440,131 +326,248 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition  Height="Auto"/>
-                                                <RowDefinition  Height="*"/>
+                                                <RowDefinition  Height="20"/>
                                                 <RowDefinition  Height="*"/>
                                             </Grid.RowDefinitions>
 
-                                            <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
-                                                <TextBlock Text="Comments"/>
-                                                <TextBox Name="txtguExtraInfo" Text="{Binding GuestObj.guExtraInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
+                                                <Button Name="btnChange" Content="Change" Width="100"/>
+                                                <Button Name="btnReschedule" Content="Reschedule" Width="100" Margin="5,0"/>
+                                                <Button Name="btnRebook" Content="Rebook" Width="100"/>
                                             </StackPanel>
 
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
-                                                <TextBlock Text="Hotel*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="Room #" Margin="0,5" />
-                                                        <TextBox Name="txtguRoomNum" Width="50" Text="{Binding GuestObj.guRoomNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <StackPanel Name="stkPRContactAndPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10" >
+                                                <StackPanel Name="stkPRContact" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                                    <TextBlock Text="PR Contact*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left" >
+                                                            <TextBlock Text="{Binding ElementName=cmbPRContact, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbPRContact" Width="200"  TextSearch.TextPath="peID" 
+                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID"
+                                                                  SelectedValue="{Binding GuestObj.guPRInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR Contact"/>
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                    <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
-                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.hoID, StringFormat='Hotel ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoHotel" Width="200" TextSearch.TextPath="hoID" 
+                                                </StackPanel>
+                                                <StackPanel Name="stkPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                                    <TextBlock Text="PR*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="{Binding ElementName=cmbPR, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbPR" Width="200"  TextSearch.TextPath="peID" 
+                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID"
+                                                                  SelectedValue="{Binding GuestObj.guPRInvit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR"/>
+
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="0,5,10,10">
+                                                <StackPanel Name="stkSales" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                                    <TextBlock Text="Sales Room*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left" >
+                                                            <TextBlock Text="{Binding ElementName=cmbSalesRooms, Path=SelectedItem.srID, StringFormat='SalesRoom ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbSalesRooms" Width="200"  TextSearch.TextPath="srID" 
+                                                                  ItemsSource="{Binding SalesRoom}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-SaleRoom-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="srID"
+                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Sales Room"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <StackPanel Name="stkLocation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                                    <TextBlock Text="Location*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="{Binding ElementName=cmbLocation, Path=SelectedItem.loID, StringFormat='Location ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbLocation" Width="200"  TextSearch.TextPath="loID" 
+                                                                  ItemsSource="{Binding Locations}" 
+                                                                  ItemTemplate="{StaticResource cbx-Location-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="loID" 
+                                                                  SelectedValue="{Binding GuestObj.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location">
+                                                            </ComboBox>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
+                                                <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Text="Time" Margin="0,5"/>
+                                                <ComboBox Name="cmbBookT" Width="130"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
+                                                <TextBlock Text="Reschedule Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <StackPanel Name="stkRescheduleDate">
+                                                        <TextBlock Text="Reschedule Date" Margin="0,5"/>
+                                                        <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"  Value="{Binding GuestObj.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBlock Text="Time" Margin="0,5"/>
+                                                        <ComboBox Name="cmbReschT" Width="130" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding GuestObj.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Name="stkFlightNumber" Margin="5,0">
+                                                        <TextBlock Text="Flight Number" Margin="0,5"/>
+                                                        <TextBox Name="txtguFlight" Width="120" Text="{Binding GuestObj.guFlight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                
+                                            </StackPanel>
+                                        </Grid>
+                                    </Viewbox>
+                                </Border>
+                                <!--#endregion-->
+
+                                <!--#region Guest2 Row 5-->
+                                <Border x:Name="brdOtherInformation" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Other Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition  Height="Auto"/>
+                                                    <RowDefinition  Height="*"/>
+                                                    <RowDefinition  Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
+                                                    <TextBlock Text="Comments"/>
+                                                    <TextBox Name="txtguExtraInfo" Text="{Binding GuestObj.guExtraInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+
+                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
+                                                    <TextBlock Text="Hotel*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="Room #" Margin="0,5" />
+                                                            <TextBox Name="txtguRoomNum" Width="50" Text="{Binding GuestObj.guRoomNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </StackPanel>
+                                                        <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
+                                                            <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.hoID, StringFormat='Hotel ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbOtherInfoHotel" Width="200" TextSearch.TextPath="hoID" 
                                                                   ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Hotel-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="hoID"
                                                                   SelectedValue="{Binding GuestObj.guHotel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Hotel"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Margin="0,5,10,10">
-                                                <TextBlock Text="Agency*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoAgency, Path=SelectedItem.agID, StringFormat='Agency ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoAgency" Width="200" TextSearch.TextPath="agID"  
+                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" Margin="0,5,10,10">
+                                                    <TextBlock Text="Agency*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="{Binding ElementName=cmbOtherInfoAgency, Path=SelectedItem.agID, StringFormat='Agency ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbOtherInfoAgency" Width="200" TextSearch.TextPath="agID"  
                                                                   ItemsSource="{Binding Agencies}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Agency-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="agID"
                                                                   SelectedValue="{Binding GuestObj.guag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Agency"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="0,5,10,10">
-                                                <TextBlock Text="Country*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding ElementName=cmbOtherInfoCountry, Path=SelectedItem.coID, StringFormat='Country ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoCountry" Width="200" TextSearch.TextPath="coN"
+                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="0,5,10,10">
+                                                    <TextBlock Text="Country*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="{Binding ElementName=cmbOtherInfoCountry, Path=SelectedItem.coID, StringFormat='Country ID: {0}'}" Margin="0,5"/>
+                                                            <ComboBox Name="cmbOtherInfoCountry" Width="200" TextSearch.TextPath="coN"
                                                                   ItemsSource="{Binding Countries}" Style="{StaticResource cbx-General}" 
                                                                   ItemTemplate="{StaticResource cbx-Country-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="coID"
                                                                   SelectedValue="{Binding GuestObj.guco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Country"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
-                                                <TextBlock Text="Reservation info" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel HorizontalAlignment="Left">
-                                                        <TextBlock Text="Pax" Margin="0,5"/>
-                                                        <TextBox Name="txtguPax" Width="50" Text="{Binding GuestObj.guPax, Mode=TwoWay, StringFormat={}{0:n2}, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </StackPanel>
-                                                    <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
-                                                        <TextBlock Text="Arrival*" Margin="0,5"/>
-                                                        <wpftk:DateTimePicker Name="dtpOtherInfoArrivalD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckInD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Arrival"/>
-                                                    </StackPanel>
-                                                    <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
-                                                        <TextBlock Text="Departure*" Margin="0,5"/>
-                                                        <wpftk:DateTimePicker Name="dtpOtherInfoDepartureD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Deperture"/>
+                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
+                                                    <TextBlock Text="Reservation info" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel HorizontalAlignment="Left">
+                                                            <TextBlock Text="Pax" Margin="0,5"/>
+                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding GuestObj.guPax, Mode=TwoWay, StringFormat={}{0:n2}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </StackPanel>
+                                                        <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
+                                                            <TextBlock Text="Arrival*" Margin="0,5"/>
+                                                            <wpftk:DateTimePicker Name="dtpOtherInfoArrivalD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckInD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Arrival"/>
+                                                        </StackPanel>
+                                                        <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
+                                                            <TextBlock Text="Departure*" Margin="0,5"/>
+                                                            <wpftk:DateTimePicker Name="dtpOtherInfoDepartureD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Deperture"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
 
-                                        </Grid>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
-                        </Grid>
-                    </ScrollViewer>
+                                            </Grid>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
+                            </Grid>
+                        </ScrollViewer>
 
-                </TabItem>
-                <TabItem Name="tabStatusGiftsOthers" Style="{StaticResource TabItemStyle}" Header="Status, Gifts, Deposits &amp; Additional Guests">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                    </TabItem>
+                    <TabItem Name="tabStatusGiftsOthers" Style="{StaticResource TabItemStyle}" Header="Status, Gifts, Deposits &amp; Additional Guests">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                            <!--#region Guest Status Row 0-->
-                            <Border x:Name="brdGuestStatus" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1">
-                                <StackPanel>
-                                    <TextBlock Text="Guest Status*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel HorizontalAlignment="Left">
-                                                <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.gsID, StringFormat='Guest Status ID: {0}'}" Margin="0,5"/>
-                                                <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
+                                <!--#region Guest Status Row 0-->
+                                <Border x:Name="brdGuestStatus" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1">
+                                    <StackPanel>
+                                        <TextBlock Text="Guest Status*" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.gsID, StringFormat='Guest Status ID: {0}'}" Margin="0,5"/>
+                                                    <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
                                                           ItemsSource="{Binding GuestStatusTypes}" Style="{StaticResource cbx-General}"
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
                                                           SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
+                                                </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                            <!--#region Gifts Row 1-->
-                            <Border x:Name="brdGifts" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel>
-                                            <DataGrid Name="dtgGifts" BeginningEdit="dtgGifts_BeginningEdit" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                <!--#region Gifts Row 1-->
+                                <Border x:Name="brdGifts" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel>
+                                                <DataGrid Name="dtgGifts" BeginningEdit="dtgGifts_BeginningEdit" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                       EnableRowVirtualization="True"
                                                       IsSynchronizedWithCurrentItem="True"
                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" 
@@ -574,246 +577,248 @@
                                                       RowEditEnding="dtgGifts_RowEditEnding"
                                                      
                                                       >
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Qty"
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Qty"
                                                                         styClasses:MaxLengthPropertyClass.MaxLength="2"
                                                                         ElementStyle="{StaticResource txt-ErrorInfo}"
-                                                                        Binding="{Binding igQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                        Binding="{Binding igQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        </DataGridTextColumn>
 
-                                                    <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
+                                                        <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
                                                                             SelectedValueBinding="{Binding iggi, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="giN" SelectedValuePath="giID"
                                                                             ItemsSource="{Binding Source={StaticResource giftList}}" />
 
-                                                    <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
+                                                        <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
                                                                         styClasses:MaxLengthPropertyClass.MaxLength="4"
                                                                         Binding="{Binding igAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    </DataGridTextColumn>
+                                                        </DataGridTextColumn>
 
-                                                    <DataGridTextColumn Header="Minors"
+                                                        <DataGridTextColumn Header="Minors"
                                                                         styClasses:MaxLengthPropertyClass.MaxLength="2"
                                                                          ElementStyle="{StaticResource txt-ErrorInfo}"
                                                                         Binding="{Binding igMinors, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger =PropertyChanged}">
-                                                    </DataGridTextColumn>
+                                                        </DataGridTextColumn>
 
-                                                    <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
+                                                        <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
 
-                                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                                <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="Max Auth" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftMaxAuth" Width="100" />
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="5,0">
-                                                    <TextBlock Text="Total Cost" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalCost" Width="100" />
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="Total Price" TextAlignment="Center"/>
-                                                    <TextBox Name="txtGiftTotalPrice" Width="100" />
+                                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="Max Auth" TextAlignment="Center"/>
+                                                        <TextBox Name="txtGiftMaxAuth" Width="100" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0">
+                                                        <TextBlock Text="Total Cost" TextAlignment="Center"/>
+                                                        <TextBox Name="txtGiftTotalCost" Width="100" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="Total Price" TextAlignment="Center"/>
+                                                        <TextBox Name="txtGiftTotalPrice" Width="100" />
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
 
 
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                            <!--#region Deposits Row 2-->
-                            <Border x:Name="brdDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel>
-                                            <DataGrid Name="dtgBookingDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding BookingDepositList}" 
+                                <!--#region Deposits Row 2-->
+                                <Border x:Name="brdDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel>
+                                                <DataGrid Name="dtgBookingDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding BookingDepositList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="bdID" Binding="{Binding bdID}"/>
-                                                    <DataGridTextColumn Header="Date" Binding="{Binding bdID}"/>
-                                                    <DataGridTextColumn Header="Deposits" Width="70"/>
-                                                    <DataGridTextColumn Header="Received" Width="70"/>
-                                                    <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyDeposits" Header="Currency" Width="90"                                                                           
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="bdID" Binding="{Binding bdID}"/>
+                                                        <DataGridTextColumn Header="Date" Binding="{Binding bdID}"/>
+                                                        <DataGridTextColumn Header="Deposits" Width="70"/>
+                                                        <DataGridTextColumn Header="Received" Width="70"/>
+                                                        <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True"/>
+                                                        <DataGridComboBoxColumn x:Name="cmbCurrencyDeposits" Header="Currency" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding iggi}"
                                                                             DisplayMemberPath="cuN" 
                                                                             SelectedValuePath="cuID"
                                                                             ItemsSource="{Binding Source={StaticResource currencyList}}" />
-                                                    <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"                                                                           
+                                                        <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding iggi}"
                                                                             DisplayMemberPath="ptN" 
                                                                             SelectedValuePath="ptID"
                                                                             ItemsSource="{Binding Source={StaticResource paymentTypeList}}" />
-                                                    <DataGridComboBoxColumn x:Name="cmbDisputeStatusDeposits" Header="Dispute Status" Width="90"                                                                           
+                                                        <DataGridComboBoxColumn x:Name="cmbDisputeStatusDeposits" Header="Dispute Status" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding iggi}"
                                                                             DisplayMemberPath="dsN" 
                                                                             SelectedValuePath="dsID"
                                                                             ItemsSource="{Binding Source={StaticResource disputeStatusList}}"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"                                                                           
+                                                        <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding iggi}"
                                                                             DisplayMemberPath="pcN" 
                                                                             SelectedValuePath="pcID"
                                                                             ItemsSource="{Binding Source={StaticResource paymentPlaceList}}"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbCreditCardTypesDeposits" Header="Credit Card" Width="90"                                                                           
+                                                        <DataGridComboBoxColumn x:Name="cmbCreditCardTypesDeposits" Header="Credit Card" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding iggi}"
                                                                             DisplayMemberPath="ccN" 
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
-                                                    <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum, ValidatesOnDataErrors=True}"/>
-                                                    <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD, ValidatesOnDataErrors=True}"/>
-                                                    <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth, ValidatesOnDataErrors=True}"/>
-                                                    <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC, ValidatesOnDataErrors=True}"/>
-                                                    <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC, ValidatesOnDataErrors=True}" IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True"/>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel>
-                                                    <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
-                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
-                                                    <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
+                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum, ValidatesOnDataErrors=True}"/>
+                                                        <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD, ValidatesOnDataErrors=True}"/>
+                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth, ValidatesOnDataErrors=True}"/>
+                                                        <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC, ValidatesOnDataErrors=True}"/>
+                                                        <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC, ValidatesOnDataErrors=True}" IsReadOnly="True"/>
+                                                        <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel>
+                                                        <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
+                                                        <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
+                                                        <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
                                                               ItemsSource="{Binding Currencies}" Style="{StaticResource cbx-General}" 
                                                               ItemTemplate="{StaticResource cbx-Currency-Concat}"
                                                               ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="cuID"
                                                               SelectedValue="{Binding GuestObj.gucu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    </ComboBox>
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
-                                                    <TextBlock Text="Payment Type" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbPaymentType" Width="200"  TextSearch.TextPath="ptN"
+                                                        </ComboBox>
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Payment Type" TextAlignment="Center" Margin="0,5"/>
+                                                        <ComboBox Name="cmbPaymentType" Width="200"  TextSearch.TextPath="ptN"
                                                               ItemsSource="{Binding PaymentTypes}" Style="{StaticResource cbx-General}"
                                                               ItemTemplate="{StaticResource cbx-PaymentType-Concat}"
                                                               ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="ptID"
                                                               SelectedValue="{Binding GuestObj.gupt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
-                                                    <TextBlock Text="Resort" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbResorts" Width="200"  TextSearch.TextPath="hoID"
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Resort" TextAlignment="Center" Margin="0,5"/>
+                                                        <ComboBox Name="cmbResorts" Width="200"  TextSearch.TextPath="hoID"
                                                               ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
                                                               ItemTemplate="{StaticResource cbx-Hotel-img}"
                                                               ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="hoID"
                                                               SelectedValue="{Binding GuestObj.guHotelB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                            <!--#region Credit Card Row 3-->
-                            <Border x:Name="brdCreditCard" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Credit Card" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel>
-                                            <StackPanel Name="stkCcCompany">
-                                                <TextBlock Text="CC Company"/>
-                                                <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </StackPanel>
-                                            <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}" 
+                                <!--#region Credit Card Row 3-->
+                                <Border x:Name="brdCreditCard" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Credit Card" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel>
+                                                <StackPanel Name="stkCcCompany">
+                                                    <TextBlock Text="CC Company"/>
+                                                    <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Qty" Binding="{Binding gdQuantity}" Width="40"/>
-                                                    <DataGridTextColumn Header="gdcc" Binding="{Binding gdcc}" Visibility="Hidden"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Qty" Binding="{Binding gdQuantity}" Width="40"/>
+                                                        <DataGridTextColumn Header="gdcc" Binding="{Binding gdcc}" Visibility="Hidden"/>
+                                                        <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"
                                                                             SelectedValueBinding="{Binding gdcc, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="ccN"
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}" />
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
-
-                            <!--#region Additional Guest Row 4-->
-                            <Border x:Name="brdAdditionalGuest" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Additional Guest" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel>
-                                            <DataGrid  Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False" MaxHeight="80" Height="80">
-                                                <DataGrid.Columns>
-                                                    <DataGridTemplateColumn Header="Search" Width="55">
-                                                        <DataGridTemplateColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15"  />
-                                                            </DataTemplate>
-                                                        </DataGridTemplateColumn.CellTemplate>
-                                                    </DataGridTemplateColumn>
-                                                    <DataGridTextColumn Header="GUID" Binding="{Binding guID, ValidatesOnDataErrors=True}"/>
-                                                    <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True" />
-                                                    <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
-                                                    <DataGridTemplateColumn Width="55">
-                                                        <DataGridTemplateColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
-                                                            </DataTemplate>
-                                                        </DataGridTemplateColumn.CellTemplate>
-                                                    </DataGridTemplateColumn>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
-
-                            <!--#region Additional Guest Row 5-->
-                            <Border x:Name="brdRoomsQtyAndElectronicPurse" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Others" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel Name="stkRoomsQty" VerticalAlignment="Center">
-                                                <TextBlock Text="Rooms Quantity" TextAlignment="Left"/>
-                                                <TextBox Name="txtguRoomsQty" Width="100" Text="{Binding GuestObj.guRoomsQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
                                             </StackPanel>
-                                            <StackPanel Name="stkElectronicPurse" VerticalAlignment="Center" Margin="3,0">
-                                                <TextBlock Text="Electronic Purse Acount" TextAlignment="Left"/>
-                                                <TextBox Name="txtguAccountGiftsCard" Width="100" Text="{Binding GuestObj.guAccountGiftsCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
+
+                                <!--#region Additional Guest Row 4-->
+                                <Border x:Name="brdAdditionalGuest" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Additional Guest" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel>
+                                                <DataGrid  Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False" MaxHeight="80" Height="80">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTemplateColumn Header="Search" Width="55">
+                                                            <DataGridTemplateColumn.CellTemplate>
+                                                                <DataTemplate>
+                                                                    <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15"  />
+                                                                </DataTemplate>
+                                                            </DataGridTemplateColumn.CellTemplate>
+                                                        </DataGridTemplateColumn>
+                                                        <DataGridTextColumn Header="GUID" Binding="{Binding guID, ValidatesOnDataErrors=True}"/>
+                                                        <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True" />
+                                                        <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
+                                                        <DataGridTemplateColumn Width="55">
+                                                            <DataGridTemplateColumn.CellTemplate>
+                                                                <DataTemplate>
+                                                                    <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
+                                                                </DataTemplate>
+                                                            </DataGridTemplateColumn.CellTemplate>
+                                                        </DataGridTemplateColumn>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
                                             </StackPanel>
-                                        </StackPanel>
-                                    </Viewbox>
-                                </StackPanel>
-                            </Border>
-                            <!--#endregion-->
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-                        </Grid>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
-        </Border>
-        <!--#endregion-->
+                                <!--#region Additional Guest Row 5-->
+                                <Border x:Name="brdRoomsQtyAndElectronicPurse" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
+                                    <StackPanel >
+                                        <TextBlock Text="Others" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel Name="stkRoomsQty" VerticalAlignment="Center">
+                                                    <TextBlock Text="Rooms Quantity" TextAlignment="Left"/>
+                                                    <TextBox Name="txtguRoomsQty" Width="100" Text="{Binding GuestObj.guRoomsQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                                <StackPanel Name="stkElectronicPurse" VerticalAlignment="Center" Margin="3,0">
+                                                    <TextBlock Text="Electronic Purse Acount" TextAlignment="Left"/>
+                                                    <TextBox Name="txtguAccountGiftsCard" Width="100" Text="{Binding GuestObj.guAccountGiftsCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Border>
+                                <!--#endregion-->
 
-        <!--#region  Estatus Bar-->
-        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="3" Margin="10,0,10,0" >
-            <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
-            <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
-            <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
-            <Separator />
-            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
-                </StackPanel>
-            </StatusBarItem>
-            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
-        </StatusBar>
-        <!--#endregion-->
+                            </Grid>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </Border>
+            <!--#endregion-->
 
-    </Grid>
+            <!--#region  Estatus Bar-->
+            <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="3" Margin="10,0,10,0" >
+                <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+                <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+                <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
+                <Separator />
+                <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
+                        <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+            </StatusBar>
+            <!--#endregion-->
+
+        </Grid>
+    </wpftk:BusyIndicator>
 </Window>
 

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"
+        xmlns:styleClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         mc:Ignorable="d" Title="Mail Outs Configuration"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     WindowState="Normal" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
@@ -41,7 +42,7 @@
                     <TextBlock Text="Mail Outs" Style="{StaticResource txtb-HeaderCatalogs}"/>
                     <ListBox x:Name="lsbxMailOuts" ItemsSource="{Binding}" TextSearch.TextPath="moCode" 
                              SelectionChanged="lsbxMailOuts_SelectionChanged"
-                             Height="120" SelectionMode="Single" DisplayMemberPath="moCode"/>
+                             Height="120" SelectionMode="Single" DisplayMemberPath="moCode" />
 
                     
                     <TextBlock Name="txtbMailOutsNumber" Text="Mail Outs" TextAlignment="Right" Margin="2,0"/>
@@ -159,14 +160,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <CheckBox Name="chkmoA" Content="Automatic Processing" Grid.Column="0"
-                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moA, Mode=TwoWay}"/>
+                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <TextBlock Text="Execution Order:" VerticalAlignment="Center"/>
                         <TextBox Name="txtExecutionOrder" VerticalAlignment="Center" Width="50" Margin="5,0" 
-                                     Text="{Binding moOrder, Mode=TwoWay}" MaxLength="2"/>
+                                     Text="{Binding moOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <CheckBox Name="chkmoCCheckIn" Content="Check In" Grid.Column="2" 
-                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCCheckIn, Mode=TwoWay}"/>
+                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCCheckIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -181,21 +182,33 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Text="Arrival Date Between Today    +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckInDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDFrom, Mode=TwoWay}" MaxLength="2"/>
+                        <TextBox Name="txtmoCCheckInDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" 
+                                 styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCCheckInDFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"/>
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckInDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDTo, Mode=TwoWay}" MaxLength="2"/>
+                        <TextBox Name="txtmoCCheckInDTo" VerticalAlignment="Center" Width="50" Margin="5,0" 
+                                  styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCCheckInDTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                         <TextBlock Text="Depart. Date Between Today  +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckOutDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDFrom, Mode=TwoWay}" MaxLength="2"/>
+                        <TextBox Name="txtmoCCheckOutDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" 
+                                 styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCCheckOutDFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"/>
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckOutDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDTo, Mode=TwoWay}" MaxLength="2"/>
+                        <TextBox Name="txtmoCCheckOutDTo" VerticalAlignment="Center" Width="50" Margin="5,0"
+                                 styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCCheckOutDTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2">
-                        <CheckBox Name="chkBookD" Content="Book Date Between Today +" Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCBookD, Mode=TwoWay}"/>
-                        <TextBox Name="txtmoCBookDFrom" VerticalAlignment="Center" Width="50" Margin="0,0,5,0" Text="{Binding moCBookDFrom, Mode=TwoWay}" MaxLength="2" />
+                        <CheckBox Name="chkBookD" Content="Book Date Between Today +" Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Name="txtmoCBookDFrom" VerticalAlignment="Center" Width="50" Margin="0,0,5,0" 
+                                 styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCBookDFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" />
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCBookDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCBookDTo, Mode=TwoWay}" MaxLength="2"/>
+                        <TextBox Name="txtmoCBookDTo" VerticalAlignment="Center" Width="50" Margin="5,0" 
+                                 styleClasses:FormatInputPropertyClass.FormatInput="NumberNegative"
+                                 Text="{Binding moCBookDTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -215,13 +228,13 @@
                             <TextBlock  Text="Contacted" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black" />
                             <RadioButton Name="cNo" Content="No" GroupName="contact" 
                                          Margin="10,5,5,0"  
-                                         IsChecked="{Binding Path=moCInfo, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
+                                         IsChecked="{Binding Path=moCInfo, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="cYes" Content="Yes" GroupName="contact"
                                          Margin="10,5,5,0"  
-                                         IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
+                                         IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="cBoth" Content="Both" GroupName="contact" 
                                         Margin="10,5,5,0"  
-                                        IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
+                                        IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
 
@@ -229,22 +242,22 @@
                         <StackPanel  >
                             <TextBlock  Text="Invited" Style="{StaticResource txtb-HeaderCatalogs}" Foreground="Black"/>
                             <RadioButton Name="iNo" Content="No" GroupName="invited"  Margin="10,5,5,0"  
-                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
+                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="iYes" Content="Yes" GroupName="invited"  Margin="10,5,5,0"  
-                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
+                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="iBoth" Content="Both" GroupName="invited"  Margin="10,5,5,0"  
-                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
+                                             IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
                     <Border Name="brdBookCancelled" Grid.Column="2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel >
                             <TextBlock  Text="Book Cancelled" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
                             <RadioButton Name="bNo" Content="No" GroupName="bookc"  Margin="10,5,5,0"  
-                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
+                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="bYes" Content="Yes" GroupName="bookc"  Margin="10,5,5,0"  
-                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
+                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="bBoth" Content="Both" GroupName="bookc"  Margin="10,5,5,0"  
-                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
+                                         IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -262,19 +275,19 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Text="Market" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
                         <ComboBox Name="cbxMarket" Margin="5,0" Width="120"
-                                      DisplayMemberPath="mkN" SelectedValuePath="mkID" TextSearch.TextPath="{Binding moCMarket}" SelectedValue="{Binding moCMarket, Mode=TwoWay}"/>
+                                      DisplayMemberPath="mkN" SelectedValuePath="mkID" TextSearch.TextPath="{Binding moCMarket}" SelectedValue="{Binding moCMarket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Text="Agency" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
                         <ComboBox Name="cbxAgency" Margin="5,0" Width="120"
-                            DisplayMemberPath="agN" SelectedValuePath="agID" TextSearch.TextPath="{Binding moCAgency}" SelectedValue="{Binding moCAgency, Mode=TwoWay}"/>
+                            DisplayMemberPath="agN" SelectedValuePath="agID" TextSearch.TextPath="{Binding moCAgency}" SelectedValue="{Binding moCAgency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Text="Country" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
                         <ComboBox  Name="cbxCountry" Margin="5,0" Width="120"
-                            DisplayMemberPath="coN" SelectedValuePath="coID" TextSearch.TextPath="{Binding moCCountry}" SelectedValue="{Binding moCCountry, Mode=TwoWay}"/>
+                            DisplayMemberPath="coN" SelectedValuePath="coID" TextSearch.TextPath="{Binding moCCountry}" SelectedValue="{Binding moCCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -292,9 +305,9 @@
                     <Border Name="brdShSa" Grid.Column="0" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Background="Transparent" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel  >
                             <CheckBox Name="chkShow" Content="Show"  
-                                      Margin="10" IsChecked="{Binding moCShow, Mode=TwoWay}"/>
+                                      Margin="10" IsChecked="{Binding moCShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox Name="chkSale" Content="Sale"  
-                                          Margin="10" IsChecked="{Binding moCSale, Mode=TwoWay}"/>
+                                          Margin="10" IsChecked="{Binding moCSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
 
@@ -303,11 +316,13 @@
                             <TextBlock  Text="Room Numbers" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
                             <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                                 <TextBlock Text="From" VerticalAlignment="Center"/>
-                                <TextBox Text="{Binding moCRoomNumFrom, Mode=TwoWay}" MaxLength="6" Width="100" Margin="10,0,0,0"/>
+                                <TextBox Text="{Binding moCRoomNumFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         MaxLength="6" Width="100" Margin="10,0,0,0"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                                 <TextBlock Text="To" VerticalAlignment="Center"/>
-                                <TextBox  Text="{Binding moCRoomNumTo, Mode=TwoWay}" MaxLength="6" Width="100" Margin="23,0,0,0"/>
+                                <TextBox  Text="{Binding moCRoomNumTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                          MaxLength="6" Width="100" Margin="23,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -316,11 +331,11 @@
                         <StackPanel >
                             <TextBlock  Text="On Group" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
                             <RadioButton Name="oNo" Content="No" GroupName="ongroup"  Margin="10,5,5,0"  
-                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
+                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="oYes" Content="Yes" GroupName="ongroup"  Margin="10,5,5,0"  
-                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
+                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1, UpdateSourceTrigger=PropertyChanged}"/>
                             <RadioButton Name="oBoth" Content="Both" GroupName="ongroup"  Margin="10,5,5,5"  
-                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
+                                             IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
                 </Grid>

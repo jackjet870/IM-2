@@ -34,6 +34,8 @@ namespace IM.Base.Forms
     private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
     private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
     private bool _dontShowAgainGuestStatus = false;
+    public CommonCatObject catObj { get; set; }
+
     #endregion
     /// <summary>
     /// Inicializa en formulario de invitacion
@@ -48,47 +50,59 @@ namespace IM.Base.Forms
     /// </history>
     public frmInvitation(EnumModule module, EnumInvitationType invitationType, UserData user, int guestId = 0, bool allowReschedule = true)
     {
+
+      catObj = new CommonCatObject(module, invitationType, user, guestId);
+      _module = module;
+      _guestId = guestId;
+      _user = user;
+      _invitationType = invitationType;
+      DataContext = catObj;
+      _allowReschedule = allowReschedule;
+      InitializeComponent();
+
+      #region Inicializar Grids
+
+      #region dtgGift
+      dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
+      {
+        if (e.NewItem != null)
+        {
+          ((InvitationGift)e.NewItem).igQty = 1;
+        }
+      });
+      GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
+      #endregion
+
+      #endregion
+
+    }
+    #region Eventos de la ventana
+
+    #region Window_Loaded
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
       try
       {
-
-        var catObj = new CommonCatObject(module, invitationType, user, guestId);
-        _module = module;
-        _guestId = guestId;
-        _user = user;
-        _invitationType = invitationType;
-        DataContext = catObj;
-        _allowReschedule = allowReschedule;
-        InitializeComponent();
-
-        #region Inicializar Grids
-
-        #region dtgGift
-        dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
-        {
-          if (e.NewItem != null)
-          {
-            ((InvitationGift)e.NewItem).igQty = 1;
-          }
-        });
-        GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
-        #endregion
-
-        #endregion
+        //Iniciamos el BusyIndicator
+        _busyIndicator.IsBusy = true;
+        _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
+        //Cargamos la informacion
+        await catObj.LoadAll();
+        //Cargamos la UI dependiendo del tipo de Invitacion
+        ControlsConfiguration();
+        //Configuramos los controles (Maxlength, caracteres etc.)
+        UIHelper.SetUpControls(new Guest(), this);
+        //Detenemos el BusyIndicator
+        _busyIndicator.IsBusy = false;
       }
       catch (Exception ex)
       {
         UIHelper.ShowMessage(ex);
       }
     }
-    #region Eventos de la ventana
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-      //Cargamos la UI dependiendo del tipo de Invitacion
-      ControlsConfiguration();
-      //Configuramos los controles (Maxlength, caracteres etc.)
-      UIHelper.SetUpControls(new Guest(), this);
-    }
+    #endregion
 
+    #region imgButtonSave_MouseLeftButtonDown
     private void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       bool _isValid = true;
@@ -109,19 +123,51 @@ namespace IM.Base.Forms
       }
 
     }
+    #endregion
 
+    #region imgButtonEdit_MouseLeftButtonDown
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
 
     }
+    #endregion
+
+    #region imgButtonPrint_MouseLeftButtonDown
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
 
     }
+    #endregion
+
+    #region imgButtonCancel_MouseLeftButtonDown
+    /// <summary>
+    /// Sirve para cancelar la edicion, y si no esta en modo edicion cierra el formulario de invitacion
+    /// </summary>
+    /// <history>
+    /// [erosado] 11/08/2016  Created.
+    /// </history>
     private void imgButtonCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-
+      //Si el boton no esta disponible quiere decir que esta en modo edicion cancelamos modo edicion y cargamos los datos sin modificar
+      if (!imgButtonEdit.IsEnabled)
+      {
+        catObj = new CommonCatObject(_module, _invitationType, _user, _guestId);
+      }
+      //Si el boton esta activo quiere decir que NO esta en modo edicion y debemos cerrar el formulario de invitacion
+      else
+      {
+        Close();
+      }
     }
+    #endregion
+
+    #region imgButtonLog_MouseLeftButtonDown
+    /// <summary>
+    /// Abre el formulario de GuestLog se la pasa el guID, sirve para mostrar los movimientos que ha tenido el guID 
+    /// </summary>
+    /// <history>
+    /// [erosado] 11/08/2016  Created.
+    /// </history>
     private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       //Si viene de Host la invitacion le mandamos el SalesRoom, en lugar del leadsource, es solo informativo.
@@ -129,10 +175,11 @@ namespace IM.Base.Forms
       frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
+    #endregion
+
+    #region cmbGuestStatus_SelectionChanged
     /// <summary>
-    /// Evento del Combobox GuestStatus
-    /// Sirve para actualizar la caja de texto txtGiftMaxAuth
-    /// dependiendo del GuestStatus que elija el usuario.
+    /// Evento del Combobox GuestStatus, Sirve para actualizar la caja de texto txtGiftMaxAuth dependiendo del GuestStatus que elija el usuario.
     /// </summary>
     ///<history>
     ///[erosado]  02/08/2016  Created.
@@ -151,13 +198,14 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #endregion
+
     #region Controls Configuration
 
     #region ControlsConfiguration
     /// <summary>
-    /// Prepara los controles para cada invitacion
+    /// Prepara los controle para los diferentes tipos de invitacion
     /// </summary>
-    /// <param name="module">EnumInvitationType</param>
     /// <history>
     /// [erosado] 16/05/2016  Created
     /// </history>
@@ -170,78 +218,14 @@ namespace IM.Base.Forms
       txtUserName.Text = _user.User.peN;
       txtPlaces.Text = _module == EnumModule.Host ? _user.SalesRoom.srN : _user.Location.loN;
 
-      //Dependiendo de cada modulo 
-      switch (_module)
-      {
-        case EnumModule.InHouse:
-          InHouseControlVisibility();
-          break;
-        case EnumModule.OutHouse:
-          OutHouseControlVisibility();
-          break;
-        case EnumModule.Host:
-          HostControlVisibility();
-          break;
-        default:
-          break;
-      }
+      //Collapsed Controls Dependiendo del EnumModule
+      CollapsedControls();
+
+      //Disable controls
+      ControlBehavior();
+
     }
     #endregion
-
-    #region ControlsConfig Hide, Visible, Collapse
-    /// <summary>
-    /// Prepara los controles para que trabaje con InHouseInvitation
-    /// </summary>
-    /// <history>
-    /// [erosado] 14/05/2016  Created.
-    /// </history>
-    private void InHouseControlVisibility()
-    {
-      if (_invitationType == EnumInvitationType.newExternal)
-      {
-        stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
-        stkOutInvitation.Visibility = Visibility.Collapsed;//Ocultamos el OutInvitation de brdPRInfo 
-      }
-      else if (_invitationType == EnumInvitationType.existing)
-      {
-        stkOutInvitation.Visibility = Visibility.Collapsed; //Quitamos Out.Invint de brdGuestInfo
-        stkPRContact.Visibility = Visibility.Collapsed;//Quitamos PRContact de  brdPRInfo - Grid Column 0
-        stkFlightNumber.Visibility = Visibility.Collapsed;//Ocultamos FlighInfo de  brdPRInfo - Grid Column 4 
-        imgSearch.Visibility = Visibility.Collapsed; //Quitamos el boton de search.
-      }
-    }
-    /// <summary>
-    /// Prepara los controles para que trabaje con OutHouseInvitation
-    /// </summary>
-    /// <history>
-    /// [erosado] 14/05/2016  Created.
-    /// </history>
-    private void OutHouseControlVisibility()
-    {
-      stkRsrvNum.Visibility = Visibility.Collapsed;
-      imgSearch.Visibility = Visibility.Collapsed;
-      stkRebookRef.Visibility = Visibility.Collapsed;
-      btnReschedule.Visibility = Visibility.Collapsed;
-      btnRebook.Visibility = Visibility.Collapsed;
-      stkRescheduleDate.Visibility = Visibility.Collapsed;
-      chkReschedule.Visibility = Visibility.Collapsed;
-      brdRoomsQtyAndElectronicPurse.Visibility = Visibility.Collapsed;
-      brdCreditCard.Visibility = Visibility.Collapsed;
-    }
-    /// <summary>
-    /// Prepara los controles para que trabaje con HostInvitation
-    /// </summary>
-    /// <history>
-    /// [erosado] 14/05/2016  Created.
-    /// </history>
-    private void HostControlVisibility()
-    {
-      stkPRContact.Visibility = Visibility.Collapsed;
-      stkSales.IsEnabled = false;
-      stkLocation.IsEnabled = true;
-      stkFlightNumber.Visibility = Visibility.Collapsed;
-      stkElectronicPurse.Visibility = Visibility.Collapsed;
-    }
     #region  MenuBarConfiguration
     /// <summary>
     /// Activa o desactiva los botones de la barra de menu dependiendo del tipo de invitacion
@@ -252,7 +236,7 @@ namespace IM.Base.Forms
     private void MenuBarConfiguration()
     {
       //Modo lectura
-      if (_invitationType == EnumInvitationType.existing)
+      if (catObj.InvitationMode == EnumMode.ReadOnly)
       {
         MenuBarModeReadOnly();
       }
@@ -286,257 +270,177 @@ namespace IM.Base.Forms
     {
       imgButtonEdit.IsEnabled = false;
       imgButtonPrint.IsEnabled = false;
-      imgButtonSave.IsEnabled = false;
+      imgButtonSave.IsEnabled = true;
       imgButtonCancel.IsEnabled = true;
-      imgButtonLog.IsEnabled = false;
-    }
-    #endregion
-    #endregion
-
-
-    #region EnableControlsExternal
-    private void EnableControlsExternal()
-    {
-      #region Guest Information
-      txtguID.IsEnabled =
-      txtguHReservID.IsEnabled = false;
-      btnSearch.IsEnabled = true;
-      txtguRef.IsEnabled =
-      txtguInvitD.IsEnabled =
-      txtguInvitT.IsEnabled = false;
-      #endregion
-
-      #region Invitation Type & Languages
-      chkguQuinella.IsEnabled = true;
-      chkguShow.IsEnabled =
-      chkguInterval.IsEnabled = false;
-      cmbLanguage.IsEnabled = true;
-      #endregion
-
-      #region Profile Opera
-      txtguIdProfileOpera.IsEnabled =
-      txtguLastNameOriginal.IsEnabled =
-      txtguFirstNameOriginal.IsEnabled = false;
-      #endregion
-
-      #region Guest1 & Guest 2
-      txtguLastName1.IsEnabled =
-      txtguFirstName1.IsEnabled =
-      txtguAge1.IsEnabled =
-      cbogums1.IsEnabled =
-      txtguOccup1.IsEnabled =
-      txtguEmail1.IsEnabled = true;
-
-      txtguLastName2.IsEnabled =
-      txtguFirstName2.IsEnabled =
-      txtguAge2.IsEnabled =
-      cbogums2.IsEnabled =
-      txtguOccup2.IsEnabled =
-      txtguEmail2.IsEnabled = true;
-      #endregion
-
-      #region PR, SalesRoom, etc..
-      btnChange.IsEnabled =
-      btnReschedule.IsEnabled =
-      btnRebook.IsEnabled = false;
-      cmbPRContact.IsEnabled =
-      cmbPR.IsEnabled =
-      cmbSalesRooms.IsEnabled = true;
-      cmbLocation.IsEnabled = false;
-      chkguAntesIO.IsEnabled =
-      dtpBookDate.IsEnabled =
-      cmbBookT.IsEnabled = true;
-      chkDirect.IsEnabled = false;
-      dtpRescheduleDate.IsEnabled =
-      cmbReschT.IsEnabled =
-      chkReschedule.IsEnabled = false;
-      #endregion
-
-      #region OtherInfo
-      txtguExtraInfo.IsEnabled =
-      txtguRoomNum.IsEnabled =
-      cmbOtherInfoHotel.IsEnabled =
-      cmbOtherInfoAgency.IsEnabled =
-      cmbOtherInfoCountry.IsEnabled =
-      txtguPax.IsEnabled =
-      dtpOtherInfoArrivalD.IsEnabled =
-      dtpOtherInfoDepartureD.IsEnabled = true;
-      #endregion
-
-      #region GuestStatus
-      cmbGuestStatus.IsEnabled = true;
-      #endregion
-
-      #region Gifts
-      dtgGifts.IsEnabled =
-      txtGiftMaxAuth.IsReadOnly =
-      txtGiftTotalCost.IsReadOnly =
-      txtGiftTotalPrice.IsReadOnly = true;
-      #endregion
-
-      #region Deposits
-      dtgBookingDeposits.IsEnabled =
-      txtBurned.IsEnabled =
-      cmbCurrency.IsEnabled =
-      cmbPaymentType.IsEnabled =
-      cmbResorts.IsEnabled = true;
-      #endregion
-
-      #region Credit Cards
-      txtguCCType.IsEnabled = false;
-      dtgCCCompany.IsEnabled = true;
-      #endregion
-
-      #region Rooms Qty And ElectronicPurse
-      txtguAccountGiftsCard.IsEnabled = false;
-      #endregion
-
+      imgButtonLog.IsEnabled = _guestId != 0 ? true : false; ;
     }
     #endregion
 
-    #region EnableControlsInHouse
-    private void EnableControlsInHouse()
+    #region CollapsedControls
+    /// <summary>
+    /// Colapsa los controles dependiendo del EnumModule
+    /// </summary>
+    /// <history>
+    /// [erosado] 11/08/2016  Created.
+    /// </history>
+    private void CollapsedControls()
     {
-
-      #region Barra de Menu
-      //imgButtonEdit.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? false : true;
-      //imgButtonPrint.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? false : true;
-      //imgButtonSave.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? true : false;
-      //imgButtonCancel.IsEnabled = _invitationType == EnumInvitationMode.modAdd ? true : false;
-      //imgButtonLog.IsEnabled = dbcontex && txtguID.Text != "0" ? true : false;
-      #endregion
-
-      #region Guest Information
-      txtguID.IsEnabled =
-      txtguHReservID.IsEnabled =
-      btnSearch.IsEnabled =
-      txtguRef.IsEnabled =
-      txtguInvitD.IsEnabled =
-      txtguInvitT.IsEnabled = false;
-      #endregion
-
-      #region Invitation Type & Languages
-      chkguQuinella.IsEnabled = true;
-      chkguShow.IsEnabled =
-      chkguInterval.IsEnabled = false;
-      cmbLanguage.IsEnabled = true;
-      #endregion
-
-      #region Profile Opera
-      txtguIdProfileOpera.IsEnabled =
-      txtguLastNameOriginal.IsEnabled =
-      txtguFirstNameOriginal.IsEnabled = false;
-      #endregion
-
-      #region Guest1 & Guest 2
-      txtguLastName1.IsEnabled =
-      txtguFirstName1.IsEnabled =
-      txtguAge1.IsEnabled =
-      cbogums1.IsEnabled =
-      txtguOccup1.IsEnabled =
-      txtguEmail1.IsEnabled = true;
-
-      txtguLastName2.IsEnabled =
-      txtguFirstName2.IsEnabled =
-      txtguAge2.IsEnabled =
-      cbogums2.IsEnabled =
-      txtguOccup2.IsEnabled =
-      txtguEmail2.IsEnabled = true;
-      #endregion
-
-      #region PR, SalesRoom, etc..
-      btnChange.IsEnabled =
-      btnReschedule.IsEnabled =
-      btnRebook.IsEnabled = false;
-      cmbPRContact.IsEnabled =
-      cmbPR.IsEnabled =
-      cmbSalesRooms.IsEnabled = true;
-      cmbLocation.IsEnabled = false;
-      chkguAntesIO.IsEnabled =
-      dtpBookDate.IsEnabled =
-      cmbBookT.IsEnabled = true;
-      chkDirect.IsEnabled = false;
-      dtpRescheduleDate.IsEnabled =
-      cmbReschT.IsEnabled =
-      chkReschedule.IsEnabled = false;
-      #endregion
-
-      #region OtherInfo
-      txtguExtraInfo.IsEnabled =
-      txtguRoomNum.IsEnabled =
-      cmbOtherInfoHotel.IsEnabled =
-      cmbOtherInfoAgency.IsEnabled =
-      cmbOtherInfoCountry.IsEnabled =
-      txtguPax.IsEnabled =
-      dtpOtherInfoArrivalD.IsEnabled =
-      dtpOtherInfoDepartureD.IsEnabled = true;
-      #endregion
-
-      #region GuestStatus
-      cmbGuestStatus.IsEnabled = true;
-      #endregion
-
-      #region Gifts
-      dtgGifts.IsEnabled =
-      txtGiftMaxAuth.IsReadOnly =
-      txtGiftTotalCost.IsReadOnly =
-      txtGiftTotalPrice.IsReadOnly = true;
-      #endregion
-
-      #region Deposits
-      dtgBookingDeposits.IsEnabled =
-      txtBurned.IsEnabled =
-      cmbCurrency.IsEnabled =
-      cmbPaymentType.IsEnabled =
-      cmbResorts.IsEnabled = true;
-      #endregion
-
-      #region Credit Cards
-      txtguCCType.IsEnabled = false;
-      dtgCCCompany.IsEnabled = true;
-      #endregion
-
-      #region Rooms Qty And ElectronicPurse
-      txtguAccountGiftsCard.IsEnabled = false;
-      txtguRoomsQty.IsEnabled = true;
-      #endregion
-
-    }
-    #endregion
-
-
-    #region EnableControls
-    private void IsEnableControls()
-    {
-      #region Guest Information
-      txtguID.IsEnabled = false;
-      txtguHReservID.IsEnabled = false;
-      btnSearch.IsEnabled = false;//Nueva INhouse False|external true|OutHouseNew oculto
-      txtguOutInvitNum.IsEnabled = true; //InHouseExternal oculto| OutHouseNew true
-      txtguRef.IsEnabled = false;//Nueva INHouse false|external false|OutHouseNew oculto
-      txtguInvitD.IsEnabled = false;//Nueva InHouse False|external false|OutHouseNew oculto
-      txtguInvitT.IsEnabled = false;//Nueva InHouse False|external false|OutHouseNew oculto
-      #endregion
-
+      /*Todos los controles por Default estan en Modo Visible
+       *Esta ventana solo colapsa controles que no se van a utilizar  
+       *Esto depende del EnumInvitationType */
       switch (_module)
       {
         case EnumModule.InHouse:
+          InHouseCollapsed();
           break;
         case EnumModule.OutHouse:
+          OutHouseCollapsed();
           break;
         case EnumModule.Host:
-          cmbSalesRooms.IsEnabled = false;
+
+          if (_invitationType == EnumInvitationType.newExternal || _invitationType == EnumInvitationType.existing)
+          {
+            InHouseCollapsed();
+          }
+          else if (_invitationType == EnumInvitationType.newOutHouse)
+          {
+            OutHouseCollapsed();
+          }
           break;
         default:
           break;
       }
+    }
+    #region InHouseCollapsed
+    /// <summary>
+    /// Colapsa controles para la invitacion InHouse
+    /// </summary>
+    /// <history>
+    /// [erosado] 11/08/2016  Created.
+    /// </history>
+    private void InHouseCollapsed()
+    {
+      stkOutInvitation.Visibility = Visibility.Collapsed;
+      stkPRContact.Visibility = Visibility.Collapsed;
+      stkFlightNumber.Visibility = Visibility.Collapsed;
+    }
+    #endregion
 
+    #region OutHouseCollapsed
+    /// <summary>
+    /// Colapsa controles para la invitacion OutHouse
+    /// </summary>
+    /// <history>
+    /// [erosado] 11/08/2016  Created.
+    /// </history>
+    private void OutHouseCollapsed()
+    {
+      stkRsrvNum.Visibility = Visibility.Collapsed;
+      brdSearchButton.Visibility = Visibility.Collapsed;
+      stkRebookRef.Visibility = Visibility.Collapsed;
+      btnReschedule.Visibility = Visibility.Collapsed;
+      btnRebook.Visibility = Visibility.Collapsed;
+      stkRescheduleDate.Visibility = Visibility.Collapsed;
+      brdCreditCard.Visibility = Visibility.Collapsed;
+      brdRoomsQtyAndElectronicPurse.Visibility = Visibility.Collapsed;
+    }
+    #endregion
+
+    #endregion
+
+    #region ControlBehavior
+    private void ControlBehavior()
+    {
+      switch (_module)
+      {
+        case EnumModule.InHouse:
+          ControlsBehaviorInHouse();
+          break;
+        case EnumModule.OutHouse:
+          ControlsBehaviorOutHouse();
+          break;
+        case EnumModule.Host:
+          if (_invitationType == EnumInvitationType.newExternal || _invitationType == EnumInvitationType.existing)
+          {
+            ControlsBehaviorInHouse();
+          }
+          else if (_invitationType == EnumInvitationType.newOutHouse)
+          {
+            ControlsBehaviorOutHouse();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    #region ControlsBehaviorInHouse
+    /// <summary>
+    /// Cambia el comportamiento de los controles visbles en la invitacion InHouse
+    /// </summary>
+    /// <history>
+    /// [erosado] 12/08/2016  Created.
+    /// </history>
+    private void ControlsBehaviorInHouse()
+    {
+      #region Enable false
+      chkguShow.IsEnabled = false;
+      chkguInterval.IsEnabled = false;
+      chkDirect.IsEnabled = false;
+      cmbLocation.IsEnabled = false;
+      stkRescheduleDate.IsEnabled = false;
+      btnChange.IsEnabled = false;
+      btnReschedule.IsEnabled = false;
+      btnRebook.IsEnabled = false;
+      #endregion
+
+      #region IsReadOnly
+      txtguID.IsReadOnly = true;
+      txtguHReservID.IsReadOnly = true;
+      txtguRef.IsReadOnly = true;
+      txtguInvitD.IsReadOnly = true;
+      txtguInvitT.IsReadOnly = true;
+      txtguIdProfileOpera.IsReadOnly = true;
+      txtguLastNameOriginal.IsReadOnly = true;
+      txtguFirstNameOriginal.IsReadOnly = true;
+      txtguAccountGiftsCard.IsReadOnly = true;
+      #endregion
     }
 
     #endregion
 
+    #region ControlsBehaviorOutHouse
+    /// <summary>
+    /// Cambia el comportamiento de los controles visbles en la invitacion OutHouse
+    /// </summary>
+    /// <history>
+    /// [erosado] 12/08/2016  Created.
+    /// </history>
+    private void ControlsBehaviorOutHouse()
+    {
+      #region Enable false
+      chkguShow.IsEnabled = false;
+      chkguInterval.IsEnabled = false;
+      chkDirect.IsEnabled = false;
+      btnChange.IsEnabled = false;
+      #endregion
 
+      #region IsReadOnly
+      txtguID.IsReadOnly = true;
+      txtguInvitD.IsReadOnly = true;
+      txtguInvitT.IsReadOnly = true;
+      txtguIdProfileOpera.IsReadOnly = true;
+      txtguLastNameOriginal.IsReadOnly = true;
+      txtguFirstNameOriginal.IsReadOnly = true;
+      #endregion
+    }
     #endregion
+    #endregion
+
+    #endregion ControlsConfiguration
+
+
+
+
 
     #region Eventos del GRID Invitation Gift
 

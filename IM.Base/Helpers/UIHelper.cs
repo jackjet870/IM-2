@@ -182,6 +182,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 08/04/2016
     /// [emoguel] modified 11/07/2016
+    /// [erosado] Modified. 12/08/2016. Se agrego para que acepte el MaxLenght de las cajas de texto o si no tuviera aceptaria las de la propiedad MaxLengthPropertyClass
     /// </history>
     public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.ReadOnly,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
     {
@@ -210,7 +211,7 @@ namespace IM.Base.Helpers
           {            
             TextBox txt = control as TextBox;//Convertimos el control a texbox
             TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
-            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt);            
+            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt) == 0 ? txt.MaxLength : MaxLengthPropertyClass.GetMaxLength(txt);            
             EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(txt);//Formato del campo de texto
             switch (typeCode)
             {

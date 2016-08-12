@@ -432,7 +432,7 @@ namespace IM.Base.Classes
       if (dbContext.Program == EnumProgram.Inhouse)
       {
         //Si el boton de busqueda de Guest esta activo
-        if (form.imgSearch.IsEnabled == true)
+        if (form.brdSearchButton.IsEnabled == true)
         {
           //Validamos que el folio no haya sido utilizado por otra invitacion
           _isValid = BRFolios.ValidateFolioReservation(dbContext.GuestObj.guls, dbContext.GuestObj.guHReservID, dbContext.GuestObj.guID);
@@ -441,7 +441,7 @@ namespace IM.Base.Classes
           if (!_isValid)
           {
             UIHelper.ShowMessage("The Reservation Folio was already used for Guest ID");
-            form.imgSearch.Focus();
+            form.brdSearchButton.Focus();
           }
         }
       }

@@ -144,20 +144,27 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [erosado] 20/04/2016  Created
     /// [erosado] 06/07/2016  Modified. Se agregó Async.
+    /// [erosado] 12/08/2016  Modified. Se agregó Try - Catch
     /// </history>
     public async static Task<int> UpdateMailOut(MailOut mo)
     {
-      int result = 0;
-      await Task.Run(() =>
+      try
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        return await Task.Run(() =>
         {
-          dbContext.Entry(mo).State = System.Data.Entity.EntityState.Modified;
-          result = dbContext.SaveChanges();
-        }
-      });
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+          {
+            dbContext.Entry(mo).State = System.Data.Entity.EntityState.Modified;
+            return dbContext.SaveChanges();
+          }
+        });
+      }
+      catch (Exception)
+      {
+        throw;
+      }
+    
 
-      return result;
     }
     #endregion
 
