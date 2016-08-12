@@ -24,7 +24,7 @@ namespace IM.Administrator.Forms
     #region atributos
     public Configuration oldConfigurations = new Configuration();//Objeto con valores iniciales
     public Configuration configurations = new Configuration();//Objeto para llenar el formulario
-    public EnumMode mode = EnumMode.edit;
+    public EnumMode mode = EnumMode.Edit;
     private bool _isClosing = false;
     #endregion
 
@@ -52,7 +52,7 @@ namespace IM.Administrator.Forms
       LoadTourTimesSchema();
       LoadPersonelBoss();
       
-      if (mode != EnumMode.preview)
+      if (mode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtocDBVersion.IsEnabled = true;
@@ -107,7 +107,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (mode != EnumMode.preview)
+      if (mode != EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(configurations, oldConfigurations))
         {

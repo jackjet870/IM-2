@@ -53,7 +53,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(chargeTo, oldChargeTo) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(chargeTo, oldChargeTo) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -126,13 +126,13 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(chargeTo, oldChargeTo);
       LoadChargeType();
       DataContext = chargeTo;
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtctPrice.IsEnabled = true;
         chkCxC.IsEnabled = true;
         cmbCalTyp.IsEnabled = true;
-        txtctID.IsEnabled = (mode == EnumMode.add);
+        txtctID.IsEnabled = (mode == EnumMode.Add);
         UIHelper.SetUpControls(chargeTo, this);
       }      
       tlpCalc.Text = "A - If the guest has tour then the charge is equal to the total of gifts less the maximum amount"
@@ -171,7 +171,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(chargeTo, oldChargeTo))
         {

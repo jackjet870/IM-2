@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       RefundType refunType = (RefundType)dgrRefundTypes.SelectedItem;
       frmRefundTypeDetail frmRefundTypeDetail = new frmRefundTypeDetail();
       frmRefundTypeDetail.Owner = this;
-      frmRefundTypeDetail.enumMode = EnumMode.edit;
+      frmRefundTypeDetail.enumMode = EnumMode.Edit;
       frmRefundTypeDetail.oldRefundType = refunType;
       if(frmRefundTypeDetail.ShowDialog()==true)
       {
@@ -208,7 +208,7 @@ namespace IM.Administrator.Forms
     {
       frmRefundTypeDetail frmRefundTypeDetail = new frmRefundTypeDetail();
       frmRefundTypeDetail.Owner = this;
-      frmRefundTypeDetail.enumMode = EnumMode.add;
+      frmRefundTypeDetail.enumMode = EnumMode.Add;
       if(frmRefundTypeDetail.ShowDialog()==true)
       {
         RefundType refundType = frmRefundTypeDetail.refundType;

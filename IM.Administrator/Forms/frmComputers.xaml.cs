@@ -120,7 +120,7 @@ namespace IM.Administrator.Forms
     {
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = EnumMode.add;
+      frmComputerDetail.mode = EnumMode.Add;
       if (frmComputerDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
@@ -177,7 +177,7 @@ namespace IM.Administrator.Forms
       Computer computer = (Computer)dgrComputers.SelectedItem;
       frmComputerDetail frmComDetail = new frmComputerDetail();
       frmComDetail.Owner = this;
-      frmComDetail.mode = EnumMode.edit;
+      frmComDetail.mode = EnumMode.Edit;
       frmComDetail.oldComputer = computer;
       frmComDetail.ShowDialog();
       if ( frmComDetail.DialogResult== true)

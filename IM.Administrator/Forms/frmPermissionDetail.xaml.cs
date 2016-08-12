@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(permission, oldPermission);
       DataContext = permission;
-      txtpmID.IsEnabled = (enumMode == EnumMode.add);
+      txtpmID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(permission, this);
     } 
     #endregion
@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(permission, oldPermission) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(permission, oldPermission) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

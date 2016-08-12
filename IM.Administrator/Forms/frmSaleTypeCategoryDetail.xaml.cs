@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      txtstcID.IsEnabled = (enumMode == EnumMode.add);
+      txtstcID.IsEnabled = (enumMode == EnumMode.Add);
       ObjectHelper.CopyProperties(saleTypeCategory, oldSaleTypeCategory);
       UIHelper.SetUpControls(saleTypeCategory, this);
       DataContext = saleTypeCategory;
@@ -161,7 +161,7 @@ namespace IM.Administrator.Forms
           var lstAddSaleType = lstSaleTypes.Where(st => !_lstOldSaleTypes.Any(stt => stt.stID == st.stID)).ToList();
           var lstDelSaleType = _lstOldSaleTypes.Where(st => !lstSaleTypes.Any(stt => stt.stID == st.stID)).ToList();
 
-          int nRes = await BRSaleTypesCategories.SaveSaleTypeCategory(saleTypeCategory, (enumMode == EnumMode.edit), lstAddSaleType, lstDelSaleType);
+          int nRes = await BRSaleTypesCategories.SaveSaleTypeCategory(saleTypeCategory, (enumMode == EnumMode.Edit), lstAddSaleType, lstDelSaleType);
           if(nRes>0)
           {
             _isClosing = true;

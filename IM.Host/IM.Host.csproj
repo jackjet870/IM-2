@@ -125,9 +125,6 @@
     <Compile Include="Classes\objRptGuestRegistrationIM.cs" />
     <Compile Include="Classes\ReceiptsGifts.cs" />
     <Compile Include="Classes\RptDepositRefundIM.cs" />
-    <Compile Include="Enums\enumMode.cs" />
-    <Compile Include="Enums\EnumOpenBy.cs" />
-    <Compile Include="Enums\EnumSale.cs" />
     <Compile Include="Forms\frmEntryFieldsData.xaml.cs">
       <DependentUpon>frmEntryFieldsData.xaml</DependentUpon>
     </Compile>
@@ -357,7 +354,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Enums\EnumModeOpen.cs" />
     <Compile Include="Forms\frmAddExchangeRate.xaml.cs">
       <DependentUpon>frmAddExchangeRate.xaml</DependentUpon>
     </Compile>

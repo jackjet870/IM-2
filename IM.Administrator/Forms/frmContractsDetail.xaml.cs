@@ -42,7 +42,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(contract, oldContract) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(contract, oldContract) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -85,9 +85,9 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(contract, oldContract);
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
-        txtcnID.IsEnabled = (mode == EnumMode.add);
+        txtcnID.IsEnabled = (mode == EnumMode.Add);
         txtcnMinDaysTours.IsEnabled = true;
         txtcnN.IsEnabled = true;
         cmbUnvMot.IsEnabled = true;
@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(contract, oldContract))
         {

@@ -39,11 +39,11 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(assistance, oldAssistance);
       DataContext = assistance;
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         txtatN.IsEnabled = true;
         chkA.IsEnabled = true;
-        txtatID.IsEnabled = (mode == EnumMode.add);
+        txtatID.IsEnabled = (mode == EnumMode.Add);
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(assistance, this);
       }
@@ -65,7 +65,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(assistance, oldAssistance) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(assistance, oldAssistance) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -129,7 +129,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {        
         if (!ObjectHelper.IsEquals(assistance, oldAssistance))
         {

@@ -309,7 +309,7 @@ namespace IM.Administrator.Forms
       {
         grpCopy.Visibility = Visibility.Collapsed;
       }
-      enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      enumMode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       LoadCatalogs();
     }
     #endregion
@@ -463,7 +463,7 @@ namespace IM.Administrator.Forms
                   txtStatus.Text = "Saving Data...";
                   ttbylssr.ttls = cboLeadSource.SelectedValue.ToString();
                   ttbylssr.ttsr = cboSalesRoom.SelectedValue.ToString();
-                  nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.add);
+                  nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.Add);
                   dgr.Items.Refresh();
                   dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
                 }
@@ -482,7 +482,7 @@ namespace IM.Administrator.Forms
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.edit);
+              nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.Edit);
               dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
             }
             break;
@@ -504,7 +504,7 @@ namespace IM.Administrator.Forms
                   ttbylssrwd.ttls = cboLeadSource.SelectedValue.ToString();
                   ttbylssrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
                   ttbylssrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
-                  nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.add);
+                  nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.Add);
                   dgr.Items.Refresh();
                   dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
                 }
@@ -523,7 +523,7 @@ namespace IM.Administrator.Forms
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.edit);
+              nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.Edit);
               dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
             }
             break;
@@ -544,7 +544,7 @@ namespace IM.Administrator.Forms
                   txtStatus.Text = "Saving Data...";
                   ttbysrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
                   ttbysrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
-                  nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.add);
+                  nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.Add);
                   dgr.Items.Refresh();
                   dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
                 }
@@ -563,7 +563,7 @@ namespace IM.Administrator.Forms
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.edit);
+              nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.Edit);
               dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
             }
             break;

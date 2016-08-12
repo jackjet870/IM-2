@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(tourTimeSchema, oldTourTimeSchema);
       UIHelper.SetUpControls(tourTimeSchema, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         txttcN.IsEnabled = true;
         chktcA.IsEnabled = true;
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(tourTimeSchema, oldTourTimeSchema))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(tourTimeSchema, oldTourTimeSchema))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(tourTimeSchema, oldTourTimeSchema))
           {

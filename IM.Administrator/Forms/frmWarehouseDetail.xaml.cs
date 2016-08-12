@@ -42,14 +42,14 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(warehouse, oldWarehouse);
       UIHelper.SetUpControls(warehouse, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtwhID.IsEnabled = (enumMode != EnumMode.edit);
+        txtwhID.IsEnabled = (enumMode != EnumMode.Edit);
         txtwhN.IsEnabled = true;
         cmbwhar.IsEnabled = true;
         chkwhA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        if(enumMode==EnumMode.search)
+        if(enumMode==EnumMode.Search)
         {
           Title = "Search";
           chkwhA.Visibility = Visibility.Hidden;
@@ -95,9 +95,9 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(enumMode!=EnumMode.search)
+      if(enumMode!=EnumMode.Search)
       {
-        if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(warehouse,oldWarehouse))
+        if(enumMode!=EnumMode.Add && ObjectHelper.IsEquals(warehouse,oldWarehouse))
         {
           _isClosing = true;
           Close();
@@ -107,7 +107,7 @@ namespace IM.Administrator.Forms
           string strMsj = ValidateHelper.ValidateForm(this, "Warehouse");
           if(strMsj=="")
           {
-            int nRes = BRWarehouses.SaveWarehouse(warehouse,(enumMode==EnumMode.edit));
+            int nRes = BRWarehouses.SaveWarehouse(warehouse,(enumMode==EnumMode.Edit));
             UIHelper.ShowMessageResult("Warehouse", nRes);
             if(nRes>0)
             {
@@ -161,7 +161,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.search && enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.Search && enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(warehouse, oldWarehouse))
           {
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Area> lstArea = await BRAreas.GetAreas();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstArea.Insert(0, new Area { arID = "", arN = "ALL" });
         }

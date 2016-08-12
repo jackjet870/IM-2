@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       frmTeamLogDetail frmTeamLogDetail = new frmTeamLogDetail();
       frmTeamLogDetail.Owner = this;
       frmTeamLogDetail.oldTeamLog = teamLog;
-      frmTeamLogDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmTeamLogDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       if(frmTeamLogDetail.ShowDialog()==true)
       {
         List<object> lstTeamsLog = (List<object>)dgrTeamsLog.ItemsSource;
@@ -186,7 +186,7 @@ namespace IM.Administrator.Forms
     {
       frmTeamLogDetail frmTeamLogDetail = new frmTeamLogDetail();
       frmTeamLogDetail.Owner = this;
-      frmTeamLogDetail.enumMode = EnumMode.add;
+      frmTeamLogDetail.enumMode = EnumMode.Add;
       if (frmTeamLogDetail.ShowDialog() == true)
       {
         TeamLog teamLog = frmTeamLogDetail.teamLog;
@@ -219,7 +219,7 @@ namespace IM.Administrator.Forms
     {
       frmTeamLogDetail frmTeamLogDetail = new frmTeamLogDetail();
       frmTeamLogDetail.Owner = this;
-      frmTeamLogDetail.enumMode = EnumMode.search;
+      frmTeamLogDetail.enumMode = EnumMode.Search;
       frmTeamLogDetail.oldTeamLog = _teamLogFilter;
       frmTeamLogDetail.blnDate = _blnDate;
       if(frmTeamLogDetail.ShowDialog()==true)
@@ -261,7 +261,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = await BREntities.OperationEntities<TeamLog>(lstTeamL,EnumMode.deleted);
+          int nRes = await BREntities.OperationEntities<TeamLog>(lstTeamL,EnumMode.Delete);
 
           if (nRes > 0)
           {

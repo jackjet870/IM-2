@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(underPaymentMotive, oldUnderPaymentMOtive);
       UIHelper.SetUpControls(underPaymentMotive, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtupN.IsEnabled = true;
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
           {

@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(refundType, oldRefundType);
-      txtrfID.IsEnabled = (enumMode == EnumMode.add);
+      txtrfID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(refundType, this);
       DataContext = refundType;
     }
@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(refundType, oldRefundType))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(refundType, oldRefundType))
         {
           _isClosing = true;
           Close();

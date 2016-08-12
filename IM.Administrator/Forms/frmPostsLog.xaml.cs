@@ -132,7 +132,7 @@ namespace IM.Administrator.Forms
       PostLog postLog = (PostLog)dgrPostsLog.SelectedItem;
       frmPostLogDetail frmPostLogDetail = new frmPostLogDetail();
       frmPostLogDetail.Owner = this;
-      frmPostLogDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmPostLogDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmPostLogDetail.oldPostLog = postLog;
       if(frmPostLogDetail.ShowDialog()==true)
       {
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
       frmPostLogDetail frmPostLogDetail = new frmPostLogDetail();
       frmPostLogDetail.Owner = this;
       frmPostLogDetail.oldPostLog = _postLogFilter;
-      frmPostLogDetail.enumMode = EnumMode.search;
+      frmPostLogDetail.enumMode = EnumMode.Search;
       frmPostLogDetail.blnDate = _blnDate;
       if (frmPostLogDetail.ShowDialog() == true)
       {        
@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
     {
       frmPostLogDetail frmPostLogDetail = new frmPostLogDetail();
       frmPostLogDetail.Owner = this;
-      frmPostLogDetail.enumMode = EnumMode.add;
+      frmPostLogDetail.enumMode = EnumMode.Add;
       if(frmPostLogDetail.ShowDialog()==true)
       {
         PostLog postLog = frmPostLogDetail.postLog;
@@ -257,7 +257,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = await BREntities.OperationEntities(lstPostsLogDel, EnumMode.deleted);
+          int nRes = await BREntities.OperationEntities(lstPostsLogDel, EnumMode.Delete);
 
           if (nRes > 0)
           {

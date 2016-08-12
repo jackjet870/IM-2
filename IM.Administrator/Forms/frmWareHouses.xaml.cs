@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       frmWarehouseDetail frmWarehouseDetail = new frmWarehouseDetail();
       frmWarehouseDetail.Owner = this;
       frmWarehouseDetail.oldWarehouse = warehouse;
-      frmWarehouseDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.add;
+      frmWarehouseDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.Add;
       if(frmWarehouseDetail.ShowDialog()==true)
       {
         List<Warehouse> lstWarehouses = (List<Warehouse>)dgrWarehouses.ItemsSource;
@@ -185,7 +185,7 @@ namespace IM.Administrator.Forms
     {
       frmWarehouseDetail frmWarehouseDetail = new frmWarehouseDetail();
       frmWarehouseDetail.Owner = this;
-      frmWarehouseDetail.enumMode = EnumMode.add;
+      frmWarehouseDetail.enumMode = EnumMode.Add;
       if(frmWarehouseDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmWarehouseDetail.warehouse))//Validamos que cumpla con los filtros actuales
@@ -215,7 +215,7 @@ namespace IM.Administrator.Forms
     {
       frmWarehouseDetail frmWarehouseDetail = new frmWarehouseDetail();
       frmWarehouseDetail.Owner = this;
-      frmWarehouseDetail.enumMode = EnumMode.search;
+      frmWarehouseDetail.enumMode = EnumMode.Search;
       frmWarehouseDetail.oldWarehouse = _warehouseFilter;
       frmWarehouseDetail.nStatus = _nStatus;
       if(frmWarehouseDetail.ShowDialog()==true)

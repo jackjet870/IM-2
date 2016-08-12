@@ -71,7 +71,7 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-     if(ObjectHelper.IsEquals(folioCXC,oldFolioCxc) && enumMode!=EnumMode.add)
+     if(ObjectHelper.IsEquals(folioCXC,oldFolioCxc) && enumMode!=EnumMode.Add)
       {
         _isClosing = true;
         Close();
@@ -101,7 +101,7 @@ namespace IM.Administrator.Forms
 
         if (strMsj == "")
         {
-          nRes = BRFoliosCXC.SaveFolioCXC(folioCXC, (enumMode == EnumMode.edit));
+          nRes = BRFoliosCXC.SaveFolioCXC(folioCXC, (enumMode == EnumMode.Edit));
           UIHelper.ShowMessageResult("Folio CxC", nRes);
           if(nRes==1)
           {
@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(folioCXC, oldFolioCxc))
         {
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     private void OpenMode()
     {
       DataContext = folioCXC;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtfiFrom.IsEnabled = true;

@@ -56,7 +56,7 @@ namespace IM.Administrator.Forms
       PaymentType paymentType = (PaymentType)dgrPaymentTypes.SelectedItem;
       frmPaymentTypeDetail frmPaymentTypeDetail = new frmPaymentTypeDetail();
       frmPaymentTypeDetail.Owner = this;
-      frmPaymentTypeDetail.enumMode = EnumMode.edit;
+      frmPaymentTypeDetail.enumMode = EnumMode.Edit;
       frmPaymentTypeDetail.oldPaymentType = paymentType;
       if(frmPaymentTypeDetail.ShowDialog()==true)
       {
@@ -192,7 +192,7 @@ namespace IM.Administrator.Forms
     {
       frmPaymentTypeDetail frmPaymentTypeDetail = new frmPaymentTypeDetail();
       frmPaymentTypeDetail.Owner = this;
-      frmPaymentTypeDetail.enumMode = EnumMode.add;
+      frmPaymentTypeDetail.enumMode = EnumMode.Add;
       if(frmPaymentTypeDetail.ShowDialog()==true)
       {
         PaymentType paymentType = frmPaymentTypeDetail.paymentType;

@@ -44,12 +44,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(hotelGroup, oldHotelGroup);
       UIHelper.SetUpControls(hotelGroup, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         txthoN.IsEnabled = true;
         chkhoA.IsEnabled = true;
         dgrHotels.IsReadOnly = false;
-        txthoID.IsEnabled = (enumMode == EnumMode.add);
+        txthoID.IsEnabled = (enumMode == EnumMode.Add);
         btnAccept.Visibility = Visibility.Visible;
         dgrHotels.BeginningEdit += GridHelper.dgr_BeginningEdit;
       }
@@ -92,7 +92,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing && enumMode != EnumMode.preview)
+      if (!blnClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) && ObjectHelper.IsListEquals(_oldHotels, lstHotels))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) && ObjectHelper.IsListEquals(_oldHotels, lstHotels))
         {
           blnClosing = true;
           Close();
@@ -159,7 +159,7 @@ namespace IM.Administrator.Forms
           {
             List<Hotel> lstAdd = lstHotels.Where(ho => !_oldHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
             List<Hotel> lstDel = _oldHotels.Where(ho => !lstHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
-            int nRes = await BRHotelGroups.SaveHotelGroup(hotelGroup, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            int nRes = await BRHotelGroups.SaveHotelGroup(hotelGroup, (enumMode == EnumMode.Edit), lstAdd, lstDel);
             UIHelper.ShowMessageResult("Hotel Group", nRes);
             if (nRes > 0)
             {

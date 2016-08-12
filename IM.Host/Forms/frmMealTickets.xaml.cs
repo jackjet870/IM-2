@@ -1,5 +1,4 @@
 ﻿using IM.BusinessRules.BR;
-using IM.Host.Enums;
 using IM.Model;
 using System;
 using System.Windows;
@@ -29,7 +28,7 @@ namespace IM.Host.Forms
     public static int _pQty = 1;
     public static int _rateTypeChild = -1;
     public bool _reanOnly = true;
-    public EnumModeOpen modeOpen;
+    public EnumMode _modeOpen;
     public GuestPremanifestHost _guestPremanifestHost = new GuestPremanifestHost();
     List<MealTicket> lstMealTicket;
     CollectionViewSource dsMealTicket;
@@ -50,22 +49,22 @@ namespace IM.Host.Forms
         {
           if (Common.IsClosed(x.meD, closeSalesRoom.srMealTicketsCloseD))
           {
-            modeOpen = EnumModeOpen.Preview;
+            _modeOpen = EnumMode.ReadOnly;
             return;
           }
         });
       }
 
-      if (modeOpen == 0)
+      if (_modeOpen == 0)
       {
         // Verificamos los permisos del usuario
         if (App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard))
         {
-          modeOpen = EnumModeOpen.PreviewEdit;
+          _modeOpen = EnumMode.PreviewEdit;
         }
         else
         {
-          modeOpen = EnumModeOpen.Preview;
+          _modeOpen = EnumMode.ReadOnly;
         }
       }
 
@@ -108,22 +107,22 @@ namespace IM.Host.Forms
       mealTicketType.Source = frmHost._lstMealTicketType;
 
       // Verificamos si es usuario estandar o de solo lectura!
-      switch (modeOpen)
+      switch (_modeOpen)
       {
-        case EnumModeOpen.Add:
-        case EnumModeOpen.Edit:
+        case EnumMode.Add:
+        case EnumMode.Edit:
           ControlsVisibility(true, Visibility.Visible, false, Visibility.Hidden);
           break;
-        case EnumModeOpen.Search:
+        case EnumMode.Search:
           ControlsVisibility(false, Visibility.Visible, false, Visibility.Hidden);
           break;
-        case EnumModeOpen.Preview:
+        case EnumMode.ReadOnly:
           // Se muestran y ocultan los controles necesarios
           ControlsVisibility(false, Visibility.Hidden, true, Visibility.Hidden);
           AdjustsControlsAndColumns();
           dsMealTicket.Source = lstMealTicket;
           break;
-        case EnumModeOpen.PreviewEdit:
+        case EnumMode.PreviewEdit:
           ControlsVisibility(true, Visibility.Hidden, true, Visibility.Hidden);
           AdjustsControlsAndColumns();
           dsMealTicket.Source = lstMealTicket;
@@ -209,12 +208,12 @@ namespace IM.Host.Forms
       frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
       _frmMealTicketsDetail.ShowInTaskbar = false;
       _frmMealTicketsDetail.Owner = this;
-      _frmMealTicketsDetail.modeOpen = (modeOpen == EnumModeOpen.Edit) ? EnumModeOpen.Add : EnumModeOpen.PreviewEdit;
+      _frmMealTicketsDetail._modeOpen = (_modeOpen == EnumMode.Edit) ? EnumMode.Add : EnumMode.PreviewEdit;
       _frmMealTicketsDetail.Title += "ADD";
 
       _frmMealTicketsDetail.ShowDialog();
 
-      if (modeOpen == EnumModeOpen.PreviewEdit)
+      if (_modeOpen == EnumMode.PreviewEdit)
       {
         dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
       }
@@ -235,7 +234,7 @@ namespace IM.Host.Forms
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
       // Se verifica que tenga permisos de editar
-      if (modeOpen != EnumModeOpen.Search && modeOpen != EnumModeOpen.Preview)
+      if (_modeOpen != EnumMode.Search && _modeOpen != EnumMode.ReadOnly)
       {
         MealTicket mealTicket = (MealTicket)dgMealTicket.SelectedItem;
 
@@ -244,7 +243,7 @@ namespace IM.Host.Forms
         ObjectHelper.CopyProperties(_frmMealTicketsDetail._mealTicketCurrency, mealTicket);
 
         _frmMealTicketsDetail.ShowInTaskbar = false;
-        _frmMealTicketsDetail.modeOpen = (modeOpen == EnumModeOpen.Edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview;
+        _frmMealTicketsDetail._modeOpen = (_modeOpen == EnumMode.Edit) ? EnumMode.Edit : EnumMode.ReadOnly;
         _frmMealTicketsDetail.Owner = this;
         _frmMealTicketsDetail.Title += "ID " + mealTicket.meID;
 
@@ -253,7 +252,7 @@ namespace IM.Host.Forms
           ObjectHelper.CopyProperties(mealTicket, _frmMealTicketsDetail._mealTicketCurrency);
         }
 
-        if (modeOpen == EnumModeOpen.PreviewEdit)
+        if (_modeOpen == EnumMode.PreviewEdit)
         {
           dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
         }
@@ -324,11 +323,11 @@ namespace IM.Host.Forms
       {
         dsMealTicket.Source = null;
 
-        if (_rateType.raID != 4 && modeOpen != EnumModeOpen.Preview) // Si es diferente de tipo External!
+        if (_rateType.raID != 4 && _modeOpen != EnumMode.ReadOnly) // Si es diferente de tipo External!
         {
           controlColumnVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
         }
-        else if (modeOpen != EnumModeOpen.Preview) // Es external
+        else if (_modeOpen != EnumMode.ReadOnly) // Es external
         {
           controlColumnVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Visible);
         }
@@ -356,7 +355,7 @@ namespace IM.Host.Forms
 
     #region AdjustsControlsAndColumns
     /// <summary>
-    /// Funcion encargada de alinear el margen y ocultar columnas cuando el modeOpen es Preview y PreviewEdit
+    /// Funcion encargada de alinear el margen y ocultar columnas cuando el modeOpen es ReadOnly y PreviewEdit
     /// </summary>
     /// <history>
     /// [vipacheco] 02/04/2016 Created

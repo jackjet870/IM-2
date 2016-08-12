@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       ScoreRuleType scoreRuleType = (ScoreRuleType)dgrScoreRulesTypes.SelectedItem;
       frmScoreRuleTypeDetail frmScoreRuleTypeDetail = new frmScoreRuleTypeDetail();
       frmScoreRuleTypeDetail.Owner = this;
-      frmScoreRuleTypeDetail.enumMode = EnumMode.edit;
+      frmScoreRuleTypeDetail.enumMode = EnumMode.Edit;
       frmScoreRuleTypeDetail.oldScoreRuleType = scoreRuleType;
       if(frmScoreRuleTypeDetail.ShowDialog()==true)
       {
@@ -193,7 +193,7 @@ namespace IM.Administrator.Forms
     {
       frmScoreRuleTypeDetail frmScoreRuleTypeDetail = new frmScoreRuleTypeDetail();
       frmScoreRuleTypeDetail.Owner = this;
-      frmScoreRuleTypeDetail.enumMode = EnumMode.add;
+      frmScoreRuleTypeDetail.enumMode = EnumMode.Add;
       if(frmScoreRuleTypeDetail.ShowDialog()==true)
       {
         ScoreRuleType scoreRuleType = frmScoreRuleTypeDetail.scoreRuleType;

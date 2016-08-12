@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
     {
       frmSaleTypeCategoryDetail frmSaleTypeCategory = new frmSaleTypeCategoryDetail();
       frmSaleTypeCategory.Owner = this;
-      frmSaleTypeCategory.enumMode = EnumMode.edit;
+      frmSaleTypeCategory.enumMode = EnumMode.Edit;
       SaleTypeCategory saleTypeCategory=dgrSaleTypesCategories.SelectedItem as SaleTypeCategory;
       frmSaleTypeCategory.oldSaleTypeCategory = saleTypeCategory;
       if(frmSaleTypeCategory.ShowDialog()==true)
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
     {
       frmSaleTypeCategoryDetail frmSaleTypeCategory = new frmSaleTypeCategoryDetail();
       frmSaleTypeCategory.Owner = this;
-      frmSaleTypeCategory.enumMode = EnumMode.add;
+      frmSaleTypeCategory.enumMode = EnumMode.Add;
       if(frmSaleTypeCategory.ShowDialog()==true)
       {
         if(ValidateFilter(frmSaleTypeCategory.saleTypeCategory))//Validamos el filtro

@@ -43,9 +43,9 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(membershipType, oldMembershipType);
       DataContext = membershipType;
       LoadMemberGroups();
-      txtmtID.IsEnabled = (enumMode != EnumMode.edit);
+      txtmtID.IsEnabled = (enumMode != EnumMode.Edit);
       #region Mode Search
-      if (enumMode == EnumMode.search)
+      if (enumMode == EnumMode.Search)
       {
         chkmtA.Visibility = Visibility.Collapsed;
         cmbSta.Visibility = Visibility.Visible;
@@ -96,9 +96,9 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
-          if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode != EnumMode.add)
+          if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode != EnumMode.Add)
           {
             _isClosing = true;
             Close();
@@ -181,9 +181,9 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
-          if (!ObjectHelper.IsEquals(membershipType, oldMembershipType) && enumMode != EnumMode.search)
+          if (!ObjectHelper.IsEquals(membershipType, oldMembershipType) && enumMode != EnumMode.Search)
           {
             MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
             if (result != MessageBoxResult.Yes)
@@ -210,7 +210,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<MembershipGroup> lstMembershipGroup = await BRMembershipGroups.GetMembershipGroups();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "ALL" });
         }

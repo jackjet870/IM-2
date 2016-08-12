@@ -85,7 +85,7 @@ namespace IM.Administrator.Forms
             {
               List<LeadSource> lstAddLeadSources = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
               List<LeadSource> lstDelLeadSources = _lstOldLeadSources.Where(ls => !lstLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
-              int nRes = await BRNotices.SaveNotice(notice, enumMode == EnumMode.edit, lstAddLeadSources, lstDelLeadSources);
+              int nRes = await BRNotices.SaveNotice(notice, enumMode == EnumMode.Edit, lstAddLeadSources, lstDelLeadSources);
               UIHelper.ShowMessageResult("Notice", nRes);
               if(nRes>0)
               {
@@ -508,7 +508,7 @@ namespace IM.Administrator.Forms
       try
       {
         cmbLeadSources.ItemsSource = await BRLeadSources.GetLeadSources(-1,-1,-1);
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           List<LeadSource> lstLeadSources = await BRLeadSources.GetLeadsourcesByNotice(notice.noID);
           dgrLeadSources.ItemsSource = lstLeadSources;

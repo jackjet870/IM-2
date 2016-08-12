@@ -189,7 +189,7 @@ namespace IM.Administrator.Forms
       Season season = (Season)dgrSeasons.SelectedItem;
       frmSeasonDetail frmSeasonDetail = new frmSeasonDetail();
       frmSeasonDetail.Owner = this;
-      frmSeasonDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmSeasonDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmSeasonDetail.oldSeason = season;
       if (frmSeasonDetail.ShowDialog() == true)
       {
@@ -268,7 +268,7 @@ namespace IM.Administrator.Forms
     {
       frmSeasonDetail frmSeasonDetail = new frmSeasonDetail();
       frmSeasonDetail.Owner = this;
-      frmSeasonDetail.enumMode = EnumMode.add;
+      frmSeasonDetail.enumMode = EnumMode.Add;
       if (frmSeasonDetail.ShowDialog() == true)
       {
         if (ValidateFilter(frmSeasonDetail.season))//Valida que cumpla con los filtros actuales

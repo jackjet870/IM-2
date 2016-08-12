@@ -44,7 +44,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(locationCategory, oldLocationCategory);
       UIHelper.SetUpControls(locationCategory, this);
-      txtlcID.IsEnabled = (enumMode == EnumMode.add);
+      txtlcID.IsEnabled = (enumMode == EnumMode.Add);
       DataContext = locationCategory;
       loadLocations();
       dgrLocation.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -114,7 +114,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<Location> lstLocations = (List<Location>)dgrLocation.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(locationCategory, oldLocationCategory) && ObjectHelper.IsListEquals(lstLocations, _oldLocations))
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(locationCategory, oldLocationCategory) && ObjectHelper.IsListEquals(lstLocations, _oldLocations))
       {
         blnClosing = true;
         Close();
@@ -129,7 +129,7 @@ namespace IM.Administrator.Forms
         {
           List<Location> lstAdd = lstLocations.Where(lo => !_oldLocations.Any(loo => loo.loID == lo.loID)).ToList();
           List<Location> lstDel = _oldLocations.Where(lo => !lstLocations.Any(loo => loo.loID == lo.loID)).ToList();
-          int nRes = await BRLocationsCategories.SaveLocationCategories(locationCategory,lstAdd,lstDel,(enumMode==EnumMode.edit));
+          int nRes = await BRLocationsCategories.SaveLocationCategories(locationCategory,lstAdd,lstDel,(enumMode==EnumMode.Edit));
           UIHelper.ShowMessageResult("Location", nRes);
           if (nRes > 0)
           {

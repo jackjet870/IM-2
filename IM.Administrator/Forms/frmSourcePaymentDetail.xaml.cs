@@ -38,13 +38,13 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(sourcePayment, oldSourcePayment);
       UIHelper.SetUpControls(sourcePayment, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
       }
-      txtsbID.IsEnabled = (enumMode == EnumMode.add);
-      txtsbN.IsEnabled = (enumMode != EnumMode.preview);
-      chksbA.IsEnabled = (enumMode != EnumMode.preview);
+      txtsbID.IsEnabled = (enumMode == EnumMode.Add);
+      txtsbN.IsEnabled = (enumMode != EnumMode.ReadOnly);
+      chksbA.IsEnabled = (enumMode != EnumMode.ReadOnly);
       DataContext = sourcePayment;
     }
     #endregion
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(sourcePayment, oldSourcePayment))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(sourcePayment, oldSourcePayment))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(sourcePayment, oldSourcePayment))
           {

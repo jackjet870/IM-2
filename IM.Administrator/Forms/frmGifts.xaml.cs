@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
       frmGiftDetail frmGiftDetail = new frmGiftDetail();
       frmGiftDetail.Owner = this;
       frmGiftDetail._oldGift = gift;
-      frmGiftDetail.enumMode = _blnEdit ? EnumMode.edit : EnumMode.preview;
+      frmGiftDetail.enumMode = _blnEdit ? EnumMode.Edit : EnumMode.ReadOnly;
       if(frmGiftDetail.ShowDialog()==true)
       {
         List<Gift> lstGifts = (List<Gift>)dgrGifs.ItemsSource;
@@ -187,7 +187,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmGiftDetail frmGiftDetail = new frmGiftDetail();
-      frmGiftDetail.enumMode = EnumMode.add;
+      frmGiftDetail.enumMode = EnumMode.Add;
       frmGiftDetail.Owner = this;
       if(frmGiftDetail.ShowDialog()==true)
       {

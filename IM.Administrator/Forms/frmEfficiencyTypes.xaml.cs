@@ -132,7 +132,7 @@ namespace IM.Administrator.Forms
     { 
       frmEfficiencyTypeDetail frmEfyTypeDetail = new frmEfficiencyTypeDetail();
       frmEfyTypeDetail.Owner = this;
-      frmEfyTypeDetail.enumMode = EnumMode.add;     
+      frmEfyTypeDetail.enumMode = EnumMode.Add;     
       if(frmEfyTypeDetail.ShowDialog()==true)
       {
         EfficiencyType efficiencyType = frmEfyTypeDetail.efficiencyType;
@@ -180,7 +180,7 @@ namespace IM.Administrator.Forms
       EfficiencyType efficiencyType = (EfficiencyType)dgrEfcyTypes.SelectedItem;
       frmEfficiencyTypeDetail frmEfyTypeDetail = new frmEfficiencyTypeDetail();
       frmEfyTypeDetail.Owner = this;
-      frmEfyTypeDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmEfyTypeDetail.enumMode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmEfyTypeDetail.oldEffType = efficiencyType;
 
       if (frmEfyTypeDetail.ShowDialog() == true)

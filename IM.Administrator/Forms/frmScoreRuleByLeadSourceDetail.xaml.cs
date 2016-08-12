@@ -42,7 +42,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(scoreRuleByLeadSource, oldScoreRuleByLeadSource);            
-      cmbsbID.IsEnabled = (enumMode == EnumMode.add);
+      cmbsbID.IsEnabled = (enumMode == EnumMode.Add);
       LoadLeadSources();
       LoadScoreRuleDetail();
       LoadScoreConcepts();
@@ -90,7 +90,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<ScoreRuleByLeadSourceDetail> lstScoreRuleDetails = (List<ScoreRuleByLeadSourceDetail>)dgrScores.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRuleByLeadSource, oldScoreRuleByLeadSource) && !hasChageScores())
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(scoreRuleByLeadSource, oldScoreRuleByLeadSource) && !hasChageScores())
       {
         _isClosing = true;
         Close();
@@ -121,11 +121,11 @@ namespace IM.Administrator.Forms
             )).ToList();
           #endregion
 
-          int nRes = await BRScoreRulesByLeadSource.SaveScoreRuleByLeadSource(scoreRuleByLeadSource, lstAdd, lstDel, lstUpd, (enumMode == EnumMode.edit));// await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);          
+          int nRes = await BRScoreRulesByLeadSource.SaveScoreRuleByLeadSource(scoreRuleByLeadSource, lstAdd, lstDel, lstUpd, (enumMode == EnumMode.Edit));// await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);          
           UIHelper.ShowMessageResult("Score Rule By Lead Source", nRes);
           if (nRes > 0)
           {
-            if(enumMode==EnumMode.add)
+            if(enumMode==EnumMode.Add)
             {
               var lstNewItem = await BRScoreRulesByLeadSource.GetScoreRuleByLeadSource(scoreRuleByLeadSource.sbls);
               scoreRuleByLeadSource = lstNewItem.FirstOrDefault();  

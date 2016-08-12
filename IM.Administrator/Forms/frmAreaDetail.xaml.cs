@@ -68,12 +68,12 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(area, oldArea);
       LoadRegions();
       DataContext = area;
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         txtarN.IsEnabled = true;
         chkarA.IsEnabled = true;
         cmbarrg.IsEnabled = true;
-        txtarID.IsEnabled = (mode == EnumMode.add);
+        txtarID.IsEnabled = (mode == EnumMode.Add);
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(area, this);
       }      
@@ -92,7 +92,7 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(area,oldArea)&& mode!=EnumMode.add)
+      if(ObjectHelper.IsEquals(area,oldArea)&& mode!=EnumMode.Add)
       {
         _isClosing = true;
         Close();
@@ -152,7 +152,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(area, oldArea))
         {

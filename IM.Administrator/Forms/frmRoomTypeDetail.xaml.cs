@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(roomType, oldRoomType);
-      txtrtID.IsEnabled = (enumMode == EnumMode.add);
+      txtrtID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(roomType, this);
       DataContext = roomType;
     } 
@@ -78,7 +78,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(roomType, oldRoomType))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(roomType, oldRoomType))
         {
           _isClosing = true;
           Close();

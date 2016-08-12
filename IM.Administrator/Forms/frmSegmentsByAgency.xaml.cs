@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
       SegmentByAgency segmentByAgency = (SegmentByAgency)dgrSegments.SelectedItem;
       frmSegmentByAgencyDetail frmSegmentByAgency = new frmSegmentByAgencyDetail();
       frmSegmentByAgency.Owner = this;
-      frmSegmentByAgency.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.add;
+      frmSegmentByAgency.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.Add;
       frmSegmentByAgency.oldSegmentByAgency = segmentByAgency;
       if(frmSegmentByAgency.ShowDialog()==true)
       {
@@ -214,7 +214,7 @@ namespace IM.Administrator.Forms
     {
       frmSegmentByAgencyDetail frmSegmentByAgency = new frmSegmentByAgencyDetail();
       frmSegmentByAgency.Owner = this;
-      frmSegmentByAgency.enumMode = EnumMode.add;
+      frmSegmentByAgency.enumMode = EnumMode.Add;
       if (frmSegmentByAgency.ShowDialog() == true)
       {
         if (ValidateFilter(frmSegmentByAgency.segmentByAgency))//Verificamos que cumpla con los filtros

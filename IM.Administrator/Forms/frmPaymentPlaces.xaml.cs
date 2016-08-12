@@ -59,7 +59,7 @@ namespace IM.Administrator.Forms
       PaymentPlace paymentPlace = (PaymentPlace)dgrPaymentPlace.SelectedItem;
       frmPaymentPlaceDetail frmPaymentPlaceDetail = new frmPaymentPlaceDetail();
       frmPaymentPlaceDetail.Owner = this;
-      frmPaymentPlaceDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmPaymentPlaceDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmPaymentPlaceDetail.oldPaymentPlace = paymentPlace;
       if(frmPaymentPlaceDetail.ShowDialog()==true)
       {
@@ -197,7 +197,7 @@ namespace IM.Administrator.Forms
     {
       frmPaymentPlaceDetail frmPaymentPlaceDetail = new frmPaymentPlaceDetail();
       frmPaymentPlaceDetail.Owner = this;
-      frmPaymentPlaceDetail.enumMode = EnumMode.add;
+      frmPaymentPlaceDetail.enumMode = EnumMode.Add;
       if(frmPaymentPlaceDetail.ShowDialog()==true)
       {
         PaymentPlace paymentPlace = frmPaymentPlaceDetail.paymentPlace;

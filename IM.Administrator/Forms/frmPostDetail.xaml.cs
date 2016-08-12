@@ -37,12 +37,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(post, oldPost);
       DataContext = post;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         chkA.IsEnabled = true;
         txtpoN.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        txtpoID.IsEnabled = (enumMode == EnumMode.add);
+        txtpoID.IsEnabled = (enumMode == EnumMode.Add);
       }
       UIHelper.SetUpControls(post, this);
     } 
@@ -82,7 +82,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(post, oldPost))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(post, oldPost))
         {
           _isClosing = true;
           Close();
@@ -143,7 +143,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(post, oldPost))
           {

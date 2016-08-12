@@ -2,10 +2,8 @@
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
-using IM.Host.Enums;
 using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Helpers;
 using IM.Services.Helpers;
 using PalaceResorts.Common.PalaceTools;
 using System;
@@ -13,16 +11,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IM.Host.Forms
 {
@@ -746,7 +740,7 @@ namespace IM.Host.Forms
       GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
       _currentCell = grdExchange.CurrentCell;
 
-      ReceiptsGifts.StartEdit(Enums.EnumMode.modEdit, giftsReceiptDetail, ref _currentCell, ref grdExchange, ref bandCancel);
+      ReceiptsGifts.StartEdit(EnumMode.Edit, giftsReceiptDetail, ref _currentCell, ref grdExchange, ref bandCancel);
     }
     #endregion
 

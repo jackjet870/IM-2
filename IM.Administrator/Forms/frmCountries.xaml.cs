@@ -131,7 +131,7 @@ namespace IM.Administrator.Forms
     {
 
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
-      frmCountryDetail.mode = EnumMode.add;
+      frmCountryDetail.mode = EnumMode.Add;
       frmCountryDetail.Owner = this;
       if (frmCountryDetail.ShowDialog() == true)
       {
@@ -179,7 +179,7 @@ namespace IM.Administrator.Forms
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
       frmCountryDetail.Owner = this;
       frmCountryDetail.oldCountry = country;
-      frmCountryDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmCountryDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if (frmCountryDetail.ShowDialog() == true)
       {
         List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;

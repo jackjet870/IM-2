@@ -29,7 +29,7 @@ namespace IM.Administrator.Forms
     #region Methods Form
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana detalle en modo preview|edicion
+    /// Muestra la ventana detalle en modo ReadOnly|edicion
     /// </summary>
     /// <history>
     /// [emoguel] 04/04/2016
@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
       MembershipType membershipType = (MembershipType)dgrMemberShipTypes.SelectedItem;
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = EnumMode.edit;
+      frmMemshipTypeDetail.enumMode = EnumMode.Edit;
       frmMemshipTypeDetail.oldMembershipType = membershipType;
       frmMemshipTypeDetail.oldMembershipType = membershipType;
       if (frmMemshipTypeDetail.ShowDialog() == true)
@@ -184,7 +184,7 @@ namespace IM.Administrator.Forms
     {
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = EnumMode.add;
+      frmMemshipTypeDetail.enumMode = EnumMode.Add;
       if(frmMemshipTypeDetail.ShowDialog()==true)
       {
         MembershipType membershipType = frmMemshipTypeDetail.membershipType;
@@ -216,7 +216,7 @@ namespace IM.Administrator.Forms
     {
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = EnumMode.search;
+      frmMemshipTypeDetail.enumMode = EnumMode.Search;
       frmMemshipTypeDetail.nStatus = _nStatus;
       frmMemshipTypeDetail.oldMembershipType = _membershipTypeFilter;
       if(frmMemshipTypeDetail.ShowDialog()==true)

@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       ReimpresionMotive reimpresionMotive = (ReimpresionMotive)dgrReimpresionMotives.SelectedItem;
       frmReimpresionMotiveDetail frmReimpresionMotive = new frmReimpresionMotiveDetail();
       frmReimpresionMotive.Owner = this;
-      frmReimpresionMotive.enumMode = EnumMode.edit;
+      frmReimpresionMotive.enumMode = EnumMode.Edit;
       frmReimpresionMotive.oldReimpresionMotive = reimpresionMotive;
       if(frmReimpresionMotive.ShowDialog()==true)
       {
@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
     {
       frmReimpresionMotiveDetail frmReimpresionMotive = new frmReimpresionMotiveDetail();
       frmReimpresionMotive.Owner = this;
-      frmReimpresionMotive.enumMode = EnumMode.add;
+      frmReimpresionMotive.enumMode = EnumMode.Add;
       if(frmReimpresionMotive.ShowDialog()==true)
       {
         ReimpresionMotive reimpresionMotive = frmReimpresionMotive.reimpresionMotive;

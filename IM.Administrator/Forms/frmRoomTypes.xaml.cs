@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       RoomType roomType = (RoomType)dgrRoomTypes.SelectedItem;
       frmRoomTypeDetail frmRoomTypeDetail = new frmRoomTypeDetail();
       frmRoomTypeDetail.Owner = this;
-      frmRoomTypeDetail.enumMode = EnumMode.edit;
+      frmRoomTypeDetail.enumMode = EnumMode.Edit;
       frmRoomTypeDetail.oldRoomType = roomType;
       if(frmRoomTypeDetail.ShowDialog()==true)
       {
@@ -192,7 +192,7 @@ namespace IM.Administrator.Forms
     {
       frmRoomTypeDetail frmRoomTypeDetail = new frmRoomTypeDetail();
       frmRoomTypeDetail.Owner = this;
-      frmRoomTypeDetail.enumMode = EnumMode.add;
+      frmRoomTypeDetail.enumMode = EnumMode.Add;
       if(frmRoomTypeDetail.ShowDialog()==true)
       {
         RoomType roomType = frmRoomTypeDetail.roomType;

@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       SourcePayment sourcePayment = (SourcePayment)dgrSourcePayments.SelectedItem;
       frmSourcePaymentDetail frmSourcePayment = new frmSourcePaymentDetail();
       frmSourcePayment.Owner = this;
-      frmSourcePayment.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmSourcePayment.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmSourcePayment.oldSourcePayment = sourcePayment;
       if(frmSourcePayment.ShowDialog()==true)
       {
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmSourcePaymentDetail frmSourcePaymentDetail = new frmSourcePaymentDetail();
       frmSourcePaymentDetail.Owner = this;
-      frmSourcePaymentDetail.enumMode = EnumMode.add;
+      frmSourcePaymentDetail.enumMode = EnumMode.Add;
       if(frmSourcePaymentDetail.ShowDialog()==true)
       {
         SourcePayment sourcePayment = frmSourcePaymentDetail.sourcePayment;

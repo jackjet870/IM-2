@@ -249,7 +249,7 @@ namespace IM.Administrator.Forms
     {
       frmTeamPRsDetail frmTeamPRsDetail = new frmTeamPRsDetail();
       frmTeamPRsDetail.Owner = this;
-      frmTeamPRsDetail.enumMode = EnumMode.add;
+      frmTeamPRsDetail.enumMode = EnumMode.Add;
       if (frmTeamPRsDetail.ShowDialog() == true)
       {
         if (ValidateFilter(frmTeamPRsDetail.team))//Valida que cumpla con los filtros actuales
@@ -310,7 +310,7 @@ namespace IM.Administrator.Forms
       frmTeamPRsDetail frmTeamPRsDetail = new frmTeamPRsDetail();
       frmTeamPRsDetail.Owner = this;
       frmTeamPRsDetail.oldTeam = teamPRs;
-      frmTeamPRsDetail.enumMode = EnumMode.edit;
+      frmTeamPRsDetail.enumMode = EnumMode.Edit;
      if (frmTeamPRsDetail.ShowDialog() == true)
       {
         int nIndex = 0;

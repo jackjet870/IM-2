@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
       Market market = (Market)dgrMarkets.SelectedItem;
       frmMarketDetail frmMarketDetail = new frmMarketDetail();
       frmMarketDetail.Owner = this;
-      frmMarketDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmMarketDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmMarketDetail.oldMarket = market;
       if(frmMarketDetail.ShowDialog()==true)
       {
@@ -197,7 +197,7 @@ namespace IM.Administrator.Forms
     {
       frmMarketDetail frmMarketDetail = new frmMarketDetail();
       frmMarketDetail.Owner = this;
-      frmMarketDetail.enumMode = EnumMode.add;
+      frmMarketDetail.enumMode = EnumMode.Add;
       if(frmMarketDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmMarketDetail.market))//Validamos que cumpla con los filtros

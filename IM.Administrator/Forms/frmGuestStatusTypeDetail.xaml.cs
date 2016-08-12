@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode != EnumMode.add)//Verificamos si se realizó algun cambio
+        if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode != EnumMode.Add)//Verificamos si se realizó algun cambio
         {
           _isClosing = true;
           Close();
@@ -116,9 +116,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(guestStaTyp, guestStaTypOld);
       DataContext = guestStaTyp;
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtgsID.IsEnabled = (enumMode==EnumMode.add);
+        txtgsID.IsEnabled = (enumMode==EnumMode.Add);
         txtgsN.IsEnabled = true;
         txtgsAgeStart.IsEnabled = true;
         txtgsAgeEnd.IsEnabled = true;
@@ -162,7 +162,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld))//Verificar que no haya cambios pendientes
         {

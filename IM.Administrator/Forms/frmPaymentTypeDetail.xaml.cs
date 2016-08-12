@@ -57,7 +57,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(paymentType, oldPaymentType);
       DataContext = paymentType;
-      txtptID.IsEnabled = (enumMode != EnumMode.edit);
+      txtptID.IsEnabled = (enumMode != EnumMode.Edit);
       UIHelper.SetUpControls(paymentType, this);
     } 
     #endregion
@@ -93,7 +93,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(paymentType, oldPaymentType) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(paymentType, oldPaymentType) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

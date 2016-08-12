@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       frmTourTimeSchemaDetail frmTourTimeSchemaDetail = new frmTourTimeSchemaDetail();
       frmTourTimeSchemaDetail.Owner = this;
       frmTourTimeSchemaDetail.oldTourTimeSchema = tourTimeSchema;
-      frmTourTimeSchemaDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.add;
+      frmTourTimeSchemaDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.Add;
       if(frmTourTimeSchemaDetail.ShowDialog()==true)
       {
         List<TourTimesSchema> lstTourTimesSchemas = (List<TourTimesSchema>)dgrTourTimesSchemas.ItemsSource;
@@ -196,7 +196,7 @@ namespace IM.Administrator.Forms
     {
       frmTourTimeSchemaDetail frmTourTimeSchema = new frmTourTimeSchemaDetail();
       frmTourTimeSchema.Owner = this;
-      frmTourTimeSchema.enumMode = EnumMode.add;
+      frmTourTimeSchema.enumMode = EnumMode.Add;
       if (frmTourTimeSchema.ShowDialog() == true)
       {
         if (ValidateFilter(frmTourTimeSchema.tourTimeSchema))//Validamos que cumpla con los filtros actuales

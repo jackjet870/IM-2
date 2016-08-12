@@ -38,9 +38,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(reasonCancellationFolio, oldReasonCanFol);
       UIHelper.SetUpControls(reasonCancellationFolio, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtrcfID.IsEnabled = (enumMode == EnumMode.add);
+        txtrcfID.IsEnabled = (enumMode == EnumMode.Add);
         txtrcfN.IsEnabled = true;
         chkrcfA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
@@ -99,7 +99,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode == EnumMode.edit && ObjectHelper.IsEquals(reasonCancellationFolio, oldReasonCanFol))
+        if (enumMode == EnumMode.Edit && ObjectHelper.IsEquals(reasonCancellationFolio, oldReasonCanFol))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(reasonCancellationFolio, oldReasonCanFol))
           {

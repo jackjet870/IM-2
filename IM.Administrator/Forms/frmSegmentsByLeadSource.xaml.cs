@@ -137,7 +137,7 @@ namespace IM.Administrator.Forms
       frmSegmentByLeadSourceDetail frmSegmentByLS = new frmSegmentByLeadSourceDetail();
       frmSegmentByLS.Owner = this;
       frmSegmentByLS.oldSegmentByLeadSource = segmentByLS;
-      frmSegmentByLS.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmSegmentByLS.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       if(frmSegmentByLS.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -189,7 +189,7 @@ namespace IM.Administrator.Forms
     {
       frmSegmentByLeadSourceDetail frmSegmentsByLS = new frmSegmentByLeadSourceDetail();
       frmSegmentsByLS.Owner = this;
-      frmSegmentsByLS.enumMode = EnumMode.add;
+      frmSegmentsByLS.enumMode = EnumMode.Add;
       if(frmSegmentsByLS.ShowDialog()==true)
       {
         if(ValidateFilter(frmSegmentsByLS.segmentByLeadSource))//Verificar si cumple con los filtros

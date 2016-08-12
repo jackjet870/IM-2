@@ -42,10 +42,10 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           cmbPersonnel.IsEnabled = true;
           SizeToContent = SizeToContent.WidthAndHeight;
@@ -54,7 +54,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          if (enumMode == EnumMode.add)
+          if (enumMode == EnumMode.Add)
           {
             cmbPersonnel.IsEnabled = true;
           }
@@ -89,7 +89,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         #region Save
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
           #region ValidateChanges
           List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
@@ -97,7 +97,7 @@ namespace IM.Administrator.Forms
           bool blnHasChanged = ValidateChanges(lstFoliosPR, lstFoliosCan);
 
           #endregion
-          if (enumMode != EnumMode.add && !blnHasChanged)
+          if (enumMode != EnumMode.Add && !blnHasChanged)
           {
             blnClosing = true;
             Close();
@@ -112,7 +112,7 @@ namespace IM.Administrator.Forms
               string strMsj = "";
 
               #region ListFolios
-              if (enumMode == EnumMode.add)
+              if (enumMode == EnumMode.Add)
               {
                 var folio = await BRFoliosInvitationsOuthousePR.GetPRbyFolioOuthouse(personnelSave);
                 if (folio.FirstOrDefault() != null)
@@ -264,7 +264,7 @@ namespace IM.Administrator.Forms
         List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
         List<FolioInvitationOuthousePRCancellation> lstFoliosCancel = (List<FolioInvitationOuthousePRCancellation>)dgrCancelled.ItemsSource;
         bool blnHasChanged = ValidateChanges(lstFoliosPR, lstFoliosCancel);
-        if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode != EnumMode.edit) || blnHasChanged == true)
+        if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode != EnumMode.Edit) || blnHasChanged == true)
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.No)

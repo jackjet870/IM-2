@@ -131,7 +131,7 @@ namespace IM.Administrator.Forms
       ScoreRuleConcept scoreRuleConcept = (ScoreRuleConcept)dgrScoreRulesConcepts.SelectedItem;
       frmScoreRuleConceptDetail frmScoRulConDetail = new frmScoreRuleConceptDetail();
       frmScoRulConDetail.Owner = this;
-      frmScoRulConDetail.enumMode = EnumMode.edit;
+      frmScoRulConDetail.enumMode = EnumMode.Edit;
       frmScoRulConDetail.oldScoreRuleConcept = scoreRuleConcept;
       if(frmScoRulConDetail.ShowDialog()==true)
       {
@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
     {
       frmScoreRuleConceptDetail frmScoRulConDetail = new frmScoreRuleConceptDetail();
       frmScoRulConDetail.Owner = this;
-      frmScoRulConDetail.enumMode = EnumMode.add;
+      frmScoRulConDetail.enumMode = EnumMode.Add;
       if(frmScoRulConDetail.ShowDialog()==true)
       {
         ScoreRuleConcept scoreRuleConcept = frmScoRulConDetail.scoreRuleConcept;

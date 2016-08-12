@@ -128,7 +128,7 @@ namespace IM.Administrator.Forms
       PlaceType placeType = (PlaceType)dgrPlaceTypes.SelectedItem;
       frmPlaceTypeDetail frmPlaceTypeDetail = new frmPlaceTypeDetail();
       frmPlaceTypeDetail.Owner = this;
-      frmPlaceTypeDetail.enumMode = EnumMode.edit;
+      frmPlaceTypeDetail.enumMode = EnumMode.Edit;
       frmPlaceTypeDetail.oldPlaceType = placeType;
       if(frmPlaceTypeDetail.ShowDialog()==true)
       {
@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
     {
       frmPlaceTypeDetail frmPlaceTypeDetail = new frmPlaceTypeDetail();
       frmPlaceTypeDetail.Owner = this;
-      frmPlaceTypeDetail.enumMode = EnumMode.add;
+      frmPlaceTypeDetail.enumMode = EnumMode.Add;
       if(frmPlaceTypeDetail.ShowDialog()==true)
       {
         PlaceType placeType = frmPlaceTypeDetail.placeType;

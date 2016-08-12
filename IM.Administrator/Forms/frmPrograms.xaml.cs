@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
     {
       Program program = (Program)dgrPrograms.SelectedItem;
       frmProgramDetail frmProgramDetail = new frmProgramDetail();
-      frmProgramDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmProgramDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmProgramDetail.oldProgram = program;
       if(frmProgramDetail.ShowDialog()==true)
       {
@@ -160,7 +160,7 @@ namespace IM.Administrator.Forms
     {
       frmProgramDetail frmProgramDetail = new frmProgramDetail();
       frmProgramDetail.Owner = this;
-      frmProgramDetail.enumMode = EnumMode.add;
+      frmProgramDetail.enumMode = EnumMode.Add;
       if(frmProgramDetail.ShowDialog()==true)
       {
         List<Program> lstPrograms = (List<Program>)dgrPrograms.ItemsSource;

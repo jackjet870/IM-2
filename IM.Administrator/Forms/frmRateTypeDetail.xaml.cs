@@ -76,7 +76,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(rateType, oldRateType))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(rateType, oldRateType))
         {
           _isClosing = true;
           Close();

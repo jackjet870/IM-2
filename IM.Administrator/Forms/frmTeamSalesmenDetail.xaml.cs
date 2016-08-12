@@ -145,18 +145,18 @@ namespace IM.Administrator.Forms
       LoadSalesRoom();
       LoadIntegrantes(team);
       #region Bloquear botones
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         btnTransfer.Visibility = Visibility.Visible;
-        txtsID.IsEnabled = (enumMode == EnumMode.add);
+        txtsID.IsEnabled = (enumMode == EnumMode.Add);
         txtDescrip.IsEnabled = true;
         cbotsLeader.IsEnabled = true;
         cbotssr.IsEnabled = true;
         chkActive.IsEnabled = true;
         UIHelper.SetUpControls(team, this);
       }
-      if (enumMode != EnumMode.add)
+      if (enumMode != EnumMode.Add)
       {
         Title += " (" + team.tsID + "," + team.tsN + ")";
       }
@@ -306,7 +306,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<Personnel> lstPersonnels = (List<Personnel>)dgrIntegrants.ItemsSource;
-      if (ObjectHelper.IsEquals(team, oldTeam) && enumMode != EnumMode.add && ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
+      if (ObjectHelper.IsEquals(team, oldTeam) && enumMode != EnumMode.Add && ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
       {
         blnClosing = true;
         Close();
@@ -321,7 +321,7 @@ namespace IM.Administrator.Forms
           List<Personnel> lstAdd = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstChanged = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID && pee.pepo == pe.pepo)).ToList();
-          int nRes = await BRTeamsSalesMen.SaveTeam(App.User.User.peID, team, (enumMode == EnumMode.edit), lstAdd, lstDel, lstChanged);
+          int nRes = await BRTeamsSalesMen.SaveTeam(App.User.User.peID, team, (enumMode == EnumMode.Edit), lstAdd, lstDel, lstChanged);
           status.Visibility = Visibility.Collapsed;
           UIHelper.ShowMessageResult("Team", nRes);
           if (nRes > 0)

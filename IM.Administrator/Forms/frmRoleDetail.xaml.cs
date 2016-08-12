@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(role, oldRole);
       DataContext = role;
-      txtroID.IsEnabled = (enumMode == EnumMode.add);
+      txtroID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(role, this);
     }
     #endregion
@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(role, oldRole))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(role, oldRole))
         {
           _isClosing = true;
           Close();

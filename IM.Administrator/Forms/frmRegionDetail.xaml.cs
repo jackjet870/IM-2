@@ -39,10 +39,10 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(region, oldRegion);
       UIHelper.SetUpControls(region, this);
       DataContext = region;
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtrgID.IsEnabled = (enumMode == EnumMode.add);
+        txtrgID.IsEnabled = (enumMode == EnumMode.Add);
         txtrgN.IsEnabled = true;
         chkrgA.IsEnabled = true;
       }
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(region, oldRegion))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(region, oldRegion))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(region, oldRegion))
           {

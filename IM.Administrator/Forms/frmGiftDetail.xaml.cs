@@ -59,13 +59,13 @@ namespace IM.Administrator.Forms
       LoadPromotionSistur();
       chkgiPack.IsEnabled = !gift.giPack;
       dgrGiftInPack.IsReadOnly = gift.giPack;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         UIHelper.SetUpControls(gift, this);      
         grdCost.IsEnabled = true;
         grdGeneral.IsEnabled = true;
         grdLocations.IsEnabled = true;
-        txtgiID.IsEnabled = (enumMode == EnumMode.add);
+        txtgiID.IsEnabled = (enumMode == EnumMode.Add);
       }
       DataContext = gift;
       dgrLocations.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -91,7 +91,7 @@ namespace IM.Administrator.Forms
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
         List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
         List<GiftPackageItem> lstPackItems = (List<GiftPackageItem>)dgrGiftInPack.ItemsSource;
-        if(enumMode!=EnumMode.preview && (!ObjectHelper.IsEquals(gift,_oldGift) || ChangedGifts(lstPackItems) || !ObjectHelper.IsListEquals(lstAgencies,_lstOldAgencies)
+        if(enumMode!=EnumMode.ReadOnly && (!ObjectHelper.IsEquals(gift,_oldGift) || ChangedGifts(lstPackItems) || !ObjectHelper.IsListEquals(lstAgencies,_lstOldAgencies)
           || !ObjectHelper.IsListEquals(lstLocations,_lstOldLocations)))
         {
           dgrGiftInPack.CancelEdit();
@@ -124,7 +124,7 @@ namespace IM.Administrator.Forms
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
         List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
         List<GiftPackageItem> lstPackItems = (List<GiftPackageItem>)dgrGiftInPack.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(gift, _oldGift) && ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies) && ObjectHelper.IsListEquals(lstLocations, _lstOldLocations) && !ChangedGifts(lstPackItems))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(gift, _oldGift) && ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies) && ObjectHelper.IsListEquals(lstLocations, _lstOldLocations) && !ChangedGifts(lstPackItems))
         {
           _isClosing = true;
           Close();
@@ -181,8 +181,8 @@ namespace IM.Administrator.Forms
               var lstUpdGiftPack=lstPackItems.Where(gp=>_lstOldPacks.Any(gpp=>gp.gpgi==gpp.gpgi && gp.gpQty!=gpp.gpQty)).ToList();
               #endregion
 
-              int nRes = await BRGifts.SaveGift(gift, (enumMode == EnumMode.edit), lstAddLocations, lstDelLocations, lstAddAgencies, lstDelAgencies, lstAddGiftPack, lstDelGiftPack, lstUpdGiftPack,
-                (enumMode == EnumMode.add && gift.giInven), App.User.User.peID);
+              int nRes = await BRGifts.SaveGift(gift, (enumMode == EnumMode.Edit), lstAddLocations, lstDelLocations, lstAddAgencies, lstDelAgencies, lstAddGiftPack, lstDelGiftPack, lstUpdGiftPack,
+                (enumMode == EnumMode.Add && gift.giInven), App.User.User.peID);
               UIHelper.ShowMessageResult("Gift", nRes);
               if(nRes>0)
               {
@@ -592,7 +592,7 @@ namespace IM.Administrator.Forms
         collectionLocations = (CollectionViewSource)FindResource("cvsLocations");
         collectionLocations.Source = await BRLocations.GetLocations(1);
         List<Location> lstLocations = new List<Location>();
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           var locationByUser = await BRLocations.GetLocationsByGift(gift.giID);
           lstLocations = locationByUser.ToList();
@@ -621,10 +621,10 @@ namespace IM.Administrator.Forms
       try
       {
         collectionPackages = (CollectionViewSource)FindResource("cvsGiftsPackage");
-        var lstGift = await BRGifts.GetGifts(1, giftPack: (enumMode == EnumMode.add) ? 1 : 0);
+        var lstGift = await BRGifts.GetGifts(1, giftPack: (enumMode == EnumMode.Add) ? 1 : 0);
         List<GiftPackageItem> lstGiftPack = new List<GiftPackageItem>();
         collectionPackages.Source = lstGift;
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           lstGiftPack = await BRGiftsPacks.GetGiftsPacks(new GiftPackageItem { gpPack = gift.giID }, true);          
           _lstOldPacks = lstGiftPack.Select(gp => new GiftPackageItem { gpgi = gp.gpgi, gpQty = gp.gpQty, gpPack=gp.gpPack }).ToList();
@@ -653,7 +653,7 @@ namespace IM.Administrator.Forms
       {
         cmbAgencies.ItemsSource = await BRAgencies.GetAgencies(null, 1);
         List<Agency> lstAgencies = new List<Agency>();
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           var agenciesByGift = await BRAgencies.GetAgenciesByGift(gift.giID);
           lstAgencies = agenciesByGift.ToList();
@@ -803,7 +803,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void GiftInPack()
     {
-      if (enumMode == EnumMode.edit)
+      if (enumMode == EnumMode.Edit)
       {
         var lstGiftsDetail = await BRGiftsReceiptDetail.GetGiftsReceiptDetail(new GiftsReceiptDetail { gegi = gift.giID });
         chkgiPack.IsEnabled = (lstGiftsDetail.Count < 1);

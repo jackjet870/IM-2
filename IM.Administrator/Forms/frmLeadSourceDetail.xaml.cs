@@ -53,7 +53,7 @@ namespace IM.Administrator.Forms
       LoadAreas();
       LoadRegions();
       LoadSegmentsByLeadSources();
-      if (enumMode==EnumMode.search)
+      if (enumMode==EnumMode.Search)
       {
         txtlsID.IsEnabled = true;
         dgrAgencies.Visibility = Visibility.Collapsed;
@@ -104,8 +104,8 @@ namespace IM.Administrator.Forms
         dgrAgencies.ItemsSource = oldLeadSource.Agencies.ToList().Where(ag => ag.agA == true).ToList();
         LoadAgencies();
         LoadLocations();
-        txtlsID.IsEnabled = (enumMode == EnumMode.add);
-        if (enumMode == EnumMode.preview)
+        txtlsID.IsEnabled = (enumMode == EnumMode.Add);
+        if (enumMode == EnumMode.ReadOnly)
         {
           dgrAgencies.IsReadOnly = true;
           dgrLocations.IsReadOnly = true;
@@ -135,9 +135,9 @@ namespace IM.Administrator.Forms
       List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
       List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
       #region Save
-      if (enumMode != EnumMode.search)
+      if (enumMode != EnumMode.Search)
       {
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(leadSource, oldLeadSource) && ObjectHelper.IsListEquals(_oldAgencies, lstAgencies) && ObjectHelper.IsListEquals(_oldLocations, lstLocations))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(leadSource, oldLeadSource) && ObjectHelper.IsListEquals(_oldAgencies, lstAgencies) && ObjectHelper.IsListEquals(_oldLocations, lstLocations))
         {
           blnClosing = true;
           Close();
@@ -160,7 +160,7 @@ namespace IM.Administrator.Forms
             List<Agency> lstAgeDel = _oldAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
             #endregion
 
-            int nRes =await BRLeadSources.SaveLeadSource(leadSource,lstLocAdd,lstLocDel,lstAgeAdd,lstAgeDel,(enumMode==EnumMode.edit));
+            int nRes =await BRLeadSources.SaveLeadSource(leadSource,lstLocAdd,lstLocDel,lstAgeAdd,lstAgeDel,(enumMode==EnumMode.Edit));
             UIHelper.ShowMessageResult("Lead Source", nRes);
             if(nRes>0)
             {
@@ -225,7 +225,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing && enumMode != EnumMode.preview && enumMode != EnumMode.search)
+      if (!blnClosing && enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
       {
         btnCancel.Focus();
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
@@ -306,7 +306,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Program> lstPrograms = await BRPrograms.GetPrograms();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstPrograms.Insert(0, new Program { pgID = "", pgN = "ALL" });
         }
@@ -332,7 +332,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<SalesRoomShort> lstSalesRooms = await BRSalesRooms.GetSalesRooms(1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstSalesRooms.Insert(0, new SalesRoomShort { srID = "", srN = "ALL" });
         }
@@ -357,7 +357,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }
@@ -382,7 +382,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Region> lstRegions = await BRRegions.GetRegions(1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstRegions.Insert(0, new Region { rgID = "", rgN = "ALL" });
         }
@@ -407,7 +407,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<SegmentByLeadSource> lstSegments = await BRSegmentsByLeadSource.GetSegmentsByLeadSource();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstSegments.Insert(0, new SegmentByLeadSource { soID = "", soN = "ALL" });
           skpStatus.Visibility = Visibility.Collapsed;

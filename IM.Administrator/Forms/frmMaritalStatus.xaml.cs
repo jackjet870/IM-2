@@ -57,7 +57,7 @@ namespace IM.Administrator.Forms
 
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana detalle en modo preview|edicion
+    /// Muestra la ventana detalle en modo ReadOnly|edicion
     /// </summary>
     /// <history>
     /// [emoguel] 01/04/2016
@@ -68,7 +68,7 @@ namespace IM.Administrator.Forms
       frmMaritalStatusDetail frmMarStatus = new frmMaritalStatusDetail();
       frmMarStatus.Owner = this;
       frmMarStatus.oldMaritalStatus = maritalStatus;
-      frmMarStatus.enumMode = (_blnEdit==true)?EnumMode.edit:EnumMode.preview;
+      frmMarStatus.enumMode = (_blnEdit==true)?EnumMode.Edit:EnumMode.ReadOnly;
       if(frmMarStatus.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -198,7 +198,7 @@ namespace IM.Administrator.Forms
     {
       frmMaritalStatusDetail frmMarStatusDet = new frmMaritalStatusDetail();
       frmMarStatusDet.Owner = this;
-      frmMarStatusDet.enumMode = EnumMode.add;
+      frmMarStatusDet.enumMode = EnumMode.Add;
       if(frmMarStatusDet.ShowDialog()==true)
       {
         MaritalStatus maritalStatus = frmMarStatusDet.maritalStatus;

@@ -39,9 +39,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(notBookingMotive, oldNotBookingMotive);
       DataContext = notBookingMotive;
-      txtnbN.IsEnabled = (enumMode != EnumMode.preview);
-      chknbA.IsEnabled = (enumMode != EnumMode.preview);
-      if(enumMode!=EnumMode.preview)
+      txtnbN.IsEnabled = (enumMode != EnumMode.ReadOnly);
+      chknbA.IsEnabled = (enumMode != EnumMode.ReadOnly);
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(notBookingMotive, this);
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive))
           {

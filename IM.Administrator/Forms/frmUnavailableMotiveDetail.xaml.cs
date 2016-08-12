@@ -45,9 +45,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(unavailableMotive, oldUnavailableMotive);
       UIHelper.SetUpControls(unavailableMotive, this);
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtumID.IsEnabled = (enumMode == EnumMode.add);
+        txtumID.IsEnabled = (enumMode == EnumMode.Add);
         txtumN.IsEnabled = true;
         chkumA.IsEnabled = true;
         dgrAgencies.IsReadOnly = false;
@@ -73,7 +73,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode != EnumMode.preview)
+      if (!_isClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Agency> lstAgencies = new List<Agency>();
@@ -132,7 +132,7 @@ namespace IM.Administrator.Forms
           }
           if (strMsj == "")
           {
-            int nRes = await BRUnavailableMotives.SaveUnavailableMotives(unavailableMotive, lstAgenciesAdd, lstContractsAdd, lstCountriesAdd, (enumMode == EnumMode.edit));
+            int nRes = await BRUnavailableMotives.SaveUnavailableMotives(unavailableMotive, lstAgenciesAdd, lstContractsAdd, lstCountriesAdd, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Unavailable Motives", nRes);
             if (nRes > 0)
             {

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using IM.Host.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
@@ -13,7 +12,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using IM.Model.Helpers;
 using IM.BusinessRules.BRIC;
-using EnumMode = IM.Host.Enums.EnumMode;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Forms
@@ -77,10 +75,10 @@ namespace IM.Host.Forms
       _guId = 7754745;
     }
 
-    public frmSales(EnumSale typeSale, int guId = 0)
+    public frmSales(EnumOpenBy openBy, int guId = 0)
     {
       InitializeComponent();     
-      gprCriteria.Visibility = typeSale == EnumSale.Sale ? Visibility.Collapsed : Visibility.Visible;
+      gprCriteria.Visibility = openBy == EnumOpenBy.Checkbox ? Visibility.Collapsed : Visibility.Visible;
       _guId = guId;
     }
 
@@ -137,7 +135,7 @@ namespace IM.Host.Forms
       }
       else
       {
-        SetMode(EnumMode.modDisplay);
+        SetMode(EnumMode.ReadOnly);
       }
 
       //obtenemos la fecha de cierre
@@ -267,7 +265,7 @@ namespace IM.Host.Forms
         dtgSale.ItemsSource = await BRSales.GetSalesShort(_guId);
       }
       //Establecemos el modo de solo lectura
-      SetMode(Enums.EnumMode.modDisplay);
+      SetMode(EnumMode.ReadOnly);
       //Cargamos el detalle de la venta
       //de la primera venta que aparece en el grid
       await LoadRecord();
@@ -508,7 +506,7 @@ namespace IM.Host.Forms
     {
      
 
-      var blnEnable = mode != EnumMode.modDisplay ? true : false;
+      var blnEnable = mode != EnumMode.ReadOnly ? true : false;
       //Grid principal
       dtgSale.IsEnabled = !blnEnable;
       //criterios de busqueda
@@ -580,7 +578,7 @@ namespace IM.Host.Forms
         txtsaComments.IsEnabled = true;
       }
       //Si la venta es de una fecha cerrada
-      if (mode != Enums.EnumMode.modDisplay && IsClosed())
+      if (mode != EnumMode.ReadOnly && IsClosed())
       {
         //Permitimos modificar la venta para marcarla como procesabel o para desmarcarla de procesable 
         // si su fecha de cancelacion no esta en una fecha cerrada
@@ -1246,7 +1244,7 @@ namespace IM.Host.Forms
     ///</history>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      SetMode(EnumMode.modEdit);
+      SetMode(EnumMode.Edit);
     }
 
     #endregion
@@ -1311,7 +1309,7 @@ namespace IM.Host.Forms
       await LoadRecord();
 
       //Establecemos el mode de solo lectura
-      SetMode(EnumMode.modDisplay);
+      SetMode(EnumMode.ReadOnly);
     }
 
     #endregion
@@ -1418,7 +1416,7 @@ namespace IM.Host.Forms
                                 "Can not save the Salesmens in Intelligence Contracts");
         }
         //Establecemos el modos de solo lectura
-        SetMode(EnumMode.modDisplay);
+        SetMode(EnumMode.ReadOnly);
 
       }
       catch (Exception ex)
@@ -1623,7 +1621,7 @@ namespace IM.Host.Forms
       if(resDelete < 1) UIHelper.ShowMessageResult("Payments", resDelete);
       foreach (var paysale in _payments)
       {       
-        int resOperationEntity = await BREntities.OperationEntity(paysale, Model.Enums.EnumMode.add);
+        int resOperationEntity = await BREntities.OperationEntity(paysale, Model.Enums.EnumMode.Add);
         //Disparamos el mensaje que nos arroja  la operación del guardado
         if (resOperationEntity > 0) continue;
         UIHelper.ShowMessageResult("Payments", resOperationEntity);

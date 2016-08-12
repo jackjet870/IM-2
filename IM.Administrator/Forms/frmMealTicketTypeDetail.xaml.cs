@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(mealTicketType, oldMealTicketType);
       DataContext = mealTicketType;
-      txtmyID.IsEnabled = (enumMode == EnumMode.add);
+      txtmyID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(mealTicketType, this);
     }
     #endregion
@@ -76,7 +76,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(mealTicketType, oldMealTicketType) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(mealTicketType, oldMealTicketType) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

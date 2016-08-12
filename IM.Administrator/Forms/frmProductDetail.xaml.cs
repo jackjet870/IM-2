@@ -65,9 +65,9 @@ namespace IM.Administrator.Forms
       DataContext = product;
       LoadLanguages();
       LoadGifts();          
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
-        txtprID.IsEnabled = (enumMode == EnumMode.add);
+        txtprID.IsEnabled = (enumMode == EnumMode.Add);
         txtprN.IsEnabled = true;
         chkprA.IsEnabled = true;
         cmbLanguages.IsEnabled = true;
@@ -89,7 +89,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing && enumMode != EnumMode.preview)
+      if (!blnClosing && enumMode != EnumMode.ReadOnly)
       {
         List<Gift> lstGifts = (List<Gift>)dgrGift.ItemsSource;
         string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
@@ -177,7 +177,7 @@ namespace IM.Administrator.Forms
         {
           string richText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
           List<Gift> lstGift = (List<Gift>)dgrGift.ItemsSource;
-          if (enumMode != EnumMode.add && _productLegend.pxText == richText.Trim() && ObjectHelper.IsEquals(product, oldProduct) && ObjectHelper.IsListEquals(lstGift, _oldlstGifts))
+          if (enumMode != EnumMode.Add && _productLegend.pxText == richText.Trim() && ObjectHelper.IsEquals(product, oldProduct) && ObjectHelper.IsListEquals(lstGift, _oldlstGifts))
           {
             blnClosing = true;
             Close();
@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
               _productLegend.pxText = richText;
               List<Gift> lstAdd = lstGift.Where(gi => !_oldlstGifts.Any(gii => gii.giID == gi.giID)).ToList();
               List<Gift> lstDel = _oldlstGifts.Where(gi => !lstGift.Any(gii => gii.giID == gi.giID)).ToList();
-              int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);
+              int nRes = await BRProducts.SaveProduct(product, (enumMode == EnumMode.Edit), _productLegend, lstAdd, lstDel);
               UIHelper.ShowMessageResult("Product", nRes);
 
               if (nRes > 0)

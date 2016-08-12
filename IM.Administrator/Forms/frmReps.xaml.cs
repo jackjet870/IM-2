@@ -129,7 +129,7 @@ namespace IM.Administrator.Forms
       Rep rep = (Rep)dgrReps.SelectedItem;
       frmRepDetail frmRepDetail = new frmRepDetail();
       frmRepDetail.Owner = this;
-      frmRepDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmRepDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmRepDetail.oldRep = rep;
       if(frmRepDetail.ShowDialog()==true)
       {
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
     {
       frmRepDetail frmRepDetail = new frmRepDetail();
       frmRepDetail.Owner = this;
-      frmRepDetail.enumMode = EnumMode.add;
+      frmRepDetail.enumMode = EnumMode.Add;
       if (frmRepDetail.ShowDialog() == true)
       {
         Rep rep = frmRepDetail.rep;

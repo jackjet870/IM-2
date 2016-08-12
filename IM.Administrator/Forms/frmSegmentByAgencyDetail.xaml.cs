@@ -43,11 +43,11 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(segmentByAgency, oldSegmentByAgency);
       UIHelper.SetUpControls(segmentByAgency,this);
       LoadAgencies();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {        
         chkseA.IsEnabled = true;
         txtseN.IsEnabled = true;
-        txtseID.IsEnabled = (enumMode == EnumMode.add);
+        txtseID.IsEnabled = (enumMode == EnumMode.Add);
         dgrAgencies.IsReadOnly = false;
       }
       DataContext = segmentByAgency;
@@ -64,7 +64,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode != EnumMode.preview)
+      if (!_isClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
@@ -173,7 +173,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(segmentByAgency, oldSegmentByAgency) && ObjectHelper.IsListEquals(_lstOldAgencies, lstAgencies))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(segmentByAgency, oldSegmentByAgency) && ObjectHelper.IsListEquals(_lstOldAgencies, lstAgencies))
         {
           _isClosing = true;
           Close();
@@ -187,7 +187,7 @@ namespace IM.Administrator.Forms
           {
             List<Agency> lstAdd = lstAgencies.Where(ag => !_lstOldAgencies.Any(agg => agg.agID == ag.agID)).ToList();
             List<Agency> lstDel = _lstOldAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
-            int nRes = await BRSegmentsByAgency.SaveSegmentByAgency(segmentByAgency, lstAdd, lstDel, (enumMode == EnumMode.edit));
+            int nRes = await BRSegmentsByAgency.SaveSegmentByAgency(segmentByAgency, lstAdd, lstDel, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Segment By Agency", nRes);
             if (nRes > 0)
             {
@@ -232,7 +232,7 @@ namespace IM.Administrator.Forms
           ObjectHelper.CopyProperties(agency, ag);
           _lstOldAgencies.Add(agency);
         }));        
-        if(enumMode!=EnumMode.preview)
+        if(enumMode!=EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }

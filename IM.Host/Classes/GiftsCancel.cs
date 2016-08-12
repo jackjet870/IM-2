@@ -163,7 +163,7 @@ namespace IM.Host.Classes
       pGiftReceipt.gePriceMinor = pGiftReceipt.gePriceMinor * -1;
       pGiftReceipt.gePriceExtraAdult = pGiftReceipt.gePriceExtraAdult * -1;
 
-      await BREntities.OperationEntity(pGiftReceipt, EnumMode.add);
+      await BREntities.OperationEntity(pGiftReceipt, EnumMode.Add);
     } 
     #endregion
 

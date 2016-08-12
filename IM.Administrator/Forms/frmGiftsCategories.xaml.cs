@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
     {
       frmGiftCategoryDetail frmGiftCategoryDetail = new frmGiftCategoryDetail();
       frmGiftCategoryDetail.Owner = this;
-      frmGiftCategoryDetail.enumMode =EnumMode.add;
+      frmGiftCategoryDetail.enumMode =EnumMode.Add;
       if(frmGiftCategoryDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmGiftCategoryDetail.giftCategory))//Verificamos si cumple con los filtros actuales
@@ -181,7 +181,7 @@ namespace IM.Administrator.Forms
       GiftCategory giftCategory = (GiftCategory)dgrGiftsCateg.SelectedItem;
       frmGiftCategoryDetail frmGiftCategoryDetail = new frmGiftCategoryDetail();
       frmGiftCategoryDetail.Owner = this;
-      frmGiftCategoryDetail.enumMode = ((_blnEdit) ? EnumMode.edit : EnumMode.preview);
+      frmGiftCategoryDetail.enumMode = ((_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmGiftCategoryDetail.oldGiftCategory = giftCategory;
       if(frmGiftCategoryDetail.ShowDialog()==true)
       {

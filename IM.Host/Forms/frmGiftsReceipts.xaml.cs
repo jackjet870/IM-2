@@ -1,6 +1,5 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Host.Enums;
 using IM.Model;
 using IM.Model.Enums;
 using System;
@@ -17,7 +16,6 @@ using IM.Host.Classes;
 using IM.Services.Helpers;
 using System.Threading.Tasks;
 using System.Data;
-using IM.Model.Helpers;
 using System.ComponentModel;
 using IM.Base.Classes;
 
@@ -36,9 +34,9 @@ namespace IM.Host.Forms
 
     static Guest _guest = new Guest();
     private int _chargeToChanged = 0;
-    public EnumModeOpen modeOpen; // Variable para saber si puede ser editado el formulario o solo carga en modo vista (Edit | Preview)
-    public EnumOpenBy modeOpenBy; // Variable para saber de que fuente fue invocado el formulario (Checkbox | boton)
-    public Enums.EnumMode _mode;  // Tipo de visualizacion
+    public EnumMode _modeOpen; // Variable para saber si puede ser editado el formulario o solo carga en modo vista (Edit | Preview)
+    public EnumOpenBy _modeOpenBy; // Variable para saber de que fuente fue invocado el formulario (Checkbox | boton)
+    public EnumMode _mode;  // Tipo de visualizacion
 
     public ObservableCollection<GiftsReceiptsShort> obsGiftsReceipt;
     public ObservableCollection<GiftsReceiptDetail> obsGifts;
@@ -123,29 +121,29 @@ namespace IM.Host.Forms
       // Cargamos las fechas
       Load_Date();
 
-      switch (modeOpenBy)
+      switch (_modeOpenBy)
       {
         case EnumOpenBy.Checkbox:
           Head.Visibility = Visibility.Collapsed;
           AdjustmentControls();
-          switch (modeOpen)
+          switch (_modeOpen)
           {
-            case EnumModeOpen.Edit:
+            case EnumMode.Edit:
               await Load_Grid_GiftsReceipt(_guestID);
               break;
-            case EnumModeOpen.Preview:
+            case EnumMode.ReadOnly:
               await Load_Grid_GiftsReceipt(_guestID);
               break;
           }
           break;
         case EnumOpenBy.Button:
           txtgrID.Text = "";
-          switch (modeOpen)
+          switch (_modeOpen)
           {
-            case EnumModeOpen.Edit:
+            case EnumMode.Edit:
               Controls_Reading_Mode();
               break;
-            case EnumModeOpen.Preview:
+            case EnumMode.ReadOnly:
               Controls_Reading_Mode();
               break;
           }
@@ -290,7 +288,7 @@ namespace IM.Host.Forms
       dsReceipts.Source = obsGiftsReceipt;
 
       // si no hay recibos de regalos
-      if (obsGiftsReceipt.Count == 0 && modeOpenBy != EnumOpenBy.Checkbox)
+      if (obsGiftsReceipt.Count == 0 && _modeOpenBy != EnumOpenBy.Checkbox)
       {
         btnCancel.Visibility = Visibility.Hidden;
         btnCancelSisturPromotions.Visibility = Visibility.Hidden;
@@ -390,7 +388,7 @@ namespace IM.Host.Forms
       _newGiftReceipt = true;
 
       // Cargamos la estructura de la tabla de recibo de regalos
-      if (modeOpenBy == EnumOpenBy.Button)
+      if (_modeOpenBy == EnumOpenBy.Button)
         _guestID = 0;
 
       txtgrgu.IsReadOnly = false;
@@ -546,9 +544,9 @@ namespace IM.Host.Forms
       grdGifts.IsReadOnly = !_Enable;
       grdPayments.IsReadOnly = !_Enable;
       if (_Enable)
-        _mode = Enums.EnumMode.modEdit;
+        _mode = EnumMode.Edit;
       else
-        _mode = Enums.EnumMode.modEditPartial;
+        _mode = EnumMode.EditPartial;
 
       // Se verifica si es un nuevo Recibo
       if (_newGiftReceipt || _newExchangeGiftReceipt)
@@ -853,7 +851,7 @@ namespace IM.Host.Forms
       List<GiftsReceiptDetail> _lstGiftInvitation = await BRInvitsGifts.GetGiftsInvitationWithoutReceipt(_guestID);
 
       if (_lstGiftInvitation.Count > 0)
-        _lstGiftInvitation.ForEach(_Gift => logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _Gift))); // Guardamos en el log de actividades de GIFTS
+        _lstGiftInvitation.ForEach(_Gift => logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Add, _Gift))); // Guardamos en el log de actividades de GIFTS
 
       return _lstGiftInvitation;
     }
@@ -1587,7 +1585,7 @@ namespace IM.Host.Forms
       // si es un recibo existente
       else
       {
-        await BREntities.OperationEntity(GiftsReceiptDetail, Model.Enums.EnumMode.edit);
+        await BREntities.OperationEntity(GiftsReceiptDetail, Model.Enums.EnumMode.Edit);
         receiptID = Convert.ToInt32(txtgrID.Text);
       }
 
@@ -1691,7 +1689,7 @@ namespace IM.Host.Forms
 
       // Actualizamos en la base de datos
       if (Update)
-        await BREntities.OperationEntity(_guest, Model.Enums.EnumMode.edit);
+        await BREntities.OperationEntity(_guest, Model.Enums.EnumMode.Edit);
 
     }
     #endregion
@@ -1730,7 +1728,7 @@ namespace IM.Host.Forms
 
           if (_newGiftReceipt || _newExchangeGiftReceipt) // Si es de nueva creacion se agregan todos.
           {
-            await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.add);
+            await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Add);
           }
           else // Si se estan editando
           {
@@ -1745,17 +1743,17 @@ namespace IM.Host.Forms
               {
                 _newGiftsPayments.gyID = _selected.gyID;
                 _newGiftsPayments.gygr = _selected.gygr;
-                await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.edit);
+                await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Edit);
               }
             }
             else // registro nuevo
             {
-              await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.add);
+              await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Add);
             }
 
             // Se verifica si se elimino alguno de la lista original
             if (_lstPaymentsDelete.Count > 0)
-              await BREntities.OperationEntities(_lstPaymentsDelete, Model.Enums.EnumMode.deleted);
+              await BREntities.OperationEntities(_lstPaymentsDelete, Model.Enums.EnumMode.Delete);
 
           }
         }
@@ -2268,22 +2266,22 @@ namespace IM.Host.Forms
           // si se encuentra
           if (_cointains != null)
           {
-            if (modeOpen == EnumModeOpen.PreviewEdit || modeOpen == EnumModeOpen.Edit)
+            if (_modeOpen == EnumMode.PreviewEdit || _modeOpen == EnumMode.Edit)
             {
               GiftsReceiptDetail _deleteGift = BRGiftsReceiptDetail.GetGiftReceiptDetail(item.gegr, item.gegi);
 
               // Verificamos que no se encuentre en el log de acciones
-              List<KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>> _actionpreview = logGiftDetail.Where(x => x.Value.gegi == _deleteGift.gegi).ToList();
+              List<KeyValuePair<EnumMode, GiftsReceiptDetail>> _actionpreview = logGiftDetail.Where(x => x.Value.gegi == _deleteGift.gegi).ToList();
 
               if (_actionpreview != null && _actionpreview.Count > 0)
               {
                 // eliminamos todas las acciones anteriores
-                foreach (KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail> current in _actionpreview)
+                foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> current in _actionpreview)
                 {
                   logGiftDetail.Remove(current);
                 }
               }
-              logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.deleted, _deleteGift));
+              logGiftDetail.Add(new KeyValuePair<EnumMode, GiftsReceiptDetail>(EnumMode.Delete, _deleteGift));
             }
           }
           obsGifts.Remove(item);

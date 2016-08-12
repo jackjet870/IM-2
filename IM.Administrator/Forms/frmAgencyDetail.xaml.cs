@@ -48,10 +48,10 @@ namespace IM.Administrator.Forms
       LoadClubs();
       LoadCountries();
       #region Bloquear botones
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtagID.IsEnabled = (enumMode == EnumMode.add);
+        txtagID.IsEnabled = (enumMode == EnumMode.Add);
         txtagN.IsEnabled = true;
         txtagSalePay.IsEnabled = true;
         txtagShowPay.IsEnabled = true;
@@ -84,7 +84,7 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();//Para actualizar el datacontext
-      if (cmbagum.SelectedValue!=null && ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add )
+      if (cmbagum.SelectedValue!=null && ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.Add )
       {
         _isClosing = true;
         Close();
@@ -103,12 +103,12 @@ namespace IM.Administrator.Forms
           #region Operacion
           switch (enumMode)
           {
-            case EnumMode.add:
+            case EnumMode.Add:
               {
                 nRes = await BRAgencies.SaveAgency(agency, false);
                 break;
               }
-            case EnumMode.edit:
+            case EnumMode.Edit:
               {
                 bool blnMarkets = ((agency.agmk.ToString() != oldAgency.agmk.ToString()) ? true : false);
                 bool blnUnMot = ((agency.agum.ToString() != oldAgency.agum.ToString()) ? true : false);
@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(agency, oldAgency))
         {

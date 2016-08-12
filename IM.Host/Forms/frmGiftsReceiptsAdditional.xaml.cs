@@ -125,7 +125,7 @@ namespace IM.Host.Forms
           // Indica que el huesped ya tiene recibo de regalos
           Guest _Guest = BRGuests.GetGuestById(lngGuestID);
           _Guest.guGiftsReceived = true;
-          await BREntities.OperationEntity(_Guest, Model.Enums.EnumMode.edit);
+          await BREntities.OperationEntity(_Guest, Model.Enums.EnumMode.Edit);
 
           // Actualizamos los regalos de la invitacion
           UpdateInvitsGifts(lngReceiptID, lngGuestID);
@@ -264,7 +264,7 @@ namespace IM.Host.Forms
         //_lstGiftReceiptDetail.ForEach(x => BREntities.OperationEntity(x, Model.Enums.EnumMode.add));
         foreach (GiftsReceiptDetail item in _lstGiftReceiptDetail)
         {
-          await BREntities.OperationEntity(item, Model.Enums.EnumMode.add);
+          await BREntities.OperationEntity(item, Model.Enums.EnumMode.Add);
         }
       }
 
@@ -288,7 +288,7 @@ namespace IM.Host.Forms
       foreach (InvitationGift Current in _lstInvitationGifts)
       {
         Current.iggr = ReceiptID;
-        await BREntities.OperationEntity(Current, Model.Enums.EnumMode.edit);
+        await BREntities.OperationEntity(Current, Model.Enums.EnumMode.Edit);
       }
     } 
     #endregion

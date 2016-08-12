@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
       Zone zone = (Zone)dgrZones.SelectedItem;      
       frmZoneDetail frmZoneDetail = new frmZoneDetail();
       frmZoneDetail.Owner = this;
-      frmZoneDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmZoneDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmZoneDetail.oldZone = zone;
       if(frmZoneDetail.ShowDialog()==true)
       {
@@ -172,7 +172,7 @@ namespace IM.Administrator.Forms
     {
       frmZoneDetail frmZoneDatail = new frmZoneDetail();
       frmZoneDatail.Owner = this;
-      frmZoneDatail.enumMode = EnumMode.add;
+      frmZoneDatail.enumMode = EnumMode.Add;
       if (frmZoneDatail.ShowDialog() == true)
       {
         if (ValidateFilter(frmZoneDatail.zone))//Verificamos que cumpla con los filtros

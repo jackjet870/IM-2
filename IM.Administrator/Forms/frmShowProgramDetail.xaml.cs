@@ -42,7 +42,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(showProgram, oldShowProgram);
       UIHelper.SetUpControls(showProgram, this);
       LoadCategories();
-      if(enumMode==EnumMode.search)
+      if(enumMode==EnumMode.Search)
       {
         cmbStatus.Visibility = Visibility.Visible;
         lblStatus.Visibility = Visibility.Visible;
@@ -50,7 +50,7 @@ namespace IM.Administrator.Forms
         ComboBoxHelper.LoadComboDefault(cmbStatus);
         cmbStatus.SelectedValue = nStatus;
       }
-      txtskID.IsEnabled = (enumMode != EnumMode.edit);
+      txtskID.IsEnabled = (enumMode != EnumMode.Edit);
       DataContext = showProgram;
     }
     #endregion
@@ -89,9 +89,9 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
-          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgram, oldShowProgram))
+          if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(showProgram, oldShowProgram))
           {
             _isClosing = true;
             Close();
@@ -160,7 +160,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(showProgram, oldShowProgram))
           {
@@ -189,7 +189,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<ShowProgramCategory> lstShowProCategories = await BRShowProgramsCategories.GetShowProgramsCategories();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstShowProCategories.Insert(0, new ShowProgramCategory { sgID = "", sgN = "ALL" });
         }

@@ -44,9 +44,9 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(market, oldMarket);
       UIHelper.SetUpControls(market, this);
       LoadAgencies();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtmkID.IsEnabled = (enumMode == EnumMode.add);
+        txtmkID.IsEnabled = (enumMode == EnumMode.Add);
         txtmkN.IsEnabled = true;
         chkmkA.IsEnabled = true;
         dgrAgencies.IsReadOnly = false;
@@ -112,7 +112,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(market, oldMarket) && ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(market, oldMarket) && ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
       {
         blnClosing = true;
         Close();
@@ -126,7 +126,7 @@ namespace IM.Administrator.Forms
         if (strMsj == "")        {
           
           List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();          
-          int nRes = await BRMarkets.SaveMarket(market,lstAdd,(enumMode==EnumMode.edit));
+          int nRes = await BRMarkets.SaveMarket(market,lstAdd,(enumMode==EnumMode.Edit));
           UIHelper.ShowMessageResult("Market", nRes);
           if (nRes > 0)
           {
@@ -181,7 +181,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing && enumMode != EnumMode.preview)
+      if (!blnClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;

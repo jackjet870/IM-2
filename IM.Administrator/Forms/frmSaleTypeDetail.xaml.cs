@@ -41,9 +41,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(saleType, oldSaleType);
       UIHelper.SetUpControls(saleType, this,enumMode);
-      txtstID.IsEnabled = !(enumMode == EnumMode.edit);
+      txtstID.IsEnabled = !(enumMode == EnumMode.Edit);
       DataContext = saleType;
-      if(enumMode==EnumMode.search)
+      if(enumMode==EnumMode.Search)
       {
         ComboBoxHelper.LoadComboDefault(cmbStatus);
         Title = "Search";
@@ -91,9 +91,9 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
-          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(saleType, oldSaleType))
+          if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(saleType, oldSaleType))
           {
             _isClosing = true;
             Close();
@@ -163,7 +163,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(saleType, oldSaleType))
           {
@@ -192,7 +192,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<SaleTypeCategory> lstSaleTypeCategories = await BRSaleTypesCategories.GetSaleCategories(1);
-        if (enumMode == EnumMode.search && lstSaleTypeCategories.Count > 0)
+        if (enumMode == EnumMode.Search && lstSaleTypeCategories.Count > 0)
         {
           lstSaleTypeCategories.Insert(0, new SaleTypeCategory { stcID = "", stcN = "ALL" });
         }

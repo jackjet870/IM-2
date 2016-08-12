@@ -148,7 +148,7 @@ namespace IM.Administrator.Forms
       Personnel personnel = BRPersonnel.GetPersonnelById(personnelShort.peID);
       frmPersonnelDetail frmPersonnelDetail=new frmPersonnelDetail();
       frmPersonnelDetail.Owner = this;
-      frmPersonnelDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmPersonnelDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmPersonnelDetail.oldPersonnel = personnel;
       if(frmPersonnelDetail.ShowDialog()==true)
       {
@@ -204,7 +204,7 @@ namespace IM.Administrator.Forms
     {
       frmPersonnelDetail frmPersonnelDetail = new frmPersonnelDetail();
       frmPersonnelDetail.Owner = this;
-      frmPersonnelDetail.enumMode = EnumMode.add;
+      frmPersonnelDetail.enumMode = EnumMode.Add;
       if (frmPersonnelDetail.ShowDialog() == true)
       { 
         var persons = await BRPersonnel.GetPersonnel(idPersonnel: frmPersonnelDetail.personnel.peID);

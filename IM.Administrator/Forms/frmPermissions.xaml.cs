@@ -57,7 +57,7 @@ namespace IM.Administrator.Forms
       frmPermissionDetail frmPermissionDetail = new frmPermissionDetail();
       frmPermissionDetail.Owner = this;
       frmPermissionDetail.oldPermission = permission;
-      frmPermissionDetail.enumMode = EnumMode.edit;
+      frmPermissionDetail.enumMode = EnumMode.Edit;
       if (frmPermissionDetail.ShowDialog() == true)
       {
         int nIndex = 0;
@@ -178,7 +178,7 @@ namespace IM.Administrator.Forms
     {
       frmPermissionDetail frmPermissionDetail = new frmPermissionDetail();
       frmPermissionDetail.Owner = this;
-      frmPermissionDetail.enumMode = EnumMode.add;
+      frmPermissionDetail.enumMode = EnumMode.Add;
       if(frmPermissionDetail.ShowDialog()==true)
       {
         Permission permission = frmPermissionDetail.permission;

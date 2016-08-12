@@ -69,7 +69,7 @@ namespace IM.Administrator.Forms
 
     #region Cell Double Click
     /// <summary>
-    /// Muestra la ventada Charge To preview
+    /// Muestra la ventada Charge To ReadOnly
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -78,7 +78,7 @@ namespace IM.Administrator.Forms
       Currency currency = (Currency)dgrCurrencies.SelectedItem;
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
-      frmCurrencyDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmCurrencyDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmCurrencyDetail.oldCurrency = currency;
       if(frmCurrencyDetail.ShowDialog()==true)
       {
@@ -177,7 +177,7 @@ namespace IM.Administrator.Forms
     {
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
-      frmCurrencyDetail.mode = EnumMode.add;
+      frmCurrencyDetail.mode = EnumMode.Add;
       if (frmCurrencyDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmCurrencyDetail.currency))//valida que cumpla con los filtros

@@ -43,7 +43,7 @@ namespace IM.Administrator.Forms
 
       UIHelper.SetUpControls(salesAmountRange, this, enumMode);
       ObjectHelper.CopyProperties(salesAmountRange, oldSalAmoRan);
-      if (enumMode == EnumMode.search)
+      if (enumMode == EnumMode.Search)
       {
         #region Configurar Controles
         lblStatus.Visibility = Visibility.Visible;
@@ -106,9 +106,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.search)
+      if(enumMode!=EnumMode.Search)
       {
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
         {
           _isClosing = true;
           Close();
@@ -128,7 +128,7 @@ namespace IM.Administrator.Forms
 
           if (strMsj == "")
           {
-            int nRes = BRSaleAmountRanges.SaveSalesAmountRange(salesAmountRange, (enumMode == EnumMode.edit));
+            int nRes = BRSaleAmountRanges.SaveSalesAmountRange(salesAmountRange, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Sales Amount Range", nRes);
             if (nRes == 1)
             {
@@ -266,7 +266,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
           {

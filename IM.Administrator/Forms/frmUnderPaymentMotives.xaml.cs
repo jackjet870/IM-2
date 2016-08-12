@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       UnderPaymentMotive underPaymentMotive = (UnderPaymentMotive)dgrUnderPayMentMotive.SelectedItem;
       frmUnderPaymentMotiveDetail frmUndPayMotDetail = new frmUnderPaymentMotiveDetail();
       frmUndPayMotDetail.Owner = this;
-      frmUndPayMotDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmUndPayMotDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmUndPayMotDetail.oldUnderPaymentMOtive = underPaymentMotive;
       if (frmUndPayMotDetail.ShowDialog() == true)
       {
@@ -197,7 +197,7 @@ namespace IM.Administrator.Forms
     {
       frmUnderPaymentMotiveDetail frmUndPayMotDetail = new frmUnderPaymentMotiveDetail();
       frmUndPayMotDetail.Owner = this;
-      frmUndPayMotDetail.enumMode = EnumMode.add;
+      frmUndPayMotDetail.enumMode = EnumMode.Add;
       if(frmUndPayMotDetail.ShowDialog()==true)
       {
         UnderPaymentMotive underPaymentMotive = frmUndPayMotDetail.underPaymentMotive;

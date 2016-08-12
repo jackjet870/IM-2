@@ -54,7 +54,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(reimpresionMotive, oldReimpresionMotive);
       UIHelper.SetUpControls(reimpresionMotive, this);
-      txtrmID.IsEnabled = (enumMode==EnumMode.add);
+      txtrmID.IsEnabled = (enumMode==EnumMode.Add);
       DataContext = reimpresionMotive;
     }
     #endregion
@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
         {
           _isClosing = true;
           Close();

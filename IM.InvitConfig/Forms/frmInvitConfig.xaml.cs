@@ -243,7 +243,7 @@ namespace IM.InvitConfig.Forms
         if (_rtfInvitation.itRTFFooter == footer && _rtfInvitation.itRTFHeader == header) return;
         _rtfInvitation.itRTFFooter = footer;
         _rtfInvitation.itRTFHeader = header;
-        await BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
+        await BREntities.OperationEntity(_rtfInvitation, EnumMode.Edit);
         StaEnd();
         #endregion
       }

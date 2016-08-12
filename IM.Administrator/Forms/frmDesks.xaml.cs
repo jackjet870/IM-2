@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     {
       Desk desk = (Desk)dgrDesks.SelectedItem;
       frmDeskDetail frmDeskDetail = new frmDeskDetail();
-      frmDeskDetail.enumMode = EnumMode.edit;
+      frmDeskDetail.enumMode = EnumMode.Edit;
       frmDeskDetail.Owner = this;
       frmDeskDetail.oldDesk = desk;
       if(frmDeskDetail.ShowDialog()==true)
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmDeskDetail frmDeskDetail = new frmDeskDetail();
-      frmDeskDetail.enumMode = EnumMode.add;
+      frmDeskDetail.enumMode = EnumMode.Add;
       frmDeskDetail.Owner = this;
       if(frmDeskDetail.ShowDialog()==true)
       {

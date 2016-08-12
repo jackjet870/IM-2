@@ -38,8 +38,8 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(period, oldPeriod);
       DataContext = period;
-      txtpdID.IsEnabled = (enumMode == EnumMode.add);
-      if(enumMode!=EnumMode.preview)
+      txtpdID.IsEnabled = (enumMode == EnumMode.Add);
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(period, this);
@@ -81,7 +81,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(period, oldPeriod) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(period, oldPeriod) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -142,7 +142,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(period, oldPeriod))
           {

@@ -127,7 +127,7 @@ namespace IM.Administrator.Forms
       ScoreRuleByLeadSource scoreRuleByLeadSource = (ScoreRuleByLeadSource)dgrScoreRulesByLS.SelectedItem;
       frmScoreRuleByLeadSourceDetail frmScoreRuleByLS = new frmScoreRuleByLeadSourceDetail();
       frmScoreRuleByLS.Owner = this;
-      frmScoreRuleByLS.enumMode = EnumMode.edit;
+      frmScoreRuleByLS.enumMode = EnumMode.Edit;
       frmScoreRuleByLS.oldScoreRuleByLeadSource = scoreRuleByLeadSource;
       frmScoreRuleByLS.ShowDialog();
     }
@@ -146,7 +146,7 @@ namespace IM.Administrator.Forms
     {
       frmScoreRuleByLeadSourceDetail frmScoreRuleByLS = new frmScoreRuleByLeadSourceDetail();
       frmScoreRuleByLS.Owner = this;
-      frmScoreRuleByLS.enumMode = EnumMode.add;      
+      frmScoreRuleByLS.enumMode = EnumMode.Add;      
       if(frmScoreRuleByLS.ShowDialog()==true)
       {
         List<ScoreRuleByLeadSource> lstScoreRuleByLeadSource = new List<ScoreRuleByLeadSource>();

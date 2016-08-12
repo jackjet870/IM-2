@@ -43,7 +43,7 @@ namespace IM.Host.Classes
     /// [vipacheco] 24/junio/2016 Created
     /// [vipacheco] 02/julio/2016 Modified --> se agrego un parametro mas para validaciones sobre el grid
     /// </history>
-    public static void StartEdit(Enums.EnumMode mode, GiftsReceiptDetail row, ref DataGridCellInfo cell, ref DataGrid grid, ref bool pCancel)
+    public static void StartEdit(EnumMode mode, GiftsReceiptDetail row, ref DataGridCellInfo cell, ref DataGrid grid, ref bool pCancel)
     {
       // Obtenemos el index del row en edicion
       int rowIndex = grid.SelectedIndex != -1 ? grid.SelectedIndex : 0;
@@ -51,7 +51,7 @@ namespace IM.Host.Classes
       switch (mode)
       {
         // Edicion total
-        case Enums.EnumMode.modEdit:
+        case EnumMode.Edit:
           switch (cell.Column.SortMemberPath)
           {
             // Cantidad
@@ -194,7 +194,7 @@ namespace IM.Host.Classes
           }
           break;
 
-        case Enums.EnumMode.modEditPartial:
+        case EnumMode.EditPartial:
           // si se ingreso la cantidad y el regalo
           if (row.geQty == 0 && row.gegi != null)
           {
@@ -1208,7 +1208,7 @@ namespace IM.Host.Classes
             if (current.geQty > 0 && current.gegi != null)
             {
             // agregamos un regalo
-            await BREntities.OperationEntity(current, EnumMode.add);
+            await BREntities.OperationEntity(current, EnumMode.Add);
 
             // Buscamos el regalo
             Gift gift = frmHost._lstGifts.Where(x => x.giID == current.gegi).Single();
@@ -1231,14 +1231,14 @@ namespace IM.Host.Classes
               }).ToList();
 
               // Guardamos los regalos
-              await BREntities.OperationEntities(giftsPacks, EnumMode.add);
+              await BREntities.OperationEntities(giftsPacks, EnumMode.Add);
             }
           }
           }
           // Si se encuentra el regalo
           else
           {
-            await BREntities.OperationEntity(result, EnumMode.edit);
+            await BREntities.OperationEntity(result, EnumMode.Edit);
           }
         }
       }
@@ -1270,14 +1270,14 @@ namespace IM.Host.Classes
           {
             // eliminamos los regalos del paquete
             List<GiftsReceiptPackageItem> lstPackages = await BRGiftsReceiptsPacks.GetGiftsReceiptPackage(pReceiptID, item.gegi);
-            await BREntities.OperationEntities(lstPackages, EnumMode.deleted);
+            await BREntities.OperationEntities(lstPackages, EnumMode.Delete);
 
             // eliminamos la promocion del regalo
             if (item.geAsPromotionOpera)
               BRGuestsPromotions.DeleteGuestPromotion(item.gegr, item.gegi);
 
             // Eliminamos el regalo
-            await BREntities.OperationEntity(item, EnumMode.deleted);
+            await BREntities.OperationEntity(item, EnumMode.Delete);
           }
         }
       }
@@ -1343,7 +1343,7 @@ namespace IM.Host.Classes
           // si se debe actualizar el regalo
           if (blnUpd)
           {
-            await BREntities.OperationEntity(result, EnumMode.edit);
+            await BREntities.OperationEntity(result, EnumMode.Edit);
           }
         }
       }

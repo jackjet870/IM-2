@@ -125,7 +125,7 @@ namespace IM.Administrator.Forms
       LeadSource leadSource = (LeadSource)dgrLeadSources.SelectedItem;
       frmLeadSourceDetail frmLeadSourceDetail = new frmLeadSourceDetail();
       frmLeadSourceDetail.Owner = this;
-      frmLeadSourceDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmLeadSourceDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmLeadSourceDetail.oldLeadSource = leadSource;
       if(frmLeadSourceDetail.ShowDialog()==true)
       {
@@ -161,7 +161,7 @@ namespace IM.Administrator.Forms
     {
       frmLeadSourceDetail frmLeadSourceDetail = new frmLeadSourceDetail();
       frmLeadSourceDetail.Owner = this;
-      frmLeadSourceDetail.enumMode = EnumMode.search;
+      frmLeadSourceDetail.enumMode = EnumMode.Search;
       frmLeadSourceDetail.nStatus = _nStatus;
       frmLeadSourceDetail.nRegen = _nRegen;
       frmLeadSourceDetail.nAnimation = _nAnimation;
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
     {
       frmLeadSourceDetail frmLeadSourceDetail = new frmLeadSourceDetail();
       frmLeadSourceDetail.Owner = this;
-      frmLeadSourceDetail.enumMode = EnumMode.add;
+      frmLeadSourceDetail.enumMode = EnumMode.Add;
       if(frmLeadSourceDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmLeadSourceDetail.leadSource))

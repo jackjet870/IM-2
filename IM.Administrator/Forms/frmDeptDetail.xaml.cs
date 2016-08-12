@@ -44,7 +44,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      txtdeID.IsEnabled = (enumMode == EnumMode.add);
+      txtdeID.IsEnabled = (enumMode == EnumMode.Add);
       ObjectHelper.CopyProperties(dept, oldDept);
       UIHelper.SetUpControls(dept, this);
       DataContext = dept;
@@ -66,7 +66,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(dept, oldDept) && ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(dept, oldDept) && ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
       {
         blnClosing = true;
         Close();
@@ -79,7 +79,7 @@ namespace IM.Administrator.Forms
           btnAccept.Visibility = Visibility.Collapsed;
           List<Personnel> lstAdd = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
-          int nRes = await BRDepts.SaveDept(dept,(enumMode==EnumMode.edit),lstAdd,lstDel);
+          int nRes = await BRDepts.SaveDept(dept,(enumMode==EnumMode.Edit),lstAdd,lstDel);
           UIHelper.ShowMessageResult("Dept", nRes);
           if (nRes > 0)
           {

@@ -56,7 +56,7 @@ namespace IM.Administrator.Forms
       PersonnelShort personnelShort = (PersonnelShort)dgrPRs.SelectedItem;
       frmFolioCXCPRDetail frmFolioDetail = new frmFolioCXCPRDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = (_blnEdit)? EnumMode.edit:EnumMode.preview;
+      frmFolioDetail.enumMode = (_blnEdit)? EnumMode.Edit:EnumMode.ReadOnly;
       frmFolioDetail.personnel = personnelShort;
       frmFolioDetail.ShowDialog();
     }
@@ -169,7 +169,7 @@ namespace IM.Administrator.Forms
     {
       frmFolioCXCPRDetail frmFolioDetail = new frmFolioCXCPRDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.Add;
       if (frmFolioDetail.ShowDialog() == true)
       {
         if (ValidateFilter(frmFolioDetail.personnel))//Verificamos que cumpla con los filtros actuales
@@ -200,7 +200,7 @@ namespace IM.Administrator.Forms
       frmFolioCXCPRDetail frmFolioDetail = new frmFolioCXCPRDetail();
       frmFolioDetail.Owner = this;
       frmFolioDetail.personnel = _prFilter;
-      frmFolioDetail.enumMode = EnumMode.search;
+      frmFolioDetail.enumMode = EnumMode.Search;
       if(frmFolioDetail.ShowDialog()==true)
       {
         _prFilter = frmFolioDetail.personnel;

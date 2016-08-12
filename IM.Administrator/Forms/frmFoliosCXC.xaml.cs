@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
     {
       frmFolioCXCDetail frmFolioDetail = new frmFolioCXCDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.Add;
       if(frmFolioDetail.ShowDialog()==true)
       {
         FolioCXC folioCXC = frmFolioDetail.folioCXC;
@@ -184,7 +184,7 @@ namespace IM.Administrator.Forms
       frmFolioCXCDetail frmFolioDetail = new frmFolioCXCDetail();
       frmFolioDetail.Owner = this;
       frmFolioDetail.oldFolioCxc = folioCXC;
-      frmFolioDetail.enumMode = ((_blnEdit==true)?EnumMode.edit:EnumMode.preview);
+      frmFolioDetail.enumMode = ((_blnEdit==true)?EnumMode.Edit:EnumMode.ReadOnly);
 
       if(frmFolioDetail.ShowDialog()==true)
       {

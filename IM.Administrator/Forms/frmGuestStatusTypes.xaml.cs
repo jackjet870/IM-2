@@ -123,7 +123,7 @@ namespace IM.Administrator.Forms
     {
       frmGuestStatusTypeDetail frmGuesStaDet = new frmGuestStatusTypeDetail();
       frmGuesStaDet.Owner = this;
-      frmGuesStaDet.enumMode = EnumMode.add;
+      frmGuesStaDet.enumMode = EnumMode.Add;
       if(frmGuesStaDet.ShowDialog()==true)
       {
         if(ValidateFilter(frmGuesStaDet.guestStaTyp))//Verificamos que cumpla con los filtros
@@ -182,7 +182,7 @@ namespace IM.Administrator.Forms
       frmGuestStatusTypeDetail frmGuesStaDet = new frmGuestStatusTypeDetail();
       frmGuesStaDet.guestStaTypOld = guestStaTyp;
       frmGuesStaDet.Owner = this;
-      frmGuesStaDet.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmGuesStaDet.enumMode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if(frmGuesStaDet.ShowDialog()==true)
       {
         int nIndex = 0;

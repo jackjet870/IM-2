@@ -94,7 +94,7 @@ namespace IM.Administrator.Forms
 
     #region Double Click Row
     /// <summary>
-    /// Muestra la ventana de AreaDetalle en modo preview
+    /// Muestra la ventana de AreaDetalle en modo ReadOnly
     /// </summary>
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
@@ -105,7 +105,7 @@ namespace IM.Administrator.Forms
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
       frmAreaDetalle.oldArea = Area;
-      frmAreaDetalle.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmAreaDetalle.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if (frmAreaDetalle.ShowDialog() == true)
       { 
         List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
@@ -141,7 +141,7 @@ namespace IM.Administrator.Forms
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();      
       frmAreaDetalle.Owner = this;
       frmAreaDetalle.oldArea = new Area();
-      frmAreaDetalle.mode = EnumMode.add;//Agregar
+      frmAreaDetalle.mode = EnumMode.Add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
       {
         if (ValidateFilters(frmAreaDetalle.area))//Validamos si cumple con los filtros

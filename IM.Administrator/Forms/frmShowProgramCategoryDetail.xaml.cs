@@ -42,7 +42,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(showProgramCategory, oldShowProgramCategory);
       UIHelper.SetUpControls(showProgramCategory, this);
-      txtsgID.IsEnabled = (enumMode == EnumMode.add);
+      txtsgID.IsEnabled = (enumMode == EnumMode.Add);
       DataContext = showProgramCategory;
       LoadShowPrograms();
       dgrShowPrograms.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -91,7 +91,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) && ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(showProgramCategory, oldShowProgramCategory) && ObjectHelper.IsListEquals(lstShowPrograms, _lstOldShowPrograms))
         {
           _isClosing = true;
           Close();
@@ -106,7 +106,7 @@ namespace IM.Administrator.Forms
             btnAccept.Visibility = Visibility.Collapsed;
             List<ShowProgram> lstAdd = lstShowPrograms.Where(sk => !_lstOldShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
             List<ShowProgram> lstDel = _lstOldShowPrograms.Where(sk => !lstShowPrograms.Any(skk => skk.skID == sk.skID)).ToList();
-            int nRes = await BRShowProgramsCategories.SaveShowProgramCategory(showProgramCategory, lstAdd, lstDel, (enumMode == EnumMode.edit));
+            int nRes = await BRShowProgramsCategories.SaveShowProgramCategory(showProgramCategory, lstAdd, lstDel, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Show Program Category", nRes);
             if (nRes > 0)
             {

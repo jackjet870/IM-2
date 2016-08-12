@@ -196,7 +196,7 @@ namespace IM.InventoryMovements
 
       try
       {
-        int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.add);
+        int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.Add);
         if (nRes > 0)
         {
           UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");

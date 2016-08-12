@@ -38,10 +38,10 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(maritalStatus, oldMaritalStatus);
       DataContext = maritalStatus;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtmsID.IsEnabled = (enumMode==EnumMode.add);
+        txtmsID.IsEnabled = (enumMode==EnumMode.Add);
         txtmsN.IsEnabled = true;
         chkmsA.IsEnabled = true;
         UIHelper.SetUpControls(maritalStatus, this);
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(maritalStatus, oldMaritalStatus))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(maritalStatus, oldMaritalStatus))
         {
           _isClosing = true;
           Close();
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {        
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(maritalStatus, oldMaritalStatus))
           {

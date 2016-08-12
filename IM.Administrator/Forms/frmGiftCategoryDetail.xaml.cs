@@ -57,9 +57,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(giftCategory, oldGiftCategory);
       DataContext = giftCategory;
-      if(enumMode!= EnumMode.preview)
+      if(enumMode!= EnumMode.ReadOnly)
       {
-        txtgcID.IsEnabled = (enumMode == EnumMode.add);
+        txtgcID.IsEnabled = (enumMode == EnumMode.Add);
         txtgcN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
@@ -80,7 +80,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
         {
@@ -121,7 +121,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
         {
           _isClosing = true;
           Close(); 

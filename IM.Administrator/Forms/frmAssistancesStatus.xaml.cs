@@ -111,7 +111,7 @@ namespace IM.Administrator.Forms
 
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana de AssistanceStatusDetail en modo preview
+    /// Muestra la ventana de AssistanceStatusDetail en modo ReadOnly
     /// </summary>
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
@@ -122,7 +122,7 @@ namespace IM.Administrator.Forms
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.oldAssistance = assistance;
       frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmAssistanceDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if (frmAssistanceDetail.ShowDialog() == true)
       {
         List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
@@ -174,7 +174,7 @@ namespace IM.Administrator.Forms
 
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = EnumMode.add;//insertar
+      frmAssistanceDetail.mode = EnumMode.Add;//insertar
       if (frmAssistanceDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros

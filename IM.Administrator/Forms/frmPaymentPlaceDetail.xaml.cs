@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(paymentPlace, oldPaymentPlace) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(paymentPlace, oldPaymentPlace) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -101,8 +101,8 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(paymentPlace, oldPaymentPlace);
       DataContext = paymentPlace;
-      txtpcID.IsEnabled = (enumMode != EnumMode.edit);      
-      if (enumMode != EnumMode.preview)
+      txtpcID.IsEnabled = (enumMode != EnumMode.Edit);      
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtpcN.IsEnabled = true;
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(paymentPlace, oldPaymentPlace))
           {

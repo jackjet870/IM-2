@@ -44,7 +44,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(membershipGroup, oldMembershipGroup);
       UIHelper.SetUpControls(membershipGroup, this);
-      txtmgID.IsEnabled = (enumMode == EnumMode.add);      
+      txtmgID.IsEnabled = (enumMode == EnumMode.Add);      
       DataContext = membershipGroup;
       LoadMembershipTypes();
       dgrmembershipTypes.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<MembershipType> lstMembershipGroup = (List<MembershipType>)dgrmembershipTypes.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) && ObjectHelper.IsListEquals(lstMembershipGroup, _oldLstmembershipTypes))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) && ObjectHelper.IsListEquals(lstMembershipGroup, _oldLstmembershipTypes))
         {
           blnClosing = true;
           Close();
@@ -148,7 +148,7 @@ namespace IM.Administrator.Forms
           if (strMsj == "")
           {
             List<MembershipType> lstAdd = lstMembershipGroup.Where(mt => !_oldLstmembershipTypes.Any(mtt => mtt.mtID == mt.mtID)).ToList();
-            int nRes = await BRMembershipGroups.SaveMembershipGroup(membershipGroup, lstAdd, (enumMode == EnumMode.edit));
+            int nRes = await BRMembershipGroups.SaveMembershipGroup(membershipGroup, lstAdd, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Membership Group", nRes);
             if (nRes > 0)
             {

@@ -49,9 +49,9 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(zone, oldZone);
       UIHelper.SetUpControls(zone, this);
       LoadLeadSources();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
-        txtznID.IsEnabled = (enumMode == EnumMode.add);
+        txtznID.IsEnabled = (enumMode == EnumMode.Add);
         txtznN.IsEnabled = true;
         chkznA.IsEnabled = true;
         dgrLeadSources.IsReadOnly = false;
@@ -70,7 +70,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode != EnumMode.preview)
+      if (!_isClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
@@ -101,7 +101,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(zone, oldZone) && ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(zone, oldZone) && ObjectHelper.IsListEquals(lstLeadSources, _lstOldLeadSources))
       {
         _isClosing = true;
         Close();
@@ -116,7 +116,7 @@ namespace IM.Administrator.Forms
           btnAccept.Visibility = Visibility.Collapsed;
           List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
           List<LeadSource> lstDel = _lstOldLeadSources.Where(ls => !lstLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
-          int nRes = await BRZones.SaveZone(zone,lstAdd,lstDel,(enumMode==EnumMode.edit));
+          int nRes = await BRZones.SaveZone(zone,lstAdd,lstDel,(enumMode==EnumMode.Edit));
           UIHelper.ShowMessageResult("Zone", nRes);
           if (nRes > 0)
           {
@@ -223,7 +223,7 @@ namespace IM.Administrator.Forms
         dgrLeadSources.ItemsSource = lstLeadSources;
         _lstOldLeadSources = lstLeadSources.ToList();
         cmbLeadSources.Header = "Lead Source (" + lstLeadSources.Count + ")";
-        if(enumMode!=EnumMode.preview)
+        if(enumMode!=EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }

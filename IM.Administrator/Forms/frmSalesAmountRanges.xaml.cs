@@ -131,7 +131,7 @@ namespace IM.Administrator.Forms
       frmSalesAmountRangeDetail frmSalAmoRanDetail = new frmSalesAmountRangeDetail();
       frmSalAmoRanDetail.Owner = this;
       frmSalAmoRanDetail.oldSalAmoRan = salesAmountRange;
-      frmSalAmoRanDetail.enumMode = EnumMode.edit;
+      frmSalAmoRanDetail.enumMode = EnumMode.Edit;
       if(frmSalAmoRanDetail.ShowDialog()==true)
       {
         List<SalesAmountRange> lstSalesAmountRange = (List<SalesAmountRange>)dgrSalesAmountRanges.ItemsSource;
@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
     {
       frmSalesAmountRangeDetail frmSalAmoRanDetail = new frmSalesAmountRangeDetail();
       frmSalAmoRanDetail.Owner = this;
-      frmSalAmoRanDetail.enumMode = EnumMode.search;
+      frmSalAmoRanDetail.enumMode = EnumMode.Search;
       frmSalAmoRanDetail.oldSalAmoRan = _salesAmountRangeFilter;
       frmSalAmoRanDetail.nStatus = _nStatus;
       if (frmSalAmoRanDetail.ShowDialog()==true)
@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
     {
       frmSalesAmountRangeDetail frmSalAmoRanDetail = new frmSalesAmountRangeDetail();
       frmSalAmoRanDetail.Owner = this;
-      frmSalAmoRanDetail.enumMode = EnumMode.add;
+      frmSalAmoRanDetail.enumMode = EnumMode.Add;
       if(frmSalAmoRanDetail.ShowDialog()==true)
       {
         SalesAmountRange salesAmountRange = frmSalAmoRanDetail.salesAmountRange;

@@ -127,7 +127,7 @@ namespace IM.Administrator.Forms
       PermissionLevel permissionLevel = (PermissionLevel)dgrPermissionsLevels.SelectedItem;
       frmPermissionLevelDetail frmPermissionLevelDetail = new frmPermissionLevelDetail();
       frmPermissionLevelDetail.Owner = this;
-      frmPermissionLevelDetail.enumMode = EnumMode.edit;
+      frmPermissionLevelDetail.enumMode = EnumMode.Edit;
       frmPermissionLevelDetail.oldPermissionLevel = permissionLevel;
       if (frmPermissionLevelDetail.ShowDialog() == true)
       {
@@ -192,7 +192,7 @@ namespace IM.Administrator.Forms
     {
       frmPermissionLevelDetail frmPermissionLevelDetail = new frmPermissionLevelDetail();
       frmPermissionLevelDetail.Owner = this;
-      frmPermissionLevelDetail.enumMode = EnumMode.add;
+      frmPermissionLevelDetail.enumMode = EnumMode.Add;
       if(frmPermissionLevelDetail.ShowDialog()==true)
       {
         PermissionLevel permissionLevel = frmPermissionLevelDetail.permissionLevel;

@@ -1,6 +1,5 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Host.Enums;
 using IM.Model;
 using IM.Model.Enums;
 using PalaceResorts.Common.PalaceTools;
@@ -341,8 +340,8 @@ namespace IM.Host.Forms
         frmGiftsReceipts giftsReceipt = new frmGiftsReceipts(GuestID)
         {
           Owner = this,
-          modeOpenBy = EnumOpenBy.Checkbox,
-          modeOpen = (_edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview
+          _modeOpenBy = EnumOpenBy.Checkbox,
+          _modeOpen = (_edit) ? EnumMode.Edit : EnumMode.ReadOnly
         };
         giftsReceipt.ShowDialog();
       }

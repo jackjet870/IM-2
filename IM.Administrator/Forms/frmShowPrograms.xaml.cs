@@ -116,7 +116,7 @@ namespace IM.Administrator.Forms
       frmShowProgramDetail frmShowProgramDetail = new frmShowProgramDetail();
       frmShowProgramDetail.Owner = this;
       frmShowProgramDetail.oldShowProgram = showProgram;
-      frmShowProgramDetail.enumMode = EnumMode.edit;
+      frmShowProgramDetail.enumMode = EnumMode.Edit;
       if(frmShowProgramDetail.ShowDialog()==true)
       {
         List<ShowProgram> lstShowPrograms = (List<ShowProgram>)dgrShowPrograms.ItemsSource;
@@ -151,7 +151,7 @@ namespace IM.Administrator.Forms
     {
       frmShowProgramDetail frmShowProgramDetail = new frmShowProgramDetail();
       frmShowProgramDetail.Owner = this;
-      frmShowProgramDetail.enumMode = EnumMode.search;
+      frmShowProgramDetail.enumMode = EnumMode.Search;
       frmShowProgramDetail.oldShowProgram = _showProgramFilter;
       frmShowProgramDetail.nStatus = _nStatus;
       if(frmShowProgramDetail.ShowDialog()==true)
@@ -176,7 +176,7 @@ namespace IM.Administrator.Forms
     {
       frmShowProgramDetail frmShowProgramDetail = new frmShowProgramDetail();
       frmShowProgramDetail.Owner = this;
-      frmShowProgramDetail.enumMode = EnumMode.add;
+      frmShowProgramDetail.enumMode = EnumMode.Add;
       if(frmShowProgramDetail.ShowDialog()==true)
       {
         ShowProgram showProgram = frmShowProgramDetail.showProgram;

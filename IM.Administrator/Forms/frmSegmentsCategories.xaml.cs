@@ -137,7 +137,7 @@ namespace IM.Administrator.Forms
       frmSegmentCategoryDetail frmSegmentCategoryDet = new frmSegmentCategoryDetail();
       frmSegmentCategoryDet.Owner = this;
       frmSegmentCategoryDet.oldSegmentCategory = segmentCategory;
-      frmSegmentCategoryDet.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmSegmentCategoryDet.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       if (frmSegmentCategoryDet.ShowDialog() == true)
       {
         List<SegmentCategory> lstSegmentsCategories = (List<SegmentCategory>)dgrSegmentsCategories.ItemsSource;
@@ -215,7 +215,7 @@ namespace IM.Administrator.Forms
     {
       frmSegmentCategoryDetail frmSegmentCategory = new frmSegmentCategoryDetail();
       frmSegmentCategory.Owner = this;
-      frmSegmentCategory.enumMode = EnumMode.add;
+      frmSegmentCategory.enumMode = EnumMode.Add;
       if(frmSegmentCategory.ShowDialog()==true)
       {
         if(ValidateFilter(frmSegmentCategory.segmentCategory))//Verificamos que cumpla con los filtros

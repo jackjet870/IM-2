@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(paymentSchema, oldPaymentSchema) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(paymentSchema, oldPaymentSchema) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

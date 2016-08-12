@@ -59,7 +59,7 @@ namespace IM.Administrator.Forms
       Period period = (Period)dgrPeriods.SelectedItem;
       frmPeriodDetail frmPeriodDetail = new frmPeriodDetail();
       frmPeriodDetail.Owner = this;
-      frmPeriodDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmPeriodDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmPeriodDetail.oldPeriod = period;
       if(frmPeriodDetail.ShowDialog()==true)
       {
@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
     {
       frmPeriodDetail frmPeriodDetail = new frmPeriodDetail();
       frmPeriodDetail.Owner = this;
-      frmPeriodDetail.enumMode = EnumMode.add;
+      frmPeriodDetail.enumMode = EnumMode.Add;
       if(frmPeriodDetail.ShowDialog()==true)
       {
         Period period = frmPeriodDetail.period;

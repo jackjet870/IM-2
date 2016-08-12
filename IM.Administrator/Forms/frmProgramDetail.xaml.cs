@@ -47,10 +47,10 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(program, oldProgram);
       UIHelper.SetUpControls(program, this);
       LoadLeadSources();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         dgrLeadSources.IsReadOnly = false;
-        txtpgID.IsEnabled = (enumMode == EnumMode.add);
+        txtpgID.IsEnabled = (enumMode == EnumMode.Add);
         txtpgN.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
         dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -70,7 +70,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!blnClosing && enumMode != EnumMode.preview)
+      if (!blnClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
@@ -165,7 +165,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_oldList.Any(lss => lss.lsID == ls.lsID)).ToList();
 
-          int nRes = await BRPrograms.SaveProgram(program, lstAdd, (enumMode == EnumMode.edit));
+          int nRes = await BRPrograms.SaveProgram(program, lstAdd, (enumMode == EnumMode.Edit));
           
           UIHelper.ShowMessageResult("Program", nRes);
           skpStatus.Visibility = Visibility.Collapsed;

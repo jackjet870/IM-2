@@ -69,7 +69,7 @@ namespace IM.Host.Classes
         // Si se ingreso los campos obligatorios.
         if (Current.geQty > 0 && Current.gegi != null)
         {
-          await BREntities.OperationEntity(Current, Model.Enums.EnumMode.add);
+          await BREntities.OperationEntity(Current, Model.Enums.EnumMode.Add);
 
           // Buscamos el regalo
           Gift gift = frmHost._lstGifts.Where(x => x.giID == Current.gegi).Single();
@@ -92,7 +92,7 @@ namespace IM.Host.Classes
             }).ToList();
 
             // Guardamos los regalos
-            await BREntities.OperationEntities(giftsPacks, Model.Enums.EnumMode.add);
+            await BREntities.OperationEntities(giftsPacks, Model.Enums.EnumMode.Add);
           }
         }
       }

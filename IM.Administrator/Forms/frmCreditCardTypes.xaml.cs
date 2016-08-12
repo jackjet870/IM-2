@@ -140,7 +140,7 @@ namespace IM.Administrator.Forms
     {
       frmCreditCardTypesDetail frmCreditCard = new frmCreditCardTypesDetail();
       frmCreditCard.Owner = this;
-      frmCreditCard.mode = EnumMode.add;
+      frmCreditCard.mode = EnumMode.Add;
       if (frmCreditCard.ShowDialog() == true)
       {
         if (ValidateFilters(frmCreditCard.creditCardType))//Validamos que cumpla con los filtros
@@ -234,7 +234,7 @@ namespace IM.Administrator.Forms
     #endregion
     #region DoubleClick
     /// <summary>
-    /// Muestra la ventada detalle en modo preview
+    /// Muestra la ventada detalle en modo ReadOnly
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -246,7 +246,7 @@ namespace IM.Administrator.Forms
       CreditCardType creditCardType = (CreditCardType)dgrCreditCard.SelectedItem;
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
-      frmCrediCard.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmCrediCard.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmCrediCard.oldCreditCard = creditCardType;
       if(frmCrediCard.ShowDialog()==true)
       {

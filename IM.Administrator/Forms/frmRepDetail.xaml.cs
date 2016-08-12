@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(rep, oldRep);
-      txtrpID.IsEnabled = (enumMode == EnumMode.add);
+      txtrpID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(rep, this);
       DataContext = rep;
     } 
@@ -93,7 +93,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(rep, oldRep))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(rep, oldRep))
         {
           _isClosing = true;
           Close();
@@ -138,7 +138,7 @@ namespace IM.Administrator.Forms
     {
       if(!_isClosing)
       {
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           if (!ObjectHelper.IsEquals(rep, oldRep))
           {

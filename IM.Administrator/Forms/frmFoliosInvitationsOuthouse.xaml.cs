@@ -122,7 +122,7 @@ namespace IM.Administrator.Forms
     {
       frmFolioInvitationOuthouseDetail frmFolioDetail = new frmFolioInvitationOuthouseDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.Add;
       if(frmFolioDetail.ShowDialog()==true)
       {
         
@@ -186,7 +186,7 @@ namespace IM.Administrator.Forms
       frmFolioInvitationOuthouseDetail frmFolioDetail = new frmFolioInvitationOuthouseDetail();
       frmFolioDetail.oldFolioInvOut = folioInvOut;
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = ((_blnEdit)?EnumMode.edit:EnumMode.preview);//Asignamos el modo
+      frmFolioDetail.enumMode = ((_blnEdit)?EnumMode.Edit:EnumMode.ReadOnly);//Asignamos el modo
       if(frmFolioDetail.ShowDialog()==true)
       {
         int nIndex = 0;

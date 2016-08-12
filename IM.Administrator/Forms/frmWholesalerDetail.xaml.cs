@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      if (enumMode == EnumMode.search)
+      if (enumMode == EnumMode.Search)
       {
         Title = "Search";
         txtName.IsEnabled = true;
@@ -57,7 +57,7 @@ namespace IM.Administrator.Forms
       else
       {
         ObjectHelper.CopyProperties(wholesaler, oldWholesaler);        
-        if(enumMode==EnumMode.add)
+        if(enumMode==EnumMode.Add)
         {
           txtwsApplication.IsEnabled = true;
           txtwsCompany.IsEnabled = true;
@@ -127,7 +127,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.search)
+      if(enumMode!=EnumMode.Search)
       {
         if(ObjectHelper.IsEquals(wholesaler,oldWholesaler))
         {
@@ -182,7 +182,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (enumMode != EnumMode.search && enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.Search && enumMode != EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(wholesaler, oldWholesaler))
         {
@@ -222,7 +222,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Club> lstClubs = await BRClubs.GetClubs(null, 1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstClubs.Insert(0, new Club { clID = 0, clN = "ALL" });
         }

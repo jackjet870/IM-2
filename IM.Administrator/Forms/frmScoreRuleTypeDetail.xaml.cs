@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(scoreRuleType, oldScoreRuleType);
       UIHelper.SetUpControls(scoreRuleType, this);
       DataContext = scoreRuleType;
-      txtsyID.IsEnabled = (enumMode == EnumMode.add);
+      txtsyID.IsEnabled = (enumMode == EnumMode.Add);
     }
     #endregion
 
@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRuleType, oldScoreRuleType))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(scoreRuleType, oldScoreRuleType))
         {
           _isClosing = true;
           Close();

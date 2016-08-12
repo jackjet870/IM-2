@@ -16,7 +16,7 @@ namespace IM.Administrator.Forms
   {
     public Currency currency=new Currency();//objeto para agrear|actualizar
     public Currency oldCurrency = new Currency();//Objeto con los datos iniciales
-    public EnumMode mode;//modo en el que se abrirá la ventana add|preview|edit
+    public EnumMode mode;//modo en el que se abrirá la ventana add|ReadOnly|edit
     private bool _isClosing = false; 
     public frmCurrencyDetail()
     {
@@ -55,9 +55,9 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(currency, oldCurrency);
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
-        txtcuID.IsEnabled = (mode == EnumMode.add);
+        txtcuID.IsEnabled = (mode == EnumMode.Add);
         txtcuN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
@@ -73,7 +73,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(currency, oldCurrency) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(currency, oldCurrency) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -121,7 +121,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(currency, oldCurrency))
         {

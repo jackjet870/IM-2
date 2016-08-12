@@ -181,7 +181,7 @@ namespace IM.Administrator.Forms
         List<Gift> lstGift = (List<Gift>)dgrGiftsOrder.ItemsSource;
 
         var lstSave = lstGift.Where(gi => lstGifts.Any(gii => gi.giID==gii.giID && gi.giO!=gii.giO)).ToList();
-        int nRes = await BREntities.OperationEntities(lstSave,EnumMode.edit);
+        int nRes = await BREntities.OperationEntities(lstSave,EnumMode.Edit);
         if(nRes>0)
         {
           UIHelper.ShowMessage("Gifts Order saved");

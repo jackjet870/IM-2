@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
       Product product = (Product)dgrProducts.SelectedItem;
       frmProductDetail frmProductDetail = new frmProductDetail();
       frmProductDetail.Owner = this;
-      frmProductDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmProductDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmProductDetail.oldProduct = product;
       if (frmProductDetail.ShowDialog() == true)
       {
@@ -214,7 +214,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmProductDetail frmProductDetail = new frmProductDetail();
-      frmProductDetail.enumMode = EnumMode.add;
+      frmProductDetail.enumMode = EnumMode.Add;
       frmProductDetail.Owner = this;
       if(frmProductDetail.ShowDialog()==true)
       {

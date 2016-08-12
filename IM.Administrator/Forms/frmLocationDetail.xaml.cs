@@ -59,14 +59,14 @@ namespace IM.Administrator.Forms
       DataContext = location;
       LoadLocationCategories();
       LoadSalesRoom();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         txtloN.IsEnabled = true;
         cmblolc.IsEnabled = true;
         cmblosr.IsEnabled = true;        
-        txtloID.IsEnabled = (enumMode != EnumMode.edit);        
-        if(enumMode==EnumMode.search)
+        txtloID.IsEnabled = (enumMode != EnumMode.Edit);        
+        if(enumMode==EnumMode.Search)
         {
           lblLeaSrc.Visibility = Visibility.Collapsed;
           cmblols.Visibility = Visibility.Collapsed;
@@ -108,9 +108,9 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
-          if (ObjectHelper.IsEquals(location, oldLocation) && enumMode != EnumMode.add)
+          if (ObjectHelper.IsEquals(location, oldLocation) && enumMode != EnumMode.Add)
           {
             _isClosing = true;
             Close();
@@ -184,7 +184,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        if (enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(location, oldLocation))
           {
@@ -216,7 +216,7 @@ namespace IM.Administrator.Forms
       {
         skpStatus.Visibility = Visibility.Visible;
         List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
-        if (enumMode == EnumMode.search && lstSalesRoom.Count > 0)
+        if (enumMode == EnumMode.Search && lstSalesRoom.Count > 0)
         {
           lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "ALL" });
         }
@@ -242,7 +242,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<LocationCategory> lstLocCategories =await BRLocationsCategories.GetLocationsCategories();
-        if (enumMode == EnumMode.search && lstLocCategories.Count > 0)
+        if (enumMode == EnumMode.Search && lstLocCategories.Count > 0)
         {
           lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "ALL" });
         }

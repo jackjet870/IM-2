@@ -63,18 +63,18 @@ namespace IM.Administrator.Forms
       
       LoadAreas();
       LoadGroups();
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
         cmbHotelAr.IsEnabled = true;
         cmbHotelGr.IsEnabled = true;
         chkA.IsEnabled = true;
-        if (enumMode != EnumMode.edit)
+        if (enumMode != EnumMode.Edit)
         {
           txthoID.IsEnabled = true;
         }
         #region Modo Busqueda
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           ComboBoxHelper.LoadComboDefault(cmbStatus);
           cmbStatus.SelectedValue = nStatus;
@@ -103,9 +103,9 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (enumMode != EnumMode.search)
+        if (enumMode != EnumMode.Search)
         {
-          if (ObjectHelper.IsEquals(hotel, oldHotel) && enumMode != EnumMode.add)//si no modifico nada
+          if (ObjectHelper.IsEquals(hotel, oldHotel) && enumMode != EnumMode.Add)//si no modifico nada
           {
             _isClosing = true;
             Close();
@@ -161,7 +161,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
+      if(enumMode!=EnumMode.ReadOnly && enumMode!=EnumMode.Search)
       {
         if (!ObjectHelper.IsEquals(hotel, oldHotel))
         {
@@ -229,7 +229,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<HotelGroup> lstHoGroup =await BRHotelGroups.GetHotelGroups(nStatus: 1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstHoGroup.Insert(0, new HotelGroup { hgID = "", hgN = "ALL" });
         }
@@ -255,7 +255,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }

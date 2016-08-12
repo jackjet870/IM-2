@@ -105,7 +105,7 @@ namespace IM.Administrator.Forms
     {
       frmLanguageDetail frmlangDetail = new frmLanguageDetail();
       frmlangDetail.Owner = this;
-      frmlangDetail.enumMode = EnumMode.add;
+      frmlangDetail.enumMode = EnumMode.Add;
       if(frmlangDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmlangDetail.language))//verificamos si cumple con los filtros
@@ -190,7 +190,7 @@ namespace IM.Administrator.Forms
 
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana detalle en modo preview|edicion
+    /// Muestra la ventana detalle en modo ReadOnly|edicion
     /// </summary>
     /// <history>
     /// [emoguel] 30/03/2016
@@ -201,7 +201,7 @@ namespace IM.Administrator.Forms
       frmLanguageDetail frmlangDetail = new frmLanguageDetail();
       frmlangDetail.Owner = this;
       frmlangDetail.oldLanguage = language;
-      frmlangDetail.enumMode = ((_blnEdit==true)?EnumMode.edit:EnumMode.preview);
+      frmlangDetail.enumMode = ((_blnEdit==true)?EnumMode.Edit:EnumMode.ReadOnly);
       if(frmlangDetail.ShowDialog()==true)
       {
         int nIndex = 0;

@@ -56,7 +56,7 @@ namespace IM.Administrator.Forms
       PaymentSchema paymentSchema = (PaymentSchema)dgrPaymentSchemas.SelectedItem;
       frmPaymentSchemaDetail frmPaymentScheDetail = new frmPaymentSchemaDetail();
       frmPaymentScheDetail.Owner = this;
-      frmPaymentScheDetail.enumMode = EnumMode.edit;
+      frmPaymentScheDetail.enumMode = EnumMode.Edit;
       frmPaymentScheDetail.oldPaymentSchema = paymentSchema;
 
       if(frmPaymentScheDetail.ShowDialog()==true)
@@ -197,7 +197,7 @@ namespace IM.Administrator.Forms
     {
       frmPaymentSchemaDetail frmPaymentScheDetail = new frmPaymentSchemaDetail();
       frmPaymentScheDetail.Owner = this;
-      frmPaymentScheDetail.enumMode = EnumMode.add;
+      frmPaymentScheDetail.enumMode = EnumMode.Add;
       if(frmPaymentScheDetail.ShowDialog()==true)
       {
         PaymentSchema paymentSchema = frmPaymentScheDetail.paymentSchema;

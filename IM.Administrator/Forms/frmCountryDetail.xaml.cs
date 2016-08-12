@@ -38,9 +38,9 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(country, oldCountry);
       #region LockControls
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
-        txtcoID.IsEnabled = (mode == EnumMode.add);
+        txtcoID.IsEnabled = (mode == EnumMode.Add);
         txtcoN.IsEnabled = true;
         txtcoNationality.IsEnabled = true;
         cmbLang.IsEnabled = true;
@@ -89,7 +89,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(country, oldCountry) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(country, oldCountry) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(mode!=EnumMode.preview)
+      if(mode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(country, oldCountry))
         {

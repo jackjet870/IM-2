@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       LocationCategory locationCategory = (LocationCategory)dgrLocationCategories.SelectedItem;
       frmLocationCategoryDetail frmLocationCategoryDetail = new frmLocationCategoryDetail();
       frmLocationCategoryDetail.Owner = this;
-      frmLocationCategoryDetail.enumMode = EnumMode.edit;
+      frmLocationCategoryDetail.enumMode = EnumMode.Edit;
       frmLocationCategoryDetail.oldLocationCategory = locationCategory;
       if (frmLocationCategoryDetail.ShowDialog() == true)
       {
@@ -186,7 +186,7 @@ namespace IM.Administrator.Forms
     {
       frmLocationCategoryDetail frmLocartionCategoryDetail = new frmLocationCategoryDetail();
       frmLocartionCategoryDetail.Owner = this;
-      frmLocartionCategoryDetail.enumMode = EnumMode.add;
+      frmLocartionCategoryDetail.enumMode = EnumMode.Add;
       if(frmLocartionCategoryDetail.ShowDialog()==true)
       {
         if (ValidateFilter(frmLocartionCategoryDetail.locationCategory))//Verificamos que cumpla con los filtros

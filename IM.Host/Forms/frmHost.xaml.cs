@@ -10,7 +10,6 @@ using IM.Host.Forms;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Enums;
-using IM.Host.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
@@ -569,7 +568,7 @@ namespace IM.Host
     /// </history>
     private void btnSales_Click(object sender, RoutedEventArgs e)
     {
-      var sales = new frmSales(EnumSale.GlobalSale) { Owner = this };
+      var sales = new frmSales(EnumOpenBy.Button) { Owner = this };
       sales.ShowDialog();
     }
     #endregion
@@ -640,7 +639,7 @@ namespace IM.Host
       var mealTickets = new frmMealTickets()
       {
         Owner = this,
-        modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search)
+        _modeOpen = ((modeEdit == true) ? EnumMode.Edit : EnumMode.Search)
       };
       mealTickets.ShowDialog();
     }
@@ -661,8 +660,8 @@ namespace IM.Host
       // Se invoca el formulario de acuerdo al permiso del usuario!
       var giftsReceipts = new frmGiftsReceipts()
       {
-        modeOpenBy = EnumOpenBy.Button,
-        modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Preview),
+        _modeOpenBy = EnumOpenBy.Button,
+        _modeOpen = ((modeEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly),
         Owner = this
       };
       giftsReceipts.ShowDialog();
@@ -1061,7 +1060,7 @@ namespace IM.Host
 
       if (ValidateGuest(guestHost, EnumPermission.Sales, EnumEntities.Sales))
       {
-        var frmSales = new frmSales(EnumSale.Sale, guestHost.guID) { Owner = this };
+        var frmSales = new frmSales(EnumOpenBy.Checkbox, guestHost.guID) { Owner = this };
         frmSales.ShowDialog();
 
         if (chekedValue.IsChecked.Value == false && !string.IsNullOrEmpty(frmSales.txtsaID.Text)
@@ -1098,8 +1097,8 @@ namespace IM.Host
         frmGiftsReceipts frmGiftsReceipts = new frmGiftsReceipts(guest.guID)
         {
           Owner = this,
-          modeOpenBy = EnumOpenBy.Checkbox,
-          modeOpen = (canEdit) ? EnumModeOpen.Edit : EnumModeOpen.Preview
+          _modeOpenBy = EnumOpenBy.Checkbox,
+          _modeOpen = (canEdit) ? EnumMode.Edit : EnumMode.ReadOnly
         };
         frmGiftsReceipts.ShowDialog();
 

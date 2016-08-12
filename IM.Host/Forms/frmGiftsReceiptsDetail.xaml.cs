@@ -1,6 +1,5 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Host.Enums;
 using IM.Model;
 using IM.Model.Enums;
 using System;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Linq;
 using IM.Model.Helpers;
@@ -23,7 +21,7 @@ namespace IM.Host.Forms
     #region Variables
     public bool _blnPublicOREmpleado = false, _CancelExternal = false; // FALSE - PUBLIC || TRUE - EMPLEADO
     private int _guestID = 0;
-    public EnumModeOpen modeOpen;
+    public EnumMode _modeOpen;
     public GiftsReceiptDetail _giftCurrent = new GiftsReceiptDetail();
     private GiftsReceiptDetail _GiftOrigin;
     private GiftsReceiptDetail _GiftReceiptC;
@@ -70,9 +68,9 @@ namespace IM.Host.Forms
     {
       //cboGift.ItemsSource  = frmHost._lstGiftsWithPackage;
 
-      switch (modeOpen)
+      switch (_modeOpen)
       {
-        case EnumModeOpen.Edit:
+        case EnumMode.Edit:
           if (_giftCurrent.geInPVPPromo)
           {
             GiftsReceiptDetail _request = BRGiftsReceiptDetail.GetGiftReceiptDetail(_giftCurrent.gegr, _giftCurrent.gegi);
@@ -152,7 +150,7 @@ namespace IM.Host.Forms
 
       if (_Selected != null)
       {
-        if (modeOpen == EnumModeOpen.Edit && _Selected.giID != _GiftOrigin.gegi || (modeOpen == EnumModeOpen.Add)) // Si es el mismo Gift en modo edicion no se realiza la validacion de repeticion.
+        if (_modeOpen == EnumMode.Edit && _Selected.giID != _GiftOrigin.gegi || (_modeOpen == EnumMode.Add)) // Si es el mismo Gift en modo edicion no se realiza la validacion de repeticion.
         {
           // Verificamos que el Gift no se encuentre repetido
           if (_obsGiftsCurrent != null)
@@ -173,9 +171,9 @@ namespace IM.Host.Forms
         return;
       }
 
-      switch (modeOpen)
+      switch (_modeOpen)
       {
-        case EnumModeOpen.Add:
+        case EnumMode.Add:
           GiftsReceiptDetail _giftsNew = new GiftsReceiptDetail
           {
             gegr = _GiftReceipt, // Se le asigna un valor 0 temporal hasta que le de guardar al Gift Receipt, se le asigna el ID del Gift Receipt correspondiente
@@ -221,7 +219,7 @@ namespace IM.Host.Forms
 
                 _obsGiftsCurrent.Add(_giftsNew);
 
-                frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
+                frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Add, _GiftReceiptC));
               }
               else // Verificamos si hubo cambio en algun campo
               {
@@ -242,7 +240,7 @@ namespace IM.Host.Forms
                     }
                   }
 
-                  frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
+                  frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Edit, _GiftReceiptC));
                 }
               }
             }
@@ -252,19 +250,19 @@ namespace IM.Host.Forms
             _GiftReceiptC = BuildGiftReceiptC();
 
             _obsGiftsCurrent.Add(_giftsNew);
-            frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
+            frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Add, _GiftReceiptC));
           }
 
           break;
-        case EnumModeOpen.Edit:
+        case EnumMode.Edit:
           _GiftReceiptC = BuildGiftReceiptC();
 
           if (!ObjectHelper.IsEquals(_giftCurrent, _GiftOrigin))
           {
             if (_giftCurrent.gegi == _GiftOrigin.gegi) // si es el mismo gift no se actualizo algun campo.
-              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
+              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Edit, _GiftReceiptC));
             else // Se cambio de gift
-              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
+              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.Add, _GiftReceiptC));
 
             int i = _obsGiftsCurrent.IndexOf(_GiftOrigin);
             _obsGiftsCurrent.RemoveAt(i);
@@ -477,15 +475,15 @@ namespace IM.Host.Forms
     /// </history>
     private void Element_GotFocus(object sender, RoutedEventArgs e)
     {
-      switch (modeOpen)
+      switch (_modeOpen)
       {
-        case EnumModeOpen.Add:
+        case EnumMode.Add:
           if (chkInSistur.IsChecked.Value)
           {
             UIHelper.ShowMessage("You can not modify the quantity of gifts have been given in Sistur promotions.", MessageBoxImage.Information);
           }
           break;
-        case EnumModeOpen.Edit:
+        case EnumMode.Edit:
           if (_giftCurrent.geInPVPPromo)
             UIHelper.ShowMessage("You can not modify the quantity of gifts have been given in Sistur promotions.", MessageBoxImage.Information);
           break;

@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(placeType, oldPlaceType);
       DataContext = placeType;
-      txtpyID.IsEnabled = (enumMode == EnumMode.add);
+      txtpyID.IsEnabled = (enumMode == EnumMode.Add);
       UIHelper.SetUpControls(placeType, this);
     }
     #endregion
@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(placeType, oldPlaceType) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(placeType, oldPlaceType) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

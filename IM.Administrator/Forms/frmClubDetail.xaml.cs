@@ -47,7 +47,7 @@ namespace IM.Administrator.Forms
       UIHelper.SetUpControls(club, this);
       DataContext = club;
       LoadAgencies(club.clID);
-      txtclID.IsEnabled = (enumMode == EnumMode.add);
+      txtclID.IsEnabled = (enumMode == EnumMode.Add);
       dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
@@ -68,7 +68,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(club, oldClub) && ObjectHelper.IsListEquals(_oldLstAgencies, lstAgencies))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(club, oldClub) && ObjectHelper.IsListEquals(_oldLstAgencies, lstAgencies))
         {
           blnClosing = true;
           Close();
@@ -87,7 +87,7 @@ namespace IM.Administrator.Forms
           {
             List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
             List<Agency> lstDel = _oldLstAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
-            int nRes = await BRClubs.SaveClub(club, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            int nRes = await BRClubs.SaveClub(club, (enumMode == EnumMode.Edit), lstAdd, lstDel);
             UIHelper.ShowMessageResult("Club", nRes);
             if (nRes > 0)
             {

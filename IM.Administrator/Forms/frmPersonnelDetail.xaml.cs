@@ -65,15 +65,15 @@ namespace IM.Administrator.Forms
       LoadLevelPermission();
       LoadPost();
       psbpePwd.Password = personnel.pePwd;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         grdGeneral.IsEnabled = true;
         grdPermission.IsEnabled = true;
         grdPlaces.IsEnabled = true;
-        txtpeID.IsEnabled = (enumMode == EnumMode.add);
+        txtpeID.IsEnabled = (enumMode == EnumMode.Add);
         UIHelper.SetUpControls(personnel, grdGeneral);        
       }
-      if (enumMode != EnumMode.add)
+      if (enumMode != EnumMode.Add)
       {
         Title += " (" + personnel.peID + "," + personnel.peN + ")";
       }
@@ -115,7 +115,7 @@ namespace IM.Administrator.Forms
         var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
         var lstPersonnelPermissionUpd = _lstOldPersonnelPermission.Where(pp => lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
         #endregion
-        if (enumMode != EnumMode.preview && (!ObjectHelper.IsEquals(personnel, oldPersonnel) || HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) || lstPersonnelPermissionAdd.Count > 0
+        if (enumMode != EnumMode.ReadOnly && (!ObjectHelper.IsEquals(personnel, oldPersonnel) || HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) || lstPersonnelPermissionAdd.Count > 0
           || lstPersonnelPermissionDel.Count > 0 || lstPersonnelPermissionUpd.Count > 0))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
@@ -167,7 +167,7 @@ namespace IM.Administrator.Forms
         var lstPersonnelPermissionUpd = lstPersonnelPermision.Where(pp => _lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
         #endregion
 
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(personnel, oldPersonnel) && !HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) && lstPersonnelPermissionAdd.Count == 0
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(personnel, oldPersonnel) && !HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) && lstPersonnelPermissionAdd.Count == 0
           && lstPersonnelPermissionDel.Count == 0 && lstPersonnelPermissionUpd.Count == 0)
         {
           oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
@@ -206,7 +206,7 @@ namespace IM.Administrator.Forms
             personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
 
 
-            int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
+            int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.Edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
               lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo),
               (personnel.peTeamType != oldPersonnel.peTeamType || personnel.pePlaceID != oldPersonnel.pePlaceID || personnel.peTeam != oldPersonnel.peTeam));
             UIHelper.ShowMessageResult("Personnel", nRes);
@@ -773,7 +773,7 @@ namespace IM.Administrator.Forms
         var salesMen = await ClubesHelper.GetSalesMen();
         var lstSalessalesMen = salesMen.ToList();
         cmbpeSalesManID.ItemsSource = lstSalessalesMen;
-        if(enumMode!=EnumMode.preview)
+        if(enumMode!=EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }
@@ -800,7 +800,7 @@ namespace IM.Administrator.Forms
       {        
         var lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID.ToString());
        cmbLeadSource.ItemsSource = lstLeadSources;        
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           _lstOldAccesLeadSource = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.LeadSource);          
         }
@@ -829,7 +829,7 @@ namespace IM.Administrator.Forms
         List<SalesRoomByUser> lstSalesRoom = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
         cmbSalesRoom.ItemsSource = lstSalesRoom;
 
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           _lstOldAccesSalesRoom = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.SalesRoom);                    
         }
@@ -856,7 +856,7 @@ namespace IM.Administrator.Forms
         List<WarehouseByUser> lstWarehouse = await BRWarehouses.GetWarehousesByUser(App.User.User.peID.ToString());
         cmbWarehouses.ItemsSource = lstWarehouse;
 
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           _lstOldAccesWH = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.Warehouse);                    
         }
@@ -883,7 +883,7 @@ namespace IM.Administrator.Forms
         List<Role> lstRoles = await BRRoles.GetRoles();
         cmbRoles.ItemsSource = lstRoles;
 
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           _lstOldRoles = await BRRoles.GetRolesByUser(personnel.peID);          
         }
@@ -911,7 +911,7 @@ namespace IM.Administrator.Forms
       {
         cmbPermission.ItemsSource = await BRPermissions.GetPermissions(1);
 
-        if (enumMode != EnumMode.add)
+        if (enumMode != EnumMode.Add)
         {
           _lstOldPersonnelPermission = await BRPermissions.GetPersonnelPermission(personnel.peID);          
         }

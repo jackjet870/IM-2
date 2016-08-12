@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       ScoreRule scoreRule = (ScoreRule)dgrScoreRules.SelectedItem;
       frmScoreRuleDetail frmScoreRuleDetail = new frmScoreRuleDetail();
       frmScoreRuleDetail.Owner = this;
-      frmScoreRuleDetail.enumMode = EnumMode.edit;
+      frmScoreRuleDetail.enumMode = EnumMode.Edit;
       frmScoreRuleDetail.oldScoreRule = scoreRule;
       if(frmScoreRuleDetail.ShowDialog()==true)
       {
@@ -198,7 +198,7 @@ namespace IM.Administrator.Forms
     {
       frmScoreRuleDetail frmScoreRuleDetail = new frmScoreRuleDetail();
       frmScoreRuleDetail.Owner = this;
-      frmScoreRuleDetail.enumMode = EnumMode.add;
+      frmScoreRuleDetail.enumMode = EnumMode.Add;
       if(frmScoreRuleDetail.ShowDialog()==true)
       {
         if (ValidateFilter(frmScoreRuleDetail.scoreRule))//Verificamos que cumpla con los filtros

@@ -44,7 +44,7 @@ namespace IM.Administrator.Forms
     {
       skpStatus.Visibility = Visibility.Visible;
       ObjectHelper.CopyProperties(scoreRule, oldScoreRule);
-      txtsuID.IsEnabled = (enumMode == EnumMode.add); 
+      txtsuID.IsEnabled = (enumMode == EnumMode.Add); 
       LoadSocreRuleDetail();
       LoadScoreRuleConcepts();
       UIHelper.SetUpControls(scoreRule, this);
@@ -93,7 +93,7 @@ namespace IM.Administrator.Forms
     {
       btnAccept.Focus();
       List<ScoreRuleDetail> lstScoreRuleDetails = (List<ScoreRuleDetail>)dgrScores.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRule, oldScoreRule) && !hasChageScores())
+      if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(scoreRule, oldScoreRule) && !hasChageScores())
       {
         blnClosing = true;
         Close();
@@ -124,7 +124,7 @@ namespace IM.Administrator.Forms
            )).ToList();
           #endregion
 
-          int nRes = await BRScoreRules.SaveScore(scoreRule,lstAdd,lstDel,lstUpd,(enumMode==EnumMode.edit));// await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);
+          int nRes = await BRScoreRules.SaveScore(scoreRule,lstAdd,lstDel,lstUpd,(enumMode==EnumMode.Edit));// await BRProducts.SaveProduct(product, (enumMode == EnumMode.edit), _productLegend, lstAdd, lstDel);
           skpStatus.Visibility = Visibility.Collapsed;
           UIHelper.ShowMessageResult("Score Rule", nRes);
           if (nRes > 0)

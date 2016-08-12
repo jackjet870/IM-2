@@ -116,7 +116,7 @@ namespace IM.Administrator.Forms
       frmSaleTypeDetail frmSaleTypeDetail = new frmSaleTypeDetail();
       frmSaleTypeDetail.Owner = this;
       frmSaleTypeDetail.oldSaleType = saleType;
-      frmSaleTypeDetail.enumMode = EnumMode.edit;
+      frmSaleTypeDetail.enumMode = EnumMode.Edit;
       if(frmSaleTypeDetail.ShowDialog()==true)
       {
         List<SaleType> lstSaleTypes = (List<SaleType>)dgrSaleTypes.ItemsSource;
@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
     {
       frmSaleTypeDetail frmSaleTypeDetail = new frmSaleTypeDetail();
       frmSaleTypeDetail.Owner = this;
-      frmSaleTypeDetail.enumMode = EnumMode.search;
+      frmSaleTypeDetail.enumMode = EnumMode.Search;
       frmSaleTypeDetail.oldSaleType = _saletTypeFilter;
       frmSaleTypeDetail.nStatus = _nStatus;
       if(frmSaleTypeDetail.ShowDialog()==true)
@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
     {
       frmSaleTypeDetail frmSaleTypeDetail = new frmSaleTypeDetail();
       frmSaleTypeDetail.Owner = this;
-      frmSaleTypeDetail.enumMode = EnumMode.add;
+      frmSaleTypeDetail.enumMode = EnumMode.Add;
       if(frmSaleTypeDetail.ShowDialog()==true)
       {
         SaleType saleType = frmSaleTypeDetail.saleType;

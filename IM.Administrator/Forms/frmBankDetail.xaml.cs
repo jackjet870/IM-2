@@ -53,7 +53,7 @@ namespace IM.Administrator.Forms
       dgrSalesRoom.ItemsSource = lstSalesRoom;
       ObjectHelper.CopyProperties(bank, oldBank);            
       UIHelper.SetUpControls(bank, this);      
-      txtbkID.IsEnabled = (enumMode == EnumMode.add);
+      txtbkID.IsEnabled = (enumMode == EnumMode.Add);
       LoadSalesRoom();
       DataContext = bank;
       dgrSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(bank, oldBank) && ObjectHelper.IsListEquals(_oldLstSalesRoom, lstSalesRoom))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(bank, oldBank) && ObjectHelper.IsListEquals(_oldLstSalesRoom, lstSalesRoom))
         {
           blnClosing = true;
           Close();
@@ -146,7 +146,7 @@ namespace IM.Administrator.Forms
             List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
             List<SalesRoom> lstDel = _oldLstSalesRoom.Where(sr => !lstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
             var grid = dgrSalesRoom;
-            int nRes = await BRBanks.SaveBank(bank, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            int nRes = await BRBanks.SaveBank(bank, (enumMode == EnumMode.Edit), lstAdd, lstDel);
             var banks = await BRBanks.GetBanks(bank: bank);
             bank = banks.FirstOrDefault();
             UIHelper.ShowMessageResult("Bank", nRes);

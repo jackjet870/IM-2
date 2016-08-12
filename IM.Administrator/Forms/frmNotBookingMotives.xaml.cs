@@ -68,7 +68,7 @@ namespace IM.Administrator.Forms
     {
       frmNotBookingMotiveDetail frmNotBokMotDetail = new frmNotBookingMotiveDetail();
       frmNotBokMotDetail.Owner = this;
-      frmNotBokMotDetail.enumMode = EnumMode.add;
+      frmNotBokMotDetail.enumMode = EnumMode.Add;
       if(frmNotBokMotDetail.ShowDialog()==true)
       {
         NotBookingMotive notBookingMotive = frmNotBokMotDetail.notBookingMotive;
@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       NotBookingMotive notBookingMotive = (NotBookingMotive)dgrNotBokMotives.SelectedItem;
       frmNotBookingMotiveDetail frmNotBokMotDetail = new frmNotBookingMotiveDetail();
       frmNotBokMotDetail.Owner = this;
-      frmNotBokMotDetail.enumMode = (_blnEdit == true) ? EnumMode.edit : EnumMode.preview;
+      frmNotBokMotDetail.enumMode = (_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmNotBokMotDetail.oldNotBookingMotive = notBookingMotive;
 
       if (frmNotBokMotDetail.ShowDialog()==true)

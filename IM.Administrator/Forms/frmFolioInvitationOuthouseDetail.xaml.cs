@@ -59,7 +59,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(folioInvOut, oldFolioInvOut);
       DataContext = folioInvOut;
       txtfiSerie.PreviewTextInput += TextBoxHelper.LetterTextInput;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         txtfiSerie.IsEnabled = true;
         txtfiFrom.IsEnabled = true;
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(folioInvOut, oldFolioInvOut))
         {
@@ -117,7 +117,7 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(folioInvOut,oldFolioInvOut)&& enumMode!=EnumMode.add)
+      if(ObjectHelper.IsEquals(folioInvOut,oldFolioInvOut)&& enumMode!=EnumMode.Add)
       {
         _isClosing = true;
         Close();
@@ -152,7 +152,7 @@ namespace IM.Administrator.Forms
 
         if (strMsj == "")
         {
-          nRes = BRFoliosInvitationsOuthouse.SaveFolioInvittionsOutside(folioInvOut, (enumMode == EnumMode.edit));
+          nRes = BRFoliosInvitationsOuthouse.SaveFolioInvittionsOutside(folioInvOut, (enumMode == EnumMode.Edit));
           UIHelper.ShowMessageResult("Folio Invitation Outhouse", nRes);
           if(nRes==1)
           {

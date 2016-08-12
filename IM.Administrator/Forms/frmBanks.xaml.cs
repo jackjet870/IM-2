@@ -135,7 +135,7 @@ namespace IM.Administrator.Forms
       Bank bank = (Bank)dgrBanks.SelectedItem;
       frmBankDetail frmBankDetail = new frmBankDetail();
       frmBankDetail.Owner = this;
-      frmBankDetail.enumMode = EnumMode.edit;
+      frmBankDetail.enumMode = EnumMode.Edit;
       frmBankDetail.oldBank = bank;
       if(frmBankDetail.ShowDialog()==true)
       {
@@ -187,7 +187,7 @@ namespace IM.Administrator.Forms
     {
       frmBankDetail frmBankDetail = new frmBankDetail();
       frmBankDetail.Owner = this;
-      frmBankDetail.enumMode = EnumMode.add;
+      frmBankDetail.enumMode = EnumMode.Add;
       if(frmBankDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmBankDetail.bank))//Validamos que cumpla con los filtros actuales

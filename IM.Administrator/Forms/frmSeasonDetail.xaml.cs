@@ -316,7 +316,7 @@ namespace IM.Administrator.Forms
       if (ValidateAllRangeDates())
       {
         List<SeasonDate> lstSeasonDates = (List<SeasonDate>)dgrDates.ItemsSource;
-        if (ObjectHelper.IsEquals(season, oldSeason) && enumMode != EnumMode.add && ObjectHelper.IsListEquals(_lstSeasonDates, _lstOldSeasonDates))
+        if (ObjectHelper.IsEquals(season, oldSeason) && enumMode != EnumMode.Add && ObjectHelper.IsListEquals(_lstSeasonDates, _lstOldSeasonDates))
         {
           _isClosing = true;
           Close();
@@ -331,7 +331,7 @@ namespace IM.Administrator.Forms
             List<SeasonDate> lstAdd = lstSeasonDates.Where(sd => !_lstOldSeasonDates.Any(sdo => sdo.sdss == sd.sdss)).ToList();
             List<SeasonDate> lstDel = _lstOldSeasonDates.Where(sd => !lstSeasonDates.Any(sdo => sdo.sdss == sd.sdss && sdo.sdStartD == sd.sdStartD && sdo.sdEndD == sd.sdEndD)).ToList();
             List<SeasonDate> lstChanged = lstSeasonDates.Where(sd => !_lstOldSeasonDates.Any(sdo => sdo.sdss == sd.sdss && sdo.sdStartD == sd.sdStartD && sdo.sdEndD == sd.sdEndD)).ToList();
-            int nRes = await BRSeasons.SaveSeason(season, (enumMode == EnumMode.edit), lstAdd, lstDel, lstChanged);
+            int nRes = await BRSeasons.SaveSeason(season, (enumMode == EnumMode.Edit), lstAdd, lstDel, lstChanged);
             skpStatus.Visibility = Visibility.Collapsed;
             UIHelper.ShowMessageResult("Season", nRes);
             if (nRes > 0)
@@ -366,7 +366,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(season, oldSeason))
         {
@@ -445,10 +445,10 @@ namespace IM.Administrator.Forms
       _year = BRHelpers.GetServerDate();
       lblYear.Content = _year.Year;
       LoadSeasonDates();
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtssID.IsEnabled = (enumMode == EnumMode.add);
+        txtssID.IsEnabled = (enumMode == EnumMode.Add);
         txtDescrip.IsEnabled = true;
         txtClosFac.IsEnabled = true;
         chkActive.IsEnabled = true;

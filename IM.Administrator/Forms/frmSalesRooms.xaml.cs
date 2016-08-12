@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       SalesRoom salesRoom = (SalesRoom)dgrSalesRooms.SelectedValue;
       frmSalesRoomDetail frmSalesRoomDetail = new frmSalesRoomDetail();
       frmSalesRoomDetail.Owner = this;
-      frmSalesRoomDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmSalesRoomDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmSalesRoomDetail.oldSalesRoom = salesRoom;
       if(frmSalesRoomDetail.ShowDialog()==true)
       {
@@ -173,7 +173,7 @@ namespace IM.Administrator.Forms
       frmSalesRoomDetail.oldSalesRoom = _salesRoomFilter;
       frmSalesRoomDetail.nStatus = _nStatus;
       frmSalesRoomDetail.nAppointment = _nAppointment;
-      frmSalesRoomDetail.enumMode = EnumMode.search;
+      frmSalesRoomDetail.enumMode = EnumMode.Search;
       if(frmSalesRoomDetail.ShowDialog()==true)
       {
         _salesRoomFilter = frmSalesRoomDetail.salesRoom;
@@ -197,7 +197,7 @@ namespace IM.Administrator.Forms
     {
       frmSalesRoomDetail frmSalesRoomDetail = new frmSalesRoomDetail();
       frmSalesRoomDetail.Owner = this;
-      frmSalesRoomDetail.enumMode = EnumMode.add;
+      frmSalesRoomDetail.enumMode = EnumMode.Add;
       if(frmSalesRoomDetail.ShowDialog()==true)
       {
         SalesRoom salesRoom = frmSalesRoomDetail.salesRoom;

@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
     #endregion
     #region Cell Double click
     /// <summary>
-    /// Muestra la ventada Charge To preview
+    /// Muestra la ventada Charge To ReadOnly
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmChargeToDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmChargeToDetail.oldChargeTo = chargeTo;
       if(frmChargeToDetail.ShowDialog()==true)
       {
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
     {
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();      
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = EnumMode.add;//insertar
+      frmChargeToDetail.mode = EnumMode.Add;//insertar
 
       if (frmChargeToDetail.ShowDialog() == true)
       {

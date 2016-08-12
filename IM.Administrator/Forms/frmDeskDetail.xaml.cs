@@ -45,7 +45,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(desk, oldDesk);
       DataContext = desk;
-      txtdkID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");
+      txtdkID.Text = ((enumMode == EnumMode.Edit) ? desk.dkID.ToString() : "");
       UIHelper.SetUpControls(desk, this);
       LoadGridComputers();
       LoadCmbComputers();
@@ -68,7 +68,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(desk, oldDesk) && ObjectHelper.IsEquals(lstComputers, _oldLstComputers))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(desk, oldDesk) && ObjectHelper.IsEquals(lstComputers, _oldLstComputers))
         {
           _isClosing = true;
           Close();
@@ -84,7 +84,7 @@ namespace IM.Administrator.Forms
           if (strMsj == "")
           {
             List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
-            nRes =await BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
+            nRes =await BRDesks.SaveDesk(desk, (enumMode == EnumMode.Edit), lstIdsComputers);
             UIHelper.ShowMessageResult("Desk", nRes);
             if (nRes > 0)
             {
@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode != EnumMode.preview)
+      if (!_isClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
@@ -230,7 +230,7 @@ namespace IM.Administrator.Forms
       {
         Computer computer = new Computer();
         List<Computer> lstComputers = new List<Computer>();
-        if (enumMode == EnumMode.edit)
+        if (enumMode == EnumMode.Edit)
         {
           computer.cpdk = desk.dkID;
           lstComputers = await BRComputers.GetComputers(computer);

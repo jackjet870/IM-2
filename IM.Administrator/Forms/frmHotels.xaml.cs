@@ -120,7 +120,7 @@ namespace IM.Administrator.Forms
     {
       frmHotelDetail frmHotelDetail = new frmHotelDetail();
       frmHotelDetail.Owner = this;
-      frmHotelDetail.enumMode = EnumMode.add;
+      frmHotelDetail.enumMode = EnumMode.Add;
       if(frmHotelDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmHotelDetail.hotel))//Validamos que cumpla con los filtros actuales
@@ -151,7 +151,7 @@ namespace IM.Administrator.Forms
       frmHotelDetail frmHotelDetail = new frmHotelDetail();
       frmHotelDetail.Owner = this;
       frmHotelDetail.oldHotel = _hotelFilter;
-      frmHotelDetail.enumMode = EnumMode.search;
+      frmHotelDetail.enumMode = EnumMode.Search;
       frmHotelDetail.nStatus = _nStatus;
       if (frmHotelDetail.ShowDialog() == true)
       {
@@ -202,7 +202,7 @@ namespace IM.Administrator.Forms
       frmHotelDetail frmHotelDetail = new frmHotelDetail();
       frmHotelDetail.Owner = this;
       frmHotelDetail.oldHotel = hotel;
-      frmHotelDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmHotelDetail.enumMode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if(frmHotelDetail.ShowDialog()==true)
       {
         int nIndex = 0;

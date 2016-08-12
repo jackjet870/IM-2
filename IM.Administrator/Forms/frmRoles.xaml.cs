@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       Role role=(Role)dgrRoles.SelectedItem;
       frmRoleDetail frmRoleDetail = new frmRoleDetail();
       frmRoleDetail.Owner = this;
-      frmRoleDetail.enumMode = EnumMode.edit;
+      frmRoleDetail.enumMode = EnumMode.Edit;
       frmRoleDetail.oldRole=role;
       if(frmRoleDetail.ShowDialog()==true)
       {
@@ -193,7 +193,7 @@ namespace IM.Administrator.Forms
     {
       frmRoleDetail frmRoleDetail = new frmRoleDetail();
       frmRoleDetail.Owner = this;
-      frmRoleDetail.enumMode = EnumMode.add;
+      frmRoleDetail.enumMode = EnumMode.Add;
       if(frmRoleDetail.ShowDialog()==true)
       {
         Role role = frmRoleDetail.role;

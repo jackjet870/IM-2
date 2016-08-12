@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       Club club = (Club)dgrClubs.SelectedItem;
       frmClubDetail frmClubDetail = new frmClubDetail();
       frmClubDetail.Owner = this;
-      frmClubDetail.enumMode = EnumMode.edit;
+      frmClubDetail.enumMode = EnumMode.Edit;
       frmClubDetail.oldClub = club;
       if(frmClubDetail.ShowDialog()==true)
       {
@@ -196,7 +196,7 @@ namespace IM.Administrator.Forms
     {
       frmClubDetail frmClubDetail = new frmClubDetail();
       frmClubDetail.Owner = this;
-      frmClubDetail.enumMode = EnumMode.add;
+      frmClubDetail.enumMode = EnumMode.Add;
       if (frmClubDetail.ShowDialog() == true)
       {
         if(ValidateFilter(frmClubDetail.club))//Verificar que cumpla con los filtros

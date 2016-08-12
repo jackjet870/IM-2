@@ -33,9 +33,9 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(creditCardType, oldCreditCard);
-      if (mode != EnumMode.preview)
+      if (mode != EnumMode.ReadOnly)
       {
-        txtccID.IsEnabled = (mode == EnumMode.add);
+        txtccID.IsEnabled = (mode == EnumMode.Add);
         txtccN.IsEnabled = true;
         chkA.IsEnabled = true;
         chkIsCC.IsEnabled = true;
@@ -71,7 +71,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(creditCardType, oldCreditCard) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(creditCardType, oldCreditCard) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -108,7 +108,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (mode != EnumMode.preview)
+      if (mode != EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(creditCardType, oldCreditCard))
         {

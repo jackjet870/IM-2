@@ -45,11 +45,11 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(segmentByLeadSource, oldSegmentByLeadSource);
       UIHelper.SetUpControls(segmentByLeadSource, this);
       LoadLeadSources();
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         chksoA.IsEnabled = true;
         txtsoN.IsEnabled = true;
-        txtsoID.IsEnabled = (enumMode == EnumMode.add);
+        txtsoID.IsEnabled = (enumMode == EnumMode.Add);
         dgrLeadSources.IsReadOnly = false;
       }
       DataContext = segmentByLeadSource;
@@ -66,7 +66,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode != EnumMode.preview)
+      if (!_isClosing && enumMode != EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
@@ -146,7 +146,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<LeadSource> lstLeadSources = (List<LeadSource>)dgrLeadSources.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(segmentByLeadSource, oldSegmentByLeadSource) && ObjectHelper.IsListEquals(_lstOldLeadSources, lstLeadSources))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(segmentByLeadSource, oldSegmentByLeadSource) && ObjectHelper.IsListEquals(_lstOldLeadSources, lstLeadSources))
         {
           _isClosing = true;
           Close();
@@ -161,7 +161,7 @@ namespace IM.Administrator.Forms
           {
             List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
             List<LeadSource> lstDel = _lstOldLeadSources.Where(ls => !lstLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();
-            int nRes = await BRSegmentsByLeadSource.SaveSegmentByLeadSource(segmentByLeadSource, lstAdd, lstDel, (enumMode == EnumMode.edit));
+            int nRes = await BRSegmentsByLeadSource.SaveSegmentByLeadSource(segmentByLeadSource, lstAdd, lstDel, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Segment By Lead Source", nRes);
             if (nRes > 0)
             {
@@ -225,7 +225,7 @@ namespace IM.Administrator.Forms
         List<LeadSource> lstLeadSources = (!string.IsNullOrWhiteSpace(segmentByLeadSource.soID)) ? lstAllLeadSources.Where(ls => ls.lsso == segmentByLeadSource.soID).ToList() : new List<LeadSource>();
         dgrLeadSources.ItemsSource = lstLeadSources;
         _lstOldLeadSources = lstLeadSources.ToList();
-        if (enumMode != EnumMode.preview)
+        if (enumMode != EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }

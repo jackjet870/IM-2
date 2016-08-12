@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       ReasonCancellationFolio reasonCancellationFolio = (ReasonCancellationFolio)dgrReaCanFols.SelectedItem;
       frmReasonCancellationFolioDetail frmReaCanFolDetail = new frmReasonCancellationFolioDetail();
       frmReaCanFolDetail.Owner = this;
-      frmReaCanFolDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmReaCanFolDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmReaCanFolDetail.oldReasonCanFol = reasonCancellationFolio;
       if(frmReaCanFolDetail.ShowDialog()==true)
       {
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmReasonCancellationFolioDetail frmResCanFolDetail = new frmReasonCancellationFolioDetail();
       frmResCanFolDetail.Owner = this;
-      frmResCanFolDetail.enumMode = EnumMode.add;
+      frmResCanFolDetail.enumMode = EnumMode.Add;
       if(frmResCanFolDetail.ShowDialog()==true)
       {
         ReasonCancellationFolio reasonCacellationFolio = frmResCanFolDetail.reasonCancellationFolio;

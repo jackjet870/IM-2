@@ -38,12 +38,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(language, oldLanguage);
       DataContext = language;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         txtlaN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        if (enumMode == EnumMode.add)
+        if (enumMode == EnumMode.Add)
         {
           txtlaID.IsEnabled = true;
         }
@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+      if (enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
       {
         if (!ObjectHelper.IsEquals(language, oldLanguage))
         {
@@ -122,7 +122,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(language, oldLanguage) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(language, oldLanguage) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();

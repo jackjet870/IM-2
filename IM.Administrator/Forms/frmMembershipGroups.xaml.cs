@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
       frmMembershipGroupDetail frmMembershipGroup = new frmMembershipGroupDetail();
       frmMembershipGroup.Owner = this;
       frmMembershipGroup.oldMembershipGroup = membershipGroup;
-      frmMembershipGroup.enumMode = EnumMode.edit;
+      frmMembershipGroup.enumMode = EnumMode.Edit;
       if(frmMembershipGroup.ShowDialog()==true)
       {
         List<MembershipGroup> lstMembershipGroups = (List<MembershipGroup>)dgrMembershipGroup.ItemsSource;
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmMembershipGroupDetail frmMembershipGroupDet = new frmMembershipGroupDetail();
       frmMembershipGroupDet.Owner = this;
-      frmMembershipGroupDet.enumMode = EnumMode.add;
+      frmMembershipGroupDet.enumMode = EnumMode.Add;
       if(frmMembershipGroupDet.ShowDialog()==true)
       {
         if(ValidateFilter(frmMembershipGroupDet.membershipGroup))//Verificamos que cumpla con los filtros

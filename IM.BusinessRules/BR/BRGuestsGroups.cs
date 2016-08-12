@@ -183,7 +183,7 @@ namespace IM.BusinessRules.BR
                 lstGuestsDelete.ForEach(async gu =>
                 {
                   gu.guGroup = false;
-                  await BREntities.OperationEntity(gu, Model.Enums.EnumMode.edit);
+                  await BREntities.OperationEntity(gu, Model.Enums.EnumMode.Edit);
                 });
 
                 #endregion

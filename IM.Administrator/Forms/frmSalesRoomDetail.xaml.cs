@@ -40,9 +40,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.search)
+      if(enumMode!=EnumMode.Search)
       {
-        if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(salesRoom,oldSalesRoom))
+        if(enumMode!=EnumMode.Add && ObjectHelper.IsEquals(salesRoom,oldSalesRoom))
         {
           _isClosing = true;
           Close();
@@ -52,7 +52,7 @@ namespace IM.Administrator.Forms
           string strMsj = ValidateHelper.ValidateForm(this, "Sales Room");
           if(strMsj=="")
           {
-            int nRes = BRSalesRooms.SaveSalesRoom(salesRoom, (enumMode == EnumMode.edit));
+            int nRes = BRSalesRooms.SaveSalesRoom(salesRoom, (enumMode == EnumMode.Edit));
             UIHelper.ShowMessageResult("Sales Room", nRes);
             if(nRes==1)
             {
@@ -107,7 +107,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(salesRoom, oldSalesRoom);
       UIHelper.SetUpControls(salesRoom, this);
-      if(enumMode==EnumMode.search)
+      if(enumMode==EnumMode.Search)
       {
         Title = "Search";
         chksrA.Visibility = Visibility.Collapsed;
@@ -134,11 +134,11 @@ namespace IM.Administrator.Forms
         LoadBoss();
         LoadWarehouses();        
       }
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         btnAccept.Visibility = Visibility.Visible;
       }
-      txtsrID.IsEnabled = (enumMode != EnumMode.edit);
+      txtsrID.IsEnabled = (enumMode != EnumMode.Edit);
       LoadAreas();      
       LoadCurrency();
       DataContext = salesRoom;
@@ -177,7 +177,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        if (enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(salesRoom, oldSalesRoom))
           {
@@ -207,7 +207,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Area> lstAreas = await BRAreas.GetAreas();
-        if (enumMode == EnumMode.search && lstAreas.Count > 0)
+        if (enumMode == EnumMode.Search && lstAreas.Count > 0)
         {
           lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }
@@ -254,7 +254,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<Currency> lstCurrency = await BRCurrencies.GetCurrencies();
-        if (enumMode == EnumMode.search && lstCurrency.Count > 0)
+        if (enumMode == EnumMode.Search && lstCurrency.Count > 0)
         {
           lstCurrency.Insert(0, new Currency { cuID = "", cuN = "ALL" });
         }

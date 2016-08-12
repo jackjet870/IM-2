@@ -57,7 +57,7 @@ namespace IM.Administrator.Forms
       frmFoliosInvitationsOuthousePRDetail frmFolioDetail = new frmFoliosInvitationsOuthousePRDetail();
       frmFolioDetail.Owner = this;
       frmFolioDetail.personnel = personnel;
-      frmFolioDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmFolioDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmFolioDetail.ShowDialog();
     }
 
@@ -154,7 +154,7 @@ namespace IM.Administrator.Forms
       frmFoliosInvitationsOuthousePRDetail frmFolioDetail = new frmFoliosInvitationsOuthousePRDetail();
       frmFolioDetail.Owner = this;
       frmFolioDetail.personnel = _prFilter;
-      frmFolioDetail.enumMode = EnumMode.search;
+      frmFolioDetail.enumMode = EnumMode.Search;
       if (frmFolioDetail.ShowDialog() == true)
       {
         _prFilter = frmFolioDetail.personnel;
@@ -176,7 +176,7 @@ namespace IM.Administrator.Forms
     {
       frmFoliosInvitationsOuthousePRDetail frmFolioDetail = new frmFoliosInvitationsOuthousePRDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.Add;
       if (frmFolioDetail.ShowDialog() == true)
       {
         if (ValidateFilter(frmFolioDetail.personnel))//Verificamos que cumpla con los filtros actuales

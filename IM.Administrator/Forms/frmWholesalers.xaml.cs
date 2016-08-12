@@ -137,7 +137,7 @@ namespace IM.Administrator.Forms
       WholesalerData wholesalerData = (WholesalerData)dgrWholesalers.SelectedItem;
       frmWholesalerDetail frmwholesalerDetail = new frmWholesalerDetail();
       frmwholesalerDetail.Owner = this;
-      frmwholesalerDetail.enumMode = EnumMode.preview;
+      frmwholesalerDetail.enumMode = EnumMode.ReadOnly;
       frmwholesalerDetail.oldWholesaler = new Wholesaler {wsApplication=wholesalerData.wsApplication,wscl=wholesalerData.wscl,wsCompany=wholesalerData.wsCompany };
       frmwholesalerDetail.ShowDialog();
     }
@@ -172,7 +172,7 @@ namespace IM.Administrator.Forms
     {
       frmWholesalerDetail frmWholesalerDetail = new frmWholesalerDetail();
       frmWholesalerDetail.Owner = this;
-      frmWholesalerDetail.enumMode = EnumMode.add;
+      frmWholesalerDetail.enumMode = EnumMode.Add;
       if(frmWholesalerDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmWholesalerDetail.wholesalerData))//Verificamos que cumpla con los filtros
@@ -203,7 +203,7 @@ namespace IM.Administrator.Forms
     {
       frmWholesalerDetail frmWholesalerDetail = new frmWholesalerDetail();
       frmWholesalerDetail.Owner = this;
-      frmWholesalerDetail.enumMode = EnumMode.search;
+      frmWholesalerDetail.enumMode = EnumMode.Search;
       ObjectHelper.CopyProperties(frmWholesalerDetail.wholesalerData,_WholeSalerFilter);
       if(frmWholesalerDetail.ShowDialog()==true)
       {
@@ -242,7 +242,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = await BREntities.OperationEntities(lstWholesaler, EnumMode.deleted);
+          int nRes = await BREntities.OperationEntities(lstWholesaler, EnumMode.Delete);
 
           if (nRes > 0)
           {

@@ -43,7 +43,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(teamLog, oldTeamLog);
       LoadPersonnels();
       LoadTeamTypes();
-      if(enumMode!=EnumMode.preview)
+      if(enumMode!=EnumMode.ReadOnly)
       {
         cmbtlpe.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
@@ -52,7 +52,7 @@ namespace IM.Administrator.Forms
         cmbtlTeam.IsEnabled = true;
         cmbtlPlaceID.IsEnabled = true;
         UIHelper.SetUpControls(teamLog, this);
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           Title = "Search";
           txttlID.Visibility = Visibility.Collapsed;
@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
         else
         {
           teamLog.tlChangedBy = App.User.User.peID;
-          if (enumMode == EnumMode.add)
+          if (enumMode == EnumMode.Add)
           {
             teamLog.tlDT = DateTime.Now;
           }
@@ -117,7 +117,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           if (dptlDT.SelectedDate != null)
           {
@@ -135,7 +135,7 @@ namespace IM.Administrator.Forms
         else
         {
           btnAccept.Focus();
-          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(teamLog, oldTeamLog))
+          if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(teamLog, oldTeamLog))
           {
             _isClosing = true;
             Close();
@@ -290,7 +290,7 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        if (enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
         {
           if (!ObjectHelper.IsEquals(teamLog, oldTeamLog))
           {
@@ -320,7 +320,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<PersonnelShort> lstPersonnel = await BRPersonnel.GetPersonnel();
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {
           lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "ALL" });
         }

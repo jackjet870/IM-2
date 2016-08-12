@@ -137,7 +137,7 @@ namespace IM.Administrator.Forms
       frmHotelGroupDetail frmHotelGroupDetail = new frmHotelGroupDetail();
       frmHotelGroupDetail.Owner = this;
       frmHotelGroupDetail.oldHotelGroup = hotelGroup;
-      frmHotelGroupDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.add;
+      frmHotelGroupDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.Add;
       if (frmHotelGroupDetail.ShowDialog()==true)
       {
         List<HotelGroup> lstHotelGroup = (List<HotelGroup>)dgrHotelGroups.ItemsSource;
@@ -185,7 +185,7 @@ namespace IM.Administrator.Forms
     {
       frmHotelGroupDetail frmHotelGroupDetail = new frmHotelGroupDetail();
       frmHotelGroupDetail.Owner = this;
-      frmHotelGroupDetail.enumMode = EnumMode.add;
+      frmHotelGroupDetail.enumMode = EnumMode.Add;
       if(frmHotelGroupDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmHotelGroupDetail.hotelGroup))

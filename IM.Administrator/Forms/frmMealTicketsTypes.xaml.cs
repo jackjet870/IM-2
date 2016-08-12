@@ -71,7 +71,7 @@ namespace IM.Administrator.Forms
 
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana detalle en modo preview|edicion
+    /// Muestra la ventana detalle en modo ReadOnly|edicion
     /// </summary>
     /// <history>
     /// [emoguel] 04/04/2016
@@ -82,7 +82,7 @@ namespace IM.Administrator.Forms
       frmMealTicketTypeDetail frmMealTkType = new frmMealTicketTypeDetail();
       frmMealTkType.Owner = this;
       frmMealTkType.oldMealTicketType = mealTicketType;
-      frmMealTkType.enumMode = EnumMode.edit;
+      frmMealTkType.enumMode = EnumMode.Edit;
       if(frmMealTkType.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmMealTicketTypeDetail frmMealTkTypeDetail = new frmMealTicketTypeDetail();
       frmMealTkTypeDetail.Owner = this;
-      frmMealTkTypeDetail.enumMode = EnumMode.add;
+      frmMealTkTypeDetail.enumMode = EnumMode.Add;
       if(frmMealTkTypeDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmMealTkTypeDetail.mealTicketType))//validamos si cumple con los filtros

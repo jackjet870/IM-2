@@ -123,7 +123,7 @@ namespace IM.Administrator.Forms
     {
       frmNoticeDetail frmNoticeDetail = new frmNoticeDetail();
       frmNoticeDetail.Owner = this;
-      frmNoticeDetail.enumMode = EnumMode.edit;
+      frmNoticeDetail.enumMode = EnumMode.Edit;
       Notice notice=dgrNotices.SelectedItem as Notice;
       frmNoticeDetail.oldNotice = notice;
       if(frmNoticeDetail.ShowDialog() == true)
@@ -172,7 +172,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmNoticeDetail frmNoticeDetail = new frmNoticeDetail();
-      frmNoticeDetail.enumMode = EnumMode.add;
+      frmNoticeDetail.enumMode = EnumMode.Add;
       if(frmNoticeDetail.ShowDialog()==true)
       {
         if(ValidateFilters(frmNoticeDetail.notice))//Validamos que cumpla con los filtros

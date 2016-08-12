@@ -183,7 +183,7 @@ namespace IM.Base.Helpers
     /// [emoguel] created 08/04/2016
     /// [emoguel] modified 11/07/2016
     /// </history>
-    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
+    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.ReadOnly,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor
       List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(obj,database);
@@ -241,7 +241,7 @@ namespace IM.Base.Helpers
                     txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;                    
                     txt.PreviewKeyDown += TextBoxHelper.Decimal_PreviewKeyDown;
                     txt.GotFocus += TextBoxHelper.DecimalGotFocus;
-                    if (enumMode != EnumMode.search)
+                    if (enumMode != EnumMode.Search)
                     {
                       txt.LostFocus += TextBoxHelper.LostFocus;                      
                     }
@@ -251,7 +251,7 @@ namespace IM.Base.Helpers
                   {
                     txt.PreviewTextInput += TextBoxHelper.IntTextInput;
                     txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
-                    if (enumMode != EnumMode.search)
+                    if (enumMode != EnumMode.Search)
                     {
                       txt.LostFocus += TextBoxHelper.LostFocus;
                       txt.GotFocus += TextBoxHelper.IntGotFocus;
@@ -267,7 +267,7 @@ namespace IM.Base.Helpers
                 {
                   txt.MaxLength = 3;
                   txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
-                  if (enumMode != EnumMode.search)
+                  if (enumMode != EnumMode.Search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;
                   }
@@ -293,7 +293,7 @@ namespace IM.Base.Helpers
                       break;
                   }                  
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
-                  if (enumMode != EnumMode.search)
+                  if (enumMode != EnumMode.Search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;
                   }

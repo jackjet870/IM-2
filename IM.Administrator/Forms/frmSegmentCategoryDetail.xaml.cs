@@ -44,11 +44,11 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(segmentCategory, oldSegmentCategory);
       UIHelper.SetUpControls(segmentCategory, this);
       LoadSegmentesOrder();
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         chkscA.IsEnabled = true;
         txtscN.IsEnabled = true;
-        txtscID.IsEnabled = (enumMode == EnumMode.add);
+        txtscID.IsEnabled = (enumMode == EnumMode.Add);
         dgrSegmentsCategory.IsReadOnly = false;
       }
       DataContext = segmentCategory;
@@ -65,7 +65,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!_isClosing && enumMode!=EnumMode.preview)
+      if (!_isClosing && enumMode!=EnumMode.ReadOnly)
       {
         btnCancel.Focus();
         List<Item> lstItems = (List<Item>)dgrSegmentsCategory.ItemsSource;
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         List<Item> lstItems = (List<Item>)dgrSegmentsCategory.ItemsSource;
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(segmentCategory, oldSegmentCategory) && ObjectHelper.IsListEquals(_lstOldItems, lstItems,"UserId"))
+        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(segmentCategory, oldSegmentCategory) && ObjectHelper.IsListEquals(_lstOldItems, lstItems,"UserId"))
         {
           _isClosing = true;
           Close();
@@ -185,7 +185,7 @@ namespace IM.Administrator.Forms
           {            
             List<Item> lstAdd = lstItems.Where(it => !_lstOldItems.Any(itt => itt.UserId == it.UserId)).ToList();
             List<Item> lstDel = _lstOldItems.Where(it => !lstItems.Any(itt => itt.UserId == it.UserId)).ToList();
-            int nRes = await BRSegmentsCategories.SaveSegmentCategory(segmentCategory, lstAdd, lstDel,(enumMode==EnumMode.edit));
+            int nRes = await BRSegmentsCategories.SaveSegmentCategory(segmentCategory, lstAdd, lstDel,(enumMode==EnumMode.Edit));
             UIHelper.ShowMessageResult("Segment By Agency", nRes);
             if (nRes > 0)
             {
@@ -229,7 +229,7 @@ namespace IM.Administrator.Forms
         dgrSegmentsCategory.ItemsSource = lstItems;
         _lstOldItems = lstItems.ToList();
         cmbSegmentsCat.Header = "Segment (" + lstItems.Count + ")";
-        if(enumMode != EnumMode.preview)
+        if(enumMode != EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }

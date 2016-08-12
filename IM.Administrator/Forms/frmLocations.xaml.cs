@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
     {
       frmLocationDetail frmLocationDetail = new frmLocationDetail();
       frmLocationDetail.Owner = this;
-      frmLocationDetail.enumMode = EnumMode.search;
+      frmLocationDetail.enumMode = EnumMode.Search;
       frmLocationDetail.oldLocation = _locationFilter;
       frmLocationDetail.nStatus = _nStatus;
       if(frmLocationDetail.ShowDialog()==true)
@@ -65,7 +65,7 @@ namespace IM.Administrator.Forms
     {
       frmLocationDetail frmLocationDetail = new frmLocationDetail();
       frmLocationDetail.Owner = this;
-      frmLocationDetail.enumMode = EnumMode.add;
+      frmLocationDetail.enumMode = EnumMode.Add;
       if(frmLocationDetail.ShowDialog()==true)
       {
         Location location = frmLocationDetail.location;
@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
 
     #region DoubleClick cell
     /// <summary>
-    /// Muestra la ventana detalle en modo preview|edicion
+    /// Muestra la ventana detalle en modo ReadOnly|edicion
     /// </summary>
     /// <history>
     /// [emoguel] 01/04/2016
@@ -205,7 +205,7 @@ namespace IM.Administrator.Forms
       frmLocationDetail frmLocationDetail = new frmLocationDetail();
       frmLocationDetail.Owner = this;
       frmLocationDetail.oldLocation = location;
-      frmLocationDetail.enumMode = ((_blnEdit)?EnumMode.edit:EnumMode.preview);
+      frmLocationDetail.enumMode = ((_blnEdit)?EnumMode.Edit:EnumMode.ReadOnly);
       if(frmLocationDetail.ShowDialog()==true)
       {
         int nIndex = dgrLanguages.SelectedIndex;

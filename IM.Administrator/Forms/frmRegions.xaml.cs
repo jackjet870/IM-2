@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       Region region = (Region)dgrRegions.SelectedItem;
       frmRegionDetail frmRegionDetail = new frmRegionDetail();
       frmRegionDetail.Owner = this;
-      frmRegionDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmRegionDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmRegionDetail.oldRegion = region;
       if(frmRegionDetail.ShowDialog()==true)
       {
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmRegionDetail frmRegionDetail = new frmRegionDetail();
       frmRegionDetail.Owner = this;
-      frmRegionDetail.enumMode = EnumMode.add;
+      frmRegionDetail.enumMode = EnumMode.Add;
       if(frmRegionDetail.ShowDialog()==true)
       {
         Region region =frmRegionDetail.region;

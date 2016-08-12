@@ -131,7 +131,7 @@ namespace IM.Administrator.Forms
       frmPostDetail frmPostDetail = new frmPostDetail();
       frmPostDetail.Owner = this;
       frmPostDetail.oldPost = post;
-      frmPostDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmPostDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       if(frmPostDetail.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -193,7 +193,7 @@ namespace IM.Administrator.Forms
     {
       frmPostDetail frmPostDetail = new frmPostDetail();
       frmPostDetail.Owner = this;
-      frmPostDetail.enumMode = EnumMode.add;
+      frmPostDetail.enumMode = EnumMode.Add;
       if(frmPostDetail.ShowDialog()==true)
       {
         Post post = frmPostDetail.post;

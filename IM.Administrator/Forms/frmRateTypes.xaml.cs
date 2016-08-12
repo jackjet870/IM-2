@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
       RateType rateType = (RateType)dgrRateTypes.SelectedItem;
       frmRateTypeDetail frmRateTypeDetail = new frmRateTypeDetail();
       frmRateTypeDetail.Owner = this;
-      frmRateTypeDetail.enumMode = EnumMode.edit;
+      frmRateTypeDetail.enumMode = EnumMode.Edit;
       frmRateTypeDetail.oldRateType = rateType;
       if (frmRateTypeDetail.ShowDialog() == true)
       {
@@ -193,7 +193,7 @@ namespace IM.Administrator.Forms
     {
       frmRateTypeDetail frmRateTypeDetail = new frmRateTypeDetail();
       frmRateTypeDetail.Owner = this;
-      frmRateTypeDetail.enumMode = EnumMode.add;
+      frmRateTypeDetail.enumMode = EnumMode.Add;
       if(frmRateTypeDetail.ShowDialog()==true)
       {
         RateType rateType = frmRateTypeDetail.rateType;

@@ -140,7 +140,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
-      frmAgencyDetail.enumMode = EnumMode.add;//Insertar
+      frmAgencyDetail.enumMode = EnumMode.Add;//Insertar
       frmAgencyDetail.Owner = this;
       frmAgencyDetail.oldAgency = new Agency();
       if(frmAgencyDetail.ShowDialog()==true)
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();      
       frmAgencyDetail.oldAgency = agency;
       frmAgencyDetail.Owner = this;
-      frmAgencyDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmAgencyDetail.enumMode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if(frmAgencyDetail.ShowDialog()==true)
       {
         int nIndex = 0;

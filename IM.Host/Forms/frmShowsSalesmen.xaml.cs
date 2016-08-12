@@ -49,7 +49,7 @@ namespace IM.Host.Forms
     /// </history>
     private void SetMode(EnumMode enumMode)
     {
-      var blnEnable = enumMode != EnumMode.preview;
+      var blnEnable = enumMode != EnumMode.ReadOnly;
       btnCancel.IsEnabled = btnSave.IsEnabled = blnEnable;
       btnEdit.IsEnabled = !blnEnable;
       dtgShowSalesman.IsReadOnly = !blnEnable;
@@ -124,7 +124,7 @@ namespace IM.Host.Forms
       //cargamos Show salesmen
       LoadShowSalesman();
 
-      SetMode(EnumMode.preview);
+      SetMode(EnumMode.ReadOnly);
     }
 
     #endregion Window_Loaded
@@ -139,7 +139,7 @@ namespace IM.Host.Forms
     /// </history>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      SetMode(EnumMode.edit);
+      SetMode(EnumMode.Edit);
 
       _oldShowSalesmanList = new List<ShowSalesman>();
       //Se hace un Foreach a ShowSalesman  y llenamos a _oldShowSalesmanList, Se hace de esta forma para que no tengan la misma referencia
@@ -164,7 +164,7 @@ namespace IM.Host.Forms
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       SaveShowSalesman();
-      SetMode(EnumMode.preview);
+      SetMode(EnumMode.ReadOnly);
     }
 
     #endregion btnSave_Click
@@ -181,7 +181,7 @@ namespace IM.Host.Forms
     {
       _showSalesmanList.Clear();
       _oldShowSalesmanList.ForEach(x => _showSalesmanList.Add(x));
-      SetMode(EnumMode.preview);
+      SetMode(EnumMode.ReadOnly);
     }
 
     #endregion btnCancel_Click

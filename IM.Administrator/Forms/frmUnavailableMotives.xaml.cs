@@ -137,7 +137,7 @@ namespace IM.Administrator.Forms
       UnavailableMotive unavailableMotive = (UnavailableMotive)dgrUnavailableMotives.SelectedItem;
       frmUnavailableMotiveDetail frmUnavailableMotDetail = new frmUnavailableMotiveDetail();
       frmUnavailableMotDetail.Owner = this;
-      frmUnavailableMotDetail.enumMode = (_blnEdit) ? EnumMode.edit : EnumMode.preview;
+      frmUnavailableMotDetail.enumMode = (_blnEdit) ? EnumMode.Edit : EnumMode.ReadOnly;
       frmUnavailableMotDetail.oldUnavailableMotive = unavailableMotive;
       if(frmUnavailableMotDetail.ShowDialog()==true)
       {
@@ -189,7 +189,7 @@ namespace IM.Administrator.Forms
     {
       frmUnavailableMotiveDetail frmUnavailableMotiveDetail = new frmUnavailableMotiveDetail();
       frmUnavailableMotiveDetail.Owner = this;
-      frmUnavailableMotiveDetail.enumMode = EnumMode.add;
+      frmUnavailableMotiveDetail.enumMode = EnumMode.Add;
       if(frmUnavailableMotiveDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmUnavailableMotiveDetail.unavailableMotive))//verificamos que cumpla con los filtros

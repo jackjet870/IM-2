@@ -42,12 +42,12 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if (enumMode != EnumMode.search)
+      if (enumMode != EnumMode.Search)
       {
         List<FolioCxCPR> lstFoliosPR = (List<FolioCxCPR>)dgrAssigned.ItemsSource;
         List<FolioCxCCancellation> lstFoliosCan = (List<FolioCxCCancellation>)dgrCancelled.ItemsSource;
         bool blnHasChanged = ValidateChanged(lstFoliosPR, lstFoliosCan);
-        if (enumMode != EnumMode.add && !blnHasChanged)
+        if (enumMode != EnumMode.Add && !blnHasChanged)
         {
           blnClosing = true;
           Close();
@@ -61,7 +61,7 @@ namespace IM.Administrator.Forms
           {
             string strMsj = "";
 
-            if(enumMode==EnumMode.add)
+            if(enumMode==EnumMode.Add)
             {
               var lstFolioCXC =await BRFoliosCXCPR.GetPRByFoliosCXC(personnelSave);
               var folioCxC = lstFolioCXC.FirstOrDefault();
@@ -142,9 +142,9 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
-        if (enumMode == EnumMode.search)
+        if (enumMode == EnumMode.Search)
         {          
           cmbPersonnel.IsEnabled = true;
           SizeToContent = SizeToContent.WidthAndHeight;
@@ -154,7 +154,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          if (enumMode == EnumMode.add)
+          if (enumMode == EnumMode.Add)
           {            
             cmbPersonnel.IsEnabled = true;
           }
@@ -247,12 +247,12 @@ namespace IM.Administrator.Forms
       if (!blnClosing)
       {
         btnCancel.Focus();
-        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        if (enumMode != EnumMode.ReadOnly && enumMode != EnumMode.Search)
         {
           List<FolioCxCPR> lstFoliosPR = (List<FolioCxCPR>)dgrAssigned.ItemsSource;
           List<FolioCxCCancellation> lstFolioCancel = (List<FolioCxCCancellation>)dgrCancelled.ItemsSource;
           bool blnHasChanged = ValidateChanged(lstFoliosPR, lstFolioCancel);
-          if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode != EnumMode.edit) || blnHasChanged)
+          if ((!string.IsNullOrWhiteSpace(personnel.peID) && enumMode != EnumMode.Edit) || blnHasChanged)
           {
             MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
             if (result == MessageBoxResult.No)
@@ -355,7 +355,7 @@ namespace IM.Administrator.Forms
         _lstCancellation =await BRFoliosCxCCancellation.GetFoliossCxCCancellation(prID);
         dgrCancelled.ItemsSource = lstCancelled;
         skpStatus.Visibility = Visibility.Collapsed;
-        if(enumMode!=EnumMode.preview)
+        if(enumMode!=EnumMode.ReadOnly)
         {
           btnAccept.Visibility = Visibility.Visible;
         }

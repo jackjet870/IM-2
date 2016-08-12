@@ -250,7 +250,7 @@ namespace IM.Administrator.Forms
     {
       frmTeamSalesmenDetail frmTeamSalesmenDetail = new frmTeamSalesmenDetail();
       frmTeamSalesmenDetail.Owner = this;
-      frmTeamSalesmenDetail.enumMode = EnumMode.add;
+      frmTeamSalesmenDetail.enumMode = EnumMode.Add;
       if (frmTeamSalesmenDetail.ShowDialog() == true)
       {
         if (ValidateFilter(frmTeamSalesmenDetail.team))//Valida que cumpla con los filtros actuales
@@ -311,7 +311,7 @@ namespace IM.Administrator.Forms
       frmTeamSalesmenDetail frmTeamSalesmenDetail = new frmTeamSalesmenDetail();
       frmTeamSalesmenDetail.Owner = this;
       frmTeamSalesmenDetail.oldTeam = teamSalesmen;
-      frmTeamSalesmenDetail.enumMode = EnumMode.edit;
+      frmTeamSalesmenDetail.enumMode = EnumMode.Edit;
       if (frmTeamSalesmenDetail.ShowDialog() == true)
       {
         int nIndex = 0;

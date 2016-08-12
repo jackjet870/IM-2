@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       ShowProgramCategory showProgramCategory = (ShowProgramCategory)dgrShowProgramscategories.SelectedItem;
       frmShowProgramCategoryDetail frmShowProgramCategoryDet = new frmShowProgramCategoryDetail();
       frmShowProgramCategoryDet.Owner = this;
-      frmShowProgramCategoryDet.enumMode = EnumMode.edit;
+      frmShowProgramCategoryDet.enumMode = EnumMode.Edit;
       frmShowProgramCategoryDet.oldShowProgramCategory = showProgramCategory;
       if(frmShowProgramCategoryDet.ShowDialog()==true)
       {
@@ -185,7 +185,7 @@ namespace IM.Administrator.Forms
     {
       frmShowProgramCategoryDetail frmShowProgramCategoryDet = new frmShowProgramCategoryDetail();
       frmShowProgramCategoryDet.Owner = this;
-      frmShowProgramCategoryDet.enumMode = EnumMode.add;
+      frmShowProgramCategoryDet.enumMode = EnumMode.Add;
       if(frmShowProgramCategoryDet.ShowDialog()==true)
       {
         if(ValidateFilter(frmShowProgramCategoryDet.showProgramCategory))//Verificamos que cumpla con los filtros 

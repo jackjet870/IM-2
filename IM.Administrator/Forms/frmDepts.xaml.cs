@@ -133,7 +133,7 @@ namespace IM.Administrator.Forms
       Dept dept = (Dept)dgrDepts.SelectedItem;
       frmDeptDetail frmDeptDetail = new frmDeptDetail();
       frmDeptDetail.Owner = this;
-      frmDeptDetail.enumMode = EnumMode.edit;
+      frmDeptDetail.enumMode = EnumMode.Edit;
       frmDeptDetail.oldDept = dept;
       if(frmDeptDetail.ShowDialog()==true)
       {
@@ -195,7 +195,7 @@ namespace IM.Administrator.Forms
     {
       frmDeptDetail frmDeptDetail = new frmDeptDetail();
       frmDeptDetail.Owner = this;
-      frmDeptDetail.enumMode = EnumMode.add;
+      frmDeptDetail.enumMode = EnumMode.Add;
       if(frmDeptDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmDeptDetail.dept))//Valida que cumpla con los filtros actuales

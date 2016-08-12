@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(computer, oldComputer);
       LoadDesks();
       UIHelper.SetUpControls(computer, this);
-      if (mode == EnumMode.add)
+      if (mode == EnumMode.Add)
       {
         txtcpID.IsEnabled = true;
       }
@@ -82,7 +82,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(computer, oldComputer) && mode != EnumMode.add)
+        if (ObjectHelper.IsEquals(computer, oldComputer) && mode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -130,7 +130,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (mode != EnumMode.preview)
+      if (mode != EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(computer, oldComputer))
         {

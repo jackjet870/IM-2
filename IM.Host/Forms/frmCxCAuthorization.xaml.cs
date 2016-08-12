@@ -609,7 +609,7 @@ namespace IM.Host.Forms
         if (cxcData.Authorized.Value == !blnFilterAuthorized)
         {
           GiftsReceipt _giftsReceipt = await SetCxCDataToGiftsReceipt(cxcData);
-          int nRes = await BREntities.OperationEntity(_giftsReceipt, EnumMode.edit);
+          int nRes = await BREntities.OperationEntity(_giftsReceipt, EnumMode.Edit);
           await SaveGiftsReceiptsLog(_giftsReceipt.grID, strUserID);
         }
       }

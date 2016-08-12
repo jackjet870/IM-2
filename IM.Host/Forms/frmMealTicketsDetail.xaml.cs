@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model;
-using IM.Host.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 
@@ -16,7 +16,7 @@ namespace IM.Host.Forms
   public partial class frmMealTicketsDetail : Window
   {
     #region Variables
-    public EnumModeOpen modeOpen;
+    public EnumMode _modeOpen;
     private int _meQty = 1;
     public MealTicket _mealTicketCurrency = new MealTicket();
 
@@ -60,20 +60,20 @@ namespace IM.Host.Forms
       _dsMealTicketType.Source = frmHost._lstMealTicketType;
 
       #region switch
-      switch (modeOpen)
+      switch (_modeOpen)
       {
-        case EnumModeOpen.Add:
+        case EnumMode.Add:
           dtpDate.Value = frmHost.dtpServerDate.Date;
           break;
-        case EnumModeOpen.Edit:
+        case EnumMode.Edit:
           DataContext = _mealTicketCurrency;
           dtpDate.Value = _mealTicketCurrency.meD.Date;
           break;
-        case EnumModeOpen.PreviewEdit: 
+        case EnumMode.PreviewEdit: 
           HiddenControls();
           dtpDate.Value = frmHost.dtpServerDate.Date;
           break;
-        case EnumModeOpen.Preview: 
+        case EnumMode.ReadOnly: 
           HiddenControls();
           DataContext = _mealTicketCurrency;
           dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
@@ -120,7 +120,7 @@ namespace IM.Host.Forms
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
 
-      if (modeOpen != EnumModeOpen.Preview && modeOpen != EnumModeOpen.PreviewEdit)
+      if (_modeOpen != EnumMode.ReadOnly && _modeOpen != EnumMode.PreviewEdit)
       {
         if (_rateType != null) // Se verifica que el SelectedItem no sea null
         {
@@ -133,7 +133,7 @@ namespace IM.Host.Forms
             controlVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Visible);
           }
         }
-        else// if (modeOpen != EnumModeOpen.Preview)
+        else// if (modeOpen != EnumMode.ReadOnly)
         {
           controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
         }
@@ -377,7 +377,7 @@ namespace IM.Host.Forms
         string _meTMinorsString = txtTMinors.Text.Substring(1, txtTMinors.Text.Length - 1);
 
         // Row New with GuestID == 0
-        if (modeOpen == EnumModeOpen.Add && frmMealTickets._pguId == 0)
+        if (_modeOpen == EnumMode.Add && frmMealTickets._pguId == 0)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);
@@ -391,7 +391,7 @@ namespace IM.Host.Forms
           BRMealTickets.InsertNewMealTicket(_newMealticket);
         }
         // Edition Row with GuestID == 0
-        else if (modeOpen == EnumModeOpen.Edit && frmMealTickets._pguId == 0)
+        else if (_modeOpen == EnumMode.Edit && frmMealTickets._pguId == 0)
         {
           int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 
@@ -422,7 +422,7 @@ namespace IM.Host.Forms
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
         }
         // Row New with GuestID != 0
-        if (modeOpen == EnumModeOpen.PreviewEdit && frmMealTickets._pguId != 0)
+        if (_modeOpen == EnumMode.PreviewEdit && frmMealTickets._pguId != 0)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
@@ -436,7 +436,7 @@ namespace IM.Host.Forms
           BRMealTickets.InsertNewMealTicket(_newMealticket);
         }
         // Edition Row with GuestID != 0
-        else if (modeOpen == EnumModeOpen.Preview && frmMealTickets._pguId != 0)
+        else if (_modeOpen == EnumMode.ReadOnly && frmMealTickets._pguId != 0)
         {
           int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 

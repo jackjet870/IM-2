@@ -55,11 +55,11 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(efficiencyType, oldEffType);
       DataContext = efficiencyType;
-      if (enumMode != EnumMode.preview)
+      if (enumMode != EnumMode.ReadOnly)
       {
         txtetN.IsEnabled = true;
         chkA.IsEnabled = true;
-        txtetID.IsEnabled = (enumMode == EnumMode.add);
+        txtetID.IsEnabled = (enumMode == EnumMode.Add);
         btnAccept.Visibility = Visibility.Visible;
         UIHelper.SetUpControls(efficiencyType, this);
       }
@@ -81,7 +81,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(efficiencyType, oldEffType) && enumMode != EnumMode.add)
+        if (ObjectHelper.IsEquals(efficiencyType, oldEffType) && enumMode != EnumMode.Add)
         {
           _isClosing = true;
           Close();
@@ -126,7 +126,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      if (enumMode!=EnumMode.preview)
+      if (enumMode!=EnumMode.ReadOnly)
       {
         if (!ObjectHelper.IsEquals(efficiencyType, oldEffType))
         {

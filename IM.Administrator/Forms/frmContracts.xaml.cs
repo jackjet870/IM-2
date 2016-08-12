@@ -116,7 +116,7 @@ namespace IM.Administrator.Forms
     {
       Contract contract = (Contract)dgrContracts.SelectedItem;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
+      frmContractDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmContractDetail.oldContract = contract;
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
@@ -152,7 +152,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.mode = EnumMode.add;
+      frmContractDetail.mode = EnumMode.Add;
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
       {
