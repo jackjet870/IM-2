@@ -22870,45 +22870,44 @@
           <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="PostName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="OwnAmount" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="OwnOOP" Nullable="true" />
-          <Property Type="Decimal" Name="OwnOUPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnSales" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnExit" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnTotal" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnEfficiency" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnClosingFactor" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OwnSaleAverage" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithAmount" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="WithOOP" Nullable="true" />
-          <Property Type="Decimal" Name="WithUPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithSales" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithExit" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithTotal" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithEfficiency" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithClosingFactor" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="WithSaleAverage" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalSalesAmount" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="TotalOOP" Nullable="true" />
-          <Property Type="Decimal" Name="TotalUPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalSalesRegular" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalSalesExit" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalSales" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalEfficiency" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalClosingFactor" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="TotalSaleAverage" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsAmount" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="AsOOP" Nullable="true" />
-          <Property Type="Decimal" Name="AsOUPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsSales" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsExit" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsTotal" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsEfficiency" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsClosingFactor" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="AsSaleAverage" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Team" Nullable="true" MaxLength="71" />
+          <Property Type="Decimal" Name="OAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="OOPP" Nullable="true" />
+          <Property Type="Decimal" Name="OUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OEfficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OSaleAverage" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="WOPP" Nullable="true" />
+          <Property Type="Decimal" Name="WUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WEfficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WSaleAverage" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="TOPP" Nullable="true" />
+          <Property Type="Decimal" Name="TUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TTotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TEfficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TSaleAverage" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AAmount" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="AOOP" Nullable="true" />
+          <Property Type="Decimal" Name="AOUPS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ASales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AExit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ATotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AEfficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ASaleAverage" Nullable="true" Precision="19" />
           </ComplexType>
         <ComplexType Name="RptGuestRegistration">
           <Property Type="Int32" Name="guID" Nullable="false" />
@@ -23039,40 +23038,38 @@
           <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="Locations" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="PostName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OWN" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="WithCloser" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AsCloser" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Exit" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="SalesTotal" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Team" Nullable="true" MaxLength="73" />
+          <Property Type="Decimal" Name="Own" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TotalSales" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptStatisticsByFTBCategories">
           <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="Locations" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="SalemanTypeN" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="PostName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TeamN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="TeamLeaderN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="SalesmanStatus" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="OPP" Nullable="true" />
           <Property Type="Decimal" Name="UPS" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="SalesRegular" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="SalesExit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Sales" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="SaleAverage" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Team" Nullable="true" MaxLength="73" />
+          <Property Type="Decimal" Name="Own" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="WithCloser" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AsCloser" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Exit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TotalSales" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30981,45 +30978,44 @@
                 <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
                 <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
                 <ScalarProperty Name="PostName" ColumnName="PostName" />
-                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
-                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
                 <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
-                <ScalarProperty Name="OwnAmount" ColumnName="OwnAmount" />
-                <ScalarProperty Name="OwnOOP" ColumnName="OwnOOP" />
-                <ScalarProperty Name="OwnOUPS" ColumnName="OwnOUPS" />
-                <ScalarProperty Name="OwnSales" ColumnName="OwnSales" />
-                <ScalarProperty Name="OwnExit" ColumnName="OwnExit" />
-                <ScalarProperty Name="OwnTotal" ColumnName="OwnTotal" />
-                <ScalarProperty Name="OwnEfficiency" ColumnName="OwnEfficiency" />
-                <ScalarProperty Name="OwnClosingFactor" ColumnName="OwnClosingFactor" />
-                <ScalarProperty Name="OwnSaleAverage" ColumnName="OwnSaleAverage" />
-                <ScalarProperty Name="WithAmount" ColumnName="WithAmount" />
-                <ScalarProperty Name="WithOOP" ColumnName="WithOOP" />
-                <ScalarProperty Name="WithUPS" ColumnName="WithUPS" />
-                <ScalarProperty Name="WithSales" ColumnName="WithSales" />
-                <ScalarProperty Name="WithExit" ColumnName="WithExit" />
-                <ScalarProperty Name="WithTotal" ColumnName="WithTotal" />
-                <ScalarProperty Name="WithEfficiency" ColumnName="WithEfficiency" />
-                <ScalarProperty Name="WithClosingFactor" ColumnName="WithClosingFactor" />
-                <ScalarProperty Name="WithSaleAverage" ColumnName="WithSaleAverage" />
-                <ScalarProperty Name="TotalSalesAmount" ColumnName="TotalSalesAmount" />
-                <ScalarProperty Name="TotalOOP" ColumnName="TotalOOP" />
-                <ScalarProperty Name="TotalUPS" ColumnName="TotalUPS" />
-                <ScalarProperty Name="TotalSalesRegular" ColumnName="TotalSalesRegular" />
-                <ScalarProperty Name="TotalSalesExit" ColumnName="TotalSalesExit" />
-                <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
-                <ScalarProperty Name="TotalEfficiency" ColumnName="TotalEfficiency" />
-                <ScalarProperty Name="TotalClosingFactor" ColumnName="TotalClosingFactor" />
-                <ScalarProperty Name="TotalSaleAverage" ColumnName="TotalSaleAverage" />
-                <ScalarProperty Name="AsAmount" ColumnName="AsAmount" />
-                <ScalarProperty Name="AsOOP" ColumnName="AsOOP" />
-                <ScalarProperty Name="AsOUPS" ColumnName="AsOUPS" />
-                <ScalarProperty Name="AsSales" ColumnName="AsSales" />
-                <ScalarProperty Name="AsExit" ColumnName="AsExit" />
-                <ScalarProperty Name="AsTotal" ColumnName="AsTotal" />
-                <ScalarProperty Name="AsEfficiency" ColumnName="AsEfficiency" />
-                <ScalarProperty Name="AsClosingFactor" ColumnName="AsClosingFactor" />
-                <ScalarProperty Name="AsSaleAverage" ColumnName="AsSaleAverage" />
+                <ScalarProperty Name="Team" ColumnName="Team" />
+                <ScalarProperty Name="OAmount" ColumnName="OAmount" />
+                <ScalarProperty Name="OOPP" ColumnName="OOPP" />
+                <ScalarProperty Name="OUPS" ColumnName="OUPS" />
+                <ScalarProperty Name="OSales" ColumnName="OSales" />
+                <ScalarProperty Name="OExit" ColumnName="OExit" />
+                <ScalarProperty Name="OTotal" ColumnName="OTotal" />
+                <ScalarProperty Name="OEfficiency" ColumnName="OEfficiency" />
+                <ScalarProperty Name="OClosingFactor" ColumnName="OClosingFactor" />
+                <ScalarProperty Name="OSaleAverage" ColumnName="OSaleAverage" />
+                <ScalarProperty Name="WAmount" ColumnName="WAmount" />
+                <ScalarProperty Name="WOPP" ColumnName="WOPP" />
+                <ScalarProperty Name="WUPS" ColumnName="WUPS" />
+                <ScalarProperty Name="WSales" ColumnName="WSales" />
+                <ScalarProperty Name="WExit" ColumnName="WExit" />
+                <ScalarProperty Name="WTotal" ColumnName="WTotal" />
+                <ScalarProperty Name="WEfficiency" ColumnName="WEfficiency" />
+                <ScalarProperty Name="WClosingFactor" ColumnName="WClosingFactor" />
+                <ScalarProperty Name="WSaleAverage" ColumnName="WSaleAverage" />
+                <ScalarProperty Name="TAmount" ColumnName="TAmount" />
+                <ScalarProperty Name="TOPP" ColumnName="TOPP" />
+                <ScalarProperty Name="TUPS" ColumnName="TUPS" />
+                <ScalarProperty Name="TSales" ColumnName="TSales" />
+                <ScalarProperty Name="TExit" ColumnName="TExit" />
+                <ScalarProperty Name="TTotal" ColumnName="TTotal" />
+                <ScalarProperty Name="TEfficiency" ColumnName="TEfficiency" />
+                <ScalarProperty Name="TClosingFactor" ColumnName="TClosingFactor" />
+                <ScalarProperty Name="TSaleAverage" ColumnName="TSaleAverage" />
+                <ScalarProperty Name="AAmount" ColumnName="AAmount" />
+                <ScalarProperty Name="AOOP" ColumnName="AOOP" />
+                <ScalarProperty Name="AOUPS" ColumnName="AOUPS" />
+                <ScalarProperty Name="ASales" ColumnName="ASales" />
+                <ScalarProperty Name="AExit" ColumnName="AExit" />
+                <ScalarProperty Name="ATotal" ColumnName="ATotal" />
+                <ScalarProperty Name="AEfficiency" ColumnName="AEfficiency" />
+                <ScalarProperty Name="AClosingFactor" ColumnName="AClosingFactor" />
+                <ScalarProperty Name="ASaleAverage" ColumnName="ASaleAverage" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -31155,21 +31151,20 @@
                 <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
                 <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
                 <ScalarProperty Name="Locations" ColumnName="Locations" />
-                <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />
-                <ScalarProperty Name="SalemanTypeN" ColumnName="SalemanTypeN" />
                 <ScalarProperty Name="PostName" ColumnName="PostName" />
-                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
-                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
                 <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
-                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
-                <ScalarProperty Name="OPP" ColumnName="OPP" />
                 <ScalarProperty Name="UPS" ColumnName="UPS" />
-                <ScalarProperty Name="SalesRegular" ColumnName="SalesRegular" />
-                <ScalarProperty Name="SalesExit" ColumnName="SalesExit" />
                 <ScalarProperty Name="Sales" ColumnName="Sales" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+                <ScalarProperty Name="Team" ColumnName="Team" />
+                <ScalarProperty Name="Own" ColumnName="Own" />
+                <ScalarProperty Name="WithCloser" ColumnName="WithCloser" />
+                <ScalarProperty Name="AsCloser" ColumnName="AsCloser" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Exit" ColumnName="Exit" />
+                <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -31180,20 +31175,19 @@
                 <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
                 <ScalarProperty Name="Locations" ColumnName="Locations" />
                 <ScalarProperty Name="PostName" ColumnName="PostName" />
-                <ScalarProperty Name="TeamN" ColumnName="TeamN" />
-                <ScalarProperty Name="TeamLeaderN" ColumnName="TeamLeaderN" />
                 <ScalarProperty Name="SalesmanStatus" ColumnName="SalesmanStatus" />
                 <ScalarProperty Name="UPS" ColumnName="UPS" />
-                <ScalarProperty Name="OWN" ColumnName="OWN" />
                 <ScalarProperty Name="WithCloser" ColumnName="WithCloser" />
                 <ScalarProperty Name="AsCloser" ColumnName="AsCloser" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
                 <ScalarProperty Name="Sales" ColumnName="Sales" />
                 <ScalarProperty Name="Exit" ColumnName="Exit" />
-                <ScalarProperty Name="SalesTotal" ColumnName="SalesTotal" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="SaleAverage" ColumnName="SaleAverage" />
+                <ScalarProperty Name="Team" ColumnName="Team" />
+                <ScalarProperty Name="Own" ColumnName="Own" />
+                <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
