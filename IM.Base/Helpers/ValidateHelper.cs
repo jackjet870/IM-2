@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
+
 namespace IM.Base.Helpers
 {
   public class ValidateHelper
@@ -98,6 +99,7 @@ namespace IM.Base.Helpers
     /// [jorcanche]  12/Mar/2016 Created
     /// [jorcanche]  24/03/2016 Modificado
     /// [vku] 04/Jul/2016 Modified. Ahora soporta un combobox
+    /// [aalcocer] 12/08/2016 Modified. Ahora soporta un DateTimePicker
     /// </history>
     public static string GetValue(Control control)
     {
@@ -107,20 +109,19 @@ namespace IM.Base.Helpers
       {
         value = ((TextBox)control).Text;
       }
-      else
+      else if (control is PasswordBox)
       {
-        if (control is PasswordBox)
-        {
-          value = ((PasswordBox)control).Password;
-        }
-        else
-        {
-          if (control is ComboBox)
-          {
-            value = ((ComboBox)control).Text;
-          }
-        }
+        value = ((PasswordBox)control).Password;
       }
+      else if (control is ComboBox)
+      {
+        value = ((ComboBox)control).Text;
+      }
+      else if (control is DateTimePicker)
+      {
+        value = ((DateTimePicker)control).Text;
+      }
+
       return value;
     }
     #endregion
@@ -132,7 +133,10 @@ namespace IM.Base.Helpers
     /// <param name="ptxtChangedBy">Control de tipo TextBox en donde se ingresa el usuario</param>
     /// <param name="ptxtPwd">Control de tipo PaswordBox en donde se ingresa el password del usuario</param>
     /// <param name="pstrUserType">Cadena en donde se ingresa el tipo de usuario por ejemplo "PR"</param>
-    /// <hitory> [jorcanche] 24/03/2016 </hitory>
+    /// <history> 
+    /// [jorcanche] 24/03/2016 Created.
+    /// [aalcocer] 12/08/2016 Modified. Se corrige la validación
+    /// </history>
     /// <returns></returns>
 
     public static bool ValidateChangedBy(TextBox ptxtChangedBy, PasswordBox ptxtPwd, string pstrUserType = "")
@@ -142,8 +146,7 @@ namespace IM.Base.Helpers
       //establecemos el mensaje de error de quin hizo el cambio
       if (pstrUserType == "")
       {
-        UIHelper.ShowMessage("Specify who is making the change.");
-        return false;
+        strMessage = "Specify who is making the change.";
       }
       else
       {
@@ -256,7 +259,7 @@ namespace IM.Base.Helpers
         else if (control is DateTimePicker)
         {
           var dtp = (DateTimePicker)control;
-         
+
           if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
           if ((blnValidateVisibility && dtp.IsVisible) || !blnValidateVisibility)
             strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
@@ -264,13 +267,13 @@ namespace IM.Base.Helpers
         #endregion
       }
       if (strMsj != "") //Mandamos el foco al primer campo
-      {        
-        var control=lstControls.FirstOrDefault(); 
+      {
+        var control = lstControls.FirstOrDefault();
         var parents = UIHelper.GetParentCollection<TabItem>(control);
         parents.ForEach(tb => tb.IsSelected = true);
         container.UpdateLayout();
         control.Focus();
-      }     
+      }
 
       //Si la showMessage viene activa muestra el mensaje
       if (showMessage)
@@ -280,7 +283,7 @@ namespace IM.Base.Helpers
 
       return strMsj.TrimEnd('\n');
     }
-    
+
     #endregion
 
     #region IsValidEmail
@@ -395,7 +398,7 @@ namespace IM.Base.Helpers
       bool _isValid = true;
       if (!(lowerBound <= number && number <= upperBound))
       {
-        UIHelper.ShowMessage($"{description} is out of range. Allowed values are {lowerBound} to {upperBound}." );
+        UIHelper.ShowMessage($"{description} is out of range. Allowed values are {lowerBound} to {upperBound}.");
         _isValid = false;
       }
       return _isValid;

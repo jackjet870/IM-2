@@ -177,11 +177,11 @@
                                                     </Grid.RowDefinitions>
                                                     <StackPanel Orientation="Horizontal"  Margin="3,0">
                                                         <CheckBox x:Name="chkguShow" Content="Shows" IsChecked="{Binding GuestObj.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Margin="3"  Click="chkguShow_OnClick" />
-                                                        <xctk:DateTimePicker x:Name="dtpguShowD" HorizontalAlignment="Left" VerticalAlignment="Top" Width="104" Margin="3" Value="{Binding GuestObj.guShowD, Mode=TwoWay}" Style="{StaticResource dtp-DateRange-TK}"  FormatString="dd/MM/yyyy" DisplayDefaultValueOnEmptyText="False" KeyDown="Control_KeyDown" />
+                                                        <xctk:DateTimePicker x:Name="dtpguShowD" Width="104" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding GuestObj.guShowD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  FormatString="dd/MM/yyyy" KeyDown="Control_KeyDown" DisplayDefaultValueOnEmptyText="False" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal" Margin="3,0" Grid.Column="1">
                                                         <TextBlock Text="Book" TextAlignment="Center" VerticalAlignment="Center" Margin="3" />
-                                                        <xctk:DateTimePicker x:Name="dtpguBookD" VerticalAlignment="Center" Width="104" Text="{Binding GuestObj.guBookD, Mode=TwoWay}" Margin="3" IsEnabled="False" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy"/>
+                                                        <xctk:DateTimePicker x:Name="dtpguBookD" Width="104" IsEnabled="False" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FormatString="dd/MM/yyyy"/>
                                                     </StackPanel>
                                                     <StackPanel  Orientation="Horizontal" Margin="3,0" Grid.Row="1" Grid.ColumnSpan="2">
                                                         <CheckBox x:Name="chkguPresentedInvitation" Content="Presented Invitation" HorizontalAlignment="Center" IsChecked="{Binding GuestObj.guPresentedInvitation, Mode=TwoWay}" Margin="3" />

@@ -437,13 +437,13 @@ namespace IM.Host.Forms
         blnValid = false;
 
       //validamos que el folio de la invitacion outhouse exista y que no haya sido usada
-      else if (!Invitations.ValidateFolio(_guestObj, _enumProgram, txtguOutInvitNum, brdSearchReservation))
+      else if (!InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguOutInvitNum, brdSearchReservation))
       {
         blnValid = false;
       }
 
       // validamos el folio de la reservacion inhouse
-      else if (!Invitations.ValidateFolio(_guestObj, _enumProgram, txtguHReservID, brdSearchReservation))
+      else if (!InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguHReservID, brdSearchReservation))
       {
         blnValid = false;
       }
@@ -995,7 +995,7 @@ namespace IM.Host.Forms
 
       //  si el sistema esta en modo de solo lectura o el usuario tiene cuando mucho permiso de lectura
       // o si el show es de una fecha cerrada
-      if (!App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || ValidateClosedDate(true))
+      if (!App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
         imgButtonSave.IsEnabled =
           imgButtonPrint.IsEnabled = false;
 
