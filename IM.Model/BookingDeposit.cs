@@ -14,6 +14,16 @@ namespace IM.Model
     
     public partial class BookingDeposit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BookingDeposit()
+        {
+            this.bdAmount = 0m;
+            this.bdReceived = 0m;
+            this.bdpt = "CS";
+            this.bdpc = "NR";
+            this.bdExpD = "";
+        }
+    
         public int bdID { get; set; }
         public int bdgu { get; set; }
         public string bdcu { get; set; }

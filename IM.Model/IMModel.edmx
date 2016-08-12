@@ -9153,10 +9153,10 @@
           <Property Name="bdID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="bdgu" Type="Int32" Nullable="false" />
           <Property Name="bdcu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="bdAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="bdReceived" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="bdpt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="bdpc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bdAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="0" />
+          <Property Name="bdReceived" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="0" />
+          <Property Name="bdpt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="CS" />
+          <Property Name="bdpc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="NR" />
           <Property Name="bdcc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="bdCardNum" Type="Int32" />
           <Property Name="bdAuth" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="true"/>
@@ -9165,7 +9165,7 @@
           <Property Name="bdFolioCXC" Type="Int32" />
           <Property Name="bdUserCXC" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="bdEntryDCXC" Type="DateTime" Precision="3" />
-          <Property Name="bdExpD" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="bdExpD" Type="String" MaxLength="5" FixedLength="false" Unicode="false" DefaultValue="" />
           <NavigationProperty Name="CreditCardType" Relationship="Self.fk_bookingdeposit_credittype" FromRole="BookingDeposits" ToRole="CreditCardTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentPlace" Relationship="Self.FK_BookingDeposits_PaymentPlaces" FromRole="BookingDeposits" ToRole="PaymentPlaces" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentType" Relationship="Self.FK_BookingDeposits_PaymentTypes" FromRole="BookingDeposits" ToRole="PaymentTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
