@@ -257,6 +257,8 @@ namespace IM.Host
     /// </summary>
     /// <history>
     /// [vipacheco] 02/Mayo/2016 Created
+    /// [aalcocer] 11/08/2016 Modified. Se agregan mas catalogos, se agregan a una lista de hilos para que sea de manera asíncrona,
+    ///   el proceso continua cuando los catalogos ya esten cargados
     /// </history>
     private async Task GetAllCatalogsHost()
     {

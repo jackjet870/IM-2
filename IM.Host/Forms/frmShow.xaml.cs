@@ -375,7 +375,7 @@ namespace IM.Host.Forms
         blnValid = false;
 
       //validamos los datos generales
-      else if (!await ValidateGeneral())
+      else if (!ValidateGeneral())
       {
         blnValid = false;
         tabGeneral.IsSelected = true;
@@ -409,7 +409,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [aalcocer]  10/08/2016 Created.
     /// </history>
-    private async Task<bool> ValidateGeneral()
+    private bool ValidateGeneral()
     {
       bool blnValid = true;
 
@@ -568,11 +568,12 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos los depositos
-      if (false/*!mDeposits.Validate()*/)
-        blnValid = false;
+      //if (false/*!mDeposits.Validate()*/)
+      //  blnValid = false;
 
       // validamos el PR 1
-      else if (!ValidateHelper.ValidateRequired(cmbguPRInvit1, "PR 1"))
+      //else 
+      if (!ValidateHelper.ValidateRequired(cmbguPRInvit1, "PR 1"))
         blnValid = false;
 
       // validamos el equipo de vendedores si es un Self Gen
@@ -1189,12 +1190,10 @@ namespace IM.Host.Forms
     /// </history>
     private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      if (await Validate())
-      {
-        Save();
-        SendEmail();
-        //Close();
-      }
+      if (!await Validate()) return;
+      Save();
+      SendEmail();
+      Close();
     }
 
     #endregion imgButtonSave_MouseLeftButtonDown
