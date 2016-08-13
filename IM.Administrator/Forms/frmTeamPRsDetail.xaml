@@ -41,7 +41,7 @@
         <!--#endregion-->
         <!--#region Grid Integrantes-->
         <DataGrid x:Name="dgrIntegrants" Grid.Row="1" IsSynchronizedWithCurrentItem="True" Height="370" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="True" 
-                  CanUserResizeColumns="False" CanUserResizeRows="False" CellEditEnding="dgrIntegrants_CellEditEnding" RowEditEnding="dgrIntegrants_RowEditEnding" >
+                  CanUserResizeColumns="False" CanUserResizeRows="False" CellEditEnding="dgrIntegrants_CellEditEnding" RowEditEnding="dgrIntegrants_RowEditEnding" BeginningEdit="dgrIntegrants_BeginningEdit">
             <DataGrid.Columns>
                 <!--#region cboIntegrant-->
                 <DataGridComboBoxColumn  Width="*" x:Name="cboIntegrant" SelectedValuePath="peID"

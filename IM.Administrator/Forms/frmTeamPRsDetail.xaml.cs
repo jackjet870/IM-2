@@ -109,14 +109,16 @@ namespace IM.Administrator.Forms
       try
       {
         List<Personnel> lstPersonnel = await BRPersonnel.GetPersonnels(blnLiner: true);
+        List<Personnel> lstPersonnelIni = await BRPersonnel.GetPersonnels(blnLiner: true);
         List<Personnel> lstliner = new List<Personnel>();
         lstliner.AddRange(lstPersonnel);
         cboIntegrant.ItemsSource = lstPersonnel;
         cboLiner.ItemsSource = lstliner;
         _lstPersonnel = lstPersonnel.Where(pe => pe.peTeam == team.tgID && pe.peTeamType == EnumToListHelper.GetEnumDescription(EnumTeamType.TeamPRs) && pe.pePlaceID == team.tglo).ToList();
-        dgrIntegrants.ItemsSource = _lstPersonnel;
-        List<Personnel> lstPersonnelIni = await BRPersonnel.GetPersonnels(blnLiner: true);
         _lstOldPersonnel = lstPersonnelIni.Where(pe => pe.peTeam == team.tgID && pe.peTeamType == EnumToListHelper.GetEnumDescription(EnumTeamType.TeamPRs) && pe.pePlaceID == team.tglo).ToList(); //Cargamos la lista con los datos iniciales
+
+        dgrIntegrants.ItemsSource = _lstPersonnel;
+
         StatusBarReg.Content = _lstPersonnel.Count + " Integrants.";
         status.Visibility = Visibility.Collapsed;
       }
@@ -251,6 +253,7 @@ namespace IM.Administrator.Forms
         string sMsj = ValidateHelper.ValidateForm(this, "Team");
         if (sMsj == "")
         {
+          btnAccept.Visibility = Visibility.Collapsed;
           List<Personnel> lstAdd = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstChanged = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peLinerID == pe.peLinerID)).ToList();
@@ -268,6 +271,7 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(sMsj);
         }
+        btnAccept.Visibility = Visibility.Visible;
       }
     }
     #endregion
@@ -370,6 +374,21 @@ namespace IM.Administrator.Forms
         GridHelper.SelectRow(dgrIntegrants, dgrIntegrants.SelectedIndex);
       }
       dgrIntegrants.RowEditEnding += dgrIntegrants_RowEditEnding;
+    }
+    #endregion
+
+    #region dgrIntegrants_BeginningEdit
+    /// <summary>
+    ///   Determina si se puede editar la informacion del grid de integrantes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void dgrIntegrants_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (GridHelper.IsInEditMode(sender as DataGrid))
+      {
+        e.Cancel = true;
+      }
     }
     #endregion
 
