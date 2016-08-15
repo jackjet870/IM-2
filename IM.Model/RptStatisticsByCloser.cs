@@ -15,19 +15,52 @@ namespace IM.Model
     {
         public string SalemanID { get; set; }
         public string SalemanName { get; set; }
-        public string SalemanType { get; set; }
-        public string SalemanTypeN { get; set; }
-        public string TeamN { get; set; }
-        public string TeamLeaderN { get; set; }
         public string SalesmanStatus { get; set; }
-        public Nullable<decimal> SalesAmount { get; set; }
-        public Nullable<int> OPP { get; set; }
-        public Nullable<decimal> UPS { get; set; }
-        public Nullable<decimal> SalesRegular { get; set; }
-        public Nullable<decimal> SalesExit { get; set; }
-        public Nullable<decimal> Sales { get; set; }
-        public Nullable<decimal> Efficiency { get; set; }
-        public Nullable<decimal> ClosingFactor { get; set; }
-        public Nullable<decimal> SaleAverage { get; set; }
+        public string Team { get; set; }
+        public Nullable<decimal> TSalesAmount { get; set; }
+        public Nullable<int> TOOP { get; set; }
+        public Nullable<decimal> TUPS { get; set; }
+        public Nullable<decimal> TSalesRegular { get; set; }
+        public Nullable<decimal> TSalesExit { get; set; }
+        public Nullable<decimal> TSales { get; set; }
+        public Nullable<decimal> TEfficiency { get; set; }
+        public Nullable<decimal> TClosingFactor { get; set; }
+        public Nullable<decimal> TSaleAverage { get; set; }
+        public Nullable<decimal> CSalesAmount { get; set; }
+        public Nullable<int> COOP { get; set; }
+        public Nullable<decimal> CUPS { get; set; }
+        public Nullable<decimal> CSalesRegular { get; set; }
+        public Nullable<decimal> CSalesExit { get; set; }
+        public Nullable<decimal> CSales { get; set; }
+        public Nullable<decimal> CEfficiency { get; set; }
+        public Nullable<decimal> CClosingFactor { get; set; }
+        public Nullable<decimal> CSaleAverage { get; set; }
+        public Nullable<decimal> AsSalesAmount { get; set; }
+        public Nullable<int> AsOOP { get; set; }
+        public Nullable<decimal> AsUPS { get; set; }
+        public Nullable<decimal> AsSalesRegular { get; set; }
+        public Nullable<decimal> AsSalesExit { get; set; }
+        public Nullable<decimal> AsSales { get; set; }
+        public Nullable<decimal> AsEfficiency { get; set; }
+        public Nullable<decimal> AsClosingFactor { get; set; }
+        public Nullable<decimal> AsSaleAverage { get; set; }
+        public Nullable<decimal> WSalesAmount { get; set; }
+        public Nullable<int> WOOP { get; set; }
+        public Nullable<decimal> WUPS { get; set; }
+        public Nullable<decimal> WSalesRegular { get; set; }
+        public Nullable<decimal> WSalesExit { get; set; }
+        public Nullable<decimal> WSales { get; set; }
+        public Nullable<decimal> WEfficiency { get; set; }
+        public Nullable<decimal> WClosingFactor { get; set; }
+        public Nullable<decimal> WSaleAverage { get; set; }
+        public Nullable<decimal> AWSalesAmount { get; set; }
+        public Nullable<int> AWOOP { get; set; }
+        public Nullable<decimal> AWUPS { get; set; }
+        public Nullable<decimal> AWSalesRegular { get; set; }
+        public Nullable<decimal> AWSalesExit { get; set; }
+        public Nullable<decimal> AWSales { get; set; }
+        public Nullable<decimal> AWEfficiency { get; set; }
+        public Nullable<decimal> AWClosingFactor { get; set; }
+        public Nullable<decimal> AWSaleAverage { get; set; }
     }
 }

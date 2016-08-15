@@ -16,28 +16,27 @@ namespace IM.Model
     using System.Linq;
     
     public partial class IMEntities : DbContext
-  {
-
-    #region Constructores y destructores
-
-    /// <summary>
-    /// Constructor que permite utilizar una cadena de conexion
-    /// </summary>
-    /// <param name="connectionString">Cadena de conexion</param>
-    /// <history>
-    /// [wtorres]  23/Mar/2016 Created
-    /// </history>
-    public IMEntities(string connectionString)
-      : base(connectionString)
     {
-      Configuration.ProxyCreationEnabled = false;
-    }
+        #region Constructores y destructores
 
-    #endregion
+        /// <summary>
+        /// Constructor que permite utilizar una cadena de conexion
+        /// </summary>
+        /// <param name="connectionString">Cadena de conexion</param>
+        /// <history>
+        /// [wtorres]  23/Mar/2016 Created
+        /// </history>
+        public IMEntities(string connectionString)
+          : base(connectionString)
+        {
+          Configuration.ProxyCreationEnabled = false;
+        }
 
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    {
-      throw new UnintentionalCodeFirstException();
+        #endregion
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
         }
     
         public virtual DbSet<Agency> Agencies { get; set; }
@@ -6457,6 +6456,23 @@ namespace IM.Model
                 new ObjectParameter("PR3", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("USP_OR_EsFrontToMiddle", personnelIDParameter, pR1Parameter, pR2Parameter, pR3Parameter);
+        }
+    
+        public virtual ObjectResult<RptEfficiencyWeekly> USP_IM_RptEfficiencyWeekly(string salesRoom, string datesFrom, string datesTo)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var datesFromParameter = datesFrom != null ?
+                new ObjectParameter("DatesFrom", datesFrom) :
+                new ObjectParameter("DatesFrom", typeof(string));
+    
+            var datesToParameter = datesTo != null ?
+                new ObjectParameter("DatesTo", datesTo) :
+                new ObjectParameter("DatesTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptEfficiencyWeekly>("USP_IM_RptEfficiencyWeekly", salesRoomParameter, datesFromParameter, datesToParameter);
         }
     }
 }

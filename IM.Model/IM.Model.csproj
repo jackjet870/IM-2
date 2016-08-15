@@ -821,6 +821,9 @@
     <Compile Include="RptDepositsPaymentByPR_Deposit.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptEfficiencyWeekly.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptFoliosCXC.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
