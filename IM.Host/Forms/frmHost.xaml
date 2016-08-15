@@ -6,6 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:IM.Host"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:styClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.frmHost"
         mc:Ignorable="d"
         Title="Host" 
@@ -43,7 +44,7 @@
       <!--#endregion-->
 
       <!--#region MENU-->
-      <Grid x:Name="grdPanel" Height="Auto" VerticalAlignment="Top" Background="#147F79" Grid.RowSpan="1">
+      <Grid x:Name="stkMenu" Height="Auto" VerticalAlignment="Top" Background="#147F79" Grid.RowSpan="1">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="10"/>
           <!--Columna para separar del límite izquierdo el GroupBox de Options -->
@@ -78,12 +79,6 @@
                 <TextBlock Text="Print" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
-            <!--<Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPreview_Click">
-            <StackPanel>
-              <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-              <TextBlock Text="Preview" HorizontalAlignment="Center"/>
-            </StackPanel>
-          </Button>-->
             <Button x:Name="btnMealTickets" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnMealTickets_Click">
               <StackPanel>
                 <Image Source="pack://application:,,,/IM.Styles;component/Images/MealTicket.png" Width="24" Height="24" HorizontalAlignment="Center"/>
@@ -229,10 +224,10 @@
 
       <!--#region DATAGRID-->
       <Grid Grid.Row="1" DataContext="{StaticResource dsPremanifestHost}" >
-        <DataGrid Name="dtgPremanifestHost"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" >
+        <DataGrid Name="grdPremanifestHost" RowValidationErrorTemplate="{x:Null}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" PreparingCellForEdit="dtgPremanifestHost_PreparingCellForEdit" CellEditEnding="grdPremanifestHost_CellEditEnding" RowEditEnding="grdPremanifestHost_RowEditEnding">
           <DataGrid.Columns>
             <!--#region DEFAULT COLUMN-->
-            <DataGridTextColumn x:Name="guShowSeqColumn" Binding="{Binding guShowSeq}" Header="Seq" Width="SizeToHeader" >
+            <DataGridTextColumn x:Name="guShowSeqColumn" Binding="{Binding guShowSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Seq" Width="SizeToHeader">
               <DataGridTextColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Sequency"/>
@@ -330,8 +325,7 @@
                 </Style>
               </DataGridTemplateColumn.HeaderStyle>
             </DataGridTemplateColumn>
-
-            <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="Taxi In" Width="SizeToHeader" IsReadOnly="True"/>
+            <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="Taxi In" Width="SizeToHeader"/>
             <DataGridTemplateColumn x:Name="guShowColumn" IsReadOnly="False"  Header="Sh" Width="SizeToHeader" >
               <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
@@ -344,7 +338,6 @@
                 </Style>
               </DataGridTemplateColumn.HeaderStyle>
             </DataGridTemplateColumn>
-
             <DataGridCheckBoxColumn x:Name="guTourColumn" Binding="{Binding guTour}" Header="Tour" Width="SizeToHeader">
               <DataGridCheckBoxColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -388,53 +381,10 @@
                 </Style>
               </DataGridTemplateColumn.HeaderStyle>
             </DataGridTemplateColumn>
-
-            <!--<DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived}" Header="Gifts" Width="SizeToHeader">
-                        <DataGridCheckBoxColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="ToolTip" Value="Gifts Received"/>
-                            </Style>
-                        </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>-->
-            <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="Comments" Width="*"/>
+            <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="Comments" Width="*" />
             <!--#endregion-->
-            <!--
-                    <DataGridTextColumn x:Name="coNColumn" Binding="{Binding coN}" Header="co N" ToolTipService.ToolTip="CONOCE" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="cuNColumn" Binding="{Binding cuN}" Header="cu N" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guagColumn" Binding="{Binding guag}" Header="guag" Width="SizeToHeader"/>
-                    <DataGridTemplateColumn x:Name="guCheckInDColumn" Header="gu Check In D" Width="SizeToHeader">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <DatePicker SelectedDate="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn x:Name="guCheckOutDColumn" Header="gu Check Out D" Width="SizeToHeader">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <DatePicker SelectedDate="{Binding guCheckOutD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="gucoColumn" Binding="{Binding guco}" Header="guco" Width="SizeToHeader"/>
-                    <DataGridCheckBoxColumn x:Name="guCTourColumn" Binding="{Binding guCTour}" Header="gu CTour" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guDepositReceivedColumn" Binding="{Binding guDepositReceived}" Header="gu Deposit Received" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guFirstName1Column" Binding="{Binding guFirstName1}" Header="gu First Name 1" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guFirstName2Column" Binding="{Binding guFirstName2}" Header="gu First Name 2" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guHotelColumn" Binding="{Binding guHotel}" Header="gu Hotel" Width="SizeToHeader"/>
-                    <DataGridCheckBoxColumn x:Name="guInOutColumn" Binding="{Binding guInOut}" Header="gu In Out" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guLastName2Column" Binding="{Binding guLastName2}" Header="gu Last Name 2" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guPaxColumn" Binding="{Binding guPax}" Header="gu Pax" Width="SizeToHeader"/>
-                    <DataGridTextColumn x:Name="guRoomNumColumn" Binding="{Binding guRoomNum}" Header="gu Room Num" Width="SizeToHeader"/>
-                    <DataGridCheckBoxColumn x:Name="guSaveProgramColumn" Binding="{Binding guSaveProgram}" Header="gu Save Program" Width="SizeToHeader"/>
-                    <DataGridCheckBoxColumn x:Name="guWalkOutColumn" Binding="{Binding guWalkOut}" Header="gu Walk Out" Width="SizeToHeader"/>
-                    <DataGridCheckBoxColumn x:Name="guWithQuinellaColumn" Binding="{Binding guWithQuinella}" Header="gu With Quinella" Width="SizeToHeader"/>
-                    -->
           </DataGrid.Columns>
         </DataGrid>
-        <ProgressBar x:Name="examplePP" HorizontalAlignment="Left" Height="39" Margin="540,97,0,0" VerticalAlignment="Top" Width="299" Visibility="Collapsed"/>
-
-
       </Grid>
       <!--#endregion-->
 

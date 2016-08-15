@@ -17,11 +17,11 @@ namespace IM.Host.Forms
   public partial class frmAddExchangeRate : Window
   {
 
-    private List<string> _listExchangeRate;
+    private List<Currency> _listExchangeRate;
     CollectionViewSource _dsCurrenciesAvailable;
     private decimal _exchangeMEX;
 
-    public frmAddExchangeRate(List<string> listExchangeRateData, decimal exchangeRateMEX)
+    public frmAddExchangeRate(List<Currency> listExchangeRateData, decimal exchangeRateMEX)
     {
       _listExchangeRate = listExchangeRateData;
       _exchangeMEX = exchangeRateMEX;
@@ -38,11 +38,10 @@ namespace IM.Host.Forms
     /// [vipacheco] 11/03/2016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _dsCurrenciesAvailable = ((CollectionViewSource)(this.FindResource("currencyViewSource")));
-        
-      _dsCurrenciesAvailable.Source =await BRCurrencies.GetCurrencies(null, 1, _listExchangeRate);
+      _dsCurrenciesAvailable = ((CollectionViewSource)(FindResource("currencyViewSource")));
+      _dsCurrenciesAvailable.Source = _listExchangeRate;// await BRCurrencies.GetCurrencies(null, 1, _listExchangeRate);
     }
 
     /// <summary>
@@ -80,13 +79,14 @@ namespace IM.Host.Forms
           exExchRate = Convert.ToDecimal(txtBoxRate.Text),
         };
 
-        //Guardamos el nuevo Exchange Rate Agregado.
-        BRExchangeRate.SaveExchangeRate(true,_exchangeRate);
+        //Guardamos el nuevo Exchange Rate Agregado.  // por el momento el SaveLog se encuentra en la transaccion BRExchangeRate.SaveExchangeRate
+        BRExchangeRate.SaveExchangeRate(true,_exchangeRate, _exD.cuID, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
 
         //Guadarmos el Log del cambio.
-        BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+        //BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
 
         // Cerramos la ventana
+        DialogResult = true;
         Close();
       }
 
@@ -95,8 +95,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Verifica las entradas de texto en el campo rate
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 12/03/2016 Created
     /// </history>

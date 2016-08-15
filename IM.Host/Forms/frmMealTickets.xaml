@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmMealTickets"
         mc:Ignorable="d"
-       
+        Closing="Window_Closing"       
         Title="Meal Tickets" Height="346.008" Width="873.379" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="dsRateType" d:DesignSource="{d:DesignInstance {x:Type Model:RateType}, CreateList=True}"/>
@@ -27,29 +27,45 @@
     <!--#endregion-->
   </Window.Resources>
   <xctk:BusyIndicator x:Name="_busyIndicator" >
-
     <Grid>
-      <GroupBox x:Name="grbSelectionCriteria" Header="Selection Criteria" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="787" Height="72" >
-        <Canvas>
-          <TextBlock x:Name="lblMtID" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Meal Ticket ID" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="7"/>
-          <TextBox x:Name="txtMealTicket" Height="23" Canvas.Left="14" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
-          <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Folio" VerticalAlignment="Top" Canvas.Left="132" Canvas.Top="7"/>
-          <TextBox x:Name="txtFolio" Height="23" Canvas.Left="132" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
-          <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Canvas.Left="263" Canvas.Top="9" Width="59"/>
-          <ComboBox x:Name="cboRateType"  DataContext="{StaticResource dsRateType}" Canvas.Left="263" Canvas.Top="23" Width="145" SelectedValuePath="raID" ItemsSource="{Binding}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>
-          <TextBlock x:Name="lblFrom" HorizontalAlignment="Left" TextWrapping="Wrap" Text="From" VerticalAlignment="Top" Canvas.Left="443" Canvas.Top="7" />
-          <xctk:DateTimePicker x:Name="dtpFrom" Canvas.Left="473" Canvas.Top="3" Width="141" Format="LongDate" TextAlignment="Left" />
-          <TextBlock x:Name="lblTo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="To" VerticalAlignment="Top" Canvas.Left="444" Canvas.Top="35" />
-          <xctk:DateTimePicker x:Name="dtpTo" Canvas.Left="474" Canvas.Top="31" Width="140" Format="LongDate" TextAlignment="Left" />
-          <Button x:Name="btnSearch" Content="Search" Canvas.Left="676" Canvas.Top="11" Width="75" Click="btnSearch_Click" Height="30" Template="{StaticResource ButtonTemplate}"/>
-        </Canvas>
-      </GroupBox>
-      <Separator HorizontalAlignment="Left" Height="12" Margin="10,262,0,0" VerticalAlignment="Top" Width="845"/>
-      <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="655,277,0,0" VerticalAlignment="Top" Width="75" Click="btnAdd_Click" Height="25" Template="{StaticResource ButtonTemplate}"/>
-      <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="766,277,0,0" VerticalAlignment="Top" Width="75" Click="btnClose_Click" Height="25" Template="{StaticResource ButtonTemplate}"/>
-      <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="38,277,0,0" VerticalAlignment="Top" Width="75" Click="btnPrint_Click" Height="25" Template="{StaticResource ButtonTemplate}"/>
-      <CheckBox x:Name="chkTicket" Content="Con o Sin Ticket" HorizontalAlignment="Left" Margin="305,285,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-      <DataGrid x:Name="dgMealTicket" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,88,10,57" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" >
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="50"/>
+      </Grid.RowDefinitions>
+
+      <StackPanel x:Name="stkSearch" Grid.Row="0" >
+        <GroupBox x:Name="grbSelectionCriteria" Grid.Row="0" Header="Selection Criteria" Margin="10,10,10,0" Height="65">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="60">
+            <StackPanel Orientation="Vertical" Margin="5">
+              <TextBlock x:Name="lblMtID" TextWrapping="Wrap" Text="Meal Ticket ID"/>
+              <TextBox x:Name="txtMealTicket" Height="23" AcceptsReturn="False" Width="100"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+              <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Folio" VerticalAlignment="Top"/>
+              <TextBox x:Name="txtFolio" Height="23" AcceptsReturn="False" Width="100"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+              <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Width="59"/>
+              <ComboBox x:Name="cboRateType"  DataContext="{StaticResource dsRateType}" Width="145" SelectedValuePath="raID" ItemsSource="{Binding}" DisplayMemberPath="raN"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+              <TextBlock x:Name="lblFrom" HorizontalAlignment="Left" TextWrapping="Wrap" Text="From" VerticalAlignment="Top"/>
+              <xctk:DateTimePicker x:Name="dtpFrom" Width="141" Format="LongDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+              <TextBlock x:Name="lblTo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="To" VerticalAlignment="Top"/>
+              <xctk:DateTimePicker x:Name="dtpTo" Width="140" Format="LongDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <Button x:Name="btnSearch" Content="Search" Width="75" Click="btnSearch_Click" Height="30" Template="{StaticResource ButtonTemplate}"/>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+
+      </StackPanel>
+
+      <DataGrid x:Name="grdMealTicket" Grid.Row="1" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" IsReadOnly="True" Margin="10,9,10,5" SelectionUnit="FullRow" SelectionMode="Extended" SelectionChanged="grdMealTicket_SelectionChanged">
         <DataGrid.Resources>
           <Style TargetType="DataGridRow">
             <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
@@ -81,6 +97,12 @@
           <DataGridTextColumn x:Name="meAuthorizedByColumn" Binding="{Binding meAuthorizedBy}" Header="Authorized By" Width="Auto"/>
         </DataGrid.Columns>
       </DataGrid>
+      <Grid Grid.Row="2">
+        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Right" Width="75" Click="btnAdd_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="0,10,94,15"/>
+        <Button x:Name="btnClose" Content="Close" Width="75" Click="btnClose_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="780,10,10,15"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Width="75" Click="btnPrint_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="11,12,0,12"/>
+      </Grid>
+  
     </Grid>
   </xctk:BusyIndicator >
 

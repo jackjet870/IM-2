@@ -658,6 +658,16 @@ namespace IM.Base.Helpers
                   break;
                 }
               #endregion
+
+              #region Byte
+              case TypeCode.Byte:
+                {
+                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, 3));//Asignamos el maxLength 
+                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.ByteTextInput)));//Validar enteros
+                  break;
+            }
+                #endregion
+
             }
             dgc.EditingElementStyle = style;
           }

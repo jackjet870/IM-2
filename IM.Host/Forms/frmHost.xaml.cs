@@ -22,11 +22,16 @@ namespace IM.Host
   /// <summary>
   /// Interaction logic for frmHost.xaml
   /// </summary>
-  /// 
   public partial class frmHost : Window
   {
+
+    #region Variables
     private DateTime? _dtpCurrent = null;
     public static DateTime dtpServerDate = new DateTime();
+    private DataGridCellInfo _currentCell;
+    private Guest _guestCurrent;
+    private bool _blnUpdateGuest; 
+    #endregion
 
     #region Listas Globales
     public static List<Currency> _lstCurrencies;
@@ -74,6 +79,8 @@ namespace IM.Host
     public frmHost()
     {
       InitializeComponent();
+
+      GridHelper.SetUpGrid(grdPremanifestHost, new Guest());
     }
     #endregion
 
@@ -125,12 +132,12 @@ namespace IM.Host
     /// </history>
     private void dtgPremanifestHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (dtgPremanifestHost.Items.Count == 0)
+      if (grdPremanifestHost.Items.Count == 0)
       {
         StatusBarReg.Content = "No Records";
         return;
       }
-      StatusBarReg.Content = string.Format("{0}/{1}", dtgPremanifestHost.Items.IndexOf(dtgPremanifestHost.CurrentItem) + 1, dtgPremanifestHost.Items.Count);
+      StatusBarReg.Content = string.Format("{0}/{1}", grdPremanifestHost.Items.IndexOf(grdPremanifestHost.CurrentItem) + 1, grdPremanifestHost.Items.Count);
     }
     #endregion
 
@@ -269,158 +276,158 @@ namespace IM.Host
 
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Currencies
-      _lstCurrencies = await BRCurrencies.GetCurrencies(null, 1);
+        // Currencies
+        _lstCurrencies = await BRCurrencies.GetCurrencies(null, 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      //Payment Types
-      _lstPaymentsType = await BRPaymentTypes.GetPaymentTypes(1);
+        //Payment Types
+        _lstPaymentsType = await BRPaymentTypes.GetPaymentTypes(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Marital Status
-      _lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(1);
+        // Marital Status
+        _lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Agencies
-      _lstAgencies = await BRAgencies.GetAgencies(1);
+        // Agencies
+        _lstAgencies = await BRAgencies.GetAgencies(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Countries
-      _lstCountries = await BRCountries.GetCountries(1);
+        // Countries
+        _lstCountries = await BRCountries.GetCountries(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Languajes
-      _lstLanguaje = await BRLanguages.GetLanguages(1);
+        // Languajes
+        _lstLanguaje = await BRLanguages.GetLanguages(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Hotels
-      _lstHotel = await BRHotels.GetHotels(null, 1);
+        // Hotels
+        _lstHotel = await BRHotels.GetHotels(null, 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Team Sales Men
-      _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
+        // Team Sales Men
+        _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Personnel
-      _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+        // Personnel
+        _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Host (ess) de llegada
-      _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
+        // Host (ess) de llegada
+        _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Host (ess) de regalos
-      _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
+        // Host (ess) de regalos
+        _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Host (ess) de salida
-      _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
+        // Host (ess) de salida
+        _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // PR's
-      _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
+        // PR's
+        _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Closer´s
-      _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
+        // Closer´s
+        _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Exit Closer´s
-      _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
+        // Exit Closer´s
+        _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Podium
-      _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
+        // Podium
+        _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Verificador Legal
-      _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
+        // Verificador Legal
+        _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Liner's
-      _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
+        // Liner's
+        _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Gifts
-      _lstGifts = await BRGifts.GetGifts(1);
+        // Gifts
+        _lstGifts = await BRGifts.GetGifts(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Banks
-      _lstBanks = await BRBanks.GetBanks(1);
+        // Banks
+        _lstBanks = await BRBanks.GetBanks(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Source Payments
-      _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
+        // Source Payments
+        _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // SalesRoomShort
-      _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
+        // SalesRoomShort
+        _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Locations
-      _lstLocations = await BRLocations.GetLocations(1);
+        // Locations
+        _lstLocations = await BRLocations.GetLocations(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Charge To
-      _lstChargeTo = await BRChargeTos.GetChargeTos();
+        // Charge To
+        _lstChargeTo = await BRChargeTos.GetChargeTos();
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Capitanes de PR's
-      _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
+        // Capitanes de PR's
+        _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Capitanes de Liner's
-      _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
+        // Capitanes de Liner's
+        _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Capitanes de Closer's
-      _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
+        // Capitanes de Closer's
+        _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Program's
-      _lstPrograms = await BRPrograms.GetPrograms();
+        // Program's
+        _lstPrograms = await BRPrograms.GetPrograms();
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // LeadSources
-      _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
+        // LeadSources
+        _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // Refund Types
-      _lstRefundTypes = await BRRefundTypes.GetRefundTypes(1);
+        // Refund Types
+        _lstRefundTypes = await BRRefundTypes.GetRefundTypes(1);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
-      // GiftsPacks
-      _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks();
+        // GiftsPacks
+        _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks();
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
@@ -503,10 +510,6 @@ namespace IM.Host
 
       dtpServerDate = BRHelpers.GetServerDate();
 
-      // Se verifica que el tipo de permiso del usuario para habilitar y/o deshabilitar opciones necesarias.
-      if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.ReadOnly))
-        guWCommentsColumn.IsReadOnly = true;
-
       // Actualizamos los tipos de cambio de monedas hasta el dia de hoy
       _busyIndicator.BusyContent = "Updating exchange rate...";
       await BRExchangeRate.InsertExchangeRate(dtpServerDate.Date);
@@ -530,10 +533,13 @@ namespace IM.Host
     {
       if (_dtpCurrent != dtpDate.Value)
       {
-        // Asignamos la fecha seleccionada.
-        _dtpCurrent = dtpDate.Value.Value.Date;
-        CollectionViewSource hostInfo = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-        hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
+        if (dtpDate.Value != null)
+        {
+          // Asignamos la fecha seleccionada.
+          _dtpCurrent = dtpDate.Value.Value.Date;
+          CollectionViewSource hostInfo = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
+          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
+        }
       }
     }
     #endregion
@@ -556,7 +562,7 @@ namespace IM.Host
         return;
       }
 
-      var exchange = new frmExchangeRate(dtpServerDate) { Owner = this };
+      var exchange = new frmExchangeRate() { Owner = this };
       exchange.ShowDialog();
     }
     #endregion
@@ -627,21 +633,18 @@ namespace IM.Host
     /// <summary>
     /// Invoca  el formulario Meal Ticket por medio del boton correspondiente.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 18/03/2016 Created
     /// </history>
     private void btnMealTickets_Click(object sender, RoutedEventArgs e)
     {
       // Se verifica si el usuario tiene permisos de edicion!
-      bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
+      //bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
 
       // Se invoca el formulario de acuerdo al permiso del usuario!
-      var mealTickets = new frmMealTickets()
+      var mealTickets = new frmMealTickets(EnumOpenBy.Button)
       {
         Owner = this,
-        _modeOpen = ((modeEdit == true) ? EnumMode.Edit : EnumMode.Search)
       };
       mealTickets.ShowDialog();
     }
@@ -848,8 +851,6 @@ namespace IM.Host
     /// <summary>
     /// Permite crear una invitacion outside
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -863,10 +864,9 @@ namespace IM.Host
     /// <summary>
     /// Permite invitar a un huesped inhouse
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [vipacheco] 09/Agosto/2016 Modified -> Se agrego la invocacion del formulario Invitacion.
     /// </history>
     private async void btnInvitationInhouse_Click(object sender, RoutedEventArgs e)
     {
@@ -906,8 +906,6 @@ namespace IM.Host
     /// <summary>
     /// Permite crear una nueva invitacion externa
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
@@ -921,14 +919,12 @@ namespace IM.Host
     /// <summary>
     /// Despliega el formulario de busqueda general de invitaciones
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
     private void btnGuests_Click(object sender, RoutedEventArgs e)
     {
-      frmSearchGeneral _frmSearch = new frmSearchGeneral(dtpDate.Value.Value) { Owner = this};
+      frmSearchGeneral _frmSearch = new frmSearchGeneral(dtpDate.Value.Value) { Owner = this };
       _frmSearch.ShowDialog();
     }
     #endregion
@@ -982,14 +978,8 @@ namespace IM.Host
       frmSearchDeposit.ShowDialog();
 
       // Si se cambio el status
-      if (frmSearchDeposit.HasRefund)
-      {
-        chkDepositsRefund.IsChecked = true;
-      }
-      else
-      {
-        chkDepositsRefund.IsChecked = false;
-      }
+      if (frmSearchDeposit.HasRefund) { chkDepositsRefund.IsChecked = true; }
+      else { chkDepositsRefund.IsChecked = false; }
     }
     #endregion
 
@@ -1004,7 +994,7 @@ namespace IM.Host
     {
       // Obtenemos el row seleccionado!
       CheckBox chkSelected = sender as CheckBox;
-      GuestPremanifestHost guest = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
+      GuestPremanifestHost guest = (GuestPremanifestHost)grdPremanifestHost.SelectedItem;
 
       //Validamos que sea un invitado valido
       if (ValidateGuest(guest, EnumPermission.Show, EnumEntities.Shows))
@@ -1032,15 +1022,17 @@ namespace IM.Host
       if (ValidateGuest(guest, EnumPermission.MealTicket, EnumEntities.MealTickets))
       {
         // Desplegamos el formulario Show
-        frmMealTickets _frmMealTickets = new frmMealTickets(guest.guID) { Owner = this };
+        frmMealTickets _frmMealTickets = new frmMealTickets(EnumOpenBy.Checkbox, guest.guID) { Owner = this };
         _frmMealTickets.ShowDialog();
+
+        // si existe algun MaalTicket guardado.
+        if (_frmMealTickets.HasMealTicket) { chkSelected.IsChecked = true; }
+        else { chkSelected.IsChecked = false; }
       }
       else
       {
         chkSelected.IsChecked = false;
       }
-
-      dtgPremanifestHost.Items.Refresh();
     }
     #endregion
 
@@ -1058,7 +1050,7 @@ namespace IM.Host
       var chekedValue = sender as CheckBox;
       chekedValue.IsChecked = !chekedValue.IsChecked;
       if (chekedValue.IsChecked == false) return;
-      var guestHost = (GuestPremanifestHost)dtgPremanifestHost.SelectedItem;
+      var guestHost = (GuestPremanifestHost)grdPremanifestHost.SelectedItem;
 
       if (ValidateGuest(guestHost, EnumPermission.Sales, EnumEntities.Sales))
       {
@@ -1073,7 +1065,7 @@ namespace IM.Host
       }
       else
       {
-        if (chekedValue != null) chekedValue.IsChecked = false;
+        if (chekedValue != null) { chekedValue.IsChecked = false; }
       }
     }
     #endregion
@@ -1122,5 +1114,132 @@ namespace IM.Host
     #endregion
 
     #endregion
+
+    #region dtgPremanifestHost_PreparingCellForEdit
+    /// <summary>
+    /// Verifica si cuenta con los permisos de edicion
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Agosto/2016 Created
+    /// </history>
+    private void dtgPremanifestHost_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      DataGrid dataGrid = sender as DataGrid;
+      GuestPremanifestHost guest = dataGrid.Items.CurrentItem as GuestPremanifestHost;
+      _currentCell = grdPremanifestHost.CurrentCell;
+      // Verificamos que no exista el guest current
+      if (_guestCurrent == null) { _guestCurrent = BRGuests.GetGuestById(guest.guID); }
+      else if (_guestCurrent.guID != guest.guID) { _guestCurrent = BRGuests.GetGuestById(guest.guID); }
+
+      switch (_currentCell.Column.SortMemberPath)
+      {
+        case nameof(guest.guShowSeq):
+          // si tiene al menos permiso estandar de Hostess
+          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
+          else { _currentCell.Column.IsReadOnly = true; }
+          break;
+        case nameof(guest.guWComments):
+          // si tiene al menos permiso estandar de Hostess
+          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false;}
+          else { _currentCell.Column.IsReadOnly = true; }
+          break;
+        case nameof(guest.guTaxiIn):
+          // si tiene al menos permiso estandar de Taxi In
+          if (App.User.HasPermission(EnumPermission.TaxiIn, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
+          else { _currentCell.Column.IsReadOnly = true; }
+          break;
+      }
+    }
+    #endregion
+
+    #region grdPremanifestHost_CellEditEnding
+    /// <summary>
+    /// Verifica si existen cambios de la celda editada.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Agosto/2016 Created.
+    /// </history>
+    private void grdPremanifestHost_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      GuestPremanifestHost guest = e.Row.Item as GuestPremanifestHost;
+      switch (_currentCell.Column.SortMemberPath)
+      {
+        case nameof(guest.guShowSeq):
+          stkMenu.IsEnabled = true;
+          var txtShow = e.EditingElement as TextBox;
+          if (!string.IsNullOrEmpty(txtShow.Text))
+          {
+            byte cvtResult;
+            if (byte.TryParse(txtShow.Text, out cvtResult))
+            {
+              // Verificamos si cambiaron los datos
+              if (_guestCurrent.guShowSeq != guest.guShowSeq)
+              {
+                _guestCurrent.guShowSeq = cvtResult;
+                _blnUpdateGuest = true;
+              }
+            }
+          }
+          else
+          {
+            txtShow.Text = null;
+            guest.guShowSeq = null;
+          }
+          break;
+        case nameof(guest.guWComments):
+          stkMenu.IsEnabled = true;
+          var txtComments = e.EditingElement as TextBox;
+          if (!string.IsNullOrEmpty(txtComments.Text))
+          {
+            if (_guestCurrent.guWComments != guest.guWComments)
+            {
+              _guestCurrent.guWComments = txtComments.Text;
+              _blnUpdateGuest = true;
+            }
+          }
+          break;
+        case nameof(guest.guTaxiIn):
+          stkMenu.IsEnabled = true;
+          var txtTaxiIn = e.EditingElement as TextBox;
+          if (!string.IsNullOrEmpty(txtTaxiIn.Text))
+          {
+            decimal cvtResult;
+            if (decimal.TryParse(txtTaxiIn.Text, out cvtResult))
+            {
+              if (_guestCurrent.guTaxiIn != guest.guTaxiIn)
+              {
+                _guestCurrent.guTaxiIn = cvtResult;
+                _blnUpdateGuest = true;
+              }
+            }
+          }
+          break;
+      }
+
+      if (_currentCell.Column.IsReadOnly)
+      {
+        _currentCell.Column.IsReadOnly = false;
+      }
+    }
+    #endregion
+
+    #region grdPremanifestHost_RowEditEnding
+    /// <summary>
+    /// Actualiza los campos correspondientes en la base de datos.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Agosto/2016 Created.
+    /// </history>
+    private async void grdPremanifestHost_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      // Verificamos si es necesario actualizar el guest
+      if (_blnUpdateGuest)
+      {
+        await BREntities.OperationEntity(_guestCurrent, EnumMode.Edit);
+      }
+      _blnUpdateGuest = false;
+    } 
+    #endregion
+
   }
 }

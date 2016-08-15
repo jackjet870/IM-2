@@ -6,16 +6,16 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateEdit"
         mc:Ignorable="d"
-        Title="Edit Exchange Rate" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
-    <Grid>
-        <TextBlock x:Name="textCurrency" HorizontalAlignment="Center" Margin="0,21,0,0" TextWrapping="Wrap" Text="Currency ID" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
-        <TextBox x:Name="txtCurrency" HorizontalAlignment="Center" Height="23" Margin="33,40,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding excu}" />
-        <TextBlock x:Name="textRate" HorizontalAlignment="Center" Margin="0,84,0,0" TextWrapping="Wrap" Text="Rate" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
-        <TextBox x:Name="txtRate" HorizontalAlignment="Center" Height="23" Margin="33,102,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" Text="{Binding exExchRate}"/>
-        <TextBlock x:Name="textPesos" HorizontalAlignment="Center" Margin="117,144,117,0" TextWrapping="Wrap" Text="Pesos" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Height="19" />
-        <TextBox x:Name="txtPesos" HorizontalAlignment="Center" Height="23" Margin="33,163,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding RatePesos}"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="33,223,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="162,223,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
-
-    </Grid>
+        Loaded="Window_Loaded"
+        Title="Exchange Rate Detail" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+  <Grid>
+    <TextBlock x:Name="txbCurrency" HorizontalAlignment="Center" Margin="0,21,0,0" TextWrapping="Wrap" Text="Currency" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
+    <ComboBox x:Name="cboCurrencies" HorizontalAlignment="Center" Height="23" Margin="33,40,33,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" DisplayMemberPath="cuN" SelectedValuePath="cuN"/>
+    <TextBlock x:Name="txbRate" HorizontalAlignment="Center" Margin="0,84,0,0" TextWrapping="Wrap" Text="Rate" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
+    <TextBox x:Name="txtRate" HorizontalAlignment="Center" Height="23" Margin="33,102,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" Text="{Binding exExchRate}" PreviewTextInput="txtRate_PreviewTextInput" PreviewKeyDown="txtRate_PreviewKeyDown" LostFocus="txtRate_LostFocus"/>
+    <TextBlock x:Name="txbPesos" HorizontalAlignment="Center" Margin="117,144,117,0" TextWrapping="Wrap" Text="Pesos" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Height="19" />
+    <TextBox x:Name="txtPesos" HorizontalAlignment="Center" Height="23" Margin="33,163,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding RatePesos}"/>
+    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="33,223,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Height="30" Template="{StaticResource ButtonTemplate}"/>
+    <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="162,223,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="btnCancel_Click" Template="{StaticResource ButtonTemplate}"/>
+  </Grid>
 </Window>

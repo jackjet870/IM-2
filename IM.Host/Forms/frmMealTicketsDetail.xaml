@@ -7,42 +7,90 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmMealTicketsDetail"
         mc:Ignorable="d"
        
-        Title="Meal Tickets Detail - " Height="239.59" Width="650.793" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
-    <Window.Resources>
-        <CollectionViewSource x:Key="dsRateType" d:DesignSource="{d:DesignInstance {x:Type Model:RateType}, CreateList=True}"/>
-        <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
-        <CollectionViewSource x:Key="dsMealTicketType" d:DesignSource="{d:DesignInstance {x:Type Model:MealTicketType}, CreateList=True}"/>
-        <CollectionViewSource x:Key="dsAgency" d:DesignSource="{d:DesignInstance {x:Type Model:Agency}, CreateList=True}"/>
-    </Window.Resources>
-    <Grid>
-        <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" Margin="75,10,0,0" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboRateType" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="183" Height="25" SelectedValue="{Binding mera}" SelectedValuePath="raID" ItemsSource="{Binding Source={StaticResource dsRateType}}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>
-        <TextBlock x:Name="lblCollaborator" HorizontalAlignment="Left" Margin="290,10,0,0" TextWrapping="Wrap" Text="Collaborator" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboCollaborator" HorizontalAlignment="Left" Margin="226,25,0,0" VerticalAlignment="Top" Width="204" Height="25" SelectedValue="{Binding mepe}" ItemsSource="{Binding Source={StaticResource dsPersonnel}}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-        <TextBlock x:Name="lblAgency" HorizontalAlignment="Left" Margin="297,10,0,0" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboAgency" HorizontalAlignment="Left" Margin="227,25,0,0" VerticalAlignment="Top" Width="204" Height="25" SelectedValue="{Binding meag}" ItemsSource="{Binding Source={StaticResource dsAgency}}" SelectedValuePath="agID" DisplayMemberPath="agN"/>
-        <TextBlock x:Name="lblRepresentative" HorizontalAlignment="Left" Margin="512,10,0,0" TextWrapping="Wrap" Text="Representative" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtRepresentative" HorizontalAlignment="Left" Height="23" Margin="473,27,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="155" Text="{Binding merep}"/>
-        <TextBlock x:Name="lblDate" HorizontalAlignment="Left" Margin="129,64,0,0" TextWrapping="Wrap" Text="Date" VerticalAlignment="Top"/>
-        <xctk:DateTimePicker x:Name="dtpDate" HorizontalAlignment="Left" Margin="75,80,0,0" VerticalAlignment="Top" Width="144" Format="LongDate" TextAlignment="Left"/>
-        <TextBlock x:Name="lblType" HorizontalAlignment="Left" Margin="287,62,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboType" HorizontalAlignment="Left" Margin="229,77,0,0" VerticalAlignment="Top" Width="150" Height="25" SelectedValue="{Binding meType}" ItemsSource="{Binding Source={StaticResource dsMealTicketType}}" SelectedValuePath="myID" DisplayMemberPath="myN" SelectionChanged="cboType_SelectionChanged"/>
-        <Separator HorizontalAlignment="Left" Height="9" Margin="10,53,0,0" VerticalAlignment="Top" Width="623"/>
-        <TextBlock x:Name="lblAdults" HorizontalAlignment="Left" Margin="391,64,0,0" TextWrapping="Wrap" Text="Adults" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtAdults" HorizontalAlignment="Left" Height="23" Margin="384,77,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meAdults}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtAdults_LostFocus"/>
-        <TextBlock x:Name="lblMinors" HorizontalAlignment="Left" Margin="446,64,0,0" TextWrapping="Wrap" Text="Minors" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtMinors" HorizontalAlignment="Left" Height="23" Margin="439,77,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meMinors}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtMinors_LostFocus"/>
-        <TextBlock x:Name="lblTAdults" HorizontalAlignment="Left" Margin="498,64,0,0" TextWrapping="Wrap" Text="T. Adults" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtTAdults" HorizontalAlignment="Left" Height="23" Margin="494,77,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTAdults, StringFormat={}{0:$0.00}}"/>
-        <TextBlock x:Name="lblTMinors" HorizontalAlignment="Left" Margin="550,64,0,0" TextWrapping="Wrap" Text="T. Minors" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtTMinors" HorizontalAlignment="Left" Height="23" Margin="549,77,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTMinors, StringFormat={}{0:$0.00}}"/>
-        <TextBlock x:Name="lblComments" HorizontalAlignment="Left" Margin="205,113,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Width="59"/>
-        <TextBox x:Name="txtComments" HorizontalAlignment="Left" Height="37" Margin="88,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding meComments}"/>
-        <CheckBox x:Name="chkCancel" Content="Cancel" HorizontalAlignment="Left" Margin="422,135,0,0" VerticalAlignment="Top" IsChecked="{Binding meCanc, Mode=TwoWay}"/>
-        <CheckBox x:Name="chkPrinted" Content="Printed" HorizontalAlignment="Left" Margin="486,135,0,0" VerticalAlignment="Top" IsChecked="{Binding mePrinted, Mode=TwoWay}"/>
-        <Separator HorizontalAlignment="Left" Height="9" Margin="10,163,0,0" VerticalAlignment="Top" Width="623"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="240,177,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="337,177,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
+        Title="Meal Tickets Detail - " Height="239.59" Width="593.59" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+  <Window.Resources>
+    <CollectionViewSource x:Key="dsRateType" d:DesignSource="{d:DesignInstance {x:Type Model:RateType}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsMealTicketType" d:DesignSource="{d:DesignInstance {x:Type Model:MealTicketType}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsAgency" d:DesignSource="{d:DesignInstance {x:Type Model:Agency}, CreateList=True}"/>
+  </Window.Resources>
+  <Grid Margin="0,0,0,11">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
 
-    </Grid>
+    <StackPanel x:Name="stkHead" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <StackPanel Orientation="Vertical" Margin="5">
+        <TextBlock x:Name="lblRateType" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cboRateType" HorizontalAlignment="Center" VerticalAlignment="Top" Width="183" Height="25" SelectedValue="{Binding mera}" SelectedValuePath="raID" ItemsSource="{Binding Source={StaticResource dsRateType}}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>
+      </StackPanel>
+      <StackPanel Orientation="Vertical" Margin="5">
+        <StackPanel x:Name="stkCollaborator" Orientation="Vertical">
+          <TextBlock x:Name="txbCollaborator" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Collaborator" VerticalAlignment="Top"/>
+          <ComboBox x:Name="cboCollaborator" HorizontalAlignment="Center" VerticalAlignment="Top" Width="204" Height="25" SelectedValue="{Binding mepe}" ItemsSource="{Binding Source={StaticResource dsPersonnel}}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+        </StackPanel>
+        <StackPanel x:Name="stkAgency" Orientation="Vertical" >
+          <TextBlock x:Name="txbAgency" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top"/>
+          <ComboBox x:Name="cboAgency" HorizontalAlignment="Center" VerticalAlignment="Top" Width="204" Height="25" SelectedValue="{Binding meag}" ItemsSource="{Binding Source={StaticResource dsAgency}}" SelectedValuePath="agID" DisplayMemberPath="agN"/>
+        </StackPanel>
+      </StackPanel>
+      <StackPanel x:Name="stkRepresentative" Orientation="Vertical" Margin="5">
+        <TextBlock x:Name="lblRepresentative" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Representative" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtRepresentative" HorizontalAlignment="Center" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="155" Text="{Binding merep}"/>
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbDate" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Date" VerticalAlignment="Top"/>
+            <xctk:DateTimePicker x:Name="dtpDate" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="144" Format="LongDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbType" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top"/>
+            <ComboBox x:Name="cboType" VerticalAlignment="Top" Width="150" Height="25" SelectedValue="{Binding meType}" ItemsSource="{Binding Source={StaticResource dsMealTicketType}}" SelectedValuePath="myID" DisplayMemberPath="myN" SelectionChanged="cboType_SelectionChanged"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbAdults" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Adults" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meAdults}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtAdults_LostFocus"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbMinors" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Minors" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meMinors}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtMinors_LostFocus"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbTAdults" HorizontalAlignment="Center" TextWrapping="Wrap" Text="T. Adults" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtTAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTAdults, StringFormat={}{0:$0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock x:Name="txbTMinors" HorizontalAlignment="Center" TextWrapping="Wrap" Text="T. Minors" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtTMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTMinors, StringFormat={}{0:$0.00}}"/>
+          </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock x:Name="txbComments" VerticalAlignment="Center" TextWrapping="Wrap" Text="Comments" Width="59"/>
+            <TextBox x:Name="txtComments" Height="37" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding meComments}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center">
+            <CheckBox x:Name="chkCancel" Content="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding meCanc, Mode=TwoWay}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center">
+            <CheckBox x:Name="chkPrinted" Content="Printed" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding mePrinted, Mode=TwoWay}"/>
+          </StackPanel>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+      <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="75" Click="btnSave_Click" Height="20" Foreground="White" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+      <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Center"  Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Height="20" Foreground="White" Click="btnCancel_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+    </StackPanel>
+
+  </Grid>
 </Window>

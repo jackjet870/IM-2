@@ -24,8 +24,9 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 11/03/2016 Modified --> Se agregó parametro nuevo para excluir alguna lista currencies en especifico por su ID
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// [erosado] 04/08/2016 Modified. Se estandarizó el valor que retorna.
+    /// [vipacheco] 10/Agosto/2016 Modified -> se elimino el parametro exceptCurrencyID.
     /// </history>
-    public async static Task<List<Currency>> GetCurrencies(Currency currency = null, int nStatus = -1, List<string> exceptCurrencyID = null)
+    public async static Task<List<Currency>> GetCurrencies(Currency currency = null, int nStatus = -1)
     {
       return await Task.Run(() =>
       {
@@ -37,15 +38,7 @@ namespace IM.BusinessRules.BR
           if (nStatus != -1)//filtro por estatus
           {
             bool blnEstatus = Convert.ToBoolean(nStatus);
-
-            if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
-            {
-              query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
-            }
-            else
-            {
-              query = query.Where(c => c.cuA == blnEstatus);
-            }
+            query = query.Where(c => c.cuA == blnEstatus);
           }
           if (currency != null)
           {
@@ -62,7 +55,7 @@ namespace IM.BusinessRules.BR
           return query.OrderBy(c => c.cuN).ToList();
         }
       });
-           
+
     }
     #endregion
 

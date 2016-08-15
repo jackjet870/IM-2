@@ -57,7 +57,7 @@ namespace IM.Host.Forms
     private short _reimpresion = 0;
     public bool _validateMaxAuthGifts;  // Variable para saber si se valida el maximo autorizado de gifts
     private GuestStatusValidateData _guesStatusInfo;  //Variable que contendra la informacion del guest status info
-    private GuestShort _guestShort;  //Variable que contendra la infomacion del guest status
+    private Guest _guestShort;  //Variable que contendra la infomacion del guest status
     private List<ExchangeRateShort> _lstExchangeRate;  //Variable para las tasas de cambio!
     private string _SRCurrency;  //Moneda de la sala de ventas
     #endregion
@@ -781,7 +781,6 @@ namespace IM.Host.Forms
       GiftsReceipt giftReceipt = await BRGiftsReceipts.GetGiftReceipt(selected.grID);
       // Obtenemos la cantidad de reimpresiones que tiene realizado este gift
       _reimpresion = giftReceipt.grReimpresion;
-      selectPersonnelInCombobox(giftReceipt.grpe, giftReceipt.grHost);
       // Asignamos el valor a la propiedad
       GiftsReceiptDetail = giftReceipt;
     }
@@ -1010,7 +1009,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Abril/2016 Created
     /// </history>
-    private void GetGuestData(int guestID)
+    private async void GetGuestData(int guestID)
     {
       // validamos que se haya enviado una clave de huesped
       if (guestID == 0)
@@ -1018,19 +1017,30 @@ namespace IM.Host.Forms
         return;
       }
       // Obtenemos los datos del huesped
-      _guestShort = BRGuests.GetGuestShort(guestID);
+      _guestShort = await BRGuests.GetGuest(guestID);
 
       if (_guestShort != null)
       {
         txtgrgu.Text = guestID + "";
-        txtGuestName.Text = _guestShort.Name;
+        txtGuestName.Text = Common.GetFullName(_guestShort.guLastName1, _guestShort.guFirstName1);
         txtReservationCaption.Text = _guestShort.guHReservID;
-        txtAgencyCaption.Text = _guestShort.agN;
-        txtProgramCaption.Text = _guestShort.pgN;
+        txtAgencyCaption.Text = _guestShort.guag;
+        txtProgramCaption.Text = _guestShort.gupt;
+        txtgrPax.Text = $"{_guestShort.guPax}";
+        txtgrRoomNum.Text = _guestShort.guRoomNum;
+        txtgrTaxiOut.Text = $"{_guestShort.guTaxiOut}";
+        //cbogrpe.SelectedIndex = _guestShort.guPRInfo
+
+        List<PersonnelShort> lstPersonnel = cbogrpe.ItemsSource as List<PersonnelShort>;
+        int index = lstPersonnel.FindIndex(x => x.peID.Equals(_guestShort.guPRInfo));
+        if (index != -1)
+          cbogrpe.SelectedIndex = index;
+        else
+          cbogrpe.SelectedItem = 1;
 
         // Obtenemos el hotel del Guest
-        Guest _guest = BRGuests.GetGuestById(_guestShort.guID);
-        cboHotel.SelectedValue = _guest.guHotel;
+        //Guest _guest = BRGuests.GetGuestById(_guestShort.guID);
+        cboHotel.SelectedValue = _guestShort.guHotel;
         // Cargamos su Sales Room
         cboSalesRoom.SelectedValue = _guestShort.gusr;
         // Cargamos su Location
@@ -1553,14 +1563,14 @@ namespace IM.Host.Forms
       // Calculamos el cargo
       frmCancelExternalProducts _frmNull = null;
       CalculateCharge(ref _frmNull);
-
+      PersonnelShort host = cbogrHost.SelectedItem as PersonnelShort;
+      PersonnelShort offered = cbogrpe.SelectedItem as PersonnelShort;
       //// Verificamos si es un Gift Receipt nuevo!
       if (string.IsNullOrEmpty(txtgrID.Text))
       {
         // Guardamos el GiftReceipt en la BD
         GiftsReceiptDetail.grWh = App.User.SalesRoom.srID;
         GiftsReceiptDetail.grExchangeRate = Math.Round(_lstExchangeRate.Where(w => w.excu == "MEX").Select(s => s.exExchRate).Single(), 4);
-        
         receiptID = await BRGiftsReceipts.SaveGiftReceipt(GiftsReceiptDetail);
         // Asignamos el ID al campo.
         txtgrID.Text = $"{receiptID}";
@@ -2214,81 +2224,81 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region btnRemoveGift_Click
-    /// <summary>
-    /// Funcion que elimina uno o varios row seleccionados del grid Gifts Detail
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 20/Abril/2016 Created
-    /// </history>
-    private void btnRemoveGift_Click(object sender, RoutedEventArgs e)
-    {
-      if (grdGifts.SelectedItems.Count == 0)
-      {
-        UIHelper.ShowMessage("Select a row!", MessageBoxImage.Information);
-        return;
-      }
+    //#region btnRemoveGift_Click
+    ///// <summary>
+    ///// Funcion que elimina uno o varios row seleccionados del grid Gifts Detail
+    ///// </summary>
+    ///// <param name="sender"></param>
+    ///// <param name="e"></param>
+    ///// <history>
+    ///// [vipacheco] 20/Abril/2016 Created
+    ///// </history>
+    //private void btnRemoveGift_Click(object sender, RoutedEventArgs e)
+    //{
+    //  if (grdGifts.SelectedItems.Count == 0)
+    //  {
+    //    UIHelper.ShowMessage("Select a row!", MessageBoxImage.Information);
+    //    return;
+    //  }
 
-      // Obtenemos los index de los row a eliminar
-      string giftsNoDelete = "";
-      List<GiftsReceiptDetail> indexRemove = new List<GiftsReceiptDetail>();
-      foreach (GiftsReceiptDetail item in grdGifts.SelectedItems)
-      {
-        GiftsReceiptDetail _selected;
-        if (item is GiftsReceiptDetail)
-        {
-          _selected = item;
+    //  // Obtenemos los index de los row a eliminar
+    //  string giftsNoDelete = "";
+    //  List<GiftsReceiptDetail> indexRemove = new List<GiftsReceiptDetail>();
+    //  foreach (GiftsReceiptDetail item in grdGifts.SelectedItems)
+    //  {
+    //    GiftsReceiptDetail _selected;
+    //    if (item is GiftsReceiptDetail)
+    //    {
+    //      _selected = item;
 
-          if (_selected.geInPVPPromo)
-            giftsNoDelete += frmHost._lstGifts.Where(x => x.giID == _selected.gegi).Select(s => s.giN).First() + "\r\n";
-          else
-            indexRemove.Add(_selected);
-        }
-      }
+    //      if (_selected.geInPVPPromo)
+    //        giftsNoDelete += frmHost._lstGifts.Where(x => x.giID == _selected.gegi).Select(s => s.giN).First() + "\r\n";
+    //      else
+    //        indexRemove.Add(_selected);
+    //    }
+    //  }
 
-      //Verificamos si algun gift de los seleccionados no se elimino
-      if (giftsNoDelete != "")
-        UIHelper.ShowMessage("You can not delete the gifts: \r\n" + giftsNoDelete + " because have been given in Sistur promotions", MessageBoxImage.Information);
+    //  //Verificamos si algun gift de los seleccionados no se elimino
+    //  if (giftsNoDelete != "")
+    //    UIHelper.ShowMessage("You can not delete the gifts: \r\n" + giftsNoDelete + " because have been given in Sistur promotions", MessageBoxImage.Information);
 
-      // eliminamos los row seleccionados
-      for (int i = 0; i <= indexRemove.Count - 1; i++)
-      {
-        GiftsReceiptDetail item = indexRemove[i];
+    //  // eliminamos los row seleccionados
+    //  for (int i = 0; i <= indexRemove.Count - 1; i++)
+    //  {
+    //    GiftsReceiptDetail item = indexRemove[i];
 
-        if (_newExchangeGiftReceipt || _newGiftReceipt)
-          obsGifts.Remove(item);
-        else
-        {
-          var _cointains = obsGiftsComplet.Where(x => x.gegi == item.gegi).SingleOrDefault(); // Verificamos si existe en la lista inicial
+    //    if (_newExchangeGiftReceipt || _newGiftReceipt)
+    //      obsGifts.Remove(item);
+    //    else
+    //    {
+    //      var _cointains = obsGiftsComplet.Where(x => x.gegi == item.gegi).SingleOrDefault(); // Verificamos si existe en la lista inicial
 
-          // si se encuentra
-          if (_cointains != null)
-          {
-            if (_modeOpen == EnumMode.PreviewEdit || _modeOpen == EnumMode.Edit)
-            {
-              GiftsReceiptDetail _deleteGift = BRGiftsReceiptDetail.GetGiftReceiptDetail(item.gegr, item.gegi);
+    //      // si se encuentra
+    //      if (_cointains != null)
+    //      {
+    //        if (_modeOpen == EnumMode.PreviewEdit || _modeOpen == EnumMode.Edit)
+    //        {
+    //          GiftsReceiptDetail _deleteGift = BRGiftsReceiptDetail.GetGiftReceiptDetail(item.gegr, item.gegi);
 
-              // Verificamos que no se encuentre en el log de acciones
-              List<KeyValuePair<EnumMode, GiftsReceiptDetail>> _actionpreview = logGiftDetail.Where(x => x.Value.gegi == _deleteGift.gegi).ToList();
+    //          // Verificamos que no se encuentre en el log de acciones
+    //          List<KeyValuePair<EnumMode, GiftsReceiptDetail>> _actionpreview = logGiftDetail.Where(x => x.Value.gegi == _deleteGift.gegi).ToList();
 
-              if (_actionpreview != null && _actionpreview.Count > 0)
-              {
-                // eliminamos todas las acciones anteriores
-                foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> current in _actionpreview)
-                {
-                  logGiftDetail.Remove(current);
-                }
-              }
-              logGiftDetail.Add(new KeyValuePair<EnumMode, GiftsReceiptDetail>(EnumMode.Delete, _deleteGift));
-            }
-          }
-          obsGifts.Remove(item);
-        }
-      }
-    }
-    #endregion
+    //          if (_actionpreview != null && _actionpreview.Count > 0)
+    //          {
+    //            // eliminamos todas las acciones anteriores
+    //            foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> current in _actionpreview)
+    //            {
+    //              logGiftDetail.Remove(current);
+    //            }
+    //          }
+    //          logGiftDetail.Add(new KeyValuePair<EnumMode, GiftsReceiptDetail>(EnumMode.Delete, _deleteGift));
+    //        }
+    //      }
+    //      obsGifts.Remove(item);
+    //    }
+    //  }
+    //}
+    //#endregion
 
     #region SavePromotionsOpera
     /// <summary>
@@ -2669,7 +2679,7 @@ namespace IM.Host.Forms
         // Si no tiene errores se hacen los calculos.
         if (!HasErrorValidate)
         {
-          ReceiptsGifts.AfterEdit(ref grdGifts, _guestShort, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: (ChargeTo)cbogrct.SelectedItem,
+          ReceiptsGifts.AfterEdit(ref grdGifts, _guestShort.guID, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: (ChargeTo)cbogrct.SelectedItem,
                                   pLeadSourceID: txtgrls.Text, pTxtTotalCost: txtTotalCost, pTxtTotalPrice: txtTotalPrice, pTxtTotalToPay: txtTotalToPay, pTxtgrCxCGifts: txtgrCxCGifts,
                                   pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrCxCAdj, pTxtgrMaxAuthGifts: txtgrMaxAuthGifts, pLblgrMaxAuthGifts: lblgrMaxAuthGifts);
         }
@@ -2766,24 +2776,5 @@ namespace IM.Host.Forms
     }
     #endregion
 
-
-    private void selectPersonnelInCombobox(string userOffered, string userHostess)
-    {
-      List<PersonnelShort> lstPersonnel;
-      int index = 0;
-      lstPersonnel = cbogrpe.ItemsSource as List<PersonnelShort>;
-      index = lstPersonnel.FindIndex(x => x.peID.Equals(userOffered));
-      if (index != -1)
-        cbogrpe.SelectedIndex = index;
-      else
-        cbogrpe.SelectedItem = 1;
-
-      lstPersonnel = cbogrHost.ItemsSource as List<PersonnelShort>;
-      index = lstPersonnel.FindIndex(x => x.peID.Equals(userHostess));
-      if (index != -1)
-        cbogrHost.SelectedIndex = index;
-      else
-        cbogrHost.SelectedItem = 1;
-    }
   }
 }

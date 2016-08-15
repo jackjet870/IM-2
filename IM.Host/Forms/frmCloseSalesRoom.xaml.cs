@@ -22,11 +22,10 @@ namespace IM.Host.Forms
     private DateTime _serverDate;
     #endregion
 
+    #region Contructor
     /// <summary>
     /// Constructor de la ventana
     /// </summary>
-    /// <param name="pHost"></param>
-    /// <param name="userData"></param>
     /// <param name="serverDate"></param>
     /// <history>
     /// [vipacheco] 27/02/2106 Created
@@ -36,8 +35,11 @@ namespace IM.Host.Forms
       //_userData = UserData;
       _serverDate = serverDate;
 
-      InitializeComponent();      validateUserPermissions(App.User);
-    }
+      InitializeComponent();
+      // Validamos si tiene los permisos para cerrar salas
+      validateUserPermissions();
+    } 
+    #endregion
 
     #region EVENTOS DE TIPO WINDOW
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -53,41 +55,72 @@ namespace IM.Host.Forms
     #endregion
 
     #region EVENTOS DE TIPO BOTON
+
+    #region btnCloseShows_Click
+    /// <summary>
+    /// Cierrra los shows
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 15/Marzo/2016 Created
+    /// </history>
     private void btnCloseShows_Click(object sender, RoutedEventArgs e)
     {
       CloseSalesRoom(EnumEntities.Shows, ref dtpCloseShows, dtpCloseSalesLast);
     }
+    #endregion
 
+    #region btnCloseMealTickets_Click
+    /// <summary>
+    /// Cierra los Meal Tickets
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 15/Marzo/2016 Created
+    /// </history>
     private void btnCloseMealTickets_Click(object sender, RoutedEventArgs e)
     {
       CloseSalesRoom(EnumEntities.MealTickets, ref dtpCloseMealTicket, dtpCloseSalesLast);
-    }
+    } 
+    #endregion
 
+    #region btnCloseSales_Click
+    /// <summary>
+    /// Cierra los Sales
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 15/Marzo/2016 Created
+    /// </history>
     private void btnCloseSales_Click(object sender, RoutedEventArgs e)
     {
       CloseSalesRoom(EnumEntities.Sales, ref dtpCloseSales, dtpCloseSalesLast);
-    }
+    } 
+    #endregion
 
+    #region btnCloseGiftsReceipts_Click
+    /// <summary>
+    /// Cierra los Gifts Receipts
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 15/Marzo/2016 Created
+    /// </history>
     private void btnCloseGiftsReceipts_Click(object sender, RoutedEventArgs e)
     {
       CloseSalesRoom(EnumEntities.GiftsReceipts, ref dtpCloseGiftsReceipts, dtpCloseSalesLast);
     }
+    #endregion
 
+    #region btnLog_Click
     /// <summary>
     /// Funcion del evento btnLog que se encarga de desplegar el frmSalesRoomsLog
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 27/02/2016 Created
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmSalesRoomsLog mfrmSalesRoomsLog = new frmSalesRoomsLog();
-      mfrmSalesRoomsLog.ShowInTaskbar = false;
-      mfrmSalesRoomsLog.Owner = this;
+      frmSalesRoomsLog mfrmSalesRoomsLog = new frmSalesRoomsLog() { Owner = this };
       mfrmSalesRoomsLog.ShowDialog();
-    }
+    } 
+    #endregion
 
     #endregion
 
@@ -95,8 +128,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Funcion que carga los calendarios close con un dia anterior
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 01/03/2016 Created
     /// </history>
@@ -111,6 +142,8 @@ namespace IM.Host.Forms
     #endregion
 
     #region METODOS DE LA CLASE
+
+    #region CloseSalesRoom
     /// <summary>
     /// Funcion para cerrar una sala de ventas segun el tipo requerido.
     /// </summary>
@@ -142,12 +175,12 @@ namespace IM.Host.Forms
       //Actualizamos datos de UI
       updateDate(_closeType, _dateClose.Value);
     }
+    #endregion
 
+    #region updateDate
     /// <summary>
     /// Función para actualizar los controles DataPicker del UI 
     /// </summary>
-    /// <param name="salesRoomType"> Tipo de entidad Sales Room </param>
-    /// <param name="dateUpdate"> Fecha de Cierre </param>
     /// <history>
     /// [vipacheco] 02/03/2016 Created
     /// </history>
@@ -174,7 +207,9 @@ namespace IM.Host.Forms
       }
       UIHelper.ShowMessage("Closing process completed.", MessageBoxImage.Information, salesRoomType.ToString() + " Process");
     }
+    #endregion
 
+    #region validateUserPermissions
     /// <summary>
     /// Función que valida las opciones a mostrar segun el tipo de permisos que tenga el usuario.
     /// </summary>
@@ -182,9 +217,9 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 07/03/2016 Created
     /// </history>
-    private void validateUserPermissions(UserData userDate)
+    private void validateUserPermissions()
     {
-      if (userDate.Permissions.Exists(c => c.pppm == "CLOSESR" && c.pppl == 1))
+      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.Standard))
       {
         // Ocultamos los label's
         lblCloseShows.Visibility = Visibility.Collapsed;
@@ -207,7 +242,9 @@ namespace IM.Host.Forms
       }
 
       dtpClose_Loaded();
-    }
+    } 
+    #endregion
+
     #endregion
 
   }

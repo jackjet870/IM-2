@@ -17,6 +17,7 @@ namespace IM.Host.Forms
   {
     #region Variables
     public EnumMode _modeOpen;
+    private EnumOpenBy _openBy;
     private int _meQty = 1;
     public MealTicket _mealTicketCurrency = new MealTicket();
 
@@ -27,9 +28,17 @@ namespace IM.Host.Forms
     #endregion
 
     #region Contructor
-    public frmMealTicketsDetail()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="openBy"></param>
+    /// <history>
+    /// [vipacheco] 15/Agosto/2016 Modified -> Se agrego el enumerado como parametro.
+    /// </history>
+    public frmMealTicketsDetail(EnumOpenBy openBy)
     {
       InitializeComponent();
+      _openBy = openBy;
     }
     #endregion
 
@@ -37,8 +46,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// [edgrodriguez] 21/05/2016 Modified. El método GetRateTypes se volvió asincrónico.
@@ -59,26 +66,63 @@ namespace IM.Host.Forms
       // Obtenemos los tipos de cupones de comida.
       _dsMealTicketType.Source = frmHost._lstMealTicketType;
 
+      // Verificamos si es usuario tiene la opcion de Reimpresion
+      chkPrinted.IsEnabled = App.User.HasPermission(EnumPermission.MealTicketReprint, EnumPermisionLevel.Standard) ? true : false;
+
+
+
       #region switch
-      switch (_modeOpen)
+
+      switch (_openBy)
       {
-        case EnumMode.Add:
-          dtpDate.Value = frmHost.dtpServerDate.Date;
+        case EnumOpenBy.Checkbox:
+          if (_modeOpen == EnumMode.Add)
+          {
+            //HiddenControls();
+            stkHead.Visibility = Visibility.Collapsed;
+            Height = 172.438; Width = 593.59;
+            dtpDate.Value = frmHost.dtpServerDate.Date;
+          }
+          else if (_modeOpen == EnumMode.Edit)
+          {
+            //HiddenControls();
+            stkHead.Visibility = Visibility.Collapsed;
+            Height = 172.438; Width = 593.59;
+            DataContext = _mealTicketCurrency;
+            dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
+          }
           break;
-        case EnumMode.Edit:
-          DataContext = _mealTicketCurrency;
-          dtpDate.Value = _mealTicketCurrency.meD.Date;
+        case EnumOpenBy.Button:
+          if (_modeOpen == EnumMode.Add)
+          {
+            dtpDate.Value = frmHost.dtpServerDate.Date;
+          }
+          else if (_modeOpen == EnumMode.Edit)
+          {
+            DataContext = _mealTicketCurrency;
+            dtpDate.Value = _mealTicketCurrency.meD.Date;
+          }
           break;
-        case EnumMode.PreviewEdit: 
-          HiddenControls();
-          dtpDate.Value = frmHost.dtpServerDate.Date;
-          break;
-        case EnumMode.ReadOnly: 
-          HiddenControls();
-          DataContext = _mealTicketCurrency;
-          dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
-          break;
-      } 
+      }
+      //switch (_modeOpen)
+      //{
+      //  case EnumMode.Add:
+      //    dtpDate.Value = frmHost.dtpServerDate.Date;
+      //    break;
+      //  case EnumMode.Edit:
+      //    DataContext = _mealTicketCurrency;
+      //    dtpDate.Value = _mealTicketCurrency.meD.Date;
+      //    break;
+      //  case EnumMode.PreviewEdit: 
+      //    HiddenControls();
+      //    dtpDate.Value = frmHost.dtpServerDate.Date;
+      //    break;
+      //  case EnumMode.ReadOnly: 
+      //    HiddenControls();
+      //    DataContext = _mealTicketCurrency;
+      //    dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
+      //    break;
+      //} 
       #endregion
     }
     #endregion
@@ -92,18 +136,18 @@ namespace IM.Host.Forms
     /// </history>
     private void HiddenControls()
     {
-      lblRateType.Visibility = Visibility.Hidden;
-      cboRateType.Visibility = Visibility.Hidden;
-      cboRateType.SelectedItem = null;
-      lblAgency.Visibility = Visibility.Hidden;
-      cboAgency.Visibility = Visibility.Hidden;
-      cboAgency.SelectedItem = null;
-      lblCollaborator.Visibility = Visibility.Hidden;
-      cboCollaborator.Visibility = Visibility.Hidden;
-      cboCollaborator.SelectedItem = null;
-      lblRepresentative.Visibility = Visibility.Hidden;
-      txtRepresentative.Visibility = Visibility.Hidden;
-      txtRepresentative.Text = "";
+      //lblRateType.Visibility = Visibility.Hidden;
+      //cboRateType.Visibility = Visibility.Hidden;
+      //cboRateType.SelectedItem = null;
+      //lblAgency.Visibility = Visibility.Hidden;
+      //cboAgency.Visibility = Visibility.Hidden;
+      //cboAgency.SelectedItem = null;
+      //lblCollaborator.Visibility = Visibility.Hidden;
+      //cboCollaborator.Visibility = Visibility.Hidden;
+      //cboCollaborator.SelectedItem = null;
+      //lblRepresentative.Visibility = Visibility.Hidden;
+      //txtRepresentative.Visibility = Visibility.Hidden;
+      //txtRepresentative.Text = "";
     } 
     #endregion
 
@@ -111,8 +155,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Funcion para inicializar los controles
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 23/03/2016 Created
     /// </history>
@@ -126,16 +168,16 @@ namespace IM.Host.Forms
         {
           if (_rateType.raID >= 2 && _rateType.raID < 4 ) // Si es diferente de tipo External!
           {
-            controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
+            controlVisibility(Visibility.Collapsed, Visibility.Visible, Visibility.Collapsed);
           }
           else if (_rateType.raID == 4) // Es external
           {
-            controlVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Visible);
+            controlVisibility(Visibility.Visible, Visibility.Collapsed, Visibility.Visible);
           }
         }
         else// if (modeOpen != EnumMode.ReadOnly)
         {
-          controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
+          controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Collapsed);
         }
 
         // Se verifica que no sean un nuevo MealTicket
@@ -159,12 +201,9 @@ namespace IM.Host.Forms
     /// </history>
     private void controlVisibility(Visibility agency, Visibility collaborator, Visibility representative)
     {
-      lblAgency.Visibility = agency;
-      cboAgency.Visibility = agency;
-      lblCollaborator.Visibility = collaborator;
-      cboCollaborator.Visibility = collaborator;
-      lblRepresentative.Visibility = representative;
-      txtRepresentative.Visibility = representative;
+      stkAgency.Visibility = agency;
+      stkCollaborator.Visibility = collaborator;
+      stkRepresentative.Visibility = representative;
     }
     #endregion
 
@@ -179,8 +218,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Funcion para evaluar que el texto introducido sea solamente numerico
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 23/03/2016
     /// </history>
@@ -239,41 +276,59 @@ namespace IM.Host.Forms
     /// <returns> False - Algun Campo Vacio | True - Campos llenados correctamente </returns>
     /// <history>
     /// [vipacheco] 01/04/2016 Created
+    /// [vipahceco] 15/Agosto/2016 Modified -> Se valida que el ticket tenga pax asociados.
     /// </history>
     private bool validateFields()
     {
-      MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; //
+      MealTicketType ticketCurrent = cboType.SelectedItem as MealTicketType;
 
       if (frmMealTickets._pguId == 0)
       {
-        RateType _rateType = (RateType)cboRateType.SelectedItem; //mera
-        PersonnelShort _personnel = (PersonnelShort)cboCollaborator.SelectedItem;
-        AgencyShort _agency = (AgencyShort)cboAgency.SelectedItem;
+        RateType rateType = cboRateType.SelectedItem as RateType;
+        PersonnelShort personnel = cboCollaborator.SelectedItem as PersonnelShort;
+        AgencyShort agency = cboAgency.SelectedItem as AgencyShort;
 
-        if (_rateType == null)
+        if (rateType == null)
         {
           UIHelper.ShowMessage("Select an option of rate type, please", MessageBoxImage.Information);
           return false;
         }
-        else if (_rateType.raID >= 2 && _rateType.raID < 4 && _personnel == null)
+        else if (rateType.raID >= 2 && rateType.raID < 4 && personnel == null)
         {
           UIHelper.ShowMessage("Select a collaborator, please", MessageBoxImage.Information);
           return false;
         }
-        else if (_rateType.raID == 4 && (_agency == null || txtRepresentative.Text == ""))
+        else if (rateType.raID == 4 && (agency == null || txtRepresentative.Text == ""))
         {
           UIHelper.ShowMessage("Select an agency and write the representative name in the field for External option.", MessageBoxImage.Information);
           return false;
         }
-        else if (_mealType == null)
+        else if (ticketCurrent == null)
         {
           UIHelper.ShowMessage("Select an option of meal type, please", MessageBoxImage.Information);
           return false;
         }
+        // Verificamos el Pax
+        int adults, minors = 0;
+        if (string.IsNullOrEmpty(txtAdults.Text) && string.IsNullOrEmpty(txtMinors.Text))
+        {
+          UIHelper.ShowMessage("Set the Pax information, adults or minors", MessageBoxImage.Information);
+          return false;
+        }
+        else if (int.TryParse(txtAdults.Text, out adults) && int.TryParse(txtMinors.Text, out minors))
+        {
+          // Verificamos que no sean ambos 0
+          if (adults == 0 && minors == 0 )
+          {
+            UIHelper.ShowMessage("Set the Pax information, adults or minors", MessageBoxImage.Information);
+            return false;
+          }
+        }
+
       }
       else
       {
-        if (_mealType == null)
+        if (ticketCurrent == null)
         {
           UIHelper.ShowMessage("Select an option of meal type, please", MessageBoxImage.Information);
           return false;
@@ -285,6 +340,12 @@ namespace IM.Host.Forms
     #endregion
 
     #region cboType_SelectionChanged
+    /// <summary>
+    /// Realiza los calculos de acuerdo a los parametros introducidos
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 31/Marzo/2016 Created
+    /// </history>
     private void cboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
@@ -312,6 +373,12 @@ namespace IM.Host.Forms
     #endregion
 
     #region txtAdults_LostFocus
+    /// <summary>
+    /// Calcula el total de adulto de acuerdo a los datos ingresados.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 31/Marzo/2016 Created
+    /// </history>
     private void txtAdults_LostFocus(object sender, RoutedEventArgs e)
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
@@ -332,6 +399,12 @@ namespace IM.Host.Forms
     #endregion
 
     #region txtMinors_LostFocus
+    /// <summary>
+    /// Calcula los totales de los minors segun los datos ingresados.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 31/Marzo/2016 Created
+    /// </history>
     private void txtMinors_LostFocus(object sender, RoutedEventArgs e)
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
@@ -357,8 +430,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Guarda la informacion proporcionada!
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 23/03/2016 Created
     /// </history>
@@ -372,9 +443,9 @@ namespace IM.Host.Forms
         AgencyShort _agency = (AgencyShort)cboAgency.SelectedItem;
 
         int _meAdults = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtAdults.Text);
-        int _meMinors = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtMinors.Text);
-        string _meTAdultsString = txtTAdults.Text.Substring(1, txtTAdults.Text.Length - 1);
-        string _meTMinorsString = txtTMinors.Text.Substring(1, txtTMinors.Text.Length - 1);
+        int _meMinors = Convert.ToInt32((txtMinors.Text == "") ? "0" : txtMinors.Text);
+        string _meTAdultsString = txtTAdults.Text.TrimStart('$');
+        string _meTMinorsString = txtTMinors.Text.TrimStart('$');
 
         // Row New with GuestID == 0
         if (_modeOpen == EnumMode.Add && frmMealTickets._pguId == 0)
@@ -422,7 +493,7 @@ namespace IM.Host.Forms
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
         }
         // Row New with GuestID != 0
-        if (_modeOpen == EnumMode.PreviewEdit && frmMealTickets._pguId != 0)
+        if (_modeOpen == EnumMode.Edit && frmMealTickets._pguId != 0)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
@@ -473,6 +544,22 @@ namespace IM.Host.Forms
       }
     }
 
+    /// <summary>
+    /// Crea un nuevo mealticket
+    /// </summary>
+    /// <param name="_rateType"></param>
+    /// <param name="_mealType"></param>
+    /// <param name="_personnel"></param>
+    /// <param name="_agency"></param>
+    /// <param name="_meAdults"></param>
+    /// <param name="_meMinors"></param>
+    /// <param name="_meTAdultsString"></param>
+    /// <param name="_meTMinorsString"></param>
+    /// <param name="folioNew"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 25/Abril/2016 Created
+    /// </history>
     private MealTicket CreateMealTicket(RateType _rateType, MealTicketType _mealType, PersonnelShort _personnel, AgencyShort _agency, int _meAdults, int _meMinors, string _meTAdultsString, string _meTMinorsString, int folioNew)
     {
       return new MealTicket

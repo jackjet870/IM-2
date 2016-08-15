@@ -59,23 +59,40 @@ namespace IM.BusinessRules.BR
     /// Función para guardar un nuevo Exchange Rate agregado
     /// </summary>
     /// <param name="bUpd"> true - Insertar | false - Update </param>
-    /// <param name="exchangeRateData"></param>
+    /// <param name="exchangeRate"> Entidad ExchangeRateDate</param>
+    /// <param name="currencyID">Clave de la moneda</param>
+    /// <param name="date">Fecha del servidor </param>
+    /// <param name="HoursDif"> Diferencia de horas del SalesRoom</param>
+    /// <param name="ChangedBy"> Clave de la persona que realiza la accion </param>
     /// <history>
     /// [vipacheco] 14/03/2016 Created
+    /// [vipacheco] 10/Agosto/2016 Modified se agregó asincronia y se agrego la transaccion
     /// </history>
-    public static void SaveExchangeRate(bool bUpd, ExchangeRate exchangeRate)
+    public static void SaveExchangeRate(bool bUpd, ExchangeRate exchangeRate, string currencyID, DateTime date, short HoursDif, string ChangedBy)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        if (bUpd)
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
-          dbContext.ExchangeRates.Add(exchangeRate);
-          dbContext.SaveChanges();
-        }
-        else
-        {
-          dbContext.Entry(exchangeRate).State = System.Data.Entity.EntityState.Modified;
-          dbContext.SaveChanges();
+          try
+          {
+            // Insertamos un nuevo Exchange
+            if (bUpd) { dbContext.Entry(exchangeRate).State = System.Data.Entity.EntityState.Added; }
+            // Actualizamos un Exchange existente
+            else { dbContext.Entry(exchangeRate).State = System.Data.Entity.EntityState.Modified; }
+
+            // Guadarmos el Log del cambio.
+            dbContext.USP_OR_SaveExchangeRateLog(currencyID, date, HoursDif, ChangedBy);
+
+            // Guardamos los cambios
+            dbContext.SaveChanges();
+            transaction.Commit();
+          }
+          catch
+          {
+            transaction.Rollback();
+            throw;
+          }
         }
       }
     }

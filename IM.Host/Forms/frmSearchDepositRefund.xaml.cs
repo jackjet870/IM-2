@@ -46,8 +46,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>

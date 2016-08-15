@@ -187,13 +187,17 @@
                   </Grid>
                 </Border>
                 <TextBlock x:Name="lblgrpe" HorizontalAlignment="Left" Margin="0.182,124,0,0" TextWrapping="Wrap" Text="Offered by" VerticalAlignment="Top" Grid.Column="1"/>
-                <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="68,121,0,0" VerticalAlignment="Top" Width="244" TextSearch.TextPath="peID"
+                <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="68,121,0,0" VerticalAlignment="Top" Width="244" TextSearch.TextPath="peID" SelectedValuePath="peID"
+                          SelectedValue="{Binding GiftsReceiptDetail.grpe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource cbx-Personnel-ValidatePermission}"
                           ItemTemplate="{StaticResource cbx-Personnel-Concat}"
-                          IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2"/>
+                          IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2" Height="21"/>
                 <TextBlock x:Name="lblgrHost" HorizontalAlignment="Left" Margin="0.182,151,0,0" TextWrapping="Wrap" Text="Gifts Hostess" VerticalAlignment="Top" Grid.Column="1"/>
                 <ComboBox x:Name="cbogrHost" HorizontalAlignment="Right" Margin="0,147,509,0" VerticalAlignment="Top" Width="244" 
-                          IsEnabled="false" Tag="host(ess)" Grid.Column="1" TextSearch.TextPath="peID"
-                          ItemTemplate="{StaticResource cbx-Personnel-Concat}" Grid.ColumnSpan="2"/>
+                          IsEnabled="false" Tag="host(ess)" Grid.Column="1" TextSearch.TextPath="peID" SelectedValuePath="peID"
+                          SelectedValue="{Binding GiftsReceiptDetail.grHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                          ItemTemplate="{StaticResource cbx-Personnel-Concat}" Grid.ColumnSpan="2" Height="21"/>
                 <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="226,125,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="292,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding GiftsReceiptDetail.grComments, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
                 <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="812" Height="177" Grid.ColumnSpan="3">

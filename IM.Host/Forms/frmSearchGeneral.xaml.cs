@@ -107,11 +107,13 @@ namespace IM.Host.Forms
     /// </history>
     private async void Load_Grid()
     {
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Loading guests...";
       grdGuest.ItemsSource = await BRGuests.GetSearchGuestGeneral(_dateParent, dtpStart.Value.Value.Date, dtpEnd.Value.Value.Date, string.IsNullOrEmpty(txtguID.Text) ? 0 : Convert.ToInt32(txtguID.Text),
                                                                   string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text, cboLeadSource.SelectedValue == null ? "" : cboLeadSource.SelectedValue.ToString(),
                                                                   cboSalesRoom.SelectedValue == null ? "" : cboSalesRoom.SelectedValue.ToString(), string.IsNullOrEmpty(txtRoomNum.Text) ? "" : txtRoomNum.Text,
                                                                   string.IsNullOrEmpty(txtReservation.Text) ? "" : txtReservation.Text, string.IsNullOrEmpty(txtPR.Text) ? "" : txtPR.Text, _module);
-
+      _busyIndicator.IsBusy = false;
     }
     #endregion
 
@@ -309,7 +311,7 @@ namespace IM.Host.Forms
       }
 
       // Validamos el permisos del usuario
-      else if (!App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
+      else if (!App.User.HasPermission(enumPermission, EnumPermisionLevel.Standard))
       {
         UIHelper.ShowMessage("You have read access.", MessageBoxImage.Information, "Search General");
         return false;
@@ -381,7 +383,7 @@ namespace IM.Host.Forms
       int GuestID = 0;
       if (ValidatePermissions(EnumPermission.MealTicket, ref GuestID))
       {
-        frmMealTickets mealticket = new frmMealTickets(GuestID) { Owner = this };
+        frmMealTickets mealticket = new frmMealTickets(EnumOpenBy.Checkbox, GuestID) { Owner = this };
         mealticket.ShowDialog();
       }
     }
@@ -399,7 +401,8 @@ namespace IM.Host.Forms
       int GuestID = 0;
       if (ValidatePermissions(EnumPermission.Sales, ref GuestID))
       {
-
+        var frmSales = new frmSales(EnumOpenBy.Checkbox, GuestID) { Owner = this };
+        frmSales.ShowDialog();
       }
     }
     #endregion

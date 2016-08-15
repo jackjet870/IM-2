@@ -83,7 +83,10 @@ namespace IM.Host
     private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
       DataGrid dgr = sender as DataGrid;
-      dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+      if (dgr.CurrentColumn != null)
+      {
+        dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+      }
     } 
     #endregion
 

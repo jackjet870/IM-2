@@ -769,7 +769,7 @@ namespace IM.Host.Forms
           ChargeTo pChargeTo = frmHost._lstChargeTo.Where(x => x.ctID.ToUpper() == "MARKETING").Single();
           LeadSource pLeadSource = cboLeadSource.SelectedItem as LeadSource;
 
-          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
+          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest.guID, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
                                         pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: txtTotalGiftsExchange, pTxtgrCxCGifts: txtgrcxcGifts,
                                         pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrcxcAdj, pTxtgrMaxAuthGifts: txtMaxAuthGifts, pLblgrMaxAuthGifts: lblMaxAuthGiftsCaption);
 

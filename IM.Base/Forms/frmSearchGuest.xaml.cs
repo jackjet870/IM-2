@@ -60,7 +60,7 @@ namespace IM.Base.Forms
     {
       if (dtgGuests.SelectedItems.Count == 0)
       {
-        UIHelper.ShowMessage("Select at least one Guest", title:"IM Search");
+        UIHelper.ShowMessage("Select at least one Guest", title: "IM Search");
         return;
       }
       if (_program == EnumProgram.Outhouse && !user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
@@ -68,41 +68,16 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Account has only read access.");
         return;
       }
-      StaStart("Loading Selected Guests...");
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Loading Selected Guests...";
       lstGuestAdd = dtgGuests.SelectedItems.OfType<Guest>().ToList();
-      StaEnd();
+      _busyIndicator.IsBusy = true;
 
       Close();
       cancel = false;
-    } 
-    #endregion
-
-    #region StaStart
-    /// <summary>
-    /// Indica en la barra de estado que se inicio un proceso
-    /// </summary>
-    /// <param name="message">mensaje a mostrar</param>
-    /// <history>[ECANUL] 31-03-2016 Created </history>
-    private void StaStart(String message)
-    {
-      lblStatusBarMessage.Content = message;
-      imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
     }
     #endregion
 
-    #region StaEnd
-    /// <summary>
-    /// Indica en la barra de estado que se finalizo un proceso
-    /// </summary>
-    /// <history>[ECANUL] 31-03-2016 Created </history>
-    private void StaEnd()
-    {
-      lblStatusBarMessage.Content = null;
-      imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
-    }
-    #endregion
 
     #endregion
 
@@ -118,7 +93,7 @@ namespace IM.Base.Forms
     private void dtp_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       DateHelper.ValidateValueDate((DateTimePicker)sender);
-    } 
+    }
     #endregion
 
     #region ValidateCriteria
@@ -141,8 +116,6 @@ namespace IM.Base.Forms
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [erosado] 24/05/2016  Modified. Se agregó asincronía
     /// [vipacheco] 05/Agosto/2016 Modified -> Se agrego switch para el manejo de los tipos de apertura del search, se elimino ambiguedad de la columna guBooKD, se corrigio 
@@ -154,8 +127,8 @@ namespace IM.Base.Forms
       {
         case EnumProgram.Inhouse:
           // Cargamos el combo de LeadSource
-          cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID);
-          cmbLeadSourse.SelectedIndex = -1;
+          cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID, EnumProgram.Inhouse);
+          cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
           // Ocultamos los criterios de busqueda no necesarios para el caso
           stkSalesRoom.Visibility = stkPR.Visibility = Visibility.Collapsed;
           break;
@@ -173,8 +146,8 @@ namespace IM.Base.Forms
           guCheckOutDColumn.Header = "Check Out Date";
 
           // Cargamos el combo de LeadSource
-          cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID);
-          cmbLeadSourse.SelectedIndex = -1;
+          cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID, EnumProgram.Outhouse);
+          cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
           // Cargamos el combo de Sales Room
           cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRoomsByUser(user.User.peID);
           cmbSalesRoom.SelectedIndex = -1;
@@ -190,11 +163,10 @@ namespace IM.Base.Forms
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);
       CkeckKeysPress(StatusBarNum, Key.NumLock);
-      StaEnd();
     }
     #endregion
 
-     #region CkeckKeysPress
+    #region CkeckKeysPress
     /// <summary>
     /// Revisa si alguna de las teclas Bloq Mayús, Bloq Núm o Insert está activo
     /// </summary>
@@ -238,7 +210,7 @@ namespace IM.Base.Forms
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       AddGuest();
-    } 
+    }
     #endregion
 
     #region btnCancel_Click
@@ -325,13 +297,14 @@ namespace IM.Base.Forms
     /// <history>
     /// [vipacheco] 05/Agosto/2016 Created -> Se cambio del evento onclick porque se cambio el control
     /// </history>
-    private void btnSearch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void btnSearch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (ValidateCriteria())
       {
-        StaStart("Loading Guests...");
+        _busyIndicator.IsBusy = true;
+        _busyIndicator.BusyContent = "Loading Guests...";
 
-        dtgGuests.ItemsSource = BRGuests.GetSearchGuestByLS(
+        dtgGuests.ItemsSource = await BRGuests.GetSearchGuestByLS(
                                 cmbLeadSourse.SelectedValue != null ? cmbLeadSourse.SelectedValue.ToString() : string.Empty,
                                 _program == EnumProgram.Inhouse ? string.Empty : cmbSalesRoom.SelectedIndex == -1 ? string.Empty : cmbSalesRoom.SelectedValue.ToString(),
                                 txtName.Text,
@@ -344,7 +317,7 @@ namespace IM.Base.Forms
                                 txtPR.Text);
 
         StatusBarReg.Content = dtgGuests.Items.Count.ToString() + (dtgGuests.Items.Count == 1 ? " Guest" : " Guests");
-        StaEnd();
+        _busyIndicator.IsBusy = false;
       }
     }
     #endregion

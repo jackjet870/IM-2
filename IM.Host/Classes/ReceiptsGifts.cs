@@ -400,7 +400,7 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void AfterEdit(ref DataGrid dtg, GuestShort pGuest, ref GiftsReceiptDetail row, DataGridCellInfo pCell, bool pUseCxCCost, bool pIsExchange, ChargeTo pChargeTo,
+    public static void AfterEdit(ref DataGrid dtg, int guestID, ref GiftsReceiptDetail row, DataGridCellInfo pCell, bool pUseCxCCost, bool pIsExchange, ChargeTo pChargeTo,
                                     string pLeadSourceID, TextBox pTxtTotalCost, TextBox pTxtTotalPrice = null, TextBox pTxtTotalToPay = null, TextBox pTxtgrCxCGifts = null,
                                     TextBox pTxtTotalCxC = null, TextBox pTxtgrCxCAdj = null, TextBox pTxtgrMaxAuthGifts = null, TextBlock pLblgrMaxAuthGifts = null)
     {
@@ -501,7 +501,7 @@ namespace IM.Host.Classes
       if (calculateCharge)
       {
         bool validate = false;
-        CalculateCharge(pGuest != null ? pGuest.guID : 0, pChargeTo, pTxtTotalCost, pIsExchange, ref pTxtgrCxCGifts, ref pTxtTotalCxC, ref pTxtgrCxCAdj, ref validate, pLeadSourceID, ref pTxtgrMaxAuthGifts, ref pLblgrMaxAuthGifts);
+        CalculateCharge(guestID, pChargeTo, pTxtTotalCost, pIsExchange, ref pTxtgrCxCGifts, ref pTxtTotalCxC, ref pTxtgrCxCAdj, ref validate, pLeadSourceID, ref pTxtgrMaxAuthGifts, ref pLblgrMaxAuthGifts);
       }
 
       GridHelper.UpdateCellsFromARow(dtg);
