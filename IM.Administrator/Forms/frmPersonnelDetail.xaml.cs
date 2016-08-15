@@ -167,7 +167,7 @@ namespace IM.Administrator.Forms
         var lstPersonnelPermissionUpd = lstPersonnelPermision.Where(pp => _lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
         #endregion
 
-        if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(personnel, oldPersonnel) && !HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) && lstPersonnelPermissionAdd.Count == 0
+        if (enumMode != EnumMode.Add && !HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) && lstPersonnelPermissionAdd.Count == 0
           && lstPersonnelPermissionDel.Count == 0 && lstPersonnelPermissionUpd.Count == 0)
         {
           oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
@@ -1216,17 +1216,17 @@ namespace IM.Administrator.Forms
         return true;
       }
 
-      if(!ObjectHelper.IsListEquals(lstWarehousesAcces,_lstOldAccesWH))
+      if(!ObjectHelper.IsListEquals(lstWarehousesAcces,_lstOldAccesWH,"plLSSRID"))
       {
         return true;
       }
 
-      if(!ObjectHelper.IsListEquals(lstSalesRoomAcces,_lstOldAccesSalesRoom))
+      if(!ObjectHelper.IsListEquals(lstSalesRoomAcces,_lstOldAccesSalesRoom, "plLSSRID"))
       {
         return true;
       }
 
-      if(!ObjectHelper.IsListEquals(lstLeadSourcesAcces,_lstOldAccesLeadSource))
+      if(!ObjectHelper.IsListEquals(lstLeadSourcesAcces,_lstOldAccesLeadSource, "plLSSRID"))
       {
         return true;
       }

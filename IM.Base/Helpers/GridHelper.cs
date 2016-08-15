@@ -713,7 +713,7 @@ namespace IM.Base.Helpers
         }
         else
         {
-          return lstRows.Count > 0;
+          return lstRows.Where(rw=>rw.IsEditing).ToList().Count > 0;
         }
       }
       return false;
