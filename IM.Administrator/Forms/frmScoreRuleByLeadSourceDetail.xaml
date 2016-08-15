@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:styClass="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Score Rule By Lead Source Detail" Height="418" Width="338">
@@ -39,19 +40,9 @@
             <DataGrid Name="dgrScores" Margin="79,0,14,15" Grid.Column="1" CellEditEnding="dgrScores_CellEditEnding" RowEditEnding="dgrScores_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                       CanUserAddRows="True" BeginningEdit="dgrScores_BeginningEdit" CanUserResizeColumns="False" CanUserResizeRows="False" >
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn  Width="40*" x:Name="cmbScoreRuleConcept" DisplayMemberPath="spN" SelectedValuePath="spID" SelectedValueBinding="{Binding sjsp}" Header="Concept" />
-                    <DataGridTemplateColumn Header="Score" Width="60*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding sjScore,StringFormat={}{0:n1}}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <TextBox Name="txtScore" Text="{Binding sjScore,StringFormat={}{0:n1}}" PreviewTextInput="txtScore_PreviewTextInput" MaxLength="3"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridComboBoxColumn  Width="40*" x:Name="cmbScoreRuleConcept" DisplayMemberPath="spN" SelectedValuePath="spID" SelectedValueBinding="{Binding sjsp,UpdateSourceTrigger=PropertyChanged}" Header="Concept" />
+                    <DataGridTextColumn Header="Score" styClass:PrecisionPropertyClass.Precision="1,1" Width="60*" Binding="{Binding sjScore,StringFormat={}{0:n1},UpdateSourceTrigger=PropertyChanged}">                        
+                    </DataGridTextColumn>                   
                 </DataGrid.Columns>
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">

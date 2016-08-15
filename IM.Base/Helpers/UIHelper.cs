@@ -192,6 +192,12 @@ namespace IM.Base.Helpers
       Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
       {
+
+        #region DataGrid
+        List<DataGrid> lstDataGrids = lstControls.Where(cl => cl is DataGrid &&  !((DataGrid)cl).IsReadOnly).OfType<DataGrid>().ToList();
+        lstDataGrids.ForEach(dtg => dtg.Sorting += GridHelper.dtg_Sorting);
+        #endregion
+
         #region Obtenemos el MaxLength
         foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
         {
@@ -233,7 +239,7 @@ namespace IM.Base.Helpers
               case TypeCode.Double:                
                 {
                   //Si permite decimales
-                  if (columnDefinition.scale>0)
+                  if (columnDefinition.scale>0 || PrecisionPropertyClass.GetPrecision(txt) != "0,0")
                   {
                     if(PrecisionPropertyClass.GetPrecision(txt)=="0,0")
                     {
@@ -470,8 +476,6 @@ namespace IM.Base.Helpers
                   {
                     control.SetBinding(ComboBox.SelectedValueProperty, binding);
                   }
-
-                  //binding.Source = sourceObject;  // view model?
                 }
                 break;
               }
@@ -487,10 +491,10 @@ namespace IM.Base.Helpers
                 {
                   Binding binding = new Binding();
                   binding.Mode = bindingMode;
-                  binding.Path = new PropertyPath(pi.Name);
+                  binding.Path = new PropertyPath(pi.Name);                  
                   if (bindingMode != BindingMode.OneWay)
                   {
-                    binding.StringFormat = "{0:C}";
+                    binding.StringFormat = "{0:C}";                    
                   }
                   control.SetBinding(TextBox.TextProperty, binding);
                 }
@@ -507,6 +511,7 @@ namespace IM.Base.Helpers
                   Binding binding = new Binding();
                   binding.Mode = bindingMode;
                   binding.Path = new PropertyPath(pi.Name);
+                  binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                   control.SetBinding(CheckBox.IsCheckedProperty, binding);
                 }
                 break;

@@ -282,7 +282,7 @@ namespace IM.Administrator.Forms
         }
       }
 
-      if(!string.IsNullOrWhiteSpace(sourcePayment.sbID))//Filtro por ID
+      if(!string.IsNullOrWhiteSpace(_sourcePaymentFilter.sbID))//Filtro por ID
       {
         if(sourcePayment.sbID!=_sourcePaymentFilter.sbID)
         {
@@ -290,9 +290,9 @@ namespace IM.Administrator.Forms
         }
       }
 
-      if(!string.IsNullOrWhiteSpace(sourcePayment.sbN))//Filtro por descripción
+      if(!string.IsNullOrWhiteSpace(_sourcePaymentFilter.sbN))//Filtro por descripción
       {
-        if(!sourcePayment.sbN.Contains(sourcePayment.sbN,StringComparison.OrdinalIgnoreCase))
+        if(!sourcePayment.sbN.Contains(_sourcePaymentFilter.sbN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

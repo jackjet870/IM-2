@@ -19,7 +19,6 @@ namespace IM.Administrator.Forms
   {
     #region Variables
     public EnumMode enumMode;//Modo de la ventana
-    private bool _isCellCancel = false;
     private bool _isClosing = false;
     public ScoreRuleByLeadSource scoreRuleByLeadSource = new ScoreRuleByLeadSource();
     public ScoreRuleByLeadSource oldScoreRuleByLeadSource = new ScoreRuleByLeadSource();
@@ -46,7 +45,8 @@ namespace IM.Administrator.Forms
       LoadLeadSources();
       LoadScoreRuleDetail();
       LoadScoreConcepts();
-      DataContext = scoreRuleByLeadSource;      
+      DataContext = scoreRuleByLeadSource;
+      GridHelper.SetUpGrid(dgrScores, new ScoreRuleByLeadSourceDetail());
     }
     #endregion
 
@@ -160,8 +160,8 @@ namespace IM.Administrator.Forms
       {
         if ((e.Column is DataGridComboBoxColumn) == false)
         {
-          var item = e.Row.Item;
-          if (Convert.ToInt32(item.GetType().GetProperty("sjsp").GetValue(item)) < 1)
+          var item = e.Row.Item as ScoreRuleByLeadSourceDetail;
+          if (item.sjsp < 1)
           {
             UIHelper.ShowMessage("Please select one concept");
             e.Cancel = true;
@@ -186,16 +186,25 @@ namespace IM.Administrator.Forms
     {
       if (e.EditAction==DataGridEditAction.Commit)
       {
-        _isCellCancel = false;
-        if (e.EditingElement is Control)
+        switch(e.Column.SortMemberPath)
         {
-          bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrScores, strPropGrid: "sjsp");
-          e.Cancel = isRepeat;
+          case "sjsp":
+            {
+              bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrScores, strPropGrid: "sjsp");
+              e.Cancel = isRepeat;
+              break;
+            }
+          case "sjScore":
+            {
+              ScoreRuleByLeadSourceDetail scoreRuleByLSDetail = e.Row.Item as ScoreRuleByLeadSourceDetail;
+              if(scoreRuleByLSDetail.sjScore>9)
+              {
+                UIHelper.ShowMessage("Score can not be greater than 9.");
+                e.Cancel = true;
+              }
+              break;
+            }
         }
-      }
-      else
-      {
-        _isCellCancel = true;        
       }
     }
     #endregion
@@ -210,23 +219,18 @@ namespace IM.Administrator.Forms
     private void dgrScores_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
-      {
-        if (_isCellCancel)
-        {
-          dgrScores.RowEditEnding -= dgrScores_RowEditEnding;
-          dgrScores.CancelEdit();
-          if (e.Row.IsNewItem)
+      {  
+          ScoreRuleByLeadSourceDetail scoreRuleByLSDetail = e.Row.Item as ScoreRuleByLeadSourceDetail;
+          if (scoreRuleByLSDetail.sjsp < 1)
           {
-            dgrScores.Items.RemoveAt(dgrScores.SelectedIndex);
-            dgrScores.Items.Refresh();
+          UIHelper.ShowMessage("Please Select a Concept");
+            e.Cancel = true;
           }
-          dgrScores.RowEditEnding += dgrScores_RowEditEnding;
-        }
-        else
-        {
-          cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count - 1) + ")";
-        }
-      }
+          else
+          {
+            cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count - 1) + ")";
+          }
+      }      
     }
     #endregion
 
@@ -251,25 +255,6 @@ namespace IM.Administrator.Forms
       }
     }
 
-    #endregion
-
-    #region txtScore
-    /// <summary>
-    /// Permite decimal y un punto
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 28/05/2016
-    /// </history>
-    private void txtScore_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (!(e.Text == "." && !txt.Text.Trim().Contains(".")))
-      {
-        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-      };
-    }
     #endregion
     #endregion
 

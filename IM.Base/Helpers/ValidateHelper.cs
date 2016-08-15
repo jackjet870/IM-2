@@ -200,7 +200,7 @@ namespace IM.Base.Helpers
           foreach (DataGrid dgr in lstGrids)
           {
 
-            if (GridHelper.IsInEditMode(dgr))
+            if (GridHelper.IsInEditMode(dgr,false))
             {
               strMsj += "Please finish editing the list. \n";
               break;

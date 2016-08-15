@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:styClass="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        xmlns:styClass="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Gift Detail" Height="480" Width="490">
     <Window.Resources>
@@ -306,7 +306,7 @@
                             <ColumnDefinition Width="50*" />
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <DataGrid Name="dgrAgencies" Grid.Row="1" Margin="5" SelectionMode="Single" AutoGenerateColumns="False" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgr_CellEditEnding" CanUserResizeColumns="False">
+                        <DataGrid Name="dgrAgencies"  Grid.Row="1" Margin="5" SelectionMode="Single" AutoGenerateColumns="False" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgr_CellEditEnding" CanUserResizeColumns="False">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>

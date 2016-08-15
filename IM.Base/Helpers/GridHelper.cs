@@ -11,6 +11,7 @@ using IM.Styles.Classes;
 using IM.Styles.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
+using System.Windows.Controls.Primitives;
 
 namespace IM.Base.Helpers
 {
@@ -137,17 +138,19 @@ namespace IM.Base.Helpers
     /// <param name="typeName">nombre que aparecerá en el titulo del mensaje</param>
     /// <returns>True. Si existe | False.no existe</returns>
     /// <history>
-    /// [emoguel] created 18/05/2016
+    /// [emoguel] 18/05/2016 created
+    /// [emoguel] 11/08/2016 modified---> se agregó el case para los textbox
     /// </history>
     public static bool HasRepeatItem(Control control, DataGrid dgrItems, bool blnClone = false, string strPropGrid = "", string typeName = "")
     {
+      var listaGrid = dgrItems.ItemsSource.Cast<object>().ToList();//Lista de registros del grid
       switch (control.GetType().Name)
       {
+        #region Combobox
         case "ComboBox":
           {
             ComboBox combobox = control as ComboBox;
-
-            var listaGrid = dgrItems.ItemsSource.Cast<object>().ToList();//Lista de registros del grid
+            
             var gridSelec = dgrItems.SelectedItem;//Item seleccionado del grid
             var selectedItem = combobox.SelectedItem;//Nuevo item seleccionado                                   
 
@@ -161,21 +164,41 @@ namespace IM.Base.Helpers
                 strPropGrid = (strPropGrid != "") ? strPropGrid : strPropControl;
                 Type typeFromGrid = gridSelec.GetType();//En caso de que sea de otro tipo el grid
 
-                var gridSelectValue = typeFromGrid.GetProperty(strPropGrid).GetValue(gridSelec, null);
-                var selectItemValue = typeFromControl.GetProperty(strPropControl).GetValue(selectedItem, null);
+                var gridSelectValue = typeFromGrid.GetProperty(strPropGrid).GetValue(gridSelec);
+                var selectItemValue = typeFromControl.GetProperty(strPropControl).GetValue(selectedItem);
 
                 if (selectItemValue != null)
                 {
-                  var itemVal = listaGrid.Where(it => typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) != gridSelectValue
-                    && (typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) == selectItemValue || typeFromGrid.GetProperty(strPropGrid).GetValue(it, null).Equals(selectItemValue))).FirstOrDefault();
-                  if (itemVal != null)
+                  if (gridSelectValue!=null && (gridSelectValue == selectItemValue || gridSelectValue.Equals(selectItemValue)))//SI el seleccionado es igual al del datagrid
                   {
-                    UIHelper.ShowMessage(((typeName != "") ? typeName : typeFromControl.Name) + " must not be repeated");
-                    return true;
+                    var items = listaGrid.Where(it => typeFromGrid.GetProperty(strPropGrid).GetValue(it)!=null &&
+                    (typeFromGrid.GetProperty(strPropGrid).GetValue(it) == selectItemValue || 
+                    typeFromGrid.GetProperty(strPropGrid).GetValue(it).Equals(selectItemValue))).ToList();
+                    if (items.Count > 1)
+                    {
+                      UIHelper.ShowMessage(((typeName != "") ? typeName : typeFromControl.Name) + " must not be repeated");
+                      combobox.SelectedIndex = -1;
+                      return true;
+                    }
+                    else if (blnClone)
+                    {
+                      ObjectHelper.CopyProperties(gridSelec, selectedItem);
+                    }
                   }
-                  else if (blnClone)
+                  else//Si los items no son iguales
                   {
-                    ObjectHelper.CopyProperties(gridSelec, selectedItem);
+                    var itemVal = listaGrid.Where(it => typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) != gridSelectValue
+                      && (typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) == selectItemValue || typeFromGrid.GetProperty(strPropGrid).GetValue(it, null).Equals(selectItemValue))).FirstOrDefault();
+                    if (itemVal != null)
+                    {
+                      UIHelper.ShowMessage(((typeName != "") ? typeName : typeFromControl.Name) + " must not be repeated");
+                      combobox.SelectedIndex = -1;
+                      return true;
+                    }
+                    else if (blnClone)
+                    {
+                      ObjectHelper.CopyProperties(gridSelec, selectedItem);
+                    }
                   }
                 }
               }
@@ -188,6 +211,32 @@ namespace IM.Base.Helpers
             break;
           }
 
+        #endregion
+
+        #region TextBox
+        case "TextBox":
+          {
+            TextBox textBox = control as TextBox;
+            var gridSelec = dgrItems.SelectedItem;//Item seleccionado del grid            
+            var bindingExpresion = textBox.GetBindingExpression(TextBox.TextProperty);//Buscamos la propiedad bindeada
+            if (bindingExpresion != null)
+            {
+              string property = bindingExpresion.ResolvedSourcePropertyName;//obtenemos el nombre de la propiedad bindeada
+
+              var strTextBox = textBox.GetValue(TextBox.TextProperty);//obtenemos el valor del textbox
+
+              var items = listaGrid.Where(it => it.GetType().GetProperty(property).GetValue(it) == strTextBox).ToList();//Obtenemos el número de registros con el mismo valor
+
+              if (items.Count > 1)//Si hay un registro con el mismo valor
+              {
+                UIHelper.ShowMessage(((typeName != "") ? typeName : gridSelec.GetType().Name) + " must not be repeated");
+                return true;
+              }
+            }
+
+            break;
+          } 
+          #endregion
       }
 
       return false;
@@ -442,12 +491,14 @@ namespace IM.Base.Helpers
                 case "TextBlock":
                   TextBlock txtb = cell.Content as TextBlock;
                   var txtBinding = txtb.GetBindingExpression(TextBlock.TextProperty);
-                  txtBinding.UpdateTarget();
+                  if(txtBinding!=null)
+                    txtBinding.UpdateTarget();
                   break;
                 case "TextBlockComboBox":
                   ComboBox cmb = cell.Content as ComboBox;
                   var cmbBinding = cmb.GetBindingExpression(ComboBox.SelectedValueProperty);
-                  cmbBinding.UpdateTarget();
+                  if(cmbBinding!=null)
+                    cmbBinding.UpdateTarget();
                   break;
                 default:
                   break;
@@ -560,14 +611,22 @@ namespace IM.Base.Helpers
               case TypeCode.Decimal:
               case TypeCode.Double:
                 {
-                  if (columnDefinition.scale > 0)
+                  if (columnDefinition.scale > 0 || PrecisionPropertyClass.GetPrecision(dgc) != "0,0")
                   {
                     style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput)));//Validar texto
-                    if (PrecisionPropertyClass.GetPrecision(dgc)=="0,0")
+                    var precisionProperty = PrecisionPropertyClass.GetPrecision(dgc);
+                    if (precisionProperty=="0,0")
                     {
                       style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale));//Agregar Presicion
-                    }                    
+                    } 
+                    else
+                    {
+                      var precision = precisionProperty.Split(',');
+                      style.Setters.Add(new Setter(MaxLengthPropertyClass.MaxLengthProperty,Convert.ToInt16(precision[0]) + Convert.ToInt16(precision[1])+1));
+                      style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, precisionProperty));//Agregar Presicion
+                    }                 
                     style.Setters.Add(new EventSetter(UIElement.PreviewKeyDownEvent, new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown)));//Validar espacios en blanco y borrado
+
                   }
                   else
                   {
@@ -598,7 +657,7 @@ namespace IM.Base.Helpers
                   style.Setters.Add(new EventSetter() { Event = UIElement.PreviewKeyDownEvent, Handler = new System.Windows.Input.KeyEventHandler(TextBoxHelper.ValidateSpace) });
                   break;
                 }
-                #endregion
+              #endregion
             }
             dgc.EditingElementStyle = style;
           }
@@ -612,29 +671,49 @@ namespace IM.Base.Helpers
     /// <summary>
     /// Valida si un datagrid está en modo edición
     /// </summary>
-    /// <param name="dgr">Datagrid a validar</param>
+    /// <param name="dtg">Datagrid a validar</param>
     /// <returns>True. está en modo edición | False. No está en modo edición</returns>
     /// <history>
-    /// [emoguel] created 29/07/2016
+    /// [emoguel] 29/07/2016 created
     /// [erosado] 05/08/2016  Modified. Se agregó validacion, para prevenir Datagrid.ItemSource = NULL
+    /// [emoguel] 11/08/2016 modified. Se agregó una bandera para validar si el item seleccionado es diferente al item en edición
+    /// [emoguel] 13/08/2016 modified. Se Agrego validacion para saber si se está editando una celda antes de habilitar otra
     /// </history>
-    public static bool IsInEditMode(DataGrid dgr)
+    public static bool IsInEditMode(DataGrid dtg,bool blnValidCurrentRow=true)
     {
-      if (dgr != null && dgr?.ItemsSource != null)
+      if (dtg != null && dtg?.ItemsSource != null)
       {
-        List<object> lstObject = dgr.ItemsSource.OfType<object>().ToList();
-        var lstRows = dgr.ItemsSource.OfType<object>().Select(obj => dgr.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
-        //Obtener la fila en edición
-        var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
-        DataGridRow rowSelected = new DataGridRow();
-        if (dgr.SelectedIndex != -1)
+        List<object> lstObject = dtg.ItemsSource.OfType<object>().ToList();
+        var lstRows = dtg.ItemsSource.OfType<object>().Select(obj => dtg.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+        //Obtener la fila en edición        
+        if (blnValidCurrentRow)
         {
-          //Fila a editar o seleccionada
-          rowSelected = dgr.ItemContainerGenerator.ContainerFromIndex(dgr.SelectedIndex) as DataGridRow;
+          var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
+          DataGridRow rowSelected = new DataGridRow();
+          if (dtg.SelectedIndex != -1)
+          {
+            //Fila a editar o seleccionada
+            rowSelected = dtg.ItemContainerGenerator.ContainerFromIndex(dtg.SelectedIndex) as DataGridRow;
+          }
+          if (rowEdit != null && rowEdit != rowSelected)
+          {
+            return true;
+          }
+          else if(rowEdit!=null)//Buscamos si es otra celda la que se quiere habilitar
+          {
+            foreach(DataGridColumn column in dtg.Columns)
+            {
+              DataGridCell cell = dtg.Columns[column.DisplayIndex].GetCellContent(rowEdit).Parent as DataGridCell;
+              if (cell != null && cell.IsEditing)
+              {                
+                return true;
+              }
+            }
+          }
         }
-        if (rowEdit != null && rowEdit != rowSelected)
+        else
         {
-          return true;
+          return lstRows.Count > 0;
         }
       }
       return false;
@@ -654,5 +733,17 @@ namespace IM.Base.Helpers
     }
     #endregion
 
+    #region dtg_Sorting
+    /// <summary>
+    /// cancela el reordenado cuando el grid está en modo edición
+    /// </summary>
+    /// <history>
+    /// [emoguel] 13/08/2016 created
+    /// </history>
+    public static void dtg_Sorting(object sender, DataGridSortingEventArgs e)
+    {
+      e.Handled = IsInEditMode(sender as DataGrid, false);
+    } 
+    #endregion
   }
 }

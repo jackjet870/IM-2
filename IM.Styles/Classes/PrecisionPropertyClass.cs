@@ -43,7 +43,7 @@ namespace IM.Styles.Classes
       {
         int nInts = 0;
         int nDecimals = 0;
-        result = ((Int32.TryParse(arrResult[0], out nInts)) ? nInts.ToString() : "0") +",0"+ ((Int32.TryParse(arrResult[1], out nDecimals)) ? nDecimals.ToString() : "0");
+        result = ((Int32.TryParse(arrResult[0], out nInts)) ? nInts.ToString() : "0") +","+ ((Int32.TryParse(arrResult[1], out nDecimals)) ? nDecimals.ToString() : "0");
       }
       return result;
     }

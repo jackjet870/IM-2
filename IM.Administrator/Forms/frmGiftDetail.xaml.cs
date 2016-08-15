@@ -33,7 +33,7 @@ namespace IM.Administrator.Forms
     #endregion
     public frmGiftDetail()
     {     
-      InitializeComponent();
+      InitializeComponent();      
     }
 
     #region Methods Form
@@ -928,5 +928,6 @@ namespace IM.Administrator.Forms
     #endregion
 
     #endregion
+    
   }
 }

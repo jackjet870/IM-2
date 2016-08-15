@@ -151,8 +151,8 @@
                     <!--#region  Level Permission-->
                     <DataGrid Grid.Column="1" AutoGenerateColumns="False" Margin="3" Name="dgrPermission" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" BeginningEdit="dgrPermission_BeginningEdit">
                         <DataGrid.Columns>
-                            <DataGridComboBoxColumn x:Name="cmbPermission" Width="50*" SelectedValuePath="pmID" DisplayMemberPath="pmN" SelectedValueBinding="{Binding pppm}" Header="Permission"/>
-                            <DataGridComboBoxColumn x:Name="cmbLevelPermission" Width="50*" SelectedValuePath="plID" DisplayMemberPath="plN" SelectedValueBinding="{Binding pppl}" Header="Level"/>                            
+                            <DataGridComboBoxColumn x:Name="cmbPermission" Width="50*" SelectedValuePath="pmID" DisplayMemberPath="pmN" SelectedValueBinding="{Binding pppm,UpdateSourceTrigger=PropertyChanged}" Header="Permission"/>
+                            <DataGridComboBoxColumn x:Name="cmbLevelPermission" Width="50*" SelectedValuePath="plID" DisplayMemberPath="plN" SelectedValueBinding="{Binding pppl,UpdateSourceTrigger=PropertyChanged}" Header="Level"/>                            
                         </DataGrid.Columns>
                     </DataGrid>
                     <!--#endregion-->                    

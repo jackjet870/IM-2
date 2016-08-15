@@ -271,6 +271,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnPermission_Click(object sender, RoutedEventArgs e)
     {
+      dgrPermission.CancelEdit();
       List<PersonnelPermission> lstNewPersonnelPermision = new List<PersonnelPermission>();
 
       if (hasRoles("PR,PRMEMBER"))
@@ -406,16 +407,17 @@ namespace IM.Administrator.Forms
     {
       if (e.EditAction==DataGridEditAction.Commit)
       {
-        _isCellCancel = false;
         DataGrid dgrEdit = sender as DataGrid;
         bool blnIsRepeat = false;
+        _isCellCancel = false;
         switch (e.Column.SortMemberPath)
         {
           case "pppm":
             {
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit, false, "pppm");
               PersonnelPermission personnelPermission = (PersonnelPermission)dgrPermission.SelectedItem;
-              personnelPermission.pppl = 1;              
+              personnelPermission.pppl = 1;
+              GridHelper.UpdateCellsFromARow(dgrEdit);       
               break;
             }
           case "plLSSRID":
@@ -455,20 +457,24 @@ namespace IM.Administrator.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         DataGrid dgr = sender as DataGrid;
-        dgr.RowEditEnding -= RowEditEnding;
-        if (_isCellCancel)
+        if (dgr.Name == "dgrPermission")
         {
-          dgr.CancelEdit();
+          PersonnelPermission personnelPermision = e.Row.Item as PersonnelPermission;
+          if(string.IsNullOrWhiteSpace(personnelPermision.pppm))
+          {
+            e.Cancel = true;
+          }
         }
         else
         {
-          if (dgr.Name == "dgrPermission" && dgr.CurrentColumn.SortMemberPath == "pppm")
+          if (_isCellCancel)
           {
-            dgr.CommitEdit();
-            dgr.Items.Refresh();
+            dgr.RowEditEnding -= RowEditEnding;
+            dgr.CancelEdit();
+            dgr.RowEditEnding += RowEditEnding;
           }
+          
         }
-        dgr.RowEditEnding += RowEditEnding;
       }
     }
     #endregion
@@ -611,6 +617,7 @@ namespace IM.Administrator.Forms
 
       if (strMsj == "")
       {
+        dgrLeadSources.CancelEdit();
         List<LeadSourceByUser> lstLeadSourceByUser = (List<LeadSourceByUser>)cmbLeadSource.ItemsSource;
         List<string> lstPrograms = dgrPrograms.SelectedItems.OfType<Program>().Select(pg => pg.pgID).ToList();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
@@ -643,6 +650,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
+        dgrSalesRoom.CancelEdit();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
         List<SalesRoomByUser> lstSalesRoomByUser = (List<SalesRoomByUser>)cmbSalesRoom.ItemsSource;
         var lstSalesRoomAssign = lstSalesRoomByUser.Where(sr => lstRegions.Contains(sr.arrg)).ToList();
@@ -671,6 +679,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
+        dgrWarehouses.CancelEdit();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
         List<WarehouseByUser> lstWarehousesByUser = (List<WarehouseByUser>)cmbWarehouses.ItemsSource;
         var lstWarehousesAsign = lstWarehousesByUser.Where(wh => lstRegions.Contains(wh.arrg)).ToList();
@@ -1100,6 +1109,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void SetRoles(string post)
     {
+      dgrRoles.CancelEdit();
       List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
       List<Role> lstAllRole = (List<Role>)cmbRoles.ItemsSource;
       switch (post)

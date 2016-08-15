@@ -501,7 +501,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private bool ValidateChanged(List<FolioCxCPR> lstAssigned, List<FolioCxCCancellation> lstCancel)
     {
-      bool blnHasChanged = (_lstCancellation.Count != lstCancel.Count || lstAssigned.Count != _lstFolios.Count);
+      bool blnHasChanged = ((lstCancel!=null && lstAssigned!=null) && _lstCancellation.Count != lstCancel.Count || lstAssigned.Count != _lstFolios.Count);
       #region Assigend
       if (blnHasChanged == false)
       {

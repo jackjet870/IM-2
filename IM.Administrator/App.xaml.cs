@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System;
+using System.ComponentModel;
 
 namespace IM.Administrator
 {
@@ -51,9 +52,11 @@ namespace IM.Administrator
         User = frmLogin.UserData;
         if (User.HasRole(EnumRole.Manager))
         {
+          
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));
           EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-          EventManager.RegisterClassHandler(typeof(ComboBox), UIElement.KeyDownEvent, new KeyEventHandler(cmb_KeyDown));
+          EventManager.RegisterClassHandler(typeof(ComboBox), UIElement.KeyDownEvent, new KeyEventHandler(cmb_KeyDown));         
+
           frmAdmin frmMain = new frmAdmin();
           frmMain.ShowDialog();
           frmSplash.Close();

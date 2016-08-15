@@ -69,7 +69,7 @@ namespace IM.Administrator.Forms
       else
       {        
         txtsnTo.LostFocus += LostFocus;
-        txtsnFrom.LostFocus += LostFocus;
+        txtsnFrom.LostFocus += LostFocus;        
         UIHelper.UiSetDatacontext(salesAmountRange, this);
         DataContext = salesAmountRange;
       }      
@@ -226,30 +226,18 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Cambia el texto de la descripción si cambia algun valor entre From y To
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 21/04/2016
     /// </history>
     private new void LostFocus(object sender, RoutedEventArgs e)
     {
-      TextBox txt = (TextBox)sender;
-      txtsnN.Focus();
-      decimal fT = Convert.ToDecimal(txt.Text);
-      if (txt.Name == "txtsnFrom")
+      TextBox txt = sender as TextBox;
+      var bindingExpresion = txt.GetBindingExpression(TextBox.TextProperty);
+      if(bindingExpresion!=null)
       {
-        if (fT != salesAmountRange.snFrom)
-        {
-          txtsnN.Text = "$" + txtsnFrom.Text + " - " + "$" + salesAmountRange.snTo;
-        }
+        bindingExpresion.UpdateSource();
       }
-      else
-      {
-        if (fT != salesAmountRange.snTo)
-        {
-          txtsnN.Text = "$" + salesAmountRange.snFrom + " - " + "$" + txtsnTo.Text;
-        }
-      }
+      txtsnN.Text = $"${salesAmountRange.snFrom} - ${salesAmountRange.snTo}";      
     }
     #endregion
 

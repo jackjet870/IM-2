@@ -22,7 +22,7 @@
             <!--#region títulos-->
             <Label Grid.Column="0" Grid.Row="0" Margin="0,0,0,12" Grid.ColumnSpan="2">Description</Label>
             <!--#endregion-->
-            <ComboBox Name="cmbPersonnel" IsEditable="True" IsTextSearchEnabled="True" Tag="Name" Grid.Row="0" Height="21" VerticalAlignment="Top" SelectedValue="{Binding peID}" SelectedValuePath="peID" IsEnabled="False" Margin="69,0,0,0" Grid.ColumnSpan="2" >
+            <ComboBox Name="cmbPersonnel" IsTextSearchEnabled="True" Tag="Name" Grid.Row="0" Height="21" VerticalAlignment="Top" SelectedValue="{Binding peID}" SelectedValuePath="peID" IsEnabled="False" Margin="69,0,0,0" Grid.ColumnSpan="2" >
                 <ComboBox.ItemTemplate>
                     <StaticResource ResourceKey="cbx-Personnel-Concat" />
                 </ComboBox.ItemTemplate>
