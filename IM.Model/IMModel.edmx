@@ -6225,6 +6225,12 @@
         <Function Name="USP_OR_DeleteSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Sale" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_EsFrontToMiddle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonnelID" Type="varchar" Mode="In" />
+          <Parameter Name="PR1" Type="varchar" Mode="In" />
+          <Parameter Name="PR2" Type="varchar" Mode="In" />
+          <Parameter Name="PR3" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -18159,6 +18165,12 @@
             <Parameter Name="SalesmanID" Mode="In" Type="String" />
             <Parameter Name="GroupedByTeam" Mode="In" Type="Boolean" />
             <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_EsFrontToMiddle" ReturnType="Collection(Int32)">
+            <Parameter Name="PersonnelID" Mode="In" Type="String" />
+            <Parameter Name="PR1" Mode="In" Type="String" />
+            <Parameter Name="PR2" Mode="In" Type="String" />
+            <Parameter Name="PR3" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -31199,6 +31211,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_EsFrontToMiddle" FunctionName="IMModel.Store.USP_OR_EsFrontToMiddle" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

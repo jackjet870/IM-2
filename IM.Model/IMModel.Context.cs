@@ -16,7 +16,7 @@ namespace IM.Model
     using System.Linq;
     
     public partial class IMEntities : DbContext
-    {
+  {
 
     #region Constructores y destructores
 
@@ -29,15 +29,15 @@ namespace IM.Model
     /// </history>
     public IMEntities(string connectionString)
       : base(connectionString)
-        {
+    {
       Configuration.ProxyCreationEnabled = false;
-        }
-    
+    }
+
     #endregion
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+      throw new UnintentionalCodeFirstException();
         }
     
         public virtual DbSet<Agency> Agencies { get; set; }
@@ -6436,6 +6436,27 @@ namespace IM.Model
                 new ObjectParameter("IncludeAllSalesmen", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByFTBLocations>("USP_IM_RptStatisticsByFTBLocations", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, groupedByTeamParameter, includeAllSalesmenParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> USP_OR_EsFrontToMiddle(string personnelID, string pR1, string pR2, string pR3)
+        {
+            var personnelIDParameter = personnelID != null ?
+                new ObjectParameter("PersonnelID", personnelID) :
+                new ObjectParameter("PersonnelID", typeof(string));
+    
+            var pR1Parameter = pR1 != null ?
+                new ObjectParameter("PR1", pR1) :
+                new ObjectParameter("PR1", typeof(string));
+    
+            var pR2Parameter = pR2 != null ?
+                new ObjectParameter("PR2", pR2) :
+                new ObjectParameter("PR2", typeof(string));
+    
+            var pR3Parameter = pR3 != null ?
+                new ObjectParameter("PR3", pR3) :
+                new ObjectParameter("PR3", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("USP_OR_EsFrontToMiddle", personnelIDParameter, pR1Parameter, pR2Parameter, pR3Parameter);
         }
     }
 }
