@@ -190,7 +190,7 @@ namespace IM.Base.Forms
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);
       CkeckKeysPress(StatusBarNum, Key.NumLock);
-
+      StaEnd();
     }
     #endregion
 

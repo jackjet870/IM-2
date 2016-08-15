@@ -108,7 +108,7 @@
             <!--#region Grd Guests Group-->
             <Grid x:Name="grdGroup" Grid.Column="0">
                 <DataGrid x:Name="dtgGuestsGroup" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="3,5,5,5"  
-                          DataContext="{Binding lstGuestsGroups}" 
+                          DataContext="{Binding lstGuestsGroups}" CanUserAddRows="False" 
                           EnableRowVirtualization="True" IsReadOnly="True" SelectionChanged="dtgGuestsGroup_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="gxIDColumn" Width=".6*" Header="ID" Binding="{Binding gxID}"/>
@@ -141,7 +141,7 @@
                     <TextBox x:Name="txtDescription" Grid.Row="2" Grid.Column="1" Margin="5,3,150,3"/>
                 </Grid>
                 <Grid x:Name="grdGuestGroup" Grid.Row="1" Margin="5,10,5,5">
-                    <DataGrid x:Name="dtgGuestGroupIntegrants" CanUserAddRows="True"  AutoGenerateColumns="False"
+                    <DataGrid x:Name="dtgGuestGroupIntegrants" CanUserAddRows="False"  AutoGenerateColumns="False"
                               Margin="0,0,0,0" DataContext="{Binding lstGuest}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="ID" Binding="{Binding guID}" IsReadOnly="True" />

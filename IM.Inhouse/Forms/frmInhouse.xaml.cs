@@ -901,7 +901,7 @@ namespace IM.Inhouse.Forms
       guID = itema.guID;
       if (itema.guGroup) //Si tiene Group
       {
-        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        gg = await BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
         guIDToAdd = 0;
       } //Si no tiene Grupo
       else
@@ -1106,7 +1106,7 @@ namespace IM.Inhouse.Forms
       group = itema.guGroup;
       if (itema.guGroup) //Si tiene Group
       {
-        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        gg = await BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
         guIDToAdd = 0;
       } //Si no tiene Grupo
       else
@@ -1274,7 +1274,7 @@ namespace IM.Inhouse.Forms
       group = itema.guGroup;
       if (itema.guGroup) //Si tiene Group
       {
-        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        gg = await BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
         guIDToAdd = 0;
       } //Si no tiene Grupo
       else
@@ -1455,7 +1455,7 @@ namespace IM.Inhouse.Forms
       group = itema.guGroup;
       if (itema.guGroup) //Si tiene Group
       {
-        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        gg = await BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
         guIDToAdd = 0;
       } //Si no tiene Grupo
       else

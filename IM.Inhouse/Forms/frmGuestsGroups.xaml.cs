@@ -10,6 +10,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Base.Forms;
 using Xceed.Wpf.Toolkit;
+using System.Threading.Tasks;
 
 namespace IM.Inhouse.Forms
 {
@@ -62,15 +63,19 @@ namespace IM.Inhouse.Forms
     /// [ECANUL] 28-03-2016 Created
     /// [ecaul]17/06/2016 Modified. Implementado Asincronia
     /// </history>
-    private async void LoadGrdGuestsGroups()
+    private async Task<int> LoadGrdGuestsGroups()
     {
       StaStart("Loading Groups...");
+      if (!string.IsNullOrEmpty(txtgxID.Text))
+        _guestsGroup.gxID = Convert.ToInt32(txtgxID.Text);
       _lstGuestsGroups = await BRGuestsGroups.GetGuestsGroups(_guest, _guestsGroup);
       dtgGuestsGroup.ItemsSource = _lstGuestsGroups;
 
       string s = dtgGuestsGroup.Items.Count == 1 ? "Group" : "Groups";
       StatusBarReg.Content = $"{dtgGuestsGroup.Items.Count} {s}";
       StaEnd();
+      txtgxID.Text = string.Empty;
+      return _lstGuestsGroups.Count();
     }
 
     #endregion
@@ -132,12 +137,14 @@ namespace IM.Inhouse.Forms
       List<GuestsGroup> guestGroup = dtgGuestsGroup.SelectedItems.OfType<GuestsGroup>().ToList();
       if (guestGroup.Count == 0)//Si no se ha seleccionado ningun "Row" y se invoca la pocicion 0 por defecto
         guestGroup = (List<GuestsGroup>)dtgGuestsGroup.ItemsSource;
-      txtID.Text = guestGroup[0].gxID.ToString();
-      txtDescription.Text = guestGroup[0].gxN;
-      gx.gxID = guestGroup[0].gxID;
-      gx.gxN = guestGroup[0].gxN;
-
-      LoadGridGuestsGroupsIntegrants(gx);
+      if (dtgGuestsGroup.Items.Count != 0)
+      {
+        txtID.Text = guestGroup[0].gxID.ToString();
+        txtDescription.Text = guestGroup[0].gxN;
+        gx.gxID = guestGroup[0].gxID;
+        gx.gxN = guestGroup[0].gxN;
+        LoadGridGuestsGroupsIntegrants(gx);
+      }
       StaEnd();
     }
 
@@ -178,17 +185,17 @@ namespace IM.Inhouse.Forms
     /// Selecciona la accion a hacer segun EnumAction
     /// </summary>
     /// <HISTORY>[ECANUL] 38-03-2016 CREATED</HISTORY>
-    void CaseLoad()
+    async void CaseLoad()
     {
       switch (_enumAction)
       {
         case EnumAction.None:
-          LoadGrdGuestsGroups();
+          await LoadGrdGuestsGroups();
           dtgGuestGroupIntegrants.SelectedItem = 0;
           LoadGuestsGroupsInfo();
           break;
         case EnumAction.Search:
-          LoadGrdGuestsGroups();
+          await LoadGrdGuestsGroups();
           EnableControls(0);
           break;
         case EnumAction.Add:
@@ -199,7 +206,7 @@ namespace IM.Inhouse.Forms
           if (_groupID != 0)
           {
             txtgxID.Text = _groupID.ToString();
-            LoadGrdGuestsGroups();
+            await LoadGrdGuestsGroups();
             LoadGuestsGroupsInfo();
             dtgGuestGroupIntegrants.IsEnabled = true;
           }
@@ -246,7 +253,7 @@ namespace IM.Inhouse.Forms
           btnDelete.IsEnabled = false;
           //Habilita
           txtDescription.IsEnabled = true;
-          dtgGuestGroupIntegrants.CanUserAddRows = true;
+         // dtgGuestGroupIntegrants.CanUserAddRows = true;
           dtgGuestGroupIntegrants.IsReadOnly = false;
           dtgGuestGroupIntegrants.Focus();
           _lstGuestsGroups = new List<GuestsGroup>();
@@ -266,7 +273,7 @@ namespace IM.Inhouse.Forms
           btnDelete.IsEnabled = false;
           //Habilita
           txtDescription.IsEnabled = true;
-          dtgGuestGroupIntegrants.CanUserAddRows = true;
+          //dtgGuestGroupIntegrants.CanUserAddRows = true;
           dtgGuestGroupIntegrants.IsReadOnly = false;
           dtgGuestGroupIntegrants.Focus();
           grdListGuest.IsEnabled = true;
@@ -421,10 +428,10 @@ namespace IM.Inhouse.Forms
       LoadGuestsGroupsInfo();
     }
 
-    private void btnSearch_Click(object sender, RoutedEventArgs e)
+    private async void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      if(DateHelper.ValidateValueDate(dtpGuestStart,dtpGuestEnd))
-        LoadGrdGuestsGroups();
+      if (DateHelper.ValidateValueDate(dtpGuestStart, dtpGuestEnd))
+        await LoadGrdGuestsGroups();
     }
 
     private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -546,11 +553,12 @@ namespace IM.Inhouse.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
 
+      #region Validacion de campos
       UIHelper.SetUpControls(new GuestsGroup(), grdGroupInfo, blnCharacters: true);
       UIHelper.SetUpControls(new Guest(), grdGuestInfo, blnCharacters: true);
-
       grdGroupInfo.DataContext = _guestsGroup;
-      grdGuestInfo.DataContext = _guest;
+      grdGuestInfo.DataContext = _guest; 
+      #endregion
 
       if (_enumAction == EnumAction.None)
       {
