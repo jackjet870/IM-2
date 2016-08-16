@@ -16,30 +16,30 @@ namespace IM.Model
     using System.Linq;
     
     public partial class IMEntities : DbContext
+  {
+    #region Constructores y destructores
+
+    /// <summary>
+    /// Constructor que permite utilizar una cadena de conexion
+    /// </summary>
+    /// <param name="connectionString">Cadena de conexion</param>
+    /// <history>
+    /// [wtorres]  23/Mar/2016 Created
+    /// </history>
+    public IMEntities(string connectionString)
+      : base(connectionString)
     {
-        #region Constructores y destructores
+      Configuration.ProxyCreationEnabled = false;
+    }
 
-        /// <summary>
-        /// Constructor que permite utilizar una cadena de conexion
-        /// </summary>
-        /// <param name="connectionString">Cadena de conexion</param>
-        /// <history>
-        /// [wtorres]  23/Mar/2016 Created
-        /// </history>
-        public IMEntities(string connectionString)
-          : base(connectionString)
-        {
-          Configuration.ProxyCreationEnabled = false;
-        }
+    #endregion
 
-        #endregion
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
-        public virtual DbSet<Agency> Agencies { get; set; }
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+      throw new UnintentionalCodeFirstException();
+    }
+
+    public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Assistance> Assistances { get; set; }
         public virtual DbSet<AssistanceStatus> AssistancesStatus { get; set; }
@@ -6473,6 +6473,19 @@ namespace IM.Model
                 new ObjectParameter("DatesTo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptEfficiencyWeekly>("USP_IM_RptEfficiencyWeekly", salesRoomParameter, datesFromParameter, datesToParameter);
+        }
+    
+        public virtual ObjectResult<PostShort> USP_OR_ObtenerPuestoDePersonalPorFecha(string personnelID, Nullable<System.DateTime> date)
+        {
+            var personnelIDParameter = personnelID != null ?
+                new ObjectParameter("PersonnelID", personnelID) :
+                new ObjectParameter("PersonnelID", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PostShort>("USP_OR_ObtenerPuestoDePersonalPorFecha", personnelIDParameter, dateParameter);
         }
     }
 }

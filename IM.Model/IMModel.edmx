@@ -6582,6 +6582,10 @@
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_ObtenerPuestoDePersonalPorFecha" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonnelID" Type="varchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="USP_OR_Occupation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="LS" Type="varchar" Mode="In" />
@@ -18182,6 +18186,10 @@
             <Parameter Name="DatesFrom" Mode="In" Type="String" />
             <Parameter Name="DatesTo" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_ObtenerPuestoDePersonalPorFecha" ReturnType="Collection(IMModel.PostShort)">
+            <Parameter Name="PersonnelID" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -23138,6 +23146,10 @@
           <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="EfficiencyType" Nullable="true" MaxLength="80" />
+        </ComplexType>
+        <ComplexType Name="PostShort">
+          <Property Type="String" Name="Post" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PostN" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -31299,6 +31311,14 @@
                 <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
                 <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
                 <ScalarProperty Name="EfficiencyType" ColumnName="EfficiencyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_ObtenerPuestoDePersonalPorFecha" FunctionName="IMModel.Store.USP_OR_ObtenerPuestoDePersonalPorFecha">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PostShort">
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="PostN" ColumnName="PostN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
