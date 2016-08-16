@@ -61,7 +61,7 @@
                     </Button>
                     <Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPreview_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center" />
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center" />
                             <TextBlock Text="Preview" />
                         </StackPanel>
                     </Button>

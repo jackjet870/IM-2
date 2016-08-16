@@ -439,7 +439,7 @@ namespace IM.ProcessorSales.Classes
     internal static FileInfo RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
     {
       var lstReportAux = new List<dynamic>(); 
-      if (groupedByTeams)
+      /*if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
         {
@@ -470,7 +470,7 @@ namespace IM.ProcessorSales.Classes
           c.SalesExit,
           c.Sales
         }));
-      }
+      }*/
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByCloserGroupedByTeams() : FormatReport.RptStatisticsByCloser(),true,showRowHeaders:true, fileFullPath: fileFullPath);
