@@ -85,28 +85,26 @@ namespace IM.Outhouse.Forms
     #region ValidateInvitation
 
     /// <summary>
-    /// Valida los datos para desplegar el formulario de invitaciones
+    /// Valida los datos para desplegar el formulario de invitacion
     /// </summary>
-    /// <param name="gucheckIn">Indica si ya hizo CheckIn el huesped</param>
-    /// <returns>bool</returns>
+    /// <param name="guCheckIn">Si ya hizo Check In el Huesped </param>    
     /// <history>
-    /// [jorcanche] 06/05/2016 created
+    /// [jorcanche] 16/ago/2016 Created
     /// </history>
-    private bool ValidateInvitation(bool gucheckIn)
+    private bool ValidateInvitation(bool guCheckIn)
     {
-      //Validamos que el huesped haya hecho Chek In
-      if (!gucheckIn)
+      //Validamos que el huesped haya hecho Check In
+      if (!guCheckIn)
       {
-        UIHelper.ShowMessage("Guest has not made Check-In", title: "Outhouse");
+        UIHelper.ShowMessage("Guest has not made Check-In.");
         return false;
       }
-      //Validamos que tenga minimo permisos de lectura de invitaciones 
-      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly))
-      {
-        UIHelper.ShowMessage("You has not Permission of 'PR Invitation'");
-        return false;
-      }
-      return true;
+      //Validamos que no sea un huesped adicional 
+     
+      //Validamos que tenga permiso de lectura de invitaciones
+      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
+      UIHelper.ShowMessage("Access denied.");
+      return false;
     }
 
     #endregion
@@ -357,17 +355,53 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void Invit_Click(object sender, RoutedEventArgs e)
     {
-      var row = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
-      var chkInv = sender as CheckBox;
-      chkInv.IsChecked = !chkInv.IsChecked.Value;
-      //Si los datos son validos
-      if (ValidateInvitation(row.guCheckIn))
-      {
-        var inv = new frmInvitationBase(EnumModule.OutHouse, App.User, row.guID, EnumInvitationMode.modEdit);
-        inv.ShowDialog();
-      }
+      var guest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
+      var chk = sender as CheckBox;
+      //Validamos Valores nulos 
+      if (chk?.IsChecked == null || guest == null) return;
+
+      //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
+      chk.IsChecked = !chk.IsChecked.Value;
+
+      //Despliega el formulario de Invitación
+      ShowInvitation(guest.guCheckIn, guest.guID, chk.IsChecked.Value);
     }
 
+    #endregion
+
+    #region ShowInvitation
+    /// <summary>
+    /// Despliega el formulario de invitacion
+    /// </summary>
+    /// <param name="guCheckIn">Check In del Huesped</param>    
+    /// <param name="guId">Id del Guest</param>
+    /// <param name="isInvit">Si ya se invito el guest</param>
+    /// <history>
+    /// [jorcanche] 16/ago/2016 Created
+    /// </history>
+    private async void ShowInvitation(bool guCheckIn, int guId, bool isInvit)
+    {
+      if (ValidateInvitation(guCheckIn))
+      {
+        frmLogin login = null;
+        if (!isInvit)
+        {
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+
+          if (App.User.AutoSign)
+          {
+            login.UserData = App.User;
+          }
+          await login.getAllPlaces();
+          login.ShowDialog();
+        }
+        if (isInvit || login.IsAuthenticated)
+        {
+          var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
+          invitacion.ShowDialog();
+        }
+      }
+    } 
     #endregion
 
     #region Window_KeyDown

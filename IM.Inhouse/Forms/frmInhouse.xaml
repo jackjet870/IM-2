@@ -495,7 +495,13 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guFollowDColumn1" IsReadOnly="True" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn1" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guInvitColumn1" IsReadOnly="True" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guInvitColumn1" IsReadOnly="False"  Header="Invit" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInvit}" Click="ChkInvit_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guBookDColumn1" IsReadOnly="True" Binding="{Binding guBookD}" Header="Book D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRInvit1Column1" IsReadOnly="True" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto"/>
                         <DataGridTextColumn x:Name="gunbColumn1" IsReadOnly="True" Binding="{Binding gunb}" Header="NB" Width="auto"/>
@@ -632,7 +638,13 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guFollowDColumn2" IsReadOnly="True" Header="Follow D" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn2" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guInvitColumn2" IsReadOnly="false" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guInvitColumn2" IsReadOnly="false" Header="Invit" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInvit}" Click="ChkInvit_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD, StringFormat=dd/MM/yyyy}" Header="Invit D" Width="auto"/>
                         <DataGridTextColumn x:Name="guInvitTColumn" IsReadOnly="True" Binding="{Binding guInvitT,StringFormat=t}" Header="Invit T" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guReschColumn" IsReadOnly="False" Binding="{Binding guResch}" Header="Rsch" Width="auto"/>
@@ -779,7 +791,13 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guFollowDColumn3" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto" IsReadOnly="True"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn3" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto" IsReadOnly="True"/>
-                        <DataGridCheckBoxColumn x:Name="guInvitColumn3" Binding="{Binding guInvit}" Header="Invit" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn x:Name="guInvitColumn3" Header="Invit" Width="auto" IsReadOnly="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInvit}" Click="ChkInvit_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guBookDColumn3" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto" IsReadOnly="True"/>
                         <DataGridTextColumn x:Name="guPRInvit1Column3" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto" IsReadOnly="True"/>
                         <DataGridTextColumn x:Name="gunbColumn3" Binding="{Binding gunb}" Header="NB" Width="auto" IsReadOnly="True"/>
