@@ -17,6 +17,16 @@ using IM.Model.Helpers;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using Application = System.Windows.Application;
+using CheckBox = System.Windows.Controls.CheckBox;
+using Cursors = System.Windows.Input.Cursors;
+using DataGrid = System.Windows.Controls.DataGrid;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
+using RadioButton = System.Windows.Controls.RadioButton;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace IM.Inhouse.Forms
 {
@@ -457,16 +467,22 @@ namespace IM.Inhouse.Forms
 
     #region OpenAvail
 
-    public void OpenAvail(DataGrid dg, int guID, bool guCheckIn, object sender)
+
+    public void OpenAvail(DataGrid dg, int guId, bool guCheckIn, object sender)
     {
       var chkguAvail = sender as CheckBox;
+      //Validamos si es nulo
+      if (chkguAvail?.IsChecked == null) return;
+
       chkguAvail.IsChecked = !chkguAvail.IsChecked.Value;
       if (ValidateAvailability(guCheckIn))
       {
         StaStart("Loading Information´s Availability...");
-        frmAvailability frmAvail = new frmAvailability(guID);
-        frmAvail.Owner = this;
-        frmAvail.ShowInTaskbar = false;
+        var frmAvail = new frmAvailability(guId)
+        {
+          Owner = this,
+          ShowInTaskbar = false
+        };
         StaEnd();
         frmAvail.ShowDialog();
         if (frmAvail._wasSaved)
@@ -858,26 +874,36 @@ namespace IM.Inhouse.Forms
 
     #region ChkBookCancArrival_Click
 
+    /// <summary>
+    /// Abre el formulario de frmBookingCancel
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 16/08/2016
+    /// </history>
     private void ChkBookCancArrival_Click(object sender, RoutedEventArgs e)
     {
-      var Arrival = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
-      var chk = sender as CheckBox;
-      chk.IsChecked = chk.IsChecked.Value ? false : true;
-      if (ValidateCancelInvitation(Arrival.guCheckIn, Arrival.guCheckOutD, Arrival.guInvit, Arrival.guShow))
+      var chk = sender as CheckBox;     
+      var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
+       
+      if (guest == null || chk?.IsChecked == null) return;
+
+      chk.IsChecked = !chk.IsChecked.Value;
+      if (!ValidateCancelInvitation(guest.guCheckIn, guest.guCheckOutD, guest.guInvit, guest.guShow)) return;
+      var log = ValidateLogin();
+      if (log == null) return;
+      var bc = new frmBookingCancel(guest.guID, log.UserData.User)
       {
-        var log = ValidateLogin();
-        if (log != null)
+        Owner = this       
+      };
+      bc.ShowDialog();
+
+      dgGuestArrival.SelectedItems.OfType<GuestArrival>()
+        .ToList()
+        .ForEach(item =>
         {
-          frmBookingCancel bc = new frmBookingCancel(Arrival.guID, log.UserData.User);
-          bc.Owner = this;
-          bc.ShowInTaskbar = false;
-          if (!bc.ShowDialog().Value)
-          {
-            dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
-            dgGuestArrival.Items.Refresh();
-          }
-        }
-      }
+          if (bc.Cancelado != null) item.guBookCanc = bc.Cancelado.Value;
+        });
+      dgGuestArrival.Items.Refresh();
     }
 
     #endregion
@@ -1077,7 +1103,7 @@ namespace IM.Inhouse.Forms
           {
             dgGuestAvailable.SelectedItems.OfType<GuestAvailable>()
               .ToList()
-              .ForEach(item => item.guBookCanc = bc._cancelado.Value);
+              .ForEach(item => item.guBookCanc = bc.Cancelado.Value);
             dgGuestAvailable.Items.Refresh();
           }
         }
@@ -1245,7 +1271,7 @@ namespace IM.Inhouse.Forms
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           bc.ShowDialog();
-          dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
+          dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guBookCanc = bc.Cancelado.Value);
           dgGuestPremanifest.Items.Refresh();
         }
       }
@@ -1417,7 +1443,7 @@ namespace IM.Inhouse.Forms
           bc.ShowInTaskbar = false;
           StaEnd();
           bc.ShowDialog();
-          guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
+          guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guBookCanc = bc.Cancelado.Value);
           guestSearchedDataGrid.Items.Refresh();
         }
       }
@@ -1810,60 +1836,162 @@ namespace IM.Inhouse.Forms
     /// Sirve para realizar una invitacion, o abrirla en modo lectura
     /// </summary>
     /// <history>
+    /// [jorcanche] 11/ago/2016 Modified. Se mejoro el Evento 
     /// [erosado] 09/08/2016  Modified. Se habilito para que se inivie el nuevo formulario de invitacion.
     /// </history>
-    private async void ChkInvit_Click(object sender, RoutedEventArgs e)
+    private void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
-      //luis
-      GuestArrival guestArrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-
+      
       var chk = sender as CheckBox;
-      if (!guestArrival.guCheckIn)
+      var guest = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+
+      //Validamos Valores nulos 
+      if (guest == null || chk?.IsChecked == null) return;
+
+      //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
+      chk.IsChecked = !chk.IsChecked.Value;
+
+      //
+      if (ShowNotBookingMotive(guest.guAvail, guest.guInfo, guest.guInvit, guest.guCheckOutD, guest.guID, dgGuestArrival))
       {
-        MessageBox.Show("Guest has not made Check In");
-        chk.IsChecked = false;
-        return;
-      }
-      //this.Cursor = Cursors.Wait;
-      var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
-      chk.IsChecked = guestArrival.guInvit;
-      //var UserData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      //var invit = new frmInvitationBase(EnumInvitationType.InHouse, App.User, guestArrival.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
-      //invit.Owner = this;
-      //invit.ShowInTaskbar = false;
-      //if (await invit.AccessValidate())
-      ////{
-      ////  this.Cursor = null;
-      ////  var res = invit.ShowDialog();
-      ////  guestArrival.guInvit = guestArrival.guInvit || (res.HasValue && res.Value);
-      ////  chk.IsChecked = guestArrival.guInvit;
-      ////}
-      //this.Cursor = null;
-
-      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
-       validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
-       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
-
-      if (App.User.AutoSign)
-      {
-        login.UserData = App.User;
-      }
-      await login.getAllPlaces();
-      login.ShowDialog();
-
-      if (login.IsAuthenticated)
-      {
-        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login.UserData, guestArrival.guID);
-        invitacion.Owner = this;
-        invitacion.ShowDialog();
-        //{
-        //  Owner = this
-        //};
-
+        //Despliega el formulario de Invitación
+        ShowInvitation(guest.guCheckIn,guest.gagu, guest.guID, chk.IsChecked.Value);        
       }
     }
 
+    /// <summary>
+    /// Despliega el formulario de invitacion
+    /// </summary>
+    /// <param name="guCheckIn">Check In del Huesped</param>
+    /// <param name="gagu">Si es un Guest Adicional</param>
+    /// <param name="guId"></param>
+    /// <param name="isInvit"></param>
+    private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit)
+    {
+      if (ValidateInvitation(guCheckIn, gagu))
+      {
+        frmLogin login = null;
+        if (!isInvit)
+        {
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
+            validatePermission: true, permission: EnumPermission.PRInvitations,
+            permissionLevel: EnumPermisionLevel.Standard,
+            switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+
+          if (App.User.AutoSign)
+          {
+            login.UserData = App.User;
+          }
+          await login.getAllPlaces();
+          login.ShowDialog();
+        }
+        if (isInvit || login.IsAuthenticated)
+        {
+          var invitacion = new frmInvitation(
+            EnumModule.InHouse,
+            EnumInvitationType.existing,
+            login != null ? login.UserData : App.User,
+            guId) {Owner = this};
+          invitacion.ShowDialog();
+        }
+      }
+    }
+
+    /// <summary>
+    /// Valida los datos para desplegar el formulario de invitacion
+    /// </summary>
+    /// <param name="guCheckIn">Si ya hizo Check In el Huesped </param>
+    /// <param name="gagu">si es un Huesped adicional</param>
+    /// <returns></returns>
+    private bool ValidateInvitation(bool guCheckIn, int? gagu )
+    {
+      //Validamos que el huesped haya hecho Check In
+      if (!guCheckIn)
+      {
+        UIHelper.ShowMessage("Guest has not made Check-In.");
+        return false;
+      }
+      //Validamos que no sea un huesped adicional 
+      if (gagu != null)
+      {
+        UIHelper.ShowMessage("An additional guest can not have invitation.");
+        return false;
+      }
+
+      //Validamos que tenga permiso de lectura de invitaciones
+      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
+      UIHelper.ShowMessage("Access denied.");
+      return false;
+    }
+
     #endregion
+
+    /// <summary>
+    /// Despliega el formulario que permite cambiar el motivo de no booking de un huesped
+    /// </summary>
+    /// <param name="guAvail"></param>
+    /// <param name="guInfo"></param>
+    /// <param name="guInvit"></param>
+    /// <param name="guCheckOutD"></param>
+    /// <param name="guId"></param>
+    /// <param name="dg"></param>
+    /// <returns></returns>
+    private  bool ShowNotBookingMotive(bool guAvail, bool guInfo, bool guInvit, DateTime guCheckOutD, int guId,DataGrid dg)
+    {
+      //Variable que servira para indicar si se abrira el formulario de Invitacion o Solo se guardare los motivos de no booking
+      var showInvitation = true;
+      
+      //Si los datos son validos
+      if (ValidateNotBookingMotive(guAvail, guInfo, guInvit, guCheckOutD))
+      {
+        showInvitation = false;
+
+        //desplegamos el formulario 
+        var frmNotBookingMotive = new frmNotBookingMotive(guId) {Owner = this};
+        frmNotBookingMotive.ShowDialog();
+
+        //Si no se guardo y tampoco se Invito quiere decir que se cerro solo así el formulario
+        if (frmNotBookingMotive.Save || frmNotBookingMotive.Invit)
+        {
+          //Si se desea invitar al huesped y no guardo al huesped
+          if (frmNotBookingMotive.Invit)
+          {
+            showInvitation =  true;
+          }
+          //Si no desea invitar al huesped y guardo los cambios
+          else
+          {
+            //Si guardo los cambios, entonces actualizamos el DataGrid
+            //select guInvit from Guests where guID = 7755761
+            var item = dg.SelectedItem;
+            var t = item.GetType();
+           //Fecha y PR de no booking
+            t.GetProperty("guNoBookD").SetValue(item,Convert.ToDateTime(frmNotBookingMotive.txtguNoBookD.Text));
+            t.GetProperty("guPRNoBook").SetValue(item, frmNotBookingMotive.cbmguPRNoBook.SelectedValue);
+            //Motivo de no booking 
+            t.GetProperty("gunb").SetValue(item, frmNotBookingMotive.cbmgunb.SelectedValue);
+
+            dg.Items.Refresh();
+            GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
+          }
+
+        }       
+      }
+      return showInvitation;
+    }
+
+
+    private bool ValidateNotBookingMotive(bool guAvail, bool guInfo, bool guInvit, DateTime guCheckOutD)
+    {
+      //validamos que el huesped este disponible
+      if (!guAvail) return false;
+      //validamos que el huesped este contactado
+      if (!guInfo) return false;
+      //validamos que el huesped no este invitado
+      if (!guInvit) return false;
+      //validamos que el huesped haya hecho Check Out
+      if (guCheckOutD > _serverDate) return false;      return true;
+    }
 
     #region Window_KeyDown
 
@@ -1905,8 +2033,6 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #endregion
-
-
 
   }
 }

@@ -196,6 +196,7 @@ namespace IM.BusinessRules.BR
     /// get a Guest
     /// </summary>
     /// <param name="guestId">Id del huesped</param>
+    /// <param name="withAditional">Indica si se quiere los Guest Adicionales</param>
     /// <returns>Guest</returns>
     /// <history>
     /// [jorcanche] created 10/03/2016
@@ -664,11 +665,12 @@ namespace IM.BusinessRules.BR
             {
               //Guardamos los cambios en el Guest
               dbContext.Entry(guest).State = EntityState.Modified;
+              var respuesta = dbContext.SaveChanges();
 
               //Guardamos el Log del guest
               dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
-
-              var respuesta = dbContext.SaveChanges();
+              
+              //Confirmammos la transaccion
               transaction.Commit();
               return respuesta;
             }

@@ -187,8 +187,7 @@ namespace IM.Inhouse
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID,App.User.LeadSource.lsN);
-      frmGuestLog.Owner = this;
+      var frmGuestLog = new frmGuestLog(_guestID) {Owner = this};
       frmGuestLog.ShowDialog();
     }
 

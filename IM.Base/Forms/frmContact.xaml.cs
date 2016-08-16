@@ -187,8 +187,7 @@ namespace IM.Base.Forms
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID,_userPrimero.LeadSource.lsN);
-      frmGuestLog.Owner = this;
+      var frmGuestLog = new frmGuestLog(_guestID) {Owner = this};
       frmGuestLog.ShowDialog();
     }
     #endregion

@@ -412,7 +412,8 @@
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
+                                    <ComboBox x:Name="cmbsaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged"
+                                              SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                             TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"

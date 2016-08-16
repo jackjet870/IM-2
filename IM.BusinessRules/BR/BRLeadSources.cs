@@ -168,10 +168,10 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.LeadSources.Where(x => x.lsID == leadSourceID).SingleOrDefault();
-}
+      }
     }
     #endregion
-
+   
     #region GetLeadSources
     /// <summary>
     /// Obtiene registros del catalogo LeadSources
@@ -445,6 +445,32 @@ namespace IM.BusinessRules.BR
         throw;
       }
     }
+    #endregion
+
+    #region GetLeadSourceByGuestId
+
+    /// <summary>
+    /// Obtienen el nombre de un Lead Source por ID de un Huesped
+    /// </summary>
+    /// <param name="guestId">Id del Huesped</param>
+    /// <returns></returns>
+    /// <history>
+    /// [JORCANCHE] 11/JUL/2016 Created
+    /// </history>
+    public static async Task<string> GetLeadSourceByGuestId(int guestId)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return (from ls in dbContext.LeadSources
+                  join gu in dbContext.Guests on ls.lsID equals gu.guls
+                  where gu.guID == guestId
+                  select ls.lsN).FirstOrDefault();
+        }
+      });
+    }
+
     #endregion
   }
 }

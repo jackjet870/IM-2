@@ -425,12 +425,13 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region SaveSale
+
     /// <summary>
     /// Guarda un Sale con asincronia y con transaction
     /// </summary>
     /// <param name="saleOld">Sale Original antes de que se modificará</param>
     /// <param name="saleNew">Sale despues de que se modificará</param>
-    /// <param name="payments">Observable Collection de tipo Payments</param>
+    /// <param name="obpayments">Observable Collection de tipo Payments</param>
     /// <param name="isEnabledsaRefMember">Para indicar como encuentra habilitado en txtsaRefMember.enabled </param>
     /// <param name="hoursDifSalesRoom">La direfencia de horas del Sales Room</param>
     /// <param name="user">Usuario que hizo el cambio</param>
@@ -528,21 +529,14 @@ namespace IM.BusinessRules.BR
                   dbContext.USP_OR_UpdateGuestSale(saleNew.sagu, true);
 
                   //5.2.- Desmarcamos como venta el Guest Id anterior si ya no le quedan ventas                
-                  if ((from s in dbContext.Sales where s.sagu == saleNew.sagu select s).Count() == 0)
+                  if (!(from s in dbContext.Sales where s.sagu == saleNew.sagu select s).Any())
                   {
                     dbContext.USP_OR_UpdateGuestSale(saleOld.sagu, false);
                   }
                 }
                 #endregion
 
-                #region Guardamos el historico de la venta
-                //*****************************************************************************************************
-                //                               Guardamos el historico de la venta
-                //*****************************************************************************************************
-                //6.1.- Guardamos SaleLog
-                dbContext.USP_OR_SaveSaleLog(saleNew.sagu, hoursDifSalesRoom, user);
-
-                #endregion
+             
               }
 
               #region Guarda los movimientos de los SalesSalesmen
@@ -607,8 +601,22 @@ namespace IM.BusinessRules.BR
                 #endregion
               }
 
-              //Si no hubo ningun problema guardamoa cambios 
+              //Si no hubo ningun problema guardamos cambios 
               var respuesta = dbContext.SaveChanges();
+
+              if (!isOnlySaveSalesSalesmen)
+              {
+                #region Guardamos el historico de la venta
+                //*****************************************************************************************************
+                //                               Guardamos el historico de la venta
+                //*****************************************************************************************************
+                //6.1.- Guardamos SaleLog
+                dbContext.USP_OR_SaveSaleLog(saleNew.sagu, hoursDifSalesRoom, user);
+
+                #endregion
+              }
+
+              //Confirmamos la transaccion
               transaction.Commit();
               return respuesta;
             }

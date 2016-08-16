@@ -203,33 +203,33 @@ namespace IM.Base.Forms
           }
         }
       }
-      else //si no se permite hacer reschedules
-      {
-        txtBookingDate.IsEnabled = true;
+      //else //si no se permite hacer reschedules
+      //{
+      //  txtBookingDate.IsEnabled = true;
 
-        //PR Contract
-        if (_invitationType == EnumInvitationType2.OutHouse)
-        {
-          txtPRContract.IsEnabled = true;
-          cmbPRContract.IsEnabled = true;
-        }
+      //  //PR Contract
+      //  if (_invitationType == EnumInvitationType2.OutHouse)
+      //  {
+      //    txtPRContract.IsEnabled = true;
+      //    cmbPRContract.IsEnabled = true;
+      //  }
 
-        //PR
-        txtPR.IsEnabled = true;
-        cmbPR.IsEnabled = true;
+      //  //PR
+      //  txtPR.IsEnabled = true;
+      //  cmbPR.IsEnabled = true;
 
-        //Sala /Location
-        if (_invitationType == EnumInvitationType2.Host)
-        {
-          txtLocation.IsEnabled = true;
-          cmbLocation.IsEnabled = true;
-        }
-        else
-        {
-          txtSalesRoom.IsEnabled = true;
-          cmbSalesRoom.IsEnabled = true;
-        }
-      }
+      //  //Sala /Location
+      //  if (_invitationType == EnumInvitationType2.Host)
+      //  {
+      //    txtLocation.IsEnabled = true;
+      //    cmbLocation.IsEnabled = true;
+      //  }
+      //  else
+      //  {
+      //    txtSalesRoom.IsEnabled = true;
+      //    cmbSalesRoom.IsEnabled = true;
+      //  }
+      //}
     }
 
     /// <summary>
@@ -1668,16 +1668,16 @@ namespace IM.Base.Forms
 
         if (!allowReschedule)
         {
-          // ocultamos los controles de reschedule y rebook
-          btnReschedule.Visibility = Visibility.Hidden;
-          btnRebook.Visibility = Visibility.Hidden;
-          txtRescheduleDate.Visibility = Visibility.Hidden;
-          cmbRescheduleTime.Visibility = Visibility.Hidden;
-          lblReschedule.Visibility = Visibility.Hidden;
-          chkResch.Visibility = Visibility.Hidden;
-          lblResch.Visibility = Visibility.Hidden;
-          //permitimos cambiar
-          btnChange.IsEnabled = true;
+          //// ocultamos los controles de reschedule y rebook
+          //btnReschedule.Visibility = Visibility.Hidden;
+          //btnRebook.Visibility = Visibility.Hidden;
+          //txtRescheduleDate.Visibility = Visibility.Hidden;
+          //cmbRescheduleTime.Visibility = Visibility.Hidden;
+          //lblReschedule.Visibility = Visibility.Hidden;
+          //chkResch.Visibility = Visibility.Hidden;
+          //lblResch.Visibility = Visibility.Hidden;
+          ////permitimos cambiar
+          //btnChange.IsEnabled = true;
         }
 
       }

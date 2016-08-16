@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Title="Booking Cancellation" Height="174.698" Width="372.453" Background="Beige"  Closed="Window_Closed" Loaded="FrmBookingCancel_OnLoaded">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Booking Cancellation" Height="174.698" Width="372.453" Closed="Window_Closed" Loaded="FrmBookingCancel_OnLoaded">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="14"/>
@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="47"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0"  Background="Bisque" Margin="5,5,5,5" BorderBrush="Black" BorderThickness="2">
+        <Border Grid.Row="0"   Margin="5,5,5,5" Style="{StaticResource brd-Catalogs}" BorderThickness="2">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock x:Name="lblUserName" Text="Usuario" Margin="10,5,10,0" FontSize="16"  />
             </StackPanel>
@@ -30,7 +30,7 @@
                 <CheckBox IsEnabled="False" Foreground="Black"  x:Name="chkguBookCanc" Content="Canceled" Margin="10,5,10,0" FontSize="17" Width="90" Height="30"/>
             </StackPanel>
         </Border>
-        <Border Grid.Row="2"  Background="Bisque" Margin="5,5,5,5" BorderBrush="Black" BorderThickness="2">
+        <Border Grid.Row="2" Margin="5,5,5,5" Style="{StaticResource brd-Catalogs}" BorderThickness="2">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center"  >
                 <Button x:Name="btnOK" Margin="10,0,17,0"   Content="OK" Click="btnOK_Click"/>
                 <Button x:Name="btnCancel" Margin="10,0,17,0" Content="Cancel" Click="btnCancel_Click" />

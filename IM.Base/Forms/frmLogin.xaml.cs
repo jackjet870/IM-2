@@ -47,6 +47,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
     /// [erosado] 25/04/2016  Modified. Se restructuro y se agregaron parametros _permission, _permissionLevel, _program, _modeSwitchLoginUser
+    /// [jorcanche] 16/08/2016 Se agrego el parametro windowStartupLocation sirve para definir en que posicion estara el windowStartupLocation
     /// </history>
     public frmLogin(
       Window splash = null,
@@ -61,10 +62,11 @@ namespace IM.Base.Forms
       EnumRole role = EnumRole.None,
       bool switchLoginUserMode = false,
       bool invitationMode = false,
-      string invitationPlaceId = ""
+      string invitationPlaceId = "",
+      WindowStartupLocation  windowStartupLocation = WindowStartupLocation.Manual
       )
     {
-
+      
       InitializeComponent();
       _splash = splash;
       _loginType = loginType;
@@ -79,6 +81,7 @@ namespace IM.Base.Forms
       _modeSwitchLoginUser = switchLoginUserMode;
       _invitationMode = invitationMode;
       _invitationPlaceId = invitationPlaceId;
+      WindowStartupLocation = windowStartupLocation;
       CloseWindow = new ExecuteCommandHelper(x => btnCancelar_Click(this, null));
     }
 

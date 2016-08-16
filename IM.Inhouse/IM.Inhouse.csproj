@@ -137,6 +137,9 @@
     <Compile Include="Forms\frmInhouse.xaml.cs">
       <DependentUpon>frmInhouse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmNotBookingMotive.xaml.cs">
+      <DependentUpon>frmNotBookingMotive.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmNotices.xaml.cs">
       <DependentUpon>frmNotices.xaml</DependentUpon>
     </Compile>
@@ -442,6 +445,10 @@
     <Page Include="Forms\frmInhouse.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmNotBookingMotive.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmNotices.xaml">
       <SubType>Designer</SubType>

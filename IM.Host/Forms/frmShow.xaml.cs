@@ -1052,7 +1052,7 @@ namespace IM.Host.Forms
     /// </history>
     private void imgButtonLog_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmGuestLog = new frmGuestLog(_guestCurrent, App.User.SalesRoom.srN) { Owner = this };
+      var frmGuestLog = new frmGuestLog(_guestCurrent) { Owner = this };
       frmGuestLog.ShowDialog();
     }
 

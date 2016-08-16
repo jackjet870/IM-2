@@ -206,7 +206,7 @@ namespace IM.Base.Forms
     private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       //Si viene de Host la invitacion le mandamos el SalesRoom, en lugar del leadsource, es solo informativo.
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestId, _user.LeadSource != null ? _user.LeadSource.lsID : _user.SalesRoom.srID);
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestId);
       frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }

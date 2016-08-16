@@ -270,8 +270,10 @@ namespace IM.Inhouse
     {
       try
       {
+
         if (Validate())
         {
+          
           //guardamos la informacion de disponibilidad
           _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
           _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
@@ -305,8 +307,7 @@ namespace IM.Inhouse
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID, App.User.LeadSource.lsN);
-      frmGuestLog.Owner = this;
+      var frmGuestLog = new frmGuestLog(_guestID) {Owner = this};
       frmGuestLog.ShowDialog();
     }
     #endregion
@@ -314,11 +315,9 @@ namespace IM.Inhouse
     #region btnEdit_Click
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(switchLoginUserMode:true);
+      var log = new frmLogin(switchLoginUserMode: true, windowStartupLocation: WindowStartupLocation.CenterScreen);
       if (App.User.AutoSign)
-      {
-        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        //MessageBox.Show(App.User.User.pePwd.ToString());
+      {        
         log.UserData = App.User;
       }
       log.ShowDialog();

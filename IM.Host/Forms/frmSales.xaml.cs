@@ -40,7 +40,7 @@ namespace IM.Host.Forms
     private decimal _saleAmountOriginal;
 
     //El Monto de la venta
-    private decimal _SaleAmount;
+    private decimal _saleAmount;
 
     //Vendedores
     private List<SalesSalesman> _saleMen;
@@ -63,17 +63,7 @@ namespace IM.Host.Forms
     //Listado de SalesSalesman de Intelligence Contracts
     private List<MemberSalesmen> _lstMemberSalesmens;   
 
-    #region frmSales
-
-    /// <summary>
-    /// Contructor de Pruebas 
-    /// </summary>
-    public frmSales()
-    {
-      InitializeComponent();     
-      gprCriteria.Visibility = Visibility.Collapsed ;
-      _guId = 7754745;
-    }
+    #region frmSales    
 
     public frmSales(EnumOpenBy openBy, int guId = 0)
     {
@@ -287,7 +277,7 @@ namespace IM.Host.Forms
       //Si hay alguna venta
       if (dtgSale.Items.Count > 0)
       {
-        //Limpiamos los Source ya que seran nuevos Datos para los Trgets
+        //Limpiamos los Source ya que seran nuevos Datos para los Targets
         _saleOld = new Sale();
         _saleNew = new Sale();
 
@@ -316,7 +306,7 @@ namespace IM.Host.Forms
         GetGuestName(_saleNew.sagu);     
 
         //Respaldamos el monto de la venta original
-        _SaleAmount = _saleAmountOriginal = GetSaleAmount();
+        _saleAmount = _saleAmountOriginal = GetSaleAmount();
 
         //Obtenemos los vendedores
         GetSalemen();
@@ -760,9 +750,10 @@ namespace IM.Host.Forms
     /// </history>
     private void cbo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+      
       var cmb = sender as ComboBox;
-      if (cmb == null || _loading) return;      
-
+      if (cmb == null || _loading) return;
+      
       var personnelValidando = cmb.Name.Substring(5).Replace("Captain", "CAPT").ToUpper();
       var lstcmb = UIHelper.GetChildParentCollection<ComboBox>(grdSalesmen);
       if (cmb.SelectedIndex == -1) return;
@@ -1798,94 +1789,6 @@ namespace IM.Host.Forms
       }
     }
 
-    #endregion 
-
-    #region Dgpayment_OnRowEditEnding
-
-    /// <summary>
-    /// Elimina los Rows Vacios, y como no se cancela el evento al final me agrega un nuevo row
-    /// dejando así al final siempre un Row vacio
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05/Jul/016
-    /// </history>
-    private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-      {
-      _payments.ToList().ForEach(payment =>
-      {
-        if (string.IsNullOrEmpty(payment.papt) && string.IsNullOrEmpty(payment.pacc))
-        {
-          _payments.Remove(payment);
-        }
-      });
-    }
-
-    #endregion
-
-    #region Dgpayment_OnLostKeyboardFocus
-    /// <summary>
-    ///Habilitamos el Combobox para que luego el evento LoadedPaccColumn_OnHandler
-    ///decida si lo habilita o lo dehabilita
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05/Jul/016
-    /// </history>
-    private void Dgpayment_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-      paccColumn.IsReadOnly = false;
-    }
-    #endregion
-
-    #region LoadedPaccColumn_OnHandler
-
-    /// <summary>
-    /// Habilita ó deshabilita la columna Credit Card según si selecciono Tarjeta de Credito (CC)
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05/Jul/016
-    /// </history>
-    private void LoadedPaccColumn_OnHandler(object sender, RoutedEventArgs e)
-    {
-      var payment = (Payment)dgpayment.CurrentItem;
-      paccColumn.IsReadOnly = payment.papt != "CC";
-    }
-
-    #endregion
-
-    #region SelectionChangedPaptColumn_OnHandler
-
-    /// <summary>
-    /// Valida la primera columna papt de modo que:
-    /// 1.- Si selecciona CC habilita la segunda columana pacc y selecciona por default el primer registro.
-    /// 2.- Si selecciona uno diferente a CC deshabilita la segunda columna pacc y quita la seleccion dejandolo en SelectedIndex = -1;
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 05/Jul/016
-    /// </history>
-    private void SelectionChangedPaptColumn_OnHandler(object sender, SelectionChangedEventArgs e)
-    {
-      var payment = (ComboBox)e.Source;
-      if (payment.SelectedValue == null) return;
-
-      var drSelected = dgpayment.ItemContainerGenerator.ContainerFromIndex(dgpayment.SelectedIndex) as DataGridRow;
-      var dcCreditCard = dgpayment.Columns[1].GetCellContent(drSelected).Parent as DataGridCell;
-      var combo = dcCreditCard.Content as ComboBox;
-
-      //Si se escogio el Credit Card en la columana Payment Type automaticamente en la columan Credit Card te escogera
-      //el primer registro de ser lo contrario lo dejara vacio
-      if (combo != null) combo.SelectedIndex = payment.SelectedValue.ToString() != "CC" ? -1 : 1;
-       
-      //Valida que no se repitan en la columan Payment Type.
-      //Al momento de seleccionar uno que ya existe te manda un mensaje 
-      //y deja el combobox.SelectedIndex con  el valor -1 para que quede vacio el control
-      if (_payments.Count(pay => pay.papt == payment.SelectedValue.ToString()) != 1)
-      {
-        UIHelper.ShowMessage("Payment Type must not be repeated");
-        payment.SelectedIndex = -1;
-        if (combo != null) combo.SelectedIndex = -1;
-      }
-    }
-
     #endregion
 
     #region btnUndo_PreviewMouseLeftButtonDown
@@ -1972,6 +1875,96 @@ namespace IM.Host.Forms
     }
 
     #endregion
+
+    #region Dgpayment_OnRowEditEnding
+
+    /// <summary>
+    /// Elimina los Rows Vacios, y como no se cancela el evento al final me agrega un nuevo row
+    /// dejando así al final siempre un Row vacio
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      _payments.ToList().ForEach(payment =>
+      {
+        if (string.IsNullOrEmpty(payment.papt) && string.IsNullOrEmpty(payment.pacc))
+        {
+          _payments.Remove(payment);
+        }
+      });
+    }
+
+    #endregion
+
+    #region Dgpayment_OnLostKeyboardFocus
+    /// <summary>
+    ///Habilitamos el Combobox para que luego el evento LoadedPaccColumn_OnHandler
+    ///decida si lo habilita o lo dehabilita
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void Dgpayment_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+      paccColumn.IsReadOnly = false;
+    }
+    #endregion
+
+    #region LoadedPaccColumn_OnHandler
+
+    /// <summary>
+    /// Habilita ó deshabilita la columna Credit Card según si selecciono Tarjeta de Credito (CC)
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void LoadedPaccColumn_OnHandler(object sender, RoutedEventArgs e)
+    {
+      var payment = (Payment)dgpayment.CurrentItem;
+      paccColumn.IsReadOnly = payment.papt != "CC";
+    }
+
+    #endregion
+
+    #region SelectionChangedPaptColumn_OnHandler
+
+    /// <summary>
+    /// Valida la primera columna papt de modo que:
+    /// 1.- Si selecciona CC habilita la segunda columana pacc y selecciona por default el primer registro.
+    /// 2.- Si selecciona uno diferente a CC deshabilita la segunda columna pacc y quita la seleccion dejandolo en SelectedIndex = -1;
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05/Jul/016
+    /// </history>
+    private void SelectionChangedPaptColumn_OnHandler(object sender, SelectionChangedEventArgs e)
+    {
+      var payment = (ComboBox)e.Source;
+      if (payment.SelectedValue == null) return;
+
+      var drSelected = dgpayment.ItemContainerGenerator.ContainerFromIndex(dgpayment.SelectedIndex) as DataGridRow;
+      var dcCreditCard = dgpayment.Columns[1].GetCellContent(drSelected).Parent as DataGridCell;
+      var combo = dcCreditCard.Content as ComboBox;
+
+      //Si se escogio el Credit Card en la columana Payment Type automaticamente en la columan Credit Card te escogera
+      //el primer registro de ser lo contrario lo dejara vacio
+      if (combo != null) combo.SelectedIndex = payment.SelectedValue.ToString() != "CC" ? -1 : 1;
+       
+      //Valida que no se repitan en la columan Payment Type.
+      //Al momento de seleccionar uno que ya existe te manda un mensaje 
+      //y deja el combobox.SelectedIndex con  el valor -1 para que quede vacio el control
+      if (_payments.Count(pay => pay.papt == payment.SelectedValue.ToString()) != 1)
+      {
+        UIHelper.ShowMessage("Payment Type must not be repeated");
+        payment.SelectedIndex = -1;
+        if (combo != null) combo.SelectedIndex = -1;
+      }
+    }
+
+    #endregion
+
+   
    
   }
 }

@@ -43,7 +43,7 @@ namespace IM.Inhouse.Classes
     }
     public string ReservacionImage
     {
-      get { return (string.IsNullOrEmpty(guHReservID) ? string.Empty : "pack://application:,,,/IM.Base;component/Images/Report.ico"); }
+      get { return (string.IsNullOrEmpty(guHReservID) ? string.Empty : "pack://application:,,,/IM.Styles;component/Images/Report.ico"); }
     }
   }
 }
