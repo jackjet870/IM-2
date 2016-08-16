@@ -559,6 +559,7 @@ namespace IM.Base.Helpers
     #endregion
 
     #region SetUpGrid
+
     /// <summary>
     /// Configura el Estilo de los DataGridTextColumn 
     /// Maxlength, Admision de caracteres especiales, Numerico, Decimal , Precision, Escala,
@@ -569,13 +570,20 @@ namespace IM.Base.Helpers
     /// [emoguel] 28/07/2016  Created.
     /// [erosado] 29/07/2016  Modified. Se agregó el Tag para definir el Maxlength desde la columna.
     /// </history>
-    public static void SetUpGrid<T>(DataGrid dtgGrid, T objBinding, EnumDatabase database = EnumDatabase.IntelligentMarketing) where T:class
+    public static void SetUpGrid<T>(DataGrid dtgGrid, T objBinding,
+      EnumDatabase database = EnumDatabase.IntelligentMarketing) where T : class
     {
-      List<DataGridTextColumn> lstColumns = dtgGrid.Columns.Where(dgc => dgc is DataGridTextColumn).OfType<DataGridTextColumn>().ToList();
-      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(objBinding, database);//Obtenemos la propiedades desde la BD
+      List<DataGridTextColumn> lstColumns =
+        dtgGrid.Columns.Where(dgc => dgc is DataGridTextColumn).OfType<DataGridTextColumn>().ToList();
+      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(objBinding, database);
+        //Obtenemos la propiedades desde la BD
+
       #region Object properties
+
       Type type = objBinding.GetType();
-      List<PropertyInfo> lstProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual).ToList();      
+      List<PropertyInfo> lstProperties =
+        type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual).ToList();
+
       #endregion
 
       lstColumns.ForEach(dgc =>
@@ -587,85 +595,121 @@ namespace IM.Base.Helpers
           var columnDefinition = lstColumnsDefinitions.FirstOrDefault(cd => cd.column == dgc.SortMemberPath);
           if (columnDefinition != null)
           {
-            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+            TypeCode typeCode =
+              Type.GetTypeCode(Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
             Style style = new Style(typeof(TextBox));
-            EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(dgc);//Formato del campo de texto
-            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(dgc);//Maxlength definido desde la columna
+            EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(dgc); //Formato del campo de texto
+            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(dgc); //Maxlength definido desde la columna
             switch (typeCode)
             {
-              #region String
+                #region String
+
               case TypeCode.String:
               case TypeCode.Char:
-                {                  
-                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength));//Asignamos el maxLength 
-                  if (formatInput==EnumFormatInput.NotSpecialCharacters)//Bloquea caracteres especiales
-                  {
-                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.TextInputSpecialCharacters)));
-                  }
-                  dgc.EditingElementStyle = style;
-                  break;
+              {
+                style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
+                  (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength)); //Asignamos el maxLength 
+                if (formatInput == EnumFormatInput.NotSpecialCharacters) //Bloquea caracteres especiales
+                {
+                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
+                    new TextCompositionEventHandler(TextBoxHelper.TextInputSpecialCharacters)));
                 }
-              #endregion
+                dgc.EditingElementStyle = style;
+                break;
+              }
 
-              #region Decimal
+                #endregion
+
+                #region Decimal
+
               case TypeCode.Decimal:
               case TypeCode.Double:
+              {
+                if (columnDefinition.scale > 0 || PrecisionPropertyClass.GetPrecision(dgc) != "0,0")
                 {
-                  if (columnDefinition.scale > 0 || PrecisionPropertyClass.GetPrecision(dgc) != "0,0")
+                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
+                    new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput))); //Validar texto
+                  var precisionProperty = PrecisionPropertyClass.GetPrecision(dgc);
+                  if (precisionProperty == "0,0")
                   {
-                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.DecimalTextInput)));//Validar texto
-                    var precisionProperty = PrecisionPropertyClass.GetPrecision(dgc);
-                    if (precisionProperty=="0,0")
-                    {
-                      style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale));//Agregar Presicion
-                    } 
-                    else
-                    {
-                      var precision = precisionProperty.Split(',');
-                      style.Setters.Add(new Setter(MaxLengthPropertyClass.MaxLengthProperty,Convert.ToInt16(precision[0]) + Convert.ToInt16(precision[1])+1));
-                      style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, precisionProperty));//Agregar Presicion
-                    }                 
-                    style.Setters.Add(new EventSetter(UIElement.PreviewKeyDownEvent, new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown)));//Validar espacios en blanco y borrado
-
+                    style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty,
+                      columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale));
+                      //Agregar Presicion
                   }
                   else
                   {
-                    style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.IntTextInput)));//Validar enteros
-                    style.Setters.Add(new EventSetter(UIElement.PreviewKeyDownEvent, new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown)));//Validar espacios en blanco
-                  }                  
-                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength));//Asignamos el maxLength 
-                  break;
-                }
-              #endregion
+                    var precision = precisionProperty.Split(',');
+                    style.Setters.Add(new Setter(MaxLengthPropertyClass.MaxLengthProperty,
+                      Convert.ToInt16(precision[0]) + Convert.ToInt16(precision[1]) + 1));
+                    style.Setters.Add(new Setter(PrecisionPropertyClass.PrecisionProperty, precisionProperty));
+                      //Agregar Presicion
+                  }
+                  style.Setters.Add(new EventSetter(UIElement.PreviewKeyDownEvent,
+                    new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown))); //Validar espacios en blanco y borrado
 
-              #region Int
+                }
+                else
+                {
+                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
+                    new TextCompositionEventHandler(TextBoxHelper.IntTextInput))); //Validar enteros
+                  style.Setters.Add(new EventSetter(UIElement.PreviewKeyDownEvent,
+                    new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown))); //Validar espacios en blanco
+                }
+                style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
+                  (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength)); //Asignamos el maxLength 
+                break;
+              }
+
+                #endregion
+
+                #region Int
+
               case TypeCode.Int16:
               case TypeCode.Int32:
               case TypeCode.Int64:
+              {
+                switch (formatInput)
                 {
-                  switch (formatInput)
-                  {
-                    case EnumFormatInput.Number:
-                      style.Setters.Add(new EventSetter() { Event = UIElement.PreviewTextInputEvent, Handler = new TextCompositionEventHandler(TextBoxHelper.IntTextInput) });
-                      style.Setters.Add(new Setter(TextBox.MaxLengthProperty, (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength));//Asignamos el maxLength
-                      break;
-                    case EnumFormatInput.NumberNegative:
-                      style.Setters.Add(new EventSetter() { Event = UIElement.PreviewTextInputEvent, Handler = new TextCompositionEventHandler(TextBoxHelper.IntWithNegativeTextInput) });
-                      style.Setters.Add(new Setter(TextBox.MaxLengthProperty, (maxLengthProp>0)? maxLengthProp + 1 : columnDefinition.maxLength+1));
-                      break;
-                  }
-                  style.Setters.Add(new EventSetter() { Event = UIElement.PreviewKeyDownEvent, Handler = new System.Windows.Input.KeyEventHandler(TextBoxHelper.ValidateSpace) });
-                  break;
+                  case EnumFormatInput.Number:
+                    style.Setters.Add(new EventSetter()
+                    {
+                      Event = UIElement.PreviewTextInputEvent,
+                      Handler = new TextCompositionEventHandler(TextBoxHelper.IntTextInput)
+                    });
+                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
+                      (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength)); //Asignamos el maxLength
+                    break;
+                  case EnumFormatInput.NumberNegative:
+                    style.Setters.Add(new EventSetter()
+                    {
+                      Event = UIElement.PreviewTextInputEvent,
+                      Handler = new TextCompositionEventHandler(TextBoxHelper.IntWithNegativeTextInput)
+                    });
+                    style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
+                      (maxLengthProp > 0) ? maxLengthProp + 1 : columnDefinition.maxLength + 1));
+                    break;
                 }
-              #endregion
-
-              #region Byte
-              case TypeCode.Byte:
+                style.Setters.Add(new EventSetter()
                 {
-                  style.Setters.Add(new Setter(TextBox.MaxLengthProperty, 3));//Asignamos el maxLength 
-                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent, new TextCompositionEventHandler(TextBoxHelper.ByteTextInput)));//Validar enteros
-                  break;
-            }
+                  Event = UIElement.PreviewKeyDownEvent,
+                  Handler = new System.Windows.Input.KeyEventHandler(TextBoxHelper.ValidateSpace)
+                });
+                break;
+              }
+
+                #endregion
+
+                #region Byte
+
+              case TypeCode.Byte:
+              {
+                style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
+                  (maxLengthProp > 0 && maxLengthProp <= 3) ? maxLengthProp : 3)); //Asignamos el maxLength 
+                style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
+                  new TextCompositionEventHandler(TextBoxHelper.ByteTextInput))); //Validar enteros
+                break;
+              }
+
                 #endregion
 
             }
@@ -675,6 +719,7 @@ namespace IM.Base.Helpers
 
       });
     }
+
     #endregion
 
     #region IsInEditMode

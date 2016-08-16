@@ -110,7 +110,7 @@
                     </Grid.RowDefinitions>
                     <Button x:Name="btnGeneral" Content="General" Grid.Column="0" Grid.Row="0" Click="btnGeneral_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
                     <Button x:Name="btnSalesmen" Content="Salesmen" Grid.Column="1" Grid.Row="0" Click="btnSalesmen_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                    <Grid Background="White" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="0" x:Name="gGeneral" >
+                    <Grid Background="White" Grid.Row="1"  Grid.ColumnSpan="2" Grid.Column="0" Panel.ZIndex="0" x:Name="gGeneral">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  />
                             <ColumnDefinition />
