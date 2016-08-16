@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataErrorInfo.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTimePicker-TK.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -113,6 +114,14 @@
                                 <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                             </StackPanel>
                         </Border>
+                        <Border x:Name="imgButtonReLogin" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonReLogin_MouseLeftButtonDown" >
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Stretch="Uniform" Width="20">
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BKey.png"/>
+                                </Viewbox>
+                                <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Border>
                         <TextBlock Name="txbMode" Text="" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
                     </StackPanel>
                 </StackPanel>
@@ -154,7 +163,7 @@
                                                             <Viewbox Stretch="Uniform" Width="20">
                                                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
                                                             </Viewbox>
-                                                            <TextBlock Name="btnSearch" Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                                                            <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                                                         </StackPanel>
                                                     </Border>
                                                     <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
@@ -167,11 +176,11 @@
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" >
                                                         <TextBlock Text="Date" TextAlignment="Center"/>
-                                                        <TextBox Name="txtguInvitD" Width="100" Text="{Binding GuestObj.guInvitD, Mode=TwoWay, StringFormat={}{'dd/MM/yyy'} , UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <wpftk:DateTimePicker Name="dtpguInvitD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guInvitD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Time" TextAlignment="Center"/>
-                                                        <TextBox Name="txtguInvitT" Width="100" Text="{Binding GuestObj.guInvitT, Mode=TwoWay, StringFormat={}{'hh:mm'}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <wpftk:TimePicker Name="tpkguInvitT" Style="{StaticResource tpk-Time-TK}" Value="{Binding GuestObj.guInvitT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -382,7 +391,8 @@
                                                                   ItemTemplate="{StaticResource cbx-SaleRoom-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="srID"
-                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Sales Room"/>
+                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  Tag="Sales Room" SelectionChanged="cmbSalesRooms_SelectionChanged"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -402,12 +412,19 @@
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
+                                            <StackPanel Name="stkBookDateAndTime" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
                                                 <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                                 <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"
+                                                                      Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                      ValueChanged="dtpBookDate_ValueChanged"/>
                                                 <TextBlock Text="Time" Margin="0,5"/>
-                                                <ComboBox Name="cmbBookT" Width="130"  Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <ComboBox Name="cmbBookT" Width="Auto"  
+                                                          Style="{StaticResource cbx-General}" 
+                                                          ToolTip="{Binding Path=SelectedItem.Tour, RelativeSource={RelativeSource Self}}"
+                                                          SelectedValuePath="Tour"
+                                                          SelectedValue="{Binding GuestObj.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                          ItemTemplate="{StaticResource cbx-TourTimes-img}"/>
                                                 <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                             </StackPanel>
                                             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
@@ -415,9 +432,14 @@
                                                 <StackPanel Orientation="Horizontal" >
                                                     <StackPanel Name="stkRescheduleDate">
                                                         <TextBlock Text="Reschedule Date" Margin="0,5"/>
-                                                        <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"  Value="{Binding GuestObj.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" 
+                                                                              Value="{Binding GuestObj.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                              ValueChanged="dtpRescheduleDate_ValueChanged"/>
                                                         <TextBlock Text="Time" Margin="0,5"/>
-                                                        <ComboBox Name="cmbReschT" Width="130" Style="{StaticResource cbx-General}" SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <ComboBox Name="cmbReschT" Width="130"
+                                                                  Style="{StaticResource cbx-General}"
+                                                                  SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  ItemTemplate="{StaticResource cbx-TourTimes-img}"/>
                                                         <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding GuestObj.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel Name="stkFlightNumber" Margin="5,0">
@@ -425,7 +447,7 @@
                                                         <TextBox Name="txtguFlight" Width="120" Text="{Binding GuestObj.guFlight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                 </StackPanel>
-                                                
+
                                             </StackPanel>
                                         </Grid>
                                     </Viewbox>
@@ -627,7 +649,7 @@
                                 <!--#endregion-->
 
                                 <!--#region Deposits Row 2-->
-                                <Border x:Name="brdDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
+                                <Border x:Name="brdBookingDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
                                     <StackPanel >
                                         <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">

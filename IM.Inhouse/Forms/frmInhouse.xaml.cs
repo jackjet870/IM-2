@@ -1662,6 +1662,7 @@ namespace IM.Inhouse.Forms
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
+      //External Invitation
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
         switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
@@ -1860,9 +1861,6 @@ namespace IM.Inhouse.Forms
         //};
 
       }
-
-
-
     }
 
     #endregion

@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:local="clr-namespace:IM.Styles">
+
+    <!--#region Estilo para el TimePicker  -->
+    <Style x:Key="tpk-Time-TK" TargetType="{x:Type wpftk:TimePicker}">
+        <Style.Triggers>
+            <Trigger Property="wpftk:DateTimePicker.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Width" Value="130"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="ToolTip" Value="Select a Time"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="CultureInfo" Value="en-US"/>
+        <Setter Property="Format" Value="Custom"/>
+        <Setter Property="FormatString" Value="HH:mm"/>
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="IsReadOnly" Value="False"/>
+        <Setter Property="AllowTextInput" Value="False"/>
+        <Setter Property="AllowSpin" Value="True"/>
+        <Setter Property="Watermark" Value="Select a Time"/>
+        <Setter Property="IsUndoEnabled" Value="False"/>
+    </Style>
+    <!--#endregion-->
+</ResourceDictionary>

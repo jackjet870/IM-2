@@ -202,16 +202,34 @@ namespace IM.Base.Classes
     private void GetInvitationMode(Guest guestObj)
     {
       EnumMode invitationMode;
-
-      //Si el guestObj tiene guID
+      var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
+      
+      //Si es una invitacion existente
       if (guestObj != null && guestObj.guInvit)
       {
-        invitationMode = EnumMode.ReadOnly;
+        //Revisamos que tenga permisos para editar >= Standard
+        if (_user.HasPermission(permission, EnumPermisionLevel.Standard))
+        {
+          invitationMode = EnumMode.Edit;
+        }
+        //Si No asiganamos permisos de solo lectura
+        else
+        {
+          invitationMode = EnumMode.ReadOnly;
+        }
       }
-      //Si NO hay guID
-      else
+      //Si es una invitacion nueva 
+      else 
       {
-        invitationMode = EnumMode.Add;
+        //Revisamos que tenga permisoss para Agregar 
+        if (_user.HasPermission(permission, EnumPermisionLevel.Standard))
+        {
+          invitationMode = EnumMode.Add;
+        }
+        else
+        {
+          invitationMode = EnumMode.ReadOnly;
+        }
       }
       //Notificamos el cambio
       SetField(ref _invitationMode, invitationMode, nameof(invitationMode));
@@ -465,7 +483,7 @@ namespace IM.Base.Classes
       GetInvitationMode(guestObj);
 
       //Si es una invitacion Nueva SIN GuestID
-      if (InvitationMode != EnumMode.ReadOnly && guestObj.guID == 0)
+      if (InvitationMode == EnumMode.Add && guestObj.guID == 0)
       {
         //Valores Defualt Comunes entre los tipos de invitacion 
         guestObj.guInvitD = serverDate;
@@ -502,7 +520,7 @@ namespace IM.Base.Classes
         }
       }
       //Si es un invitacion nueva CON GuestID
-      else if (InvitationMode != EnumMode.ReadOnly && guestObj.guID !=0 )
+      else if (InvitationMode == EnumMode.Add && guestObj.guID != 0)
       {
         //Fecha y hora Invitacion
         guestObj.guInvitD = serverDate;
@@ -531,7 +549,7 @@ namespace IM.Base.Classes
         }
 
       }
-
+  
       //Hacemos una copia del objeto
       Guest copyGuest = new Guest();
       ObjectHelper.CopyProperties(copyGuest, guestObj);
