@@ -1648,13 +1648,15 @@ namespace IM.BusinessRules.BR
     /// <param name="segments">Claves de segmentos</param>
     /// <param name="program">Programs</param>
     /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <param name="groupByTeams">Indica si se va a incluir la informacion de equipos</param>
     /// <returns><list type="RptStatisticsByCloser"></list></returns>
     /// <history>
     ///   [aalcocer] 13/07/2016 Created
     ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    ///   [ecanul]
     /// </history>
     public static async Task<List<RptStatisticsByCloser>> GetStatisticsByCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
-      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false, bool groupByTeams = false)
     {
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
       return await Task.Run(() =>
@@ -1663,7 +1665,7 @@ namespace IM.BusinessRules.BR
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByCloser_Timeout;
           return dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
-            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen, false).ToList();
+            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen,groupByTeams).ToList();
         }
       });
     }
@@ -1818,6 +1820,30 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion GetStatisticsByFTB
+
+    #region GetRptEfficiencyWeekly
+    /// <summary>
+    /// Devuelve los datos para el reporte Efficiency Weekly
+    /// </summary>
+    /// <param name="ltsDtmStart">listado con las fechas de inicio</param>
+    /// <param name="ltsDtmEnd">listado con las fechas finales</param>
+    /// <param name="salesRoom">Sala de ventas</param>
+    /// <history>
+    ///   [ecanul] 16/08/2016 Created
+    /// </history>
+    public static async Task<List<RptEfficiencyWeekly>> GetRptEfficiencyWeekly(IEnumerable<DateTime> ltsDtmStart, IEnumerable<DateTime> ltsDtmEnd,
+      string salesRoom)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_IM_RptEfficiencyWeekly(salesRoom, string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")),
+            string.Join(",", ltsDtmEnd.Select(x => $"{x:yyyyMMdd}"))).ToList();
+        }
+      });
+    } 
+    #endregion
 
     #endregion Processor Sales
 

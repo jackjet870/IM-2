@@ -449,8 +449,19 @@ namespace IM.ProcessorSales.Forms
       #endregion
 
       #region EfficiencyWeekly
-      if(pnlWeeks.IsVisible)
-        frmPrs._clsFilter.lstEfficiency = _lstEfficiencyWeeks.Where(g => g.Include == true).ToList();
+      if (pnlWeeks.IsVisible)
+      {
+        frmPrs._clsFilter.LstSalesRooms = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
+        var effDates = new EfficiencyData()
+        {
+          efDateFrom = dtmStart.Value.Value,
+          efDateTo = dtmEnd.Value.Value,
+          Include = true
+          
+        };
+        frmPrs._clsFilter.lstEfficiency.Add(effDates);
+        frmPrs._clsFilter.lstEfficiency.AddRange(_lstEfficiencyWeeks.Where(g => g.Include == true).ToList());
+      }
       #endregion
     }
 

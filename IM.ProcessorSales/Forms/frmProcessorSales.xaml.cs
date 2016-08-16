@@ -344,7 +344,7 @@ namespace IM.ProcessorSales.Forms
           #region Stats by Closer
           case EnumRptRoomSales.StatsByCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), 
-              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen, groupByTeams:clsFilter.BlnGroupedByTeams));
             if (list.Any())
               file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
@@ -394,9 +394,14 @@ namespace IM.ProcessorSales.Forms
             break;
           #endregion
 
+          #region Efficiency Weekly
           case EnumRptRoomSales.EfficiencyWeekly:
-            
-            break;
+            list.AddRange(await BRReportsBySalesRoom.GetRptEfficiencyWeekly(clsFilter.lstEfficiency.Select(x => x.efDateFrom), clsFilter.lstEfficiency.Select(x => x.efDateTo),
+              clsFilter.LstSalesRooms.First().ToString()));
+            if (list.Any())
+              file = Reports.RptEfficiencyWeekly(reporteName, fileFullPath, filters, list.Cast<RptEfficiencyWeekly>().ToList());
+            break; 
+            #endregion
         }
         if (file == null)
         {
@@ -485,7 +490,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
           #region Stats by Closer
           case EnumRptSalesRoomAndSalesman.StatsByCloser:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, groupByTeams: clsFilter.BlnGroupedByTeams));
             if (list.Any())
               file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;

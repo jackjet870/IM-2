@@ -289,6 +289,10 @@ DECLARE @StatsByCloser table (
 	AWClosingFactor money,
 	AWSaleAverage money
 );
+--- se reinician las fechas para escoger las primeras del reporte
+SET @DateFrom = (SELECT DateFrom FROM @DatesFromTable WHERE id = 1);
+SET @DateTo = (SELECT DateTo FROM @DatesToTable WHERE id = 1);
+
 INSERT @StatsByCloser EXEC USP_IM_RptStatisticsByCloser @DateFrom, @DateTo, @SalesRoom;
 SELECT top 1 SalemanID, SalemanName, (CSalesAmount+ WSalesAmount + AsSalesAmount) Total INTO #temp FROM @StatsByCloser ORDER BY Total DESC
 

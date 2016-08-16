@@ -6,6 +6,7 @@ using System.Linq;
 using IM.Base.Helpers;
 using IM.Model;
 using IM.Model.Enums;
+using System.Text;
 
 namespace IM.ProcessorSales.Classes
 {
@@ -435,45 +436,13 @@ namespace IM.ProcessorSales.Classes
     /// <param name="groupedByTeams">Agrupado por equipos</param>
     /// <history>
     ///  [aalcocer] 13/07/2016 Created
+    ///  [ecanul]   16/08/2016 Modified, Se ha cambiado el formato Pivote a Excel Custom
     /// </history>
     internal static FileInfo RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
     {
-      var lstReportAux = new List<dynamic>(); 
-      /*if (groupedByTeams)
-      {
-        lstReportAux.AddRange(lstReport.Select(c => new
-        {
-          //c.SalemanTypeN,
-          //Team = c.TeamN + "   " + c.TeamLeaderN,
-          //c.SalesmanStatus,
-          //c.SalemanID,
-          //c.SalemanName,
-          //c.SalesAmount,
-          //c.OPP,
-          //c.UPS,
-          //c.SalesRegular,
-          //c.SalesExit,
-          //c.Sales
-        }));
-      }
-      else
-      {
-        lstReportAux.AddRange(lstReport.Select(c => new
-        {
-          //c.SalemanTypeN,
-          //c.SalemanID,
-          //c.SalemanName,
-          //c.SalesAmount,
-          //c.OPP,
-          //c.UPS,
-          //c.SalesRegular,
-          //c.SalesExit,
-          //c.Sales
-        }));
-      }*/
-
-      DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByCloserGroupedByTeams() : FormatReport.RptStatisticsByCloser(),true,showRowHeaders:true, fileFullPath: fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstReport);
+      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByCloser(groupedByTeams),
+        blnRowGrandTotal: true, blnShowSubtotal: groupedByTeams, fileFullPath: fileFullPath);
     }
     #endregion RptStatisticsByCloser
 
@@ -619,7 +588,7 @@ namespace IM.ProcessorSales.Classes
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
       return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByLocationsGroupedByTeams() : FormatReport.RptStatisticsByFTBByLocations(), blnShowSubtotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
     }
-    #endregion RptStatisticsByFTB
+    #endregion RptStatisticsByFTBByLocations
 
     #region RptStatisticsByFTBByCategories
 
@@ -640,7 +609,36 @@ namespace IM.ProcessorSales.Classes
       return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByCategoriesGroupedByTeams() : FormatReport.RptStatisticsByFTBByCategories(), blnShowSubtotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion RptStatisticsByFTB
-    
+
+    #region RptEfficiencyWeekly
+    /// <summary>
+    /// Devuele el reporte Efficiency Weekly
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta a guardar</param>
+    /// <param name="filters">Filtros Aplicados</param>
+    /// <param name="lstReport">Listado con la informacion del reporte</param>
+    /// <history>
+    /// [ecanul] 16/08/2016 Created
+    /// </history>
+    public static FileInfo RptEfficiencyWeekly(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptEfficiencyWeekly> lstReport)
+    {
+      DataTable dtData = TableHelper.GetDataTableFromList(lstReport);
+      var unAssistance = lstReport.Where(x => x.EfficiencyType == "Undefined Assistance").ToList();
+
+      StringBuilder str = new StringBuilder();
+      if (unAssistance.Any())
+      {
+        str.AppendLine("The following salesmen are not have defined their assistance:");
+        unAssistance.ForEach(x =>
+        {
+          str.AppendLine($"{x.SalemanID} - {x.SalemanName}");
+        });
+      }
+      UIHelper.ShowMessage(str.ToString(), System.Windows.MessageBoxImage.Exclamation, "Front To Backs without Assistance");
+      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), fileFullPath: fileFullPath);
+    } 
+    #endregion
 
     #endregion
   }
