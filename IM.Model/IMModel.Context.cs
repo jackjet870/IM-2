@@ -39,7 +39,7 @@ namespace IM.Model
       throw new UnintentionalCodeFirstException();
     }
 
-    public virtual DbSet<Agency> Agencies { get; set; }
+        public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Assistance> Assistances { get; set; }
         public virtual DbSet<AssistanceStatus> AssistancesStatus { get; set; }
@@ -6486,6 +6486,27 @@ namespace IM.Model
                 new ObjectParameter("Date", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PostShort>("USP_OR_ObtenerPuestoDePersonalPorFecha", personnelIDParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<string> USP_OR_FolioValidCXC(Nullable<int> number, Nullable<int> guestID, Nullable<bool> active, Nullable<int> action)
+        {
+            var numberParameter = number.HasValue ?
+                new ObjectParameter("Number", number) :
+                new ObjectParameter("Number", typeof(int));
+    
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var activeParameter = active.HasValue ?
+                new ObjectParameter("Active", active) :
+                new ObjectParameter("Active", typeof(bool));
+    
+            var actionParameter = action.HasValue ?
+                new ObjectParameter("Action", action) :
+                new ObjectParameter("Action", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_FolioValidCXC", numberParameter, guestIDParameter, activeParameter, actionParameter);
         }
     }
 }

@@ -6236,6 +6236,12 @@
           <Parameter Name="PR2" Type="varchar" Mode="In" />
           <Parameter Name="PR3" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_FolioValidCXC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Number" Type="int" Mode="In" />
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Active" Type="bit" Mode="In" />
+          <Parameter Name="Action" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -18189,6 +18195,12 @@
           <FunctionImport Name="USP_OR_ObtenerPuestoDePersonalPorFecha" ReturnType="Collection(IMModel.PostShort)">
             <Parameter Name="PersonnelID" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_FolioValidCXC" ReturnType="Collection(String)">
+            <Parameter Name="Number" Mode="In" Type="Int32" />
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="Active" Mode="In" Type="Boolean" />
+            <Parameter Name="Action" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -31322,6 +31334,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_FolioValidCXC" FunctionName="IMModel.Store.USP_OR_FolioValidCXC" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
