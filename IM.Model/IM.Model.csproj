@@ -268,7 +268,6 @@
     <Compile Include="Enums\EnumSearchHostType.cs" />
     <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
-    <Compile Include="Enums\EnumInvitationType2.cs" />
     <Compile Include="Enums\EnumTourTimesSchema.cs" />
     <Compile Include="Enums\EnumWindow.cs" />
     <Compile Include="ExchangeRate.cs">
