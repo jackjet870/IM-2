@@ -194,7 +194,7 @@
         <!--#region  DataGrid Principal-->
         <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,10">
             <Grid Background="#FFE5E5E5">
-                <DataGrid x:Name="dtgCxC"  SelectionChanged="dtgCxC_SelectionChanged" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+                <DataGrid x:Name="dtgCxC"  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt" IsReadOnly="True" Width="auto"/>
@@ -261,10 +261,11 @@
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
 
+
                         <DataGridTextColumn x:Name="grAuthorizedByColumn" Binding="{Binding grAuthorizedBy, UpdateSourceTrigger=PropertyChanged}" Header="Auth. By" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grAuthorizedNameColumn" Binding="{Binding grAuthorizedName, UpdateSourceTrigger=PropertyChanged}" Header="Auth. Name" IsReadOnly="True" Width="auto"/>
 
-                        <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=0.000;;#}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=\{0:C\}}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grAmountPaidColumn" Binding="{Binding grAmountPaid, StringFormat=\{0:C\}}" Header="Amount Paid" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="grBalanceColumn" Binding="{Binding grBalance, StringFormat=\{0:C\}}" Header="Balance" IsReadOnly="True" Width="auto"/>
 

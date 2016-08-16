@@ -370,7 +370,7 @@ namespace IM.ProcessorSales.Forms
           #region Stats by F.T.B
           case EnumRptRoomSales.StatsByFtb:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
-              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, groupByTeam: clsFilter.BlnGroupedByTeams, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
               file = Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
@@ -378,19 +378,19 @@ namespace IM.ProcessorSales.Forms
 
           #region Stats by F.T.B. & Locations
           case EnumRptRoomSales.StatsByFtbAndLocatios:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
-              byLocations:true, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBLocations(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
+              includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
           #region Stats by F.T.B. & Locations Categories
           case EnumRptRoomSales.StatsByFtbAndLocatiosCategories:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
-               byLocations: true, byLocationsCategories: true, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBCategories(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
+               includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -499,27 +499,26 @@ namespace IM.ProcessorSales.Forms
           #endregion
           #region Stats by F.T.B
           case EnumRptSalesRoomAndSalesman.StatsByFtb:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID,
+              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, groupByTeam: clsFilter.BlnGroupedByTeams, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnIncludeAllSalesmen);
             break;
           #endregion
 
           #region Stats by F.T.B. & Locations
           case EnumRptSalesRoomAndSalesman.StatsByFtbAndLocations:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID,
-              byLocations: true));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBLocations(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, clsFilter.BlnGroupedByTeams, clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
           #region Stats by F.T.B. & Locations Categories
           case EnumRptSalesRoomAndSalesman.StatsByFtbAndLocationsCategories:
-            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID,
-               byLocations: true, byLocationsCategories: true));
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBCategories(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, clsFilter.BlnGroupedByTeams, clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
           #region Statistics by Segments

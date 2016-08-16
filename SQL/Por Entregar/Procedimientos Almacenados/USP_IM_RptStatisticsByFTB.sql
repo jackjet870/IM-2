@@ -23,8 +23,7 @@ create procedure [dbo].[USP_IM_RptStatisticsByFTB]
 	@SalesmanID varchar(10) = 'ALL',	-- Clave de un vendedor	
 	@Segments varchar(8000) = 'ALL',	-- Claves de segmentos
 	@Programs varchar(8000) = 'ALL',	-- Programs
-	@ByLocations bit = 0,				-- Indica si es por locaciones
-	@ByLocationsCategories bit = 0,			-- Indica si es por categorias de locaciones
+	@GroupedByTeam bit = 0,			-- si se desea que esten agrupdo´por su equipo
 	@IncludeAllSalesmen bit = 0			-- si se desea que esten todos los vendedores de la sala
 as
 --SET FMTONLY OFF
@@ -44,7 +43,7 @@ DECLARE @Manifest table (
 	sold bit default 0,
 	Opp int default 0,	
 	MembershipGroup varchar(10),
-	Locations VARCHAR(30),
+	
 		-- Campos de la tabla de ventas	
 	saID int,
 	procSales int,	
@@ -85,7 +84,7 @@ DECLARE @Manifest table (
 --=======================   MANIFEST    =============================
 --===================================================================
 INSERT into @Manifest (guID, guShow, own, salesmanDate, guSelfGen, TeamSelfGen, guOverflow,
-saID, procSales, MembershipGroup, Locations, Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P,
+saID, procSales, MembershipGroup,  Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P,
 Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 select DISTINCT
 	--Campos de la tabla de huespedes
@@ -99,8 +98,7 @@ select DISTINCT
 	S.sagu,
 	0 procSales,
 	MT.mtGroup,
-	-- Locacion
-	case when @ByLocationsCategories = 0 then LO.loN else IsNull(LC.lcN, 'NO LOCATION CATEGORY') end as loN,
+	
 	-- PERSONAL DEL SHOW	
 	-- Vendedores
 	-- Liner 1
@@ -146,8 +144,7 @@ from Guests G
 	left join Agencies A on A.agID = G.guag
 	left join SegmentsByAgency SA on SA.seID = A.agse
 	left join LeadSources LS on LS.lsID = G.guls
-	left join Locations LO on LO.loID = G.guloInvit
-	left join LocationsCategories LC on LC.lcID = LO.lolc
+	
 	left join SegmentsByLeadSource SL on SL.soID = LS.lsso
 	left join SegmentsCategories SCA on SCA.scID = SA.sesc
 	left join SegmentsCategories SCL on SCL.scID = SL.sosc
@@ -197,8 +194,7 @@ BEGIN
 			S.saD,	
 			S.saGrossAmount,						
 			MT.mtGroup,
-			-- Locacion
-			case when @ByLocationsCategories = 0 then LO.loN else IsNull(LC.lcN, 'NO LOCATION CATEGORY') end as loN,
+			
 		--Datos de los vendedores			
 			-- Liner 1
 			S.saLiner1 as saLiner1,
@@ -247,8 +243,7 @@ BEGIN
 			left join Agencies A on A.agID = G.guag		
 			left join SegmentsByAgency SA on SA.seID = A.agse
 			left join LeadSources LS on LS.lsID = G.guls
-			left join Locations LO on LO.loID = G.guloInvit
-			left join LocationsCategories LC on LC.lcID = LO.lolc
+			
 			left join SegmentsByLeadSource SL on SL.soID = LS.lsso
 			left join SegmentsCategories SCA on SCA.scID = SA.sesc
 			left join SegmentsCategories SCL on SCL.scID = SL.sosc
@@ -270,7 +265,7 @@ BEGIN
 		and (@Segments = 'ALL' or A.agse in (select item from split(@Segments, ',')))
 		-- Programa
 		and (@Programs = 'ALL' or LS.lspg in (select item from split(@Programs, ',')))
-		INSERT INTO @Manifest (guID, own, saID,salesmanDate,saGrossAmount, MembershipGroup, Locations,
+		INSERT INTO @Manifest (guID, own, saID,salesmanDate,saGrossAmount, MembershipGroup, 
 		Liner1,Liner1N,Liner1P,Liner2,Liner2N,Liner2P,Closer1,Closer1N,Closer1P,Closer2,Closer2N,Closer2p,Closer3,Closer3N,Closer3p,
 		Exit1,Exit1N,Exit1P,Exit2,Exit2N,Exit2P,sold,procSales)
 		SELECT * FROM #tbTemp;
@@ -286,7 +281,7 @@ END;
 --===================================================================
 --#region Deposit Sales
 INSERT into @Manifest (guID, own, salesmanDate, guSelfGen, TeamSelfGen, guOverflow, 
-procSales, MembershipGroup, Locations, Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, 
+procSales, MembershipGroup, Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, 
 Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 select 
 	--#region Campos de la tabla de huespedes
@@ -298,8 +293,7 @@ select
 	G.guOverflow,	
 	0 procSales,
 	MT.mtGroup,	
-	-- Locacion
-	case when @ByLocationsCategories = 0 then LO.loN else IsNull(LC.lcN, 'NO LOCATION CATEGORY') end as loN,
+	
 	--#endregion	
 	--#region PERSONAL DEL SHOW	
 	-- Vendedores
@@ -349,8 +343,7 @@ from Guests G
 	left join Agencies A on A.agID = G.guag
 	left join SegmentsByAgency SA on SA.seID = A.agse
 	left join LeadSources LS on LS.lsID = G.guls
-	left join Locations LO on LO.loID = G.guloInvit
-	left join LocationsCategories LC on LC.lcID = LO.lolc
+	
 	left join SegmentsByLeadSource SL on SL.soID = LS.lsso
 	left join SegmentsCategories SCA on SCA.scID = SA.sesc
 	left join SegmentsCategories SCL on SCL.scID = SL.sosc
@@ -379,7 +372,7 @@ order by G.guID;
 --======================  OTHER SALES    ============================
 --===================================================================
 --#region Other Sales
-INSERT into @Manifest (guID, own, guSelfGen, salesmanDate,sold, Opp, saID, procSales, saGrossAmount,  MembershipGroup, Locations,
+INSERT into @Manifest (guID, own, guSelfGen, salesmanDate,sold, Opp, saID, procSales, saGrossAmount,  MembershipGroup, 
 Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, Closer1, Closer1N, Closer1P, Closer2, Closer2N, 
 Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 SELECT 
@@ -394,8 +387,7 @@ SELECT
 	CASE WHEN dbo.UFN_IM_GetSaleType(@DateFrom,@DateTo,S.sast,ST.ststc,G.guDepSale,S.saD,S.saProcD,S.saCancelD,G.gusr,S.sasr,S.saByPhone) NOT IN(5,14) THEN 1 ELSE 0 END [procSales],
 	S.saGrossAmount,
 	MT.mtGroup,
-	-- Locacion
-	case when @ByLocationsCategories = 0 then LO.loN else IsNull(LC.lcN, 'NO LOCATION CATEGORY') end as loN,
+	
 --Datos de los vendedores	
 	-- Liner 1
 	S.saLiner1 as saLiner1,
@@ -441,8 +433,7 @@ FROM Guests G --para obtener la fecha del show
 	left join Agencies A on A.agID = G.guag
 	left join SegmentsByAgency SA on SA.seID = A.agse
 	left join LeadSources LS on LS.lsID = S.sals
-	left join Locations LO on Lo.loID = S.salo
-	left join LocationsCategories LC on LC.lcID = LO.lolc
+	
 	left join SegmentsByLeadSource SL on Sl.soID = LS.lsso
 	left join SegmentsCategories SCA on SCA.scID = SA.sesc
 	left join SegmentsCategories SCL on SCL.scID = SL.sosc
@@ -568,11 +559,11 @@ DECLARE @Salesman table (
 --#endregion
 	
 	--=================== TABLA StatsByExitCloser =============================
---#region StatsByExitCloser Table
-DECLARE @StatsByFTB table (
+--#region StatsByTFB Table
+--DECLARE #StatsByFTB table
+CREATE TABLE #StatsByFTB (
 	SalemanID varchar(10),
 	SalemanName varchar(40),
-	Locations varchar(30),
 	SalemanType varchar(5),
 	SalemanTypeN varchar(50),
 	PostName varchar(50),
@@ -591,17 +582,20 @@ DECLARE @StatsByFTB table (
 	);
 --#endregion
 
-	INSERT INTO @StatsByFTB
-	SELECT SalemanID, SalemanName, Locations, SalemanType,
+	INSERT INTO #StatsByFTB
+	SELECT SalemanID, SalemanName, SalemanType,
 	CASE SalemanType WHEN 'AS' THEN 'As A Closer' WHEN 'WITH' THEN 'Front To Back (With Closer)' WHEN 'OWN' THEN 'Front To Back (Own)' END AS SalemanTypeN,
-	PostName, TeamN, TeamLeaderN, SalesmanStatus,
+	PostName, 
+	(case when @GroupedByTeam = 0 then '' else TeamN end ) as TeamN,
+	(case when @GroupedByTeam = 0 then '' else TeamLeaderN end ) as TeamLeaderN,
+	(case when @GroupedByTeam = 0 then '' else SalesmanStatus end ) as SalesmanStatus,
 	sum(Amount) AS SalesAmount, sum(Opp) AS Opp, sum(UPS) AS UPS,
 	SUM(Sales) AS SalesRegular, Sum([Exit]) AS SalesExit, SUM (Sales + [Exit]) as Sales,
 	dbo.UFN_OR_SecureDivision( sum(Amount),sum(UPS)) Efficiency,
 	dbo.UFN_OR_SecureDivision(SUM (Sales + [Exit]),sum(UPS)) ClosingFactor,
 	dbo.UFN_OR_SecureDivision(SUM (Amount),SUM (Sales + [Exit])) SaleAverage
 	FROM(
-		SELECT DISTINCT m.guID, m.saID, s.SalemanID,s.SalemanName,m.Locations, s.SalemanType,
+		SELECT DISTINCT m.guID, m.saID, s.SalemanID,s.SalemanName, s.SalemanType,
 		CASE WHEN dbo.UFN_IM_IsSelfGen(s.SalemanID,s.Role,m.guSelfGen)=1 THEN 
 			CASE WHEN m.guOverflow = 1 THEN 'Overflow' ELSE 'Front To Middle' END
 		ELSE ISNULL(CONVERT(varchar(40),PO.poN ),'NO POST')  END AS PostName,
@@ -625,19 +619,38 @@ DECLARE @StatsByFTB table (
 		cross apply  dbo.UFN_IM_GetPersonnelTeamSalesmenByDate(s.SalemanID,m.salesmanDate) t		
 		WHERE SalemanType IS NOT NULL
 		) AS x
-		GROUP by SalemanID,SalemanName, Locations, SalemanType, PostName, TeamN, TeamLeaderN, x.SalesmanStatus
+		GROUP by SalemanID,SalemanName, SalemanType, PostName, TeamN, TeamLeaderN, x.SalesmanStatus
 
-		IF @ByLocations=0
-		BEGIN
-		INSERT INTO @StatsByFTB 
-		SELECT SalemanID, SalemanName, Locations, 'OWN', 'Front To Back (Own)', PostName, TeamN, TeamLeaderN, SalesmanStatus, 0, OPP, UPS, 0,
-		0, 0, 0, 0, 0 FROM @StatsByFTB WHERE SalemanType = 'WITH'
-		END
-
-IF @IncludeAllSalesmen=1 AND  (SELECT COUNT(*) from @StatsByFTB)>0
+		
+		INSERT INTO #StatsByFTB 
+		SELECT SalemanID, SalemanName, 'OWN', 'Front To Back (Own)', PostName, TeamN, TeamLeaderN, SalesmanStatus, 0, OPP, UPS, 0,
+		0, 0, 0, 0, 0 FROM #StatsByFTB WHERE SalemanType = 'WITH'
+		
+		UPDATE  #StatsByFTB SET 
+			#StatsByFTB.Efficiency = tempFTB.Efficiency,
+			#StatsByFTB.ClosingFactor = tempFTB.ClosingFactor,
+			#StatsByFTB.SaleAverage = tempFTB.SaleAverage
+		FROM ( 
+			SELECT DISTINCT
+				SalemanID, SalemanType, PostName, TeamN, TeamLeaderN, SalesmanStatus, 
+				dbo.UFN_OR_SecureDivision(sum(SalesAmount),sum(UPS)) Efficiency,
+				dbo.UFN_OR_SecureDivision(SUM(Sales) ,SUM(UPS)) ClosingFactor,
+				dbo.UFN_OR_SecureDivision(SUM(SalesAmount) ,SUM(Sales)) SaleAverage 
+			FROM #StatsByFTB 
+			WHERE SalemanType = 'OWN'
+			GROUP BY SalemanID, SalemanType, PostName, TeamN, TeamLeaderN, SalesmanStatus
+			) tempFTB
+		 WHERE
+			tempFTB.SalemanID = #StatsByFTB.SalemanID AND tempFTB.SalemanType = #StatsByFTB.SalemanType AND tempFTB.PostName = #StatsByFTB.PostName AND
+			tempFTB.TeamN = #StatsByFTB.TeamN AND tempFTB.TeamLeaderN = #StatsByFTB.TeamLeaderN AND tempFTB.SalesmanStatus = #StatsByFTB.SalesmanStatus AND #StatsByFTB.SalesAmount > 0.00
+		  
+		
+IF @IncludeAllSalesmen=1 AND  (SELECT COUNT(*) from #StatsByFTB)>0
 BEGIN			
-	INSERT INTO @StatsByFTB(SalemanID, SalemanName, SalemanType, TeamN, TeamLeaderN)
-	select P.peID, P.peN as SalesmanN, (SELECT top 1 SalemanType from @StatsByFTB) , IsNull(tsN, 'NO TEAM'), IsNull(L.peN, '')
+	INSERT INTO #StatsByFTB(SalemanID, SalemanName, SalemanType, TeamN, TeamLeaderN)
+	select P.peID, P.peN as SalesmanN, (SELECT top 1 SalemanType from #StatsByFTB) ,
+		(case when @GroupedByTeam = 0 then '' else IsNull(tsN, 'NO TEAM') end ) as TeamN,
+		(case when @GroupedByTeam = 0 then '' else IsNull(L.peN, '') end ) as TeamLeaderN
 	from Personnel P 
 	left join TeamsSalesmen on P.peTeamType = 'SA' and P.pePlaceID = tssr and P.peTeam = tsID 
 	left join Personnel L on tsLeader = L.peID
@@ -649,31 +662,91 @@ BEGIN
 		-- Personal activo
 		and P.peA = 1		
 		--si no se encuentra el vendedor
-		AND NOT EXISTS (SELECT * from @StatsByFTB  WHERE SalemanID = p.peID)
+		AND NOT EXISTS (SELECT * from #StatsByFTB  WHERE SalemanID = p.peID)
 END	
-		
+
+
 --===================================================================
 --===================  SELECT  ===========================
 --===================================================================
 
-SELECT * FROM (
-	SELECT * from @StatsByFTB
+SELECT DISTINCT
+	SalemanID,
+	SalemanName,
+	PostName,
+	(TeamN+' '+TeamLeaderN) Team,
+	SalesmanStatus,
+	SUM(OwnSalesAmount) OAmount,
+	SUM(OwnOPP) OOPP,
+	SUM(OwnUPS) OUPS,
+	SUM(OwnSalesRegular) OSales,
+	SUM (OwnSalesExit) OExit,
+	SUM(OwnSales) OTotal,
+	SUM(OwnEfficiency) OEfficiency,
+	SUM(OwnClosingFactor) OClosingFactor,
+	SUM (OwnSaleAverage) OSaleAverage,
+	SUM(WithSalesAmount) WAmount,
+	SUM(WithOPP) WOPP,
+	SUM(WithUPS) WUPS,
+	SUM(WithSalesRegular) WSales,
+	SUM (WithSalesExit) WExit,
+	SUM(WithSales) WTotal,
+	SUM(WithEfficiency) WEfficiency,
+	SUM(WithClosingFactor) WClosingFactor,
+	SUM (WithSaleAverage) WSaleAverage,
+	(SUM(OwnSalesAmount) + SUM(WithSalesAmount)) AS TAmount,
+	(SUM(OwnOPP)) as TOPP,
+	(SUM(OwnUPS)) TUPS,
+	(SUM(OwnSalesRegular) + SUM(WithSalesRegular)) as TSales,
+	(SUM(OwnSalesExit) + SUM(WithSalesExit)) as TExit,
+	(SUM(OwnSales) + SUM(WithSales)) as TTotal,		
+	dbo.UFN_OR_SecureDivision( (SUM(OwnSalesAmount) + SUM(WithSalesAmount)) ,SUM(OwnUPS)) TEfficiency,
+	dbo.UFN_OR_SecureDivision((SUM(OwnSales) + SUM(WithSales)) ,SUM(OwnUPS)) TClosingFactor,
+	dbo.UFN_OR_SecureDivision((SUM(OwnSalesAmount) + SUM(WithSalesAmount)) ,(SUM(OwnSales) + SUM(WithSales))) TSaleAverage,
+	SUM(AsSalesAmount) AAmount,
+	SUM(AsOPP) AOOP,
+	SUM(AsUPS) AOUPS,
+	SUM(AsSalesRegular) ASales,
+	SUM (AsSalesExit) AExit,
+	SUM(AsSales) ATotal,
+	SUM(AsEfficiency) AEfficiency,
+	SUM(AsClosingFactor) AClosingFactor,
+	SUM (AsSaleAverage) ASaleAverage
+FROM
+(
+		SELECT 
+			SalemanID, SalemanName, PostName, TeamN, TeamLeaderN, SalesmanStatus, 
+			SUM(SalesAmount) OwnSalesAmount, SUM(OPP) OwnOPP, SUM(UPS) OwnUPS, SUM(SalesRegular) OwnSalesRegular, SUM(SalesExit) OwnSalesExit, SUM(Sales) OwnSales, SUM(Efficiency) OwnEfficiency, SUM(ClosingFactor) OwnClosingFactor, SUM (SaleAverage) OwnSaleAverage, 
+			0 WithSalesAmount, 0 WithOPP, 0 WithUPS, 0 WithSalesRegular, 0 WithSalesExit, 0 WithSales, 0 WithEfficiency,	0 WithClosingFactor, 0 WithSaleAverage, 
+			0 AsSalesAmount, 0 AsOPP, 0 AsUPS, 0 AsSalesRegular, 0 AsSalesExit, 0 AsSales, 0 AsEfficiency,	0 AsClosingFactor, 0 AsSaleAverage 
+		 
+		FROM #StatsByFTB
+		WHERE SalemanType = 'OWN'
+		GROUP BY SalemanID,SalemanName, PostName, TeamN,TeamLeaderN,SalesmanStatus
+		
 	UNION ALL
-	SELECT SalemanID, SalemanName, Locations, 'TOTAL' AS SalemanType, 'Total Clobal' AS SalemanTypeN,
-	PostName, TeamN, TeamLeaderN, SalesmanStatus,	
-		sum(SalesAmount) AS SalesAmount, sum(OPP) as OPP, sum(CASE SalemanType WHEN 'OWN' THEN UPS ELSE 0 END) as UPS, 
-		sum(SalesRegular) as SalesRegular, sum(SalesExit) as SalesExit, sum(Sales) as Sales,		
-		dbo.UFN_OR_SecureDivision( sum(SalesAmount),sum(UPS)) Efficiency,
-		dbo.UFN_OR_SecureDivision(SUM (Sales),sum(UPS)) ClosingFactor,
-		dbo.UFN_OR_SecureDivision(SUM (SalesAmount),SUM (Sales)) SaleAverage    
-	FROM @StatsByFTB  
-	WHERE SalemanType in ('OWN','WITH') 
-	AND (@ByLocations = 0 OR 2 = 1)
-	GROUP BY SalemanID,SalemanName, Locations, PostName, TeamN,TeamLeaderN,SalesmanStatus) AS sbc
-	Order By Case SalemanType
-    When 'OWN' Then 1
-    When 'WITH' Then 2
-    When 'TOTAL' Then 3
-    When 'AS' Then 4
-	End, SalesAmount DESC, SalemanID   
+		SELECT 
+			SalemanID, SalemanName, PostName, TeamN, TeamLeaderN, SalesmanStatus,
+			0 OwnSalesAmount, 0 OwnOPP, 0 OUPS, 0 OwnSalesRegular, 0 OwnSalesExit, 0 OwnSales, 0 OwnEfficiency,	0 OwnClosingFactor, 0 OwnSaleAverage, 
+			SUM(SalesAmount) WithSalesAmount, SUM(OPP) WithOPP, SUM(UPS) WithUPS, SUM(SalesRegular) WithSalesRegular, SUM(SalesExit) WithSalesExit, SUM(Sales) WithSales, SUM(Efficiency) WithEfficiency,	SUM(ClosingFactor) WithClosingFactor, SUM (SaleAverage) WithSaleAverage, 
+			0 AsSalesAmount, 0 AsOPP, 0 AsUPS, 0 AsSalesRegular, 0 AsSalesExit, 0 AsSales, 0 AsEfficiency,	0 AsClosingFactor, 0 AsSaleAverage
+		 
+		FROM #StatsByFTB
+		WHERE SalemanType = 'WITH'
+		GROUP BY SalemanID,SalemanName, PostName, TeamN,TeamLeaderN,SalesmanStatus 
+		
+	UNION ALL
+		SELECT 
+			SalemanID, SalemanName, PostName, TeamN, TeamLeaderN, SalesmanStatus,
+			0 OwnSalesAmount, 0 OwnOPP, 0 OUPS, 0 OwnSalesRegular, 0 OwnSalesExit, 0 OwnSales, 0 OwnEfficiency,	0 OwnClosingFactor, 0 OwnSaleAverage, 
+			0 WithSalesAmount, 0 WithOPP, 0 WUPS, 0 WithSalesRegular, 0 WithSalesExit, 0 WithSales, 0 WithEfficiency,0 WithClosingFactor, 0 WithSaleAverage, 
+			SUM(SalesAmount) AsSalesAmount, SUM(OPP) AsOPP, SUM(UPS) AsUPS, SUM(SalesRegular) AsSalesRegular, SUM(SalesExit) AsSalesExit, SUM(Sales) AsSales, SUM(Efficiency) AsEfficiency,	SUM(ClosingFactor) AsClosingFactor, SUM (SaleAverage) AsSaleAverage
+		 
+		FROM #StatsByFTB
+		WHERE SalemanType = 'AS'
+		GROUP BY SalemanID,SalemanName, PostName, TeamN,TeamLeaderN,SalesmanStatus 
+) AS LST
+GROUP BY SalemanID,SalemanName, PostName, TeamN,TeamLeaderN,SalesmanStatus 
+ORDER BY SalemanID
 
+DROP TABLE #StatsByFTB;

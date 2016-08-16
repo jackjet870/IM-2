@@ -34,9 +34,10 @@ namespace IM.Host.Forms
     decimal dcUSD;
     decimal dcMXN;
     string previousText = String.Empty;
-    bool blnResult = false;
+    bool blnChanges = false;
     decimal amountToPay = 0;
     decimal amountPay = 0;
+    CxCPayment cxcPayment = new CxCPayment();
     #endregion
 
     #region Constructores y Destructores
@@ -53,8 +54,8 @@ namespace IM.Host.Forms
       amountPay = dcAmountPay;
       textBalance.Text = String.Format("{0:C}", balance);
       textTotal.Text = String.Format("{0:C}", dcAmountToPay);
-      tbxUSD.IsEnabled = tbxMXN.IsEnabled = imgButtonSave.IsEnabled = (dcAmountToPay == dcAmountPay) ? false : true;
-     
+      txtcxAmount.IsEnabled = txtcxAmountMXN.IsEnabled = imgButtonSave.IsEnabled = (dcAmountToPay == dcAmountPay || balance <= 0 ) ? false : true;
+      
     }
     #endregion
 
@@ -76,7 +77,7 @@ namespace IM.Host.Forms
       tbxReceivedBy.Text = $"{strUserName}";
       textReceiptID.Text = $"{giftReceiptID}";
       textPaymentDt.Text = String.Format("{0:dd/MM/yyyy}", _dtpServerDate);
-      textExchangeRate.Text = String.Format("{0:C}", (1/dbExchange));// $"{dbExchange}"; 
+      textExchangeRate.Text = String.Format("{0:C}", (1/dbExchange));// 
       
     }
 
@@ -98,11 +99,11 @@ namespace IM.Host.Forms
       //e.Handled = !ValidateHelper.OnlyDecimals(e., sender as TextBox);
       switch (((TextBox)sender).Name)
       {
-        case "tbxUSD":
-          tbxUSD.TextChanged += tbx_TextChanged;
+        case "txtcxAmount":
+          txtcxAmount.TextChanged += tbx_TextChanged;
           break;
-        case "tbxMXN":
-          tbxMXN.TextChanged += tbx_TextChanged;
+        case "txtcxAmountMXN":
+          txtcxAmountMXN.TextChanged += tbx_TextChanged;
           break;
         default:
           break;
@@ -110,8 +111,6 @@ namespace IM.Host.Forms
       
     }
     #endregion
-
-
 
     #region Decimal_PreviewTextInput
     /// <summary>
@@ -127,19 +126,17 @@ namespace IM.Host.Forms
       if(!e.Handled)
         switch (((TextBox)sender).Name)
         {
-          case "tbxUSD":
-            tbxUSD.TextChanged += tbx_TextChanged;
+          case "txtcxAmount":
+            txtcxAmount.TextChanged += tbx_TextChanged;
             break;
-          case "tbxMXN":
-            tbxMXN.TextChanged += tbx_TextChanged;
+          case "txtcxAmountMXN":
+            txtcxAmountMXN.TextChanged += tbx_TextChanged;
             break;
           default:
             break;
         }
     }
     #endregion
-
-
 
     #region tbx_TextChanged
     /// <summary>
@@ -152,11 +149,11 @@ namespace IM.Host.Forms
     {
       var tbx = ((TextBox)sender);
       bool valid = Valid(sender);
-      if (valid && tbx.Name == "tbxUSD")
+      if (valid && tbx.Name == "txtcxAmount")
       {
         ApplyRate("USD", dbTextExchange);
       }
-      else if (valid && tbx.Name == "tbxMXN")
+      else if (valid && tbx.Name == "txtcxAmountMXN")
       {
         ApplyRate("MXN", dbTextExchange);
       }
@@ -203,8 +200,8 @@ namespace IM.Host.Forms
     ///</history>
     public void LoadTexBox()
     {
-      tbxMXN.Text = "0.00";
-      tbxUSD.Text = "0.00";
+      txtcxAmountMXN.Text = "0.00";
+      txtcxAmount.Text = "0.00";
     }
     #endregion
 
@@ -228,9 +225,9 @@ namespace IM.Host.Forms
         bool success = double.TryParse(((TextBox)sender).Text, out db);//((TextBox)sender).Text
         if (success & db >= 0)
         {
-          ((TextBox)sender).Text.Trim();
+          ((TextBox)sender).Text.Trim().TrimStart().TrimEnd();
           //strText.Trim();
-          previousText = ((TextBox)sender).Text;//strText.Trim();
+          previousText = ((TextBox)sender).Text.Trim().TrimEnd().TrimStart();//strText.Trim();
           dbTextExchange = db;
           
           return true;
@@ -263,15 +260,15 @@ namespace IM.Host.Forms
       {
         dcUSD = Convert.ToDecimal(dbAmount);
         dcMXN = Convert.ToDecimal(dbAmount / dbExchange);
-        tbxMXN.Text = String.Format("{0:C}", dcMXN);
+        txtcxAmountMXN.Text = String.Format("{0:C}", dcMXN);
       }
       else //if (strModified == "MXN")
       {
         dcMXN = Convert.ToDecimal(dbAmount);
         dcUSD = Convert.ToDecimal(dbAmount * dbExchange);
-        tbxUSD.Text = String.Format("{0:C}", dcUSD);
+        txtcxAmount.Text = String.Format("{0:C}", dcUSD);
       }
-      textBalance.Text =  
+      
       textBalance.Text = String.Format("{0:C}", amountToPay - (dcUSD + amountPay));
     }
     #endregion
@@ -285,9 +282,10 @@ namespace IM.Host.Forms
     ///</history>
     public async void Save()
     {
+      
       string message = string.Empty;
       bool error = false;
-      if (String.IsNullOrEmpty(tbxUSD.Text) || String.IsNullOrEmpty(tbxMXN.Text))
+      if (String.IsNullOrEmpty(txtcxAmount.Text) || String.IsNullOrEmpty(txtcxAmountMXN.Text))
       {
         message = "Inser a valid Amount.";
         error = !error;
@@ -311,7 +309,7 @@ namespace IM.Host.Forms
           message = "Transaction Added.";
           LoadTexBox();
           LoadPayments();
-          blnResult = true;
+          blnChanges = true;
         }
 
       }
@@ -321,7 +319,7 @@ namespace IM.Host.Forms
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      DialogResult = blnResult;
+      DialogResult = blnChanges;
     }
   }
 }

@@ -1745,8 +1745,7 @@ namespace IM.BusinessRules.BR
     ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsByFTB>> GetStatisticsByFTB(DateTime dtStart, DateTime dtEnd, string salesRoom,
-      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All,
-      bool byLocations= false, bool byLocationsCategories=false , bool includeAllSalesmen = false)
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool groupByTeam = false, bool includeAllSalesmen = false)
     {
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
       return await Task.Run(() =>
@@ -1755,14 +1754,72 @@ namespace IM.BusinessRules.BR
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
           return dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
-          EnumToListHelper.GetEnumDescription(program), false, includeAllSalesmen).ToList();
+         
+          EnumToListHelper.GetEnumDescription(program), groupByTeam, includeAllSalesmen).ToList();
+        }
+      });
+    }
+    #endregion GetStatisticsByFTB
+
+    #region GetStatisticsByFTBLocations
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB Locations
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    /// </history>
+    public static async Task<List<RptStatisticsByFTBLocations>> GetStatisticsByFTBLocations(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", bool groupByTeam = false, bool includeAllSalesmen = false)
+    {
+      
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          return dbContext.USP_IM_RptStatisticsByFTBLocations(dtStart, dtEnd, salesRoom, salesmanID, groupByTeam, includeAllSalesmen).ToList();
+        }
+      });
+    }
+    #endregion GetStatisticsByFTB
+
+    #region GetStatisticsByFTBCategories
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB Locations and Categories
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    /// </history>
+    public static async Task<List<RptStatisticsByFTBCategories>> GetStatisticsByFTBCategories(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", bool groupByTeam = false, bool includeAllSalesmen = false)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          return dbContext.USP_IM_RptStatisticsByFTBCategories(dtStart, dtEnd, salesRoom, salesmanID, groupByTeam, includeAllSalesmen).ToList();
         }
       });
     }
     #endregion GetStatisticsByFTB
 
     #endregion Processor Sales
-
 
     #region GetRptUplist
     /// <summary>
