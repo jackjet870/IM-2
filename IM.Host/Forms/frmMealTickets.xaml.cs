@@ -255,19 +255,15 @@ namespace IM.Host.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail(_openBy);
-      _frmMealTicketsDetail.Owner = this;
+      frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail(_openBy) { Owner = this };
       _frmMealTicketsDetail._modeOpen = EnumMode.Add;//(_modeOpen == EnumMode.Edit) ? EnumMode.Add : EnumMode.Edit;
       _frmMealTicketsDetail.Title += "ADD";
 
-      _frmMealTicketsDetail.ShowDialog();
-
-      if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox)
+      if (_frmMealTicketsDetail.ShowDialog() == true)
       {
-        dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+        if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId); }
+        else { btnSearch_Click(null, null); }
       }
-      else
-        btnSearch_Click(null, null);
     }
     #endregion
 
@@ -468,6 +464,13 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    #region grdMealTicket_SelectionChanged
+    /// <summary>
+    /// Metodo encargado de validar si el boton Print esta habilitado o deshabilitado.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 15/Agosto/2016 Created
+    /// </history>
     private void grdMealTicket_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       DataGrid grd = sender as DataGrid;
@@ -484,6 +487,7 @@ namespace IM.Host.Forms
           else { btnPrint.IsEnabled = false; }
         }
       }
-    }
+    } 
+    #endregion
   }
 }

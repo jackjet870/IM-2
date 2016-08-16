@@ -30,7 +30,7 @@ namespace IM.Host
     public static DateTime dtpServerDate = new DateTime();
     private DataGridCellInfo _currentCell;
     private Guest _guestCurrent;
-    private bool _blnUpdateGuest; 
+    private bool _blnUpdateGuest;
     #endregion
 
     #region Listas Globales
@@ -854,9 +854,36 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void btnInvitationOutside_Click(object sender, RoutedEventArgs e)
+    private async void btnInvitationOuthouse_Click(object sender, RoutedEventArgs e)
     {
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse,
+      validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
+      switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
 
+      if (App.User.AutoSign)
+      {
+        login.UserData = App.User;
+      }
+      await login.getAllPlaces();
+      login.ShowDialog();
+
+      if (login.IsAuthenticated)
+      {
+        // Verificamos que permisos tiene el usuario
+        if (login.UserData.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
+        {
+          var invitacion = new frmInvitation(EnumModule.Host, EnumInvitationType.newOutHouse, login.UserData)
+          {
+            Owner = this
+          };
+          invitacion.ShowDialog();
+        }
+        else
+        {
+          UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation", MessageBoxImage.Information);
+          return;
+        }
+      }
     }
     #endregion
 
@@ -879,8 +906,8 @@ namespace IM.Host
         Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
 
         var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse,
-       validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
-       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
+        validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
 
         if (App.User.AutoSign)
         {
@@ -891,12 +918,20 @@ namespace IM.Host
 
         if (login.IsAuthenticated)
         {
-          //TODO: Tony revisar los parametros por favor, yo los cambie para que no de error- Edder.
-          var invitacion = new frmInvitation(EnumModule.Host, EnumInvitationType.newExternal, login.UserData, guest.guID)
+          // Verificamos que permisos tiene el usuario
+          if (login.UserData.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
           {
-            Owner = this
-          };
-          invitacion.ShowDialog();
+            var invitacion = new frmInvitation(EnumModule.Host, EnumInvitationType.existing, login.UserData, guest.guID)
+            {
+              Owner = this
+            };
+            invitacion.ShowDialog();
+          }
+          else
+          {
+            UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation", MessageBoxImage.Information);
+            return;
+          }
         }
       }
     }
@@ -909,9 +944,36 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// </history>
-    private void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
+    private async void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
     {
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse,
+       validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
+       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
 
+      if (App.User.AutoSign)
+      {
+        login.UserData = App.User;
+      }
+      await login.getAllPlaces();
+      login.ShowDialog();
+
+      if (login.IsAuthenticated)
+      {
+        // Verificamos que permisos tiene el usuario
+        if (login.UserData.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
+        {
+          var invitacion = new frmInvitation(EnumModule.Host, EnumInvitationType.newExternal, login.UserData)
+          {
+            Owner = this
+          };
+          invitacion.ShowDialog();
+        }
+        else
+        {
+          UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation", MessageBoxImage.Information);
+          return;
+        }
+      }
     }
     #endregion
 
@@ -1140,7 +1202,7 @@ namespace IM.Host
           break;
         case nameof(guest.guWComments):
           // si tiene al menos permiso estandar de Hostess
-          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false;}
+          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
           else { _currentCell.Column.IsReadOnly = true; }
           break;
         case nameof(guest.guTaxiIn):
@@ -1238,7 +1300,7 @@ namespace IM.Host
         await BREntities.OperationEntity(_guestCurrent, EnumMode.Edit);
       }
       _blnUpdateGuest = false;
-    } 
+    }
     #endregion
 
   }

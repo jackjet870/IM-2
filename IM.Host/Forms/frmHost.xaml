@@ -170,7 +170,7 @@
                   <TextBlock Text="Transfer..." HorizontalAlignment="Center" FontWeight="Bold" />
                 </StackPanel>
               </Button>
-              <Button x:Name="btnInvitationOutside" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnInvitationOutside_Click" >
+              <Button x:Name="btnInvitationOuthouse" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnInvitationOuthouse_Click" >
                 <StackPanel>
                   <Image Source="pack://application:,,,/IM.Styles;component/Images/Invitation.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                   <TextBlock Text="Out. Inv." HorizontalAlignment="Center" FontWeight="Bold" />

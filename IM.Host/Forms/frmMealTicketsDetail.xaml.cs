@@ -69,23 +69,18 @@ namespace IM.Host.Forms
       // Verificamos si es usuario tiene la opcion de Reimpresion
       chkPrinted.IsEnabled = App.User.HasPermission(EnumPermission.MealTicketReprint, EnumPermisionLevel.Standard) ? true : false;
 
-
-
       #region switch
-
       switch (_openBy)
       {
         case EnumOpenBy.Checkbox:
           if (_modeOpen == EnumMode.Add)
           {
-            //HiddenControls();
             stkHead.Visibility = Visibility.Collapsed;
             Height = 172.438; Width = 593.59;
             dtpDate.Value = frmHost.dtpServerDate.Date;
           }
           else if (_modeOpen == EnumMode.Edit)
           {
-            //HiddenControls();
             stkHead.Visibility = Visibility.Collapsed;
             Height = 172.438; Width = 593.59;
             DataContext = _mealTicketCurrency;
@@ -162,7 +157,7 @@ namespace IM.Host.Forms
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
 
-      if (_modeOpen != EnumMode.ReadOnly && _modeOpen != EnumMode.PreviewEdit)
+      if (_modeOpen != EnumMode.ReadOnly && _modeOpen != EnumMode.Edit && _openBy != EnumOpenBy.Checkbox)
       {
         if (_rateType != null) // Se verifica que el SelectedItem no sea null
         {
@@ -175,9 +170,9 @@ namespace IM.Host.Forms
             controlVisibility(Visibility.Visible, Visibility.Collapsed, Visibility.Visible);
           }
         }
-        else// if (modeOpen != EnumMode.ReadOnly)
+        else if (_modeOpen != EnumMode.ReadOnly)
         {
-          controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Collapsed);
+          controlVisibility(Visibility.Collapsed, Visibility.Visible, Visibility.Collapsed);
         }
 
         // Se verifica que no sean un nuevo MealTicket
@@ -245,23 +240,22 @@ namespace IM.Host.Forms
     /// </history>
     private double CalculateAdult(int intRatetype, int intAdults, int intQt = 1)
     {
-      MealTicketType _mealTicketType = (MealTicketType)cboType.SelectedItem;
+      MealTicketType mealTicket = cboType.SelectedItem as MealTicketType;
       double Amt = 0;
 
-      if (_mealTicketType != null)
+      if (mealTicket != null)
       {
-
         if (intRatetype == 1)
         {
-          Amt = intQt * intAdults * Convert.ToDouble(_mealTicketType.myPriceA);
+          Amt = intQt * intAdults * Convert.ToDouble(mealTicket.myPriceA);
         }
         else if (intRatetype == 2)
         {
-          Amt = intQt * intAdults * Convert.ToDouble(_mealTicketType.myCollaboratorWithCost);
+          Amt = intQt * intAdults * Convert.ToDouble(mealTicket.myCollaboratorWithCost);
         }
         else if (intRatetype >= 3)
         {
-          Amt = intQt * intAdults * Convert.ToDouble(_mealTicketType.myCollaboratorWithoutCost);
+          Amt = intQt * intAdults * Convert.ToDouble(mealTicket.myCollaboratorWithoutCost);
         }
       }
 
@@ -278,7 +272,7 @@ namespace IM.Host.Forms
     /// [vipacheco] 01/04/2016 Created
     /// [vipahceco] 15/Agosto/2016 Modified -> Se valida que el ticket tenga pax asociados.
     /// </history>
-    private bool validateFields()
+    private bool ValidateGeneral()
     {
       MealTicketType ticketCurrent = cboType.SelectedItem as MealTicketType;
 
@@ -435,7 +429,7 @@ namespace IM.Host.Forms
     /// </history>
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      if (validateFields())
+      if (ValidateGeneral())
       {
         RateType _rateType = (RateType)cboRateType.SelectedItem; 
         MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; 
