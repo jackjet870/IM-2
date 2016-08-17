@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Styles", "IM.Styles\IM.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InvitConfig", "IM.InvitConfig\IM.InvitConfig.csproj", "{F81185F3-005E-4A5D-B203-2B4B5A1F4440}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.MailOuts", "IM.MailOuts\IM.MailOuts.csproj", "{8441A21C-5EF5-4FEB-BE2F-995269672694}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +225,18 @@ Global
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.ActiveCfg = Release|Any CPU
 		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.Build.0 = Release|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Debug|x86.ActiveCfg = Debug|x86
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Debug|x86.Build.0 = Debug|x86
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Quality|Any CPU.ActiveCfg = Quality|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Quality|Any CPU.Build.0 = Quality|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Quality|x86.ActiveCfg = Release|x86
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Quality|x86.Build.0 = Release|x86
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Release|x86.ActiveCfg = Release|x86
+		{8441A21C-5EF5-4FEB-BE2F-995269672694}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
