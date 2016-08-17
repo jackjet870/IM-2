@@ -11,12 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class MailOutTextByLeadSource
+    public partial class PostShort
     {
-        public string mtmoCode { get; set; }
-        public string mtla { get; set; }
-        public string mtRTF { get; set; }
-        public string laMrMrs { get; set; }
-        public string laRoom { get; set; }
+        public string Post { get; set; }
+        public string PostN { get; set; }
     }
 }

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
-using System.Windows.Controls;
 using System.Windows;
 using Xceed.Wpf.Toolkit;
 namespace IM.Base.Helpers
@@ -77,12 +72,12 @@ namespace IM.Base.Helpers
       else if (dateFrom.Year != dateTo.Year)
       {
         //Años completos
-        if (dateFrom.Day == 1 && dateFrom.Month == 1 && dateTo.Day==31 && dateTo.Month==12)
+        if (dateFrom.Day == 1 && dateFrom.Month == 1 && dateTo.Day == 31 && dateTo.Month == 12)
         {
-          dateRange= string.Format("{0:yyyy} to {1:yyyy}", dateFrom, dateTo);
+          dateRange = string.Format("{0:yyyy} to {1:yyyy}", dateFrom, dateTo);
         }
         //Años incompletos meses completos
-        else if (dateFrom.Day == 1 && dateTo.Day ==DateTime.DaysInMonth(dateTo.Year,dateTo.Month))
+        else if (dateFrom.Day == 1 && dateTo.Day == DateTime.DaysInMonth(dateTo.Year, dateTo.Month))
         {
           dateRange = string.Format("{0:yyyy-MM} to {1:yyyy-MM}", dateFrom, dateTo);
         }
@@ -91,18 +86,18 @@ namespace IM.Base.Helpers
         {
           dateRange = string.Format("{0:yyyy-MM-dd} to {1:yyyy-MM-dd}", dateFrom, dateTo);
         }
-       
+
       }
       //Si son diferentes meses
       else if (dateFrom.Month != dateTo.Month)
       {
         //Año completo
-        if (dateFrom.Day ==1 && dateFrom.Month==1 && dateTo.Day==31 && dateTo.Month==12)
+        if (dateFrom.Day == 1 && dateFrom.Month == 1 && dateTo.Day == 31 && dateTo.Month == 12)
         {
           dateRange = string.Format("{0:yyyy}", dateFrom);
         }
         //Meses completos
-        else if (dateFrom.Day==1 && dateTo.Day== DateTime.DaysInMonth(dateTo.Year,dateTo.Month))
+        else if (dateFrom.Day == 1 && dateTo.Day == DateTime.DaysInMonth(dateTo.Year, dateTo.Month))
         {
           dateRange = string.Format("{0:yyyy-MM} to {1:MM}", dateFrom, dateTo);
         }
@@ -116,14 +111,14 @@ namespace IM.Base.Helpers
       else
       {
         //Mes completo
-        if (dateFrom.Day==1 && dateTo.Day== DateTime.DaysInMonth(dateTo.Year,dateTo.Month))
+        if (dateFrom.Day == 1 && dateTo.Day == DateTime.DaysInMonth(dateTo.Year, dateTo.Month))
         {
           dateRange = string.Format("{0:yyyy-MM}", dateFrom);
         }
         //Mes incompleto
         else
         {
-          dateRange = string.Format("{0:yyyy-MM-dd} to {1:dd}", dateFrom,dateTo);
+          dateRange = string.Format("{0:yyyy-MM-dd} to {1:dd}", dateFrom, dateTo);
         }
       }
       return dateRange;
@@ -239,7 +234,7 @@ namespace IM.Base.Helpers
     ///</history>
     public static DateTime DaysBeforeOrAfter(int days, DateTime? date = null)
     {
-      if(date == null) date = DateTime.Now;
+      if (date == null) date = DateTime.Now;
       DateTime dateBefore = date.Value.AddDays(days);
       return dateBefore;
     }
@@ -308,8 +303,8 @@ namespace IM.Base.Helpers
       DateTime? date = null;
       if (BirthDate != null)
       {
-        if(BirthDate.Value.Year > 1900) date = BirthDate;
-      }      
+        if (BirthDate.Value.Year > 1900) date = BirthDate;
+      }
       return date;
     }
     #endregion
@@ -431,25 +426,7 @@ namespace IM.Base.Helpers
     #endregion
 
     #region ValidateValueDate
-    /// <summary>
-    /// Valida que sea correcta la fecha proporcionada
-    /// </summary>
-    /// <param name="sender">Objeto de tipo DataPicker</param>
-    /// <history>
-    ///   [jorcanche] 17/03/2016 Created
-    ///   [ecanul] 19/07/2016 Modified, Movi de frmSearchGuest A DateHelpper, Deja de usar El MessageBox.Show, ahora usa UIHelper.ShowMessage
-    ///   [ecanul] 20/07/2016 Modified. Modifique el texto del mensaje, ahora recibe un DatePicker en vez de un object
-    /// </history>
-    public static void ValidateValueDate(DatePicker sender)
-    {
-      if (!sender.SelectedDate.HasValue)
-      {
-        //Cuando el usuario ingresa una fecha invalida
-        UIHelper.ShowMessage("Invalid date", MessageBoxImage.Exclamation, "Specify the Date");
-        //Y le asignamos la fecha del servidor (la actual hora actual)
-        sender.SelectedDate = BRHelpers.GetServerDate();
-      }
-    }
+
     /// <summary>
     /// Valida que sea correcta la fecha proporcionada
     /// Sobrecarga del metodo que usa solo el DatePicker comun de wpf
@@ -460,7 +437,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void ValidateValueDate(DateTimePicker sender)
     {
-      if(!sender.Value.HasValue)
+      if (!sender.Value.HasValue)
       {
         //Cuando el usuario ingresa una fecha invalida
         UIHelper.ShowMessage("Invalid date", MessageBoxImage.Exclamation, "Specify the Date");
@@ -499,5 +476,23 @@ namespace IM.Base.Helpers
       return validatePass;
     }
     #endregion
+
+    #region IsInRangeDate
+    /// <summary>
+    /// Determina si una fecha esta en un rango de fechas
+    /// </summary>
+    /// <param name="dtmDate">Fecha que se va validar</param>
+    /// <param name="dtmStart">Fecha donde se inicia la validacion</param>
+    /// <param name="dtmEnd">Fecha donde se finaliza la validacion</param>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [aalcocer] 04/08/2016 Created
+    /// </history>
+    public static bool IsInRangeDate(DateTime dtmDate, DateTime dtmStart, DateTime dtmEnd)
+    {
+      return dtmStart <= dtmDate && dtmDate <= dtmEnd;
+    }
+
+    #endregion IsInRangeDate
   }
 }

@@ -100,5 +100,27 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region FolioValidateCXC
+    /// <summary>
+    /// Valida que exista el folio en la tabla de folios y que no exista el folio en el BookingDeposits
+    /// </summary>
+    /// <param name="folio">Numero de folio</param>
+    /// <param name="guestID">Id del huesped</param>
+    /// <param name="active">Especifica si está activo el rango de folios</param>
+    /// <param name="action">Especifica la accion a realizar Insert(0) o Update(1)</param>
+    /// <returns>True. El folio el valido | False. El folio no es valido</returns>
+    /// <history>
+    /// [emoguel] 16-08-2016 created
+    /// </history>
+    public static bool FolioValidateCXC(int folio, int guestID, bool active, int action)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      {
+        string result = dbContext.USP_OR_FolioValidCXC(folio, guestID, active, action).ToString();
+        return result == "VALIDO";
+      }
+    } 
+    #endregion
   }
 }

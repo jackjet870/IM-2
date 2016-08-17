@@ -243,6 +243,7 @@ namespace IM.Model
         public string guFTM2 { get; set; }
         public string guCloser4 { get; set; }
         public string guExit3 { get; set; }
+        public Nullable<bool> guNotifiedEmailShowNotInvited { get; set; }
     
         public virtual Agency Agency { internal get; set; }
         public virtual Club Club { internal get; set; }

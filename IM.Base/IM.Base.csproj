@@ -64,6 +64,9 @@
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PalaceResorts4.Common.Notifications.WinForm">
+      <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Notifications.WinForm\PalaceResorts4.Common.Notifications.WinForm.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SAPBusinessObjects.WPF.Viewer, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -119,6 +122,7 @@
     <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\CommonCatObject.cs" />
     <Compile Include="Classes\Gifts.cs" />
+    <Compile Include="Classes\InvitationConverter.cs" />
     <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />

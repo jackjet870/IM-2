@@ -3201,7 +3201,7 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.DecimalNumber:
-          format = "#,#00.00;-#,#00.00;";
+          format = "#,##0.00;-#,##0.00;";
           break;
 
         case EnumFormatTypeExcel.DecimalNumberWithCero:

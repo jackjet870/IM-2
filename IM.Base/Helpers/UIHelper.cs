@@ -11,6 +11,9 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using IM.Model.Helpers;
 using System.Data.Entity.Validation;
+using IM.BusinessRules.BR;
+using IM.Styles.Classes;
+using IM.Styles.Enums;
 
 namespace IM.Base.Helpers
 {
@@ -179,34 +182,51 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 08/04/2016
     /// [emoguel] modified 11/07/2016
+    /// [erosado] Modified. 12/08/2016. Se agrego para que acepte el MaxLenght de las cajas de texto o si no tuviera aceptaria las de la propiedad MaxLengthPropertyClass
     /// </history>
-    public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview,bool blnCharacters=false)
+    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.ReadOnly,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor
+      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(obj,database);
 
       Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
       {
+
+        #region DataGrid
+        List<DataGrid> lstDataGrids = lstControls.Where(cl => cl is DataGrid &&  !((DataGrid)cl).IsReadOnly).OfType<DataGrid>().ToList();
+        lstDataGrids.ForEach(dtg => dtg.Sorting += GridHelper.dtg_Sorting);
+        #endregion
+
         #region Obtenemos el MaxLength
-        EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);
         foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
-        {            
-          EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember                      
-          Facet facet;
-          Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control          
-          if (control != null)//Verifcamos que tengamos un control
+        {
+          //buscamos si existe el control
+          Control control = lstControls.FirstOrDefault(cl => cl.Name == "txt" + pi.Name);
+          //Buscamos la descripción de la columna
+          var columnDefinition = lstColumnsDefinitions.FirstOrDefault(cd => cd.column == pi.Name);
+          #region tooltip
+          //var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
+          //if(controlTooltip!=null && columnDefinition!=null && !string.IsNullOrWhiteSpace(columnDefinition.description))
+          //{
+          //  controlTooltip.ToolTip = columnDefinition.description;
+          //}
+          #endregion
+
+          if (control != null && columnDefinition!=null)//Verifcamos que tengamos un control
           {            
             TextBox txt = control as TextBox;//Convertimos el control a texbox
-            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);            
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
+            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt) == 0 ? txt.MaxLength : MaxLengthPropertyClass.GetMaxLength(txt);            
+            EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(txt);//Formato del campo de texto
             switch (typeCode)
             {
               #region String
               case TypeCode.String:
               case TypeCode.Char:
-                {
-                  facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
-                  txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
-                  if(blnCharacters)
+                {                  
+                  txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;//Asignamos el maxLength                  
+                  if(formatInput==EnumFormatInput.NotSpecialCharacters)
                   {
                     txt.PreviewTextInput += TextBoxHelper.TextInputSpecialCharacters;
                   }
@@ -218,28 +238,33 @@ namespace IM.Base.Helpers
               case TypeCode.Decimal:
               case TypeCode.Double:                
                 {
-                  int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
-                  int Scale = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Scale").FirstOrDefault().Value);
-                  if(Scale>0)
+                  //Si permite decimales
+                  if (columnDefinition.scale>0 || PrecisionPropertyClass.GetPrecision(txt) != "0,0")
                   {
-                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;
-                    if (enumMode != EnumMode.search)
+                    if(PrecisionPropertyClass.GetPrecision(txt)=="0,0")
                     {
-                      txt.LostFocus += TextBoxHelper.LostFocus;
-                      txt.GotFocus += TextBoxHelper.DecimalGotFocus;
+                      PrecisionPropertyClass.SetPrecision(txt, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale);
+                    }
+                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;                    
+                    txt.PreviewKeyDown += TextBoxHelper.Decimal_PreviewKeyDown;
+                    txt.GotFocus += TextBoxHelper.DecimalGotFocus;
+                    if (enumMode != EnumMode.Search)
+                    {
+                      txt.LostFocus += TextBoxHelper.LostFocus;                      
                     }
                   }
+                  //Si sólo permite enteros
                   else
                   {
                     txt.PreviewTextInput += TextBoxHelper.IntTextInput;
-                    if (enumMode != EnumMode.search)
+                    txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
+                    if (enumMode != EnumMode.Search)
                     {
                       txt.LostFocus += TextBoxHelper.LostFocus;
                       txt.GotFocus += TextBoxHelper.IntGotFocus;
-                    }
-                  }
-                  
-                  txt.MaxLength = Precision;                  
+                    }                    
+                  }                  
+                  txt.MaxLength = (maxLengthProp > 0)?maxLengthProp: columnDefinition.maxLength;                  
                   break;
                 }
               #endregion
@@ -249,7 +274,7 @@ namespace IM.Base.Helpers
                 {
                   txt.MaxLength = 3;
                   txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
-                  if (enumMode != EnumMode.search)
+                  if (enumMode != EnumMode.Search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;
                   }
@@ -261,11 +286,21 @@ namespace IM.Base.Helpers
               case TypeCode.Int16:
               case TypeCode.Int32:
               case TypeCode.Int64:
-                {
-                  txt.MaxLength = 10;
-                  txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                {                 
+                  
+                  switch (formatInput)
+                  {
+                    case EnumFormatInput.Number:
+                      txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;
+                      break;
+                    case EnumFormatInput.NumberNegative:
+                      txt.PreviewTextInput += TextBoxHelper.IntWithNegativeTextInput;
+                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp+1 : columnDefinition.maxLength+1;
+                      break;
+                  }                  
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
-                  if (enumMode != EnumMode.search)
+                  if (enumMode != EnumMode.Search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;
                   }
@@ -306,7 +341,7 @@ namespace IM.Base.Helpers
     /// <summary>
     /// busca todos los controles contenedores para recorrerlos
     /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <typeparam name="T">tipo de "child" a buscar </typeparam>
     /// <param name="parent">contenedor</param>
     /// <returns>devuelve una lista de controles</returns>
     /// <history>
@@ -324,7 +359,7 @@ namespace IM.Base.Helpers
     /// <summary>
     /// Obtiene todos los controles dentro de los contenedores
     /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <typeparam name="T">tipo de control</typeparam>
     /// <param name="parent">Contenedor</param>
     /// <param name="logicalCollection">lista de controles</param>
     /// <history>
@@ -346,6 +381,52 @@ namespace IM.Base.Helpers
         }
       }
     }
+    #endregion
+
+    #region GetParentCollection
+    /// <summary>
+    /// Obtiene los contenedores del control o sus "parents"
+    /// </summary>
+    /// <typeparam name="T">Tipo de contenedor a buscar</typeparam>
+    /// <param name="child">control a buscar sus parents</param>
+    /// <returns>Lista de contenedores</returns>
+    /// <history>
+    /// [emoguel] created 09/08/2016
+    /// </history>
+    public static List<T> GetParentCollection<T>(object child) where T : DependencyObject
+    {
+      List<T> logicalCollection = new List<T>();
+      GetParentCollection(child as DependencyObject, logicalCollection);
+      return logicalCollection;
+    }
+    #endregion
+
+    #region GetParentCollection
+
+    /// <summary>
+    /// Obtiene todos los controles dentro de los contenedores
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="child">control</param>
+    /// <param name="logicalCollection">lista de controles</param>
+    /// <history>
+    /// [emoguel] created 09/08/2016
+    /// </history>
+    public static void GetParentCollection<T>(DependencyObject child, List<T> logicalCollection) where T : DependencyObject
+    {
+      //Get parent parent
+      var parent = LogicalTreeHelper.GetParent(child);
+
+      if (parent is DependencyObject)
+      {
+        DependencyObject depParent = child as DependencyObject;
+        if (parent is T)
+        {
+          logicalCollection.Add(parent as T);
+        }
+        GetParentCollection(parent, logicalCollection);
+      }
+    } 
     #endregion
 
     #region UiSetDatacontext
@@ -395,8 +476,6 @@ namespace IM.Base.Helpers
                   {
                     control.SetBinding(ComboBox.SelectedValueProperty, binding);
                   }
-
-                  //binding.Source = sourceObject;  // view model?
                 }
                 break;
               }
@@ -412,10 +491,10 @@ namespace IM.Base.Helpers
                 {
                   Binding binding = new Binding();
                   binding.Mode = bindingMode;
-                  binding.Path = new PropertyPath(pi.Name);
+                  binding.Path = new PropertyPath(pi.Name);                  
                   if (bindingMode != BindingMode.OneWay)
                   {
-                    binding.StringFormat = "{0:C}";
+                    binding.StringFormat = "{0:C}";                    
                   }
                   control.SetBinding(TextBox.TextProperty, binding);
                 }
@@ -432,6 +511,7 @@ namespace IM.Base.Helpers
                   Binding binding = new Binding();
                   binding.Mode = bindingMode;
                   binding.Path = new PropertyPath(pi.Name);
+                  binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                   control.SetBinding(CheckBox.IsCheckedProperty, binding);
                 }
                 break;

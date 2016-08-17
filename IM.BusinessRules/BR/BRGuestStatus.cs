@@ -37,7 +37,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
     /// </history>
-    public static GuestStatusValidateData GetStatusValidateInfo(int guestID, int receiptID)
+    public static GuestStatusValidateData GetGuestStatusInfo(int guestID, int receiptID = 0)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {

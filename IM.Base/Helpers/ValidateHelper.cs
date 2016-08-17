@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
+
 namespace IM.Base.Helpers
 {
   public class ValidateHelper
@@ -35,10 +36,10 @@ namespace IM.Base.Helpers
     /// <history>
     /// [vipacheco] created 30/Junio/2016 Created
     /// </history>
-    public static bool OnlyDecimals(string text, TextBox sender)
+    public static bool OnlyDecimals(string text, TextBox control)
     {
       Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
-      return regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, text));
+      return regex.IsMatch((control).Text.Insert((control).SelectionStart, text));
     }
     #endregion
 
@@ -98,6 +99,7 @@ namespace IM.Base.Helpers
     /// [jorcanche]  12/Mar/2016 Created
     /// [jorcanche]  24/03/2016 Modificado
     /// [vku] 04/Jul/2016 Modified. Ahora soporta un combobox
+    /// [aalcocer] 12/08/2016 Modified. Ahora soporta un DateTimePicker
     /// </history>
     public static string GetValue(Control control)
     {
@@ -107,20 +109,19 @@ namespace IM.Base.Helpers
       {
         value = ((TextBox)control).Text;
       }
-      else
+      else if (control is PasswordBox)
       {
-        if (control is PasswordBox)
-        {
-          value = ((PasswordBox)control).Password;
-        }
-        else
-        {
-          if (control is ComboBox)
-          {
-            value = ((ComboBox)control).Text;
-          }
-        }
+        value = ((PasswordBox)control).Password;
       }
+      else if (control is ComboBox)
+      {
+        value = ((ComboBox)control).Text;
+      }
+      else if (control is DateTimePicker)
+      {
+        value = ((DateTimePicker)control).Text;
+      }
+
       return value;
     }
     #endregion
@@ -132,7 +133,10 @@ namespace IM.Base.Helpers
     /// <param name="ptxtChangedBy">Control de tipo TextBox en donde se ingresa el usuario</param>
     /// <param name="ptxtPwd">Control de tipo PaswordBox en donde se ingresa el password del usuario</param>
     /// <param name="pstrUserType">Cadena en donde se ingresa el tipo de usuario por ejemplo "PR"</param>
-    /// <hitory> [jorcanche] 24/03/2016 </hitory>
+    /// <history> 
+    /// [jorcanche] 24/03/2016 Created.
+    /// [aalcocer] 12/08/2016 Modified. Se corrige la validación
+    /// </history>
     /// <returns></returns>
 
     public static bool ValidateChangedBy(TextBox ptxtChangedBy, PasswordBox ptxtPwd, string pstrUserType = "")
@@ -142,8 +146,7 @@ namespace IM.Base.Helpers
       //establecemos el mensaje de error de quin hizo el cambio
       if (pstrUserType == "")
       {
-        UIHelper.ShowMessage("Specify who is making the change.");
-        return false;
+        strMessage = "Specify who is making the change.";
       }
       else
       {
@@ -163,7 +166,7 @@ namespace IM.Base.Helpers
       }
       return true;
     }
-    #endregion  
+    #endregion
 
     #region ValidateForm
 
@@ -172,33 +175,38 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="container">Contenedor</param>   
     /// <param name="strForm">Nombre del formulario</param>
-    /// <param name="validateVisible">valida los controles visibles</param>
+    /// <param name="blnValidateVisibility">valida la visibilidad de los controles (TRUE - Para validar solo los controles visibles | FALSE - Para validar todos los controles) </param>
     /// <param name="blnDatagrids">Valida que los datagrids ya eno estén en modo edición</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
-    /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
+    /// [erosado] 02/05/2016  Modified. Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// [vipacheco] Modified 14/Julio/2016 Se agrego parametro de validacion de visibilidad
     /// [jorcanche] Modified 19/07/2016 Se simplifico el metodo, se documento el parametro validateVisible
     /// [emoguel] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
     /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
+    /// [erosado] 05/08/2016  Modified. Se corrigió la validacion del DateTimePicker, y se agrego una bandera para que el metodo se encargue de mandar el ShowMessage
     /// </history>
-public static string ValidateForm(UIElement container, string strForm,bool validateVisible = true,bool blnDatagrids=false)    {
+    public static string ValidateForm(UIElement container, string strForm, bool blnValidateVisibility = true, bool blnDatagrids = false, bool showMessage = false)
+    {
       var strMsj = "";
       var lstControls = UIHelper.GetChildParentCollection<Control>(container);
-        //buscamos todos los controles de la ventana
+      //buscamos todos los controles de la ventana
       if (blnDatagrids)
       {
-        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co=>co as DataGrid).ToList();
+        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co => co as DataGrid).ToList();
         if (lstGrids != null)
         {
-          foreach(DataGrid dgr in lstGrids)
-          { 
-            
-            if (GridHelper.IsInEditMode(dgr))
-            {
-              strMsj += "Please finish editing the list. \n";
-              break;
+          foreach (DataGrid dgr in lstGrids)
+          {
+
+            if (GridHelper.IsInEditMode(dgr,false))
+            {              
+              var parents = UIHelper.GetParentCollection<TabItem>(dgr);
+              parents.ForEach(tb => tb.IsSelected = true);
+              container.UpdateLayout();
+              dgr.Focus();
+              return "Please finish editing the list. \n";              
             }
           }
         }
@@ -210,67 +218,72 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
 
         if (control is TextBox) //Si es Textbox
         {
-          var txt = (TextBox) control;
+          var txt = (TextBox)control;
           #region Remover espacios
-          txt.Text= txt.Text.Trim();
+          txt.Text = txt.Text.Trim();
           var binding = txt.GetBindingExpression(TextBox.TextProperty);
-          if(binding!=null)
-          {
-            binding.UpdateSource();
-          }
-          #endregion
-          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
-          if ((validateVisible && txt.IsVisible) || !validateVisible)          
-            strMsj += "Specify the " + strForm + " " + txt.Tag + ". \n";          
-        }
-          #endregion
-
-          #region Combobox
-
-        else if (control is ComboBox)
-        {
-          var cmb = (ComboBox) control;
-          if (cmb.SelectedIndex > -1) continue;
-          if ((validateVisible && cmb.IsVisible) || !validateVisible)         
-            strMsj += "Specify the " + strForm + " " + cmb.Tag + ". \n";          
-        }        
-          #endregion
-
-          #region PasswordBox
-
-        else if (control is PasswordBox)
-        {
-          var pwd = (PasswordBox) control;
-          #region Remover espacios
-          pwd.Password=pwd.Password.Trim();
-          #endregion
-          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
-          if ((validateVisible && pwd.IsVisible) || !validateVisible)
-            strMsj += "Specify the " + strForm + " " + pwd.Tag + ". \n";
-        }                
-          #endregion
-
-        else if (control is DateTimePicker)
-        {
-          var dtp = (DateTimePicker) control;
-          #region Remover espacios
-          dtp.Text=dtp.Text.Trim();
-          var binding = dtp.GetBindingExpression(TextBox.TextProperty);
           if (binding != null)
           {
             binding.UpdateSource();
           }
           #endregion
-          if (!string.IsNullOrWhiteSpace(dtp.Text.Trim())) continue;
-          if ((validateVisible && dtp.IsVisible) || !validateVisible)                
-              strMsj += "Specify the " + strForm + " " + dtp.Tag + ". \n";                   
+          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
+          if ((blnValidateVisibility && txt.IsVisible) || !blnValidateVisibility)
+            strMsj += $"Specify the {strForm}  { txt.Tag }. \n";
         }
+        #endregion
+
+        #region Combobox
+
+        else if (control is ComboBox)
+        {
+          var cmb = (ComboBox)control;
+          if (cmb.SelectedIndex > -1) continue;
+          if ((blnValidateVisibility && cmb.IsVisible) || !blnValidateVisibility)
+            strMsj += $"Specify the {strForm } {cmb.Tag}. \n";
+        }
+        #endregion
+
+        #region PasswordBox
+
+        else if (control is PasswordBox)
+        {
+          var pwd = (PasswordBox)control;
+          #region Remover espacios
+          pwd.Password = pwd.Password.Trim();
+          #endregion
+          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
+          if ((blnValidateVisibility && pwd.IsVisible) || !blnValidateVisibility)
+            strMsj += $"Specify the {strForm } {pwd.Tag}. \n";
+        }
+        #endregion
+
+        #region DateTimePicker
+        else if (control is DateTimePicker)
+        {
+          var dtp = (DateTimePicker)control;
+
+          if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
+          if ((blnValidateVisibility && dtp.IsVisible) || !blnValidateVisibility)
+            strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
+        }
+        #endregion
       }
       if (strMsj != "") //Mandamos el foco al primer campo
       {
-        lstControls.FirstOrDefault().Focus();
+        var control = lstControls.FirstOrDefault();
+        var parents = UIHelper.GetParentCollection<TabItem>(control);
+        parents.ForEach(tb => tb.IsSelected = true);
+        container.UpdateLayout();
+        control.Focus();
       }
-      container.UpdateLayout();
+
+      //Si la showMessage viene activa muestra el mensaje
+      if (showMessage)
+      {
+        UIHelper.ShowMessage(strMsj.TrimEnd('\n'), title: "Intelligence Marketing");
+      }
+
       return strMsj.TrimEnd('\n');
     }
 
@@ -345,6 +358,7 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
     }
     #endregion
 
+    #region validateCharacters
     /// <summary>
     /// Valida que el texto no contenga los caracteres de una lista
     /// </summary>
@@ -356,8 +370,9 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
     public static bool validateCharacters(string text)
     {
       bool _blnValid = true;
-      List<string> lstCharacters = new List<string> { "", "%", "'","-","_" };
-      text.ToCharArray().ToList().ForEach(c => {
+      List<string> lstCharacters = new List<string> { "", "%", "'", "-", "_" };
+      text.ToCharArray().ToList().ForEach(c =>
+      {
         if (lstCharacters.Contains(c.ToString()))
         {
           _blnValid = false;
@@ -366,5 +381,31 @@ public static string ValidateForm(UIElement container, string strForm,bool valid
       });
       return _blnValid;
     }
+    #endregion
+
+    #region  ValidateNumber
+    /// <summary>
+    /// Valida que un numero este en un determinado rango
+    /// </summary>
+    /// <param name="number">Numero</param>
+    /// <param name="lowerBound">Limite inferior</param>
+    /// <param name="upperBound">Limite superior</param>
+    /// <param name="description">Nombre del campo</param>
+    /// <returns>True is Valid | False No</returns>
+    /// <history>
+    /// [erosado] 06/08/2016  Created.
+    /// [aalcocer] 11/08/2016 Modified. Se cambian los parametros a decimales
+    /// </history>
+    public static bool ValidateNumber(decimal number, decimal lowerBound, decimal upperBound, string description)
+    {
+      bool _isValid = true;
+      if (!(lowerBound <= number && number <= upperBound))
+      {
+        UIHelper.ShowMessage($"{description} is out of range. Allowed values are {lowerBound} to {upperBound}.");
+        _isValid = false;
+      }
+      return _isValid;
+    }
+    #endregion
   }
 }

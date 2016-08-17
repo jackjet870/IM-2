@@ -302,14 +302,14 @@ namespace IM.BusinessRules.BRIC
                 lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Salesmen = sClosers });
                 lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Salesmen = sExits });
 
-
+                //Eliminamos los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence Marketing
                 foreach (var item in lstDeleteSalesmenClubes)
                 {
                   //Obtenemos vendedores actuales de Intelligence Contracts                
                   var memberSalesmens = dbContextIC.USP_CL_GetMemberSalesmen(saleNew.saMembershipNum, "ALL", "ALL", item.Role).ToList();
                   if (memberSalesmens.Any())
                   {
-                    //si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
+                    //Si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
                     memberSalesmens.ForEach(ms =>
                    {
                      if (!item.Salesmen.Contains(ms.OPC))

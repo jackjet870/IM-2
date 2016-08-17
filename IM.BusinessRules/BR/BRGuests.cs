@@ -196,6 +196,7 @@ namespace IM.BusinessRules.BR
     /// get a Guest
     /// </summary>
     /// <param name="guestId">Id del huesped</param>
+    /// <param name="withAditional">Indica si se quiere los Guest Adicionales</param>
     /// <returns>Guest</returns>
     /// <history>
     /// [jorcanche] created 10/03/2016
@@ -552,84 +553,93 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Trae los huespedes segun los parametros
     /// </summary>
-    /// <param name="leadsource"></param>
-    /// <param name="salesRoom"></param>
-    /// <param name="name"></param>
+    /// <param name="leadsource"> Clave del LeadSource</param>
+    /// <param name="salesRoom"> Clave de la sala de venta</param>
+    /// <param name="name"> Nombre del Guest </param>
     /// <param name="room"></param>
-    /// <param name="reservation"></param>
-    /// <param name="guid"></param>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
-    /// <param name="program"></param>
+    /// <param name="reservation"> Numero de reservacion</param>
+    /// <param name="guid">Clava del guest</param>
+    /// <param name="from">Fecha inicial de busqueda</param>
+    /// <param name="to">fecha final de busqueda</param>
+    /// <param name="program"> Enumerado que indica el program de origen </param>
+    /// <param name="PR"></param>
     /// <returns>Listado de Guest</returns>
     /// <history>
     /// [ECANUL] 01-04-2016 Created
     /// [jorcanche] 04/05/2016 Simplificado
+    /// [vipacheco] 08/Agosto/2016 Modified -> Se le agrego timeout a la consulta.
+    /// [vipacheco] 11/Agosto/2016 Modified -> Se agrego asincronia 
     /// </history>
-    public static List<Guest> GetSearchGuestByLS(string leadsource, string salesRoom, string name, string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
+    public async static Task<List<Guest>> GetSearchGuestByLS(string leadsource, string salesRoom, string name, string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
     {
-      var pro = EnumToListHelper.GetEnumDescription(program);
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var query = from gu in dbContext.Guests
-                    join ls in dbContext.LeadSources
-                    on gu.guls equals ls.lsID
-                    //busqueda por program
-                    where ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)
-                    select gu;
-        //Busqueda por clave de huesped
-        if (guid != 0)
+        var pro = EnumToListHelper.GetEnumDescription(program);
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          query = query.Where(gu => gu.guID == guid);
-        }
-        else
-        { //Busqueda por nombre y aprellido
-          if (!string.IsNullOrWhiteSpace(name))
-          {
-            query = query.Where(gu => gu.guLastName1.Contains(name) ||
-                                      gu.guFirstName1.Contains(name) ||
-                                      gu.guLastname2.Contains(name) ||
-                                      gu.guLastname2.Contains(name));
-          }
-          //Busqueda por Lead Source
-          if (!string.IsNullOrEmpty(leadsource))
-          {
-            query = query.Where(gu => gu.guls == leadsource);
-          }
-          //Busqueda por sala
-          if (!string.IsNullOrEmpty(salesRoom))
-          {
-            query = query.Where(gu => gu.gusr == salesRoom);
-          }
-          //Busqueda por numero de habitacion
-          if (!string.IsNullOrEmpty(room))
-          {
-            query = query.Where(gu => gu.guRoomNum.Contains(room));
-          }
-          //Busqueda por folio de reservacion
-          if (!string.IsNullOrEmpty(reservation))
-          {
-            query = query.Where(gu => gu.guHReservID == reservation);
-          }
-          if (!string.IsNullOrEmpty(PR))
-          {
-            query = query.Where(gu => gu.guPRInvit1 == PR);
-          }
-          //Busqueda por fecha de llegada
+          // Agregamos el timeout de la consulta
+          dbContext.Database.CommandTimeout = 180;
 
-          query = query.Where(gu =>
-                          (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) >= from &&
-                          (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) <= to);
+          var query = from gu in dbContext.Guests
+                      join ls in dbContext.LeadSources
+                      on gu.guls equals ls.lsID
+                      //busqueda por program
+                      where ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)
+                      select gu;
+          //Busqueda por clave de huesped
+          if (guid != 0)
+          {
+            query = query.Where(gu => gu.guID == guid);
+          }
+          else
+          { //Busqueda por nombre y aprellido
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+              query = query.Where(gu => gu.guLastName1.Contains(name) ||
+                                        gu.guFirstName1.Contains(name) ||
+                                        gu.guLastname2.Contains(name) ||
+                                        gu.guLastname2.Contains(name));
+            }
+            //Busqueda por Lead Source
+            if (!string.IsNullOrEmpty(leadsource))
+            {
+              query = query.Where(gu => gu.guls == leadsource);
+            }
+            //Busqueda por sala
+            if (!string.IsNullOrEmpty(salesRoom))
+            {
+              query = query.Where(gu => gu.gusr == salesRoom);
+            }
+            //Busqueda por numero de habitacion
+            if (!string.IsNullOrEmpty(room))
+            {
+              query = query.Where(gu => gu.guRoomNum.Contains(room));
+            }
+            //Busqueda por folio de reservacion
+            if (!string.IsNullOrEmpty(reservation))
+            {
+              query = query.Where(gu => gu.guHReservID == reservation);
+            }
+            if (!string.IsNullOrEmpty(PR))
+            {
+              query = query.Where(gu => gu.guPRInvit1 == PR);
+            }
+            //Busqueda por fecha de llegada
+
+            query = query.Where(gu =>
+                            (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) >= from &&
+                            (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) <= to);
+          }
+          //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con 
+          //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se 
+          //utiliza esta condicion
+          if (program == EnumProgram.Outhouse)
+          {
+            query = query.Where(gu => gu.guInvit == true && gu.guShow == false);
+          }
+          return query.OrderBy(gu => gu.gusr).ThenBy(gu => gu.guBookD).ThenBy(gu => gu.guLastName1).ToList();
         }
-        //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con 
-        //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se 
-        //utiliza esta condicion
-        if (program == EnumProgram.Outhouse)
-        {
-          query = query.Where(gu => gu.guInvit == true && gu.guShow == false);
-        }
-        return query.OrderBy(gu => gu.gusr).ThenBy(gu => gu.guBookD).ThenBy(gu => gu.guLastName1).ToList();
-      }
+      });
     }
     #endregion
 
@@ -655,11 +665,12 @@ namespace IM.BusinessRules.BR
             {
               //Guardamos los cambios en el Guest
               dbContext.Entry(guest).State = EntityState.Modified;
+              var respuesta = dbContext.SaveChanges();
 
               //Guardamos el Log del guest
               dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
-
-              var respuesta = dbContext.SaveChanges();
+              
+              //Confirmammos la transaccion
               transaction.Commit();
               return respuesta;
             }
@@ -845,170 +856,91 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region GetSelfGen
-    /// <summary>
-    /// Devuelve los datos para la busqueda de casos Self Gen
-    /// </summary>
-    /// <param name="GuestName"></param>
-    /// <param name="SalesRoom"></param>
-    /// <param name="dateFrom"></param>
-    /// <param name="dateTo"></param>
-    /// <param name="GuestID"></param>
-    /// <param name="SelfGen"></param>
-    /// <param name="RoomNum"></param>
-    /// <param name="Liner"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 04/Junio/2016 Created
-    /// </history>
-    public async static Task<IEnumerable<object>> GetSelfGen(string GuestName, string SalesRoom, DateTime dateFrom, DateTime dateTo, string GuestID = "", EnumCaseSelfGen SelfGen = EnumCaseSelfGen.PendingByClassifying, string RoomNum = "", string Liner = "")
-    {
-      IEnumerable<object> lstResult = null;
-
-      await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          var query = from _Guest in dbContext.Guests
-                      join _Personnel in dbContext.Personnels on _Guest.guLiner1 equals _Personnel.peID into Joined
-                      from _Personnel in Joined.DefaultIfEmpty()
-                      select new
-                      {
-                        guLastName1 = _Guest.guLastName1,
-                        guFirstName1 = _Guest.guFirstName1,
-                        guHotel = _Guest.guHotel,
-                        guRoomNum = _Guest.guRoomNum,
-                        guLiner1 = _Guest.guLiner1,
-                        peN = _Personnel.peN,
-                        guShowD = _Guest.guShowD,
-                        guShow = _Guest.guShow,
-                        guSelfGen = _Guest.guSelfGen,
-                        guts = _Guest.guts,
-
-                        // Campos para validaciones
-                        peLinerID = _Personnel.peLinerID,
-                        guID = _Guest.guID,
-                        gusr = _Guest.gusr,
-                        guInvit = _Guest.guInvit
-                      };
-
-          //Busqueda por sala  //Busqueda de solo invitados //Busqueda por fechas
-          query = query.Where(x => x.gusr == SalesRoom && (x.guShowD >= dateFrom && x.guShowD <= dateTo) && x.guInvit == true);
-
-          // Obtenemos el personal
-          var Personnel = (dbContext.Personnels.Where(w => !string.IsNullOrEmpty(w.peLinerID)).Select(s => s.peLinerID)).ToList();
-
-          // Busqueda de Self Gen
-          switch (SelfGen)
-          {
-            case EnumCaseSelfGen.All:
-              query = query.Where(x => (Personnel.Contains(x.guLiner1)) || x.guSelfGen == true);
-              break;
-            case EnumCaseSelfGen.Classified:
-              query = query.Where(x => (Personnel.Contains(x.guLiner1)) && x.guSelfGen == true && x.guts != "");
-              break;
-            case EnumCaseSelfGen.PendingByClassifying:
-              query = query.Where(x => (Personnel.Contains(x.guLiner1)) && (x.guSelfGen == false || x.guts == null) || (!(Personnel.Contains(x.guLiner1)) && x.guSelfGen == true));
-              break;
-          }
-
-          // Busqueda por clave de invitado
-          if (GuestID != "")
-          {
-            int Guest = Convert.ToInt32(GuestID);
-            query = query.Where(x => x.guID == Guest);
-          }
-
-          // Busqueda por nombre o apellido
-          if (GuestName != "")
-          {
-            query = query.Where(x => x.guLastName1.Contains(GuestName) || x.guFirstName1.Contains(GuestName));
-          }
-
-          // Busqueda por numero de habitacion
-          if (RoomNum != "")
-          {
-            query = query.Where(x => x.guRoomNum.Contains(RoomNum));
-          }
-
-          // Busqueda por liner
-          if (Liner != "")
-          {
-            query = query.Where(x => x.guLiner1 == Liner);
-          }
-
-          lstResult = query.ToList();
-        }
-      });
-
-      return lstResult;
-    }
-    #endregion
-
-    #region GetSearchGuest_General
+    #region GetSearchGuestGeneral
     /// <summary>
     /// Busca los huespedes que cumplan los criterios de busqueda
     /// </summary>
-    /// <param name="dtpStart"></param>
-    /// <param name="dtpEnd"></param>
-    /// <param name="GuestID"></param>
-    /// <param name="GuestName"></param>
-    /// <param name="LeadSource"></param>
-    /// <param name="salesRoom"></param>
-    /// <param name="RoomNum"></param>
-    /// <param name="Reservation"></param>
-    /// <param name="PR"></param>
+    /// <param name="hostDateSelected">Fecha seleccionado en la ventana principal del modulo host</param>
+    /// <param name="dtpStart">Fecha inicial seleccionada del formulario Search</param>
+    /// <param name="dtpEnd">Fecha final seleccionada del formulario Search</param>
+    /// <param name="guestID">Clave del huesped</param>
+    /// <param name="guestName">Nombre del huesped</param>
+    /// <param name="leadSource">Clave del Lead Source</param>
+    /// <param name="salesRoom">Clave de la sala de venta</param>
+    /// <param name="roomNum">Numero de habitacion</param>
+    /// <param name="reservation">Numero de reservacion </param>
+    /// <param name="PR">Clave del PR</param>
+    /// <param name="module">Origen de invocacion del formulario Search</param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [vipacheco] 09/Agosto/2016 Modified -> Se agrego el estandar del return, se agregaron nuevos parametros al metodo, se agrego un switch para validar tipos de busqueda, se agrego timeout.
     /// </history>
-    public async static Task<List<Guest>> GetSearchGuest_General(DateTime dtpStart, DateTime dtpEnd, int GuestID = 0, string GuestName = "", string LeadSource = "", string salesRoom = "", string RoomNum = "", string Reservation = "", string PR = "")
+    public async static Task<List<Guest>> GetSearchGuestGeneral(DateTime hostDateSelected, DateTime dtpStart, DateTime dtpEnd, int guestID = 0, string guestName = "", string leadSource = "", string salesRoom = "", string roomNum = "",
+                                                                string reservation = "", string PR = "", EnumSearchHostType module = EnumSearchHostType.General)
     {
-      List<Guest> lstGuests = new List<Guest>();
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          var query = from _Guests in dbContext.Guests
-                      where _Guests.guInvit == true && (_Guests.guBookD >= dtpStart && _Guests.guBookD <= dtpEnd)
-                      select _Guests;
+          // Agregamos el timeout de la consulta
+          dbContext.Database.CommandTimeout = 180;
 
+          IQueryable<Guest> query = Enumerable.Empty<Guest>().AsQueryable();
           // Busqueda por Guest ID
-          if (GuestID > 0)
-            query = query.Where(x => x.guID == GuestID);
+          if (guestID > 0)
+            query = dbContext.Guests.Where(x => x.guID == guestID);
           else
           {
             // Busqueda por nombre o apellido
-            if (GuestName != "")
-              query = query.Where(x => x.guLastName1.Contains(GuestName) || x.guFirstName1.Contains(GuestName) || x.guLastname2.Contains(GuestName) || x.guFirstName2.Contains(GuestName));
-
+            if (guestName != "")
+            {
+              query = dbContext.Guests.Where(x => x.guLastName1.Contains(guestName) || x.guFirstName1.Contains(guestName) || x.guLastname2.Contains(guestName) || x.guFirstName2.Contains(guestName));
+            }
             // Busqueda por Lead Source
-            if (LeadSource != "")
-              query = query.Where(x => x.guls == LeadSource);
-
+            if (leadSource != "")
+            {
+              query = query.Any() ? query.Where(x => x.guls == leadSource) : dbContext.Guests.Where(x => x.guls == leadSource);
+            }
             // Busqueda por sala
             if (salesRoom != "")
-              query = query.Where(x => x.gusr == salesRoom);
-
+            {
+              query = query.Any() ? query.Where(x => x.gusr == salesRoom) : dbContext.Guests.Where(x => x.gusr == salesRoom);
+            }
             // Busqueda por numero de habitacion
-            if (RoomNum != "")
-              query = query.Where(x => x.guRoomNum == RoomNum);
-
+            if (roomNum != "")
+            {
+              query = query.Any() ? query.Where(x => x.guRoomNum == roomNum) : dbContext.Guests.Where(x => x.guRoomNum == roomNum);
+            } 
             // Busqueda por folio de reservacion
-            if (Reservation != "")
-              query = query.Where(x => x.guHReservID == Reservation);
-
+            if (reservation != "")
+            {
+              query = query.Any() ? query.Where(x => x.guHReservID == reservation) : dbContext.Guests.Where(x => x.guHReservID == reservation);
+            }
             //Busqueda por PR
             if (PR != "")
-              query = query.Where(x => x.guPRInvit1 == PR);
-
+            {
+              query = query.Any() ? query.Where(x => x.guPRInvit1 == PR) : dbContext.Guests.Where(x => x.guPRInvit1 == PR);
+            }
+            // Verificamos el tipo de busqueda a realizar
+            switch (module)
+            {
+              // Si es de tipo transfer
+              case EnumSearchHostType.Transfer:
+                query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false);
+                break;
+              // Si la busqueda es general 
+              case EnumSearchHostType.General:
+                query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true);
+                break;
+              case EnumSearchHostType.Invit:
+                query = query.Any() ? query.Where(x => x.guCheckOutD > hostDateSelected && x.guCheckIn == true) : dbContext.Guests.Where(x => x.guCheckOutD > hostDateSelected  && x.guCheckIn == true);
+                break;
+            }
           }
-          lstGuests = query.ToList();
+          return query.OrderBy(x => x.gusr).ToList();
         }
       });
-
-      return lstGuests;
     }
     #endregion
 

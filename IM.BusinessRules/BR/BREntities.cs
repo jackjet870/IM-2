@@ -33,21 +33,21 @@ namespace IM.BusinessRules.BR
           switch (enumMode)
           {
             #region Delete
-            case EnumMode.deleted:
+            case EnumMode.Delete:
               {
                 dbContext.Entry(entitySave).State = EntityState.Deleted;
                 break;
               }
             #endregion
             #region Edit
-            case EnumMode.edit:
+            case EnumMode.Edit:
               {
                 dbContext.Entry(entitySave).State = EntityState.Modified;
                 break;
               }
             #endregion
             #region Add
-            case EnumMode.add:
+            case EnumMode.Add:
               {
                 var objContext = ((IObjectContextAdapter)dbContext).ObjectContext;
                 var objSet = objContext.CreateObjectSet<T>();
@@ -63,7 +63,6 @@ namespace IM.BusinessRules.BR
                       blIdentity = true;
                       break;
                     }
-
                   }
                 }
                 #endregion
@@ -129,7 +128,7 @@ namespace IM.BusinessRules.BR
               {
                 lstEntities.ForEach(item =>
                 {
-                  dbContext.Entry(item).State = (enumMode == EnumMode.add) ? EntityState.Added : (enumMode == EnumMode.edit) ? EntityState.Modified : EntityState.Deleted;
+                  dbContext.Entry(item).State = (enumMode == EnumMode.Add) ? EntityState.Added : (enumMode == EnumMode.Edit) ? EntityState.Modified : EntityState.Deleted;
                 });
                 nRes = dbContext.SaveChanges();
                 transaction.Commit();

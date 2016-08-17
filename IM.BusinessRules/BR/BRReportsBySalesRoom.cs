@@ -7,7 +7,6 @@ using IM.Model.Helpers;
 using IM.Model.Enums;
 using System.Collections;
 using System.Threading.Tasks;
-using System.Data;
 
 namespace IM.BusinessRules.BR
 {
@@ -1630,6 +1629,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsBySegments_Timeout;
           return dbContext.USP_IM_RptStatisticsBySegments(string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")), string.Join(",", ltsDtmEnd.Select(x=> $"{x:yyyyMMdd}")), 
             string.Join(",", salesRooms), salesmanID, bySegmentsCategories, own, includeAllSalesmen).ToList();
         }
@@ -1648,21 +1648,24 @@ namespace IM.BusinessRules.BR
     /// <param name="segments">Claves de segmentos</param>
     /// <param name="program">Programs</param>
     /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <param name="groupByTeams">Indica si se va a incluir la informacion de equipos</param>
     /// <returns><list type="RptStatisticsByCloser"></list></returns>
     /// <history>
     ///   [aalcocer] 13/07/2016 Created
     ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    ///   [ecanul]
     /// </history>
     public static async Task<List<RptStatisticsByCloser>> GetStatisticsByCloser(DateTime dtStart, DateTime dtEnd, string salesRoom,
-      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false)
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool includeAllSalesmen = false, bool groupByTeams = false)
     {
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByCloser_Timeout;
           return dbContext.USP_IM_RptStatisticsByCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
-            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
+            EnumToListHelper.GetEnumDescription(program), includeAllSalesmen,groupByTeams).ToList();
         }
       });
     }
@@ -1692,6 +1695,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByExitCloser_Timeout;
           return dbContext.USP_IM_RptStatisticsByExitCloser(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
             EnumToListHelper.GetEnumDescription(program), includeAllSalesmen).ToList();
         }
@@ -1743,8 +1747,7 @@ namespace IM.BusinessRules.BR
     ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
     /// </history>
     public static async Task<List<RptStatisticsByFTB>> GetStatisticsByFTB(DateTime dtStart, DateTime dtEnd, string salesRoom,
-      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All,
-      bool byLocations= false, bool byLocationsCategories=false , bool includeAllSalesmen = false)
+      string salesmanID = "ALL", IEnumerable<string> segments = null, EnumProgram program = EnumProgram.All, bool groupByTeam = false, bool includeAllSalesmen = false)
     {
       if (segments == null || !segments.Any()) segments = new List<string> { "ALL" };
       return await Task.Run(() =>
@@ -1753,14 +1756,96 @@ namespace IM.BusinessRules.BR
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
           return dbContext.USP_IM_RptStatisticsByFTB(dtStart, dtEnd, salesRoom, salesmanID, string.Join(",", segments),
-          EnumToListHelper.GetEnumDescription(program), byLocations, byLocationsCategories, includeAllSalesmen).ToList();
+         
+          EnumToListHelper.GetEnumDescription(program), groupByTeam, includeAllSalesmen).ToList();
         }
       });
     }
     #endregion GetStatisticsByFTB
 
-    #endregion Processor Sales
+    #region GetStatisticsByFTBLocations
 
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB Locations
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    /// </history>
+    public static async Task<List<RptStatisticsByFTBLocations>> GetStatisticsByFTBLocations(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", bool groupByTeam = false, bool includeAllSalesmen = false)
+    {
+      
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          return dbContext.USP_IM_RptStatisticsByFTBLocations(dtStart, dtEnd, salesRoom, salesmanID, groupByTeam, includeAllSalesmen).ToList();
+        }
+      });
+    }
+    #endregion GetStatisticsByFTB
+
+    #region GetStatisticsByFTBCategories
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por FTB Locations and Categories
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin</param>
+    /// <param name="salesRoom">Clave de las sala</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsByFTB"></list></returns>
+    /// <history>
+    ///   [michan] 21/07/2016 Created
+    ///   [ecanul] 05/08/2016 Modified. Ahora el return es directo
+    /// </history>
+    public static async Task<List<RptStatisticsByFTBCategories>> GetStatisticsByFTBCategories(DateTime dtStart, DateTime dtEnd, string salesRoom,
+      string salesmanID = "ALL", bool groupByTeam = false, bool includeAllSalesmen = false)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptStatisticsByFTB_Timeout;
+          return dbContext.USP_IM_RptStatisticsByFTBCategories(dtStart, dtEnd, salesRoom, salesmanID, groupByTeam, includeAllSalesmen).ToList();
+        }
+      });
+    }
+    #endregion GetStatisticsByFTB
+
+    #region GetRptEfficiencyWeekly
+    /// <summary>
+    /// Devuelve los datos para el reporte Efficiency Weekly
+    /// </summary>
+    /// <param name="ltsDtmStart">listado con las fechas de inicio</param>
+    /// <param name="ltsDtmEnd">listado con las fechas finales</param>
+    /// <param name="salesRoom">Sala de ventas</param>
+    /// <history>
+    ///   [ecanul] 16/08/2016 Created
+    /// </history>
+    public static async Task<List<RptEfficiencyWeekly>> GetRptEfficiencyWeekly(IEnumerable<DateTime> ltsDtmStart, IEnumerable<DateTime> ltsDtmEnd,
+      string salesRoom)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_IM_RptEfficiencyWeekly(salesRoom, string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")),
+            string.Join(",", ltsDtmEnd.Select(x => $"{x:yyyyMMdd}"))).ToList();
+        }
+      });
+    } 
+    #endregion
+
+    #endregion Processor Sales
 
     #region GetRptUplist
     /// <summary>

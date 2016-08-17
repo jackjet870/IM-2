@@ -212,16 +212,16 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida el monto maximo de regalos
     /// </summary>
-    /// <param name="totalGifts">Total de costo de los regalos</param>
+    /// <param name="totalCostGifts">Total de costo de los regalos</param>
     /// <param name="maxAuthGifts">Máximo autorizado de los regalos</param>
-    /// <returns></returns>
+    /// <returns>True totalCostGift Autorizado | False No autorizado</returns>
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
     /// [vipacheco] 26/Mayo/2016 Modified --> Se migro a esta clase generica
     /// </history>
-    public static bool ValidateMaxAuthGifts(string totalGifts, string maxAuthGifts)
+    public static bool ValidateMaxAuthGifts(string totalCostGifts, string maxAuthGifts)
     {
-      decimal pcurTotalGifts = Convert.ToDecimal(totalGifts.TrimStart('$'));
+      decimal pcurTotalGifts = Convert.ToDecimal(totalCostGifts.TrimStart('$'));
       decimal pcurMaxAuthGifts = Convert.ToDecimal(maxAuthGifts.TrimStart('$'));
 
       // si se rebasa el monto maximo de regalos
@@ -392,62 +392,104 @@ namespace IM.Base.Classes
     }
     #endregion
 
-
-
-    //Este metodo sera remplazado por el que ya existe dentro de GiftReceips
-    //TODO: quitar este metodo cuando se agregue el de tony
-    public static bool ValidateMaxQuantityGiftTour(DataGrid dtg, GuestStatusType guestStatusType, string qtyField, string giftField)
+    #region ValidateMaxQuantityGiftTour
+    /// <summary>
+    /// Valida la informacion del GuestStaus x los regalos || Valida los regalos y el GuestStatus || Tours validados por Guest
+    /// </summary>
+    /// <param name="dtg"> Datagrid donde se encuentran la lista de Gifts a validar </param>
+    /// <param name="guestStatus">Informacion para validar el status de un Guest </param>
+    /// <param name="qtyField"> Nombre de la propiedad que contiene Qty</param>
+    /// <param name="giftField"> Nombre de la propiedad que contiene el giftID </param>
+    /// <returns>TRUE - Tours validos | FALSE - Se ingreso una candidad maxima a los TOURS permitidos</returns>
+    /// <history>
+    /// [vipacheco] 19/Abril/2016 Created
+    /// </history>
+    public static bool ValidateGiftsGuestStatus(DataGrid dtg, GuestStatusValidateData guestStatus, string qtyField, string giftField)
     {
-      bool _hasError = false;
-      //Nuestras restricciones son
-      var maxQtyTours = guestStatusType.gsMaxQtyTours;
+      int iToursUsed, iDiscsUsed, iTourAllowed, iTours, iTCont = 0, iDCont = 0, iMaxTours;
+      decimal iPax, iDiscAllowed, iDisc, iAdults = 0, iMinors = 0, TotPax = 0;
+      bool? blnDisc;
+      string strMsg = "";
 
-      //int tourCount = 0;
-      int totalTourHas = 0;
-      //int descTourCount = 0;
-      int totaldescTourCount = 0;
-      //Si el GuesStatus tiene Cantidad Max de Tour validamos que no se agreguen mas de la cuenta.
-      if (maxQtyTours > 0)
+      // Asignamos los valores del GuestStatus para validar
+      iMaxTours = (int)guestStatus.gsMaxQtyTours;
+      iToursUsed = guestStatus.TourUsed;
+      blnDisc = guestStatus.gsAllowTourDisc;
+      iDiscsUsed = guestStatus.DiscUsed;
+      iPax = guestStatus.guPax;
+
+      // Calculamos el total Pax
+      CalculateAdultsMinorsByPax(iPax, ref iAdults, ref iMinors);
+      TotPax = iAdults + iMinors;
+
+      // Los Tours permitidos
+      iTourAllowed = iMaxTours - iToursUsed;
+      iTours = iTourAllowed;
+
+      // Validamos con cada registro de tour
+      foreach (var item in dtg.Items.SourceCollection)
       {
-        //Recorremos los elementos del grid
-        foreach (var item in dtg.Items.SourceCollection)
+        var properties = item.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+
+        if (properties.Any())
         {
-          var giftValue = item.GetType().GetProperty(giftField).GetValue(item);
+          var giftValue = item.GetType().GetProperty(giftField).GetValue(item) as Gift;
           int qtyValue = Convert.ToInt32(item.GetType().GetProperty(qtyField).GetValue(item));
 
-          //Consultamos el tipo de Gift 
-          var gift = BRGifts.GetGiftId(giftValue.ToString());
-
-          if (gift.gigc == nameof(EnumGiftCategory.TOURS))
+          if (giftValue != null)
           {
-            if (guestStatusType.gsAllowTourDisc == true && gift.giDiscount != null && gift.giDiscount == true)
+            // Evaluamos si son de toures y con descuento
+            if (giftValue.gigc == "TOURS" && !(bool)giftValue.giDiscount)
             {
-              //descTourCount++;
-              totaldescTourCount += qtyValue;
-            }
-            else
-            {
-              //tourCount++;
-              totalTourHas += qtyValue;
+              iTours += iTours - (giftValue.giQty * qtyValue);
+              iTCont += iTCont + (giftValue.giQty * qtyValue);
             }
           }
         }
-        //Validamos que no se sobre pase el limite de Tours permitidos
-        if (guestStatusType.gsAllowTourDisc != true)
+      }
+
+      // Los descuentos permitidos son los restantes de los PAX restantes
+      iDiscAllowed = TotPax - iTCont;
+      iDiscAllowed = iDiscAllowed - iDiscsUsed;
+      iDisc = iDiscAllowed;
+
+      // Validamos con cada registro de descuentos
+      foreach (var item in dtg.Items.SourceCollection)
+      {
+        var properties = item.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+
+        if (properties.Any())
         {
-          //Enviamos Mensaje
-          UIHelper.ShowMessage($"The maximum number of tours {maxQtyTours} has been exceeded. There are {totalTourHas} tours on this invitation", MessageBoxImage.Exclamation, "Intelligence Marketing");
-          _hasError = true;
-        }
-        else if (true && totalTourHas > maxQtyTours)
-        {
-          //Enviamos Mensaje
-          UIHelper.ShowMessage($"The maximum number of tours {maxQtyTours} has been exceeded. There are {totalTourHas} tours on this invitation", MessageBoxImage.Exclamation, "Intelligence Marketing");
-          _hasError = true;
+          var giftValue = item.GetType().GetProperty(giftField).GetValue(item) as Gift;
+          int qtyValue = Convert.ToInt32(item.GetType().GetProperty(qtyField).GetValue(item));
+
+          if (giftValue != null)
+          {
+            if (giftValue.gigc == nameof(EnumGiftCategory.TOURS) && (bool)giftValue.giDiscount)
+            {
+              iDisc = iDisc - (giftValue.giQty * qtyValue);
+              iDCont = iDCont + (giftValue.giQty * qtyValue);
+            }
+          }
         }
       }
-      return _hasError;
-    }
+
+      //Revisamos el remanente de la revision de Gifts
+      if (iTours < 0)
+      {
+        UIHelper.ShowMessage("The maximum number of tours " + iTourAllowed + " has been exceeded. \r\n There are " + iTCont + " tours on this receipt", MessageBoxImage.Exclamation);
+        return false;
+      }
+
+      if (iDisc < 0 && strMsg == "")
+      {
+        UIHelper.ShowMessage("The maximum number of discount tours " + iDiscAllowed + " has been exceeded.\r\n There are " + iDCont + " discount tours on this receipt", MessageBoxImage.Exclamation);
+        return false;
+      }
+
+      return true;
+    } 
+    #endregion
 
     #region CalculateAdultsMinorsByPax
     /// <summary>
@@ -465,5 +507,29 @@ namespace IM.Base.Classes
       piMinors = (pcurPax - piAdults) * 10;
     }
     #endregion
+
+    //#region LoadGuesStatusInfo
+    ///// <summary>
+    ///// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
+    ///// </summary>
+    ///// <param name="guestID"> Clave del Guest</param>
+    ///// <param name="applyGuestStatusValidation"></param>
+    ///// <history>
+    ///// [vipacheco] 19/Abril/2016 Created
+    ///// [vipacheco] 08/Agosto/2016 Modified --> Migrado a esta clase  para el uso generico
+    ///// </history>
+    //public static void LoadGuesStatusInfo(int guestID, ref bool applyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo, int pReceiptID = 0)
+    //{
+    //  applyGuestStatusValidation = false;
+
+    //  pGuestStatusInfo = BRGuestStatus.GetStatusValidateInfo(pGuestID, pReceiptID);
+
+    //  // Solo si esta configurado se realiza la revision
+    //  if (pGuestStatusInfo != null)
+    //    if (pGuestStatusInfo.gsMaxQtyTours > 0)
+    //      applyGuestStatusValidation = true;
+    //}
+    //#endregion
+
   }
 }

@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Classes\FormatInputPropertyClass.cs" />
     <Compile Include="Classes\MaxLengthPropertyClass.cs" />
+    <Compile Include="Classes\PrecisionPropertyClass.cs" />
     <Compile Include="Classes\RichTextBoxToolBar.cs" />
     <Compile Include="Classes\TagPropertyClass.cs" />
     <Compile Include="Enums\EnumFormatInput.cs" />
@@ -145,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\styTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styTimePicker-TK.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -500,6 +505,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Season.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BClock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

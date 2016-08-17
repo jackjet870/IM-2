@@ -27,7 +27,7 @@ namespace IM.Base.Forms
     readonly bool _validatePermission;
     readonly bool _validateRole;
     readonly bool _invitationMode;
-    string _invitationPlaceName;
+    string _invitationPlaceId;
     readonly EnumPermission _permission;
     readonly EnumPermisionLevel _permissionLevel;
     readonly EnumProgram _program;
@@ -47,6 +47,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
     /// [erosado] 25/04/2016  Modified. Se restructuro y se agregaron parametros _permission, _permissionLevel, _program, _modeSwitchLoginUser
+    /// [jorcanche] 16/08/2016 Se agrego el parametro windowStartupLocation sirve para definir en que posicion estara el windowStartupLocation
     /// </history>
     public frmLogin(
       Window splash = null,
@@ -61,10 +62,11 @@ namespace IM.Base.Forms
       EnumRole role = EnumRole.None,
       bool switchLoginUserMode = false,
       bool invitationMode = false,
-      string invitationPlaceName = ""
+      string invitationPlaceId = "",
+      WindowStartupLocation  windowStartupLocation = WindowStartupLocation.Manual
       )
     {
-
+      
       InitializeComponent();
       _splash = splash;
       _loginType = loginType;
@@ -78,7 +80,8 @@ namespace IM.Base.Forms
       _role = role;
       _modeSwitchLoginUser = switchLoginUserMode;
       _invitationMode = invitationMode;
-      _invitationPlaceName = invitationPlaceName;
+      _invitationPlaceId = invitationPlaceId;
+      WindowStartupLocation = windowStartupLocation;
       CloseWindow = new ExecuteCommandHelper(x => btnCancelar_Click(this, null));
     }
 
@@ -291,6 +294,7 @@ namespace IM.Base.Forms
     /// [erosado] 19/03/2016  Created
     /// [erosado] 14/04/2016  Modified. Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// [wtorres] 05/07/2016  Modified. Ahora se busca la locacion por clave
+    /// [erosado] 10/08/2016  Modified. Se cambio para que location busque por ID antes estaba por Name
     /// </history>
     public void DoGetLocationsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
@@ -323,7 +327,7 @@ namespace IM.Base.Forms
         if (_invitationMode)
         {
           var lstPS = cmbPlace.ItemsSource as List<Item>;
-          int index = lstPS.FindIndex(x => x.Name.Equals(_invitationPlaceName));
+          int index = lstPS.FindIndex(x => x.Id.Equals(_invitationPlaceId));
           if (index == -1)
           {
             UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing");
@@ -357,6 +361,7 @@ namespace IM.Base.Forms
     /// [erosado] 19/Mar/2016 Created
     /// [erosado] 14/04/2016  Modified. Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// [wtorres] 05/07/2016  Modified. Ahora se busca la sala de ventas por clave
+    /// [erosado] 10/08/2016  Modified. Se cambio para que location busque por ID antes estaba por Name
     /// </history>
     public void DoGetSalesRoomsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
@@ -391,7 +396,7 @@ namespace IM.Base.Forms
         {
           cmbPlace.IsEnabled = false;
           var lstPS = cmbPlace.ItemsSource as List<Item>;
-          int index = lstPS.FindIndex(x => x.Name.Equals(_invitationPlaceName));
+          int index = lstPS.FindIndex(x => x.Id.Equals(_invitationPlaceId));
           if (index == -1)
           {
             UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing");
@@ -414,7 +419,7 @@ namespace IM.Base.Forms
           cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
         }
       }
-      cmbPlace.IsEnabled = data.Count > 1;
+      cmbPlace.IsEnabled = data.Count > 1 && !_invitationMode;
     }
     #endregion
 

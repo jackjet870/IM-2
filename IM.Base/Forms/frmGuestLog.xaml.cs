@@ -21,16 +21,14 @@ namespace IM.Base.Forms
   public partial class frmGuestLog : Window
   {
     #region Atributos
-    private int _idGuest;
-    private string _leadSource;
+    private readonly int _idGuest;
     #endregion
 
     #region Constructores y destructores
-    public frmGuestLog(int idGuest, string leadSource)
+    public frmGuestLog(int idGuest)
     {
       InitializeComponent();
-      _idGuest = idGuest;
-      _leadSource = leadSource;
+      _idGuest = idGuest;   
     }
     #endregion
 
@@ -46,7 +44,8 @@ namespace IM.Base.Forms
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       dgGuestLog.DataContext = await BRGuestsLogs.GetGuestLog(_idGuest);
-      Title = $"IM guest Log - Guest ID {_idGuest} / Lead Source {_leadSource}";           
+      var leadSourceguest = await BRLeadSources.GetLeadSourceByGuestId(_idGuest);
+      Title = $"IM guest Log - Guest ID {_idGuest} / Lead Source {leadSourceguest}";
     }
    
     #endregion
@@ -60,8 +59,7 @@ namespace IM.Base.Forms
     /// </history>
     private void btnGuestMovents_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestsMovements guestMovements = new frmGuestsMovements(_idGuest);
-      guestMovements.Owner = this;
+      var guestMovements = new frmGuestsMovements(_idGuest) {Owner = this};
       guestMovements.ShowDialog();
     }
     #endregion

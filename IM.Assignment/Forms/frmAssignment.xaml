@@ -34,10 +34,10 @@
         <TextBlock x:Name="txbWeek" Text="lblWeek" TextAlignment="Center" HorizontalAlignment="Left" Margin="7,12,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="0" Width="257" Height="25" TextWrapping="Wrap" Padding="6" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <TextBlock x:Name="txbDateRange" Text="lblDateRange" TextAlignment="Center" HorizontalAlignment="Left" Margin="7,40,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="0" Width="257" Height="25" Padding="6" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
         <StackPanel Grid.Column="0" Orientation="Horizontal" Width="257" Height="25"  HorizontalAlignment="Left" Margin="7,70,0,0" VerticalAlignment="Top" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
-            <TextBlock x:Name="txb1" Text="Total Week" VerticalAlignment="Center" FontWeight="Bold" Height="14" Width="62" Grid.Column="0" Margin="5,5,5,5"/>
-            <TextBlock x:Name="txbTotalW" Text="9999"  VerticalAlignment="Center" FontWeight="Bold" Height="14" Width="29" Grid.Column="0" Margin="10,5,5,5"/>
-            <TextBlock x:Name="txb2" Text="Assigned" VerticalAlignment="Center" FontWeight="Bold" Height="14" Width="53" Grid.Column="0" Margin="15,5,5,5"/>
-            <TextBlock x:Name="txbTotalAssign" Text="9999" VerticalAlignment="Center" FontWeight="Bold" Height="14" Width="31" Grid.Column="0" Margin="10,5,5,5"/>
+            <TextBlock x:Name="txb1" Text="Total Week" VerticalAlignment="Bottom" FontWeight="Bold" Height="19" Width="68" Grid.Column="0" Margin="5,0"/>
+            <TextBlock x:Name="txbTotalW" Text="9999"  VerticalAlignment="Center" FontWeight="Bold" Height="19" Width="35" Grid.Column="0" Margin="10,6,5,0"/>
+            <TextBlock x:Name="txb2" Text="Assigned" VerticalAlignment="Center" FontWeight="Bold" Height="19" Width="53" Grid.Column="0" Margin="15,6,5,0"/>
+            <TextBlock x:Name="txbTotalAssign" Text="9999" VerticalAlignment="Center" FontWeight="Bold" Height="19" Width="40" Grid.Column="0" Margin="10,6,5,0"/>
         </StackPanel>
         <Button x:Name="btnBack" Content="Back" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="7,109,0,0" VerticalAlignment="Top" Width="75" Height="31" Click="btnBack_Click" Grid.Column="0"/>
         <Button x:Name="btnNext" Content="Next" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="189,109,0,0" VerticalAlignment="Top" Width="75" Height="31" Click="btnNext_Click" Grid.Column="0"/>

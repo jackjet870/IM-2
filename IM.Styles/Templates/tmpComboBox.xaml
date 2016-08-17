@@ -584,4 +584,32 @@
         </Border>
     </DataTemplate>
     <!--#endregion-->
+
+    <!--#region TourTimes Img-->
+    <DataTemplate x:Key="cbx-TourTimes-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding Tour}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="18" Stretch="Uniform">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BClock.png" />
+                    </Viewbox>
+                </StackPanel>
+
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding Tour, StringFormat='TourTime: {0:HH:mm}'}" />
+                <TextBlock  Text="{Binding PickUp, StringFormat='PickUpTime: {0:HH:mm}'}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
 </ResourceDictionary>

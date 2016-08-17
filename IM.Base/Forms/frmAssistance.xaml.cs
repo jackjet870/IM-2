@@ -204,7 +204,10 @@ namespace IM.Base.Forms
             _listAssistData.Add(assistance);
           });
           _isNew = true;
+          btnEdit.IsEnabled = true;
         }
+        else
+          btnEdit.IsEnabled = false;
         assistanceDataDataGrid.ItemsSource = _listAssistData;
       }
       StaEnd();
@@ -256,7 +259,7 @@ namespace IM.Base.Forms
         lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));        
       });
 
-      nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.add : EnumMode.edit);
+      nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.Add : EnumMode.Edit);
       ChangeUseMode(false);
       UIHelper.ShowMessage("Saved Assistance", MessageBoxImage.Information, "Saved");
       LoadGrid();

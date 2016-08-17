@@ -30,26 +30,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 06/04/2016 Created
     /// </history>
-    public async static Task<List<GiftsReceipt>> GetGiftsReceipts(int? guestID = 0, string salesRoom = "ALL", int receipt = 0, string folio = "ALL",
+    public async static Task<List<GiftsReceiptsShort>> GetGiftsReceipts(int? guestID = 0, string salesRoom = "ALL", int receipt = 0, string folio = "ALL",
                                                             DateTime? dateFrom = null, DateTime? dateTo = null, string name = "ALL",
                                                             string reservation = "ALL")
     {
-      List<GiftsReceipt> lstResult = new List<GiftsReceipt>();
+      List<GiftsReceiptsShort> lstResult = new List<GiftsReceiptsShort>();
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Obtenemos los GiftsReceiptShort del Stored correspondiente con los campos correspondientes
-          List<GiftsReceiptsShort> lstShort = new List<GiftsReceiptsShort>();
-
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGiftsReceipts_Timeout;
-          lstShort = dbContext.USP_OR_GetGiftsReceipts(guestID, salesRoom, receipt, folio, dateFrom, dateTo, name, reservation).ToList();
-
-          // Recorremos la lista resultado y contruimos la lista a enviar. 
-          if (lstShort.Count > 0)
-          {
-            lstShort.ForEach(x => lstResult.Add(dbContext.GiftsReceipts.Where(w => w.grID == x.grID).Single()));
-          }
+          lstResult = dbContext.USP_OR_GetGiftsReceipts(guestID, salesRoom, receipt, folio, dateFrom, dateTo, name, reservation).ToList();
         }
       });
 
@@ -114,11 +106,11 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 2/Mayo/2016 Created
     /// [vipacheco] 07/Julio/2016 Modified --> Se agregó asincronia
+    /// [vipacheco] 05/Agosto/2016 Modified --> Se agregó estandarizacion del return
     /// </history>
     public async static Task<int> SaveGiftReceipt(GiftsReceipt giftReceipt)
     {
-      int result = 0;
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
@@ -126,11 +118,9 @@ namespace IM.BusinessRules.BR
           dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
           dbContext.SaveChanges();
 
-          result = giftReceipt.grID; // Obtenemos el ID del nuevo Gift Receipt
+          return giftReceipt.grID; // Obtenemos el ID del nuevo Gift Receipt
         }
       });
-
-      return result;
     }
     #endregion
 
@@ -196,8 +186,9 @@ namespace IM.BusinessRules.BR
     /// <param name="Gift"></param>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
+    /// [vipacheco] 25/Julio/2016 Modified --> Se agrego asyncronia
     /// </history>
-    public async static void CancelGiftPromotionSistur(int ReceiptID, string Gift)
+    public async static Task CancelGiftPromotionSistur(int ReceiptID, string Gift)
     {
       await Task.Run(() =>
       {
@@ -209,19 +200,28 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    public static async Task<int> SaveGiftReceiptAuthorized(GiftsReceipt giftsReceipt)
+    #region UpdateCharge
+    /// <summary>
+    /// Actualiza el cargo de un recibo de regalos
+    /// </summary>
+    /// <param name="pGuestID"></param>
+    /// <param name="pCharge"></param>
+    /// <param name="pAdjustement"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 08/Julio/2016 Created
+    /// </history>
+    public async static Task UpdateCharge(int pGuestID, decimal pCharge, decimal pAdjustement)
     {
-      int nRes = await Task.Run(() =>
+      await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Entry(giftsReceipt).State = System.Data.Entity.EntityState.Modified;
-          return dbContext.SaveChanges();
+          dbContext.USP_OR_UpdateCharge(pGuestID, pCharge, pAdjustement);
         }
       });
-      return nRes;
     }
-
+    #endregion
     #region getRptGiftsReceipt
     /// <summary>
     /// Obtiene la informacion para el repote GiftReceipt del Modulo Host.
@@ -256,7 +256,7 @@ namespace IM.BusinessRules.BR
             .GetValues();
         }
       });
-    } 
+    }
     #endregion
   }
 }

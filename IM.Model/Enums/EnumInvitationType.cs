@@ -8,11 +8,8 @@ namespace IM.Model.Enums
 {
   public enum EnumInvitationType
   {
-    InHouse = 0,
-    OutHouse,
-    Host,
-    Animation,
-    Regen,
-    External
+    existing, //Invitacion de un huesped existente
+    newOutHouse,//Invitacion nueva OutHouse
+    newExternal//Invitacion nueva External
   }
 }

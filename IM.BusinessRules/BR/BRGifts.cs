@@ -295,28 +295,6 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    public static IEnumerable<object> GetGiftsWithPackages()
-    {
-      IEnumerable<object> lstResult;
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        var query = from a in dbContext.Gifts
-                    where a.giA == true
-                    select new
-                    {
-                      giID = a.giID,
-                      giN = a.giN,
-                      Visibility = a.giPack ? true : false,
-                      packs = dbContext.GiftsPackagesItems.Where(w => w.gpPack == a.giID).Select(s => dbContext.Gifts.Where(w => w.giID == s.gpgi).Select(ss => ss.giN).FirstOrDefault()).ToList()
-                    };
-
-        lstResult = query.ToList();
-      }
-
-      return lstResult;
-    }
-
     #region SaveGift
     /// <summary>
     /// Guarda un Gift y Su Log

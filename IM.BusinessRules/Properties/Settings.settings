@@ -200,5 +200,14 @@
     <Setting Name="USP_OR_DeletePersonnel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>
     </Setting>
+    <Setting Name="USP_IM_RptStatisticsBySegments_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_IM_RptStatisticsByCloser_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_IM_RptStatisticsByExitCloser_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
