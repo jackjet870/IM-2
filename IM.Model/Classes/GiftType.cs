@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IM.Base.Classes
+namespace IM.Model.Classes
 {
   /// <summary>
   /// Struct para el manejo de regalos

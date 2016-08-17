@@ -2,6 +2,7 @@
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Services.WirePRService;
 using PalaceResorts.Common.PalaceTools;
 using System;

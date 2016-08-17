@@ -2,6 +2,7 @@
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Services.Helpers;
 using IM.Services.SisturService;

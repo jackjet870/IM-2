@@ -125,6 +125,7 @@
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
+    <Compile Include="Classes\GiftType.cs" />
     <Compile Include="Classes\GuestInvitation.cs" />
     <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\ItemsList.cs" />
