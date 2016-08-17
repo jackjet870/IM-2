@@ -35,6 +35,7 @@ namespace IM.Base.Forms
     private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
     private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
     private bool _dontShowAgainGuestStatus = false;
+    public bool _isRebook = false;
     public CommonCatObject catObj { get; set; }
 
     #endregion
@@ -51,7 +52,6 @@ namespace IM.Base.Forms
     /// </history>
     public frmInvitation(EnumModule module, EnumInvitationType invitationType, UserData user, int guestId = 0, bool allowReschedule = true)
     {
-
       catObj = new CommonCatObject(module, invitationType, user, guestId);
       _module = module;
       _guestId = guestId;
@@ -99,6 +99,7 @@ namespace IM.Base.Forms
       catch (Exception ex)
       {
         UIHelper.ShowMessage(ex);
+        _busyIndicator.IsBusy = false;
       }
     }
     #endregion
@@ -143,7 +144,7 @@ namespace IM.Base.Forms
         SetAdd();
 
         //Activamos el Modo Edit
-        EditModeControlsBehaviorInHouse();
+        EditModeControlsBehavior();
       }
     }
     #endregion
@@ -268,6 +269,64 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #region cmbSalesRooms_SelectionChanged
+    /// <summary>
+    /// Obtiene la informacion de los tourTimes cada que se cambia de sala de ventas
+    /// </summary>
+    ///<history>
+    ///[erosado]  16/08/2016  Created.
+    /// </history>
+    private void cmbSalesRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      {
+        //Consultamos los horarios disponibles 
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
+      }
+      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      {
+        //Consultamos los horarios disponibles 
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
+      }
+    }
+    #endregion
+
+    #region dtpBookDate_ValueChanged
+    /// <summary>
+    /// Obtiene la informacion de los tourTimes cada que se cambia la fecha de Book
+    /// </summary>
+    ///<history>
+    ///[erosado]  16/08/2016  Created.
+    /// </history>
+    private void dtpBookDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      //Si tiene una fecha y es una fecha valida
+      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      {
+        //Consultamos los horarios disponibles 
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
+      }
+    }
+    #endregion
+
+    #region dtpRescheduleDate_ValueChanged
+    /// <summary>
+    /// Obtiene la informacion de los tourTimes cada que se cambia la fecha de Reschedule
+    /// </summary>
+    ///<history>
+    ///[erosado]  16/08/2016  Created.
+    /// </history>
+    private void dtpRescheduleDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      //Si tiene una fecha y es una fecha valida
+      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      {
+        //Consultamos los horarios disponibles 
+        cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
+      }
+    }
+    #endregion
+
     #endregion
 
     #region Controls Configuration
@@ -347,6 +406,8 @@ namespace IM.Base.Forms
 
     #endregion
 
+    #region CollapsedControlsConfiguration
+
     #region CollapsedControls
     /// <summary>
     /// Colapsa los controles dependiendo del EnumModule
@@ -382,6 +443,8 @@ namespace IM.Base.Forms
           break;
       }
     }
+    #endregion
+
     #region InHouseCollapsed
     /// <summary>
     /// Colapsa controles para la invitacion InHouse
@@ -466,8 +529,9 @@ namespace IM.Base.Forms
       #region Enable false
       chkguShow.IsEnabled = false;
       chkguInterval.IsEnabled = false;
-      chkDirect.IsEnabled = false;
-      cmbLocation.IsEnabled = false;
+      chkDirect.IsEnabled = _module == EnumModule.Host ? true : false;
+      cmbLocation.IsEnabled = _module == EnumModule.Host ? true : false;
+      cmbSalesRooms.IsEnabled = _module != EnumModule.Host ? true : false;
       stkRescheduleDate.IsEnabled = false;
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
@@ -489,6 +553,19 @@ namespace IM.Base.Forms
       dtgAdditionalGuest.IsReadOnly = catObj.InvitationMode == EnumMode.ReadOnly;
 
       #endregion
+
+      //Si es una invitacion existente 
+      if (catObj.InvitationMode != EnumMode.Add)
+      {
+        //Desactivamos los siguientes controles.
+        stkPRContact.IsEnabled = false;
+        stkPR.IsEnabled = false;
+        stkLocation.IsEnabled = false;
+        stkSales.IsEnabled = false;
+        dtpBookDate.IsEnabled = false;
+        cmbBookT.IsEnabled = false;
+        stkRescheduleDate.IsEnabled = false;
+      }
     }
 
     #endregion
@@ -517,10 +594,175 @@ namespace IM.Base.Forms
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
       #endregion
+
+      //Si OutHouse y es una invitacion existente
+      if (_module == EnumModule.OutHouse && catObj.InvitationMode != EnumMode.Add)
+      {
+        //Desactivamos los siguientes controles.
+        stkPR.IsEnabled = false;
+        stkLocation.IsEnabled = false;
+        stkSales.IsEnabled = false;
+        dtpBookDate.IsEnabled = false;
+        cmbBookT.IsEnabled = false;
+      }
+
     }
     #endregion
 
-    #region OtherButtons
+    #region EditModeControlsBehavior
+    /// <summary>
+    /// Sirve para saber que se puede o que no se puede editar en una invitacion, dependiendo de los permisos del usuario
+    /// </summary>
+    ///<history>
+    ///[erosado]  15/08/2016  Created.
+    /// </history>
+    private void EditModeControlsBehavior()
+    {
+      //Se usa el Objeto CGuestObj cuando referenciamos a datos sin modificar en origos le llamaban (Original) eso quiere decir que es el backup del Guest que se esta modificando
+      var serverDate = BRHelpers.GetServerDate();
+      //Si viene de Host cambiamos a HostInvitations, si es de cualquier otro tipo utilizamos PRInvitations
+      var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
+
+      //Edit Mode Siempre sera en modo InvitationMode = ReadOnly
+      if (_module != EnumModule.Host)
+      {
+        //PR
+        cmbPR.IsEnabled = false;
+        //SalesRoom
+        cmbSalesRooms.IsEnabled = false;
+        //Fecha y hora del booking
+        stkBookDateAndTime.IsEnabled = false;
+      }
+      //Si el modo en que se abre la invitacion se permiten reschedule (alloreschedule = true) desahabilitamos el stkRescheduleDate
+      if (_allowReschedule)
+      {
+        stkRescheduleDate.IsEnabled = false;
+      }
+
+      //BOOKING DEPOSITS      
+      //Si viene de InHouse o Host
+      if (_module != EnumModule.OutHouse)
+      {
+        //Si el huesped no se ha ido, o la fecha en que se hizo la invitacion ya pasó o (no tiene permiso de invitacion  y la fecha de Booking es menor a la fecha de hoy)
+        if (catObj.GuestObj.guCheckOutD <= serverDate || catObj.GuestObj.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.CGuestObj.guBookD < serverDate))
+        {
+          //No permitimos modificacion de depositos desactivamos todo el contenedor
+          brdBookingDeposits.IsEnabled = false;
+        }
+      }
+
+      //GUEST ADDITIONAL
+      //Si no es de OutHouse ni Host(es InHouse)
+      if (_module == EnumModule.InHouse)
+      {
+        //Si la fecha de booking original es antes de hoy
+        if (catObj.CGuestObj.guBookD < serverDate)
+        {
+          brdAdditionalGuest.IsEnabled = false;
+        }
+      }
+
+      //Other Info
+      if (_module == EnumModule.InHouse)
+      {
+        //Si tiene copia de folio de reservacion, no se permite modificar la agencia
+        if (!string.IsNullOrWhiteSpace(catObj.GuestObj.guHReservIDC))
+        {
+          cmbOtherInfoAgency.IsEnabled = false;
+        }
+        //No se permite modificar el hotel y la fecha de llegada
+        cmbOtherInfoHotel.IsEnabled = false;
+        dtpOtherInfoArrivalD.IsEnabled = false;
+      }
+
+      if (_module != EnumModule.OutHouse)
+      {
+        //Si no tiene permiso especial el usuario NO se le permite modificar la fecha de salida
+        if (!_user.HasPermission(permission, EnumPermisionLevel.Special))
+        {
+          dtpOtherInfoDepartureD.IsEnabled = false;
+        }
+      }
+
+      //CREDIT CARDS, GUEST STATUS Y ROOMS QUANTITY
+
+      if (_module == EnumModule.InHouse)
+      {
+        //Si la fecha de Booking origial es antes de hoy No permitimos modificar 
+        if (catObj.CGuestObj.guBookD < serverDate)
+        {
+          brdCreditCard.IsEnabled = false;
+          cmbGuestStatus.IsEnabled = false;
+          stkRoomsQty.IsEnabled = false;
+        }
+      }
+    }
+    #endregion
+
+    #region SetReadOnly
+    /// <summary>
+    /// Deshabilita los controles principales
+    /// </summary>
+    /// <history>
+    /// [erosado] 15/08/2016  Created.
+    /// </history>
+    private void SetReadOnly()
+    {
+      //Contenedores principales de la aplicacion
+      brdGuestInfo.IsEnabled = false;
+      brdProfileOpera.IsEnabled = false;
+      brdGuest1.IsEnabled = false;
+      brdGuest2.IsEnabled = false;
+      brdPRInfo.IsEnabled = false;
+      brdOtherInformation.IsEnabled = false;
+      brdGuestStatus.IsEnabled = false;
+      brdGifts.IsEnabled = false;
+      brdBookingDeposits.IsEnabled = false;
+      brdCreditCard.IsEnabled = false;
+      //Additional Guest
+      dtgAdditionalGuest.IsReadOnly = true;
+
+      brdRoomsQtyAndElectronicPurse.IsEnabled = false;
+    }
+    #endregion
+
+    #region SetAdd
+    /// <summary>
+    /// Habilita los controles principales
+    /// </summary>
+    /// <history>
+    /// [erosado] 15/08/2016  Created.
+    /// </history>
+    private void SetAdd()
+    {
+      //Contenedores principales de la aplicacion
+      brdGuestInfo.IsEnabled = true;
+      brdProfileOpera.IsEnabled = true;
+      brdGuest1.IsEnabled = true;
+      brdGuest2.IsEnabled = true;
+      brdPRInfo.IsEnabled = true;
+      brdOtherInformation.IsEnabled = true;
+      brdGuestStatus.IsEnabled = true;
+      brdGifts.IsEnabled = true;
+      brdBookingDeposits.IsEnabled = true;
+      brdCreditCard.IsEnabled = true;
+      //Additional Guest
+      dtgAdditionalGuest.IsEnabled = true;
+      brdRoomsQtyAndElectronicPurse.IsEnabled = true;
+
+      //Si esta iniciando una edicion de invitacion desactivamos los siguientes controles
+      if (_isEditing)
+      {
+        imgButtonEdit.IsEnabled = false;
+        imgButtonPrint.IsEnabled = false;
+        imgButtonSave.IsEnabled = true;
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Metodos Complementarios
 
     #region SetupChangeRescheduleRebook
     /// <summary>
@@ -629,157 +871,187 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #endregion
-
-    #region SetReadOnly
+    #region LoadTourTimes
     /// <summary>
-    /// Deshabilita los controles principales
+    /// Sirve para cargar los TourTimes disponibles
     /// </summary>
-    /// <history>
-    /// [erosado] 15/08/2016  Created.
-    /// </history>
-    private void SetReadOnly()
+    /// <param name="salesRoom">Sala de ventas</param>
+    /// <param name="selectedDate">Dia seleccionado</param>
+    /// <param name="bookingDate">True Booking|False Reschedule </param>
+    /// <returns></returns>
+    private List<TourTimeAvailable> LoadTourTimes(string salesRoom, DateTime selectedDate, bool bookingDate = true)
     {
-      //Contenedores principales de la aplicacion
-      brdGuestInfo.IsEnabled = false;
-      brdProfileOpera.IsEnabled = false;
-      brdGuest1.IsEnabled = false;
-      brdGuest2.IsEnabled = false;
-      brdPRInfo.IsEnabled = false;
-      brdOtherInformation.IsEnabled = false;
-      brdGuestStatus.IsEnabled = false;
-      brdGifts.IsEnabled = false;
-      brdBookingDeposits.IsEnabled = false;
-      brdCreditCard.IsEnabled = false;
-      brdAdditionalGuest.IsEnabled = false;
-      brdRoomsQtyAndElectronicPurse.IsEnabled = false;
-    }
-    #endregion
+      List<TourTimeAvailable> tourTimes = new List<TourTimeAvailable>();
+      //Obtenemos el LeadSource
+      var leadSource = _module != EnumModule.Host ? _user.LeadSource.lsID : catObj.GuestObj.guls;
 
-    #region SetAdd
-    /// <summary>
-    /// Habilita los controles principales
-    /// </summary>
-    /// <history>
-    /// [erosado] 15/08/2016  Created.
-    /// </history>
-    private void SetAdd()
-    {
-      //Contenedores principales de la aplicacion
-      brdGuestInfo.IsEnabled = true;
-      brdProfileOpera.IsEnabled = true;
-      brdGuest1.IsEnabled = true;
-      brdGuest2.IsEnabled = true;
-      brdPRInfo.IsEnabled = true;
-      brdOtherInformation.IsEnabled = true;
-      brdGuestStatus.IsEnabled = true;
-      brdGifts.IsEnabled = true;
-      brdBookingDeposits.IsEnabled = true;
-      brdCreditCard.IsEnabled = true;
-      brdAdditionalGuest.IsEnabled = true;
-      brdRoomsQtyAndElectronicPurse.IsEnabled = true;
-
-      //Si esta iniciando una edicion de invitacion desactivamos los siguientes controles
-      if (_isEditing)
-      {
-        imgButtonEdit.IsEnabled = false;
-        imgButtonPrint.IsEnabled = false;
-        imgButtonSave.IsEnabled = true;
-      }
-    }
-    #endregion
-    #endregion
-
-    #region EditModeControlsBehaviorInHouse
-    /// <summary>
-    /// Sirve para saber que se puede o que no se puede editar en una invitacion, dependiendo de los permisos del usuario
-    /// </summary>
-    ///<history>
-    ///[erosado]  15/08/2016  Created.
-    /// </history>
-    private void EditModeControlsBehaviorInHouse()
-    {
-      //Se usa el Objeto CGuestObj cuando referenciamos a datos sin modificar en origos le llamaban (Original) eso quiere decir que es el backup del Guest que se esta modificando
+      //Obtenemos la fecha del servidor
       var serverDate = BRHelpers.GetServerDate();
-      //Si viene de Host cambiamos a HostInvitations, si es de cualquier otro tipo utilizamos PRInvitations
+
+      //Si es una invitacion nueva
+      if (catObj.InvitationMode == EnumMode.Add)
+      {
+        tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate);
+      }
+      //Si es en modo edicion
+      if (catObj.InvitationMode == EnumMode.Edit)
+      {
+        //Booking
+        if (bookingDate)
+        {
+          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.CGuestObj.guBookD, catObj.CGuestObj.guBookT, serverDate);
+        }
+        //Reschedule
+        else
+        {
+          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.CGuestObj.guReschD, catObj.CGuestObj.guReschT, serverDate);
+        }
+      }
+      return tourTimes;
+    }
+    #endregion
+
+    #region Change
+    /// <summary>
+    /// Este evento de ejecuta desde el boton btnChange
+    /// </summary>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    private void Change()
+    {
+      var serverDate = BRHelpers.GetServerDate();
       var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
 
-      //Edit Mode Siempre sera en modo InvitationMode = ReadOnly
-      if (_module != EnumModule.Host)
-      {
-        //PR
-        cmbPR.IsEnabled = false;
-        //SalesRoom
-        cmbSalesRooms.IsEnabled = false;
-        //Fecha y hora del booking
-        stkBookDateAndTime.IsEnabled = false;
-      }
+      //Deshabilitamos los controles de Change, Reschedule y Rebook
+      btnChange.IsEnabled = false;
+      btnReschedule.IsEnabled = false;
+      btnRebook.IsEnabled = false;
 
-      //Si el modo en que se abre la invitacion se permiten reschedule (alloreschedule = true) desahabilitamos el stkRescheduleDate
+      //Si se permite hacer reschedule
       if (_allowReschedule)
       {
-        stkRescheduleDate.IsEnabled = false;
-      }
-
-
-      //BOOKING DEPOSITS      
-      //Si viene de InHouse o Host
-      if (_module != EnumModule.OutHouse)
-      {
-        //Si el huesped no se ha ido, o la fecha en que se hizo la invitacion ya pasó o (no tiene permiso de invitacion  y la fecha de Booking es menor a la fecha de hoy)
-        if (catObj.GuestObj.guCheckOutD <= serverDate || catObj.GuestObj.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.CGuestObj.guBookD < serverDate))
+        //si la fecha de invitacion es hoy o si la fecha de booking es despues de hoy
+        if (catObj.GuestObj.guInvitD == serverDate || catObj.GuestObj.guBookD > serverDate)
         {
-          //No permitimos modificacion de depositos desactivamos todo el contenedor
-          brdBookingDeposits.IsEnabled = false;
+          //Se activa la fecha de Book
+          dtpBookDate.IsEnabled = true;
+
+          //Si tiene permiso especial
+          if (_user.HasPermission(permission, EnumPermisionLevel.Special))
+          {
+            //PR Contact 
+            if (!cmbPRContact.IsEnabled)
+            {
+              stkPRContact.IsEnabled = true;
+              cmbPRContact.IsEnabled = true;
+            }
+            //PR
+            stkPR.IsEnabled = true;
+            cmbPR.IsEnabled = true;
+            //Sala
+            if (!cmbSalesRooms.IsEnabled)
+            {
+              stkSales.IsEnabled = true;
+              cmbSalesRooms.IsEnabled = true;
+            }
+          }
         }
       }
-
-      //GUEST ADDITIONAL
-      //Si no es de OutHouse ni Host(es InHouse)
-      if (_module == EnumModule.InHouse)
+      //Si no se permite Reschedule
+      else
       {
-        //Si la fecha de booking original es antes de hoy
-        if (catObj.CGuestObj.guBookD < serverDate)
+        //Fecha de Booking 
+        stkBookDateAndTime.IsEnabled = true;
+
+        //PR Contact
+        if (!cmbPRContact.IsEnabled)
         {
-          brdAdditionalGuest.IsEnabled = false;
+          stkPRContact.IsEnabled = true;
+          cmbPRContact.IsEnabled = true;
         }
-      }
-
-      //Other Info
-      if (_module == EnumModule.InHouse)
-      {
-        //Si tiene copia de folio de reservacion, no se permite modificar la agencia
-        if (!string.IsNullOrWhiteSpace(catObj.GuestObj.guHReservIDC))
+        //PR
+        stkPR.IsEnabled = true;
+        cmbPR.IsEnabled = true;
+        //Sala
+        if (!cmbSalesRooms.IsEnabled)
         {
-          cmbOtherInfoAgency.IsEnabled = false;
-        }
-        //No se permite modificar el hotel y la fecha de llegada
-        cmbOtherInfoHotel.IsEnabled = false;
-        dtpOtherInfoArrivalD.IsEnabled = false;
-      }
-
-      if (_module != EnumModule.OutHouse)
-      {
-        //Si no tiene permiso especial el usuario NO se le permite modificar la fecha de salida
-        if (!_user.HasPermission(permission, EnumPermisionLevel.Special))
-        {
-          dtpOtherInfoDepartureD.IsEnabled = false;
-        }
-      }
-
-      //CREDIT CARDS, GUEST STATUS Y ROOMS QUANTITY
-
-      if (_module == EnumModule.InHouse)
-      {
-        //Si la fecha de Booking origial es antes de hoy No permitimos modificar 
-        if (catObj.CGuestObj.guBookD < serverDate)
-        {
-          brdCreditCard.IsEnabled = false;
-          cmbGuestStatus.IsEnabled = false;
-          stkRoomsQty.IsEnabled = false;
+          stkSales.IsEnabled = true;
+          cmbSalesRooms.IsEnabled = true;
         }
       }
     }
+
+    #endregion
+
+    #region Reschedule
+    /// <summary>
+    /// Este metodo se ejecuta desde el boton btnReschedule
+    /// </summary>
+    private void Reschedule()
+    {
+      //Deshabilitamos los controles de Change, Reschedule y Rebook
+      btnChange.IsEnabled = false;
+      btnReschedule.IsEnabled = false;
+      btnRebook.IsEnabled = false;
+
+      //SalesRoom
+      if (!cmbSalesRooms.IsEnabled)
+      {
+        stkSales.IsEnabled = true;
+        cmbSalesRooms.IsEnabled = true;
+      }
+
+      //Fecha de Reschedule
+      stkRescheduleDate.IsEnabled = true;
+      dtpRescheduleDate.IsEnabled = true;
+
+      //Fecha y hora en que se hizo es reschedule
+      catObj.GuestObj.guReschDT = BRHelpers.GetServerDateTime();
+
+      //Reschedule TourTimes
+      cmbReschT.IsEnabled = true;
+
+      //Activamos el Check de reschedule
+      chkReschedule.IsChecked = true;
+
+    }
+    #endregion
+
+    #region Rebook
+    private void Rebook()
+    {
+      //Nota: Cuando es un Rebook, se genera un nuevo Guest y en su guRef se escribe el GuestID del padre
+      _isRebook = true;
+      var serverDate = BRHelpers.GetServerDate();
+      var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
+
+      //Deshabilitamos los controles de Change, Reschedule y Rebook
+      btnChange.IsEnabled = false;
+      btnReschedule.IsEnabled = false;
+      btnRebook.IsEnabled = false;
+
+      //Si guRef es null o cero
+      if (catObj.GuestObj.guRef == null || catObj.GuestObj.guRef ==0)
+      {
+        //Le asignamos el valor del GuestID
+        catObj.GuestObj.guRef = catObj.GuestObj.guID;
+      }
+
+      //Guest id = ""
+      
+      //Desactivamos Quinella
+      chkguQuinella.IsChecked = false;
+      //Desactivamos Show
+      chkguShow.IsChecked = false;
+      //Limpiamos la informacion del show
+      
+      
+
+
+    }
+    #endregion
+
     #endregion
 
     #region Eventos del GRID Invitation Gift
@@ -944,69 +1216,43 @@ namespace IM.Base.Forms
 
     #endregion
 
-    private void dtpBookDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    #region btnChange_Click
+    /// <summary>
+    /// Evento del boton Change dentro de OtherInformation
+    /// </summary>
+    /// <history>
+    /// [erosado] 16/08/2016  Created.
+    /// </history>
+    private void btnChange_Click(object sender, RoutedEventArgs e)
     {
-      //Si tiene una fecha y es una fecha valida
-      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
-      {
-        //Consultamos los horarios disponibles 
-        cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
-      }
+      Change();
     }
-
-    private void cmbSalesRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    #endregion
+    
+    #region btnReschedule_Click
+    /// <summary>
+    /// Evento del boton Reschedule dentro de OtherInformation
+    /// </summary>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    private void btnReschedule_Click(object sender, RoutedEventArgs e)
     {
-      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
-      {
-        //Consultamos los horarios disponibles 
-        cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
-      }
-      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
-      {
-        //Consultamos los horarios disponibles 
-        cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
-      }
+      Reschedule();
     }
+    #endregion
 
-    private List<TourTimeAvailable> LoadTourTimes(string salesRoom, DateTime selectedDate, bool bookingDate = true)
+    #region btnRebook_Click
+    /// <summary>
+    /// Evento del boton Rebook dentro de OtherInformation
+    /// </summary>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    private void btnRebook_Click(object sender, RoutedEventArgs e)
     {
-      List<TourTimeAvailable> tourTimes = new List<TourTimeAvailable>();
-      //Obtenemos el LeadSource
-      var leadSource = _module != EnumModule.Host ? _user.LeadSource.lsID : catObj.GuestObj.guls;
 
-      //Obtenemos la fecha del servidor
-      var serverDate = BRHelpers.GetServerDate();
-
-      //Si es una invitacion nueva
-      if (catObj.InvitationMode == EnumMode.Add)
-      {
-        tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate);
-      }
-      //Si es en modo edicion
-      if (catObj.InvitationMode == EnumMode.Edit)
-      {
-        //Booking
-        if (bookingDate)
-        {
-          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.CGuestObj.guBookD, catObj.CGuestObj.guBookT, serverDate);
-        }
-        //Reschedule
-        else
-        {
-          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.CGuestObj.guReschD, catObj.CGuestObj.guReschT, serverDate);
-        }
-      }
-      return tourTimes;
     }
-
-    private void dtpRescheduleDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-      //Si tiene una fecha y es una fecha valida
-      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
-      {
-        //Consultamos los horarios disponibles 
-        cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
-      }
-    }
+    #endregion
   }
 }

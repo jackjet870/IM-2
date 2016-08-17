@@ -94,6 +94,13 @@ namespace IM.Base.Classes
       set
       { SetField(ref _guestObj, value); }
     }
+    private List<TourTimeAvailable> _tourTimes;
+    public List<TourTimeAvailable> TourTimes
+    {
+      get { return _tourTimes; }
+      set { SetField(ref _tourTimes, value); }
+    }
+
 
     #endregion
 
@@ -187,7 +194,6 @@ namespace IM.Base.Classes
         SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), nameof(BookingDepositList));
         SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
         SetField(ref _additionalGuestList, new ObservableCollection<Guest>(), nameof(AdditionalGuestList));
-        //SetField(ref _guestObj, new Guest(), nameof(GuestObj));
       }
     }
     #endregion
@@ -203,7 +209,7 @@ namespace IM.Base.Classes
     {
       EnumMode invitationMode;
       var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
-      
+
       //Si es una invitacion existente
       if (guestObj != null && guestObj.guInvit)
       {
@@ -219,7 +225,7 @@ namespace IM.Base.Classes
         }
       }
       //Si es una invitacion nueva 
-      else 
+      else
       {
         //Revisamos que tenga permisoss para Agregar 
         if (_user.HasPermission(permission, EnumPermisionLevel.Standard))
@@ -508,7 +514,7 @@ namespace IM.Base.Classes
             }
             break;
           case EnumModule.OutHouse:
-            guestObj.guloInvit = user.SalesRoom.srN;
+            guestObj.guloInvit = user.LeadSource.lsID;
             guestObj.guag = "OUTSIDE";
             break;
           case EnumModule.Host:
@@ -549,7 +555,7 @@ namespace IM.Base.Classes
         }
 
       }
-  
+
       //Hacemos una copia del objeto
       Guest copyGuest = new Guest();
       ObjectHelper.CopyProperties(copyGuest, guestObj);
@@ -586,7 +592,7 @@ namespace IM.Base.Classes
       ////Obtiene la informacion del Booking Deposits
       SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(result), nameof(BookingDepositList));
       ////Crea una copia de la lista
-      SetField(ref _cBookingDepositList, Model.Helpers.ObjectHelper.CopyProperties(result), nameof(CBookingDepositList));
+      SetField(ref _cBookingDepositList, ObjectHelper.CopyProperties(result), nameof(CBookingDepositList));
     }
     #endregion
 

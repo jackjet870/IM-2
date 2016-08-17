@@ -189,7 +189,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel  VerticalAlignment="Center" >
-                                                            <TextBlock Text="Quiniella" TextAlignment="Center"/>
+                                                            <TextBlock Text="Quinella" TextAlignment="Center"/>
                                                             <CheckBox Name="chkguQuinella" HorizontalAlignment="Center" 
                                                                   IsChecked="{Binding GuestObj.guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
@@ -343,9 +343,9 @@
                                             </Grid.RowDefinitions>
 
                                             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
-                                                <Button Name="btnChange" Content="Change" Width="100"/>
-                                                <Button Name="btnReschedule" Content="Reschedule" Width="100" Margin="5,0"/>
-                                                <Button Name="btnRebook" Content="Rebook" Width="100"/>
+                                                <Button Name="btnChange" Content="Change" Width="100" Click="btnChange_Click"/>
+                                                <Button Name="btnReschedule" Content="Reschedule" Width="100" Margin="5,0" Click="btnReschedule_Click"/>
+                                                <Button Name="btnRebook" Content="Rebook" Width="100" Click="btnRebook_Click"/>
                                             </StackPanel>
 
                                             <StackPanel Name="stkPRContactAndPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10" >
@@ -420,6 +420,7 @@
                                                                       ValueChanged="dtpBookDate_ValueChanged"/>
                                                 <TextBlock Text="Time" Margin="0,5"/>
                                                 <ComboBox Name="cmbBookT" Width="Auto"  
+                                                          ItemsSource="{Binding TourTimes}"
                                                           Style="{StaticResource cbx-General}" 
                                                           ToolTip="{Binding Path=SelectedItem.Tour, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="Tour"
@@ -437,6 +438,7 @@
                                                                               ValueChanged="dtpRescheduleDate_ValueChanged"/>
                                                         <TextBlock Text="Time" Margin="0,5"/>
                                                         <ComboBox Name="cmbReschT" Width="130"
+                                                                  ItemsSource="{Binding TourTimes}"
                                                                   Style="{StaticResource cbx-General}"
                                                                   SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                   ItemTemplate="{StaticResource cbx-TourTimes-img}"/>

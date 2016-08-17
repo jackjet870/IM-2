@@ -549,14 +549,37 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private void btnNewInv_Click(object sender, RoutedEventArgs e)
+    private async void btnNewInv_Click(object sender, RoutedEventArgs e)
     {
-      var invit = new frmInvitationBase(EnumModule.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
+      //TODO: Jorge revisar la instancia al nuevo formulario, 
+      //var invit = new frmInvitationBase(EnumModule.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
+      //{
+      //  Owner = this,
+      //  ShowInTaskbar = false
+      //};
+      //invit.ShowDialog();
+
+      //External Invitation
+      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse,
+        validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+
+      if (App.User.AutoSign)
       {
-        Owner = this,
-        ShowInTaskbar = false
-      };
-      invit.ShowDialog();
+        login.UserData = App.User;
+      }
+      await login.getAllPlaces();
+      login.ShowDialog();
+
+      if (login.IsAuthenticated)
+      {
+        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData)
+        {
+          Owner = this
+        };
+        invitacion.ShowDialog();
+      }
+
     }
 
     #endregion
