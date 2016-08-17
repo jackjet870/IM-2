@@ -163,6 +163,7 @@ namespace IM.Launcher.Forms
       lstMenu.Add(EnumMenu.SalesByPR);
       lstMenu.Add(EnumMenu.SalesByLiner);
       lstMenu.Add(EnumMenu.SalesByCloser);
+      lstMenu.Add(EnumMenu.MailOutsConfig);
       lstMenu.Add(EnumMenu.InvitationsConfig);
       lstMenu.Add(EnumMenu.SystemConfig);
 

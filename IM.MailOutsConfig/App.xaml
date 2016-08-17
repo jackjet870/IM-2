@@ -1,0 +1,17 @@
+﻿<Application x:Class="IM.MailOutsConfig.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:IM.MailOutsConfig">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styBorder.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styTextBlock.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styListBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styCheckBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styImage.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
