@@ -153,11 +153,11 @@
                                                 <StackPanel Name="stkGuid" Orientation="Horizontal">
                                                     <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="GUID" TextAlignment="Center"/>
-                                                        <TextBox Name="txtguID" Width="100" Text="{Binding GuestObj.guID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Name="txtguID" Width="100" Text="{Binding Guest.guID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
                                                         <TextBlock Text="Rsrv. Num.*" TextAlignment="Center"/>
-                                                        <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
+                                                        <TextBox Name="txtguHReservID" Width="100" Text="{Binding Guest.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
                                                     </StackPanel>
                                                     <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
                                                         <StackPanel Orientation="Horizontal">
@@ -169,19 +169,19 @@
                                                     </Border>
                                                     <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
                                                         <TextBlock Text="Out Invit." TextAlignment="Center"/>
-                                                        <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding GuestObj.guOutInvitNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding Guest.guOutInvitNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel Name="stkRebookRef" VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Rebook Ref." TextAlignment="Center"/>
-                                                        <TextBox Name="txtguRef" Width="100" Text="{Binding GuestObj.guRef, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Name="txtguRef" Width="100" Text="{Binding Guest.guRef, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" >
                                                         <TextBlock Text="Date" TextAlignment="Center"/>
-                                                        <wpftk:DateTimePicker Name="dtpguInvitD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guInvitD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <wpftk:DateTimePicker Name="dtpguInvitD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding Guest.guInvitD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Time" TextAlignment="Center"/>
-                                                        <wpftk:TimePicker Name="tpkguInvitT" Style="{StaticResource tpk-Time-TK}" Value="{Binding GuestObj.guInvitT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        <wpftk:TimePicker Name="tpkguInvitT" Style="{StaticResource tpk-Time-TK}" Value="{Binding Guest.guInvitT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -192,17 +192,17 @@
                                                         <StackPanel  VerticalAlignment="Center" >
                                                             <TextBlock Text="Quinella" TextAlignment="Center"/>
                                                             <CheckBox Name="chkguQuinella" HorizontalAlignment="Center" 
-                                                                  IsChecked="{Binding GuestObj.guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                  IsChecked="{Binding Guest.guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="Show" TextAlignment="Center"/>
                                                             <CheckBox Name="chkguShow" HorizontalAlignment="Center"
-                                                                  IsChecked="{Binding GuestObj.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                  IsChecked="{Binding Guest.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="Interval" TextAlignment="Center"/>
                                                             <CheckBox Name="chkguInterval" HorizontalAlignment="Center"
-                                                                  IsChecked="{Binding GuestObj.guInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                                  IsChecked="{Binding Guest.guInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="Language" TextAlignment="Center"/>
@@ -211,7 +211,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Languages-Concat}"
                                                                   ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="guID"
-                                                                  SelectedValue="{Binding GuestObj.gula, Mode=OneWayToSource}"/>
+                                                                  SelectedValue="{Binding Guest.gula, Mode=OneWayToSource}"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -229,15 +229,15 @@
                                             <StackPanel Name="stkProfileOpera" Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="ID" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding GuestObj.guIdProfileOpera, Mode=TwoWay}" MaxLength="15"/>
+                                                    <TextBox Name="txtguIdProfileOpera" Width="100" Text="{Binding Guest.guIdProfileOpera, Mode=TwoWay}" MaxLength="15"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3">
                                                     <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding GuestObj.guLastNameOriginal, Mode=TwoWay}" MaxLength="65"/>
+                                                    <TextBox Name="txtguLastNameOriginal" Width="100" Text="{Binding Guest.guLastNameOriginal, Mode=TwoWay}" MaxLength="65"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding GuestObj.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40"/>
+                                                    <TextBox Name="txtguFirstNameOriginal" Width="100" Text="{Binding Guest.guFirstNameOriginal, Mode=TwoWay}" MaxLength="40"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -253,15 +253,15 @@
                                             <StackPanel Name="stkGuest1" Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Last Name*" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguLastName1" Width="100" Text="{Binding GuestObj.guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="65" Tag="Guest 1 Last Name "/>
+                                                    <TextBox Name="txtguLastName1" Width="100" Text="{Binding Guest.guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="65" Tag="Guest 1 Last Name "/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="First Name*" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguFirstName1" Width="100" Text="{Binding GuestObj.guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Tag="Guest 1 First Name "/>
+                                                    <TextBox Name="txtguFirstName1" Width="100" Text="{Binding Guest.guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Tag="Guest 1 First Name "/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Age" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguAge1" Width="50" Text="{Binding GuestObj.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguAge1" Width="50" Text="{Binding Guest.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Marital Status" TextAlignment="Center"/>
@@ -270,15 +270,15 @@
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.msN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="msID"
-                                                          SelectedValue="{Binding GuestObj.gums1,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                          SelectedValue="{Binding Guest.gums1,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguOccup1" Width="100" Text="{Binding GuestObj.guOccup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguOccup1" Width="100" Text="{Binding Guest.guOccup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Email" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguEmail1" Width="100" Text="{Binding GuestObj.guEmail1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguEmail1" Width="100" Text="{Binding Guest.guEmail1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -294,15 +294,15 @@
                                             <StackPanel Name="stkGuest2" Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguLastName2" Width="100" Text="{Binding GuestObj.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguLastName2" Width="100" Text="{Binding Guest.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="First Name" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguFirstName2" Width="100" Text="{Binding GuestObj.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguFirstName2" Width="100" Text="{Binding Guest.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Age" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguAge2" Width="50" Text="{Binding GuestObj.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguAge2" Width="50" Text="{Binding Guest.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Marital Status" TextAlignment="Center"/>
@@ -311,15 +311,15 @@
                                                           ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
                                                           ToolTip="{Binding SelectedItem.msN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="msID"
-                                                          SelectedValue="{Binding GuestObj.gums2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                          SelectedValue="{Binding Guest.gums2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Ocupation" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguOccup2" Width="100" Text="{Binding GuestObj.guOccup2, Mode=TwoWay}"/>
+                                                    <TextBox Name="txtguOccup2" Width="100" Text="{Binding Guest.guOccup2, Mode=TwoWay}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="Email" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguEmail2" Width="100" Text="{Binding GuestObj.guEmail2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguEmail2" Width="100" Text="{Binding Guest.guEmail2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -360,7 +360,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID"
-                                                                  SelectedValue="{Binding GuestObj.guPRInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR Contact"/>
+                                                                  SelectedValue="{Binding Guest.guPRInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR Contact"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -374,7 +374,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID"
-                                                                  SelectedValue="{Binding GuestObj.guPRInvit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR"/>
+                                                                  SelectedValue="{Binding Guest.guPRInvit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="PR"/>
 
                                                         </StackPanel>
                                                     </StackPanel>
@@ -392,7 +392,7 @@
                                                                   ItemTemplate="{StaticResource cbx-SaleRoom-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="srID"
-                                                                  SelectedValue="{Binding GuestObj.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  SelectedValue="{Binding Guest.gusr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                   Tag="Sales Room" SelectionChanged="cmbSalesRooms_SelectionChanged"/>
                                                         </StackPanel>
                                                     </StackPanel>
@@ -407,7 +407,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Location-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="loID" 
-                                                                  SelectedValue="{Binding GuestObj.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location">
+                                                                  SelectedValue="{Binding Guest.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location">
                                                             </ComboBox>
                                                         </StackPanel>
                                                     </StackPanel>
@@ -415,9 +415,9 @@
                                             </StackPanel>
                                             <StackPanel Name="stkBookDateAndTime" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3" Margin="0,5,10,10">
                                                 <TextBlock Text="Book Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                                <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding GuestObj.guAntesIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <CheckBox Name="chkguAntesIO" Content="Before In &amp; Out" Margin="0,5" IsChecked="{Binding Guest.guAntesIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 <wpftk:DateTimePicker Name="dtpBookDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0"
-                                                                      Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                      Value="{Binding Guest.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                       ValueChanged="dtpBookDate_ValueChanged"/>
                                                 <TextBlock Text="Time" Margin="0,5"/>
                                                 <ComboBox Name="cmbBookT" Width="Auto"  
@@ -425,9 +425,9 @@
                                                           Style="{StaticResource cbx-General}" 
                                                           ToolTip="{Binding Path=SelectedItem.Tour, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="Tour"
-                                                          SelectedValue="{Binding GuestObj.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                          SelectedValue="{Binding Guest.guBookT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                                           ItemTemplate="{StaticResource cbx-TourTimes-img}"/>
-                                                <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding GuestObj.guDirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <CheckBox Name="chkDirect" Content="Direct" IsChecked="{Binding Guest.guDirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                             </StackPanel>
                                             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
                                                 <TextBlock Text="Reschedule Date &amp; Time" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
@@ -435,19 +435,19 @@
                                                     <StackPanel Name="stkRescheduleDate">
                                                         <TextBlock Text="Reschedule Date" Margin="0,5"/>
                                                         <wpftk:DateTimePicker Name="dtpRescheduleDate" Style="{StaticResource dtp-DateRange-TK}" Margin="0" 
-                                                                              Value="{Binding GuestObj.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                              Value="{Binding Guest.guReschD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                               ValueChanged="dtpRescheduleDate_ValueChanged"/>
                                                         <TextBlock Text="Time" Margin="0,5"/>
                                                         <ComboBox Name="cmbReschT" Width="130"
                                                                   ItemsSource="{Binding TourTimes}"
                                                                   Style="{StaticResource cbx-General}"
-                                                                  SelectedValue="{Binding GuestObj.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  SelectedValue="{Binding Guest.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                   ItemTemplate="{StaticResource cbx-TourTimes-img}"/>
-                                                        <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding GuestObj.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding Guest.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel Name="stkFlightNumber" Margin="5,0">
                                                         <TextBlock Text="Flight Number" Margin="0,5"/>
-                                                        <TextBox Name="txtguFlight" Width="120" Text="{Binding GuestObj.guFlight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Name="txtguFlight" Width="120" Text="{Binding Guest.guFlight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                 </StackPanel>
 
@@ -477,7 +477,7 @@
 
                                                 <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
                                                     <TextBlock Text="Comments"/>
-                                                    <TextBox Name="txtguExtraInfo" Text="{Binding GuestObj.guExtraInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguExtraInfo" Text="{Binding Guest.guExtraInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
 
                                                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
@@ -485,7 +485,7 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel HorizontalAlignment="Left">
                                                             <TextBlock Text="Room #" Margin="0,5" />
-                                                            <TextBox Name="txtguRoomNum" Width="50" Text="{Binding GuestObj.guRoomNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBox Name="txtguRoomNum" Width="50" Text="{Binding Guest.guRoomNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.hoID, StringFormat='Hotel ID: {0}'}" Margin="0,5"/>
@@ -494,7 +494,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Hotel-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="hoID"
-                                                                  SelectedValue="{Binding GuestObj.guHotel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Hotel"/>
+                                                                  SelectedValue="{Binding Guest.guHotel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Hotel"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -508,7 +508,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Agency-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="agID"
-                                                                  SelectedValue="{Binding GuestObj.guag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Agency"/>
+                                                                  SelectedValue="{Binding Guest.guag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Agency"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -522,7 +522,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Country-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="coID"
-                                                                  SelectedValue="{Binding GuestObj.guco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Country"/>
+                                                                  SelectedValue="{Binding Guest.guco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Country"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -531,15 +531,15 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel HorizontalAlignment="Left">
                                                             <TextBlock Text="Pax" Margin="0,5"/>
-                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding GuestObj.guPax, Mode=TwoWay, StringFormat={}{0:n2}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding Guest.guPax, Mode=TwoWay, StringFormat={}{0:n2}, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="Arrival*" Margin="0,5"/>
-                                                            <wpftk:DateTimePicker Name="dtpOtherInfoArrivalD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckInD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Arrival"/>
+                                                            <wpftk:DateTimePicker Name="dtpOtherInfoArrivalD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding Guest.guCheckInD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Arrival"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="Departure*" Margin="0,5"/>
-                                                            <wpftk:DateTimePicker Name="dtpOtherInfoDepartureD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding GuestObj.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Deperture"/>
+                                                            <wpftk:DateTimePicker Name="dtpOtherInfoDepartureD" Style="{StaticResource dtp-DateRange-TK}" Margin="0" Value="{Binding Guest.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Deperture"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -578,7 +578,7 @@
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
-                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
+                                                          SelectedValue="{Binding Guest.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -714,7 +714,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel>
                                                     <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
-                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding Guest.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
@@ -723,7 +723,7 @@
                                                               ItemTemplate="{StaticResource cbx-Currency-Concat}"
                                                               ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="cuID"
-                                                              SelectedValue="{Binding GuestObj.gucu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                              SelectedValue="{Binding Guest.gucu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                         </ComboBox>
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
@@ -733,7 +733,7 @@
                                                               ItemTemplate="{StaticResource cbx-PaymentType-Concat}"
                                                               ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="ptID"
-                                                              SelectedValue="{Binding GuestObj.gupt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                              SelectedValue="{Binding Guest.gupt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Resort" TextAlignment="Center" Margin="0,5"/>
@@ -742,7 +742,7 @@
                                                               ItemTemplate="{StaticResource cbx-Hotel-img}"
                                                               ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
                                                               SelectedValuePath="hoID"
-                                                              SelectedValue="{Binding GuestObj.guHotelB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                              SelectedValue="{Binding Guest.guHotelB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                                     </StackPanel>
                                                 </StackPanel>
@@ -760,7 +760,7 @@
                                             <StackPanel>
                                                 <StackPanel Name="stkCcCompany">
                                                     <TextBlock Text="CC Company"/>
-                                                    <TextBox Name="txtguCCType" Text="{Binding GuestObj.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguCCType" Text="{Binding Guest.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
@@ -821,11 +821,11 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel Name="stkRoomsQty" VerticalAlignment="Center">
                                                     <TextBlock Text="Rooms Quantity" TextAlignment="Left"/>
-                                                    <TextBox Name="txtguRoomsQty" Width="100" Text="{Binding GuestObj.guRoomsQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguRoomsQty" Width="100" Text="{Binding Guest.guRoomsQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkElectronicPurse" VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Electronic Purse Acount" TextAlignment="Left"/>
-                                                    <TextBox Name="txtguAccountGiftsCard" Width="100" Text="{Binding GuestObj.guAccountGiftsCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguAccountGiftsCard" Width="100" Text="{Binding Guest.guAccountGiftsCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>

@@ -14,114 +14,24 @@ using System.Threading.Tasks;
 
 namespace IM.Base.Classes
 {
-  public class CommonCatObject : INotifyPropertyChanged
+  public class GuestInvitationRules : EntityBase
   {
-    EnumModule _module;
-    EnumInvitationType _invitationType;
-    UserData _user;
-    int _guID;
+    private EnumModule _module;
+    private EnumInvitationType _invitationType;
+    private UserData _user;
+    private int _guID;
 
-    #region Properties
-    #region Solo Lectura(Catalogos)
-    private List<LanguageShort> _languages;
-    public List<LanguageShort> Languages => _languages;
-    private List<MaritalStatus> _maritalStatus;
-    public List<MaritalStatus> MaritalStatus => _maritalStatus;
-    private List<PersonnelShort> _personnel;
-    public List<PersonnelShort> Personnel => _personnel;
-    private List<Hotel> _hotels;
-    public List<Hotel> Hotels => _hotels;
-    private List<AgencyShort> _agencies;
-    public List<AgencyShort> Agencies => _agencies;
-    private List<CountryShort> _countries;
-    public List<CountryShort> Countries => _countries;
-    private List<GuestStatusType> _guestStatusTypes;
-    public List<GuestStatusType> GuestStatusTypes => _guestStatusTypes;
-    private List<Currency> _currencies;
-    public List<Currency> Currencies => _currencies;
-    private List<PaymentType> _paymentTypes;
-    public List<PaymentType> PaymentTypes => _paymentTypes;
-    private List<PaymentPlace> _paymentPlaces;
-    public List<PaymentPlace> PaymentPlaces => _paymentPlaces;
-    private List<CreditCardType> _creditCardTypes;
-    public List<CreditCardType> CreditCardTypes => _creditCardTypes;
-    private List<GiftShort> _gifts;
-    public List<GiftShort> Gifts => _gifts;
-    private List<SalesRoomShort> _salesRoom;
-    public List<SalesRoomShort> SalesRoom => _salesRoom;
-    private List<LocationByUser> _locations;
-    public List<LocationByUser> Locations => _locations;
-    private List<DisputeStatus> _disputeStatus;
-    public List<DisputeStatus> DisputeStatus => _disputeStatus;
-    private DateTime? _closeDate;
-    public DateTime? CloseDate => _closeDate;
-    private EnumProgram _program;
-    public EnumProgram Program => _program;
-    private EnumMode _invitationMode;
-    public EnumMode InvitationMode => _invitationMode;
-
-    #endregion
-
-    #region Lectura & Escritura
-    private ObservableCollection<InvitationGift> _invitationGiftList;
-    public ObservableCollection<InvitationGift> InvitationGiftList
+    private GuestInvitation _guestInvitation;
+    public GuestInvitation GuestInvitation
     {
-      get { return _invitationGiftList; }
-      set { SetField(ref _invitationGiftList, value); }
+      get { return _guestInvitation; }
+      set { SetField(ref _guestInvitation, value); }
     }
-    private ObservableCollection<BookingDeposit> _bookingDepositList;
-    public ObservableCollection<BookingDeposit> BookingDepositList
-    {
-      get { return _bookingDepositList; }
-      set { SetField(ref _bookingDepositList, value); }
-    }
-    private ObservableCollection<GuestCreditCard> _guestCreditCardList;
-    public ObservableCollection<GuestCreditCard> GuestCreditCardList
-    {
-      get { return _guestCreditCardList; }
-      set { SetField(ref _guestCreditCardList, value); }
-    }
-    private ObservableCollection<Guest> _additionalGuestList;
-    public ObservableCollection<Guest> AdditionalGuestList
-    {
-      get { return _additionalGuestList; }
-      set { SetField(ref _additionalGuestList, value); }
-    }
-    private Guest _guestObj;
-    public Guest GuestObj
-    {
-      get { return _guestObj; }
-      set
-      { SetField(ref _guestObj, value); }
-    }
-    private List<TourTimeAvailable> _tourTimes;
-    public List<TourTimeAvailable> TourTimes
-    {
-      get { return _tourTimes; }
-      set { SetField(ref _tourTimes, value); }
-    }
-
-
-    #endregion
-
-    #region Listas Clonadas
-    private List<InvitationGift> _cInvitationGiftList;
-    public List<InvitationGift> CInvitationGiftList => _cInvitationGiftList;
-    private List<BookingDeposit> _cBookingDepositList;
-    public List<BookingDeposit> CBookingDepositList => _cBookingDepositList;
-    private List<GuestCreditCard> _cGuestCreditCardList;
-    public List<GuestCreditCard> CGuestCreditCardList => _cGuestCreditCardList;
-    private List<Guest> _cAdditionalGuestList;
-    public List<Guest> CAdditionalGuestList => _cAdditionalGuestList;
-    private Guest _cGuestObj;
-    public Guest CGuestObj => _cGuestObj;
-
-    #endregion
-    #endregion
 
     #region Constructor
-    public CommonCatObject(EnumModule module, EnumInvitationType invitationType, UserData user, int guID = 0)
+    public GuestInvitationRules(EnumModule module, EnumInvitationType invitationType, UserData user, int guID = 0)
     {
+      GuestInvitation = new GuestInvitation();
       _module = module;
       _invitationType = invitationType;
       _user = user;
@@ -190,10 +100,10 @@ namespace IM.Base.Classes
       //Si No trae GuestID Invitacion Nueva       
       else
       {
-        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(), nameof(InvitationGiftList));
-        SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(), nameof(BookingDepositList));
-        SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(), nameof(GuestCreditCardList));
-        SetField(ref _additionalGuestList, new ObservableCollection<Guest>(), nameof(AdditionalGuestList));
+        _guestInvitation.InvitationGiftList = new ObservableCollection<InvitationGift>();
+        _guestInvitation.BookingDepositList = new ObservableCollection<BookingDeposit>();
+        _guestInvitation.GuestCreditCardList = new ObservableCollection<GuestCreditCard>();
+        _guestInvitation.AdditionalGuestList = new ObservableCollection<Guest>();
       }
     }
     #endregion
@@ -238,7 +148,7 @@ namespace IM.Base.Classes
         }
       }
       //Notificamos el cambio
-      SetField(ref _invitationMode, invitationMode, nameof(invitationMode));
+      _guestInvitation.InvitationMode = invitationMode;
     }
     #endregion
 
@@ -250,7 +160,7 @@ namespace IM.Base.Classes
     private async Task LoadLenguages()
     {
       var result = await BRLanguages.GetLanguages(1);
-      SetField(ref _languages, result, nameof(Languages));
+      _guestInvitation.Languages = result;
     }
     #endregion
 
@@ -258,7 +168,7 @@ namespace IM.Base.Classes
     private async Task LoadMaritalStatus()
     {
       var result = await BRMaritalStatus.GetMaritalStatus(1);
-      SetField(ref _maritalStatus, result, nameof(MaritalStatus));
+      _guestInvitation.MaritalStatus = result;
     }
     #endregion
 
@@ -284,7 +194,7 @@ namespace IM.Base.Classes
       {
         personnel = await BRPersonnel.GetPersonnel(user.LeadSource.lsID, roles: "PR");
       }
-      SetField(ref _personnel, personnel, nameof(Personnel));
+      _guestInvitation.Personnel = personnel;
     }
     #endregion
 
@@ -292,7 +202,7 @@ namespace IM.Base.Classes
     private async Task LoadHotels()
     {
       var result = await BRHotels.GetHotels(nStatus: 1);
-      SetField(ref _hotels, result, nameof(Hotels));
+      _guestInvitation.Hotels = result;
     }
     #endregion
 
@@ -300,7 +210,7 @@ namespace IM.Base.Classes
     private async Task LoadAgencies()
     {
       var result = await BRAgencies.GetAgencies(1);
-      SetField(ref _agencies, result, nameof(Agencies));
+      _guestInvitation.Agencies = result;
     }
     #endregion
 
@@ -308,7 +218,7 @@ namespace IM.Base.Classes
     private async Task LoadCountries()
     {
       var result = await BRCountries.GetCountries(1);
-      SetField(ref _countries, result, nameof(Countries));
+      _guestInvitation.Countries = result;
     }
     #endregion
 
@@ -316,7 +226,7 @@ namespace IM.Base.Classes
     private async Task LoadGuestStatusType()
     {
       var result = await BRGuests.GetGuestStatusType(1);
-      SetField(ref _guestStatusTypes, result, nameof(GuestStatusTypes));
+      _guestInvitation.GuestStatusTypes = result;
     }
     #endregion
 
@@ -324,7 +234,7 @@ namespace IM.Base.Classes
     private async Task LoadCurrencies()
     {
       var result = await BRCurrencies.GetCurrencies(nStatus: 1);
-      SetField(ref _currencies, result, nameof(Currencies));
+      _guestInvitation.Currencies = result;
     }
     #endregion
 
@@ -332,8 +242,7 @@ namespace IM.Base.Classes
     private async Task LoadPaymentTypes()
     {
       var result = await BRPaymentTypes.GetPaymentTypes(1);
-      SetField(ref _paymentTypes, result, nameof(PaymentTypes));
-
+      _guestInvitation.PaymentTypes = result;
     }
     #endregion
 
@@ -341,7 +250,7 @@ namespace IM.Base.Classes
     private async Task LoadPaymentPlaces()
     {
       var result = await BRPaymentPlaces.GetPaymentPlaces();
-      SetField(ref _paymentPlaces, result, nameof(PaymentPlaces));
+      _guestInvitation.PaymentPlaces = result;
     }
     #endregion
 
@@ -349,7 +258,7 @@ namespace IM.Base.Classes
     private async Task LoadCreditCardTypes()
     {
       var result = await BRCreditCardTypes.GetCreditCardTypes(nStatus: 1);
-      SetField(ref _creditCardTypes, result, nameof(CreditCardTypes));
+      _guestInvitation.CreditCardTypes = result;
     }
 
     #endregion
@@ -358,7 +267,7 @@ namespace IM.Base.Classes
     private async Task LoadGifts(UserData _user)
     {
       var result = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
-      SetField(ref _gifts, result, nameof(Gifts));
+      _guestInvitation.Gifts = result;
     }
     #endregion
 
@@ -366,7 +275,7 @@ namespace IM.Base.Classes
     private async Task LoadSalesRooms()
     {
       var result = await BRSalesRooms.GetSalesRooms(0);
-      SetField(ref _salesRoom, result, nameof(SalesRoom));
+      _guestInvitation.SalesRoom = result;
     }
     #endregion
 
@@ -379,8 +288,7 @@ namespace IM.Base.Classes
     private async Task LoadLocations(UserData user, EnumModule module)
     {
       var result = await BRLocations.GetLocationsByUser(user.User.peID);
-
-      SetField(ref _locations, result, nameof(Locations));
+      _guestInvitation.Locations = result;
     }
     #endregion
 
@@ -388,7 +296,7 @@ namespace IM.Base.Classes
     private async Task LoadDisputeStatus()
     {
       var result = await BRDisputeStatus.GetDisputeStatus();
-      SetField(ref _disputeStatus, result, nameof(DisputeStatus));
+      _guestInvitation.DisputeStatus = result;
     }
     #endregion
 
@@ -396,7 +304,7 @@ namespace IM.Base.Classes
     private async Task LoadCloseDate()
     {
       var result = await BRConfiguration.GetCloseDate();
-      SetField(ref _closeDate, result, nameof(CloseDate));
+      _guestInvitation.CloseDate = result;
     }
     #endregion
 
@@ -462,7 +370,7 @@ namespace IM.Base.Classes
             break;
         }
       }
-      SetField(ref _program, program, nameof(Program));
+      _guestInvitation.Program = program;
     }
     #endregion
 
@@ -489,7 +397,7 @@ namespace IM.Base.Classes
       GetInvitationMode(guestObj);
 
       //Si es una invitacion Nueva SIN GuestID
-      if (InvitationMode == EnumMode.Add && guestObj.guID == 0)
+      if (_guestInvitation.InvitationMode == EnumMode.Add && guestObj.guID == 0)
       {
         //Valores Defualt Comunes entre los tipos de invitacion 
         guestObj.guInvitD = serverDate;
@@ -508,6 +416,7 @@ namespace IM.Base.Classes
         {
           case EnumModule.InHouse:
             guestObj.guloInvit = user.LeadSource.lsID;
+            guestObj.guls = user.LeadSource.lsID;
             if (_invitationType == EnumInvitationType.newExternal)
             {
               guestObj.guag = "EXTERNAL";
@@ -526,7 +435,7 @@ namespace IM.Base.Classes
         }
       }
       //Si es un invitacion nueva CON GuestID
-      else if (InvitationMode == EnumMode.Add && guestObj.guID != 0)
+      else if (_guestInvitation.InvitationMode == EnumMode.Add && guestObj.guID != 0)
       {
         //Fecha y hora Invitacion
         guestObj.guInvitD = serverDate;
@@ -561,9 +470,8 @@ namespace IM.Base.Classes
       ObjectHelper.CopyProperties(copyGuest, guestObj);
 
       //Notificamos cambios 
-      SetField(ref _guestObj, guestObj, nameof(GuestObj));
-      SetField(ref _cGuestObj, copyGuest, nameof(CGuestObj));
-
+      _guestInvitation.Guest = guestObj;
+      _guestInvitation.CloneGuest = guestObj;
     }
     #endregion
 
@@ -572,9 +480,9 @@ namespace IM.Base.Classes
     {
       var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(guID);
       //Obtiene la informacion del InvitationGift
-      SetField(ref _invitationGiftList, new ObservableCollection<InvitationGift>(result), nameof(InvitationGiftList));
+      _guestInvitation.InvitationGiftList = new ObservableCollection<InvitationGift>(result);
       //Crea una copia de la lista
-      SetField(ref _cInvitationGiftList, result.ToList(), nameof(CInvitationGiftList));
+      _guestInvitation.CloneInvitationGiftList = ObjectHelper.CopyProperties(result);
     }
     #endregion
 
@@ -590,9 +498,9 @@ namespace IM.Base.Classes
     {
       var result = await BRBookingDeposits.GetBookingDeposits(guID, true);
       ////Obtiene la informacion del Booking Deposits
-      SetField(ref _bookingDepositList, new ObservableCollection<BookingDeposit>(result), nameof(BookingDepositList));
+      _guestInvitation.BookingDepositList = new ObservableCollection<BookingDeposit>(result);
       ////Crea una copia de la lista
-      SetField(ref _cBookingDepositList, ObjectHelper.CopyProperties(result), nameof(CBookingDepositList));
+      _guestInvitation.CloneBookingDepositList = ObjectHelper.CopyProperties(result);
     }
     #endregion
 
@@ -608,9 +516,9 @@ namespace IM.Base.Classes
     {
       var result = await BRGuestCreditCard.GetGuestCreditCard(guID);
       ////Obtiene la informacion del GuestCreditCard
-      SetField(ref _guestCreditCardList, new ObservableCollection<GuestCreditCard>(result), nameof(GuestCreditCardList));
+      _guestInvitation.GuestCreditCardList = new ObservableCollection<GuestCreditCard>(result);
       ////Crea una copia de la lista
-      SetField(ref _cGuestCreditCardList, result.ToList(), nameof(CGuestCreditCardList));
+      _guestInvitation.CloneGuestCreditCardList = ObjectHelper.CopyProperties(result);
     }
     #endregion
 
@@ -626,27 +534,11 @@ namespace IM.Base.Classes
     {
       var result = await BRGuests.GetAdditionalGuest(guID);
       ////Obtiene la informacion del AdditionalGuest
-      SetField(ref _additionalGuestList, new ObservableCollection<Guest>(result), nameof(AdditionalGuestList));
+      _guestInvitation.AdditionalGuestList = new ObservableCollection<Guest>(result);
       ////Crea una copia de la lista
-      SetField(ref _cAdditionalGuestList, Model.Helpers.ObjectHelper.CopyProperties(result), nameof(CAdditionalGuestList));
+      _guestInvitation.CloneAdditionalGuestList = ObjectHelper.CopyProperties(result);
     }
     #endregion
-    #endregion
-
-    #region Implementacion INotifyPropertyChange
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return;
-      field = value;
-      OnPropertyChanged(propertyName);
-    }
     #endregion
 
   }
