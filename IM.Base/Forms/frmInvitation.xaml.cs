@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System;
 using System.Windows.Data;
 using IM.Styles.Classes;
+using System.Threading.Tasks;
 
 namespace IM.Base.Forms
 {
@@ -37,7 +38,8 @@ namespace IM.Base.Forms
     private bool _dontShowAgainGuestStatus = false;
     public bool _isRebook = false;
     public CommonCatObject catObj { get; set; }
-
+        
+    private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda
     #endregion
     /// <summary>
     /// Inicializa en formulario de invitacion
@@ -60,6 +62,7 @@ namespace IM.Base.Forms
       DataContext = catObj;
       _allowReschedule = allowReschedule;
       InitializeComponent();
+
 
       #region Inicializar Grids
 
@@ -95,6 +98,8 @@ namespace IM.Base.Forms
         UIHelper.SetUpControls(new Guest(), this);
         //Detenemos el BusyIndicator
         _busyIndicator.IsBusy = false;
+
+        GridHelper.SetUpGrid(dtgBookingDeposits, new BookingDeposit());
       }
       catch (Exception ex)
       {
@@ -1253,6 +1258,57 @@ namespace IM.Base.Forms
     {
 
     }
+    #endregion
+
+    #region Datagrid Boking Deposits
+    #region BeginningEdit 
+    private void dtgBookingDeposits_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (!GridHelper.IsInEditMode(dtgBookingDeposits))
+      {
+        e.Cancel = !InvitationValidationRules.StartEditBookingDeposits(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, true);
+      }
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+    #endregion
+
+    #region CellEditEnding
+    private void dtgBookingDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
+        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control,catObj.CBookingDepositList,catObj.GuestObj.guID);
+        e.EditingElement.Focus();
+      }
+    }
+    #endregion
+
+    #region RowEditEnding
+    private void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
+      {        
+        if(_isCellCommitDeposit)
+        {
+          _isCellCommitDeposit = false;
+          e.Cancel = true;
+        }
+        else if(Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        {
+          _isCellCommitDeposit = false;
+          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit,sender as DataGrid, catObj.CBookingDepositList,catObj.GuestObj.guID);          
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+      }
+    }  
+    #endregion
     #endregion
   }
 }

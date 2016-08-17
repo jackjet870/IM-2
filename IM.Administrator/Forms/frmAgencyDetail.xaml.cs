@@ -39,7 +39,8 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 09/03/2016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {      
+    {     
+      
       ObjectHelper.CopyProperties(agency, oldAgency);      
       LoadUnavailableMotives();
       LoadMarkets();

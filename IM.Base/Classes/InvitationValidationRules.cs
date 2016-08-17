@@ -10,6 +10,7 @@ using IM.Base.Forms;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace IM.Base.Classes
 {
@@ -755,6 +756,376 @@ namespace IM.Base.Classes
 
     #endregion
 
+    #region DataGrid Booking Deposits
+    #region IsReaOnlyBookingDeposits
+    /// <summary>
+    /// indica si el grid sólo va a ser lectura
+    /// </summary>
+    /// <param name="enumMode">Modo en que se encuentra la ventana</param>
+    /// <returns>True. Va a ser modo lectura | False. Se puede editar</returns>
+    /// <history>
+    /// [emoguel] 12/08/2016 created 
+    /// </history>
+    public static bool IsReaOnlyBookingDeposits(EnumMode enumMode, Guest guest, bool blnNewInv, EnumPermisionLevel enumPermisionLevel)
+    {
+      //Validar si se está editando
+      if (enumMode == EnumMode.Edit)
+      {
+        //Falta validar si no es el modulo outside
 
+        // si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
+        // (tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
+        if (!(guest.guCheckOutD >= DateTime.Now && (blnNewInv || guest.guInvitD == DateTime.Now || (enumPermisionLevel >= EnumPermisionLevel.Special && guest.guBookD >= DateTime.Now))))
+        {
+          return true;
+        }
+        //Fin de la validacion
+      }
+      return false;
+    }
+    #endregion
+
+    #region StartEditBokingDeposits
+    /// <summary>
+    /// Valida la celda que se quiere editar
+    /// </summary>
+    /// <param name="dtgDeposits">Datagrid a validar</param>
+    /// <param name="strColumn">Columna que se quiere editar</param>
+    /// <param name="bookingDeposit">Objeto bindeado</param>
+    /// <param name="blnModifyPaymentPlace"></param>
+    /// <returns>True. no se puede editar | False. si se puede editar</returns>
+    /// <history>
+    /// [emoguel] created 10/08/2016
+    /// </history>
+    public static bool StartEditBookingDeposits(string strColumn, BookingDeposit bookingDeposit,bool blnModifyPaymentPlace=true)
+    {
+      switch (strColumn)
+      {
+        case "bdcc":
+        case "bdCardNum":
+        case "bdExpD":
+          {
+            if (bookingDeposit != null && (string.IsNullOrWhiteSpace(bookingDeposit.bdpt) || bookingDeposit.bdpt != "CC"))
+            {
+              return false;
+            }
+            break;
+          }
+        case "bdpc":
+          {
+            return blnModifyPaymentPlace;
+          }
+      }
+
+      return true;
+    }
+    #endregion
+
+    #region validateEditBookingDeposit
+    /// <summary>
+    /// Valida que la columna cumpla con los datos necesarios
+    /// </summary>
+    /// <param name="strColumn"></param>
+    /// <param name="bookingDeposit">Objeto que se está editando(e.row.Item)</param>
+    /// <param name="dtgBookingDeposits">Datagrid de deposits que se está editando</param>
+    /// <param name="editElement">control que se está editando</param>
+    /// <history>
+    /// [emoguel] 11/08/2016 created
+    /// </history>
+    /// <returns> false. no es valido | true. es valido</returns>
+    public static bool validateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement,List<BookingDeposit> lstBookingDeposits,int guestID)
+    {
+      switch (strColumn)
+      {
+        #region Amount
+        case "bdAmount":
+          {
+            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
+          }
+        #endregion
+        #region Received
+        case "bdReceived":
+          {
+            if( validateEditNumber(bookingDeposit.bdReceived.ToString(), "Received", 999999, 0))
+            {
+              if(bookingDeposit.bdReceived>bookingDeposit.bdAmount)
+              {
+                UIHelper.ShowMessage("Received can not be greater than Deposit.");
+                bookingDeposit.bdReceived = bookingDeposit.bdAmount;
+                return false;
+              }
+            }
+            else
+            {
+              return false;
+            }
+
+            break;
+          }
+        #endregion
+        #region Card Number
+        case "bdCardNum":
+          {
+            if (bookingDeposit.bdpt == "CC")//Sólo si es tipo Credit Card hace las validaciones
+            {
+              if (bookingDeposit.bdCardNum == null || bookingDeposit.ToString().Length > 4)
+              {
+                UIHelper.ShowMessage("Specify the last four numbers of credit card.");
+              }
+
+              //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
+              if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+              {
+                UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
+                return false;
+              }
+              return validateEditNumber(bookingDeposit.bdCardNum.ToString(), "Card Number", 999999, 0);
+            }
+            break;
+          }
+        #endregion
+        #region Payment type
+        case "bdpt":
+          {
+            //Validamos que se especifique el tipo de pago
+            if(string.IsNullOrWhiteSpace(bookingDeposit.bdpt))
+            {
+              UIHelper.ShowMessage("Specify the Payment Type");
+              return false;
+            }
+
+            //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
+            if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+            {
+              UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
+              return false;
+            }
+
+            if (bookingDeposit != null && !string.IsNullOrWhiteSpace(bookingDeposit.bdpt) && bookingDeposit.bdpt != "CC")
+            {
+              bookingDeposit.bdcc = null;
+              bookingDeposit.bdCardNum = null;
+              bookingDeposit.bdExpD = "";
+              bookingDeposit.bdAuth = null;
+              bookingDeposit.bdds = null;
+              bookingDeposit.bdD = DateTime.Now;
+              GridHelper.UpdateCellsFromARow(dtgBookingDeposits);
+            }            
+            break;
+          }
+        #endregion
+        #region Expiration date
+        case "bdExpD":
+          {
+            if (bookingDeposit.bdpt == "CC")//Sólo se valida cuando es tipo Credit Card
+            {
+              bool blnIsValid = Regex.IsMatch(bookingDeposit.bdExpD, @"^(0[1-9]|1[0-2])\/?([0-9]{2})$");
+              if (!blnIsValid)
+              {
+                UIHelper.ShowMessage("Expiration Date is not valid");
+              }
+              return blnIsValid;
+            }
+            break;
+          }
+        #endregion
+        #region Tarjeta de credito y tipo de moneda
+        case "bdcu":
+        case "bdcc":
+          {
+            //Si es tarjeta de credito verificar que tenga el tipo de tarjeta
+            if(bookingDeposit.bdpt=="CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
+            {
+              UIHelper.ShowMessage("Specify a credit card type");
+              return false;
+            }
+
+            //Verificar que se especifique el currency
+            if(string.IsNullOrWhiteSpace(bookingDeposit.bdcu))
+            {
+              UIHelper.ShowMessage("Specify the Currency.");
+              return false;
+            }
+            //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
+            if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+            {
+              UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
+              return false;
+            }
+            
+            break;
+          }
+        #endregion
+        #region Lugar de pago
+        case "bdpc":
+          {
+            if (string.IsNullOrWhiteSpace(bookingDeposit.bdpc))
+            {
+              UIHelper.ShowMessage("Specify the Payment place.");
+              return false;
+            }
+            break;
+          }
+        #endregion
+        #region Number Autorization
+        case "bdAuth":
+          {
+            if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdAuth))
+            {
+              UIHelper.ShowMessage("Specify a Authorization ID.");
+              return false;
+            }
+            break;
+          }
+        #endregion
+        #region CxC
+        case "CxC":
+          {
+            if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdpt != "CS")
+            {
+              UIHelper.ShowMessage("CxC is only for payment type 'Cash'.");
+              return false;
+            }
+            break;
+          }
+        #endregion
+        #region Folio CxC
+        case "bdFolioCxC":
+          {
+            if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdFolioCXC == null)
+            {
+              UIHelper.ShowMessage("Specify the CxC folio.");
+              return false;
+            }
+            else if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) == 0 && bookingDeposit.bdFolioCXC != null)
+            {
+              UIHelper.ShowMessage("CxC Folio is only for CxC distinct of zero.");
+              return false;
+            }
+            else if(bookingDeposit.bdFolioCXC!=null)
+            {
+              //Verificar que el folio no esté en la lista y que no lo contenga un deposit en la BD
+              List<BookingDeposit> lstDeposits = dtgBookingDeposits.ItemsSource.OfType<BookingDeposit>().ToList();
+              if(lstDeposits.Any(bd=>bd.bdFolioCXC==bookingDeposit.bdFolioCXC))
+              {
+                UIHelper.ShowMessage("Please select other Folio");
+                return false;
+              }
+              else if(bookingDeposit.bdID>0)//Verificamos si el booking deposit se está actualizando
+              {
+                if(lstBookingDeposits!=null && lstBookingDeposits.Where(bd=>bd.bdID==bookingDeposit.bdID && bd.bdFolioCXC==bookingDeposit.bdFolioCXC).ToList().Count>0)
+                {
+                  if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1)) 
+                  {
+                    UIHelper.ShowMessage("Folio is in use.");
+                    return false;
+                  }
+                }
+              }
+              else
+              {
+                if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 0))
+                {
+                  UIHelper.ShowMessage("Folio is in use.");
+                  return false;
+                }
+              }
+            }
+            break;
+          } 
+          #endregion
+      }
+      return true;
+    } 
+    #endregion
+
+    #region validateEditNumber
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="number"></param>
+    /// <param name="strTitle"></param>
+    /// <param name="maxNumber"></param>
+    /// <param name="minNumber"></param>
+    /// <param name="blnValidateBounds"></param>
+    /// <history>
+    /// [emoguel] 11/08/2016 created
+    /// </history>
+    /// <returns> false. no es valido | true. es valido</returns>
+    public static bool validateEditNumber(string number, string strTitle, int maxNumber, int minNumber, bool blnValidateBounds = true)
+    {
+      if (!string.IsNullOrWhiteSpace(number))
+      {
+        int numb = 0;
+        int.TryParse(number, out numb);
+        if (blnValidateBounds)
+        {
+          if (numb > maxNumber)
+          {
+            UIHelper.ShowMessage($"{strTitle} can not be greater than {maxNumber}");
+            return false;
+          }
+          if (numb < minNumber)
+          {
+            UIHelper.ShowMessage($"{strTitle} can not be lower than {minNumber}");
+            return false;
+          }
+        }
+        return true;
+      }
+      else
+      {
+        UIHelper.ShowMessage($"{strTitle} is invalid");
+        number = "0";
+        return false;
+      }
+    }
+    #endregion
+
+    #region AfertEditBookingDeposits
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bookingDeposits"></param>    
+    /// <returns>True. Son campos validos | False. Hay un campo invalido</returns>
+    /// <history>
+    /// [emoguel] 11/08/2016 created
+    /// </history>
+    public static bool AfertEditBookingDeposits(BookingDeposit bookingDeposit,DataGrid dtgBookingDeposits,List<BookingDeposit>lstBookingsDeposits,int guestID)
+    {
+      PropertyInfo [] properties = bookingDeposit.GetType().GetProperties(System.Reflection.BindingFlags.Public | BindingFlags.Instance);
+      foreach(PropertyInfo pi in properties)
+      {
+        if(!validateEditBookingDeposit(pi.Name,bookingDeposit,dtgBookingDeposits,null,lstBookingsDeposits,guestID))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+    #endregion
+
+    #region isRepeatCreditCardInfo
+    /// <summary>
+    /// Validaciones del creditcard info
+    /// </summary>
+    /// <param name="dtgBookingDeposits">datagrid de deposits</param>
+    /// <history>
+    /// [emoguel] 12/08/2016 created
+    /// </history>
+    /// <returns>True. existe otro item con los mismos datos | False. no existe otro item con los mismo datos</returns>
+    public static bool isRepeatCreditCardInfo(DataGrid dtgBookingDeposits, BookingDeposit bookingDeposits)
+    {
+      GridHelper.UpdateSourceFromARow(dtgBookingDeposits);//Actualizamos el source
+      List<BookingDeposit> lstItemsGrid = dtgBookingDeposits.Items.OfType<BookingDeposit>().ToList();
+      if (lstItemsGrid.Count > 1 && bookingDeposits != null)
+      {
+        var lstRepeatItems = lstItemsGrid.Where(bd => bd.bdcu == bookingDeposits.bdcu && bd.bdpt == bookingDeposits.bdpt && bd.bdcc == bookingDeposits.bdcc && bd.bdCardNum == bookingDeposits.bdCardNum).ToList();
+        return lstRepeatItems.Count > 1;
+      }
+      return false;
+    } 
+    #endregion
+    #endregion
   }
 }

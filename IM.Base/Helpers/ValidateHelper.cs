@@ -201,9 +201,12 @@ namespace IM.Base.Helpers
           {
 
             if (GridHelper.IsInEditMode(dgr,false))
-            {
-              strMsj += "Please finish editing the list. \n";
-              break;
+            {              
+              var parents = UIHelper.GetParentCollection<TabItem>(dgr);
+              parents.ForEach(tb => tb.IsSelected = true);
+              container.UpdateLayout();
+              dgr.Focus();
+              return "Please finish editing the list. \n";              
             }
           }
         }

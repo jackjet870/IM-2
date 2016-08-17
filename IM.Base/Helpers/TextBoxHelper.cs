@@ -41,7 +41,7 @@ namespace IM.Base.Helpers
     /// [emoguel] modified 08/08/2016-->Se agregó la validación de enteros y decimales
     /// </history>
     public static void DecimalTextInput(object sender, TextCompositionEventArgs e)
-    {      
+    {
       TextBox txt = (TextBox)sender;
       bool blnValid = (e.Text == "." && !txt.Text.Trim().Contains("."));
 
@@ -51,7 +51,7 @@ namespace IM.Base.Helpers
         string precisionProperty = PrecisionPropertyClass.GetPrecision(txt);//Obtenemos la precision        
         var precision = precisionProperty.Split(',');//Separamos el presicion y el scale--->Presicion[0]=Enteros, Presicion[1]=Decimales permitidos
         string text = "";
-        text = (!string.IsNullOrWhiteSpace(txt.SelectedText))?txt.Text.Remove(txt.SelectionStart, txt.SelectionLength).Insert(txt.CaretIndex, e.Text) : txt.Text.Insert(txt.CaretIndex, e.Text);//Quitamos el texto que se va a remplazar
+        text = (!string.IsNullOrWhiteSpace(txt.SelectedText)) ? txt.Text.Remove(txt.SelectionStart, txt.SelectionLength).Insert(txt.CaretIndex, e.Text) : txt.Text.Insert(txt.CaretIndex, e.Text);//Quitamos el texto que se va a remplazar
 
         if (text.Contains('.'))//Si contiene punto decimal
         {
