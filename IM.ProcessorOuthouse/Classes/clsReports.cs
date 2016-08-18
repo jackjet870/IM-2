@@ -69,7 +69,7 @@ namespace IM.ProcessorOuthouse.Classes
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true, showColumnGrandTotal: true, fileFullPath: fileFullPath);
-     
+      //return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptDepositsPaymentByPR(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptDepositsPaymentByPR
@@ -178,6 +178,8 @@ namespace IM.ProcessorOuthouse.Classes
         c.Shows,
         c.Sales_PROC,
         c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
         c.Sales_PEND,
         c.SalesAmount_PEND,
         c.Sales_CANCEL,
@@ -368,7 +370,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
-        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true);
+        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
       }
     }
     #endregion ExportRptProductionByAgencyOuthouse
@@ -1057,7 +1059,9 @@ namespace IM.ProcessorOuthouse.Classes
         c.Status,
         c.PR,
         c.PRN,
+        c.Contacts,
         c.Books,
+        c.BooksFactor,
         c.InOuts,
         c.GrossBooks,
         c.GrossShows,

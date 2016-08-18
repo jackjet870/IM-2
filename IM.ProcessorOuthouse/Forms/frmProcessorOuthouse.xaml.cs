@@ -678,7 +678,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = await BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdAll);
             if (lstRptProductionByGuestStatusOuthouse.Any())
               finfo = clsReports.ExportRptProductionByGuestStatusOuthouse(strReport, fileFullPath, filters, lstRptProductionByGuestStatusOuthouse);
@@ -791,7 +791,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdAll,
                _enumBasedOnBooking);
             if (lstRptProductionByPROuthouse.Any())
@@ -838,14 +838,14 @@ namespace IM.ProcessorOuthouse.Forms
 
           #region Production by PR & Sales Room (Deposits)
 
-          case "Production by PR Sales Room (Deposits)":
+          case "Production by PR & Sales Room (Deposits)":
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
 
             List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDeposits = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdDeposit,
                _enumBasedOnBooking);
             if (lstRptProductionByPRSalesRoomDeposits.Any())
@@ -935,7 +935,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPRContactOuthouse> lstRptProductionByPRContactOuthouse = await BRReportsByLeadSource.GetProductionByPRContactOuthouse(_dtmStart, _dtmEnd,
                  string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                  "ALL",
-                 EnumProgram.Outhouse,
+                 EnumProgram.All,
                  EnumFilterDeposit.fdAll);
             if (lstRptProductionByPRContactOuthouse.Any())
               finfo = clsReports.ExportRptProductionByPRContactOuthouse(strReport, fileFullPath, filters, lstRptProductionByPRContactOuthouse);
@@ -1106,6 +1106,24 @@ namespace IM.ProcessorOuthouse.Forms
               finfo = clsReports.ExportRptProductionByAgeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeSalesRoomOuthouse);
             break;
           #endregion
+
+          #region Production by Agency
+
+          case "Production by Agency":
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PRs", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())));
+
+            ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencyOuthouseData(_dtmStart, _dtmEnd,
+              "ALL",
+              string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+              EnumProgram.Outhouse,
+              EnumFilterDeposit.fdDepositShowsNoDeposit,
+              _enumSalesByMemberShipType);
+            if (lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse.Any())
+              finfo = clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
+            break;
+
+          #endregion Production by Agency
 
           #region Production by Agency, Market & Hotel
           case "Production by Agency, Market & Hotel":

@@ -209,5 +209,8 @@
     <Setting Name="USP_IM_RptStatisticsByExitCloser_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
+    <Setting Name="USP_OR_ReportsProcessorOuthouse_TimeOut" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
