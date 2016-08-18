@@ -779,40 +779,7 @@ namespace IM.Base.Classes
 
     #endregion InvitationGiftValidation
 
-    #region DataGrid Booking Deposits
-
-    #region IsReaOnlyBookingDeposits
-
-    /// <summary>
-    /// indica si el grid sólo va a ser lectura
-    /// </summary>
-    /// <param name="enumMode">Modo en que se encuentra la ventana</param>
-    /// <returns>True. Va a ser modo lectura | False. Se puede editar</returns>
-    /// <history>
-    /// [emoguel] 12/08/2016 created
-    /// </history>
-    public static bool IsReaOnlyBookingDeposits(EnumMode enumMode, Guest guest, bool blnNewInv, EnumPermisionLevel enumPermisionLevel)
-    {
-      //Validar si se está editando
-      if (enumMode == EnumMode.Edit)
-      {
-        //Falta validar si no es el modulo outside
-
-        #endregion IsReaOnlyBookingDeposits
-
-        // si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
-        // (tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
-        if (!(guest.guCheckOutD >= DateTime.Now && (blnNewInv || guest.guInvitD == DateTime.Now || (enumPermisionLevel >= EnumPermisionLevel.Special && guest.guBookD >= DateTime.Now))))
-        {
-          return true;
-        }
-        //Fin de la validacion
-      }
-      return false;
-    }
-
-    #endregion DataGrid Booking Deposits
-
+    #region DataGrid Booking Deposits    
     #region StartEditBokingDeposits
 
     /// <summary>
@@ -821,7 +788,7 @@ namespace IM.Base.Classes
     /// <param name="dtgDeposits">Datagrid a validar</param>
     /// <param name="strColumn">Columna que se quiere editar</param>
     /// <param name="bookingDeposit">Objeto bindeado</param>
-    /// <param name="blnModifyPaymentPlace"></param>
+    /// <param name="blnModifyPaymentPlace">unicamente se debe enviar como false cuando sea desde el formulario show</param>
     /// <returns>True. no se puede editar | False. si se puede editar</returns>
     /// <history>
     /// [emoguel] created 10/08/2016
@@ -1145,8 +1112,7 @@ namespace IM.Base.Classes
 
     #endregion validateEditNumber
 
-    #region AfertEditBookingDeposits
-
+    #region EndingEditBookingDeposits
     /// <summary>
     ///
     /// </summary>
@@ -1155,20 +1121,21 @@ namespace IM.Base.Classes
     /// <history>
     /// [emoguel] 11/08/2016 created
     /// </history>
-    public static bool AfertEditBookingDeposits(BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, List<BookingDeposit> lstBookingsDeposits, int guestID)
+    public static bool EndingEditBookingDeposits(BookingDeposit bookingDeposit,DataGrid dtgBookingDeposits,List<BookingDeposit>lstBookingsDeposits,int guestID, ref int columnIndex)
     {
-      PropertyInfo[] properties = bookingDeposit.GetType().GetProperties(System.Reflection.BindingFlags.Public | BindingFlags.Instance);
-      foreach (PropertyInfo pi in properties)
+      PropertyInfo [] properties = bookingDeposit.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+      foreach(PropertyInfo pi in properties)
       {
         if (!validateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestID))
         {
+          var column = dtgBookingDeposits.Columns.Where(cl => cl.SortMemberPath == pi.Name).FirstOrDefault();
+          columnIndex = (column != null) ? column.DisplayIndex : 0;
           return false;
         }
       }
       return true;
     }
-
-    #endregion AfertEditBookingDeposits
+    #endregion
 
     #region isRepeatCreditCardInfo
 
@@ -1343,6 +1310,7 @@ namespace IM.Base.Classes
     }
     #endregion
 
+    #endregion
     #endregion
 
   }

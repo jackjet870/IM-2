@@ -1146,5 +1146,337 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetAdditionalGuest
+
+    #region SaveGuestInvitation
+    /// <summary>
+    /// Guarda un GuestInvitation
+    /// </summary>
+    /// <param name="guestInvitation">Objeto con todos los datos del guest a guardar</param>
+    /// <param name="enumProgram">program con el que se está guardando</param>
+    /// <param name="enumModule">Desde dónde se está abriendo</param>
+    /// <param name="user">Los datos del usuario que está guardando los datos</param>
+    /// <param name="enumMode">Edit. Actualiza | Add. Agrega un nuevo guest</param>
+    /// <param name="computerName">Nombre de la computadora desde donde se está guardando</param>
+    /// <param name="iPAddress">Ip de la maquina desde donde se está guardando</param>
+    /// <param name="guestMovementType">Tipo de movimiento del guest</param>
+    /// <param name="hoursDiff"></param>
+    /// <returns>0. No se guardó | >0. Los datos se guardaron correctamente</returns>
+    /// <history>
+    /// [emoguel] 18/08/2016 created
+    /// </history>
+    public async static Task<int> SaveGuestInvitation(GuestInvitation guestInvitation, EnumProgram enumProgram, EnumModule enumModule, UserData user, EnumMode enumMode,
+      string computerName, string iPAddress, GuestMovementType guestMovementType, short hoursDiff)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          DateTime dtServerNow = BRHelpers.GetServerDateTime();
+          bool blnInvited = false;
+          //Establecemos el deposito
+          SetDeposits(guestInvitation.BookingDepositList.ToList(), guestInvitation.Guest);
+
+          //Con Check In
+          guestInvitation.Guest.guCheckIn = true;
+
+          //Disponible
+          if (string.IsNullOrWhiteSpace(guestInvitation.Guest.guPRAvail))
+          {
+            guestInvitation.Guest.guAvail = true;
+          }
+
+          #region Seguimiento
+          if (enumProgram == EnumProgram.Inhouse)
+          {
+            //Si estaba contactado y no invitado
+            if (guestInvitation.Guest.guInfo == true && guestInvitation.Guest.guInvit)
+            {
+              //Con seguimiento
+              guestInvitation.Guest.guFollow = true;
+              //PR de seguimiento
+              if (string.IsNullOrWhiteSpace(guestInvitation.Guest.guPRFollow))
+              {
+                guestInvitation.Guest.guPRFollow = guestInvitation.Guest.guPRInvit1;
+              }
+
+              //Fecha de seguimiento
+              if (guestInvitation.Guest.guFollowD == null)
+              {
+                guestInvitation.Guest.guFollowD = guestInvitation.Guest.guInvitD;
+              }
+            }
+          }
+          #endregion
+
+          #region Contratacion
+          //contactado
+          guestInvitation.Guest.guInfo = true;
+
+          //PR de Contacto
+          if (string.IsNullOrWhiteSpace(guestInvitation.Guest.guPRInfo))
+          {
+            guestInvitation.Guest.guPRInfo = guestInvitation.Guest.guPRInvit1;
+          }
+
+          //Fecha de contacto
+          if (guestInvitation.Guest.guInfoD == null)
+          {
+            guestInvitation.Guest.guInfoD = guestInvitation.Guest.guInvitD;
+          }
+
+          //Locacion de contacto
+          if (string.IsNullOrWhiteSpace(guestInvitation.Guest.guloInfo))
+          {
+            if (enumModule != EnumModule.Host)
+            {
+              guestInvitation.Guest.guloInfo = user.Location.loID;
+            }
+            else
+            {
+              guestInvitation.Guest.guloInfo = guestInvitation.Guest.guloInvit;
+            }
+          }
+          #endregion
+
+          #region Invitation
+          //Invitado
+          blnInvited = guestInvitation.Guest.guInvit;
+          guestInvitation.Guest.guInvit = true;
+
+          //invitation no cancelada
+          guestInvitation.Guest.guBookCanc = false;
+
+          //PR de invitation
+          guestInvitation.Guest.guPRInvit1 = guestInvitation.Guest.guPRInvit1.Trim();
+
+          //Captain de PR
+          if (enumModule == EnumModule.Host || enumModule == EnumModule.OutHouse)
+          {
+            guestInvitation.Guest.guPRCaptain1 = dbContext.Personnels.Where(pe => pe.peID == guestInvitation.Guest.guPRInvit1).FirstOrDefault().peCaptain;
+          }
+          else if (!string.IsNullOrWhiteSpace(guestInvitation.Guest.guloInvit) && guestInvitation.Guest.guloInvit != guestInvitation.CloneGuest.guloInvit)
+          {
+            guestInvitation.Guest.guPRCaptain1 = dbContext.Locations.Where(lo => lo.loID == guestInvitation.Guest.guloInvit).FirstOrDefault().loPRCaptain;
+          }
+
+          //Fecha del primer booking
+          if (enumMode == EnumMode.Add)
+          {
+            guestInvitation.Guest.guFirstBookD = guestInvitation.Guest.guBookD;
+          }
+
+          //Definimos si el huesped es interval
+          guestInvitation.Guest.guInterval = true;
+
+          #endregion
+
+          #region Transaccion
+          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              int nSave = 0;
+
+              //Guest
+              dbContext.Entry(guestInvitation.Guest).State = (enumMode == EnumMode.Edit) ? EntityState.Modified : EntityState.Added;
+              nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
+
+              //Recargamos el codigo contable
+              dbContext.USP_OR_SetAccountingCode(guestInvitation.Guest.guID, "MK");
+
+              //Guardamos el historico del huesped
+              dbContext.USP_OR_SaveGuestLog(guestInvitation.Guest.guID, hoursDiff, user.User.peID);
+
+              #region Gifts
+              //Invitation Gift a Eliminar
+              #region Eliminar
+              List<InvitationGift> lstGiftsDel = guestInvitation.CloneInvitationGiftList.Where(ig =>
+                        !guestInvitation.InvitationGiftList.Any(igg => ig.iggu == igg.iggu && ig.iggi == igg.iggi && ig.igct == igg.igct)).ToList();
+
+              lstGiftsDel.ForEach(ig => dbContext.Entry(ig).State = EntityState.Deleted);
+              #endregion
+
+              //Invitation Gift a Agregar
+              #region Agregar
+              List<InvitationGift> lstGiftsAdd = guestInvitation.InvitationGiftList.Where(ig =>
+                        !guestInvitation.CloneInvitationGiftList.Any(igg => ig.iggu == igg.iggu && ig.iggi == igg.iggi && ig.igct == igg.igct)).ToList();
+
+              lstGiftsAdd.ForEach(ig =>
+              {
+                ig.iggu = guestInvitation.Guest.guID;
+                dbContext.Entry(ig).State = EntityState.Added;
+              });
+              #endregion
+
+              //Invitation Gift a Actualizar
+              //TODO: falta validar si cambió algun campo
+              #region Actualizar
+              List<InvitationGift> lstGiftsUpd = guestInvitation.InvitationGiftList.Where(ig =>
+                        guestInvitation.CloneInvitationGiftList.Any(igg => ig.iggu == igg.iggu && ig.iggi == igg.iggi && ig.igct == igg.igct)).ToList();
+
+              lstGiftsUpd.ForEach(ig => dbContext.Entry(ig).State = EntityState.Modified);
+              #endregion
+
+
+
+
+              #endregion
+
+              #region Deposits              
+              //Agregar
+              #region Add
+              List<BookingDeposit> lstDepositsAdd = guestInvitation.BookingDepositList.Where(bd => !guestInvitation.CloneBookingDepositList.Any(bdd => bdd.bdID == bd.bdID)).ToList();
+              lstDepositsAdd.ForEach(bd =>
+              {
+                bd.bdgu = guestInvitation.Guest.guID;
+                bd.bdD = dtServerNow;
+                if (bd.bdFolioCXC != null)
+                {
+                  bd.bdUserCXC = user.User.peID;
+                  bd.bdEntryDCXC = dtServerNow;
+                }
+                bd.bdds = (string.IsNullOrWhiteSpace(bd.bdds)) ? null : bd.bdds;
+
+                dbContext.Entry(bd).State = EntityState.Added;
+              });
+              #endregion
+              //Update
+              #region Update
+              List<BookingDeposit> lstDepositsUpd = guestInvitation.BookingDepositList.Where(bd => guestInvitation.CloneBookingDepositList.Any(bdd => bdd.bdID == bd.bdID)).ToList();
+              lstDepositsUpd.ForEach(bd =>
+              {
+                bd.bdD = dtServerNow;
+                if (bd.bdFolioCXC != null)
+                {
+                  bd.bdUserCXC = user.User.peID;
+                  bd.bdEntryDCXC = dtServerNow;
+                }
+                else
+                {
+                  bd.bdUserCXC = null;
+                  bd.bdEntryDCXC = null;
+                }
+                bd.bdds = (string.IsNullOrWhiteSpace(bd.bdds)) ? null : bd.bdds;
+
+                dbContext.Entry(bd).State = EntityState.Modified;
+              });
+              #endregion
+
+              //Eliminar
+              #region Delete
+              List<BookingDeposit> lstDepositsDel = guestInvitation.CloneBookingDepositList.Where(bd => !guestInvitation.BookingDepositList.Any(bdd => bdd.bdID == bd.bdID)).ToList();
+              lstDepositsDel.ForEach(bd => dbContext.Entry(bd).State = EntityState.Deleted);
+              #endregion
+              #endregion
+
+              #region CreditCard
+              var lstGuestCreditCards = dbContext.GuestsCreditCards.Where(cc => cc.gdgu == guestInvitation.Guest.guID);
+
+              //Si se encontro alguno los eliminamos 
+              if (lstGuestCreditCards.Any())
+              {
+                dbContext.GuestsCreditCards.RemoveRange(lstGuestCreditCards);
+              }
+
+              //Si se agregaron nuevos GuestCreditCards los guardamos.
+              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
+                dbContext.Entry(gcc).State = EntityState.Added
+              );
+
+              //Creamos la variable en donde se van a concatenar 
+              string strguCCType = string.Empty;
+
+              //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
+              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
+              {
+                if (gcc.gdQuantity > 1)
+                {
+                  strguCCType = strguCCType + gcc.gdQuantity;
+                }
+                strguCCType = strguCCType + gcc.gdcc + ", ";
+              });
+
+              //Eliminamos la ultima coma
+              strguCCType = strguCCType.TrimEnd(',');
+
+              //Escojemos los primeros 30 caracteres porque es el límite del campo 
+              guestInvitation.Guest.guCCType = strguCCType.Substring(0, 30);
+
+              #endregion
+
+              #region GuestStatus
+              //Eliminamos los regsitros
+              #region Delete
+              var lstGuestStatusDel = dbContext.GuestsStatus.Where(gs => gs.gtgu == guestInvitation.Guest.guID);
+              dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
+              #endregion
+              #region Add
+              GuestStatus guestStatus = new GuestStatus();
+              guestStatus.gtQuantity = 1;
+              guestStatus.gtgu = guestInvitation.Guest.guID;
+              guestStatus.gtgs = guestInvitation.Guest.guGStatus;
+              dbContext.Entry(guestStatus).State = EntityState.Added;
+              #endregion
+              #endregion
+
+              #region Proceso Guest Additional
+              dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",",  guestInvitation.AdditionalGuestList.Select(c => c.guID).ToList()));              
+              if (enumProgram == EnumProgram.Inhouse)
+              {
+                //Actualizamos los datos de los huespedes adicionales.
+                dbContext.USP_OR_UpdateGuestsAdditional(guestInvitation.Guest.guID, guestInvitation.Guest.guPRInvit1, dtServerNow, user.Location.loID, guestInvitation.Guest.guInvit);
+                guestInvitation.AdditionalGuestList.ToList().ForEach(c =>
+                {
+                  //Guardamos el Log del guestAdditional
+                  dbContext.USP_OR_SaveGuestMovement(guestInvitation.Guest.guID, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Contact), user.User.peID, computerName, iPAddress);
+                });
+              }
+              #endregion
+
+              #region GuestMovement
+              dbContext.USP_OR_SaveGuestMovement(guestInvitation.Guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), user.User.peID, computerName, iPAddress);
+              #endregion
+
+              nSave += dbContext.SaveChanges();
+              transacction.Commit();
+              return nSave;
+
+            }
+            catch
+            {
+              transacction.Rollback();              
+              throw;
+            }
+          }
+          #endregion
+        }
+      });
+    } 
+    #endregion
+
+    #region SetDeposits
+    /// <summary>
+    /// Establece el deposito
+    /// </summary>
+    /// <param name="lstDeposits">Lista de depositos</param>
+    /// <param name="guest">guest para asiganr el deposito</param>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
+    private static void SetDeposits(List<BookingDeposit> lstDeposits, Guest guest)
+    {
+      //Establecemos el primer deposito
+      if (lstDeposits.Count > 0)
+      {
+        guest.guDeposit = lstDeposits.FirstOrDefault().bdAmount;
+      }
+
+      //Si no tuvo deposito, se establece el deposito quemado
+      if (guest.guDeposit == 0)
+      {
+        guest.guDeposit = guest.guDepositTwisted;
+      }
+    }
+    #endregion
   }
 }

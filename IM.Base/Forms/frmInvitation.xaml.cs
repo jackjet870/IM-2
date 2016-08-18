@@ -211,6 +211,8 @@ namespace IM.Base.Forms
 
         //Activamos el Modo Edit
         EditModeControlsBehavior();
+
+        dtgBookingDeposits.IsReadOnly = IsReaOnlyBookingDeposits();
       }
     }
 
@@ -521,6 +523,7 @@ namespace IM.Base.Forms
         SetReadOnly();
       }
 
+      dtgBookingDeposits.IsReadOnly = IsReaOnlyBookingDeposits();
       //Configuramos los controles de Change,Reschedule,Rebook
       SetupChangeRescheduleRebook();
     }
@@ -1775,21 +1778,43 @@ namespace IM.Base.Forms
     #endregion BeginningEdit
 
     #region CellEditEnding
-
+    /// <summary>
+    /// Valida que no se le haga commit a la celda si el dato es erroneo
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
     private void dtgBookingDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
-      {
-        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.CloneBookingDepositList, catObj.Guest.guID);
-        e.EditingElement.Focus();
+      { 
+        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));        
+        if(!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.CloneBookingDepositList, catObj.Guest.guID))
+        {
+          if (dtgBookingDeposits.CurrentColumn!=null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
+          {
+            //Regresamos el foco a la columna con el dato mal
+            dtgBookingDeposits.CellEditEnding -= dtgBookingDeposits_CellEditEnding;
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
+            dtgBookingDeposits.CellEditEnding += dtgBookingDeposits_CellEditEnding;
+          }
+          else
+          {
+            //Cancelamos el commit de la celda
+            e.Cancel = true;
+          }
+        }
       }
     }
-
-    #endregion CellEditEnding
+    #endregion
 
     #region RowEditEnding
-
+    /// <summary>
+    /// Valida que no se haga commit la fila si hay datos erroneos
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
     private void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
@@ -1801,8 +1826,14 @@ namespace IM.Base.Forms
         }
         else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
+          int columnIndex = 0;
           _isCellCommitDeposit = false;
-          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, catObj.CloneBookingDepositList, catObj.Guest.guID);
+          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit,sender as DataGrid, catObj.CloneBookingDepositList,catObj.Guest.guID,ref columnIndex);          
+          if(e.Cancel)
+          {
+            _isCellCommitDeposit = true;//true para que no haga el commit
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
+          }
         }
         else
         {
@@ -1812,6 +1843,34 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #region IsReaOnlyBookingDeposits
+    /// <summary>
+    /// indica si el grid sólo va a ser lectura
+    /// </summary>
+    /// <returns>True. Va a ser modo lectura | False. Se puede editar</returns>
+    /// <history>
+    /// [emoguel] 12/08/2016 created 
+    /// </history>
+    public bool IsReaOnlyBookingDeposits()
+    {
+      //Validar si se está editando
+      if (catObj.InvitationMode == EnumMode.Edit || catObj.InvitationMode == EnumMode.Add)
+      {
+        if (_module != EnumModule.OutHouse)//Validar que no sea Outhouse
+        {
+          bool blnInvitations = (_module == EnumModule.Host) ? _user.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Special) : _user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special);
+          // si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
+          // (tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
+          if (!(catObj.Guest.guCheckOutD >= DateTime.Now && (catObj.InvitationMode == EnumMode.Add || catObj.Guest.guInvitD == DateTime.Now || (blnInvitations && catObj.Guest.guBookD >= DateTime.Now))))
+          {
+            return true;
+          }
+        }
+
+      }
+      return false;
+    }
+    #endregion
     #endregion
 
 
