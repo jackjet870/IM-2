@@ -47,7 +47,7 @@ namespace IM.Host.Forms
     private ObservableCollection<InvitationGift> _invitationGiftList = new ObservableCollection<InvitationGift>();
     private bool _blnLoading;
     private byte _ocWelcomeCopies;
-
+  	private bool _isCellCommitDeposit = false;        
     private ObservableCollection<Guest> _guestAdditionalList = new ObservableCollection<Guest>();
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
@@ -265,6 +265,7 @@ namespace IM.Host.Forms
       {
         // cargamos los datos del huesped
         GuestObj = await BRGuests.GetGuest(_guestCurrent);
+        _guestShow.Guest = GuestObj;
         _guestShow.CloneGuest = ObjectHelper.CopyProperties(GuestObj);
       }));
 
@@ -1251,6 +1252,8 @@ namespace IM.Host.Forms
       //Si de la BD el campo guNotifiedEmailShowNotInvited es null, lo ponemos en unChecked el control
       if (_guestObj.guNotifiedEmailShowNotInvited == null)
         chkguNotifiedEmailShowNotInvited.IsChecked = false;
+
+      GridHelper.SetUpGrid(dtgDeposits, new BookingDeposit());
     }
 
 
@@ -1969,6 +1972,108 @@ namespace IM.Host.Forms
     #endregion Implementacion INotifyPropertyChange
 
 
+    #region Booking Deposits
+    #region dtgDeposits_PreparingCellForEdit
+    /// <summary>
+    /// Pone el foco en el edit element
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016
+    /// </history>
+    private void dtgDeposits_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      Control control = e.EditingElement as Control;
+      var bi = control.GetBindingExpression(TextBox.TextProperty);
+      
+      control.Focus();
+    }
+    #endregion
 
+    #region BeginningEdit 
+    /// <summary>
+    /// Verifica que no se puedan editar campos
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
+    private void dtgDeposits_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (!GridHelper.IsInEditMode(dtgDeposits))
+      {
+        e.Cancel = !InvitationValidationRules.StartEditBookingDeposits(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, false);
+      }
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+    #endregion
+
+    #region CellEditEnding
+    /// <summary>
+    /// Valida que no se le haga commit a la celda si el dato es erroneo
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
+    private void dtgDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
+        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgDeposits, e.EditingElement as Control,_guestShow.CloneBookingDepositList.ToList(),_guestShow.Guest.guID))
+        {
+          if (dtgDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
+          {
+            //Regresamos el foco a la columna con el dato mal
+            dtgDeposits.CellEditEnding -= dtgDeposits_CellEditEnding;
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
+            dtgDeposits.CellEditEnding += dtgDeposits_CellEditEnding;
+          }
+          else
+          {
+            //Cancelamos el commit de la celda
+            e.Cancel = true;
+          }
+        }
+      }
+    }
+    #endregion
+
+    #region RowEditEnding
+    /// <summary>
+    /// Valida que no se haga commit la fila si hay datos erroneos
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/08/2016 created
+    /// </history>
+    private void dtgDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        if (_isCellCommitDeposit)
+        {
+          _isCellCommitDeposit = false;
+          e.Cancel = true;
+        }
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        {
+          int columnIndex = 0;
+          _isCellCommitDeposit = false;
+          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid,_guestShow.CloneBookingDepositList.ToList(),_guestShow.Guest.guID, ref columnIndex);
+          if (e.Cancel)
+          {
+            _isCellCommitDeposit = true;//true para que no haga el commit
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
+          }
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+      }
+    }
+    #endregion
+    #endregion
   }
 }
