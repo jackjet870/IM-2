@@ -999,7 +999,7 @@ namespace IM.Inhouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex);
+        UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "GetRptReservationOrigos");
       }
      
     }

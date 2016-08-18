@@ -158,7 +158,7 @@ namespace IM.Base.Forms
       {
         UIHelper.ShowMessage(exception);
       }
-    } 
+    }
     #endregion
 
     #region ValidateCriteria
@@ -191,7 +191,7 @@ namespace IM.Base.Forms
         return false;
       }
       return true;
-    } 
+    }
     #endregion
 
     #region dtp_ValueChanged
@@ -286,7 +286,7 @@ namespace IM.Base.Forms
         return;
       }
       StatusBarReg.Content = string.Format("{0}/{1}", grdGuests.Items.IndexOf(grdGuests.Items.CurrentItem) + 1, grdGuests.Items.Count);
-    } 
+    }
     #endregion
 
   }

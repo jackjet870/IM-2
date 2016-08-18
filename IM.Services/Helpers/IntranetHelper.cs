@@ -1,8 +1,6 @@
 ﻿using System;
-//using IM.Base.Helpers;
 using IM.Services.IntranetService;
 using PalaceResorts.Common.PalaceTools;
-using System.Windows;
 using System.Threading.Tasks;
 
 namespace IM.Services.Helpers
@@ -60,9 +58,10 @@ namespace IM.Services.Helpers
       /// </history>
       public async static Task<TipoCambioTesoreria> TipoCambioTesoreria(DateTime date, string currencyId, System.Threading.CancellationToken cToken = new System.Threading.CancellationToken())
       {
-        TipoCambioTesoreria exchangeRate = null;
-        await Task.Run(() =>
+        
+        return await Task.Run(() =>
         {
+          TipoCambioTesoreria exchangeRate = null;
           TipoCambioTesoreriaRequest request = new TipoCambioTesoreriaRequest();
           TipoCambioTesoreriaResponse response = new TipoCambioTesoreriaResponse();
 
@@ -76,14 +75,17 @@ namespace IM.Services.Helpers
 
             //invocamos al servicio web  
             response = Current.ObtenerTipoCambioTesoreria(request);
+          if(response.HasErrors)
+            throw new Exception(response.ExceptionInfo.Message);
 
-            var Data = response.Data;
+          var Data = response.Data;
           if (Data.Length > 0)
           {
             exchangeRate = Data[0];
           }
-        }, cToken);    
-        return exchangeRate;
+          return exchangeRate;
+        });    
+        
       }
       #endregion
 

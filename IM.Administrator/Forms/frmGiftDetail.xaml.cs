@@ -20,7 +20,7 @@ namespace IM.Administrator.Forms
   public partial class frmGiftDetail : Window
   {
     #region Variables
-    public Gift gift = new Gift ();   
+    public Gift gift = new Gift();
     public Gift _oldGift = new Gift();
     public EnumMode enumMode;
     private bool _isClosing = false;
@@ -32,8 +32,8 @@ namespace IM.Administrator.Forms
     CollectionViewSource collectionPackages = new CollectionViewSource();
     #endregion
     public frmGiftDetail()
-    {     
-      InitializeComponent();      
+    {
+      InitializeComponent();
     }
 
     #region Methods Form
@@ -45,7 +45,7 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 08/07/2016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    { 
+    {
       ObjectHelper.CopyProperties(gift, _oldGift);
       GiftInPack();
       LoadLocations();
@@ -61,7 +61,7 @@ namespace IM.Administrator.Forms
       dgrGiftInPack.IsReadOnly = gift.giPack;
       if (enumMode != EnumMode.ReadOnly)
       {
-        UIHelper.SetUpControls(gift, this);      
+        UIHelper.SetUpControls(gift, this);
         grdCost.IsEnabled = true;
         grdGeneral.IsEnabled = true;
         grdLocations.IsEnabled = true;
@@ -91,8 +91,8 @@ namespace IM.Administrator.Forms
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
         List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
         List<GiftPackageItem> lstPackItems = (List<GiftPackageItem>)dgrGiftInPack.ItemsSource;
-        if(enumMode!=EnumMode.ReadOnly && (!ObjectHelper.IsEquals(gift,_oldGift) || ChangedGifts(lstPackItems) || !ObjectHelper.IsListEquals(lstAgencies,_lstOldAgencies)
-          || !ObjectHelper.IsListEquals(lstLocations,_lstOldLocations)))
+        if (enumMode != EnumMode.ReadOnly && (!ObjectHelper.IsEquals(gift, _oldGift) || ChangedGifts(lstPackItems) || !ObjectHelper.IsListEquals(lstAgencies, _lstOldAgencies)
+          || !ObjectHelper.IsListEquals(lstLocations, _lstOldLocations)))
         {
           dgrGiftInPack.CancelEdit();
           dgrAgencies.CancelEdit();
@@ -178,13 +178,13 @@ namespace IM.Administrator.Forms
               //GiftItemPack
               var lstAddGiftPack = lstPackItems.Where(gp => !_lstOldPacks.Any(gpp => gp.gpgi == gpp.gpgi)).ToList();
               var lstDelGiftPack = _lstOldPacks.Where(gp => !lstPackItems.Any(gpp => gpp.gpgi == gp.gpgi)).ToList();
-              var lstUpdGiftPack=lstPackItems.Where(gp=>_lstOldPacks.Any(gpp=>gp.gpgi==gpp.gpgi && gp.gpQty!=gpp.gpQty)).ToList();
+              var lstUpdGiftPack = lstPackItems.Where(gp => _lstOldPacks.Any(gpp => gp.gpgi == gpp.gpgi && gp.gpQty != gpp.gpQty)).ToList();
               #endregion
 
               int nRes = await BRGifts.SaveGift(gift, (enumMode == EnumMode.Edit), lstAddLocations, lstDelLocations, lstAddAgencies, lstDelAgencies, lstAddGiftPack, lstDelGiftPack, lstUpdGiftPack,
                 (enumMode == EnumMode.Add && gift.giInven), App.User.User.peID);
               UIHelper.ShowMessageResult("Gift", nRes);
-              if(nRes>0)
+              if (nRes > 0)
               {
                 _isClosing = true;
                 DialogResult = true;
@@ -281,9 +281,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgr_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (e.EditAction==DataGridEditAction.Commit)
-      { 
-        DataGrid dgr = sender as DataGrid;        
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        DataGrid dgr = sender as DataGrid;
         switch (e.Column.SortMemberPath)
         {
           case "loN":
@@ -331,12 +331,12 @@ namespace IM.Administrator.Forms
                 combo.Focus();
               }
               e.Cancel = blnIsRepeat;
-              dgr.RowEditEnding += dgr_RowEditEnding;              
+              dgr.RowEditEnding += dgr_RowEditEnding;
               break;
             }
           case "gpQty":
             {
-              TextBox txt = (TextBox)e.EditingElement;              
+              TextBox txt = (TextBox)e.EditingElement;
               if (string.IsNullOrWhiteSpace(txt.Text) || Convert.ToInt32(txt.Text) < 1)
               {
                 if (!Keyboard.IsKeyDown(Key.Tab))
@@ -352,7 +352,7 @@ namespace IM.Administrator.Forms
               }
               break;
             }
-        }        
+        }
       }
       else
       {
@@ -374,7 +374,7 @@ namespace IM.Administrator.Forms
     private void dgr_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       DataGrid dgr = sender as DataGrid;
-      if (e.EditAction==DataGridEditAction.Commit)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
         if (dgr.CurrentColumn != null)
         {
@@ -384,7 +384,7 @@ namespace IM.Administrator.Forms
               {
                 GiftPackageItem giftInPack = (GiftPackageItem)e.Row.Item;
                 if (giftInPack.gpQty < 1)
-                {                                    
+                {
                   e.Cancel = true;
                   UIHelper.ShowMessage("Quantity can no be lower than 1.");
                 }
@@ -400,7 +400,7 @@ namespace IM.Administrator.Forms
                 GiftPackageItem giftPackage = (GiftPackageItem)e.Row.Item;
                 if (giftPackage.GiftItem == null)
                 {
-                  UIHelper.ShowMessage("Please select a Gift");                  
+                  UIHelper.ShowMessage("Please select a Gift");
                   e.Cancel = true;
                 }
                 break;
@@ -449,7 +449,7 @@ namespace IM.Administrator.Forms
     {
       var grid = (DataGrid)sender;
       if (!GridHelper.IsInEditMode(sender as DataGrid))
-      {        
+      {
         switch (e.Column.SortMemberPath)
         {
           case "GiftItem.giN":
@@ -459,7 +459,7 @@ namespace IM.Administrator.Forms
               {
                 e.Cancel = true;
                 UIHelper.ShowMessage("Quantity can not be lower than 1.");
-                grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);                
+                grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
                 grid.BeginningEdit -= dgr_BeginningEdit;
                 grid.BeginEdit();
                 grid.BeginningEdit += dgr_BeginningEdit;
@@ -499,7 +499,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-       
+
     #region btnAssignLocations_Click
     /// <summary>
     /// Asigna Locations
@@ -626,8 +626,8 @@ namespace IM.Administrator.Forms
         collectionPackages.Source = lstGift;
         if (enumMode != EnumMode.Add)
         {
-          lstGiftPack = await BRGiftsPacks.GetGiftsPacks(new GiftPackageItem { gpPack = gift.giID }, true);          
-          _lstOldPacks = lstGiftPack.Select(gp => new GiftPackageItem { gpgi = gp.gpgi, gpQty = gp.gpQty, gpPack=gp.gpPack }).ToList();
+          lstGiftPack = await BRGiftsPacks.GetGiftsPacks(new GiftPackageItem { gpPack = gift.giID }, true);
+          _lstOldPacks = lstGiftPack.Select(gp => new GiftPackageItem { gpgi = gp.gpgi, gpQty = gp.gpQty, gpPack = gp.gpPack }).ToList();
         }
         dgrGiftInPack.ItemsSource = lstGiftPack.ToList();
         dtcGiftPack.Header = "Gifts In Pack (" + lstGiftPack.Count + ")";
@@ -897,7 +897,8 @@ namespace IM.Administrator.Forms
 
         #region Actualizar Campos
         List<TextBox> lstPrices = UIHelper.GetChildParentCollection<TextBox>(grdCost);
-        lstPrices.ForEach(txt => {
+        lstPrices.ForEach(txt =>
+        {
           var bindingExpresion = txt.GetBindingExpression(TextBox.TextProperty);
           bindingExpresion.UpdateTarget();
         });
@@ -917,17 +918,17 @@ namespace IM.Administrator.Forms
     /// </history>
     private bool ChangedGifts(List<GiftPackageItem> lstGiftsPack)
     {
-      var lstGiftChanges = (lstGiftsPack!=null)? lstGiftsPack.Where(gp => !_lstOldPacks.Any(gpp => gpp.gpgi == gp.gpgi && gpp.gpQty == gp.gpQty)).ToList():new List<GiftPackageItem>();
+      var lstGiftChanges = (lstGiftsPack != null) ? lstGiftsPack.Where(gp => !_lstOldPacks.Any(gpp => gpp.gpgi == gp.gpgi && gpp.gpQty == gp.gpQty)).ToList() : new List<GiftPackageItem>();
       bool blnChanges = false;
       if (lstGiftsPack != null)
       {
         blnChanges = !(_lstOldPacks.Count == lstGiftsPack.Count);
-      }      
-      return  blnChanges || lstGiftChanges.Count > 0;
+      }
+      return blnChanges || lstGiftChanges.Count > 0;
     }
     #endregion
 
     #endregion
-    
+
   }
 }

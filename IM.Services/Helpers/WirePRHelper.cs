@@ -1,6 +1,4 @@
-﻿//using IM.Base.Classes;
-//using IM.Base.Helpers;
-using IM.BusinessRules.BR;
+﻿using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Services.WirePRService;
@@ -8,7 +6,6 @@ using PalaceResorts.Common.PalaceTools;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Linq;
 
 namespace IM.Services.Helpers
@@ -20,7 +17,7 @@ namespace IM.Services.Helpers
   /// [jorcanche] 31/03/2016 Created 
   /// </history>
   public class WirePRHelper
-  {  
+  {
     #region Atributos
 
     private static OrigosServiceInterface _service;
@@ -80,17 +77,14 @@ namespace IM.Services.Helpers
 
       //Si ocurrio un error 
       if (response.HasErrors)
+        throw new Exception(response.ExceptionInfo.Message);
+
+      var Data = response.Data;
+      if (Data.Length > 0)
       {
-        //UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptReservationOrigos");
+        report = Data[0];
       }
-      else
-      {
-        var Data = response.Data;
-        if (Data.Length > 0)
-        {
-          report = Data[0];
-        }
-      }
+
       return report;
     }
     #endregion
@@ -112,6 +106,7 @@ namespace IM.Services.Helpers
     /// </history>
     public static long Origos_reservas_ficticias_Guardar(string hotel, int folio, string FirstName, string LastName)
     {
+
       origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest();
       IntegerResponse Response = null;
       long Data = 0;
@@ -129,9 +124,6 @@ namespace IM.Services.Helpers
       //if (Response.HasErrors)
       //  UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "Origos_reservas_ficticias_Guardar");
 
-      // recuperamos el ID que se inserto
-      Data = Response.Numero;
-
       return Data;
     }
     #endregion
@@ -144,13 +136,13 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 01/Junio/2016 Created
     /// </history>
-    public static void SaveRoomChargesOpera(int ReceiptID, string ChargeTo)
+    public static string SaveRoomChargesOpera(int ReceiptID, string ChargeTo)
     {
+
       CargoHabitacionTRNRequest Request = new CargoHabitacionTRNRequest();
       RmmsttrnRowResponse Response = null;
       CargoHabitacionRequest[] aRoomCharges = new CargoHabitacionRequest[] { };
       List<GiftType> aGifts = new List<GiftType>();
-      bool Error = false;
 
       // obtenemos los regalos con cargo a habitacion
       aRoomCharges = GetGiftsRoomCharges(ReceiptID, ref aGifts, ref Request, ChargeTo);
@@ -159,27 +151,21 @@ namespace IM.Services.Helpers
       if (aRoomCharges.Length > 0)
       {
         // invocamos al servicio web para insertar cada regalo que se pretende asignar
-        Response = InsertarCargoHabitacionTRN(Request, ref Error);
+        Response = InsertarCargoHabitacionTRN(Request);
 
         // si se guardo exitosamente en Opera
-        if (!Error)
-        {
-          // actualizamos el consecutivo de cargos a habitacion
-          BRRoomCharges.UpdateRoomChargeConsecutive(Request.Hotel, $"{Request.Folio}");
 
-          // actualizamos los regalos para identificarlos como que se guardaron en Opera
-          foreach (GiftType _Gift in aGifts)
-          {
-            BRGiftsReceiptDetail.UpdateGiftsReceiptDetailRoomChargeOpera(_Gift.Receipt, _Gift.ID, _Gift.TransactionTypeOpera);
-          }
-          //UIHelper.ShowMessage("Gifts were successfully saved in Opera as Room Charges", MessageBoxImage.Information);
-        }
-        else
+        // actualizamos el consecutivo de cargos a habitacion
+        BRRoomCharges.UpdateRoomChargeConsecutive(Request.Hotel, $"{Request.Folio}");
+
+        // actualizamos los regalos para identificarlos como que se guardaron en Opera
+        foreach (GiftType _Gift in aGifts)
         {
-          //UIHelper.ShowMessage("None gift was saved in Opera as Room Charge", MessageBoxImage.Error);
+          BRGiftsReceiptDetail.UpdateGiftsReceiptDetailRoomChargeOpera(_Gift.Receipt, _Gift.ID, _Gift.TransactionTypeOpera);
         }
+        return "Gifts were successfully saved in Opera as Room Charges";
       }
-
+      return "None gift was saved in Opera as Room Charge";
     }
     #endregion
 
@@ -193,8 +179,9 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 01/Junio/2016 Created
     /// </history>
-    public static RmmsttrnRowResponse InsertarCargoHabitacionTRN(CargoHabitacionTRNRequest Request, ref bool Error)
+    public static RmmsttrnRowResponse InsertarCargoHabitacionTRN(CargoHabitacionTRNRequest Request)
     {
+
       RmmsttrnRowResponse Response = null;
       // invocamos al servicio web
       Response = Current.InsertarCargoHabitacionTRN(Request);
@@ -202,12 +189,11 @@ namespace IM.Services.Helpers
       // Si ocurrio un error
       if (Response.HasErrors)
       {
-        //UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "InsertarCargoHabitacionTRN");
-        Error = true;
+        throw new Exception(Response.ExceptionInfo.Message);
       }
-
       return Response;
-    } 
+
+    }
     #endregion
 
     #region GetGiftsRoomCharges
@@ -261,7 +247,7 @@ namespace IM.Services.Helpers
       }
 
       return aRoomCharges;
-    } 
+    }
     #endregion
 
     #region AddRoomCharge
@@ -319,16 +305,16 @@ namespace IM.Services.Helpers
         TransactionTypesResponse response = null;
 
         #region Request              
-        request.TransactionTypes = new TransactionTypes();          
+        request.TransactionTypes = new TransactionTypes();
         request.TransactionTypes.Tc_Group = ConfigHelper.GetString("Opera.TransactionTypesGroups");
         request.TransactionTypes.Tc_Subgroup = ConfigHelper.GetString("Opera.TransactionTypesSubgroups");
         #endregion
         response = Current.GetTransactionTypes(request);
         //si ocurrio un error
-        //if (response.HasErrors)
-        //  UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetTransactionTypes");
+        if (response.HasErrors)
+          throw new Exception(response.ExceptionInfo.Message);
 
-        return response.Data.OrderBy(t=>t.Description).ToList();
+        return response.Data.OrderBy(t => t.Description).ToList();
       });
     }
     #endregion
@@ -353,33 +339,29 @@ namespace IM.Services.Helpers
       {
         QueryRequest request = new QueryRequest();
         ReservationOrigosResponse response = null;
-        try
-        {
-          // configuramos el request
-          request.Query = new Query()
-          {
-            Hotel = hotel,
-            Folio = folio,
-            Room = room,
-            Name = name,
-            DateFrom = dtpStart,
-            DateTo = dtpEnd
-          };
 
-          // Invocamos al servicio web
-          response = Current.GetReservationsOrigos(request);
-
-          return response.Data;
-        }
-        catch
+        // configuramos el request
+        request.Query = new Query()
         {
+          Hotel = hotel,
+          Folio = folio,
+          Room = room,
+          Name = name,
+          DateFrom = dtpStart,
+          DateTo = dtpEnd
+        };
+
+        // Invocamos al servicio web
+        response = Current.GetReservationsOrigos(request);
+        if (response.HasErrors)
           throw new Exception(response.ExceptionInfo.Message);
-        }
+
+        return response.Data;
+
       });
-    } 
+    }
     #endregion
 
     #endregion
   }
 }
-                                  

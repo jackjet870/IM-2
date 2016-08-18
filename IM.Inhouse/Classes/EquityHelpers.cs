@@ -75,8 +75,19 @@ namespace IM.Inhouse.Classes
           {
             club = (EnumClub)clubGuest;
           }
-          //obtenemos los datos del reporte del servicio de Clubes
-          Services.ClubesService.RptEquity rptClubes = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+
+          Services.ClubesService.RptEquity rptClubes = null;
+          try
+          {
+            //obtenemos los datos del reporte del servicio de Clubes
+           rptClubes = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+          }
+          catch (Exception ex)
+          {
+            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "GetRptEquity");
+            return;
+          }
+         
 
           //si no se pudo generenar el reporte en clubes y nos salimos
           if (rptClubes == null)
@@ -90,9 +101,20 @@ namespace IM.Inhouse.Classes
             UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, "Clubes");
             return;
           }
+          Services.CallCenterService.RptEquity rptCallCenter = null;
+          try
+          {
+            //Obtenemos la membrecia en el servicio de Call Center
+            rptCallCenter = CallCenterHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+          }
+          catch (Exception ex)
+          {
+            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "GetRptEquity");
+            return;
+          }
 
-          //Obtenemos la membrecia en el servicio de Call Center
-          Services.CallCenterService.RptEquity rptCallCenter = CallCenterHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+          
+          
 
           // si no se pudo generar reporte en Call Center nos salimos 
           if (rptCallCenter == null)

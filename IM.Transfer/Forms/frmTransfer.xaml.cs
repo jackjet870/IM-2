@@ -592,9 +592,17 @@ namespace IM.Transfer.Forms
       if ((hotels.Count > 0) && (hotels != null) && dateFrom <= dateTo)
       {
         // obtenemos las reservaciones e la zona
-        AddLogGridReservations("Info", $"Getting Reservations from {zoneName} (Check In Date: {DateHelper.DateRange(dateFrom, dateTo)} , Hotels: {leadSourceID} ).");
         timeWatchReservations.Start();
-        reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID, cancelTokenReservations.Token);
+        try
+        {
+          reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID);
+        }
+        catch (Exception ex)
+        {
+          AddLogGridReservations("Error", UIHelper.GetMessageError(ex));
+        }
+
+        
         timeWatchReservations.Stop();
         
 
@@ -2173,7 +2181,16 @@ namespace IM.Transfer.Forms
       //obtenemos el tipo de cambio de la Intranet
       AddValueProgressBarExchangeRate(value: 2);
       AddLogGridExchangeRate("Info", "Getting Exchange Rate from Intranet Service");
-      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD", cancelTokenExchangeRate.Token);
+      TipoCambioTesoreria exchangeRate = null;
+      try
+      {
+        exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD");
+      }
+      catch (Exception ex)
+      {
+        AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
+      }
+      
       if (exchangeRate != null)
       {
         timeWatchExchangeRate.Start();
@@ -2231,7 +2248,15 @@ namespace IM.Transfer.Forms
       AddValueProgressBarExchangeRate(value: 7);
       // obtenemos el tipo de cambio de la Intranet
       AddLogGridExchangeRate("Info", "Getting Currency Change from Intranet Service...");
-      Rmmoney currencyChange = await HotelServiceHelper.ObtenerFactoresConversion("CP", cancelTokenExchangeRate.Token);
+      Rmmoney currencyChange = null;
+      try
+      {
+        currencyChange = await HotelServiceHelper.ObtenerFactoresConversion("CP");
+      }
+      catch (Exception ex)
+      {
+        AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
+      }
 
       // validamos que exista el tipo de cambio para el dia actual
       if (currencyChange != null)

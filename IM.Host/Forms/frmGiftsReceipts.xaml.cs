@@ -1541,7 +1541,15 @@ namespace IM.Host.Forms
         _busyIndicator.IsBusy = true;
         _busyIndicator.BusyContent = "Saving Gifts Receipt";
 
-        await Save();
+        try
+        {
+          await Save();
+        }
+        catch (Exception ex)
+        {
+          UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Saving Gifts Receipt");
+        }
+
         await Load_Record();
 
         _busyIndicator.IsBusy = false;
@@ -1608,14 +1616,16 @@ namespace IM.Host.Forms
       if (ConfigHelper.GetString("UseSisturPromotions").ToUpper().Equals("TRUE"))
       {
         // Guardamos las promociones de Sistur
-        await SisturHelper.SavePromotionsSistur(receiptID, txtChangedBy.Text, App.User.User.peID);
+        string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(receiptID, txtChangedBy.Text, App.User.User.peID);
+        UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save Promotions Sistur");
       }
 
       // si se maneja cargos a habitacion en Opera
       if (ConfigHelper.GetString("UseRoomCharges").ToUpper().Equals("TRUE"))
       {
         // guardamos los cargos a habitacion en Opera
-        WirePRHelper.SaveRoomChargesOpera(receiptID, txtChangedBy.Text);
+        string msj = WirePRHelper.SaveRoomChargesOpera(receiptID, txtChangedBy.Text);
+        UIHelper.ShowMessage(msj, MessageBoxImage.Information, "Gifts Receipt");
       }
 
       // si se maneja promociones de Opera

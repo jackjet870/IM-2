@@ -69,7 +69,7 @@ namespace IM.Host.Forms
       _GuestID = GuestID;
       _ValidateMaxAuthGifts = ValidateMaxAuthGifts;
       useCxCCost = pUseCxCCost;
-      _Exchange = Exchange; 
+      _Exchange = Exchange;
       _isExchangeReceipt = pIsExchangeReceipt;
       _Cancelled = false;
       _FrmGiftsReceipt = FrmGiftsReceipt;
@@ -238,7 +238,15 @@ namespace IM.Host.Forms
     {
       if (Validate())
       {
-        await Save();
+        try
+        {
+          await Save();
+        }
+        catch (Exception ex)
+        {
+          UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Error Save promotions in sistur");
+        }
+
         DialogResult = true;
       }
     }
@@ -273,7 +281,8 @@ namespace IM.Host.Forms
             GiftsExchange.Save(ReceiptExchangeID, grdExchange);
 
             // Guardamos las promociones en Sistur
-            await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
+            string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
+            UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save promotions in sistur");
           }
         }
 
@@ -289,6 +298,7 @@ namespace IM.Host.Forms
           await BRGiftsReceipts.UpdateCharge(_GuestID, Charge, Adjustment);
         }
       }
+
     }
     #endregion
 
@@ -362,7 +372,6 @@ namespace IM.Host.Forms
     /// </history>
     private async Task<List<string>> CancelGifts()
     {
-      bool blnOk = false;
       string strGift = "", GiftsCancellled = "", GiftsNotCancellled = "";
       List<string> aGiftsToCancel = new List<string>();
       List<string> GiftsCancelled = new List<string>();
@@ -387,73 +396,61 @@ namespace IM.Host.Forms
             aGiftsToCancel.Add(strGift);
 
             // Si es el monedero electronico
-            if (_EnumExternalProduct == EnumExternalProduct.expElectronicPurse)
-            {
-
-            }
-            else
+            if (_EnumExternalProduct != EnumExternalProduct.expElectronicPurse)
             {
               if (await SisturHelper.CancelPromotionSistur(strGift, (string)type.GetProperty("gePVPPromotion").GetValue(item, null), cboProgram.SelectedValue.ToString(),
-                                                               cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, _PromotionsSystem, GiftsCancelled) && !blnOk)
+                                          cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, _PromotionsSystem, GiftsCancelled))
               {
                 // Cancelamos el regalo en origos
                 await BRGiftsReceipts.CancelGiftPromotionSistur(_ReceiptID, strGift);
-                blnOk = true;
               }
             }
           }
         }
       }
 
-      // Si no hubo error
-      if (blnOk)
+      // si se cancelaron todos los regalos
+      if (aGiftsToCancel.Count == GiftsCancelled.Count)
       {
-        // si se cancelaron todos los regalos
-        if (aGiftsToCancel.Count == GiftsCancelled.Count)
-        {
-          UIHelper.ShowMessage("Gifts were successfully cancelled", MessageBoxImage.Information, "Intelligence Marketing");
-        }
-        // si no se cancelaron todos los regalos
-        else
-        {
-          // si no se pudo cancelar ningun regalo
-          if (GiftsCancelled.Count <= 0)
-          {
-            UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
-            blnOk = false;
-          }
-          // si se pudo cancelar al menos un regalo
-          else
-          {
-            // recorremos los regalos que se deseaban cancelar
-            foreach (string _Gift in aGiftsToCancel)
-            {
-              // localizamos el regalo
-              Gift _giftResult = frmHost._lstGifts.Where(x => x.giID == _Gift).Single();
-
-              // buscamos el regalo en el arreglo de regalos cancelados
-              int iIndex = GiftsCancelled.IndexOf(_Gift);
-
-              // si el regalo fue cancelado
-              if (iIndex > 0)
-              {
-                GiftsCancellled += _giftResult.giN + "\r\n";
-              }
-              // si el regalo no fue cancelado
-              else
-              {
-                GiftsNotCancellled += _giftResult.giN + "\r\n";
-              }
-            }
-            UIHelper.ShowMessage("The following gifts were cancelled from the account: \r\n" + GiftsCancellled + "\r\n\r\n" + "But the following gifts were not cancelled from the account: \r\n" + GiftsNotCancellled, MessageBoxImage.Exclamation, "Intelligence Marketing");
-          }
-        }
+        UIHelper.ShowMessage("Gifts were successfully cancelled", MessageBoxImage.Information, "Intelligence Marketing");
       }
-      // si hubo error
+      // si no se cancelaron todos los regalos
       else
       {
-        UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
+        // si no se pudo cancelar ningun regalo
+        if (GiftsCancelled.Count <= 0)
+        {
+
+          UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
+
+        }
+        // si se pudo cancelar al menos un regalo
+        else
+        {
+          // recorremos los regalos que se deseaban cancelar
+          foreach (string _Gift in aGiftsToCancel)
+          {
+            // localizamos el regalo
+            Gift _giftResult = frmHost._lstGifts.Where(x => x.giID == _Gift).Single();
+
+            // buscamos el regalo en el arreglo de regalos cancelados
+            int iIndex = GiftsCancelled.IndexOf(_Gift);
+
+            // si el regalo fue cancelado
+            if (iIndex > 0)
+            {
+              GiftsCancellled += _giftResult.giN + "\r\n";
+            }
+            // si el regalo no fue cancelado
+            else
+            {
+              GiftsNotCancellled += _giftResult.giN + "\r\n";
+            }
+          }
+          UIHelper.ShowMessage("The following gifts were cancelled from the account: \r\n" + GiftsCancellled + "\r\n\r\n" + "But the following gifts were not cancelled from the account: \r\n" + GiftsNotCancellled, MessageBoxImage.Exclamation, "Intelligence Marketing");
+        }
       }
+
       return GiftsCancelled;
     }
     #endregion
