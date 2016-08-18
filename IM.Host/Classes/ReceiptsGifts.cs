@@ -303,26 +303,26 @@ namespace IM.Host.Classes
           {
             if (row.gegi != null)
             {
-          //Obtenemos el Gift
+              //Obtenemos el Gift
               var gift = frmHost._lstGifts.Where(x => x.giID == row.gegi).First();
 
-          // validamos la cantidad maxima del regalo
-          Gifts.ValidateMaxQuantityOnEntryQuantity(ref row, gift, isExchange, LowerBound,ref  cancel, "geQty");
+              // validamos la cantidad maxima del regalo
+              Gifts.ValidateMaxQuantityOnEntryQuantity(ref row, gift, isExchange, LowerBound, ref cancel, "geQty");
 
-          //si el regalo esta guardado como promocion de Opera
+              //si el regalo esta guardado como promocion de Opera
               if (row.geAsPromotionOpera == true)
-          {
-            // ejecutamos el procedimiento almacenado
+              {
+                // ejecutamos el procedimiento almacenado
                 GuestPromotion guest = await BRGuestsPromotions.GetGuestPromotion(row.gegr, row.gegi);
-            int quantity = guest.gpQty;
+                int quantity = guest.gpQty;
 
-            // validamos que no se le de una cantidad inferior a la que se le habia dado antes
+                // validamos que no se le de una cantidad inferior a la que se le habia dado antes
                 if (quantity < row.geQty)
-            {
-              UIHelper.ShowMessage("The quantity can not be lower than the previous (" + quantity + ").", MessageBoxImage.Information);
+                {
+                  UIHelper.ShowMessage("The quantity can not be lower than the previous (" + quantity + ").", MessageBoxImage.Information);
                   cancel = true;
-            }
-          }
+                }
+              }
             }
             else
             {
@@ -997,7 +997,7 @@ namespace IM.Host.Classes
           // autorizado. De lo contrario el cargo es por el total de regalos
           case "A":
             // Validamos si tiene tour
-             LoadGuest($"{GuestID}"); 
+            LoadGuest($"{GuestID}");
             blnTour = _guest.guTour;
             if (blnTour)
               curCharge = CalculateChargeBasedOnMaxAuthGifts(curTotalCost, curMaxAuthGifts);
@@ -1037,7 +1037,7 @@ namespace IM.Host.Classes
     private static async void LoadGuest(string guestId)
     {
       _guest = await BRGuests.GetGuest(Convert.ToInt32(guestId));
-    } 
+    }
     #endregion
 
     #endregion
@@ -1207,33 +1207,33 @@ namespace IM.Host.Classes
             // Si se ingreso los campos obligatorios.
             if (current.geQty > 0 && current.gegi != null)
             {
-            // agregamos un regalo
-            await BREntities.OperationEntity(current, EnumMode.Add);
+              // agregamos un regalo
+              await BREntities.OperationEntity(current, EnumMode.Add);
 
-            // Buscamos el regalo
-            Gift gift = frmHost._lstGifts.Where(x => x.giID == current.gegi).Single();
+              // Buscamos el regalo
+              Gift gift = frmHost._lstGifts.Where(x => x.giID == current.gegi).Single();
 
               // Verificamos si tiene regalos del paquete
-            if (gift.giPack)
-            {
-              // Buscamos los regalos del paquete
-              var packs = frmHost._lstGiftsPacks.Where(x => x.gpPack == gift.giID).ToList();
-              var giftsPacks = packs.Select(x => new GiftsReceiptPackageItem
+              if (gift.giPack)
               {
-                gkgr = pReceiptID,
-                gkPack = x.gpPack,
-                gkgi = x.gpgi,
-                gkQty = 1,
-                gkAdults = 1,
-                gkMinors = 0,
-                gkPriceA = frmHost._lstGifts.Where(f => f.giID == x.gpgi).Select(s => s.giPrice1).Single(),
-                gkPriceM = 0
-              }).ToList();
+                // Buscamos los regalos del paquete
+                var packs = frmHost._lstGiftsPacks.Where(x => x.gpPack == gift.giID).ToList();
+                var giftsPacks = packs.Select(x => new GiftsReceiptPackageItem
+                {
+                  gkgr = pReceiptID,
+                  gkPack = x.gpPack,
+                  gkgi = x.gpgi,
+                  gkQty = 1,
+                  gkAdults = 1,
+                  gkMinors = 0,
+                  gkPriceA = frmHost._lstGifts.Where(f => f.giID == x.gpgi).Select(s => s.giPrice1).Single(),
+                  gkPriceM = 0
+                }).ToList();
 
-              // Guardamos los regalos
-              await BREntities.OperationEntities(giftsPacks, EnumMode.Add);
+                // Guardamos los regalos
+                await BREntities.OperationEntities(giftsPacks, EnumMode.Add);
+              }
             }
-          }
           }
           // Si se encuentra el regalo
           else
@@ -1360,7 +1360,7 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 12/Julio/2016 Created
     /// </history>
-    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, GuestStatusValidateData pGuestStatus, 
+    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, GuestStatusValidateData pGuestStatus,
                                 string pTotalCost, string pMaxAuthGifts, DataGrid dtg)
     {
       bool blnvalid = true;

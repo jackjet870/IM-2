@@ -99,51 +99,8 @@ namespace IM.Host.Forms
           }
           break;
       }
-      //switch (_modeOpen)
-      //{
-      //  case EnumMode.Add:
-      //    dtpDate.Value = frmHost.dtpServerDate.Date;
-      //    break;
-      //  case EnumMode.Edit:
-      //    DataContext = _mealTicketCurrency;
-      //    dtpDate.Value = _mealTicketCurrency.meD.Date;
-      //    break;
-      //  case EnumMode.PreviewEdit: 
-      //    HiddenControls();
-      //    dtpDate.Value = frmHost.dtpServerDate.Date;
-      //    break;
-      //  case EnumMode.ReadOnly: 
-      //    HiddenControls();
-      //    DataContext = _mealTicketCurrency;
-      //    dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
-      //    break;
-      //} 
       #endregion
     }
-    #endregion
-
-    #region HiddenControls
-    /// <summary>
-    /// Oculta los controles necesarios segun el caso lo requiera.
-    /// </summary>
-    /// <history>
-    /// [vipacheco] 04/04/2016 Created
-    /// </history>
-    private void HiddenControls()
-    {
-      //lblRateType.Visibility = Visibility.Hidden;
-      //cboRateType.Visibility = Visibility.Hidden;
-      //cboRateType.SelectedItem = null;
-      //lblAgency.Visibility = Visibility.Hidden;
-      //cboAgency.Visibility = Visibility.Hidden;
-      //cboAgency.SelectedItem = null;
-      //lblCollaborator.Visibility = Visibility.Hidden;
-      //cboCollaborator.Visibility = Visibility.Hidden;
-      //cboCollaborator.SelectedItem = null;
-      //lblRepresentative.Visibility = Visibility.Hidden;
-      //txtRepresentative.Visibility = Visibility.Hidden;
-      //txtRepresentative.Text = "";
-    } 
     #endregion
 
     #region cboRateType_SelectionChanged
@@ -276,7 +233,7 @@ namespace IM.Host.Forms
     {
       MealTicketType ticketCurrent = cboType.SelectedItem as MealTicketType;
 
-      if (frmMealTickets._pguId == 0)
+      if (frmMealTickets._guestID == 0)
       {
         RateType rateType = cboRateType.SelectedItem as RateType;
         PersonnelShort personnel = cboCollaborator.SelectedItem as PersonnelShort;
@@ -442,7 +399,7 @@ namespace IM.Host.Forms
         string _meTMinorsString = txtTMinors.Text.TrimStart('$');
 
         // Row New with GuestID == 0
-        if (_modeOpen == EnumMode.Add && frmMealTickets._pguId == 0)
+        if (_modeOpen == EnumMode.Add && frmMealTickets._guestID == 0)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);
@@ -456,14 +413,14 @@ namespace IM.Host.Forms
           BRMealTickets.InsertNewMealTicket(_newMealticket);
         }
         // Edition Row with GuestID == 0
-        else if (_modeOpen == EnumMode.Edit && frmMealTickets._pguId == 0)
+        else if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID == 0)
         {
           int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 
           // Creamos el Meal Ticket con el guestID
           _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
-          _mealTicketCurrency.megu = frmMealTickets._pguId;
-          _mealTicketCurrency.meQty = frmMealTickets._pQty;
+          _mealTicketCurrency.megu = frmMealTickets._guestID;
+          _mealTicketCurrency.meQty = frmMealTickets._Qty;
           _mealTicketCurrency.meType = _mealType.myID;
           _mealTicketCurrency.meAdults = _meAdults;
           _mealTicketCurrency.meMinors = _meMinors;
@@ -487,7 +444,7 @@ namespace IM.Host.Forms
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
         }
         // Row New with GuestID != 0
-        if (_modeOpen == EnumMode.Edit && frmMealTickets._pguId != 0)
+        if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID != 0)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
@@ -501,14 +458,14 @@ namespace IM.Host.Forms
           BRMealTickets.InsertNewMealTicket(_newMealticket);
         }
         // Edition Row with GuestID != 0
-        else if (_modeOpen == EnumMode.ReadOnly && frmMealTickets._pguId != 0)
+        else if (_modeOpen == EnumMode.ReadOnly && frmMealTickets._guestID != 0)
         {
           int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 
           // Creamos el Meal Ticket con el guestID
           _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
-          _mealTicketCurrency.megu = frmMealTickets._pguId;
-          _mealTicketCurrency.meQty = frmMealTickets._pQty;
+          _mealTicketCurrency.megu = frmMealTickets._guestID;
+          _mealTicketCurrency.meQty = frmMealTickets._Qty;
           _mealTicketCurrency.meType = _mealType.myID;
           _mealTicketCurrency.meAdults = _meAdults;
           _mealTicketCurrency.meMinors = _meMinors;
@@ -532,7 +489,7 @@ namespace IM.Host.Forms
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
         }
         //Actualizamos el campo guMealTicket del Guest
-        BRGuests.UpdateFieldguMealTicket(true, frmMealTickets._pguId);
+        BRGuests.UpdateFieldguMealTicket(true, frmMealTickets._guestID);
 
         Close();
       }
@@ -559,8 +516,8 @@ namespace IM.Host.Forms
       return new MealTicket
       {
         meD = dtpDate.Value.Value.Date,
-        megu = frmMealTickets._pguId,
-        meQty = frmMealTickets._pQty,
+        megu = frmMealTickets._guestID,
+        meQty = frmMealTickets._Qty,
         meType = _mealType.myID,
         meAdults = _meAdults,
         meMinors = _meMinors,

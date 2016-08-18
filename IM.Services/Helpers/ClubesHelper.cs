@@ -1,7 +1,7 @@
 ﻿using PalaceResorts.Common.PalaceTools;
 using IM.Services.ClubesService;
 using IM.Model.Enums;
-using IM.Base.Helpers;
+//using IM.Base.Helpers;
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,9 +96,9 @@ namespace IM.Services.Helpers
       response = Current(club).GetRptEquity(request);
 
       //si ocurrio un error
-      if (response.HasErrors)
-        UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
-      else
+      //if (response.HasErrors)
+        //UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
+      //else
         report = response.Data;
 
       return report;
@@ -123,10 +123,10 @@ namespace IM.Services.Helpers
 
           response = Current().ObtenerCatalogoVendedores(request);
         //si ocurrio un error
-        if (response.HasErrors)
-            UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetSalesMen");
-          else
-            vendedor = response.Data;
+        //if (response.HasErrors)
+            //UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetSalesMen");
+          //else
+            //vendedor = response.Data;
 
           return vendedor;
         });
@@ -151,8 +151,8 @@ namespace IM.Services.Helpers
 
         response = Current().GetProductsBySystem(request);
         //si ocurrio un error
-        if (response.HasErrors)
-          UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetProductsBySystem");
+        //if (response.HasErrors)
+        //  UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetProductsBySystem");
 
         return response.Data.OrderBy(pd => pd.DESCRIPCION).ToList();
       });

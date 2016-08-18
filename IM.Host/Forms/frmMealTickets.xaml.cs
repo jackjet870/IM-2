@@ -24,8 +24,8 @@ namespace IM.Host.Forms
   {
 
     #region VARIABLES
-    public static int _pguId = 0;
-    public static int _pQty = 1;
+    public static int _guestID = 0;
+    public static int _Qty = 1;
     public static int _rateTypeChild = -1;
     public bool _reanOnly = true;
     private EnumMode _modeOpen;
@@ -46,7 +46,7 @@ namespace IM.Host.Forms
     /// </history>
     public frmMealTickets(EnumOpenBy openBy, int guestID = 0)
     {
-      _pguId = guestID;
+      _guestID = guestID;
       _openBy = openBy;
 
       bool isclosed = false;
@@ -130,13 +130,10 @@ namespace IM.Host.Forms
           if (_modeOpen == EnumMode.ReadOnly)
           {
             btnAdd.IsEnabled = false;
-
-            //ControlsVisibility(false, Visibility.Visible, false);
           }
           else if (_modeOpen == EnumMode.Edit)
           {
             btnAdd.IsEnabled = true;
-            //ControlsVisibility(true, Visibility.Visible, false);
           }
           break;
 
@@ -145,13 +142,11 @@ namespace IM.Host.Forms
           {
             btnAdd.IsEnabled = false;
             stkSearch.Visibility = Visibility.Collapsed;
-            //ControlsVisibility(false, Visibility.Collapsed, true);
           }
           else if (_modeOpen == EnumMode.Edit)
           {
             btnAdd.IsEnabled = true;
             stkSearch.Visibility = Visibility.Collapsed;
-            //ControlsVisibility(true, Visibility.Collapsed, true);
           }
 
           AdjustsControlsAndColumns();
@@ -206,11 +201,9 @@ namespace IM.Host.Forms
     /// </history>
     private async void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-      int mlTicket = 0;
+      int mlTicket = 0, rateType = 0;
       string folio = "";
-      int rateType = 0;
-      DateTime? fromDate = null;
-      DateTime? toDate = null;
+      DateTime? fromDate = null, toDate = null;
 
       // Verificamos que tipo de RateType tiene para ocultar las columas necesarias
       RateType itemRate = cboRateType.SelectedItem as RateType;
@@ -255,13 +248,13 @@ namespace IM.Host.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail(_openBy) { Owner = this };
-      _frmMealTicketsDetail._modeOpen = EnumMode.Add;//(_modeOpen == EnumMode.Edit) ? EnumMode.Add : EnumMode.Edit;
-      _frmMealTicketsDetail.Title += "ADD";
+      frmMealTicketsDetail mealTicketsDetail = new frmMealTicketsDetail(_openBy) { Owner = this };
+      mealTicketsDetail._modeOpen = EnumMode.Add;
+      mealTicketsDetail.Title += "Add";
 
-      if (_frmMealTicketsDetail.ShowDialog() == true)
+      if (mealTicketsDetail.ShowDialog().Value)
       {
-        if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId); }
+        if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_guestID); }
         else { btnSearch_Click(null, null); }
       }
     }
@@ -279,25 +272,19 @@ namespace IM.Host.Forms
       // Se verifica que tenga permisos de editar
       if (_modeOpen != EnumMode.ReadOnly)
       {
-        MealTicket mealTicket = (MealTicket)grdMealTicket.SelectedItem;
+        MealTicket mealTicket = grdMealTicket.SelectedItem as MealTicket;
 
-        //_pguId = mealTicket.megu;
-        frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail(_openBy) { Owner = this };
-        ObjectHelper.CopyProperties(_frmMealTicketsDetail._mealTicketCurrency, mealTicket);
-        //_frmMealTicketsDetail._modeOpen = (_modeOpen == EnumMode.Edit) ? EnumMode.Edit : EnumMode.ReadOnly;
-        _frmMealTicketsDetail._modeOpen = EnumMode.Edit;
-        _frmMealTicketsDetail.Title += "ID " + mealTicket.meID;
+        frmMealTicketsDetail frmealTkt = new frmMealTicketsDetail(_openBy) { Owner = this };
+        ObjectHelper.CopyProperties(frmealTkt._mealTicketCurrency, mealTicket);
+        frmealTkt._modeOpen = EnumMode.Edit;
+        frmealTkt.Title += "Edit - ID " + mealTicket.meID;
 
-        if (_frmMealTicketsDetail.ShowDialog() == true)
+        if (frmealTkt.ShowDialog().Value)
         {
-          ObjectHelper.CopyProperties(mealTicket, _frmMealTicketsDetail._mealTicketCurrency);
-        }
+          ObjectHelper.CopyProperties(mealTicket, frmealTkt._mealTicketCurrency);
 
-        if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox)
-        {
-          dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+          if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_guestID); }
         }
-
       }
     }
     #endregion
@@ -326,24 +313,6 @@ namespace IM.Host.Forms
       e.Handled = blnHandled;
     }
 
-    #endregion
-
-    #region ControlsVisibility
-    /// <summary>
-    /// Función encargada de ocultar o mostrar parametros segun sea necesario
-    /// </summary>
-    /// <param name="controlAdd"> Control de tipo Boton para Agregar </param>
-    /// <param name="selectionCriteria"> Group Box Selection Criteria </param>
-    /// <param name="controlPrinted"> Control de tipo Boton para Imprimir </param>
-    /// <history>
-    /// [vipacheco] 22/03/2016 Created
-    /// </history>
-    private void ControlsVisibility(bool controlAdd, Visibility selectionCriteria, bool controlPrinted)
-    {
-      btnAdd.IsEnabled = controlAdd;
-      btnPrint.IsEnabled = controlPrinted;
-      stkSearch.Visibility = selectionCriteria;
-    }
     #endregion
 
     #region controlColumnVisibility
@@ -377,10 +346,7 @@ namespace IM.Host.Forms
       _margin.Top = 18;
       grdMealTicket.Margin = _margin;
       // Se ocultan la primeras 4 columnas!
-      //meraColumn.Visibility = Visibility.Hidden;
-      //mepeColumn.Visibility = Visibility.Hidden;
-      //meagColumn.Visibility = Visibility.Hidden;
-      //merepColumn.Visibility = Visibility.Hidden;
+      meraColumn.Visibility = mepeColumn.Visibility = meagColumn.Visibility = merepColumn.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -489,5 +455,6 @@ namespace IM.Host.Forms
       }
     } 
     #endregion
+
   }
 }

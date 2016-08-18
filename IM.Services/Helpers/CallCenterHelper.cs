@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using PalaceResorts.Common.PalaceTools;
 using IM.Services.CallCenterService;
 using IM.Model.Enums;
-using IM.Base.Helpers;
+//using IM.Base.Helpers;
 using System.Windows;
 
 namespace IM.Services.Helpers
@@ -95,8 +95,8 @@ namespace IM.Services.Helpers
       response = Current(club).GetRptEquity(request);
 
       // Si ocurrio un error
-      if (response.HasErrors)
-        UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
+      //if (response.HasErrors)
+        //UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
 
       var data = response.Data;
       if (data.Length > -1)

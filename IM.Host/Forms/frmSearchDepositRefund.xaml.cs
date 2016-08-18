@@ -144,45 +144,45 @@ namespace IM.Host.Forms
     {
       //if (_lstRefund.Count > 0)
       //{
-        int guestID = 0, refundID = 0, folio = 0;
+      int guestID = 0, refundID = 0, folio = 0;
 
       // Si no esta asociado a un Guest
       if (!HasGuest())
+      {
+        // Obtenemos el selected del grid
+        if (grdRefund.SelectedItem == null && grdRefund.Items.Count > 0)
         {
-          // Obtenemos el selected del grid
-          if (grdRefund.SelectedItem == null && grdRefund.Items.Count > 0)
-          {
-            grdRefund.SelectedIndex = 0;
-          }
-          DepositsRefund selected = grdRefund.SelectedItem as DepositsRefund;
-          guestID = selected.guID;
-          refundID = selected.drID;
-          folio = selected.drFolio;
+          grdRefund.SelectedIndex = 0;
         }
+        DepositsRefund selected = grdRefund.SelectedItem as DepositsRefund;
+        guestID = selected.guID;
+        refundID = selected.drID;
+        folio = selected.drFolio;
+      }
       else
-          guestID = _GuestID;
+        guestID = _GuestID;
 
       // Checamos si envio refund
       if (RefundID > 0)
-          refundID = RefundID;
+        refundID = RefundID;
 
-        txtFolio.Text = $"{folio}";
-        txtID.Text = $"{guestID}";
+      txtFolio.Text = $"{folio}";
+      txtID.Text = $"{guestID}";
 
       // Ejecutamos el procedimiento
-      List<DepositToRefund> lstResult = await BRBookingDeposits.GetDepositsToRefund(guestID, refundID);
+      lstDeposits = await BRBookingDeposits.GetDepositsToRefund(guestID, refundID);
 
       // Cargamos la informacion al Grid
       CollectionViewSource _dsDeposits = ((CollectionViewSource)(this.FindResource("dsDeposits")));
-        _dsDeposits.Source = lstDeposits;
+      _dsDeposits.Source = lstDeposits;
 
-        // Verificamos si aun quedan Depositos por guardar
-        var depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList();
+      // Verificamos si aun quedan Depositos por guardar
+      var depositsID = grdDeposits.Items.Cast<DepositToRefund>().ToList();
 
-        if (depositsID.Any(x => !x.bdRefund.Value))
-          Controls_Mode(true, false, false, false, true, false);
-        else
-          Controls_Mode(false, false, depositsID.Any(x => x.bdRefund.Value) ? true : false, false, true, ValidateGuest: true);
+      if (depositsID.Any(x => !x.bdRefund.Value))
+        Controls_Mode(true, false, false, false, true, false);
+      else
+        Controls_Mode(false, false, depositsID.Any(x => x.bdRefund.Value) ? true : false, false, true, ValidateGuest: true);
       //}
     }
     #endregion
@@ -298,7 +298,7 @@ namespace IM.Host.Forms
       if (DateHelper.ValidateValueDate(dtpStart, dtpEnd))
       {
         await Load_Refund();
-    }
+      }
     }
     #endregion
 
@@ -469,9 +469,9 @@ namespace IM.Host.Forms
           var footer = reportText[1].reText;
 
           var crptRefundLetter = new Reports.rptRefundLetter();
-          crptRefundLetter.Database.Tables[0].SetDataSource(ObjectHelper.ObjectToList(objRptRefundletter));
-          crptRefundLetter.Database.Tables[1].SetDataSource(ObjectHelper.ObjectToList(new Classes.objReportText { Header = header, Footer = footer }));
-          crptRefundLetter.Subreports[0].SetDataSource(RptRefundLetter[1].Cast<RptRefundLetter_BookingDeposit>().ToList());
+          crptRefundLetter.Database.Tables["depositRefund"].SetDataSource(ObjectHelper.ObjectToList(objRptRefundletter));
+          crptRefundLetter.Database.Tables["reportText"].SetDataSource(ObjectHelper.ObjectToList(new Classes.objReportText { Header = header, Footer = footer }));
+          crptRefundLetter.Subreports["RptBookingDeposits.rpt"].SetDataSource(TableHelper.GetDataTableFromList(RptRefundLetter[1].Cast<RptRefundLetter_BookingDeposit>().ToList()));
 
           CrystalReportHelper.SetLanguage(crptRefundLetter, objRptRefundletter.gula);
 
@@ -484,7 +484,7 @@ namespace IM.Host.Forms
       }
       else
         UIHelper.ShowMessage("Select a Refund from the list.");
-    } 
+    }
     #endregion
 
     #region Save
@@ -509,7 +509,7 @@ namespace IM.Host.Forms
       await BRRefundTypeFolios.UpdateRefundFolio(cborefundType.SelectedValue.ToString(), folio);
 
       HasRefund = true;
-  }
+    }
     #endregion
 
     #region Window_Closing
@@ -526,7 +526,7 @@ namespace IM.Host.Forms
       {
         UIHelper.ShowMessage("This form is currently in edit mode. Please save or cancel your changes before closing it.", MessageBoxImage.Information, "Intelligence Marketing");
         e.Cancel = true;
-}
+      }
       else
       {
         // Verificamos si aun quedan Depositos por guardar
@@ -579,7 +579,7 @@ namespace IM.Host.Forms
     private void grdDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       _currentCell.Column.IsReadOnly = false;
-    } 
+    }
     #endregion
 
   }

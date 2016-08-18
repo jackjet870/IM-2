@@ -307,7 +307,6 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [ECANUL] 01-04-2016 Created
-    /// [vipacheco] 04/Agosto/2016 Modified -> Se agrego el parametro EnumProgram al frmSearchGuest
     /// </history>
     void AddGuests()
     {

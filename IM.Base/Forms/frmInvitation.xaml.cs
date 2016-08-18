@@ -279,10 +279,18 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 17/08/2016  Created.
+    /// [vipacheco] 18/08/2016 Modified -> Se agregó la invocacion para la busqueda de huespedes por # de reservacion.
     /// </history>
     private void brdSearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      //Desde Aqui invocamos al Search Reservation
+       frmSearchReservation search = new frmSearchReservation(_user) { Owner = this };
+
+      // Verificamos si se selecciono un guest
+      if (search.ShowDialog().Value)
+      {  
+        var rsrv = search.reservationNum;
+      }
+
     }
     #endregion
 
@@ -1405,7 +1413,6 @@ namespace IM.Base.Forms
     #endregion
 
     #endregion
-
 
   }
 }

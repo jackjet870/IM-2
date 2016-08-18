@@ -22837,7 +22837,7 @@
           <Property Type="String" Name="AmountLetter" Nullable="false" />
           <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="CCType" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CardNum" Nullable="false" MaxLength="4" />
+          <Property Type="Int32" Name="CardNum" Nullable="true" />
           <Property Type="String" Name="ExpDate" Nullable="false" MaxLength="5" />
           <Property Type="String" Name="Auth" Nullable="false" MaxLength="7" />
         </ComplexType>

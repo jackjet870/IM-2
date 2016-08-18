@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateLog"
         mc:Ignorable="d"
-        Title="Exchange Rate Log - Exchange Rate ID " Height="350" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+        KeyDown="Window_KeyDown" 
+        Title="Exchange Rate Log - " Height="350" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     <Window.Resources>
         <CollectionViewSource x:Key="dsExchangeRateLog" d:DesignSource="{d:DesignInstance {x:Type Model:ExchangeRateLog}, CreateList=True}"/>
     </Window.Resources>
@@ -48,7 +49,7 @@
             <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem x:Name="StatusBarReg" Content ="No Records" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Width="76"/>
+            <StatusBarItem x:Name="StatusBarReg" Content ="No Records" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Width="Auto" Margin="0,0,10,0"/>
         </StatusBar>
 
 

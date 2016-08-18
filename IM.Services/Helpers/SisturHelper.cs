@@ -1,5 +1,5 @@
-﻿using IM.Base.Classes;
-using IM.Base.Helpers;
+﻿//using IM.Base.Classes;
+//using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
@@ -147,12 +147,12 @@ namespace IM.Services.Helpers
           Response = Current(enumPromotionsSystem).ActualizaEstatusPromoForzadaFolio(Request);
 
           // si ocurrio un error
-          if (Response.hasErrors)
-            UIHelper.ShowMessage(Response.message + "\r\n" + Response.errorInfo, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
+          //if (Response.hasErrors)
+            //UIHelper.ShowMessage(Response.message + "\r\n" + Response.errorInfo, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-          UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
+          //UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
         }
 
         return Response;
@@ -255,7 +255,7 @@ namespace IM.Services.Helpers
         }
         catch (Exception ex)
         {
-          UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ObtenerDetalleEstadoCuenta");
+          //UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ObtenerDetalleEstadoCuenta");
           error = ex.Message;
         }
 
@@ -301,7 +301,7 @@ namespace IM.Services.Helpers
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ObtenerCabeceraEstadoCuenta");
+       // UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "ObtenerCabeceraEstadoCuenta");
         error = ex.Message;
       }
 
@@ -356,14 +356,14 @@ namespace IM.Services.Helpers
           }
 
           // si se pudo guardar todas las promociones
-          if (string.IsNullOrEmpty(GiftsSaved) || GiftsSaved == "")
-            UIHelper.ShowMessage("Gifts were successfully saved in Sistur as Promotion", MessageBoxImage.Information);
-          // si no se pudo guardar ninguna promocion
-          else if (string.IsNullOrEmpty(GiftsNoSaved) || GiftsNoSaved == "")
-            UIHelper.ShowMessage("None gift was saved in Sistur as Promotion", MessageBoxImage.Information);
-          // si no se pudo guardar alguna promocion
-          else
-            UIHelper.ShowMessage("The following gifts were saved in Sistur as Promotion:\r\n" + GiftsSaved + "\r\n\r\n" + "But the following gifts were not saved: \r\n" + GiftsNoSaved, MessageBoxImage.Information);
+          //if (string.IsNullOrEmpty(GiftsSaved) || GiftsSaved == "")
+          //  UIHelper.ShowMessage("Gifts were successfully saved in Sistur as Promotion", MessageBoxImage.Information);
+          //// si no se pudo guardar ninguna promocion
+          //else if (string.IsNullOrEmpty(GiftsNoSaved) || GiftsNoSaved == "")
+          //  UIHelper.ShowMessage("None gift was saved in Sistur as Promotion", MessageBoxImage.Information);
+          //// si no se pudo guardar alguna promocion
+          //else
+          //  UIHelper.ShowMessage("The following gifts were saved in Sistur as Promotion:\r\n" + GiftsSaved + "\r\n\r\n" + "But the following gifts were not saved: \r\n" + GiftsNoSaved, MessageBoxImage.Information);
 
         }
 
@@ -394,7 +394,7 @@ namespace IM.Services.Helpers
         // Si ocurrio un error
         if (Response.hasErrors)
         {
-          UIHelper.ShowMessage(Response.message, MessageBoxImage.Error, "GuardarPromocionForzada");
+          //UIHelper.ShowMessage(Response.message, MessageBoxImage.Error, "GuardarPromocionForzada");
           Error = true;
         }
 
@@ -467,7 +467,12 @@ namespace IM.Services.Helpers
           if (Detail.srUseSistur)
             enumPromotionsSystem = EnumPromotionsSystem.Sistur;
         }
-
+        // si es una invitacion externa u outhouse
+        if ((Detail.lspg.Equals("IH") && Detail.guHReservID == null) || Detail.lspg.Equals("OUT"))
+        {
+          // guardamos la reservacion ficticia
+          WirePRHelper.Origos_reservas_ficticias_Guardar(Hotel, Convert.ToInt32(Folio), Detail.guFirstName1, Detail.guLastName1);
+        }
       }
 
       for (int i = 1; i < Result.Count - 1; i++)
@@ -563,7 +568,7 @@ namespace IM.Services.Helpers
           Promotion = response[0];
           if (Promotion.hasErrors)
           {
-            UIHelper.ShowMessage(Promotion.errorInfo, MessageBoxImage.Error, "getPromotionsType");
+            //UIHelper.ShowMessage(Promotion.errorInfo, MessageBoxImage.Error, "getPromotionsType");
           }
         }
         return response.OrderBy(ptr => ptr.nombre).ToList();
