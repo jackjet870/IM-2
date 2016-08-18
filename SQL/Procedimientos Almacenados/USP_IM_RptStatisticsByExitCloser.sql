@@ -14,9 +14,11 @@ GO
 ** Devuelve los datos para el reporte de estadisticas por ExitCloser (Processor Sales)
 **
 ** [aalcocer] 18/Jul/2016 Created
+** [ecanul]	  18/08/2016 Modified. Apago los errores ANSI en el select final para que deje hacer los reportes
+**				y no marque el error de conversion de tipos de datos 'String or binary data would be truncated.'
 **
 */
-create procedure [dbo].[USP_IM_RptStatisticsByExitCloser]
+CREATE procedure [dbo].[USP_IM_RptStatisticsByExitCloser]
 	@DateFrom datetime,					-- Fecha desde
 	@DateTo datetime,					-- Fecha hasta
 	@SalesRoom varchar(10),				-- Clave de la sala
@@ -514,7 +516,7 @@ DECLARE @StatsByExitCloser table (
 	SalesAmount money,
 	OPP int,
 	UPS money,	
-	SalesAmountRange VARCHAR(10),
+	SalesAmountRange VARCHAR(30),
 	Sales money,
 	SalesTotal money,	
 	Efficiency money,
@@ -522,7 +524,7 @@ DECLARE @StatsByExitCloser table (
 	SaleAverage money
 	);
 --#endregion
-
+--SET ansi_warnings OFF
 	INSERT INTO @StatsByExitCloser
 	SELECT SalemanID, SalemanName, SalemanType, 
 	TeamN, TeamLeaderN, SalesmanStatus,
@@ -575,7 +577,7 @@ BEGIN
 		--si no se encuentra el vendedor
 		AND NOT EXISTS (SELECT * from @StatsByExitCloser  WHERE SalemanID = p.peID)
 END	
-		
+--SET ansi_warnings ON			
 --===================================================================
 --===================  SELECT  ===========================
 --===================================================================
