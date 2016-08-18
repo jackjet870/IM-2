@@ -7,6 +7,8 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.Model.Enums;
 using System.Text;
+using IM.BusinessRules.BR;
+using System.Threading.Tasks;
 
 namespace IM.ProcessorSales.Classes
 {
@@ -258,14 +260,14 @@ namespace IM.ProcessorSales.Classes
       var dateRangeCurrent= dateRangeFileName;
       var shows = Convert.ToInt32(reportHeader[0].Shows);
       var salesAount = Convert.ToDecimal(reportHeader[0].SalesAmount);
-      var eff = salesAount / shows;
+      var eff = MathHelper.SecureDivision(salesAount, shows);
       //Prev
       var dateRangePrev = DateHelper.DateRange(dtStart.AddYears(-1), dtEnd.AddYears(-1));
       var shPrev = Convert.ToInt32(reportHeader[0].ShowsPrevious);
       var SaPrev = Convert.ToDecimal(reportHeader[0].SalesAmountPrevious);
-      var effPrev = SaPrev / shPrev;
+      var effPrev = MathHelper.SecureDivision(SaPrev, shPrev);
       //Info
-      var forecast = goal / DateTime.DaysInMonth(dtEnd.Year, dtEnd.Month) * dtEnd.Day;
+      var forecast = MathHelper.SecureDivision(goal, (DateTime.DaysInMonth(dtEnd.Year, dtEnd.Month) * dtEnd.Day));
       var diference = salesAount - forecast;
       
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraHeader = new List<Tuple<string, dynamic, EnumFormatTypeExcel>>
@@ -621,10 +623,16 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 16/08/2016 Created
     /// </history>
-    public static FileInfo RptEfficiencyWeekly(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptEfficiencyWeekly> lstReport)
+    public static FileInfo RptEfficiencyWeekly(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptEfficiencyWeekly> lstReport, ClsFilter filtros)
     {
-      DataTable dtData = TableHelper.GetDataTableFromList(lstReport);
+      var nReport = lstReport.Where(x => x.EfficiencyType != "Undefined Assistance").ToList();
+      DataTable dtData = TableHelper.GetDataTableFromList(nReport);
       var unAssistance = lstReport.Where(x => x.EfficiencyType == "Undefined Assistance").ToList();
+
+      if(filtros.blnSaveEfficiency)
+      {
+        Task<int> i = BREfficiency.SaveEfficiencies(nReport, filtros.LstSalesRooms.First(), filtros.DtmStart, filtros.DtmEnd);
+      }
 
       StringBuilder str = new StringBuilder();
       if (unAssistance.Any())
@@ -634,8 +642,9 @@ namespace IM.ProcessorSales.Classes
         {
           str.AppendLine($"{x.SalemanID} - {x.SalemanName}");
         });
+        UIHelper.ShowMessage(str.ToString(), System.Windows.MessageBoxImage.Exclamation, "Front To Backs without Assistance");
       }
-      UIHelper.ShowMessage(str.ToString(), System.Windows.MessageBoxImage.Exclamation, "Front To Backs without Assistance");
+      
       return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), fileFullPath: fileFullPath);
     } 
     #endregion

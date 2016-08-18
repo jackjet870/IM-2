@@ -167,6 +167,7 @@ namespace IM.ProcessorSales.Forms
       if (!_shWeeks)
       {
         pnlWeeks.Visibility = Visibility.Collapsed;
+        grdEfficiency.Visibility = Visibility.Collapsed;
         return;
       }
       _lstEfficiencyWeeks = await BREfficiency.GetEfficiencyByWeeks(_salesRoom, dtmStart.Value.Value.Date, dtmEnd.Value.Value.Date);
@@ -297,16 +298,6 @@ namespace IM.ProcessorSales.Forms
     {
       if (grdGoal.Visibility == Visibility.Visible && frmPrs._clsFilter.Goal != 0)
         txtGoal.Text = $"{frmPrs._clsFilter.Goal}";
-
-      cmbDate.SelectedValue =
-        cmbDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmPrs._clsFilter.CboDateSelected)
-          ? frmPrs._clsFilter.CboDateSelected
-          : EnumPredefinedDate.DatesSpecified;
-      if (grdDates.Visibility == Visibility.Visible)
-      {
-        dtmStart.Value = frmPrs._clsFilter.DtmStart;
-        dtmEnd.Value = frmPrs._clsFilter.DtmEnd;
-      }
       chkBasedOnArrival.IsChecked = Convert.ToBoolean(frmPrs.basedOnArrival);
       chkQuinellas.IsChecked = Convert.ToBoolean(frmPrs.quinellas);
 
@@ -318,6 +309,15 @@ namespace IM.ProcessorSales.Forms
         chkExit.IsChecked = frmPrs._clsFilter.LstEnumRole.Contains(EnumRole.ExitCloser);
       }
 
+      cmbDate.SelectedValue =
+        cmbDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmPrs._clsFilter.CboDateSelected)
+          ? frmPrs._clsFilter.CboDateSelected
+          : EnumPredefinedDate.DatesSpecified;
+      if (grdDates.Visibility == Visibility.Visible)
+      {
+        dtmStart.Value = frmPrs._clsFilter.DtmStart;
+        dtmEnd.Value = frmPrs._clsFilter.DtmEnd;
+      }
     }
 
     #endregion
@@ -395,6 +395,7 @@ namespace IM.ProcessorSales.Forms
       if (pnlSalesRoomConcentrate.IsVisible)
         frmPrs._clsFilter.LstGoals = _lstGoals.Where(g => g.IsCheck).ToList();
       #endregion
+
       #region Multidate
       if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible)
         frmPrs._clsFilter.LstMultiDate = _lstMultiDate.Where(x => !string.IsNullOrWhiteSpace(x.SalesRoom)).OrderByDescending(x => x.IsMain).ToList();
@@ -456,9 +457,10 @@ namespace IM.ProcessorSales.Forms
         {
           efDateFrom = dtmStart.Value.Value,
           efDateTo = dtmEnd.Value.Value,
-          Include = true
-          
+          Include = true          
         };
+        frmPrs._clsFilter.blnSaveEfficiency = Convert.ToBoolean(chkSaveEfficiency.IsChecked);
+        frmPrs._clsFilter.lstEfficiency.Clear();
         frmPrs._clsFilter.lstEfficiency.Add(effDates);
         frmPrs._clsFilter.lstEfficiency.AddRange(_lstEfficiencyWeeks.Where(g => g.Include == true).ToList());
       }
@@ -652,6 +654,8 @@ namespace IM.ProcessorSales.Forms
 
       //Toma la configuracion del padre
       LoadUserFilters();
+      EnumPredefinedDate selected = (EnumPredefinedDate)(cmbDate).SelectedValue;
+      grdDtmStart.IsEnabled = grdDtgEnd.IsEnabled = (selected == EnumPredefinedDate.DatesSpecified);
       //configura el check all de los grids
       // ConfigureSelection(onlyOneRegister, allPrograms, allSegments);
 

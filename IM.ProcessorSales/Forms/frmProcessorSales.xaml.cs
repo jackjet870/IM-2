@@ -399,7 +399,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetRptEfficiencyWeekly(clsFilter.lstEfficiency.Select(x => x.efDateFrom), clsFilter.lstEfficiency.Select(x => x.efDateTo),
               clsFilter.LstSalesRooms.First().ToString()));
             if (list.Any())
-              file = Reports.RptEfficiencyWeekly(reporteName, fileFullPath, filters, list.Cast<RptEfficiencyWeekly>().ToList());
+              file = Reports.RptEfficiencyWeekly(reporteName, fileFullPath, filters, list.Cast<RptEfficiencyWeekly>().ToList(), clsFilter);
             break; 
             #endregion
         }

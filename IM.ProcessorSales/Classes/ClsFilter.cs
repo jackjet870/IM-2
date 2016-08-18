@@ -21,6 +21,8 @@ namespace IM.ProcessorSales.Classes
 
     public bool BlnAllSegments { get; set; }
 
+    public bool blnSaveEfficiency { get; set; }
+
     public List<EnumRole> LstEnumRole { get; set; } = new List<EnumRole>();
 
     public bool BlnGroupedByTeams { get; set; }

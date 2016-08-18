@@ -6521,5 +6521,27 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SetAccountingCode", guestIDParameter, activityParameter);
         }
+    
+        public virtual int USP_IM_ADDEfficiencySalesmen(Nullable<int> efficiencyID, string salemanID)
+        {
+            var efficiencyIDParameter = efficiencyID.HasValue ?
+                new ObjectParameter("EfficiencyID", efficiencyID) :
+                new ObjectParameter("EfficiencyID", typeof(int));
+    
+            var salemanIDParameter = salemanID != null ?
+                new ObjectParameter("SalemanID", salemanID) :
+                new ObjectParameter("SalemanID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_IM_ADDEfficiencySalesmen", efficiencyIDParameter, salemanIDParameter);
+        }
+    
+        public virtual int USP_IM_DeleteEfficiencySalesmen(Nullable<int> efficiencyID)
+        {
+            var efficiencyIDParameter = efficiencyID.HasValue ?
+                new ObjectParameter("EfficiencyID", efficiencyID) :
+                new ObjectParameter("EfficiencyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_IM_DeleteEfficiencySalesmen", efficiencyIDParameter);
+        }
     }
 }

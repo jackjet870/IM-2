@@ -5928,6 +5928,13 @@
           <Parameter Name="endD" Type="datetime" Mode="In" />
           <Parameter Name="WH0" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_ADDEfficiencySalesmen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EfficiencyID" Type="int" Mode="In" />
+          <Parameter Name="SalemanID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_DeleteEfficiencySalesmen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EfficiencyID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_IM_GetEfficiencyByWeeks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -18209,6 +18216,13 @@
           <FunctionImport Name="USP_OR_SetAccountingCode">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
             <Parameter Name="Activity" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_ADDEfficiencySalesmen">
+            <Parameter Name="EfficiencyID" Mode="In" Type="Int32" />
+            <Parameter Name="SalemanID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_DeleteEfficiencySalesmen">
+            <Parameter Name="EfficiencyID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -31344,6 +31358,8 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_FolioValidCXC" FunctionName="IMModel.Store.USP_OR_FolioValidCXC" />
           <FunctionImportMapping FunctionImportName="USP_OR_SetAccountingCode" FunctionName="IMModel.Store.USP_OR_SetAccountingCode" />
+          <FunctionImportMapping FunctionImportName="USP_IM_ADDEfficiencySalesmen" FunctionName="IMModel.Store.USP_IM_ADDEfficiencySalesmen" />
+          <FunctionImportMapping FunctionImportName="USP_IM_DeleteEfficiencySalesmen" FunctionName="IMModel.Store.USP_IM_DeleteEfficiencySalesmen" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

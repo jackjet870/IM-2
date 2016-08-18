@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Helpers\ConfigRegistryHelper.cs" />
     <Compile Include="Helpers\CrystalReportHelper.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\PrinterHelper.cs" />
     <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />

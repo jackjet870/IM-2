@@ -53,7 +53,7 @@
             <!--#region Grids-->
             <!--#region SalesRoom-->
             <Grid x:Name="grdSalesRooms" Grid.Row="1" Grid.Column="0" Margin="20,5,5,5">
-                <DataGrid x:Name="dtgSalesRoom">
+                <DataGrid x:Name="dtgSalesRoom" GridLinesVisibility="None" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Value}" IsReadOnly="True" Width="*" Header="REPORTS BY SALES ROOM"
                                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
@@ -65,7 +65,7 @@
 
             <!--#region Salesman-->
             <Grid x:Name="grdSalesmas" Grid.Row="1" Grid.Column="2" Margin="5">
-                <DataGrid Name="dtgSalesman">
+                <DataGrid Name="dtgSalesman" GridLinesVisibility="None" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Value}" IsReadOnly="True" Width="*" Header="REPORTS BY SALES ROOM &amp; SALESMAN"
                                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
