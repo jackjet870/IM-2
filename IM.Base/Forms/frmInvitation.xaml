@@ -12,7 +12,7 @@
         Title="Invitation" 
         d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="SingleBorderWindow"
         ShowInTaskbar="False" Loaded="Window_Loaded">
-    <Window.Resources>        
+    <Window.Resources>
         <ResourceDictionary >
             <Classes:InvitationConverter x:Key="converterInvitation" />
             <CollectionViewSource x:Key="giftList" Source="{Binding Gifts}" />
@@ -776,15 +776,23 @@
                                                     <TextBox Name="txtguCCType" Text="{Binding Guest.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}" 
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"    LostKeyboardFocus="dtgCCCompany_LostKeyboardFocus"            
+                                                                            RowEditEnding="dtgCCCompany_RowEditEnding" >
                                                     <DataGrid.Columns>
-                                                        <DataGridTextColumn Header="Qty" Binding="{Binding gdQuantity}" Width="40"/>
-                                                        <DataGridTextColumn Header="gdcc" Binding="{Binding gdcc}" Visibility="Hidden"/>
-                                                        <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="200"
+                                                        <DataGridTextColumn Header="Qty" x:Name="gdQuantity" Binding="{Binding gdQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Width="40" styClasses:MaxLengthPropertyClass.MaxLength="1"/>
+                                                        <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="250"
                                                                             SelectedValueBinding="{Binding gdcc, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
-                                                                            DisplayMemberPath="ccN"
-                                                                            SelectedValuePath="ccID"
-                                                                            ItemsSource="{Binding Source={StaticResource crediCardTypesList}}" />
+                                                                            DisplayMemberPath="ccN"                                                                                
+                                                                            SelectedValuePath="ccID"                                                                           
+                                                                            ItemsSource="{Binding Source={StaticResource crediCardTypesList}}" >
+                                                            <DataGridComboBoxColumn.EditingElementStyle>
+                                                                <Style TargetType="ComboBox">
+                                                                    <EventSetter Event="SelectionChanged" Handler="SelectionChangedCurrencyCcCompanyColumn"/>
+                                                                    <EventSetter Event="Loaded" Handler="LoadedCurrencyCcCompanyColumn"/>
+                                                                </Style>
+                                                            </DataGridComboBoxColumn.EditingElementStyle>
+                                                        </DataGridComboBoxColumn>
+                                                        <DataGridTextColumn Header="gdgu" Binding="{Binding gdgu, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" Visibility="Hidden"/>
                                                     </DataGrid.Columns>
                                                 </DataGrid>
                                             </StackPanel>

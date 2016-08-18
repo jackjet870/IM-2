@@ -107,6 +107,8 @@ namespace IM.Base.Forms
       GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
       #endregion
 
+      GridHelper.SetUpGrid(dtgCCCompany, new GuestCreditCard());
+
       #endregion
 
     }
@@ -1484,5 +1486,99 @@ namespace IM.Base.Forms
 
     #endregion
 
+
+    #region Eventos del Grid Guest Credit Card 
+
+    #region SelectionChangedCurrencyCcCompanyColumn
+    /// <summary>
+    /// Valida que no se repitan los Credi Card
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history>   
+    private void SelectionChangedCurrencyCcCompanyColumn(object sender, SelectionChangedEventArgs e)
+    {
+      //Obtenemos el Row Seleccionado, y luego validamos si es nulo 
+      var drSelected = dtgCCCompany.ItemContainerGenerator.ContainerFromIndex(dtgCCCompany.SelectedIndex) as DataGridRow;
+      if (drSelected == null) return;
+      //Con el Row obtenido extraemos el contenido de la celda de la clumna de CrediCard y luego validamos si es nulo
+      var getCellContent = dtgCCCompany.Columns[1].GetCellContent(drSelected);
+      if (getCellContent == null) return;
+      //Obtenemos el Parent del contenido de la celda y validamos si es nulo
+      var dcCreditCard = getCellContent.Parent as DataGridCell;
+      var creditCard = dcCreditCard?.Content as ComboBox;
+      if (creditCard?.SelectedValue == null) return;
+      if (catObj.GuestCreditCardList.Count(gcc => gcc.gdcc == creditCard.SelectedValue.ToString()) > 1)
+      {
+        UIHelper.ShowMessage("Credit Cards must not be repeat");
+        creditCard.SelectedIndex = -1;
+      }     
+    }
+    #endregion
+
+    #region LoadedCurrencyCcCompanyColumn
+    /// <summary>
+    /// Valida que primero se ingrese el Quantity
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history>   
+    private void LoadedCurrencyCcCompanyColumn(object sender, RoutedEventArgs e)
+    {
+      var creditCard = (GuestCreditCard)dtgCCCompany.CurrentItem;
+
+      if (creditCard.gdQuantity == 0)
+      {
+        UIHelper.ShowMessage("Enter the quantity first");
+        cmbCurrencyCCCompany.IsReadOnly = true;
+      }
+      else
+      {
+        cmbCurrencyCCCompany.IsReadOnly = false;
+      }
+    }
+    #endregion
+
+    #region dtgCCCompany_RowEditEnding
+    /// <summary>
+    /// Valida que esten completos los Row si al terminar la edicion quedo algo nulo la elimina 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history> 
+    private void dtgCCCompany_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      catObj.GuestCreditCardList.ToList().ForEach(guestCreditCardList =>
+      {
+        guestCreditCardList.gdgu = catObj.Guest.guID;
+        if (string.IsNullOrEmpty(guestCreditCardList.gdcc) || guestCreditCardList.gdQuantity == 0)
+        {
+          catObj.GuestCreditCardList.Remove(guestCreditCardList);
+        }
+      });
+    }
+    #endregion
+
+    #region dtgCCCompany_LostKeyboardFocus
+    /// <summary>
+    /// Valida que no este en nulo la columna de Quantity y habilita la columna de CreditCard
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history> 
+    private void dtgCCCompany_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+      cmbCurrencyCCCompany.IsReadOnly = false;
+
+      var txt = e.OldFocus as TextBox;
+
+      if (txt != null && string.IsNullOrEmpty(txt.Text))
+      {
+        txt.Text = "0";
+      }
+    }
+    #endregion 
+
+    #endregion
   }
 }

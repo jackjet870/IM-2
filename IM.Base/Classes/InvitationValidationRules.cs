@@ -1125,8 +1125,35 @@ namespace IM.Base.Classes
         return lstRepeatItems.Count > 1;
       }
       return false;
-    } 
+    }
     #endregion
     #endregion
+
+    #region DataGrid Guest Credit Card
+
+    #region ValidateGuestCreditCard
+    /// <summary>
+    /// Valida que no halla 
+    /// </summary>
+    /// <param name="gcc">Listado de los Guest Credit Card</param>
+    /// <history>
+    /// [jorcanche]  created 18/08/2016
+    /// </history>
+    public bool ValidateGuestCreditCard(List<GuestCreditCard> gcc)
+    {
+      bool validate = true;
+      gcc.ForEach(guestCreditCardList =>
+      {
+        if (string.IsNullOrEmpty(guestCreditCardList.gdcc) || guestCreditCardList.gdQuantity == 0)
+        {
+          validate = false;
+        }
+      });
+      return validate;
+    }
+    #endregion
+
+    #endregion
+
   }
 }
