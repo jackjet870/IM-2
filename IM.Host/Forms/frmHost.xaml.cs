@@ -1090,6 +1090,8 @@ namespace IM.Host
     {
       // Obtenemos el row seleccionado!
       CheckBox chkSelected = sender as CheckBox;
+      var chekedValue = sender as CheckBox;
+      chekedValue.IsChecked = !chekedValue.IsChecked;
       GuestPremanifestHost guest = (GuestPremanifestHost)grdPremanifestHost.SelectedItem;
 
       //Validamos que sea un invitado valido

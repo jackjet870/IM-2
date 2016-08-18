@@ -36,7 +36,6 @@ namespace IM.Host.Forms
   public partial class frmShow : INotifyPropertyChanged
   {
     #region Atributos
-
     private readonly int _guestCurrent;
     private EnumProgram _enumProgram;
     private DateTime _dateCurrent;
@@ -47,11 +46,15 @@ namespace IM.Host.Forms
     private ObservableCollection<InvitationGift> _invitationGiftList = new ObservableCollection<InvitationGift>();
     private bool _blnLoading;
     private byte _ocWelcomeCopies;
-  	private bool _isCellCommitDeposit = false;        
+    private bool _isCellCommitDeposit = false;
     private ObservableCollection<Guest> _guestAdditionalList = new ObservableCollection<Guest>();
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
     private GuestShow _guestShow;
+
+    //Grids Banderas
+    private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
+    private bool _dontShowAgainGuestStatus = false;
 
     #region Colleciones
 
@@ -551,12 +554,13 @@ namespace IM.Host.Forms
       /*
       // TODO validamos los regalos
       else if (!mInvitsGifts.Validate )
-          blnValid = false;
+          blnValid = false;                  
+               */
 
-      //TODO validamos las tarjetas de credito
-      else if (!mCreditCards.Validate )
-          blnValid = false;
-           */
+      // validamos las tarjetas de credito
+      else if (!InvitationValidationRules.ValidateGuestCreditCard(GuestCreditCardList.ToList()))
+        blnValid = false;
+
       // validamos los estatus de invitados
       else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, false, showMessage: true)))
         blnValid = false;
@@ -578,13 +582,12 @@ namespace IM.Host.Forms
     {
       var blnValid = true;
 
-      //TODO validamos los depositos
-      //if (false/*!mDeposits.Validate()*/)
-      //  blnValid = false;
+      // validamos los depositos
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdDeposits, string.Empty, false, true, true)))
+        blnValid = false;
 
       // validamos el PR 1
-      //else
-      if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPR1, string.Empty, false, showMessage: true)))
+      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPR1, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos el equipo de vendedores si es un Self Gen
@@ -960,7 +963,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [aalcocer] 11/08/2016 Created
     /// </history>
-    private async void Save()
+    private async Task Save()
     {
       // indicamos que ya se le dio el show al invitado
       if (_guestObj.guTimeInT != null && !_guestObj.guShow)
@@ -978,22 +981,24 @@ namespace IM.Host.Forms
       // si es una invitacion outside y esta habilitado el uso de perfiles de Opera
       if (_enumProgram == EnumProgram.Outhouse && ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
       {
-        //TODO guardamos el perfil en Opera
         //WirePRHelper.SaveProfileOpera Me, mData
       }
-      //TODO guardar
-      // guardamos el huesped
-
+      // guardar
       _guestShow.Guest = GuestObj;
       _guestShow.InvitationGiftList = InvitationGiftList.OfType<InvitationGift>().ToList();
       _guestShow.BookingDepositList = BookingDepositList.OfType<BookingDeposit>().ToList();
       _guestShow.GuestCreditCardList = GuestCreditCardList.OfType<GuestCreditCard>().ToList();
       _guestShow.GuestStatusTypes = new List<GuestStatusType>() { (GuestStatusType)cmbGuestStatus.SelectedItem };
       _guestShow.AdditionalGuestList = GuestAdditionalList.OfType<Guest>().ToList();
-      // guardamos el historico del huesped
 
+      if (await BRGuests.SaveGuestShow(_guestShow, App.User, txtChangedBy.Text, Environment.MachineName, ComputerHelper.GetIpMachine()) == 0)
+      {
+        UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+          MessageBoxImage.Error, "Information can not keep");
 
+      }
 
+      await LoadRecord();
     }
 
 
@@ -1083,7 +1088,7 @@ namespace IM.Host.Forms
         if (_guestObj.guSelfGen &&
             UIHelper.ShowMessage($"This case not must be Self Gen.. {Environment.NewLine}Unmark the checkbox ''SELF GEN''?", MessageBoxImage.Question) == MessageBoxResult.Yes)
           chkguSelfGen.IsChecked = false;
-      }      
+      }
     }
 
 
@@ -1223,6 +1228,14 @@ namespace IM.Host.Forms
 
       //configuramos la clase de datos
       UIHelper.SetUpControls(new Guest(), this);
+      // configuramos el grid de depositos
+      GridHelper.SetUpGrid(dtgDeposits, new BookingDeposit());
+      // configuramos el grid de tarjetas de credito
+      GridHelper.SetUpGrid(dtgCCCompany, new GuestCreditCard());
+      // configuramos el grid de invitados adicionales
+      GridHelper.SetUpGrid(dtgGuestAdditional, new Guest());
+      GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
+
 
       //obtenemos la fechas de cierre
       _salesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
@@ -1240,20 +1253,16 @@ namespace IM.Host.Forms
       //  si el sistema esta en modo de solo lectura o el usuario tiene cuando mucho permiso de lectura
       // o si el show es de una fecha cerrada
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE") ||
-        !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) ||
-        !ValidateClosedDate(true))
+          !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
+      {
         imgButtonSave.IsEnabled = imgButtonPrint.IsEnabled = false;
-      if (!App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true)) { }
-      imgButtonSave.IsEnabled =
-        imgButtonPrint.IsEnabled = false;
-      btnSearchGuestAdditional.IsEnabled = btnAddGuestAdditional.IsEnabled = false;
-      dtgGuestAdditional.IsReadOnly = true;
+        btnSearchGuestAdditional.IsEnabled = btnAddGuestAdditional.IsEnabled = false;
+        dtgGuestAdditional.IsReadOnly = true;
+      }
 
       //Si de la BD el campo guNotifiedEmailShowNotInvited es null, lo ponemos en unChecked el control
       if (_guestObj.guNotifiedEmailShowNotInvited == null)
         chkguNotifiedEmailShowNotInvited.IsChecked = false;
-
-      GridHelper.SetUpGrid(dtgDeposits, new BookingDeposit());
     }
 
 
@@ -1441,7 +1450,7 @@ namespace IM.Host.Forms
     private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (!await Validate()) return;
-      Save();
+      await Save();
       SendEmail();
       Close();
     }
@@ -1984,7 +1993,7 @@ namespace IM.Host.Forms
     {
       Control control = e.EditingElement as Control;
       var bi = control.GetBindingExpression(TextBox.TextProperty);
-      
+
       control.Focus();
     }
     #endregion
@@ -2021,7 +2030,7 @@ namespace IM.Host.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgDeposits, e.EditingElement as Control,_guestShow.CloneBookingDepositList.ToList(),_guestShow.Guest.guID))
+        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgDeposits, e.EditingElement as Control, _guestShow.CloneBookingDepositList.ToList(), _guestShow.Guest.guID))
         {
           if (dtgDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
@@ -2060,7 +2069,7 @@ namespace IM.Host.Forms
         {
           int columnIndex = 0;
           _isCellCommitDeposit = false;
-          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid,_guestShow.CloneBookingDepositList.ToList(),_guestShow.Guest.guID, ref columnIndex);
+          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, _guestShow.CloneBookingDepositList.ToList(), _guestShow.Guest.guID, ref columnIndex);
           if (e.Cancel)
           {
             _isCellCommitDeposit = true;//true para que no haga el commit
@@ -2075,5 +2084,267 @@ namespace IM.Host.Forms
     }
     #endregion
     #endregion
+
+    #region Eventos del Grid Guest Credit Card 
+
+    #region SelectionChangedCurrencyCcCompanyColumn
+    /// <summary>
+    /// Valida que no se repitan los Credi Card
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history>   
+    private void SelectionChangedCurrencyCcCompanyColumn(object sender, SelectionChangedEventArgs e)
+    {
+      //Obtenemos el Row Seleccionado, y luego validamos si es nulo 
+      var drSelected = dtgCCCompany.ItemContainerGenerator.ContainerFromIndex(dtgCCCompany.SelectedIndex) as DataGridRow;
+      if (drSelected == null) return;
+      //Con el Row obtenido extraemos el contenido de la celda de la clumna de CrediCard y luego validamos si es nulo
+      var getCellContent = dtgCCCompany.Columns[1].GetCellContent(drSelected);
+      if (getCellContent == null) return;
+      //Obtenemos el Parent del contenido de la celda y validamos si es nulo
+      var dcCreditCard = getCellContent.Parent as DataGridCell;
+      var creditCard = dcCreditCard?.Content as ComboBox;
+      if (creditCard?.SelectedValue == null) return;
+      if (GuestCreditCardList.Count(gcc => gcc.gdcc == creditCard.SelectedValue.ToString()) > 1)
+      {
+        UIHelper.ShowMessage("Credit Cards must not be repeat");
+        creditCard.SelectedIndex = -1;
+      }
+    }
+    #endregion
+
+    #region LoadedCurrencyCcCompanyColumn
+    /// <summary>
+    /// Valida que primero se ingrese el Quantity
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history>   
+    private void LoadedCurrencyCcCompanyColumn(object sender, RoutedEventArgs e)
+    {
+      var creditCard = (GuestCreditCard)dtgCCCompany.CurrentItem;
+
+      if (creditCard.gdQuantity == 0)
+      {
+        UIHelper.ShowMessage("Enter the quantity first");
+        cmbCurrencyCCCompany.IsReadOnly = true;
+      }
+      else
+      {
+        cmbCurrencyCCCompany.IsReadOnly = false;
+      }
+    }
+    #endregion
+
+    #region dtgCCCompany_RowEditEnding
+    /// <summary>
+    /// Valida que esten completos los Row si al terminar la edicion quedo algo nulo la elimina 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history> 
+    private void dtgCCCompany_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      GuestCreditCardList.ToList().ForEach(guestCreditCardList =>
+      {
+        guestCreditCardList.gdgu = GuestObj.guID;
+        if (string.IsNullOrEmpty(guestCreditCardList.gdcc) || guestCreditCardList.gdQuantity == 0)
+        {
+          GuestCreditCardList.Remove(guestCreditCardList);
+        }
+      });
+    }
+    #endregion
+
+    #region dtgCCCompany_LostKeyboardFocus
+    /// <summary>
+    /// Valida que no este en nulo la columna de Quantity y habilita la columna de CreditCard
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/ago/2016
+    /// </history> 
+    private void dtgCCCompany_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+      cmbCurrencyCCCompany.IsReadOnly = false;
+
+      var txt = e.OldFocus as TextBox;
+
+      if (txt != null && string.IsNullOrEmpty(txt.Text))
+      {
+        txt.Text = "0";
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Eventos del GRID Invitation Gift
+
+    #region BeginningEdit
+
+    /// <summary>
+    /// Se ejecuta antes de que entre en modo edicion alguna celda
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private void dtgGifts_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      //Preguntamos si desea agregar GuestStatusType para el calculo de costos
+      if (cmbGuestStatus.SelectedValue == null && !_dontShowAgainGuestStatus)
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("We recommend first select the status of the guest, that would help us calculate costs and prices, do you want to select it now?", MessageBoxImage.Question, "Intelligence Marketing");
+        if (result == MessageBoxResult.Yes)
+        {
+          e.Cancel = true;
+          _hasError = true;
+          _isCellCancel = true;
+          _dontShowAgainGuestStatus = false;
+          cmbGuestStatus.Focus();
+        }
+        else
+        {
+          _dontShowAgainGuestStatus = true;
+        }
+      }
+      else
+      {
+        _hasError = false;
+        _isCellCancel = false;
+      }
+
+      //Si el grid no esta en modo edicion, permite hacer edicion.
+      if (!GridHelper.IsInEditMode(dtgGifts) && !_hasError)
+      {
+        dtgGifts.BeginningEdit -= dtgGifts_BeginningEdit;
+        //Obtenemos el objeto de la fila que se va a editar
+        InvitationGift invitationGift = e.Row.Item as InvitationGift;
+        //Obtenemos la celda que vamos a validar
+        _IGCurrentCell = dtgGifts.CurrentCell;
+        //Hacemos la primera validacion
+        InvitationValidationRules.StartEdit(ref invitationGift, ref _IGCurrentCell, dtgGifts, ref _hasError);
+        //Si tuvo algun error de validacion cancela la edicion de la celda.
+        e.Cancel = _hasError;
+        dtgGifts.BeginningEdit += dtgGifts_BeginningEdit;
+      }
+      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+
+    #endregion BeginningEdit
+
+    #region PreparingCellForEdit
+
+    /// <summary>
+    /// Se ejecuta cuando la celda entra en modo edicion
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      //Sirve para agregar el Focus a las celdas
+      Control ctrl = e.EditingElement as Control;
+      ctrl.Focus();
+    }
+
+    #endregion PreparingCellForEdit
+
+    #region CellEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la celda en edicion pierde el foco
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      //Si paso las validaciones del preparingCellForEdit
+      if (!_hasError)
+      {
+        //Si viene en modo Commit
+        if (e.EditAction == DataGridEditAction.Commit)
+        {
+          //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
+          _isCellCancel = false;
+          //Obtenemos el Objeto
+          InvitationGift invitationGift = e.Row.Item as InvitationGift;
+
+          //Bandera que checata que todo salga bien en la validacion siguiente.
+          bool _hasErrorValidateEdit = false;
+          //Validamos la celda
+          //TODO:Revisar este metodo
+          //InvitationValidationRules.ValidateEdit(ref invitationGift, ref _hasErrorValidateEdit, ref _IGCurrentCell);
+
+          //Si Paso las validaciones
+          if (!_hasErrorValidateEdit)
+          {
+            //Obtenemos el program
+
+            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType);
+          }
+          //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
+          else
+          {
+            e.Cancel = true;
+          }
+        }
+        //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
+        else
+        {
+          _isCellCancel = true;
+        }
+      }
+    }
+
+    #endregion CellEditEnding
+
+    #region RowEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
+    /// </summary>
+    /// <history>
+    /// [erosado] 02/08/2016  Created.
+    /// </history>
+    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+
+    {
+      DataGrid dtg = sender as DataGrid;
+      InvitationGift invitationGift = e.Row.Item as InvitationGift;
+
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        if (_isCellCancel)
+        {
+          dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+          dtg.CancelEdit();
+          dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+        }
+        else
+        {
+          if (invitationGift.igQty == 0 || string.IsNullOrEmpty(invitationGift.iggi))
+          {
+            UIHelper.ShowMessage("Please enter the required fields Qty and Gift to continue", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            e.Cancel = true;
+          }
+        }
+      }
+      else
+      {
+        //CommonCatObject dtContext = DataContext as CommonCatObject;
+        //dtContext.InvitationGiftList.RemoveAt(e.Row.GetIndex());
+      }
+    }
+
+    #endregion RowEditEnding
+
+    #endregion Eventos del GRID Invitation Gift
+
   }
 }

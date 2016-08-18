@@ -249,7 +249,7 @@ namespace IM.Base.Classes
     /// <param name="txtTotalCost">Caja de texto donde se pondrá el resultado del calculo de Costos</param>
     /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
     /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
-    internal static void AfterEdit(DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
+    public static void AfterEdit(DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
       ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, string program = "")
     {
       //bool _passValidate = false;
@@ -1296,7 +1296,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [jorcanche]  created 18/08/2016
     /// </history>
-    public bool ValidateGuestCreditCard(List<GuestCreditCard> gcc)
+    public static bool ValidateGuestCreditCard(List<GuestCreditCard> gcc)
     {
       bool validate = true;
       gcc.ForEach(guestCreditCardList =>
