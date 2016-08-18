@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -18,7 +19,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using PalaceResorts.Common.PalaceTools;
+using PalaceResorts.Common.Notifications.WinForm;
 using Xceed.Wpf.Toolkit;
+using LanguageHelper = IM.Base.Helpers.LanguageHelper;
 
 namespace IM.Host.Forms
 {
@@ -33,7 +37,6 @@ namespace IM.Host.Forms
     #region Atributos
 
     private readonly int _guestCurrent;
-    private bool _blnLoadig;
     private EnumProgram _enumProgram;
     private DateTime _dateCurrent;
     private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
@@ -41,6 +44,8 @@ namespace IM.Host.Forms
     private ObservableCollection<GuestCreditCard> _guestCreditCardList = new ObservableCollection<GuestCreditCard>();
     private ObservableCollection<BookingDeposit> _bookingDepositList = new ObservableCollection<BookingDeposit>();
     private ObservableCollection<InvitationGift> _invitationGiftList = new ObservableCollection<InvitationGift>();
+    private bool _blnLoading;
+    private byte _ocWelcomeCopies;
 
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
@@ -80,6 +85,12 @@ namespace IM.Host.Forms
     {
       get { return _invitationGiftList; }
       set { SetField(ref _invitationGiftList, value); }
+    }
+
+    public byte OcWelcomeCopies
+    {
+      get { return _ocWelcomeCopies; }
+      set { SetField(ref _ocWelcomeCopies, value); }
     }
 
     #endregion Propiedades
@@ -168,7 +179,7 @@ namespace IM.Host.Forms
             brdGuest1.IsEnabled =
               brdGuest2.IsEnabled =
                 brdGuestsAdditional.IsEnabled =
-                  txtCopies.IsEnabled = blnEnable;
+                  txtocWelcomeCopies.IsEnabled = blnEnable;
 
       // Pestaña Gifts, CC, Status & Comments
       brdGifts.IsEnabled =
@@ -233,7 +244,8 @@ namespace IM.Host.Forms
     /// </history>
     private async Task LoadRecord()
     {
-      _blnLoadig = true;
+      busyIndicator.IsBusy = _blnLoading = true;
+
       var lstTasks = new List<Task>();
 
       lstTasks.Add(Task.Run(async () =>
@@ -269,11 +281,11 @@ namespace IM.Host.Forms
         chkguDirect.IsEnabled = true;
 
       // establecemos el numero de copias
-      txtCopies.DataContext = frmHost._configuration.ocWelcomeCopies;
+      OcWelcomeCopies = frmHost._configuration.ocWelcomeCopies;
 
       // habilitamos / deshabilitamos la invitacion externa
       EnableOutsideInvitation();
-      _blnLoadig = false;
+      busyIndicator.IsBusy = _blnLoading = false;
     }
 
     #endregion LoadRecord
@@ -343,15 +355,19 @@ namespace IM.Host.Forms
       _showSalesmanList = new List<ShowSalesman>();
       salesmen.ForEach(s =>
       {
+        PersonnelShort personnelShort = frmHost._lstPersonnel.First(p => p.peID == s);
         var showSalesman = new ShowSalesman
         {
           Guest = _guestObj,
           shgu = _guestCurrent,
           shUp = true,
-          Personnel = BRPersonnel.GetPersonnelById(s)
+          shpe = personnelShort.peID,
+          Personnel = new Personnel
+          {
+            peID = personnelShort.peID,
+            peN = personnelShort.peN
+          }
         };
-        showSalesman.shpe = showSalesman.Personnel.peID;
-
         _showSalesmanList.Add(showSalesman);
       });
     }
@@ -375,7 +391,7 @@ namespace IM.Host.Forms
         blnValid = false;
 
       //validamos los datos generales
-      else if (!ValidateGeneral())
+      else if (!await ValidateGeneral())
       {
         blnValid = false;
         tabGeneral.IsSelected = true;
@@ -409,67 +425,48 @@ namespace IM.Host.Forms
     /// <history>
     /// [aalcocer]  10/08/2016 Created.
     /// </history>
-    private bool ValidateGeneral()
+    private async Task<bool> ValidateGeneral()
     {
-      bool blnValid = true;
+      var blnValid = true;
 
       // validamos la fecha de show
-      if (!ValidateHelper.ValidateRequired(dtpguShowD, "Show Date", condition: _guestObj.guShow))
+      if (_guestObj.guShow && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkShows, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       //validamos que la fecha de show no este en una fecha cerrada
-      else if (Common.ValidateCloseDate(EnumEntities.Shows, ref dtpguShowD, _salesRoom.srShowsCloseD,
-        pCondition: _guestObj.guShow))
+      else if (!Common.ValidateCloseDate(EnumEntities.Shows, ref dtpguShowD, _salesRoom.srShowsCloseD, pCondition: _guestObj.guShow))
       {
         ValidateClosedDate(false);
         blnValid = false;
       }
 
       // validamos que indique si presento invitacion
-      else if (!ValidateHelper.ValidateRequired(chkguPresentedInvitation, "Please specify if the guest presented invitation",
-        condition: _guestObj.guShow && _enumProgram == EnumProgram.Outhouse))
-      {
+      else if (_guestObj.guShow && _enumProgram == EnumProgram.Outhouse
+        && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPresentedInvitation, string.Empty, false, showMessage: true)))
         blnValid = false;
-      }
 
       // validamos el tipo de show
       else if (!ValidateShowType())
         blnValid = false;
 
       //validamos que el folio de la invitacion outhouse exista y que no haya sido usada
-      else if (!InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguOutInvitNum, brdSearchReservation))
-      {
+      else if (_enumProgram == EnumProgram.Outhouse && !InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguOutInvitNum, brdSearchReservation))
         blnValid = false;
-      }
 
       // validamos el folio de la reservacion inhouse
-      else if (!InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguHReservID, brdSearchReservation))
-      {
-        blnValid = false;
-      }
-
-      // validamos la fecha de llegada
-      else if (!ValidateHelper.ValidateRequired(txtguCheckInD, "check-in date"))
+      else if (_enumProgram == EnumProgram.Inhouse && !InvitationValidationRules.ValidateFolio(_guestObj, _enumProgram, txtguHReservID, brdSearchReservation))
         blnValid = false;
 
-      // validamos la fecha de salida
-      else if (!ValidateHelper.ValidateRequired(txtguCheckOutD, "check-out date"))
+      // validamos la fecha de llegada y la fecha de salida
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkCheckInOut, string.Empty, false, showMessage: true)))
         blnValid = false;
 
-      // validamos el estado civil
-      else if (!ValidateHelper.ValidateRequired(cbogums1, "guest 1 marital status"))
+      // validamos el estado civil, apellido y nombre
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest1, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos el estado civil de su acompañante
-      else if (!ValidateHelper.ValidateRequired(cbogums2, "guest 2 marital status"))
-        blnValid = false;
-
-      // validamos el apellido
-      else if (!ValidateHelper.ValidateRequired(txtguLastName1, "guest last name"))
-        blnValid = false;
-
-      // validamos el nombre
-      else if (!ValidateHelper.ValidateRequired(txtguFirstName1, "guest first name"))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest2, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos la locacion
@@ -480,23 +477,22 @@ namespace IM.Host.Forms
       }
 
       // validamos si la invitacion es una quiniela split
-      else if (!ValidateQuinellaSplit())
+      else if (!await ValidateQuinellaSplit())
         blnValid = false;
 
       // validamos el show
       else if (!ValidateShow())
         blnValid = false;
 
+
       /*
-      // validamos los huespedes adicionales
+      // TODO validamos los huespedes adicionales
       else if (!mGuestsAdditional.Validate(basCheckBox.GetValue(chkguQuinella), txtguID.Text)
         blnValid = false;
         */
 
       return blnValid;
     }
-
-   
 
     #endregion ValidateGeneral
 
@@ -512,20 +508,8 @@ namespace IM.Host.Forms
     {
       var blnValid = true;
 
-      // validamos el pais
-      if (!ValidateHelper.ValidateRequired(cmbguco, "country"))
-        blnValid = false;
-
-      // validamos la agencia
-      else if (!ValidateHelper.ValidateRequired(cmbguag, "agency"))
-        blnValid = false;
-
-      // validamos el hotel
-      else if (!ValidateHelper.ValidateRequired(cmbguHotel, "hotel"))
-        blnValid = false;
-
-      // validamos el numero de habitacion
-      else if (!ValidateHelper.ValidateRequired(txtguRoomNum, "room number"))
+      // validamos el pais, la agencia, el hotel y el numero de habitacion
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdOtherInfo, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos el numero de bookings
@@ -537,18 +521,17 @@ namespace IM.Host.Forms
         blnValid = false;
 
       /*
-      // validamos los regalos
+      // TODO validamos los regalos
       else if (!mInvitsGifts.Validate )
           blnValid = false;
 
-      // validamos las tarjetas de credito
+      //TODO validamos las tarjetas de credito
       else if (!mCreditCards.Validate )
           blnValid = false;
-
+           */
       // validamos los estatus de invitados
-      else if (!mGuestsStatus.Validate )
-          blnValid = false;
-          */
+      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, false, showMessage: true)))
+        blnValid = false;
 
       return blnValid;
     }
@@ -567,17 +550,17 @@ namespace IM.Host.Forms
     {
       var blnValid = true;
 
-      // validamos los depositos
+      //TODO validamos los depositos
       //if (false/*!mDeposits.Validate()*/)
       //  blnValid = false;
 
       // validamos el PR 1
-      //else 
-      if (!ValidateHelper.ValidateRequired(cmbguPRInvit1, "PR 1"))
+      //else
+      if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPR1, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos el equipo de vendedores si es un Self Gen
-      else if (!ValidateHelper.ValidateRequired(cmbguts, "team", condition: _guestObj.guSelfGen))
+      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkTeam, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       return blnValid;
@@ -598,7 +581,7 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos que se haya ingresado la locacion
-      if (!ValidateHelper.ValidateRequired(txtguloInvit, "location"))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdPlaces, string.Empty, false, showMessage: true)))
         blnValid = false;
 
       // validamos que la locacion exista
@@ -645,9 +628,9 @@ namespace IM.Host.Forms
       // Invitacion externa
       txtguOutInvitNum.IsEnabled =
         // Fecha de llegada
-        txtguCheckInD.IsEnabled =
+        dtpguCheckInD.IsEnabled =
           // Fecha de salida
-          txtguCheckOutD.IsEnabled = !blnIsInHouse;
+          dtpguCheckOutD.IsEnabled = !blnIsInHouse;
 
       // si es una invitacion inhouse y no tiene un folio de reservacion definido, permitimos definirlo
       brdSearchReservation.IsEnabled = blnIsInHouse && string.IsNullOrWhiteSpace(_guestObj.guHReservID);
@@ -656,8 +639,6 @@ namespace IM.Host.Forms
       if (blnIsInHouse)
         txtguOutInvitNum.Text = string.Empty;
     }
-
-    
 
     #endregion EnableOutsideInvitation
 
@@ -751,37 +732,75 @@ namespace IM.Host.Forms
       return false;
     }
 
-    
-
     #endregion ValidateExist
 
     #region ValidateQuinellaSplit
+
     /// <summary>
     /// Valida si es una invitacion quiniela split
     /// </summary>
     /// <history>
     /// [aalcocer] 11/08/2016 Created
     /// </history>
-    private bool ValidateQuinellaSplit()
+    private async Task<bool> ValidateQuinellaSplit()
     {
       var blnValid = true;
       // si es una quiniela split
       if (_guestObj.guQuinellaSplit)
       {
         // validamos la invitacion principal
-        blnValid = ValidateMainInvitation(true);
+        blnValid = await ValidateMainInvitation(true);
       }
       return blnValid;
     }
 
-    private bool ValidateMainInvitation(bool b)
+    #region ValidateMainInvitation
+
+    /// <summary>
+    /// Valida la invitacion principal
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 13/08/2016 Created
+    /// </history>
+    private async Task<bool> ValidateMainInvitation(bool blnRequired)
     {
-      throw new NotImplementedException();
+      // si tiene invitacion principal
+      if (_guestObj.guMainInvit != null)
+      {
+        // si la invitacion principal no es la invitacion actual
+        if (_guestObj.guMainInvit != _guestObj.guID)
+        {
+          // obtenemos el nombre del huesped
+          txtMainInvitName.Text = await Common.GetGuestName(_guestObj.guMainInvit);
+
+          //si no se encontro el huesped
+          if (!string.IsNullOrWhiteSpace(txtMainInvitName.Text)) return true;
+          txtMainInvitName.Focus();
+        }
+        // si la invitacion principal es la invitacion actual
+        else
+        {
+          UIHelper.ShowMessage("Main Invitation should not be the current.");
+          txtguMainInvit.Focus();
+        }
+      }
+      // si no tiene invitacion principal
+      else
+      {
+        txtMainInvitName.Text = string.Empty;
+        if (!blnRequired) return true;
+        UIHelper.ShowMessage("Main Invitation not specified.");
+        txtguMainInvit.Focus();
+      }
+      return false;
     }
 
-    #endregion
+    #endregion ValidateMainInvitation
+
+    #endregion ValidateQuinellaSplit
 
     #region ValidateShow
+
     /// <summary>
     /// Valida el show
     /// </summary>
@@ -802,7 +821,7 @@ namespace IM.Host.Forms
         _guestObj.guCloser3,
         _guestObj.guExit1,
         _guestObj.guExit2
-      }.Any(string.IsNullOrWhiteSpace))
+      }.Any(s => !string.IsNullOrWhiteSpace(s)))
       {
         // validamos que sea show
         if (!_guestObj.guShow)
@@ -874,10 +893,13 @@ namespace IM.Host.Forms
 
       return blnValid;
     }
-    #endregion
 
+
+
+    #endregion ValidateShow
 
     #region ValidateShowType
+
     /// <summary>
     /// Valida el tipo de show
     /// </summary>
@@ -886,42 +908,224 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateShowType()
     {
-      var blnValid = true;
-
       // si es show
-      if (_guestObj.guShow)
-      {
-        // si no tiene un tipo de show
-        if (!_guestObj.guTour && !_guestObj.guInOut &&  !_guestObj.guWalkOut && !_guestObj.guCTour && !_guestObj.guSaveProgram && !_guestObj.guWithQuinella)
-        {
-          UIHelper.ShowMessage("Please specify the show type");
-          rdbguTour.Focus();
-          blnValid = false;
-        }
-      }
-
-      return blnValid;
+      if (!_guestObj.guShow) return true;
+      // si no tiene un tipo de show
+      if (_guestObj.guTour || _guestObj.guInOut || _guestObj.guWalkOut || _guestObj.guCTour || _guestObj.guSaveProgram || _guestObj.guWithQuinella) return true;
+      UIHelper.ShowMessage("Please specify the show type");
+      rdbguTour.Focus();
+      return false;
     }
-    #endregion
 
+    #endregion ValidateShowType
 
     #region Save
+
     /// <summary>
     /// Guarda los datos del show
     /// </summary>
     /// <history>
     /// [aalcocer] 11/08/2016 Created
     /// </history>
-    private void Save()
+    private async void Save()
     {
-    } 
-    #endregion
+      // indicamos que ya se le dio el show al invitado
+      if (_guestObj.guTimeInT != null && !_guestObj.guShow)
+        chkguShow.IsChecked = true;
 
-    private void SendEmail()
-    {
+      // checamos si los datos de Self Gen estan correctamente llenados
+      await CheckSelfGen();
+
+      // establecemos el deposito
+      SetDeposit();
+
+      // definimos al huesped interval
+      chkguInterval.IsChecked = true;
+
+      // si es una invitacion outside y esta habilitado el uso de perfiles de Opera
+      if (_enumProgram == EnumProgram.Outhouse && ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
+      {
+        //TODO guardamos el perfil en Opera
+        //WirePRHelper.SaveProfileOpera Me, mData
+      }
+      //TODO guardar
+      // guardamos el huesped
+
+      // guardamos el historico del huesped
+
+
+
     }
 
-   
+
+
+    #endregion Save
+
+    #region SetLinerType
+    /// <summary>
+    /// Establece el tipo del liner 1
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 16/08/2016 Created
+    /// </history>
+    private async Task SetLinerType()
+    {
+      var dtmDate = _guestObj.guShowD != null ? Convert.ToDateTime(_guestObj.guShowD) : Convert.ToDateTime(_guestObj.guBookD);
+
+      // establecemos el tipo de liner
+      PostShort postShort = await BRPosts.GetPersonnelPostByDate(_guestObj.guLiner1, dtmDate);
+
+      switch (postShort.Post)
+      {
+        // Liner
+        case "LINER":
+          rdbguLiner1Type.IsChecked = true;
+          break;
+        // Front To Middle
+        case "FTM":
+          rdbguLiner2Type.IsChecked = true;
+          break;
+        // Front To Back
+        case "FTB":
+        case "CLOSER":
+        case "EXIT":
+          rdbguLiner3Type.IsChecked = true;
+          break;
+        // para los que no tienen puesto todavia, se les establece como liners
+        default:
+          rdbguLiner1Type.IsChecked = true;
+          break;
+      }
+    }
+
+    #endregion
+
+    #region SetSelfGen
+    /// <summary>
+    /// Determina si es un Self Gen
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 16/08/2016 Created
+    /// </history>
+    private async Task SetSelfGen(string strSalesmenID)
+    {
+      // si es un Self Gen
+      if (await BRPersonnel.IsFrontToMiddle(strSalesmenID))
+        chkguSelfGen.IsChecked = false;
+      else
+        chkguSelfGen.IsChecked = false;
+
+    }
+
+
+    #endregion
+
+    #region CheckSelfGen
+    /// <summary>
+    /// Checa si es un Self Gen y de ser asi avisa al usuario
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 15/08/2016 Created
+    /// </history>
+    private async Task CheckSelfGen()
+    {
+      // si es un Self Gen
+      if (!string.IsNullOrWhiteSpace(_guestObj.guLiner1) && await BRPersonnel.IsFrontToMiddle(_guestObj.guLiner1))
+      {
+        // si no esta como Self Gen
+        if (!_guestObj.guSelfGen &&
+          UIHelper.ShowMessage($"This case must be Self Gen. {Environment.NewLine}Mark the checkbox ''SELF GEN''?", MessageBoxImage.Question) == MessageBoxResult.Yes)
+          chkguSelfGen.IsChecked = true;
+      }
+      // si no es un Self Gen
+      else
+      {
+        //si no esta como Self Gen
+        if (_guestObj.guSelfGen &&
+            UIHelper.ShowMessage($"This case not must be Self Gen.. {Environment.NewLine}Unmark the checkbox ''SELF GEN''?", MessageBoxImage.Question) == MessageBoxResult.Yes)
+          chkguSelfGen.IsChecked = false;
+      }
+    }
+
+
+
+
+
+    #endregion
+
+    #region SetDeposit
+    /// <summary>
+    /// Establece el deposito
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 15/08/2016 Created
+    /// </history>
+    private void SetDeposit()
+    {
+      // establecemos el primer deposito
+      _guestObj.guDeposit = _bookingDepositList.Where(d => d.bdAmount > 0).Select(d => d.bdAmount).FirstOrDefault();
+
+      // si no tuvo deposito, establece el deposito quemado
+      if (_guestObj.guDeposit == 0)
+        _guestObj.guDeposit = _guestObj.guDepositTwisted;
+    }
+    #endregion
+    
+    #region SendEmail
+    /// <summary>
+    /// Envia un correo de nofiticacion indicando que un huesped se presento sin invitacion
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 17/08/2016 Created
+    /// </history>
+    private async void SendEmail()
+    {
+      //// si se presento sin invitacion y es Outhouse y No ha sido notificado
+      if (!_guestObj.guShow || Convert.ToBoolean(_guestObj.guPresentedInvitation) ||
+          Convert.ToBoolean(_guestObj.guNotifiedEmailShowNotInvited) || _enumProgram != EnumProgram.Outhouse) return;
+
+      // obtenemos la sala de ventas
+      var salesRoom = frmHost._lstSalesRoom.FirstOrDefault(s => s.srID == _guestObj.gusr);
+
+      // obtenemos el Lead Source
+      var leadSource = frmHost._lstLeadSources.FirstOrDefault(s => s.lsID == _guestObj.guls);
+
+      // Obtenermos el PR1
+      var personnel = frmHost._lstPersonnelPR.FirstOrDefault(p => p.peID == _guestObj.guPRInvit1);
+
+      var cont = 1;
+      var x = _bookingDepositList.ToList().Select(c => new
+      {
+        N = cont++,
+        Deposit = $"$ {c.bdAmount:0.##}",
+        Received = $"$ {c.bdReceived:0.##}",
+        Currency = frmHost._lstCurrencies.FirstOrDefault(cu => cu.cuID == c.bdcu)?.cuN,
+        PaymentType = frmHost._lstPaymentsType.FirstOrDefault(pt => pt.ptID == c.bdpt)?.ptN
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(x);
+      // Renombramos las columnas.
+      dtData.Columns.Cast<DataColumn>().Where(t => t.ColumnName == "N").ToList().ForEach(t => t.ColumnName = "#");
+      dtData.Columns.Cast<DataColumn>().Where(t => t.ColumnName == "PaymentType").ToList().ForEach(t => t.ColumnName = "Payment Type");
+
+
+      // enviamos el correo electronico
+      var res = clsEmail.SendMail(_guestObj, salesRoom, leadSource, personnel, dtData);
+
+      //'Si la respuesta es diferente de vacio, mandamos el mensaje de error
+      if (res == string.Empty)
+      {
+        _guestObj.guNotifiedEmailShowNotInvited = true;
+        await BRGuests.SaveGuest(_guestObj);
+      }
+      else
+      {
+        UIHelper.ShowMessage(res, MessageBoxImage.Error);
+      }
+
+
+    } 
+    #endregion
 
     #endregion Metodos
 
@@ -980,6 +1184,9 @@ namespace IM.Host.Forms
       //configuramos la clase de datos
       UIHelper.SetUpControls(new Guest(), this);
 
+      //obtenemos la fechas de cierre
+      _salesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+
       //cargamos los datos del show
       await LoadRecord();
 
@@ -990,21 +1197,16 @@ namespace IM.Host.Forms
       if (!_guestObj.guShow && _guestObj.guBookD.HasValue && !DateHelper.IsInRangeDate(_guestObj.guBookD.Value, _dateCurrent, _dateCurrent.AddDays(1)))
         imgButtonPrint.IsEnabled = false;
 
-      //obtenemos la fechas de cierre
-      _salesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
-
       //  si el sistema esta en modo de solo lectura o el usuario tiene cuando mucho permiso de lectura
       // o si el show es de una fecha cerrada
-      if (!App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
-        imgButtonSave.IsEnabled =
-          imgButtonPrint.IsEnabled = false;
+      if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE") ||
+        !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) ||
+        !ValidateClosedDate(true))
+        imgButtonSave.IsEnabled = imgButtonPrint.IsEnabled = false;
 
       //Si de la BD el campo guNotifiedEmailShowNotInvited es null, lo ponemos en unChecked el control
-      //if(_guestObj.guno)
-
-      //  If chkguNotifiedEmailShowNotInvited.Value = 2 Then
-      //    chkguNotifiedEmailShowNotInvited.Value = vbUnchecked
-      //End If
+      if (_guestObj.guNotifiedEmailShowNotInvited == null)
+        chkguNotifiedEmailShowNotInvited.IsChecked = false;
     }
 
     #endregion Window_Loaded
@@ -1068,11 +1270,11 @@ namespace IM.Host.Forms
     /// </history>
     private void btnOut_Click(object sender, RoutedEventArgs e)
     {
-      if (tpkguTimeOutT.Value == null)
+      if (_guestObj.guTimeOutT == null)
       {
         tpkguTimeOutT.Value = DateTime.Now;
-        if (tpkguTimeInT.Value == null)
-          tpkguTimeInT.Value = tpkguTimeOutT.Value;
+        if (_guestObj.guTimeInT == null)
+          tpkguTimeInT.Value = _guestObj.guTimeOutT;
       }
       chkguShow.IsChecked = true;
     }
@@ -1143,7 +1345,7 @@ namespace IM.Host.Forms
           (rptGuestRegistration.ReportDefinition.ReportObjects["lblReimpresion"] as TextObject).Text = msgReimpresion;
         }
 
-        CrystalReportHelper.ShowReport(rptGuestRegistration, $"Guest Registration {_guestObj.guID.ToString()}", PrintDevice: EnumPrintDevice.pdScreen, numCopies: ((string.IsNullOrWhiteSpace(txtCopies.Text)) ? 1 : Convert.ToInt32(txtCopies.Text)));
+        CrystalReportHelper.ShowReport(rptGuestRegistration, $"Guest Registration {_guestObj.guID.ToString()}", PrintDevice: EnumPrintDevice.pdScreen, numCopies: ((string.IsNullOrWhiteSpace(txtocWelcomeCopies.Text)) ? 1 : Convert.ToInt32(txtocWelcomeCopies.Text)));
 
         //Cerramos el Formulario.
         Close();
@@ -1198,14 +1400,15 @@ namespace IM.Host.Forms
 
     #endregion imgButtonSave_MouseLeftButtonDown
 
-    #region chkguQuinellaSplit_Click
+    #region chkguQuinellaSplit_Checked
+
     /// <summary>
     /// Habilita / deshabilita el editor de invitacion principal
     /// </summary>
     /// <history>
     /// [aalcocer]  11/08/2016 Created.
     /// </history>
-    private void chkguQuinellaSplit_Click(object sender, RoutedEventArgs e)
+    private void chkguQuinellaSplit_Checked(object sender, RoutedEventArgs e)
     {
       if (_guestObj.guQuinellaSplit)
         txtguMainInvit.IsEnabled = true;
@@ -1216,16 +1419,18 @@ namespace IM.Host.Forms
         txtMainInvitName.Text = string.Empty;
       }
     }
-    #endregion
 
-    #region chkguSelfGen_Click
+    #endregion chkguQuinellaSplit_Checked
+
+    #region chkguSelfGen_Checked
+
     /// <summary>
     /// Habilita / deshabilita el combo de equipo
     /// </summary>
     /// <history>
     /// [aalcocer]  11/08/2016 Created.
     /// </history>
-    private void chkguSelfGen_Click(object sender, RoutedEventArgs e)
+    private void chkguSelfGen_Checked(object sender, RoutedEventArgs e)
     {
       if (_guestObj.guSelfGen)
         cmbguts.IsEnabled = true;
@@ -1234,20 +1439,21 @@ namespace IM.Host.Forms
         cmbguts.IsEnabled = false;
         cmbguts.SelectedIndex = -1;
       }
-
     }
-    #endregion
 
-    #region chkguShow_OnClick
+    #endregion chkguSelfGen_Checked
+
+    #region chkguShow_Checked
+
     /// <summary>
     /// Show
     /// </summary>
     /// <history>
     /// [aalcocer]  11/08/2016 Created.
     /// </history>
-    private void chkguShow_OnClick(object sender, RoutedEventArgs e)
+    private void chkguShow_Checked(object sender, RoutedEventArgs e)
     {
-      if (_blnLoadig) return;
+      if (_blnLoading) return;
 
       if (!_guestObj.guShow)
       {
@@ -1265,7 +1471,28 @@ namespace IM.Host.Forms
         if (_guestObj.guTimeInT == null)
           tpkguTimeInT.Value = DateTime.Now;
       }
-    } 
+    }
+
+    #endregion chkguShow_Checked
+
+    #region Window_OnContentRendered
+    private async void Window_OnContentRendered(object sender, EventArgs e)
+    {
+      if (_guestObj == null) return;
+      // checamos si los datos de Self Gen estan correctamente llenados
+      await CheckSelfGen();
+
+      // checamos el equipo de vendedores si es un Self Gen
+      if (_guestObj.guSelfGen && string.IsNullOrWhiteSpace(_guestObj.guts))
+      {
+        UIHelper.ShowMessage("Specify the Team.");
+        cmbguts.Focus();
+      }
+
+      // establecemos el nombre de la invitacion principal
+      await ValidateMainInvitation(false);
+    }
+
     #endregion
 
     #region Window_IsKeyboarFocusedChanged
@@ -1318,26 +1545,111 @@ namespace IM.Host.Forms
     #endregion Window_KeyDown
 
     #region Control_KeyDown
+
     /// <summary>
     /// Si es un ComboBox funcionara nada mas cuando presionen la tecla eliminar para quitar el registro que esta actualmente seleccionado y dejarlo vacio
     /// </summary>
     /// <history>
-    /// [aalcocer] 11/08/2016  Created. 
+    /// [aalcocer] 11/08/2016  Created.
     /// </history>
     private void Control_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Delete) return;
 
-      if (sender is ComboBox)
+      switch (sender.GetType().Name)
       {
-        ((ComboBox)sender).SelectedIndex = -1;
+        case nameof(ComboBox):
+          ((ComboBox)sender).SelectedIndex = -1;
+          break;
+        case nameof(DateTimePicker):
+          ((DateTimePicker)sender).Value = null;
+          ((DateTimePicker)sender).IsOpen = false;
+          break;
       }
-      else if (sender is DateTimePicker)
+    }
+
+    #endregion Control_KeyDown
+
+    #region cmb_SelectionChanged
+    /// <summary>
+    /// Valida cuando se cambia de Item los Combox de los vendedores
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 17/08/2016 Created.
+    /// </history>
+    private async void cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var cmb = sender as ComboBox;
+      if (cmb?.SelectedValue == null || _blnLoading) return;
+
+      if (sender.Equals(cmbguLiner1) && !string.IsNullOrWhiteSpace(_guestObj.guLiner1))
       {
-        ((DateTimePicker)sender).Value = null;
+        // establecemos el tipo del liner 1
+        await SetLinerType();
+
+        // determinamos si es un Self Gen
+        await SetSelfGen(_guestObj.guLiner1);
       }
-    
-    } 
+
+      var personnelValidando = cmb.Name.Substring(5).ToUpper();
+      var lstcmb = UIHelper.GetChildParentCollection<ComboBox>(brdSalesmen);
+      if (cmb.SelectedIndex == -1) return;
+      foreach (var item in lstcmb)
+      {
+        var personnelFound = item.Name.Substring(5).ToUpper();
+        //Validacion que sirve para saber si no es mismo ComboBox que se esta validando, PR1 == PR1 
+        if (personnelFound == personnelValidando) continue;
+        //Validacion que sirve para siempre se compare los del mismo rol PR == PR
+        if (personnelValidando.Trim('1', '2', '3') != personnelFound.Trim('1', '2', '3')) continue;
+        //Ahora como ya se sabe que no es mismo ComboBox y es el mismo rol entonces ya podemos hacer 
+        //la validacion de ser el mismo texto no permitimos que se seleccione
+        var rol = personnelValidando.Trim('1', '2', '3');
+        if (cmb.SelectedValue.ToString() != item.Text) continue;
+        UIHelper.ShowMessage(
+          $"Please select another person. \nThe person with the Id: {item.Text} already selected with the role of {rol}");
+        cmb.SelectedIndex = -1;
+        break;
+      }
+    }
+    #endregion
+
+    #region txtocWelcomeCopies_PreviewTextInput
+    /// <summary>
+    /// Valida que solo se pueda ingresar numeros y que sean del 1 al 4 en  TxtocWelcomeCopies 
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 17/08/2016 Created
+    /// </history>
+    private void txtocWelcomeCopies_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
+      if (e.Handled) return;
+      if (Convert.ToInt16(e.Text) < 1)
+      {
+        UIHelper.ShowMessage("The copies number can not be smaller than 1.");
+        e.Handled = true;
+      }
+      else if (Convert.ToInt16(e.Text) > 4)
+      {
+        UIHelper.ShowMessage("The copies number can not be greater than 4.");
+        e.Handled = true;
+      }
+    }
+    #endregion
+
+    #region TxtocWelcomeCopies_OnLostFocus
+    /// <summary>
+    /// Pone por Default el valor 1 en  TxtocWelcomeCopies al perder el foco y no tiene valor
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 17/08/2016 Created
+    /// </history>
+    private void TxtocWelcomeCopies_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+      var textBox = (TextBox)sender;
+      if (textBox?.Text == string.Empty)
+        textBox.Text = "1";
+    }
     #endregion
 
     #endregion Eventos del formulario
@@ -1359,5 +1671,8 @@ namespace IM.Host.Forms
     }
 
     #endregion Implementacion INotifyPropertyChange
+
+
+
   }
 }

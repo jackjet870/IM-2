@@ -81,6 +81,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\PalaceResorts\Common2.0\PalaceTools\PalaceResorts2.Common.PalaceTools.dll</HintPath>
     </Reference>
+    <Reference Include="PalaceResorts4.Common.Notifications.WinForm, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d399b2cc59d85ff0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Notifications.WinForm\PalaceResorts4.Common.Notifications.WinForm.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -131,6 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\clsEmail.cs" />
     <Compile Include="Classes\clsFormatReport.cs" />
     <Compile Include="Classes\Common.cs" />
     <Compile Include="Classes\GiftsCancel.cs" />
@@ -620,6 +625,10 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\emailShowTemplate.html" />
+    <Content Include="Template\html.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

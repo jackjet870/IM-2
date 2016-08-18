@@ -22,5 +22,35 @@ namespace IM.Host.Properties {
                 return defaultInstance;
             }
         }
+        
+        /// <summary>
+        /// Asunto
+        /// </summary>
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("Asunto")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Show sin invitacion")]
+        public string Subject {
+            get {
+                return ((string)(this["Subject"]));
+            }
+        }
+        
+        /// <summary>
+        /// Destinatarios
+        /// </summary>
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("Destinatarios")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>aalcocer@palaceresorts.com</string>
+  <string>aalcocer@palaceresorts.com</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ToEmail {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ToEmail"]));
+            }
+        }
     }
 }

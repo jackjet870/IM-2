@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Classes
@@ -64,11 +65,14 @@ namespace IM.Host.Classes
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 08/Julio/2016 Created
+    /// [aalcocer] 12/08/2016 Modified. Se valida si el parametro pDate tiene valor
     /// </history>
     public static bool ValidateCloseDate(EnumEntities pEntity, ref DateTimePicker pDate, DateTime pDateClose, string pDescription = "", bool pCondition = true)
     {
       int diffDay = 0;
       string items = "", description = "";
+
+      if (pDate.Value == null) return true;
 
       // Dias transcurridos
       diffDay = (pDateClose - pDate.Value.Value.Date).Days;
@@ -202,6 +206,33 @@ namespace IM.Host.Classes
         }
       }
       return FullName;
+    }
+    #endregion
+
+    #region GetGuestName
+    /// <summary>
+    /// Obtiene el nombre de un huesped
+    /// </summary>
+    /// <param name="guestId">Id del Guest</param>
+    /// <returns>string</returns>
+    /// <history>
+    /// [aalcocer] 13/08/2016 Created
+    /// </history>
+    public static async Task<string> GetGuestName(int? guestId)
+    {
+      var strName = string.Empty;
+
+      // validamos que se haya enviado una clave de huesped
+      if (guestId == null || guestId == 0)
+        return strName;
+      var guest = await BRGuests.GetGuest((int)guestId);
+      // si se encontro el huesped
+      if (guest != null)
+        strName = GetFullName(guest.guLastName1, guest.guFirstName1);
+      // si no se encontro el huesped
+      else
+        UIHelper.ShowMessage("Guest not found");
+      return strName;
     }
     #endregion
 
