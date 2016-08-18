@@ -1,0 +1,142 @@
+﻿<Window x:Class="IM.Base.Forms.frmSearchReservation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        mc:Ignorable="d"
+        Title="Search Guest Reservation" Width="976.638" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" >
+  <Window.Resources>
+    <ResourceDictionary>
+
+      <Style TargetType="StackPanel" x:Key="stk-style">
+        <Setter Property="Margin" Value="5,0,0,0"/>
+      </Style>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styBorder.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+
+  <wpftk:BusyIndicator x:Name="_busyIndicator" >
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="30"/>
+      </Grid.RowDefinitions>
+      <!--#region Search Criteria   -->
+      <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
+        <Border x:Name="grbCriteria" Grid.Row="0" Margin="10" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="txbTitle" Text="Search Criteria" TextAlignment="Center" Margin="13,5,10,5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+              <StackPanel x:Name="stkLeadSource" Style="{StaticResource ResourceKey=stk-style}">
+                <TextBlock x:Name="txbLeadSourse" Text="Lead Sourse" TextAlignment="Center" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <ComboBox x:Name="cboLeadSourse" DisplayMemberPath="lsN" SelectedValuePath="lsID" Width="160"/>
+              </StackPanel>
+              <StackPanel x:Name="stkFolio" Style="{StaticResource ResourceKey=stk-style}">
+                <TextBlock x:Name="txbFolio" Text="Folio" TextAlignment="Center" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBox x:Name="txtFolio" Width="80"/>
+              </StackPanel>
+              <StackPanel x:Name="stkRoom" Style="{StaticResource ResourceKey=stk-style}">
+                <TextBlock x:Name="txbRoom" Text="Room" TextAlignment="Center" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White" />
+                <TextBox x:Name="txtRoomNum" Width="80"/>
+              </StackPanel>
+              <StackPanel x:Name="stkName" Style="{StaticResource ResourceKey=stk-style}">
+                <TextBlock x:Name="txbName"  Text="Name" TextAlignment="Center" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBox x:Name="txtName"  VerticalAlignment="Center" Width="170"/>
+              </StackPanel>
+              <StackPanel x:Name="stkDateFrom" Style="{StaticResource ResourceKey=stk-style}" Width="Auto">
+                <TextBlock x:Name="txbDateFrom" Text="Arrival Date From"  TextAlignment="Center" Margin="0,5,0,2" Background="#147F79" FontSize="12" Foreground="White" Width="160"/>
+                <wpftk:DateTimePicker x:Name="dtpStart" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged" TextAlignment="Center" Margin="5,0,3,0" Width="160"/>
+              </StackPanel>
+              <StackPanel x:Name="stkDateTo" Style="{StaticResource ResourceKey=stk-style}" Width="Auto">
+                <TextBlock x:Name="txbDateTo" Text="Arrival Date To" TextAlignment="Center" Margin="0,5,0,2" Width="160" Background="#147F79" FontSize="12" Foreground="White"/>
+                <wpftk:DateTimePicker x:Name="dtpEnd" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged" TextAlignment="Center" Margin="5,0,3,0" Width="160"/>
+              </StackPanel>
+              <StackPanel VerticalAlignment="Center" Style="{StaticResource stk-style}">
+                <Border x:Name="btnSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSearch_MouseLeftButtonDown" Background="White">
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+                    <Viewbox Stretch="Uniform" Width="20">
+                      <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
+                    </Viewbox>
+                    <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+      <!--#endregion-->
+
+      <!--#region gridGuests-->
+
+      <DataGrid Grid.Row="1" x:Name="grdGuests" FontSize="13"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" Margin="10,0,10,0" IsReadOnly="True" SelectionChanged="grdGuests_SelectionChanged" SelectionMode="Extended" SelectionUnit="FullRow" ItemsSource="{Binding}">
+        <DataGrid.Columns>
+          <DataGridTextColumn x:Name="hotelColumn" Width="auto" Header="Hotel" Binding="{Binding Hotel}"/>
+          <DataGridTextColumn x:Name="folioColumn" Width="Auto" Header="Folio" Binding="{Binding Folio}"/>
+          <DataGridTextColumn x:Name="statusColumn" Width="auto" Header="Status" Binding="{Binding Status}"/>
+          <DataGridTextColumn x:Name="lastNameColumn" Width="Auto" Header="Last Name" Binding="{Binding lastName}"/>
+          <DataGridTextColumn x:Name="firstNameColumn" Width="Auto" Header="First Name" Binding="{Binding firstName}"/>
+          <DataGridTextColumn x:Name="arrivalColumn" Width="Auto" Header="Arrival" Binding="{Binding Arrival}"/>
+          <DataGridTextColumn x:Name="DepartureColumn" Width="Auto" Header="Departure" Binding="{Binding Departure}"/>
+          <DataGridTextColumn x:Name="roomColumn" Width="Auto" Header="Room" Binding="{Binding Room}"/>
+          <DataGridTextColumn x:Name="roomTypeColumn" Width="Auto" Header="Room Type" Binding="{Binding RoomType}"/>
+          <DataGridTextColumn x:Name="adultsColumn" Width="Auto" Header="Adults" Binding="{Binding Adults}"/>
+          <DataGridTextColumn x:Name="childrenColumn" Width="Auto" Header="Children" Binding="{Binding Children}"/>
+          <DataGridTextColumn x:Name="countryColumn" Width="Auto" Header="Country" Binding="{Binding Country}"/>
+          <DataGridTextColumn x:Name="agencyColumn" Width="Auto" Header="Agency" Binding="{Binding Agency}"/>
+          <DataGridTextColumn x:Name="contractColumn" Width="Auto" Header="Contract" Binding="{Binding Contract}"/>
+          <DataGridTextColumn x:Name="companyColumn" Width="Auto" Header="Co." Binding="{Binding Company}"/>
+          <DataGridTextColumn x:Name="membershipColumn" Width="Auto" Header="Membership" Binding="{Binding Membership}"/>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <!--#endregion-->
+
+      <!--#region Buttons-->
+      <Grid Grid.Row="2" x:Name="grdButtons">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="7*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Border x:Name="btnOK" Grid.Column="1"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnOk_MouseLeftButtonDown" Background="White" HorizontalAlignment="Right">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="58">
+            <Viewbox Stretch="Uniform" Width="20">
+              <Image Source="pack://application:,,,/IM.Styles;component/Images/BOk.png" />
+            </Viewbox>
+            <TextBlock Text="Ok" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Black" Margin="5,0,0,0"/>
+          </StackPanel>
+        </Border>
+        <Border x:Name="btnCancel" Grid.Column="2"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnCancel_MouseLeftButtonDown" Background="White" HorizontalAlignment="Right" Margin="10,5,10,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="58">
+            <Viewbox Stretch="Uniform" Width="20">
+              <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png" />
+            </Viewbox>
+            <TextBlock Text="Cancel" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Black" Margin="5,0,0,0"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+      <!--#endregion-->
+
+      <!--#region Status Bar-->
+      <Grid Grid.Row="3">
+        <StatusBar x:Name="stbStatusBar">
+          <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+          <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
+          <StatusBarItem x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
+          <Separator />
+          <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="Auto" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+        </StatusBar>
+      </Grid>
+      <!--#endregion Status Bar-->
+    </Grid>
+  </wpftk:BusyIndicator>
+</Window>
