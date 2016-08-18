@@ -387,40 +387,84 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 20/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse)
+    public static FileInfo ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
-      var lstRptProductionByAgencySalesRoom = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse;
-      var lstRptProductionByAgencySalesRoomOuthouseAux = lstRptProductionByAgencySalesRoom.Select(c => new
+      DataTable dtData = null;
+      var lstProductionByAgency = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse;
+      if (!Convert.ToBoolean(salesByMemberShipType))
       {
-        c.SalesRoomN,
-        c.Agency,
-        c.AgencyN,
-        c.Books,
-        c.InOuts,
-        c.GrossBooks,
-        c.Shows,
-        c.WalkOuts,
-        c.Tours,
-        c.CourtesyTours,
-        c.SaveTours,
-        c.TotalTours,
-        c.UPS,
-        c.Sales_PROC,
-        c.SalesAmount_PROC,
-        c.Sales_OOP,
-        c.SalesAmount_OOP,
-        c.Sales_CANCEL,
-        c.SalesAmount_CANCEL,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.ShowsFactor,
-        c.CancelFactor,
-        c.Efficiency,
-        c.ClosingFactor,
-        c.AverageSale
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgencySalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomOuthouse(), showRowGrandTotal: true, fileFullPath: fileFullPath);
+        var lstProductionByAgencyAux = lstProductionByAgency.Select(c => new
+        {
+          c.SalesRoomN,
+          c.Agency,
+          c.AgencyN,
+          c.Books,
+          c.InOuts,
+          c.GrossBooks,
+          c.Shows,
+          c.WalkOuts,
+          c.Tours,
+          c.CourtesyTours,
+          c.SaveTours,
+          c.TotalTours,
+          c.UPS,
+          c.Sales_PROC,
+          c.SalesAmount_PROC,
+          c.Sales_OOP,
+          c.SalesAmount_OOP,
+          c.Sales_CANCEL,
+          c.SalesAmount_CANCEL,
+          c.Sales_TOTAL,
+          c.SalesAmount_TOTAL,
+          c.ShowsFactor,
+          c.CancelFactor,
+          c.Efficiency,
+          c.ClosingFactor,
+          c.AverageSale
+        }).ToList();
+        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencyAux, replaceStringNullOrWhiteSpace: true);
+        return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true, fileFullPath: fileFullPath);
+      }
+      else
+      {
+        var lstProductionByAgencySalesMembershipType = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse_SalesByMembershipType;
+        var lstMembershipType = lstRptProductionByAgencySalesRoomOuthouse.MembershipTypes;
+
+        var lstProductionByAgencySalesMembershipTypeAux = (from prodbyAgency in lstProductionByAgency
+                                                           join prodByAgencyMemshipType in lstProductionByAgencySalesMembershipType on prodbyAgency.Agency equals prodByAgencyMemshipType.Agency
+                                                           join mt in lstMembershipType on prodByAgencyMemshipType.MembershipType equals mt.mtID
+                                                           select new
+                                                           {
+                                                             prodbyAgency.SalesRoomN,
+                                                             prodbyAgency.Agency,
+                                                             prodbyAgency.AgencyN,
+                                                             prodbyAgency.Books,
+                                                             prodbyAgency.InOuts,
+                                                             prodbyAgency.GrossBooks,
+                                                             prodbyAgency.Shows,
+                                                             prodbyAgency.WalkOuts,
+                                                             prodbyAgency.Tours,
+                                                             prodbyAgency.CourtesyTours,
+                                                             prodbyAgency.SaveTours,
+                                                             prodbyAgency.TotalTours,
+                                                             prodbyAgency.UPS,
+                                                             mt.mtN,
+                                                             prodByAgencyMemshipType.Sales,
+                                                             prodByAgencyMemshipType.SalesAmount,
+                                                             SalesCancel = prodbyAgency.Sales_CANCEL,
+                                                             SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
+                                                             SalesTotal = prodbyAgency.Sales_TOTAL,
+                                                             SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
+                                                             prodbyAgency.ShowsFactor,
+                                                             prodbyAgency.CancelFactor,
+                                                             prodbyAgency.Efficiency,
+                                                             prodbyAgency.ClosingFactor,
+                                                             prodbyAgency.AverageSale
+                                                           }).ToList();
+
+        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
+        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+      }
     }
 
     #endregion ExportRptProductionByAgencySalesRoomOuthouse
