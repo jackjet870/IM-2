@@ -15,20 +15,23 @@ using System;
 using System.Windows.Data;
 using IM.Styles.Classes;
 using System.Threading.Tasks;
+using IM.Services.WirePRService;
+using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmInvitation.xaml
   /// </summary>
-  public partial class frmInvitation : Window
+  public partial class frmInvitation : Window, INotifyPropertyChanged
   {
     #region Propiedades, Atributos
     //Parametros del constructor
     public readonly EnumModule _module;
     public readonly EnumInvitationType _invitationType;
     public UserData _user;
-    private readonly int _guestId;
+    private int _guestId;
     public readonly bool _allowReschedule;
     public bool _isEditing = false;
     //Grids Banderas
@@ -38,8 +41,35 @@ namespace IM.Base.Forms
     private bool _dontShowAgainGuestStatus = false;
     public bool _isRebook = false;
     public GuestInvitationRules catObj { get; set; }
-
     private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda
+
+  
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnPropertyChanged(string propertyName)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    #region SetField
+    /// <summary>
+    /// Sirve para setear valores a una propiedad, implementa INotifyPropertyChanged
+    /// Si el nuevo valor es diferente del que ya tenia asignado Se lo asigna.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="field">ref _atributo o propiedad</param>
+    /// <param name="value">value</param>
+    /// <param name="propertyName">Nombre de la propiedad</param>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    public void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+    {
+      if (EqualityComparer<T>.Default.Equals(field, value)) return;
+      field = value;
+      OnPropertyChanged(propertyName);
+    }
+    #endregion
     #endregion
     /// <summary>
     /// Inicializa en formulario de invitacion
@@ -59,7 +89,8 @@ namespace IM.Base.Forms
       _guestId = guestId;
       _user = user;
       _invitationType = invitationType;
-      DataContext = catObj.GuestInvitation;
+      DataContext = catObj;
+
       _allowReschedule = allowReschedule;
       InitializeComponent();
 
@@ -126,7 +157,7 @@ namespace IM.Base.Forms
       bool _isValid = true;
 
       //Validamos controles comunes y validaciones basicas
-      if (!InvitationValidationRules.ValidateGeneral(this, catObj.GuestInvitation))
+      if (!InvitationValidationRules.ValidateGeneral(this, catObj))
       {
         _isValid = false;
         tabGeneral.TabIndex = 0;
@@ -134,7 +165,7 @@ namespace IM.Base.Forms
       //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
       if (_isValid)
       {
-        _isValid = InvitationValidationRules.ValidateInformationGrids(this, catObj.GuestInvitation);
+        _isValid = InvitationValidationRules.ValidateInformationGrids(this, catObj);
       }
 
     }
@@ -150,7 +181,7 @@ namespace IM.Base.Forms
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       //Si el Guest ya hizo Show No podemos editar nada.
-      if (catObj.GuestInvitation.Guest.guShow)
+      if (catObj.Guest.guShow)
       {
         UIHelper.ShowMessage("Guest has made show");
       }
@@ -205,7 +236,7 @@ namespace IM.Base.Forms
         DataContext = null;
         catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
         await catObj.LoadAll();
-        DataContext = catObj.GuestInvitation;
+        DataContext = catObj;
         SetReadOnly();
 
         //Habilitamos los botones editar e imprimir
@@ -247,7 +278,7 @@ namespace IM.Base.Forms
     /// </history>
     private async void imgButtonReLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.Location, program: catObj.GuestInvitation.Program,
+      var login = new frmLogin(loginType: EnumLoginType.Location, program: catObj.Program,
       validatePermission: true, permission: _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations,
       permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: _user.Location.loID);
 
@@ -266,7 +297,7 @@ namespace IM.Base.Forms
         _user = login.UserData;
         //Cargar de nuevo la invitacion
         catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
-        DataContext = catObj.GuestInvitation;
+        DataContext = catObj;
         //Configuramos de nuevo todo
         Window_Loaded(this, null);
       }
@@ -287,8 +318,13 @@ namespace IM.Base.Forms
 
       // Verificamos si se selecciono un guest
       if (search.ShowDialog().Value)
-      {  
-        var rsrv = search.reservationNum;
+      {
+        //Seteamos la informacion de SearchGuest en nuestro objeto Guest
+        SetRervationOrigosInfo(search._reservationInfo);
+
+        catObj.SetRervationOrigosInfo(search._reservationInfo);
+
+        UIHelper.UpdateTarget(this);
       }
 
     }
@@ -366,12 +402,12 @@ namespace IM.Base.Forms
       if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
-        catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
       }
       if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
-        catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
       }
     }
     #endregion
@@ -389,7 +425,7 @@ namespace IM.Base.Forms
       if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
-        catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
+        catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
       }
     }
     #endregion
@@ -436,14 +472,14 @@ namespace IM.Base.Forms
       MenuBarConfiguration();
 
       //Si el usuario viene con permisos diferentes a solo lectura configuramos los controles
-      if (catObj.GuestInvitation.InvitationMode != EnumMode.ReadOnly)
+      if (catObj.InvitationMode != EnumMode.ReadOnly)
       {
         //Disable controls
         ControlBehaviorConfiguration();
       }
 
       //Si es modo ReadOnly y Modo Edit deshabilitamos los contenedores principales.
-      if (catObj.GuestInvitation.InvitationMode == EnumMode.ReadOnly || catObj.GuestInvitation.InvitationMode == EnumMode.Edit)
+      if (catObj.InvitationMode == EnumMode.ReadOnly || catObj.InvitationMode == EnumMode.Edit)
       {
         SetReadOnly();
       }
@@ -462,7 +498,7 @@ namespace IM.Base.Forms
     /// </history>
     private void MenuBarConfiguration()
     {
-      if (catObj.GuestInvitation.InvitationMode == EnumMode.Add)
+      if (catObj.InvitationMode == EnumMode.Add)
       {
         imgButtonEdit.IsEnabled = false;
         imgButtonPrint.IsEnabled = false;
@@ -470,7 +506,7 @@ namespace IM.Base.Forms
         imgButtonCancel.IsEnabled = true;
         imgButtonLog.IsEnabled = _guestId != 0 ? true : false; ;
       }
-      else if (catObj.GuestInvitation.InvitationMode == EnumMode.Edit)
+      else if (catObj.InvitationMode == EnumMode.Edit)
       {
         imgButtonEdit.IsEnabled = true;
         imgButtonPrint.IsEnabled = true;
@@ -478,7 +514,7 @@ namespace IM.Base.Forms
         imgButtonCancel.IsEnabled = true;
         imgButtonLog.IsEnabled = true;
       }
-      else if (catObj.GuestInvitation.InvitationMode == EnumMode.ReadOnly)
+      else if (catObj.InvitationMode == EnumMode.ReadOnly)
       {
         imgButtonEdit.IsEnabled = false;
         imgButtonPrint.IsEnabled = true;
@@ -635,12 +671,12 @@ namespace IM.Base.Forms
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
       txtguAccountGiftsCard.IsReadOnly = true;
-      dtgAdditionalGuest.IsReadOnly = catObj.GuestInvitation.InvitationMode == EnumMode.ReadOnly;
+      dtgAdditionalGuest.IsReadOnly = catObj.InvitationMode == EnumMode.ReadOnly;
 
       #endregion
 
       //Si es una invitacion existente 
-      if (catObj.GuestInvitation.InvitationMode != EnumMode.Add)
+      if (catObj.InvitationMode != EnumMode.Add)
       {
         //Desactivamos los siguientes controles.
         stkPRContact.IsEnabled = false;
@@ -681,7 +717,7 @@ namespace IM.Base.Forms
       #endregion
 
       //Si OutHouse y es una invitacion existente
-      if (_module == EnumModule.OutHouse && catObj.GuestInvitation.InvitationMode != EnumMode.Add)
+      if (_module == EnumModule.OutHouse && catObj.InvitationMode != EnumMode.Add)
       {
         //Desactivamos los siguientes controles.
         stkPR.IsEnabled = false;
@@ -729,7 +765,7 @@ namespace IM.Base.Forms
       if (_module != EnumModule.OutHouse)
       {
         //Si el huesped no se ha ido, o la fecha en que se hizo la invitacion ya pasó o (no tiene permiso de invitacion  y la fecha de Booking es menor a la fecha de hoy)
-        if (catObj.GuestInvitation.Guest.guCheckOutD <= serverDate || catObj.GuestInvitation.Guest.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.GuestInvitation.CloneGuest.guBookD < serverDate))
+        if (catObj.Guest.guCheckOutD <= serverDate || catObj.Guest.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.CloneGuest.guBookD < serverDate))
         {
           //No permitimos modificacion de depositos desactivamos todo el contenedor
           brdBookingDeposits.IsEnabled = false;
@@ -741,7 +777,7 @@ namespace IM.Base.Forms
       if (_module == EnumModule.InHouse)
       {
         //Si la fecha de booking original es antes de hoy
-        if (catObj.GuestInvitation.CloneGuest.guBookD < serverDate)
+        if (catObj.CloneGuest.guBookD < serverDate)
         {
           brdAdditionalGuest.IsEnabled = false;
         }
@@ -751,7 +787,7 @@ namespace IM.Base.Forms
       if (_module == EnumModule.InHouse)
       {
         //Si tiene copia de folio de reservacion, no se permite modificar la agencia
-        if (!string.IsNullOrWhiteSpace(catObj.GuestInvitation.Guest.guHReservIDC))
+        if (!string.IsNullOrWhiteSpace(catObj.Guest.guHReservIDC))
         {
           cmbOtherInfoAgency.IsEnabled = false;
         }
@@ -774,7 +810,7 @@ namespace IM.Base.Forms
       if (_module == EnumModule.InHouse)
       {
         //Si la fecha de Booking origial es antes de hoy No permitimos modificar 
-        if (catObj.GuestInvitation.CloneGuest.guBookD < serverDate)
+        if (catObj.CloneGuest.guBookD < serverDate)
         {
           brdCreditCard.IsEnabled = false;
           cmbGuestStatus.IsEnabled = false;
@@ -862,20 +898,20 @@ namespace IM.Base.Forms
       var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
 
       //Si la fecha de salida es hoy o despues o el usuario tiene permiso especial de invitaciones
-      if (catObj.GuestInvitation.Guest.guCheckOutD >= serverDate || _user.HasPermission(permission, EnumPermisionLevel.Special))
+      if (catObj.Guest.guCheckOutD >= serverDate || _user.HasPermission(permission, EnumPermisionLevel.Special))
       {
         //Si es una invitacion Nueva
-        if (catObj.GuestInvitation.InvitationMode == EnumMode.Add)
+        if (catObj.InvitationMode == EnumMode.Add)
         {
           btnChange.IsEnabled = false;
           btnReschedule.IsEnabled = false;
           btnRebook.IsEnabled = false;
         }
         //Si tiene show
-        else if (catObj.GuestInvitation.Guest.guShow)
+        else if (catObj.Guest.guShow)
         {
           //Si guANtesIO tiene es true no permitimos modificar el control chkguAntesIO
-          if (catObj.GuestInvitation.Guest.guAntesIO)
+          if (catObj.Guest.guAntesIO)
           {
             chkguAntesIO.IsEnabled = false;
           }
@@ -886,7 +922,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //Si la fecha de invitacion es hoy y no es un reschedule
-        else if (catObj.GuestInvitation.Guest.guInvitD == serverDate && !catObj.GuestInvitation.Guest.guResch)
+        else if (catObj.Guest.guInvitD == serverDate && !catObj.Guest.guResch)
         {
           //Solo se permite modificar Rebook
           btnChange.IsEnabled = true;
@@ -894,7 +930,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //si la fecha de invitacion es hoy y es un reschedule
-        else if (catObj.GuestInvitation.Guest.guInvitD == serverDate && catObj.GuestInvitation.Guest.guResch)
+        else if (catObj.Guest.guInvitD == serverDate && catObj.Guest.guResch)
         {
           //No se permite cambiar
           btnChange.IsEnabled = false;
@@ -902,8 +938,8 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //Si la fecha de invitacion es antes de hoy y No tiene reschedule y la fecha de booking es despues de hoy 
-        else if (catObj.GuestInvitation.Guest.guInvitD < serverDate && !catObj.GuestInvitation.Guest.guResch &&
-          catObj.GuestInvitation.Guest.guBookD > serverDate && _user.HasPermission(permission, EnumPermisionLevel.Standard))
+        else if (catObj.Guest.guInvitD < serverDate && !catObj.Guest.guResch &&
+          catObj.Guest.guBookD > serverDate && _user.HasPermission(permission, EnumPermisionLevel.Standard))
         {
           //No se permite Reschedule y Rebook
           btnChange.IsEnabled = true;
@@ -911,7 +947,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = false;
         }
         //si la fecha de invitacion es antes de hoy y no es un reschedule y su fecha de booking es hoy
-        else if (catObj.GuestInvitation.Guest.guInvitD < serverDate && !catObj.GuestInvitation.Guest.guResch && catObj.GuestInvitation.Guest.guBookD == serverDate)
+        else if (catObj.Guest.guInvitD < serverDate && !catObj.Guest.guResch && catObj.Guest.guBookD == serverDate)
         {
           //se permite cambiar, reschedule y rebook
           btnChange.IsEnabled = true;
@@ -919,7 +955,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //si la fecha de invitacion es antes de hoy y no es un reschedule y su fecha de booking es antes de hoy
-        else if (catObj.GuestInvitation.Guest.guInvitD < serverDate && !catObj.GuestInvitation.Guest.guResch && catObj.GuestInvitation.Guest.guBookD < serverDate)
+        else if (catObj.Guest.guInvitD < serverDate && !catObj.Guest.guResch && catObj.Guest.guBookD < serverDate)
         {
           //No se permite cambiar
           btnChange.IsEnabled = false;
@@ -927,7 +963,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //si la fecha de invitacion es antes de hoy y es un rechedule
-        else if (catObj.GuestInvitation.Guest.guInvitD < serverDate && catObj.GuestInvitation.Guest.guResch)
+        else if (catObj.Guest.guInvitD < serverDate && catObj.Guest.guResch)
         {
           //No se permite cambiar
           btnChange.IsEnabled = false;
@@ -968,32 +1004,32 @@ namespace IM.Base.Forms
     {
       List<TourTimeAvailable> tourTimes = new List<TourTimeAvailable>();
       //Obtenemos el LeadSource
-      var leadSource = _module != EnumModule.Host ? _user.LeadSource.lsID : catObj.GuestInvitation.Guest.guls;
+      var leadSource = _module != EnumModule.Host ? _user.LeadSource.lsID : catObj.Guest.guls;
 
       //Obtenemos la fecha del servidor
       var serverDate = BRHelpers.GetServerDate();
 
       //Si es una invitacion nueva
-      if (catObj.GuestInvitation.InvitationMode == EnumMode.Add)
+      if (catObj.InvitationMode == EnumMode.Add)
       {
         tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate);
       }
       //Si es en modo edicion
-      if (catObj.GuestInvitation.InvitationMode == EnumMode.Edit)
+      if (catObj.InvitationMode == EnumMode.Edit)
       {
         //Booking
         if (bookingDate)
         {
           tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate,
-            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guBookD : null,
-            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guBookT : null, serverDate);
+            catObj.CloneGuest != null ? catObj.CloneGuest.guBookD : null,
+            catObj.CloneGuest != null ? catObj.CloneGuest.guBookT : null, serverDate);
         }
         //Reschedule
         else
         {
           tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate,
-            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guReschD : null,
-            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guReschT : null, serverDate);
+            catObj.CloneGuest != null ? catObj.CloneGuest.guReschD : null,
+            catObj.CloneGuest != null ? catObj.CloneGuest.guReschT : null, serverDate);
         }
       }
       return tourTimes;
@@ -1021,7 +1057,7 @@ namespace IM.Base.Forms
       if (_allowReschedule)
       {
         //si la fecha de invitacion es hoy o si la fecha de booking es despues de hoy
-        if (catObj.GuestInvitation.Guest.guInvitD == serverDate || catObj.GuestInvitation.Guest.guBookD > serverDate)
+        if (catObj.Guest.guInvitD == serverDate || catObj.Guest.guBookD > serverDate)
         {
           //Se activa la fecha de Book
           dtpBookDate.IsEnabled = true;
@@ -1096,7 +1132,7 @@ namespace IM.Base.Forms
       dtpRescheduleDate.IsEnabled = true;
 
       //Fecha y hora en que se hizo es reschedule
-      catObj.GuestInvitation.Guest.guReschDT = BRHelpers.GetServerDateTime();
+      catObj.Guest.guReschDT = BRHelpers.GetServerDateTime();
 
       //Reschedule TourTimes
       cmbReschT.IsEnabled = true;
@@ -1119,7 +1155,7 @@ namespace IM.Base.Forms
       //_isRebook = true;
       
       //Cambiamos el modo de la invitacion esto sirve para futuras validaciones
-      catObj.GuestInvitation.InvitationMode = EnumMode.Add;
+      catObj.InvitationMode = EnumMode.Add;
 
       //Deshabilitamos los controles de Change, Reschedule y Rebook
       btnChange.IsEnabled = false;
@@ -1127,75 +1163,109 @@ namespace IM.Base.Forms
       btnRebook.IsEnabled = false;
 
       //Si guRef es null o cero, SI NO le dejamos el guRef existente
-      if (catObj.GuestInvitation.Guest.guRef == null || catObj.GuestInvitation.Guest.guRef == 0)
+      if (catObj.Guest.guRef == null || catObj.Guest.guRef == 0)
       {
         //Le asignamos el valor del GuestID
-        catObj.GuestInvitation.Guest.guRef = catObj.GuestInvitation.Guest.guID;
+        catObj.Guest.guRef = catObj.Guest.guID;
       }
       //Limpiamos la informacion del Guest ID
-      catObj.GuestInvitation.Guest.guID = 0;
+      catObj.Guest.guID = 0;
       
       //Desactivamos Quinella
-      catObj.GuestInvitation.Guest.guQuinella = false;
+      catObj.Guest.guQuinella = false;
       //Desactivamos Show
-      catObj.GuestInvitation.Guest.guShow = false;
+      catObj.Guest.guShow = false;
       //Limpiamos la informacion del show
-      if (catObj.GuestInvitation.Guest.guShowD != null)
+      if (catObj.Guest.guShowD != null)
       {
-        catObj.GuestInvitation.Guest.guShowD = null;
+        catObj.Guest.guShowD = null;
       }
 
       //Booking
 
       //PR Contact
-      catObj.GuestInvitation.Guest.guPRInfo = "";
+      catObj.Guest.guPRInfo = "";
 
       //PR
-      catObj.GuestInvitation.Guest.guPRInvit1 = "";
+      catObj.Guest.guPRInvit1 = "";
 
       //Fecha y Hora del Booking
-      catObj.GuestInvitation.Guest.guBookD = null;
-      catObj.GuestInvitation.Guest.guBookT = null;
+      catObj.Guest.guBookD = null;
+      catObj.Guest.guBookT = null;
 
-      if (catObj.GuestInvitation.Guest.guReschD != null || catObj.GuestInvitation.Guest.guReschD != DateTime.MinValue)
+      if (catObj.Guest.guReschD != null || catObj.Guest.guReschD != DateTime.MinValue)
       {
         //Limpiamos fecha y hora Reschedule
-        catObj.GuestInvitation.Guest.guReschD = null;
-        catObj.GuestInvitation.Guest.guReschT = null;
+        catObj.Guest.guReschD = null;
+        catObj.Guest.guReschT = null;
 
         //Limpiamos fecha y hora en que se hizo el reschedule
-        catObj.GuestInvitation.Guest.guReschDT = null;
+        catObj.Guest.guReschDT = null;
       }
 
       if (_module == EnumModule.InHouse)
       {
         //No directa
-        catObj.GuestInvitation.Guest.guDirect = false;
+        catObj.Guest.guDirect = false;
 
         //Invitacion No cancelada
-        catObj.GuestInvitation.Guest.guBookCanc = false;
+        catObj.Guest.guBookCanc = false;
 
         //Contactacion
 
         //Fecha de contacto
-        catObj.GuestInvitation.Guest.guInfoD = null;
+        catObj.Guest.guInfoD = null;
        
       }
 
       //Depositos
-      catObj.GuestInvitation.Guest.guDeposit = 0;
-      catObj.GuestInvitation.Guest.guDepositTwisted = 0;
-      catObj.GuestInvitation.Guest.guHotel = "";
+      catObj.Guest.guDeposit = 0;
+      catObj.Guest.guDepositTwisted = 0;
+      catObj.Guest.guHotel = "";
 
       //Regalos
-      catObj.GuestInvitation.InvitationGiftList = new ObservableCollection<InvitationGift>();
+      catObj.InvitationGiftList = new ObservableCollection<InvitationGift>();
 
       //Numero de habitaciones
-      if (catObj.GuestInvitation.Guest.guRoomsQty != 0)
+      if (catObj.Guest.guRoomsQty != 0)
       {
-        catObj.GuestInvitation.Guest.guRoomsQty = 1;
+        catObj.Guest.guRoomsQty = 1;
       }
     }
+    #endregion
+
+    #region GetSearchReservationInfo
+    /// <summary>
+    /// Asignamos los valores de ReservationOrigos a nuestro objeto Guest
+    /// </summary>
+    /// <param name="reservationOrigos">ReservationOrigos</param>
+    /// <history>
+    /// [erosado] 18/08/2016  Created.
+    /// </history>
+    private void SetRervationOrigosInfo(ReservationOrigos reservationOrigos)
+    {
+      //catObj = DataContext as GuestInvitation;
+
+      //Asignamos el folio de reservacion
+      catObj.Guest.guHReservID = reservationOrigos.Folio;
+      catObj.Guest.guLastName1 = reservationOrigos.LastName;
+      catObj.Guest.guFirstName1 = reservationOrigos.FirstName;
+      catObj.Guest.guCheckInD = reservationOrigos.Arrival;
+      catObj.Guest.guCheckOutD = reservationOrigos.Departure;
+      catObj.Guest.guRoomNum = reservationOrigos.Room;
+      //Calculamos Pax
+      decimal pax = 0;
+      bool convertPax = decimal.TryParse($"{reservationOrigos.Adults}.{reservationOrigos.Children}", out pax);
+      catObj.Guest.guPax = pax;
+
+      catObj.Guest.guco = reservationOrigos.Country;
+      catObj.Guest.guag = reservationOrigos.Agency;
+      catObj.Guest.guHotel = reservationOrigos.Hotel;
+      catObj.Guest.guCompany = reservationOrigos.Company;
+      catObj.Guest.guMembershipNum = reservationOrigos.Membership;
+
+    }
+
     #endregion
 
     #endregion
@@ -1383,7 +1453,7 @@ namespace IM.Base.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.GuestInvitation.CloneBookingDepositList, catObj.GuestInvitation.Guest.guID);
+        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.CloneBookingDepositList, catObj.Guest.guID);
         e.EditingElement.Focus();
       }
     }
@@ -1402,7 +1472,7 @@ namespace IM.Base.Forms
         else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
           _isCellCommitDeposit = false;
-          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, catObj.GuestInvitation.CloneBookingDepositList, catObj.GuestInvitation.Guest.guID);
+          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, catObj.CloneBookingDepositList, catObj.Guest.guID);
         }
         else
         {

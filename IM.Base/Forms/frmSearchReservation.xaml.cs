@@ -29,7 +29,7 @@ namespace IM.Base.Forms
 
     private UserData _user;
     private string _leadSourceID;
-    public string reservationNum;
+    public ReservationOrigos _reservationInfo;
 
     #region Constructor
     /// <summary>
@@ -109,8 +109,7 @@ namespace IM.Base.Forms
         return;
       }
       DialogResult = true;
-      var selected = grdGuests.SelectedItem as ReservationOrigos;
-      reservationNum = selected.Folio;
+      _reservationInfo = grdGuests.SelectedItem as ReservationOrigos;
       Close();
     }
     #endregion

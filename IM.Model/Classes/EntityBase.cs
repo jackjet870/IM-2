@@ -21,7 +21,7 @@ namespace IM.Model.Classes
     /// <history>
     /// [erosado] 17/08/2016  Created.
     /// </history>
-    private void OnPropertyChanged(string propertyName)
+    public void OnPropertyChanged(string propertyName)
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
