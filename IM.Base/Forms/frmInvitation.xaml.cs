@@ -1102,34 +1102,35 @@ namespace IM.Base.Forms
     #region Rebook
     private void Rebook()
     {
-      //Nota: Cuando es un Rebook, se genera un nuevo Guest y en su guRef se escribe el GuestID del padre
-      _isRebook = true;
-      //Cambiamos el modo de la invitacion
+      /*Nota: El proceso del Rebook consiste en la creacion de un nuevo Guest teniendo como guRef el ID del Guest anterior
+       * este proceso se interpreta como la creacion de una nueva invitacion en un nuevo Guest que tiene como referencia
+       * guRef = guID del padre.
+       * */
+      
+      ////Encendemos la bandera indicando que es un Rebook
+      //_isRebook = true;
+      
+      //Cambiamos el modo de la invitacion esto sirve para futuras validaciones
       catObj.GuestInvitation.InvitationMode = EnumMode.Add;
-
-      var serverDate = BRHelpers.GetServerDate();
-      var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
 
       //Deshabilitamos los controles de Change, Reschedule y Rebook
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
 
-      //Si guRef es null o cero
+      //Si guRef es null o cero, SI NO le dejamos el guRef existente
       if (catObj.GuestInvitation.Guest.guRef == null || catObj.GuestInvitation.Guest.guRef == 0)
       {
         //Le asignamos el valor del GuestID
         catObj.GuestInvitation.Guest.guRef = catObj.GuestInvitation.Guest.guID;
       }
-
       //Limpiamos la informacion del Guest ID
       catObj.GuestInvitation.Guest.guID = 0;
-
-
+      
       //Desactivamos Quinella
-      chkguQuinella.IsChecked = false;
+      catObj.GuestInvitation.Guest.guQuinella = false;
       //Desactivamos Show
-      chkguShow.IsChecked = false;
+      catObj.GuestInvitation.Guest.guShow = false;
       //Limpiamos la informacion del show
       if (catObj.GuestInvitation.Guest.guShowD != null)
       {
@@ -1170,9 +1171,7 @@ namespace IM.Base.Forms
 
         //Fecha de contacto
         catObj.GuestInvitation.Guest.guInfoD = null;
-
-        //PR Contacto
-        catObj.GuestInvitation.Guest.guPRInfo = "";
+       
       }
 
       //Depositos
