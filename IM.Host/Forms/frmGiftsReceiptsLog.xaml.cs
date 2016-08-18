@@ -42,8 +42,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Cierra el formulario
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
@@ -57,16 +55,16 @@ namespace IM.Host.Forms
     /// <summary>
     /// Carga el historico
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 07/Junio/2016 Created
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsGifsReceiptLog = ((CollectionViewSource)(this.FindResource("dsGifsReceiptLog")));
-      _dsGifsReceiptLog.Source = await BRGiftsReceiptLog.GetGiftsReceiptLog(_ReceiptID);
 
+      _busyIndicator.IsBusy = true;
+      _dsGifsReceiptLog.Source = await BRGiftsReceiptLog.GetGiftsReceiptLog(_ReceiptID);
+      _busyIndicator.IsBusy = false;
     }
     #endregion
 

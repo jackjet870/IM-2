@@ -1,5 +1,5 @@
-﻿using IM.Base.Classes;
-using IM.Base.Helpers;
+﻿//using IM.Base.Classes;
+//using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
@@ -55,71 +55,6 @@ namespace IM.Services.Helpers
 
     #region Metodos
 
-    #region HandlerError
-    /// <summary>
-    /// HandlerError
-    /// </summary>
-    /// <param name="result"></param>
-    /// <param name="method"></param>
-    /// <returns>string strError</returns>
-    /// <history>
-    /// [jorcanche] 31/03/2016
-    /// </history>
-    private string HandlerError(ResultStatus result, string method)
-    {
-      string errorMessage = "";
-      Text Text;    
-
-      //si ocurrio un error
-      if (result.resultStatusFlag == ResultStatusFlag.FAIL)
-      {
-        var Texts = result.Text;
-        //si tiene mensaje
-        if (Texts != null)
-        {
-          for (int i = 0; i == Texts.Length; i++)
-          {
-            Text = Texts[1];
-            errorMessage = errorMessage + Text.Value;
-          }
-        }
-        else
-        {
-          errorMessage = "Error";
-        }
-      }
-      return errorMessage;
-    }
-
-    #endregion
-
-    #region GetID
-    /// <summary>
-    /// Obtiene el id de un response
-    /// </summary>
-    /// <param name="result"></param>
-    /// <returns>string strID </returns>
-    /// <history>
-    /// [jorcanche] 31/03/2016
-    /// </history>
-    private string GetID(ResultStatus result)
-    {
-      string strID = string.Empty;
-
-      //si el resultado es exitosos
-      if (result.resultStatusFlag == ResultStatusFlag.SUCCESS)
-      {
-        var IDs = result.IDs;
-        if (IDs == null)
-        {
-          IDPair ID = IDs[0];
-          strID = ID.operaId.ToString();
-        }
-      }
-      return strID;
-    }
-    #endregion
-
     #region GetRptReservationOrigos
     /// <summary>
     /// Obtiene el reporte de una reservacion para Origos
@@ -146,7 +81,7 @@ namespace IM.Services.Helpers
       //Si ocurrio un error 
       if (response.HasErrors)
       {
-        UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptReservationOrigos");
+        //UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptReservationOrigos");
       }
       else
       {
@@ -175,7 +110,7 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    public static long Origos_reservas_ficticias_Guardar(string hotel, int folio, string FirstName, string LastName, string Company, string Application, string MembershipType)
+    public static long Origos_reservas_ficticias_Guardar(string hotel, int folio, string FirstName, string LastName)
     {
       origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest();
       IntegerResponse Response = null;
@@ -186,16 +121,13 @@ namespace IM.Services.Helpers
       Request.data.folio = folio;
       Request.data.FirstName = FirstName;
       Request.data.LastName = LastName;
-      Request.data.company = Company;
-      Request.data.application = Application;
-      Request.data.program = MembershipType;
 
       // Invocamos al servicio web
       Response = Current.Origos_reservas_ficticias_Guardar(Request);
 
       // Si ocurrio un error
-      if (Response.HasErrors)
-        UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "Origos_reservas_ficticias_Guardar");
+      //if (Response.HasErrors)
+      //  UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "Origos_reservas_ficticias_Guardar");
 
       // recuperamos el ID que se inserto
       Data = Response.Numero;
@@ -240,11 +172,11 @@ namespace IM.Services.Helpers
           {
             BRGiftsReceiptDetail.UpdateGiftsReceiptDetailRoomChargeOpera(_Gift.Receipt, _Gift.ID, _Gift.TransactionTypeOpera);
           }
-          UIHelper.ShowMessage("Gifts were successfully saved in Opera as Room Charges", MessageBoxImage.Information);
+          //UIHelper.ShowMessage("Gifts were successfully saved in Opera as Room Charges", MessageBoxImage.Information);
         }
         else
         {
-          UIHelper.ShowMessage("None gift was saved in Opera as Room Charge", MessageBoxImage.Error);
+          //UIHelper.ShowMessage("None gift was saved in Opera as Room Charge", MessageBoxImage.Error);
         }
       }
 
@@ -270,7 +202,7 @@ namespace IM.Services.Helpers
       // Si ocurrio un error
       if (Response.HasErrors)
       {
-        UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "InsertarCargoHabitacionTRN");
+        //UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "InsertarCargoHabitacionTRN");
         Error = true;
       }
 
@@ -393,13 +325,60 @@ namespace IM.Services.Helpers
         #endregion
         response = Current.GetTransactionTypes(request);
         //si ocurrio un error
-        if (response.HasErrors)
-          UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetTransactionTypes");
+        //if (response.HasErrors)
+        //  UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetTransactionTypes");
 
         return response.Data.OrderBy(t=>t.Description).ToList();
       });
     }
     #endregion
+
+    #region GetReservationsOrigos
+    /// <summary>
+    /// Obtiene reservaciones dado un conjunto de criterios
+    /// </summary>
+    /// <param name="hotel">clave del hotel</param>
+    /// <param name="folio">folio de la reseravacion</param>
+    /// <param name="room">Numero de room</param>
+    /// <param name="name">Nombre del huesped</param>
+    /// <param name="dtpStart">Fecha inicial</param>
+    /// <param name="dtpEnd">Fecha final</param>
+    /// <returns> Array de ReservationOrigos</returns>
+    /// <history>
+    /// [vipacheco] 17/Agosto/2016 Created
+    /// </history>
+    public static async Task<ReservationOrigos[]> GetReservationsOrigos(string hotel, string folio, string room, string name, DateTime dtpStart, DateTime dtpEnd)
+    {
+      return await Task.Run(() =>
+      {
+        QueryRequest request = new QueryRequest();
+        ReservationOrigosResponse response = null;
+        try
+        {
+          // configuramos el request
+          request.Query = new Query()
+          {
+            Hotel = hotel,
+            Folio = folio,
+            Room = room,
+            Name = name,
+            DateFrom = dtpStart,
+            DateTo = dtpEnd
+          };
+
+          // Invocamos al servicio web
+          response = Current.GetReservationsOrigos(request);
+
+          return response.Data;
+        }
+        catch
+        {
+          throw new Exception(response.ExceptionInfo.Message);
+        }
+      });
+    } 
+    #endregion
+
     #endregion
   }
 }

@@ -36,7 +36,7 @@ namespace IM.Host.Forms
     private int _chargeToChanged = 0;
     public EnumMode _modeOpen; // Variable para saber si puede ser editado el formulario o solo carga en modo vista (Edit | Preview)
     public EnumOpenBy _modeOpenBy; // Variable para saber de que fuente fue invocado el formulario (Checkbox | boton)
-    public EnumMode _mode;  // Tipo de visualizacion
+    public EnumMode _modeOpenGrid;  // Tipo de visualizacion del datagrid
 
     public ObservableCollection<GiftsReceiptsShort> obsGiftsReceipt;
     public ObservableCollection<GiftsReceiptDetail> obsGifts;
@@ -544,9 +544,9 @@ namespace IM.Host.Forms
       grdGifts.IsReadOnly = !_Enable;
       grdPayments.IsReadOnly = !_Enable;
       if (_Enable)
-        _mode = EnumMode.Edit;
+        _modeOpenGrid = EnumMode.Edit;
       else
-        _mode = EnumMode.EditPartial;
+        _modeOpenGrid = EnumMode.EditPartial;
 
       // Se verifica si es un nuevo Recibo
       if (_newGiftReceipt || _newExchangeGiftReceipt)
@@ -1595,7 +1595,7 @@ namespace IM.Host.Forms
       // si es un recibo existente
       else
       {
-        await BREntities.OperationEntity(GiftsReceiptDetail, Model.Enums.EnumMode.Edit);
+        await BREntities.OperationEntity(GiftsReceiptDetail, EnumMode.Edit);
         receiptID = Convert.ToInt32(txtgrID.Text);
       }
 
@@ -2479,7 +2479,7 @@ namespace IM.Host.Forms
       GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
       _currentCell = grdGifts.CurrentCell;
 
-      ReceiptsGifts.StartEdit(_mode, giftsReceiptDetail, ref _currentCell, ref grdGifts, ref HasErrors);
+      ReceiptsGifts.StartEdit(_modeOpenGrid, giftsReceiptDetail, ref _currentCell, ref grdGifts, ref HasErrors);
     }
     #endregion
 
@@ -2683,10 +2683,6 @@ namespace IM.Host.Forms
                                   pLeadSourceID: txtgrls.Text, pTxtTotalCost: txtTotalCost, pTxtTotalPrice: txtTotalPrice, pTxtTotalToPay: txtTotalToPay, pTxtgrCxCGifts: txtgrCxCGifts,
                                   pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrCxCAdj, pTxtgrMaxAuthGifts: txtgrMaxAuthGifts, pLblgrMaxAuthGifts: lblgrMaxAuthGifts);
         }
-        //else
-        //{
-        //  //e.Cancel = true;
-        //}
         grdGifts.CellEditEnding += grdGifts_CellEditEnding;
       }
 

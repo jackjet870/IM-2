@@ -72,6 +72,36 @@ namespace IM.Base.Classes
       LoadCloseDate(),
       LoadProgram(_module, _invitationType, _guID)
         );
+      
+    }
+    #endregion
+
+    #region LoadInvitationInfo
+    /// <summary>
+    /// Load Invitation Info es el mensaje que sale a lado del menu bar en la invitacion
+    /// </summary>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    private void LoadInvitationInfo()
+    {
+      string invitType = string.Empty;
+
+      switch (_invitationType)
+      {
+        case EnumInvitationType.existing:
+          invitType = "Existing Guest";
+          break;
+        case EnumInvitationType.newOutHouse:
+          invitType = "New OutHouse";
+          break;
+        case EnumInvitationType.newExternal:
+          invitType = "New External";
+          break;
+        default:
+          break;
+      }
+      _guestInvitation.InvitationInfo = $"Mode: {EnumToListHelper.GetEnumDescription(GuestInvitation.InvitationMode)} | Module: {_module} | Invitation Type: {invitType}";
     }
     #endregion
 
@@ -91,7 +121,6 @@ namespace IM.Base.Classes
       //Si trae GuestID, Nueva o existente.
       if (guID != 0)
       {
-        //await LoadGuest(user, guID);
         await LoadInvitationGift(guID);
         await LoadBookingDeposit(guID);
         await LoadGuestCreditCard(guID);
@@ -105,6 +134,9 @@ namespace IM.Base.Classes
         _guestInvitation.GuestCreditCardList = new ObservableCollection<GuestCreditCard>();
         _guestInvitation.AdditionalGuestList = new ObservableCollection<Guest>();
       }
+
+      //Carga el Mensaje de la invitacion
+      LoadInvitationInfo();
     }
     #endregion
 

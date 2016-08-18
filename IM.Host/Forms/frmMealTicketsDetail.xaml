@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmMealTicketsDetail"
         mc:Ignorable="d"
-       
-        Title="Meal Tickets Detail - " Height="239.59" Width="593.59" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+        Title="Meal Tickets " Height="239.59" Width="593.59" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="dsRateType" d:DesignSource="{d:DesignInstance {x:Type Model:RateType}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>

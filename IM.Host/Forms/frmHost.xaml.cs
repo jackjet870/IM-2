@@ -853,12 +853,13 @@ namespace IM.Host
     /// </summary>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [vipacheco] 16/Agosto/2016 Modified -> Se agrego la invocacion del formulario Invitacion.
     /// </history>
     private async void btnInvitationOuthouse_Click(object sender, RoutedEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse,
-      validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
-      switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
+                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                               windowStartupLocation: WindowStartupLocation.CenterScreen);
 
       if (App.User.AutoSign)
       {
@@ -877,6 +878,17 @@ namespace IM.Host
             Owner = this
           };
           invitacion.ShowDialog();
+
+          // si se guardo la invitacion
+          if (invitacion.catObj.GuestInvitation.Guest.guInvit)
+          {
+            dtpDate_ValueChanged(null, null);
+            // Seleccionamos el row invitado
+            if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
+            {
+              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.catObj.GuestInvitation.Guest.guID);
+            }
+          }
         }
         else
         {
@@ -905,9 +917,9 @@ namespace IM.Host
       {
         Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
 
-        var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse,
-        validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
-        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
+        var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
+                                 permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                                 windowStartupLocation: WindowStartupLocation.CenterScreen);
 
         if (App.User.AutoSign)
         {
@@ -926,6 +938,17 @@ namespace IM.Host
               Owner = this
             };
             invitacion.ShowDialog();
+
+            // si se guardo la invitacion
+            if (invitacion.catObj.GuestInvitation.Guest.guInvit)
+            {
+              dtpDate_ValueChanged(null, null);
+              // Seleccionamos el row invitado
+              if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
+              {
+                grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.catObj.GuestInvitation.Guest.guID);
+              }
+            }
           }
           else
           {
@@ -946,9 +969,9 @@ namespace IM.Host
     /// </history>
     private async void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse,
-       validatePermission: true, permission: EnumPermission.HostInvitations, permissionLevel: EnumPermisionLevel.Standard,
-       switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID);
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
+                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                               windowStartupLocation: WindowStartupLocation.CenterScreen);
 
       if (App.User.AutoSign)
       {
@@ -967,6 +990,17 @@ namespace IM.Host
             Owner = this
           };
           invitacion.ShowDialog();
+
+          // si se guardo la invitacion
+          if (invitacion.catObj.GuestInvitation.Guest.guInvit)
+          {
+            dtpDate_ValueChanged(null, null);
+            // Seleccionamos el row invitado
+            if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
+            {
+              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.catObj.GuestInvitation.Guest.guID);
+            }
+          }
         }
         else
         {
@@ -1001,14 +1035,14 @@ namespace IM.Host
     /// </history>
     private async void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin Login = new frmLogin(null, EnumLoginType.SalesRoom, changePassword: false, autoSign: true, validatePermission: true, permission: EnumPermission.Host, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: false);
+      frmLogin Login = new frmLogin(null, EnumLoginType.SalesRoom, changePassword: false, autoSign: true, validatePermission: true, permission: EnumPermission.Host,
+                                    permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: false, windowStartupLocation: WindowStartupLocation.CenterScreen);
 
       await Login.getAllPlaces();
       if (App.User.AutoSign)
       {
         Login.UserData = App.User;
       }
-      Login.WindowStartupLocation = WindowStartupLocation.CenterScreen;
       Login.ShowDialog();
       if (Login.IsAuthenticated)
       {

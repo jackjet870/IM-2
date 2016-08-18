@@ -54,13 +54,13 @@
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="0,0,5,0">
             <TextBlock Text="GUID"/>
-            <TextBox x:Name="txtguID" AcceptsReturn="False" Width="50"/>
+            <TextBox x:Name="txtguID" AcceptsReturn="False" Width="65"/>
           </StackPanel>
-          <StackPanel x:Name="stkStartDate" Orientation="Vertical" Margin="0,0,5,0">
+          <StackPanel x:Name="stkStartDate" Orientation="Vertical" >
             <TextBlock x:Name="txbStartDate" Text="Book D. From" Margin="10,0,0,0"/>
             <xctk:DateTimePicker x:Name="dtpStart" Width="150" Format="LongDate" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Justify"/>
           </StackPanel>
-          <StackPanel x:Name="stkEndDate" Orientation="Vertical" Margin="0,0,5,0">
+          <StackPanel x:Name="stkEndDate" Orientation="Vertical">
             <TextBlock x:Name="txbEndDate" Text="Book D. To" Margin="10,0,0,0"/>
             <xctk:DateTimePicker x:Name="dtpEnd" Width="150" Format="LongDate" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Justify"/>
           </StackPanel>

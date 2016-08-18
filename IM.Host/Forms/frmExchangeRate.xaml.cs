@@ -11,6 +11,7 @@ using IM.Base.Helpers;
 using System.Windows.Media;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
@@ -25,7 +26,6 @@ namespace IM.Host.Forms
     #region VARIABLES
     private int _monthCurrent;
     private int _dayCurrent;
-    private string _currencyID;
     private int _dayLimit;
     public static decimal _exchangeRateMEX;
     #endregion
@@ -49,13 +49,12 @@ namespace IM.Host.Forms
       _dayCurrent = calDate.SelectedDate.Value.Day;
 
       //Validamos permisos del usuario
-      if (!App.User.HasPermission(Model.Enums.EnumPermission.ExchangeRates, Model.Enums.EnumPermisionLevel.Standard))
+      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.Standard))
       {
         // Ocultamos los botones necesarios.
         btnAdd.IsEnabled = false;
         btnEdit.IsEnabled = false;
       }
-      //validateUserPermissions(App.User);
     }
     #endregion
 
@@ -82,7 +81,7 @@ namespace IM.Host.Forms
       CollectionViewSource dsExchangeRates = ((CollectionViewSource)(FindResource("dsExchangeRates")));
       dsExchangeRates.Source = lstExchangeRates;
 
-    } 
+    }
     #endregion
 
     #region calDate_Loaded
@@ -101,12 +100,12 @@ namespace IM.Host.Forms
       txtDate.Text = string.Format("Date: {0} {1}", calDate.SelectedDate.Value.DayOfWeek, calDate.SelectedDate.Value.Day);
 
       //Agregamos el rango de dias disponibleas.
-      calDate.DisplayDateStart = new DateTime(1990, calDate.SelectedDate.Value.Month, 1); 
-      calDate.DisplayDateEnd = new DateTime(calDate.SelectedDate.Value.Year, calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day); 
+      calDate.DisplayDateStart = new DateTime(1990, calDate.SelectedDate.Value.Month, 1);
+      calDate.DisplayDateEnd = new DateTime(calDate.SelectedDate.Value.Year, calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day);
 
       // Obtenemos los limites actuales
       _dayLimit = calDate.SelectedDate.Value.Day;
-    } 
+    }
     #endregion
 
     #region validateRange
@@ -125,7 +124,7 @@ namespace IM.Host.Forms
         return _dayCurrent;
       }
       return DateTime.DaysInMonth(dateSelected.Value.Year, dateSelected.Value.Month);
-    } 
+    }
     #endregion
 
     #region btnLog_Click
@@ -137,46 +136,20 @@ namespace IM.Host.Forms
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmExchangeRateLog _frmExchangeRateLog = new frmExchangeRateLog(_currencyID) { Owner = this };
-      _frmExchangeRateLog.Title += _currencyID;
-      _frmExchangeRateLog.ShowDialog();
-    } 
-    #endregion
-
-    #region dgExchangeRates_SelectionChanged
-    /// <summary>
-    /// Función para actualizar el currency utilizado al invocar el formulario log.
-    /// </summary>
-    /// <history>
-    /// [vipacheco] 05/03/2016 Created
-    /// </history>
-    private void dgExchangeRates_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      // Obtenemos y casteamos el row seleccionado.
       ExchangeRateData itemRow = grdExchangeRate.SelectedItem as ExchangeRateData;
 
-      // Se asigna el tipo de currency segun el row seleccionado.
-      _currencyID = itemRow.excu;
-    } 
-    #endregion
-
-    #region validateUserPermissions
-    /// <summary>
-    /// Función para validar los permisos y opciones a mostrar.
-    /// </summary>
-    /// <param name="userData"></param>
-    /// <history>
-    /// [vipacheco] 07/03/2016 Created
-    /// </history>
-    private void validateUserPermissions(UserData userData)
-    {
-      if (userData.Permissions.Exists(c => c.pppm == "EXCHRATES" && c.pppl == 1))
+      if (itemRow != null)
       {
-        // Ocultamos los botones necesarios.
-        btnAdd.Visibility = Visibility.Collapsed;
-        btnEdit.Visibility = Visibility.Collapsed;
-        return;
+        frmExchangeRateLog _frmExchangeRateLog = new frmExchangeRateLog(itemRow.excu) { Owner = this };
+        _frmExchangeRateLog.Title += frmHost._lstCurrencies.Where(x => x.cuID == itemRow.excu).Select(s => s.cuN).Single();
+        _frmExchangeRateLog.ShowDialog();
       }
+      else
+      {
+        UIHelper.ShowMessage("Select a exchange rate", MessageBoxImage.Information);
+      }
+
+
     }
     #endregion
 
@@ -184,8 +157,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Función que inhabilita el row MEXICAN
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 03/14/2016 Created
     /// </history>
@@ -301,6 +272,31 @@ namespace IM.Host.Forms
     }
     #endregion
 
+
+    #region grdReceipts_KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 16/Agosto/2016 Created
+    /// </history>
+    private void grdExchangeRate_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+      e.Handled = blnHandled;
+    }
+    #endregion
+
     #region calDate_DisplayDateChanged
     /// <summary>
     /// Actualiza la informacion cuando se cambia la fecha por los botones del Calendar
@@ -316,7 +312,7 @@ namespace IM.Host.Forms
         calDate.SelectedDate = e.AddedDate.Value.AddDays(_dayLimit - 1);
       else
         calDate.SelectedDate = e.AddedDate.Value.AddDays(day - 1);
-    } 
+    }
     #endregion
 
   }

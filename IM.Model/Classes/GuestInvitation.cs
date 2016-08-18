@@ -11,7 +11,7 @@ namespace IM.Model.Classes
   {
 
     #region Properties
-    
+
     #region Catalogos
 
     private List<LanguageShort> _languages;
@@ -139,6 +139,15 @@ namespace IM.Model.Classes
       get { return _invitationMode; }
       set { SetField(ref _invitationMode, value); }
     }
+
+    private string _invitationInfo;
+
+    public string InvitationInfo
+    {
+      get { return _invitationInfo; }
+      set { SetField(ref _invitationInfo, value); }
+    }
+
 
     #endregion
 

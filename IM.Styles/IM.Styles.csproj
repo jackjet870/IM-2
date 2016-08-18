@@ -504,7 +504,7 @@
     <Resource Include="Images\BClock.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BClock.png" />
+    <Resource Include="Images\BOk.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

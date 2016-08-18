@@ -887,57 +887,69 @@ namespace IM.BusinessRules.BR
           dbContext.Database.CommandTimeout = 180;
 
           IQueryable<Guest> query = Enumerable.Empty<Guest>().AsQueryable();
-          // Busqueda por Guest ID
-          if (guestID > 0)
-            query = dbContext.Guests.Where(x => x.guID == guestID);
-          else
+
+          if (module == EnumSearchHostType.General)
           {
-            // Busqueda por nombre o apellido
-            if (guestName != "")
+            // Busqueda por Guest ID
+            if (guestID > 0)
             {
-              query = dbContext.Guests.Where(x => x.guLastName1.Contains(guestName) || x.guFirstName1.Contains(guestName) || x.guLastname2.Contains(guestName) || x.guFirstName2.Contains(guestName));
-            }
-            // Busqueda por Lead Source
-            if (leadSource != "")
-            {
-              query = query.Any() ? query.Where(x => x.guls == leadSource) : dbContext.Guests.Where(x => x.guls == leadSource);
-            }
-            // Busqueda por sala
-            if (salesRoom != "")
-            {
-              query = query.Any() ? query.Where(x => x.gusr == salesRoom) : dbContext.Guests.Where(x => x.gusr == salesRoom);
-            }
-            // Busqueda por numero de habitacion
-            if (roomNum != "")
-            {
-              query = query.Any() ? query.Where(x => x.guRoomNum == roomNum) : dbContext.Guests.Where(x => x.guRoomNum == roomNum);
-            } 
-            // Busqueda por folio de reservacion
-            if (reservation != "")
-            {
-              query = query.Any() ? query.Where(x => x.guHReservID == reservation) : dbContext.Guests.Where(x => x.guHReservID == reservation);
-            }
-            //Busqueda por PR
-            if (PR != "")
-            {
-              query = query.Any() ? query.Where(x => x.guPRInvit1 == PR) : dbContext.Guests.Where(x => x.guPRInvit1 == PR);
-            }
-            // Verificamos el tipo de busqueda a realizar
-            switch (module)
-            {
-              // Si es de tipo transfer
-              case EnumSearchHostType.Transfer:
-                query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false);
-                break;
-              // Si la busqueda es general 
-              case EnumSearchHostType.General:
-                query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true);
-                break;
-              case EnumSearchHostType.Invit:
-                query = query.Any() ? query.Where(x => x.guCheckOutD > hostDateSelected && x.guCheckIn == true) : dbContext.Guests.Where(x => x.guCheckOutD > hostDateSelected  && x.guCheckIn == true);
-                break;
+              return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
             }
           }
+          else
+          {
+            // Busqueda por Guest ID
+            if (guestID > 0)
+            {
+              query = dbContext.Guests.Where(x => x.guID == guestID);
+            }
+          }
+          // Busqueda por nombre o apellido
+          if (guestName != "")
+          {
+            query = dbContext.Guests.Where(x => x.guLastName1.Contains(guestName) || x.guFirstName1.Contains(guestName) || x.guLastname2.Contains(guestName) || x.guFirstName2.Contains(guestName));
+          }
+          // Busqueda por Lead Source
+          if (leadSource != "")
+          {
+            query = query.Any() ? query.Where(x => x.guls == leadSource) : dbContext.Guests.Where(x => x.guls == leadSource);
+          }
+          // Busqueda por sala
+          if (salesRoom != "")
+          {
+            query = query.Any() ? query.Where(x => x.gusr == salesRoom) : dbContext.Guests.Where(x => x.gusr == salesRoom);
+          }
+          // Busqueda por numero de habitacion
+          if (roomNum != "")
+          {
+            query = query.Any() ? query.Where(x => x.guRoomNum == roomNum) : dbContext.Guests.Where(x => x.guRoomNum == roomNum);
+          }
+          // Busqueda por folio de reservacion
+          if (reservation != "")
+          {
+            query = query.Any() ? query.Where(x => x.guHReservID == reservation) : dbContext.Guests.Where(x => x.guHReservID == reservation);
+          }
+          //Busqueda por PR
+          if (PR != "")
+          {
+            query = query.Any() ? query.Where(x => x.guPRInvit1 == PR) : dbContext.Guests.Where(x => x.guPRInvit1 == PR);
+          }
+          // Verificamos el tipo de busqueda a realizar
+          switch (module)
+          {
+            // Si es de tipo transfer
+            case EnumSearchHostType.Transfer:
+              query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true && x.guShow == false);
+              break;
+            // Si la busqueda es general 
+            case EnumSearchHostType.General:
+              query = query.Any() ? query.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true) : dbContext.Guests.Where(x => x.guBookD >= dtpStart && x.guBookD <= dtpEnd && x.guInvit == true);
+              break;
+            case EnumSearchHostType.Invit:
+              query = query.Any() ? query.Where(x => x.guCheckOutD > hostDateSelected && x.guCheckIn == true) : dbContext.Guests.Where(x => x.guCheckOutD > hostDateSelected && x.guCheckIn == true);
+              break;
+          }
+          //}
           return query.OrderBy(x => x.gusr).ToList();
         }
       });
