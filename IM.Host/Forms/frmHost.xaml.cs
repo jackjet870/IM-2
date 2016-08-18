@@ -1096,7 +1096,14 @@ namespace IM.Host
       if (ValidateGuest(guest, EnumPermission.Show, EnumEntities.Shows))
       {
         // Desplegamos el formulario Show
+        var frmShow = new frmShow(guest.guID) { Owner = this };
+        frmShow.ShowDialog();
 
+        if (!Convert.ToBoolean(chkSelected.IsChecked) && Convert.ToBoolean(frmShow.chkguShow.IsChecked)
+          || Convert.ToBoolean(chkSelected.IsChecked) && !Convert.ToBoolean(frmShow.chkguShow.IsChecked))
+        {
+          chkSelected.IsChecked = true;
+        }
       }
     }
     #endregion

@@ -29,5 +29,10 @@ namespace IM.Base.Helpers
       }
       return localIp;
     }
+
+    public static string GetMachineName()
+    {
+      return System.Environment.MachineName;
+    }
   }
 }

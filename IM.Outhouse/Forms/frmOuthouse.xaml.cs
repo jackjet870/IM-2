@@ -1,18 +1,18 @@
-﻿using System;
+﻿using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using IM.Outhouse.Classes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Enums;
-using IM.Model.Classes;
 using System.Windows.Input;
-using System.Linq;
-using IM.Base.Forms;
-using IM.Model;
-using System.Collections.Generic;
-using IM.Outhouse.Classes;
-using System.Threading.Tasks;
 
 namespace IM.Outhouse.Forms
 {
@@ -21,14 +21,13 @@ namespace IM.Outhouse.Forms
   /// </summary>
   public partial class frmOuthouse
   {
-
     #region Atributos
 
     private CollectionViewSource _outPremanifestViewSource;
     private DateTime _serverDate;
     private bool _bookInvit = true;
 
-    #endregion
+    #endregion Atributos
 
     #region Contructores Y destructores
 
@@ -43,7 +42,7 @@ namespace IM.Outhouse.Forms
       InitializeComponent();
     }
 
-    #endregion
+    #endregion Contructores Y destructores
 
     #region Metodos
 
@@ -80,14 +79,14 @@ namespace IM.Outhouse.Forms
       return true;
     }
 
-    #endregion
+    #endregion ValidateContact
 
     #region ValidateInvitation
 
     /// <summary>
     /// Valida los datos para desplegar el formulario de invitacion
     /// </summary>
-    /// <param name="guCheckIn">Si ya hizo Check In el Huesped </param>    
+    /// <param name="guCheckIn">Si ya hizo Check In el Huesped </param>
     /// <history>
     /// [jorcanche] 16/ago/2016 Created
     /// </history>
@@ -99,15 +98,15 @@ namespace IM.Outhouse.Forms
         UIHelper.ShowMessage("Guest has not made Check-In.");
         return false;
       }
-      //Validamos que no sea un huesped adicional 
-     
+      //Validamos que no sea un huesped adicional
+
       //Validamos que tenga permiso de lectura de invitaciones
       if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }
 
-    #endregion
+    #endregion ValidateInvitation
 
     #region LoadGrid
 
@@ -124,10 +123,10 @@ namespace IM.Outhouse.Forms
       _outPremanifestViewSource.Source =
         await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
       StaEnd();
-     // BusyIndicator.IsBusy = false;
+      // BusyIndicator.IsBusy = false;
     }
 
-    #endregion
+    #endregion LoadGrid
 
     #region LoadOuthouse
 
@@ -148,18 +147,18 @@ namespace IM.Outhouse.Forms
       dtpDate_ValueChanged(null, null);
 
       //Inicializamos la variable del datagrid
-      _outPremanifestViewSource = (CollectionViewSource) FindResource("outPremanifestViewSource");
+      _outPremanifestViewSource = (CollectionViewSource)FindResource("outPremanifestViewSource");
 
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
 
-      //Cargamos el DataGrid  
+      //Cargamos el DataGrid
       LoadGrid();
     }
 
-    #endregion
+    #endregion LoadOuthouse
 
     #region StaStart
 
@@ -168,7 +167,7 @@ namespace IM.Outhouse.Forms
     /// </summary>
     /// <param name="message">mensaje a mostrar</param>
     /// <history>
-    /// [jorcanche] 05/04/2016 Created 
+    /// [jorcanche] 05/04/2016 Created
     /// </history>
     private void StaStart(string message)
     {
@@ -177,7 +176,7 @@ namespace IM.Outhouse.Forms
       this.Cursor = Cursors.Wait;
     }
 
-    #endregion
+    #endregion StaStart
 
     #region StaEnd
 
@@ -192,9 +191,9 @@ namespace IM.Outhouse.Forms
       Cursor = null;
     }
 
-    #endregion
+    #endregion StaEnd
 
-    #endregion
+    #endregion Metodos
 
     #region Eventos
 
@@ -207,16 +206,16 @@ namespace IM.Outhouse.Forms
     /// [jorcanche] 05/05/2016 created
     /// </history>
     private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {    
+    {
       if (!IsInitialized) return;
       if (dtpDate.Text == string.Empty) dtpDate.Value = _serverDate;
       if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;
       StaStart("Loading OutHouse...");
       _serverDate = dtpDate.Value.Value;
-      LoadGrid();    
+      LoadGrid();
     }
 
-    #endregion
+    #endregion dtpDate_ValueChanged
 
     #region rbt_Checked
 
@@ -234,7 +233,7 @@ namespace IM.Outhouse.Forms
       LoadGrid();
     }
 
-    #endregion
+    #endregion rbt_Checked
 
     #region btnRefresh_Click
 
@@ -249,7 +248,7 @@ namespace IM.Outhouse.Forms
       LoadGrid();
     }
 
-    #endregion
+    #endregion btnRefresh_Click
 
     #region Window_Loaded
 
@@ -264,7 +263,7 @@ namespace IM.Outhouse.Forms
       LoadOuthouse();
     }
 
-    #endregion
+    #endregion Window_Loaded
 
     #region Info_Click
 
@@ -278,7 +277,7 @@ namespace IM.Outhouse.Forms
     {
       var chkguInfo = sender as CheckBox;
       var outPre = dgGuestPremanifest.Items[dgGuestPremanifest.Items.CurrentPosition] as GuestPremanifestOuthouse;
-      //Invertimos el valor del Check para que no se refleje si no que hasta que se halla terminado la solicitud 
+      //Invertimos el valor del Check para que no se refleje si no que hasta que se halla terminado la solicitud
       chkguInfo.IsChecked = !chkguInfo.IsChecked.Value;
       if (outPre != null && ValidateContact(outPre.guCheckIn, outPre.guInfo, outPre.guCheckOutD))
       {
@@ -308,7 +307,7 @@ namespace IM.Outhouse.Forms
       StaEnd();
     }
 
-    #endregion
+    #endregion Info_Click
 
     #region guCommentsColumnArrival_LostFocus
 
@@ -327,12 +326,12 @@ namespace IM.Outhouse.Forms
       await BRGuests.SaveGuest(pre);
     }
 
-    #endregion
+    #endregion guCommentsColumnArrival_LostFocus
 
     #region guCommentsColumnArrival_Loaded
 
     /// <summary>
-    /// Cuando se incializa le asigna el focus a la celda de comentarios 
+    /// Cuando se incializa le asigna el focus a la celda de comentarios
     /// </summary>
     /// <history>
     /// [jorcanche] created 05/05/2016
@@ -343,7 +342,7 @@ namespace IM.Outhouse.Forms
       txt.Focus();
     }
 
-    #endregion
+    #endregion guCommentsColumnArrival_Loaded
 
     #region Invit_Click
 
@@ -353,11 +352,11 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private void Invit_Click(object sender, RoutedEventArgs e)
+    private async void Invit_Click(object sender, RoutedEventArgs e)
     {
       var guest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
       var chk = sender as CheckBox;
-      //Validamos Valores nulos 
+      //Validamos Valores nulos
       if (chk?.IsChecked == null || guest == null) return;
 
       //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
@@ -367,13 +366,14 @@ namespace IM.Outhouse.Forms
       ShowInvitation(guest.guCheckIn, guest.guID, chk.IsChecked.Value);
     }
 
-    #endregion
+    #endregion Invit_Click
 
     #region ShowInvitation
+
     /// <summary>
     /// Despliega el formulario de invitacion
     /// </summary>
-    /// <param name="guCheckIn">Check In del Huesped</param>    
+    /// <param name="guCheckIn">Check In del Huesped</param>
     /// <param name="guId">Id del Guest</param>
     /// <param name="isInvit">Si ya se invito el guest</param>
     /// <history>
@@ -401,8 +401,9 @@ namespace IM.Outhouse.Forms
           invitacion.ShowDialog();
         }
       }
-    } 
-    #endregion
+    }
+
+    #endregion ShowInvitation
 
     #region Window_KeyDown
 
@@ -419,16 +420,18 @@ namespace IM.Outhouse.Forms
         case Key.Capital:
           KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
           break;
+
         case Key.Insert:
           KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
           break;
+
         case Key.NumLock:
           KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
           break;
       }
     }
 
-    #endregion
+    #endregion Window_KeyDown
 
     #region dgGuestPremanifest_PreviewKeyDown
 
@@ -443,24 +446,24 @@ namespace IM.Outhouse.Forms
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
 
       //Si no es una tecla Delete ó si row es igual a null Retornamos
-      if(e.Key != Key.Delete || row  == null) return;
+      if (e.Key != Key.Delete || row == null) return;
 
       // Si se esta editando alguna celda del row no dejamos que elimine el registro
       if (((DataGridRow)dgGuestPremanifest.ItemContainerGenerator.ContainerFromItem(row)).IsEditing) return;
 
-      //Si se presiono la tecla Delte y si  diferente de Null el row y si tiene Show el guest 
-      //No lo permitimos eliminar y retornamos 
+      //Si se presiono la tecla Delte y si  diferente de Null el row y si tiene Show el guest
+      //No lo permitimos eliminar y retornamos
       if (row.guShow)
       {
         e.Handled = true;
         UIHelper.ShowMessage("You can not delete the Guest because has 'Show Up'");
         return;
       }
-    
-      var result = MessageBox.Show("Are you sure you want to delete this invitation?", "Delete", MessageBoxButton.YesNo,
-        MessageBoxImage.Question, MessageBoxResult.No);           
 
-      if (result == MessageBoxResult.Yes )
+      var result = MessageBox.Show("Are you sure you want to delete this invitation?", "Delete", MessageBoxButton.YesNo,
+        MessageBoxImage.Question, MessageBoxResult.No);
+
+      if (result == MessageBoxResult.Yes)
       {
         await BRGuests.DeleteGuest(row.guID);
       }
@@ -470,7 +473,7 @@ namespace IM.Outhouse.Forms
       }
     }
 
-    #endregion
+    #endregion dgGuestPremanifest_PreviewKeyDown
 
     #region OnIsKeyboardFocusWithinChanged
 
@@ -487,7 +490,7 @@ namespace IM.Outhouse.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
 
-    #endregion
+    #endregion OnIsKeyboardFocusWithinChanged
 
     #region btnLogin_Click
 
@@ -516,7 +519,7 @@ namespace IM.Outhouse.Forms
       }
     }
 
-    #endregion
+    #endregion btnLogin_Click
 
     #region btnPrint_Click
 
@@ -539,7 +542,7 @@ namespace IM.Outhouse.Forms
       }
     }
 
-    #endregion
+    #endregion btnPrint_Click
 
     #region btnNewInv_Click
 
@@ -582,7 +585,7 @@ namespace IM.Outhouse.Forms
 
     }
 
-    #endregion
+    #endregion btnNewInv_Click
 
     #region btnAbout_Click
 
@@ -593,11 +596,11 @@ namespace IM.Outhouse.Forms
     /// <param name="e"></param>
     private void btnAbout_Click(object sender, RoutedEventArgs e)
     {
-      frmAbout formAbout = new frmAbout {Owner = this};
+      frmAbout formAbout = new frmAbout { Owner = this };
       formAbout.ShowDialog();
     }
 
-    #endregion
+    #endregion btnAbout_Click
 
     #region btnTransfer_Click
 
@@ -629,7 +632,7 @@ namespace IM.Outhouse.Forms
           guest.gulsOriginal = App.User.LeadSource.lsID;
 
           //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
-          //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+          //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso
           //se realizo, es decir ni se guardo el Guest ni el Log
           if (await BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
           {
@@ -643,26 +646,25 @@ namespace IM.Outhouse.Forms
       {
         UIHelper.ShowMessage(ex);
       }
-
     }
 
-    #endregion
+    #endregion btnTransfer_Click
 
     #region btnAssistance_Click
 
     /// <summary>
-    /// Abre el formulario de asistencia 
+    /// Abre el formulario de asistencia
     /// </summary>
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      var frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User) {Owner = this};
+      var frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User) { Owner = this };
       frmAssistance.ShowDialog();
     }
 
-    #endregion
+    #endregion btnAssistance_Click
 
     #region btnDaysOff_Click
 
@@ -678,7 +680,7 @@ namespace IM.Outhouse.Forms
       frmDaysOff.ShowDialog();
     }
 
-    #endregion
+    #endregion btnDaysOff_Click
 
     #region dgGuestPremanifest_SelectionChanged
 
@@ -694,10 +696,8 @@ namespace IM.Outhouse.Forms
       if (dg != null) StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
     }
 
-    #endregion
+    #endregion dgGuestPremanifest_SelectionChanged
 
-    #endregion
+    #endregion Eventos
   }
 }
-
-

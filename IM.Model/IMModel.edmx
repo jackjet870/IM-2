@@ -6152,6 +6152,10 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_SaveGuestAdditional" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="guID" Type="int" Mode="In" />
+          <Parameter Name="AdditionalGuestID" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ActualizarFechasTemporadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentYear" Type="int" Mode="In" />
         </Function>
@@ -7571,6 +7575,13 @@
         </Function>
         <Function Name="USP_OR_UpdateGuestReimpresionNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGuestsAdditional" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="Invited" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_UpdateGuestSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
@@ -9393,7 +9404,7 @@
           <NavigationProperty Name="EfficiencyType" Relationship="Self.FK_Efficiency_EfficiencyTypes" FromRole="Efficiency" ToRole="EfficiencyTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Period" Relationship="Self.FK_Efficiency_Periods" FromRole="Efficiency" ToRole="Periods" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRoom" Relationship="Self.FK_Efficiency_SalesRooms" FromRole="Efficiency" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Personnels" Relationship="Self.EfficiencySalesmen" FromRole="Efficiency" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Personnels" Relationship="Self.EfficiencySalesmen" FromRole="Efficiency" ToRole="Personnel" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="EfficiencyType">
           <Key>
@@ -18222,7 +18233,18 @@
             <Parameter Name="SalemanID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_IM_DeleteEfficiencySalesmen">
-            <Parameter Name="EfficiencyID" Mode="In" Type="Int32" />
+          <Parameter Name="EfficiencyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_SaveGuestAdditional">
+            <Parameter Name="guID" Mode="In" Type="Int32" />
+            <Parameter Name="AdditionalGuestID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestsAdditional">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="Invited" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -31360,6 +31382,8 @@
           <FunctionImportMapping FunctionImportName="USP_OR_SetAccountingCode" FunctionName="IMModel.Store.USP_OR_SetAccountingCode" />
           <FunctionImportMapping FunctionImportName="USP_IM_ADDEfficiencySalesmen" FunctionName="IMModel.Store.USP_IM_ADDEfficiencySalesmen" />
           <FunctionImportMapping FunctionImportName="USP_IM_DeleteEfficiencySalesmen" FunctionName="IMModel.Store.USP_IM_DeleteEfficiencySalesmen" />
+          <FunctionImportMapping FunctionImportName="USP_IM_SaveGuestAdditional" FunctionName="IMModel.Store.USP_IM_SaveGuestAdditional" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestsAdditional" FunctionName="IMModel.Store.USP_OR_UpdateGuestsAdditional" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

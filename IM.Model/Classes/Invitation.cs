@@ -16,9 +16,9 @@ namespace IM.Model.Classes
 
     public List<GuestStatus> NewGuestStatus { get; set; }
 
-    public List<GuestStatus> UpdatedGuestStatus { get; set; }
+    public List<GuestStatusType> UpdatedGuestStatus { get; set; }
 
-    public List<GuestStatus> DeletedGuestStatus { get; set; }
+    public List<GuestStatusType> DeletedGuestStatus { get; set; }
 
     public List<GuestCreditCard> NewCreditCards { get; set; }
 

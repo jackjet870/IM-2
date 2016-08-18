@@ -1,15 +1,15 @@
-﻿using System;
-using System.Windows;
-using IM.BusinessRules.BR;
-using IM.Model.Classes;
-using IM.Model;
-using System.Collections.Generic;
-using IM.Model.Enums;
-using System.Windows.Data;
-using IM.Base.Classes;
-using System.Linq;
-using System.Windows.Controls;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace IM.Base.Forms
 {
@@ -22,56 +22,43 @@ namespace IM.Base.Forms
   public partial class frmGuest : Window
   {
     #region Atributos
-    UserData _user;
-    int _guestId;
-    bool _isInvitation;
-    bool _includedTours;
-    bool _isReadOnly;
-    bool _wasSelectedByKeyboard = false;
 
-    #region Listas
-    private List<InvitationGift> _lstGifts = new List<InvitationGift>();
-    private List<GuestStatus> _lstGuestStatus = new List<GuestStatus>();
+    private UserData _user;
+    private readonly int _guestId;
+    private bool _isReadOnly;
+    private EnumModule _module;
 
-    private List<objInvitGift> _lstObjInvitGift = null;
-    private List<objInvitGuestStatus> _lstObjInvitGuestStatus = null;
-    #endregion
+    //private bool _isInvitation;
+    private bool _wasSelectedByKeyboard;
+
+    private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
+    private bool _hasError; //Sirve para las validaciones True hubo Error | False NO
+    private bool _isCellCancel;//Sirve para cuando se cancela la edicion de una Celda
+    private bool _dontShowAgainGuestStatus;
+    public Guest NewGuest => ((GuestInvitationRules)DataContext).Guest;
 
     #region Objetos
 
-    Invitation invitation;
+    private Invitation _invitation;
 
-    #region Regalos
-    CollectionViewSource objInvitGiftViewSource;
-    CollectionViewSource giftShortViewSource;
-    #endregion
+    #endregion Objetos
 
-    #region Guest Status
-    CollectionViewSource objInvitGuestStatusViewSource;
-    CollectionViewSource guestStatusTypeViewSource;
-    objInvitGuestStatus objInvitGuestStatusTemp = new objInvitGuestStatus();
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #region Atributo Público
-    public Guest guestAdditional = null;
-    #endregion
+    #endregion Atributos
 
     #region Constructores y destructores
-    public frmGuest(UserData user, int guestId, bool isInvitation, bool includedTours, bool isReadOnly = false)
+
+    public frmGuest(UserData user, int guestId, bool isInvitation, EnumModule module, bool isReadOnly = false)
     {
-      WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-      this._user = user;
-      this._guestId = guestId;
-      this._isInvitation = isInvitation;
-      this._includedTours = includedTours;
-      this._isReadOnly = isReadOnly;
+      WindowStartupLocation = WindowStartupLocation.CenterScreen;
+      _user = user;
+      _guestId = guestId;
+      //_isInvitation = isInvitation;
+      _isReadOnly = isReadOnly;
+      _module = module;
       InitializeComponent();
     }
-    #endregion
+
+    #endregion Constructores y destructores
 
     #region Métodos de la forma
 
@@ -80,26 +67,23 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void frmGuest_Loaded(object sender, RoutedEventArgs e)
+    private async void frmGuest_Loaded(object sender, RoutedEventArgs e)
     {
+      //Iniciamos el BusyIndicator
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Please wait, we are preparing the Guest form...";
+      var catObj = new GuestInvitationRules(_module,_user, _guestId);
+      await catObj.LoadAll();
+      DataContext = catObj;
       ConfigurationControls();
       LoadControls();
+      UIHelper.SetUpControls(new Guest(), this);
+      //Detenemos el BusyIndicator
+      _busyIndicator.IsBusy = false;
     }
 
     /// <summary>
-    /// Asigna la cable de la agencia al ComboBox asociado
-    /// </summary>
-    /// <history>
-    /// [lchairez] 10/03/2016 Crated.
-    /// </history>
-    private void txtAgency_LostFocus(object sender, RoutedEventArgs e)
-    {
-      _wasSelectedByKeyboard = true;
-      cmbAgency.SelectedValue = txtAgency.Text;
-    }
-
-    /// <summary>
-    /// Asigna la cable de la agencia al TextBox asociado
+    /// Asigna la clave de la agencia al TextBox asociado
     /// </summary>
     /// <history>
     /// [lchairez] 10/03/2016 Crated.
@@ -108,7 +92,7 @@ namespace IM.Base.Forms
     {
       if (!_wasSelectedByKeyboard)
       {
-        txtAgency.Text = cmbAgency.SelectedValue.ToString();
+        //txtAgency.Text = cmbAgency.SelectedValue.ToString();
       }
       _wasSelectedByKeyboard = false;
     }
@@ -120,12 +104,12 @@ namespace IM.Base.Forms
     /// <param name="e"></param>
     private void dtgGuestStatus_LoadingRow(object sender, DataGridRowEventArgs e)
     {
-      System.ComponentModel.IEditableCollectionView itemView = dtgGuestStatus.Items;
-      if (_lstObjInvitGuestStatus.Count == 1 && itemView.IsAddingNew)
-      {
-        itemView.CommitNew();
-        dtgGuestStatus.CanUserAddRows = false;
-      }
+      //System.ComponentModel.IEditableCollectionView itemView = dtgGuestStatus.Items;
+      //if (_lstObjInvitGuestStatus.Count == 1 && itemView.IsAddingNew)
+      //{
+      //  itemView.CommitNew();
+      //  dtgGuestStatus.CanUserAddRows = false;
+      //}
     }
 
     /// <summary>
@@ -135,30 +119,50 @@ namespace IM.Base.Forms
     /// <param name="e"></param>
     private void dtgGuestStatus_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      switch (e.Column.SortMemberPath)
-      {
-        case "gtgs":
-          var gtgs = e.EditingElement as ComboBox;
-          if (gtgs.SelectedIndex != -1)
-          {
-            _lstObjInvitGuestStatus[e.Row.GetIndex()].gtgs = gtgs.SelectedValue.ToString();
-            _lstObjInvitGuestStatus[e.Row.GetIndex()].gtQuantity = Convert.ToByte(1);
-            CalculateMaxAuthGifts();
-          }
-          break;
-      }
+      //switch (e.Column.SortMemberPath)
+      //{
+      //  case "gtgs":
+      //    var gtgs = e.EditingElement as ComboBox;
+      //    if (gtgs.SelectedIndex != -1)
+      //    {
+      //      _lstObjInvitGuestStatus[e.Row.GetIndex()].gtgs = gtgs.SelectedValue.ToString();
+      //      _lstObjInvitGuestStatus[e.Row.GetIndex()].gtQuantity = Convert.ToByte(1);
+      //      CalculateMaxAuthGifts();
+      //    }
+      //    break;
+      //}
     }
 
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      if (Validate())
-      {
-        SaveGuestInformation();
-        this.Close();
-      }
+      if (!Validate()) return;
+      SaveGuestInformation();
+      Close();
+    }
+
+    /// <summary>
+    /// Evento del Combobox GuestStatus
+    /// Sirve para actualizar la caja de texto txtGiftMaxAuth
+    /// dependiendo del GuestStatus que elija el usuario.
+    /// </summary>
+    ///<history>
+    ///[edgrodriguez]  11/08/2016  Created.
+    /// </history>
+    private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      //Obtenemos el GuestStatusType del combobox cmbGuestStatus
+      var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
+
+      txtGiftMaxAuth.Text = $"{guStatusType?.gsMaxAuthGifts ?? 0:C2}";
+
+      //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
+      //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
+      //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
+      //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
     }
 
     #region Métodos Genéricos
+
     /// <summary>
     /// Revisa que los textbox númericos solo resivan números
     /// </summary>
@@ -170,24 +174,191 @@ namespace IM.Base.Forms
         e.Handled = false;
       else if (!char.IsDigit(e.Text, e.Text.Length - 1))
         e.Handled = true;
-
     }
 
-    #endregion
+    #endregion Métodos Genéricos
 
-    #endregion
+    #region Eventos del GRID Invitation Gift
+
+    #region BeginningEdit
+
+    /// <summary>
+    /// Se ejecuta antes de que entre en modo edicion alguna celda
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 11/08/2016  Created.
+    /// </history>
+    private void dtgGifts_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      //Preguntamos si desea agregar GuestStatusType para el calculo de costos
+      if (cmbGuestStatus.SelectedValue == null && !_dontShowAgainGuestStatus)
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("We recommend first select the status of the guest, that would help us calculate costs and prices, do you want to select it now?", MessageBoxImage.Question, "Intelligence Marketing");
+        if (result == MessageBoxResult.Yes)
+        {
+          e.Cancel = true;
+          _hasError = true;
+          _isCellCancel = true;
+          _dontShowAgainGuestStatus = false;
+          cmbGuestStatus.Focus();
+        }
+        else
+        {
+          _dontShowAgainGuestStatus = true;
+        }
+      }
+      else
+      {
+        _hasError = false;
+        _isCellCancel = false;
+      }
+
+      //Si el grid no esta en modo edicion, permite hacer edicion.
+      if (!GridHelper.IsInEditMode(dtgGifts) && !_hasError)
+      {
+        dtgGifts.BeginningEdit -= dtgGifts_BeginningEdit;
+        //Obtenemos el objeto de la fila que se va a editar
+        InvitationGift invitationGift = e.Row.Item as InvitationGift;
+        //Obtenemos la celda que vamos a validar
+        _IGCurrentCell = dtgGifts.CurrentCell;
+        //Hacemos la primera validacion
+        InvitationValidationRules.StartEdit(ref invitationGift, ref _IGCurrentCell, dtgGifts, ref _hasError);
+        //Si tuvo algun error de validacion cancela la edicion de la celda.
+        e.Cancel = _hasError;
+        dtgGifts.BeginningEdit += dtgGifts_BeginningEdit;
+      }
+      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+
+    #endregion BeginningEdit
+
+    #region PreparingCellForEdit
+
+    /// <summary>
+    /// Se ejecuta cuando la celda entra en modo edicion
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      //Sirve para agregar el Focus a las celdas
+      Control ctrl = e.EditingElement as Control;
+      ctrl.Focus();
+    }
+
+    #endregion PreparingCellForEdit
+
+    #region CellEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la celda en edicion pierde el foco
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/08/2016  Created.
+    /// </history>
+    private async void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      //Si paso las validaciones del preparingCellForEdit
+      if (!_hasError)
+      {
+        //Si viene en modo Commit
+        if (e.EditAction == DataGridEditAction.Commit)
+        {
+          //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
+          _isCellCancel = false;
+          //Obtenemos el Objeto
+          InvitationGift invitationGift = e.Row.Item as InvitationGift;
+
+          //Bandera que checata que todo salga bien en la validacion siguiente.
+          bool _hasErrorValidateEdit = false;
+          //Validamos la celda
+          // InvitationValidationRules.ValidateEdit(ref invitationGift, ref _hasErrorValidateEdit, ref _IGCurrentCell);
+
+          //Si Paso las validaciones
+          if (!_hasErrorValidateEdit)
+          {
+            //Obtenemos el program
+            var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
+
+            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, program);
+          }
+          //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
+          else
+          {
+            e.Cancel = true;
+          }
+        }
+        //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
+        else
+        {
+          _isCellCancel = true;
+        }
+      }
+    }
+
+    #endregion CellEditEnding
+
+    #region RowEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 11/08/2016  Created.
+    /// </history>
+    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+
+    {
+      DataGrid dtg = sender as DataGrid;
+      InvitationGift invitationGift = e.Row.Item as InvitationGift;
+
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        if (_isCellCancel)
+        {
+          dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+          dtg.CancelEdit();
+          dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+        }
+        else
+        {
+          if (invitationGift.igQty != 0 && !string.IsNullOrEmpty(invitationGift.iggi)) return;
+          UIHelper.ShowMessage("Please enter the required fields Qty and Gift to continue", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          e.Cancel = true;
+        }
+      }
+    }
+
+    #endregion RowEditEnding
+
+    #endregion Eventos del GRID Invitation Gift
+
+    #endregion Métodos de la forma
 
     #region Métodos privados
 
     #region Configuración de controles
-    private void ConfigurationControls()
+
+    private async void ConfigurationControls()
     {
-      btnIncludedTours.Visibility = _includedTours ? Visibility.Visible : Visibility.Hidden;
-      txtArrival.IsEnabled = !_includedTours;
-      txtDeparture.IsEnabled = !_includedTours;
       btnSave.IsEnabled = !_isReadOnly;
+      dtgGifts.IsReadOnly = _isReadOnly;
+      grbGuestInfo.IsEnabled =
+        grbOtherInformation.IsEnabled =
+          grbGuest1.IsEnabled =
+            grbGuest2.IsEnabled =
+              grbGuestStatus.IsEnabled = !_isReadOnly;
+
+      dtpArrival.IsEnabled =
+        dtpDeparture.IsEnabled = (await BRLeadSources.GetLeadSourceProgram(txtguls.Text)) == "IH";
     }
-    #endregion
+
+    #endregion Configuración de controles
 
     #region Cargar datos del invitado
 
@@ -197,68 +368,6 @@ namespace IM.Base.Forms
     private void LoadControls()
     {
       LoadCommonControls(); //Se cargan los controles que son comunes en todos los tipos de invitacion.
-
-      
-      #region Datos del Invitado
-      LoadGuestInformation();
-      #endregion
-    }
-
-    /// <summary>
-    /// Carga la información extraida de la base de datos
-    /// </summary>
-    private void LoadGuestInformation()
-    {
-      var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestId);
-
-      if (guest == null) return;
-      
-      #region Información del invitado
-      txtGuid.Text = guest.guID.ToString();
-      txtReservationNumber.Text = guest.guHReservID;
-      txtSalesRoom.Text = String.IsNullOrEmpty(guest.gusr) ? String.Empty : guest.gusr;
-      txtLeadSource.Text = String.IsNullOrEmpty(guest.guls) ? String.Empty : guest.guls;
-
-      #endregion
-
-      #region Other Information
-      txtRoom.Text = guest.guRoomNum;
-      cmbAgency.SelectedValue = guest.guag;
-      txtAgency.Text = guest.guag;
-      txtPax.Text = guest.guPax.ToString("#.00");
-      txtArrival.Text = guest.guCheckInD.ToString("dd/MM/yyyy");
-      txtDeparture.Text = guest.guCheckOutD.ToString("dd/MM/yyyy");
-
-      #endregion
-
-      #region Guest 1
-      txtLastNameGuest1.Text = guest.guLastName1;
-      txtFirstNameGuest1.Text = guest.guFirstName1;
-      txtAgeGuest1.Text = guest.guAge1.HasValue ? guest.guAge1.Value.ToString() : String.Empty;
-      cmbMaritalStatusGuest1.SelectedValue = String.IsNullOrEmpty(guest.gums1) ? String.Empty : guest.gums1;
-      txtOcuppationGuest1.Text = guest.guOccup1;
-      txtEmailGuest1.Text = guest.guEmail1;
-      #endregion
-
-      #region Guest 2
-      txtLastNameGuest2.Text = guest.guLastname2;
-      txtFirstNameGuest2.Text = guest.guFirstName2;
-      txtAgeGuest2.Text = guest.guAge2.HasValue ? guest.guAge2.Value.ToString() : String.Empty;
-      cmbMaritalStatusGuest2.SelectedValue = String.IsNullOrEmpty(guest.gums2) ? String.Empty : guest.gums2;
-      txtOcuppationGuest2.Text = guest.guOccup2;
-      txtEmailGuest2.Text = guest.guEmail2;
-      #endregion
-
-      #region Guest Status
-      txtGuestStatus.Text = guest.guGStatus;
-
-      LoadGuestStatusGrid();
-      //LLENAR GRID
-      #endregion
-
-      #region Gifts
-      LoadGiftGrid();
-      #endregion
     }
 
     /// <summary>
@@ -267,134 +376,17 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void LoadCommonControls()
+    private void LoadCommonControls()
     {
       #region User
+
       txtUser.Text = _user.User.peID;
       txtPassword.Password = _user.User.pePwd;
-      #endregion
 
-      #region ComboBoxes
-
-      var agencies = await IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
-      LoadComboBox(agencies, cmbAgency, "ag");
-
-      var maritalStatus = await IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
-      LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
-      LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
-
-      //Combo Guest Estatus
-      guestStatusTypeViewSource = ((CollectionViewSource)(this.FindResource("guestStatusTypeViewSource")));
-      guestStatusTypeViewSource.Source = await BRGuests.GetGuestStatusType(1);
-
-      //Combo Regalos
-      giftShortViewSource = ((CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = await BRGifts.GetGifts();
-      #endregion
-
+      #endregion User
     }
 
-    #endregion
-
-    #region Métodos para cargar los grids
-
-    /// <summary>
-    /// Carga la información del Grid de regalos
-    /// </summary>
-    private async void LoadGiftGrid()
-    {
-      _lstObjInvitGift = new List<objInvitGift>();
-
-      var invitGift = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestId);
-
-      _lstObjInvitGift = invitGift.Select(c => new objInvitGift
-      {
-        igAdults = c.igAdults,
-        igComments = c.igComments,
-        igct = c.igct,
-        igExtraAdults = c.igExtraAdults,
-        igFolios = c.igFolios,
-        iggi = c.iggi,
-        iggr = c.iggr,
-        iggu = c.iggu,
-        igMinors = c.igMinors,
-        igPriceA = c.igPriceA,
-        igPriceAdult = c.igPriceAdult,
-        igPriceExtraAdult = c.igPriceExtraAdult,
-        igPriceM = c.igPriceM,
-        igPriceMinor = c.igPriceMinor,
-        igQty = c.igQty
-      }).ToList();
-
-      _lstGifts = invitGift;
-
-      objInvitGiftViewSource = ((CollectionViewSource)(this.FindResource("objInvitGiftViewSource")));
-      objInvitGiftViewSource.Source = _lstObjInvitGift;
-
-      CalculateCostsPrices();
-      CalculateTotalGifts();
-    }
-
-    /// <summary>
-    /// Carga la información del Grid de estado de los invitados
-    /// </summary>
-    private void LoadGuestStatusGrid()
-    {
-      var guestStatus = BRGuestStatusTypes.GetGuestStatus(_guestId);
-
-      _lstObjInvitGuestStatus = guestStatus.Select(c => new objInvitGuestStatus
-      {
-        gtgs = c.gtgs,
-        gtgu = c.gtgu,
-        gtQuantity = c.gtQuantity
-      }).ToList();
-      _lstGuestStatus = guestStatus; // esta lista mantiene los registros de la base de datos sin modificaciones.
-
-      objInvitGuestStatusViewSource = ((CollectionViewSource)(this.FindResource("objInvitGuestStatusViewSource")));
-      objInvitGuestStatusViewSource.Source = _lstObjInvitGuestStatus;
-
-      txtGuestStatus.Text = guestStatus.Any() ? guestStatus.First().gtgs : String.Empty;
-      CalculateMaxAuthGifts();
-
-      if (_lstObjInvitGuestStatus.Any()) dtgGuestStatus.CanUserAddRows = false;
-    }
-
-    #endregion
-
-    #region Métodos para cargar ComboBoxes
-
-    /// <summary>
-    /// Carga los combos de la forma
-    /// </summary>
-    /// <param name="items">Lista de elementos que contendrá el combo</param>
-    /// <param name="combo">Combo que se llenará con los elementos</param>
-    /// <param name="displayItem">Nombre del elemento</param>
-    /// <param name="valueItem">Valor del elemento</param>
-    /// <param name="defaultValue">Valor que será seleccionado por default</param>
-    private void LoadComboBox(IEnumerable<object> items, ComboBox combo, string displayItem, string valueItem, string defaultValue = "")
-    {
-      combo.DisplayMemberPath = displayItem;
-      combo.SelectedValuePath = valueItem;
-      combo.SelectedValue = defaultValue;
-      combo.ItemsSource = items;
-    }
-    
-    /// <summary>
-    /// Carga los combos de la forma
-    /// </summary>
-    /// <param name="items">Lista de elementos que contendrá el combo</param>
-    /// <param name="combo">Combo que se llenará con los elementos</param>
-    /// <param name="prefix">prefijo</param>
-    /// <param name="defaultValue">Valor que será seleccionado por default</param>
-    private void LoadComboBox(IEnumerable<object> items, ComboBox combo, string prefix, string defaultValue = "")
-    {
-      combo.DisplayMemberPath = String.Format("{0}N", prefix);
-      combo.SelectedValuePath = String.Format("{0}ID", prefix);
-      combo.SelectedValue = defaultValue;
-      combo.ItemsSource = items;
-    }
-
-    #endregion
+    #endregion Cargar datos del invitado
 
     #region Métodos para calcular los costos de los regalos
 
@@ -404,74 +396,73 @@ namespace IM.Base.Forms
     /// <param name="useCxCCost">Indica si se utilizará el costo del empleado</param>
     private void CalculateCostsPrices(bool useCxCCost = false)
     {
-      decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
+      //decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
 
-      foreach (var row in _lstObjInvitGift)
-      {
-        var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
-        if (gift != null)
-        {
-          // Costos
-          // si se va a usar el costo de empleado
-          if (useCxCCost)
-          {
-            costAdult = gift.giPrice1;
-            costMinor = gift.giPrice4;
-          }
-          else // se va a usar el cosrto al público
-          {
-            costAdult = gift.giPrice1;
-            costMinor = gift.giPrice2;
-          }
+      //foreach (var row in _lstObjInvitGift)
+      //{
+      //  var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+      //  if (gift != null)
+      //  {
+      //    // Costos
+      //    // si se va a usar el costo de empleado
+      //    if (useCxCCost)
+      //    {
+      //      costAdult = gift.giPrice1;
+      //      costMinor = gift.giPrice4;
+      //    }
+      //    else // se va a usar el cosrto al público
+      //    {
+      //      costAdult = gift.giPrice1;
+      //      costMinor = gift.giPrice2;
+      //    }
 
-          // Precios
-          priceAdult = gift.giPublicPrice;
-          priceMinor = gift.giPriceMinor;
-          priceExtraAdult = gift.giPriceExtraAdult;
-          quantity = row.igQty;
+      //    // Precios
+      //    priceAdult = gift.giPublicPrice;
+      //    priceMinor = gift.giPriceMinor;
+      //    priceExtraAdult = gift.giPriceExtraAdult;
+      //    quantity = row.igQty;
 
-          // Total del costo adultos
-          row.igPriceA = quantity * (row.igAdults + row.igExtraAdults) * costAdult;
-          // Total del costo de menores
-          row.igPriceM = quantity * row.igMinors * costMinor;
-          // Total del precio adultos
-          row.igPriceAdult = quantity * row.igAdults * priceAdult;
-          //Total del precio de menores
-          row.igPriceMinor = quantity * row.igMinors * priceMinor;
-          // Total del precio de adultos extra
-          row.igPriceExtraAdult = quantity * row.igExtraAdults * priceExtraAdult;
-        }
-      }
+      //    // Total del costo adultos
+      //    row.igPriceA = quantity * (row.igAdults + row.igExtraAdults) * costAdult;
+      //    // Total del costo de menores
+      //    row.igPriceM = quantity * row.igMinors * costMinor;
+      //    // Total del precio adultos
+      //    row.igPriceAdult = quantity * row.igAdults * priceAdult;
+      //    //Total del precio de menores
+      //    row.igPriceMinor = quantity * row.igMinors * priceMinor;
+      //    // Total del precio de adultos extra
+      //    row.igPriceExtraAdult = quantity * row.igExtraAdults * priceExtraAdult;
+      //  }
+      //}
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="onlyCancellled"></param>
     /// <param name="cancel"></param>
     private void CalculateTotalGifts(bool onlyCancellled = false, string cancel = "")
     {
-      decimal cost, price, totalCost = 0, totalPrice = 0;
+      //decimal cost, price, totalCost = 0, totalPrice = 0;
 
-      foreach (var row in _lstObjInvitGift)
-      {
-        // calculamos el costo del regalo
-        cost = row.igPriceA + row.igPriceA;
+      //foreach (var row in _lstObjInvitGift)
+      //{
+      //  // calculamos el costo del regalo
+      //  cost = row.igPriceA + row.igPriceA;
 
-        //calculamos el precio del regalo
-        price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
+      //  //calculamos el precio del regalo
+      //  price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
 
-        //si se desean todos los regalos
-        if (!onlyCancellled)
-        {
-          totalCost += cost;
-          totalPrice += price;
-        }
+      //  //si se desean todos los regalos
+      //  if (!onlyCancellled)
+      //  {
+      //    totalCost += cost;
+      //    totalPrice += price;
+      //  }
 
-
-      }
-      txtTotalCost.Text = totalCost.ToString("$#,##0.00;$(#,##0.00)");
-      txtTotalPrice.Text = totalPrice.ToString("$#,##0.00;$(#,##0.00)");
+      //}
+      //txtTotalCost.Text = totalCost.ToString("$#,##0.00;$(#,##0.00)");
+      //txtTotalPrice.Text = totalPrice.ToString("$#,##0.00;$(#,##0.00)");
     }
 
     /// <summary>
@@ -482,74 +473,71 @@ namespace IM.Base.Forms
     /// </history>
     private async void CalculateMaxAuthGifts()
     {
-      decimal maxAuthGifts = 0;
+      //decimal maxAuthGifts = 0;
 
-      foreach (var row in _lstObjInvitGuestStatus)
-      {
-        if (row.gtgs != null && row.gtQuantity > 0)
-        {
-          var guestStatusType = await BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs });
-          var guestStaType=guestStatusType.FirstOrDefault();
-          maxAuthGifts += row.gtQuantity * guestStaType.gsMaxAuthGifts;
-        }
-      }
+      //foreach (var row in _lstObjInvitGuestStatus)
+      //{
+      //  if (row.gtgs == null || row.gtQuantity <= 0) continue;
+      //  var guestStatusType = await BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs });
+      //  var guestStaType=guestStatusType.FirstOrDefault();
+      //  maxAuthGifts += row.gtQuantity * guestStaType.gsMaxAuthGifts;
+      //}
 
-      txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
+      //txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
     }
 
-    #endregion
+    #endregion Métodos para calcular los costos de los regalos
 
     #region Métodos para guardar la información del invitado
+
     /// <summary>
     /// Guarda la informaciónde la forma en la base de datos
     /// </summary>
     private void SaveGuestInformation()
     {
-      invitation = new Invitation();
-      var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestId);
+      _invitation = new Invitation();
+      var guest = NewGuest;//IM.BusinessRules.BR.BRGuests.GetGuestById(_guestId);
 
-      #region Other Information
-      guest.guRoomNum = ForStringValue(txtRoom.Text);
-      guest.guag = ForStringValue(txtAgency.Text);
-      guest.guPax = ForDecimalValue(txtPax.Text);
-      guest.guCheckInD = txtArrival.SelectedDate.HasValue ? txtArrival.SelectedDate.Value : guest.guCheckInD;
-      guest.guCheckOutD = txtDeparture.SelectedDate.HasValue ? txtDeparture.SelectedDate.Value : guest.guCheckOutD;
+      //#region Other Information
+      //guest.guRoomNum = ForStringValue(txtRoom.Text);
+      //guest.guag = ForStringValue(txtAgency.Text);
+      //guest.guPax = ForDecimalValue(txtPax.Text);
+      //guest.guCheckInD = txtArrival.SelectedDate.HasValue ? txtArrival.SelectedDate.Value : guest.guCheckInD;
+      //guest.guCheckOutD = txtDeparture.SelectedDate.HasValue ? txtDeparture.SelectedDate.Value : guest.guCheckOutD;
 
-      #endregion
+      //#endregion
 
-      #region Guest 1
-      guest.guLastName1 = ForStringValue(txtLastNameGuest1.Text);
-      guest.guFirstName1 = ForStringValue(txtFirstNameGuest1.Text);
-      guest.guAge1 = String.IsNullOrEmpty(txtAgeGuest1.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest1.Text);
-      guest.gums1 = ForStringValue(cmbMaritalStatusGuest1.SelectedValue);
-      guest.guOccup1 = ForStringValue(txtOcuppationGuest1.Text);
-      guest.guEmail1 = ForStringValue(txtEmailGuest1.Text);
-      #endregion
+      //#region Guest 1
+      //guest.guLastName1 = ForStringValue(txtLastNameGuest1.Text);
+      //guest.guFirstName1 = ForStringValue(txtFirstNameGuest1.Text);
+      //guest.guAge1 = string.IsNullOrEmpty(txtAgeGuest1.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest1.Text);
+      //guest.gums1 = ForStringValue(cmbMaritalStatusGuest1.SelectedValue);
+      //guest.guOccup1 = ForStringValue(txtOcuppationGuest1.Text);
+      //guest.guEmail1 = ForStringValue(txtEmailGuest1.Text);
+      //#endregion
 
-      #region Guest 2
-      guest.guLastname2 = ForStringValue(txtLastNameGuest2.Text);
-      guest.guFirstName2 = ForStringValue(txtFirstNameGuest2.Text);
-      guest.guAge2 = String.IsNullOrEmpty(txtAgeGuest2.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest2.Text);
-      guest.gums2 = ForStringValue(cmbMaritalStatusGuest2.SelectedValue);
-      guest.guOccup2 = ForStringValue(txtOcuppationGuest2.Text);
-      guest.guEmail2 = ForStringValue(txtEmailGuest2.Text);
-      #endregion
+      //#region Guest 2
+      //guest.guLastname2 = ForStringValue(txtLastNameGuest2.Text);
+      //guest.guFirstName2 = ForStringValue(txtFirstNameGuest2.Text);
+      //guest.guAge2 = string.IsNullOrEmpty(txtAgeGuest2.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest2.Text);
+      //guest.gums2 = ForStringValue(cmbMaritalStatusGuest2.SelectedValue);
+      //guest.guOccup2 = ForStringValue(txtOcuppationGuest2.Text);
+      //guest.guEmail2 = ForStringValue(txtEmailGuest2.Text);
+      //#endregion
 
-      #region Guest Status 
-      guest.guGStatus = ForStringValue(txtGuestStatus.Text);
-      SaveGuestStatus();
-      #endregion
+      //#region Guest Status
+      //guest.guGStatus = ForStringValue(txtGuestStatus.Text);
+      //SaveGuestStatus();
+      //#endregion
 
       #region Gifts
       SaveGifts();
 
       #endregion
 
-      invitation.Guest = guest;
+      _invitation.Guest = guest;
 
-
-      BRGuests.SaveGuestInvitation(invitation);
-
+      //BRGuests.SaveGuestInvitation(invitation);
     }
 
     /// <summary>
@@ -557,47 +545,48 @@ namespace IM.Base.Forms
     /// </summary>
     private void SaveGifts()
     {
-      invitation.NewGifts = new List<Model.InvitationGift>();
-      invitation.UpdatedGifts = new List<Model.InvitationGift>();
-      invitation.DeletedGifts = new List<Model.InvitationGift>();
+      _invitation.NewGifts = new List<Model.InvitationGift>();
+      _invitation.UpdatedGifts = new List<Model.InvitationGift>();
+      _invitation.DeletedGifts = new List<Model.InvitationGift>();
 
-      if (!_lstObjInvitGift.Any()) return;
+
+      if (!((GuestInvitation)DataContext).InvitationGiftList.Any()) return;
 
       //Convertimos la lista a un objeto de la capa Model
-      var gifts = _lstObjInvitGift.Select(c => new InvitationGift
-      {
-        igAdults = c.igAdults,
-        igComments = c.igComments,
-        igct = c.igct,
-        igExtraAdults = c.igExtraAdults,
-        igFolios = c.igFolios,
-        iggi = c.iggi,
-        iggr = c.iggr,
-        iggu = c.iggu,
-        igMinors = c.igMinors,
-        igPriceA = c.igPriceA,
-        igPriceAdult = c.igPriceAdult,
-        igPriceExtraAdult = c.igPriceExtraAdult,
-        igPriceM = c.igPriceM,
-        igPriceMinor = c.igPriceMinor,
-        igQty = c.igQty
-      }).ToList();
+      var gifts = ((GuestInvitation)DataContext).InvitationGiftList;
+        //  _lstObjInvitGift.Select(c => new InvitationGift
+      //{
+      //  igAdults = c.igAdults,
+      //  igComments = c.igComments,
+      //  igct = c.igct,
+      //  igExtraAdults = c.igExtraAdults,
+      //  igFolios = c.igFolios,
+      //  iggi = c.iggi,
+      //  iggr = c.iggr,
+      //  iggu = c.iggu,
+      //  igMinors = c.igMinors,
+      //  igPriceA = c.igPriceA,
+      //  igPriceAdult = c.igPriceAdult,
+      //  igPriceExtraAdult = c.igPriceExtraAdult,
+      //  igPriceM = c.igPriceM,
+      //  igPriceMinor = c.igPriceMinor,
+      //  igQty = c.igQty
+      //}).ToList();
 
       //Obtenemos los regalos que se modificarán
-      invitation.UpdatedGifts = gifts.Where(c => c.iggu != 0).ToList();
+      _invitation.UpdatedGifts = gifts.Where(c => c.iggu != 0).ToList();
 
       //Obtenemos los regalos nuevos para asignales los precios y el invitado
       var newGifts = gifts.Where(c => c.iggu == 0).ToList();
-      if (newGifts.Any())
+      if (!newGifts.Any()) return;
+
+      //Asignamos el guest a los nuevos regalos
+      newGifts.ForEach(c =>
       {
-        //Asignamos el guest a los nuevos regalos
-        newGifts.ForEach(c =>
-        {
-          c.iggu = c.iggu != 0 ? c.iggu : _guestId;
-          c.igct = !String.IsNullOrEmpty(c.igct) ? c.igct : "MARKETING";
-        });
-        invitation.NewGifts.AddRange(newGifts);
-      }
+        c.iggu = c.iggu != 0 ? c.iggu : _guestId;
+        c.igct = !string.IsNullOrEmpty(c.igct) ? c.igct : "MARKETING";
+      });
+      _invitation.NewGifts.AddRange(newGifts);
     }
 
     /// <summary>
@@ -605,165 +594,85 @@ namespace IM.Base.Forms
     /// </summary>
     private void SaveGuestStatus()
     {
-      invitation.NewGuestStatus = new List<Model.GuestStatus>();
-      invitation.UpdatedGuestStatus = new List<Model.GuestStatus>();
-      invitation.DeletedGuestStatus = new List<Model.GuestStatus>();
+      _invitation.NewGuestStatus = new List<Model.GuestStatus>();
+      _invitation.UpdatedGuestStatus = new List<Model.GuestStatusType>();
+      _invitation.DeletedGuestStatus = new List<Model.GuestStatusType>();
       CalculateMaxAuthGifts();
 
-      if (_lstObjInvitGuestStatus.Any())
-      {
+      if (!((GuestInvitation)DataContext).GuestStatusTypes.Any()) return;
+      ////Asignamos el guest
+      //_lstObjInvitGuestStatus.ForEach(c =>
+      //{
+      //  c.gtgu = c.gtgu != 0 ? c.gtgu : _guestId;
+      //});
 
-        //Asignamos el guest
-        _lstObjInvitGuestStatus.ForEach(c =>
-        {
-          c.gtgu = c.gtgu != 0 ? c.gtgu : _guestId;
-        });
+      //Convertimos la lista a un objeto de la capa Model
+      //var gs = _lstObjInvitGuestStatus.Select(c => new GuestStatus
+      //{
+      //  gtgs = c.gtgs,
+      //  gtgu = c.gtgu,
+      //  gtQuantity = c.gtQuantity
+      //}).ToList();
 
-        //Convertimos la lista a un objeto de la capa Model
-        var gs = _lstObjInvitGuestStatus.Select(c => new GuestStatus
-        {
-          gtgs = c.gtgs,
-          gtgu = c.gtgu,
-          gtQuantity = c.gtQuantity
-        }).ToList();
-
-        invitation.DeletedGuestStatus.AddRange(_lstGuestStatus); //Borramos lo que tenia la base de datos
-        invitation.NewGuestStatus.AddRange(gs); //Agregamos lo que tiene el grid
-      }
-    }
-    
-    #endregion
-
-    #region Métodos para asignar valores al objeto Guest
-
-    /// <summary>
-    /// Devuelme una cadena
-    /// </summary>
-    /// <param name="value">objeto que se recibe</param>
-    /// <returns>string</returns>
-    private string ForStringValue(object value)
-    {
-      if (value == null) return String.Empty;
-      return String.IsNullOrEmpty(value.ToString()) ? String.Empty : value.ToString().Trim();
+      //_invitation.DeletedGuestStatus.AddRange(_lstGuestStatus); //Borramos lo que tenia la base de datos
+      _invitation.NewGuestStatus.AddRange(new List<GuestStatus> { (GuestStatus)cmbGuestStatus.SelectedItem }); //Agregamos lo que tiene el grid
     }
 
-    /// <summary>
-    /// Devuelme un decimal
-    /// </summary>
-    /// <param name="value">objeto que se recibe</param>
-    /// <returns>string</returns>
-    private decimal ForDecimalValue(object value)
-    {
-      return String.IsNullOrEmpty(value.ToString().Trim()) ? 0 : Convert.ToDecimal(value.ToString().Trim());
-    }
-
-    /// <summary>
-    /// Devuelme un intero
-    /// </summary>
-    /// <param name="value">objeto que se recibe</param>
-    /// <returns>string</returns>
-    private int ForIntegerValue(object value)
-    {
-      return String.IsNullOrEmpty(value.ToString().Trim()) ? 0 : Convert.ToInt32(value.ToString().Trim());
-    }
-
-    /// <summary>
-    /// Devuelve un booleano
-    /// </summary>
-    /// <param name="value">objeto que se recibe</param>
-    /// <returns>bool</returns>
-    private bool ForBooleanValue(bool? value)
-    {
-      return value.HasValue ? value.Value : false;
-    }
-
-
-
-
-
-
-    #endregion
+    #endregion Métodos para guardar la información del invitado
 
     #region Métodos para Válidar la información
+
     private bool Validate()
     {
       bool res = true;
 
-      if (!txtArrival.SelectedDate.HasValue) //validamos la fecha de llegada
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("Specify an arrival date");
-        txtArrival.Focus();
-      }
-      else if (!txtDeparture.SelectedDate.HasValue) //validamos la fecha de salida
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("Specify an departure date");
-        txtDeparture.Focus();
-      }
-      else if (String.IsNullOrEmpty(txtAgency.Text))
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("Specify an agency");
-        cmbAgency.Focus();
-      }
-      else if (String.IsNullOrEmpty(txtLastNameGuest1.Text)) //validamos el apellido
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("Input the guest last name");
-        txtLastNameGuest1.Focus();
-      }
-      else if (String.IsNullOrEmpty(txtFirstNameGuest1.Text)) //validamos el nombre
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("Input the guest first name");
-        txtFirstNameGuest1.Focus();
-      }
-      else if (!ValidateGifts()) //validamos los regalos
-      {
-        res = false;
-      }
-      else if (!ValidateGuestStatus()) //validamos los estatus de invitados
-      {
-        res = false;
-      }
-      else if (!ValidateChangedBy()) //validamos quien hizo el cambio y su contraseña
-      {
-        res = false;
-      }
-      else if (!ValidateChangedByExist())//validamos que los datos de quien hizo el cambio y su contraseña existan
-      {
-        res = false;
-      }
-       
-      return res;
-    }
+      //if (!txtArrival.SelectedDate.HasValue) //validamos la fecha de llegada
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("Specify an arrival date");
+      //  txtArrival.Focus();
+      //}
+      //else if (!txtDeparture.SelectedDate.HasValue) //validamos la fecha de salida
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("Specify an departure date");
+      //  txtDeparture.Focus();
+      //}
+      //else if (String.IsNullOrEmpty(txtAgency.Text))
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("Specify an agency");
+      //  cmbAgency.Focus();
+      //}
+      //else if (String.IsNullOrEmpty(txtLastNameGuest1.Text)) //validamos el apellido
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("Input the guest last name");
+      //  txtLastNameGuest1.Focus();
+      //}
+      //else if (String.IsNullOrEmpty(txtFirstNameGuest1.Text)) //validamos el nombre
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("Input the guest first name");
+      //  txtFirstNameGuest1.Focus();
+      //}
+      //else if (!ValidateGifts()) //validamos los regalos
+      //{
+      //  res = false;
+      //}
+      //else if (!ValidateGuestStatus()) //validamos los estatus de invitados
+      //{
+      //  res = false;
+      //}
+      //else if (!ValidateChangedBy()) //validamos quien hizo el cambio y su contraseña
+      //{
+      //  res = false;
+      //}
+      //else if (!ValidateChangedByExist())//validamos que los datos de quien hizo el cambio y su contraseña existan
+      //{
+      //  res = false;
+      //}
 
-    /// <summary>
-    /// Valida que almenos se haya registrado un estatus
-    /// </summary>
-    /// <returns></returns>
-    private bool ValidateGuestStatus()
-    {
-      bool res = true;
-      string title = "Guest Status Section";
-      if (_lstObjInvitGuestStatus.Any())
-      {
-        if (_lstObjInvitGuestStatus.Where(g => g.gtQuantity == 0).Any())
-        {
-          Helpers.UIHelper.ShowMessage("Any status does not has a quantity", title: title);
-          res = false;
-        }
-        else if (_lstObjInvitGuestStatus.Where(g => String.IsNullOrEmpty(g.gtgs)).Any())
-        {
-          Helpers.UIHelper.ShowMessage("Any status does not has a status", title: title);
-          res = false;
-        }
-      }
-      if (!res)
-      {
-        dtgGuestStatus.Focus();
-      }
       return res;
     }
 
@@ -774,43 +683,43 @@ namespace IM.Base.Forms
     private bool ValidateGifts()
     {
       bool res = true;
-      string title = "Gifts Section";
-      //Revisamos que todos los regalos tengan una cantidad
-      if (_lstObjInvitGift.Where(g => g.igQty == 0).Any())
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity", title: title);
-      }
-      else if (_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift", title: title);
-      }
-      else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults", title: title);
-      }
+      //string title = "Gifts Section";
+      ////Revisamos que todos los regalos tengan una cantidad
+      //if (_lstObjInvitGift.Where(g => g.igQty == 0).Any())
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity", title: title);
+      //}
+      //else if (_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift", title: title);
+      //}
+      //else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
+      //{
+      //  res = false;
+      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults", title: title);
+      //}
 
-      if (res)
-      {
-        foreach (var row in _lstObjInvitGift)
-        {
-          var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
-          if (row.igQty > gift.giMaxQty)
-          {
-            string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-            Helpers.UIHelper.ShowMessage(error, title: title);
-            res = false;
-            break;
-          }
-        }
-      }
+      //if (res)
+      //{
+      //  foreach (var row in _lstObjInvitGift)
+      //  {
+      //    var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+      //    if (row.igQty > gift.giMaxQty)
+      //    {
+      //      string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
+      //      Helpers.UIHelper.ShowMessage(error, title: title);
+      //      res = false;
+      //      break;
+      //    }
+      //  }
+      //}
 
-      if (!res)
-      {
-        dtgGifts.Focus();
-      }
+      //if (!res)
+      //{
+      //  dtgGifts.Focus();
+      //}
       return res;
     }
 
@@ -822,19 +731,19 @@ namespace IM.Base.Forms
     {
       bool res = true;
 
-      if(String.IsNullOrEmpty(txtUser.Text))
+      if (string.IsNullOrEmpty(txtUser.Text))
       {
         res = false;
         Helpers.UIHelper.ShowMessage("Specify who is making the change.");
         txtUser.Focus();
       }
-      else if(String.IsNullOrEmpty(txtPassword.Password))
+      else if (string.IsNullOrEmpty(txtPassword.Password))
       {
         res = false;
         Helpers.UIHelper.ShowMessage("Specify who is making the change.");
         txtUser.Focus();
       }
-     
+
       return res;
     }
 
@@ -845,33 +754,31 @@ namespace IM.Base.Forms
       var pass = EncryptHelper.Encrypt(txtPassword.Password);
 
       var valid = BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
-      
-      if(valid.Focus != String.Empty)
+
+      if (valid.Focus == string.Empty) return res;
+
+      res = false;
+
+      //desplegamos el mensaje de error
+      Helpers.UIHelper.ShowMessage(valid.Message);
+
+      //establecemos el foco en el control que tiene el error
+      switch (valid.Focus)
       {
-        res = false;
+        case "ID":
+        case "ChangedBy":
+          txtUser.Focus();
+          break;
 
-        //desplegamos el mensaje de error
-        Helpers.UIHelper.ShowMessage(valid.Message);
-
-        //establecemos el foco en el control que tiene el error
-        switch(valid.Focus)
-        {
-          case "ID":
-          case "ChangedBy":
-            txtUser.Focus();
-            break;
-          case "Password":
-            txtPassword.Focus();
-            break;
-        }
+        case "Password":
+          txtPassword.Focus();
+          break;
       }
       return res;
     }
 
-    #endregion
+    #endregion Métodos para Válidar la información
 
-    #endregion
-
-   
+    #endregion Métodos privados
   }
 }

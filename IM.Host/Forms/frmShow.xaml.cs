@@ -5,6 +5,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
@@ -47,8 +48,10 @@ namespace IM.Host.Forms
     private bool _blnLoading;
     private byte _ocWelcomeCopies;
 
+    private ObservableCollection<Guest> _guestAdditionalList = new ObservableCollection<Guest>();
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
+    private GuestShow _guestShow;
 
     #region Colleciones
 
@@ -56,6 +59,10 @@ namespace IM.Host.Forms
       _dsTeamsSalesMen, _dsPersonnel, _dsPersonnelPR, _dsPersonnelLiner, _dsPersonnelCloser, _dsPersonnelExitcloser,
       _dsPersonnelPodium, _dsPersonnelVlo, _dsPersonnelHostsentry, _dsPersonnelHostsgifts, _dsPersonnelHostsexit,
       _dsCreditCardTypes, _dsGuestStatusTypes, _dsDisputeStatus, _dsPaymentPlaces, _dsGifts;
+    private bool _hasError;
+    private bool _isCellCancel;
+    DataGridCellInfo _IGCurrentCellGuestAdditional;
+    private bool _isCellCommitGuestAdditional;
 
     #endregion Colleciones
 
@@ -93,6 +100,11 @@ namespace IM.Host.Forms
       set { SetField(ref _ocWelcomeCopies, value); }
     }
 
+    public ObservableCollection<Guest> GuestAdditionalList
+    {
+      get { return _guestAdditionalList; }
+      set { SetField(ref _guestAdditionalList, value); }
+    }
     #endregion Propiedades
 
     #region Constructores y destructores
@@ -102,6 +114,7 @@ namespace IM.Host.Forms
       _guestCurrent = guestID;
       InitializeComponent();
       DataContext = this;
+      _guestShow = new GuestShow();
     }
 
     #endregion Constructores y destructores
@@ -178,7 +191,7 @@ namespace IM.Host.Forms
           brdOtherInfo.IsEnabled =
             brdGuest1.IsEnabled =
               brdGuest2.IsEnabled =
-                brdGuestsAdditional.IsEnabled =
+                brdAdditionalGuest.IsEnabled =
                   txtocWelcomeCopies.IsEnabled = blnEnable;
 
       // Pestaña Gifts, CC, Status & Comments
@@ -252,6 +265,7 @@ namespace IM.Host.Forms
       {
         // cargamos los datos del huesped
         GuestObj = await BRGuests.GetGuest(_guestCurrent);
+        _guestShow.CloneGuest = ObjectHelper.CopyProperties(GuestObj);
       }));
 
       lstTasks.Add(Task.Run(async () =>
@@ -259,6 +273,7 @@ namespace IM.Host.Forms
         //cargamos los regalos de invitacion
         var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestCurrent);
         InvitationGiftList = new ObservableCollection<InvitationGift>(result);
+        _guestShow.CloneInvitationGiftList = ObjectHelper.CopyProperties(result);
       }));
 
       lstTasks.Add(Task.Run(async () =>
@@ -266,6 +281,7 @@ namespace IM.Host.Forms
         //cargamos los depositos
         var result = await BRBookingDeposits.GetBookingDeposits(_guestCurrent);
         BookingDepositList = new ObservableCollection<BookingDeposit>(result);
+        _guestShow.CloneBookingDepositList = ObjectHelper.CopyProperties(result);
       }));
 
       lstTasks.Add(Task.Run(async () =>
@@ -273,6 +289,15 @@ namespace IM.Host.Forms
         //cargamos las tarjetas de credito
         var result = await BRGuestCreditCard.GetGuestCreditCard(_guestCurrent);
         GuestCreditCardList = new ObservableCollection<GuestCreditCard>(result);
+        _guestShow.CloneGuestCreditCardList = ObjectHelper.CopyProperties(result);
+      }));
+
+      lstTasks.Add(Task.Run(async () =>
+      {
+        //cargamos las tarjetas de credito
+        var result = await BRGuests.GetAdditionalGuest(_guestCurrent);
+        GuestAdditionalList = new ObservableCollection<Guest>(result);
+        _guestShow.CloneAdditionalGuestList = ObjectHelper.CopyProperties(result);
       }));
 
       await Task.WhenAll(lstTasks);
@@ -494,6 +519,8 @@ namespace IM.Host.Forms
       return blnValid;
     }
 
+
+
     #endregion ValidateGeneral
 
     #region ValidateOtherInfoGiftsCreditCardsGuestStatus
@@ -638,6 +665,9 @@ namespace IM.Host.Forms
       // si la locacion es In House
       if (blnIsInHouse)
         txtguOutInvitNum.Text = string.Empty;
+
+      btnAddGuestAdditional.Visibility = (blnIsInHouse) ? Visibility.Collapsed : Visibility.Visible;
+
     }
 
     #endregion EnableOutsideInvitation
@@ -731,6 +761,8 @@ namespace IM.Host.Forms
 
       return false;
     }
+
+
 
     #endregion ValidateExist
 
@@ -951,6 +983,12 @@ namespace IM.Host.Forms
       //TODO guardar
       // guardamos el huesped
 
+      _guestShow.Guest = GuestObj;
+      _guestShow.InvitationGiftList = InvitationGiftList.OfType<InvitationGift>().ToList();
+      _guestShow.BookingDepositList = BookingDepositList.OfType<BookingDeposit>().ToList();
+      _guestShow.GuestCreditCardList = GuestCreditCardList.OfType<GuestCreditCard>().ToList();
+      _guestShow.GuestStatusTypes = new List<GuestStatusType>() { (GuestStatusType)cmbGuestStatus.SelectedItem };
+      _guestShow.AdditionalGuestList = GuestAdditionalList.OfType<Guest>().ToList();
       // guardamos el historico del huesped
 
 
@@ -1044,7 +1082,7 @@ namespace IM.Host.Forms
         if (_guestObj.guSelfGen &&
             UIHelper.ShowMessage($"This case not must be Self Gen.. {Environment.NewLine}Unmark the checkbox ''SELF GEN''?", MessageBoxImage.Question) == MessageBoxResult.Yes)
           chkguSelfGen.IsChecked = false;
-      }
+      }      
     }
 
 
@@ -1070,7 +1108,7 @@ namespace IM.Host.Forms
         _guestObj.guDeposit = _guestObj.guDepositTwisted;
     }
     #endregion
-    
+
     #region SendEmail
     /// <summary>
     /// Envia un correo de nofiticacion indicando que un huesped se presento sin invitacion
@@ -1124,8 +1162,9 @@ namespace IM.Host.Forms
       }
 
 
-    } 
+    }
     #endregion
+
 
     #endregion Metodos
 
@@ -1203,11 +1242,17 @@ namespace IM.Host.Forms
         !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) ||
         !ValidateClosedDate(true))
         imgButtonSave.IsEnabled = imgButtonPrint.IsEnabled = false;
+      if (!App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true)) { }
+      imgButtonSave.IsEnabled =
+        imgButtonPrint.IsEnabled = false;
+      btnSearchGuestAdditional.IsEnabled = btnAddGuestAdditional.IsEnabled = false;
+      dtgGuestAdditional.IsReadOnly = true;
 
       //Si de la BD el campo guNotifiedEmailShowNotInvited es null, lo ponemos en unChecked el control
       if (_guestObj.guNotifiedEmailShowNotInvited == null)
         chkguNotifiedEmailShowNotInvited.IsChecked = false;
     }
+
 
     #endregion Window_Loaded
 
@@ -1611,6 +1656,8 @@ namespace IM.Host.Forms
         break;
       }
     }
+
+
     #endregion
 
     #region txtocWelcomeCopies_PreviewTextInput
@@ -1651,6 +1698,255 @@ namespace IM.Host.Forms
         textBox.Text = "1";
     }
     #endregion
+
+    #region GuestAdditional
+
+    #region Eventos del GRID GuestAdditional
+
+    #region BeginningEdit
+
+    /// <summary>
+    /// Se ejecuta antes de que entre en modo edicion alguna celda
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (string.IsNullOrWhiteSpace(txtgusr.Text) && e.Column.SortMemberPath == "guID")
+      {
+        UIHelper.ShowMessage("First select a Sales Room ", MessageBoxImage.Warning, "Intelligence Marketing");
+
+        e.Cancel = true;
+        _hasError = true;
+        _isCellCancel = true;
+        txtgusr.Focus();
+      }
+      else
+      {
+        _hasError = false;
+        _isCellCancel = false;
+      }
+
+      //Si el grid no esta en modo edicion, permite hacer edicion.
+      if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
+      {
+        dtgGuestAdditional.BeginningEdit -= dtgGuestAdditional_BeginningEdit;
+        //Obtenemos la celda que vamos a validar
+        _IGCurrentCellGuestAdditional = dtgGuestAdditional.CurrentCell;
+        //Hacemos la primera validacion
+        InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCellGuestAdditional, dtgGuestAdditional, ref _hasError);
+        //Si tuvo algun error de validacion cancela la edicion de la celda.
+        e.Cancel = _hasError;
+        dtgGuestAdditional.BeginningEdit += dtgGuestAdditional_BeginningEdit;
+      }
+      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+
+    #endregion BeginningEdit
+
+    #region PreparingCellForEdit
+
+    /// <summary>
+    /// Se ejecuta cuando la celda entra en modo edicion
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      //Sirve para agregar el Focus a las celdas
+      Control ctrl = e.EditingElement as Control;
+      ctrl?.Focus();
+    }
+
+    #endregion PreparingCellForEdit
+
+    #region CellEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la celda en edicion pierde el foco
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      //Si paso las validaciones del preparingCellForEdit
+      if (_hasError) return;
+      //Si viene en modo Commit
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
+        //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
+        _isCellCancel = false;
+        //Obtenemos el Objeto
+        Guest guestAdditionalRow = e.Row.Item as Guest;
+        Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow.guID));//await BRGuests.GetGuest(guestAdditionalRow.guID);
+        var NotValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(GuestObj, guestAdditional, _IGCurrentCellGuestAdditional));
+        //Si Paso las validaciones
+        if (!NotValid)
+        {
+          e.Row.Item = guestAdditional;
+        }
+        //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
+        else
+        {
+          e.Cancel = true;
+          _isCellCancel = true;
+        }
+      }
+      //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
+      else
+      {
+        _isCellCancel = true;
+      }
+    }
+
+    #endregion CellEditEnding
+
+    #region RowEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 02/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      DataGrid dtg = sender as DataGrid;
+
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        if (_isCellCommitGuestAdditional)
+        {
+          _isCellCommitGuestAdditional = false;
+          e.Cancel = true;
+        }
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        {
+          _isCellCommitGuestAdditional = false;
+          e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestObj, (Guest)e.Row.Item, true)).Item1;
+          GridHelper.SelectRow(dtgGuestAdditional, e.Row.GetIndex(), blnEdit: true);
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+        //  if (_isCellCancel)
+        //{
+        //  dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+        //  dtg.CancelEdit();
+        //  dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+        //}
+      }
+    }
+
+    #endregion RowEditEnding
+
+    #endregion Eventos del GRID GuestAdditional
+
+    #region btnSearchGuestAdditional_Click
+
+    /// <summary>
+    /// Abre la ventana SearchGuest
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private async void btnSearchGuestAdditional_Click(object sender, RoutedEventArgs e)
+    {
+      frmSearchGuest frmSrchGu = new frmSearchGuest(App.User, EnumProgram.Outhouse)
+      {
+        Owner = this
+      };
+      frmSrchGu.ShowDialog();
+      //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
+      var guestAdditionalList = frmSrchGu.lstGuestAdd ?? new List<Guest>();
+      if (guestAdditionalList.Any())
+      {
+        List<string> lstMsg = new List<string>();
+        foreach (var ga in guestAdditionalList)
+        {
+          //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
+          //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
+          var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestObj, ga);
+          if (!validate.Item1) { lstMsg.Add($"Guest ID: {ga.guID} \t{validate.Item2}"); continue; }
+          if (validate.Item1 && GuestAdditionalList.Any(c => c.guID == ga.guID)) { lstMsg.Add($"Guest ID: {ga.guID} \tIt is already in the list."); continue; }
+          GuestAdditionalList.Add(ga);
+        };
+
+        if (lstMsg.Any())
+        {
+          UIHelper.ShowMessage(string.Join("\n", lstMsg));
+        }
+      }
+    }
+
+    #endregion btnSearchGuestAdditional_Click
+
+    #region guestDetails_Click
+
+    /// <summary>
+    /// Abre la ventana Guest, para mostrar la informacion.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void guestDetails_Click(object sender, RoutedEventArgs e)
+    {
+      var guest = dtgGuestAdditional.Items[dtgGuestAdditional.Items.CurrentPosition] as Guest;
+      if (guest == null || guest.guID == 0) return;
+      if (GuestObj != null && string.IsNullOrWhiteSpace(txtguls.Text))
+      {
+        UIHelper.ShowMessage("Specify the Lead Source", title: "Intelligence Marketing");
+        return;
+      }
+      if (GuestObj != null && string.IsNullOrWhiteSpace(txtgusr.Text))
+      {
+        UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
+        return;
+      }
+      frmGuest frmGuest = new frmGuest(App.User, guest.guID, false, EnumModule.Host, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      frmGuest.ShowDialog();
+    }
+
+    #endregion guestDetails_Click
+
+    #region btnAddGuestAdditional_OnClick
+
+    /// <summary>
+    /// Abre la ventana Guest, para crear el nuevo guest adicional.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void BtnAddGuestAdditional_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (GuestObj != null && string.IsNullOrWhiteSpace(txtguls.Text))
+      {
+        UIHelper.ShowMessage("Specify the Lead Source", title: "Intelligence Marketing");
+        return;
+      }
+      if (GuestObj != null && string.IsNullOrWhiteSpace(txtgusr.Text))
+      {
+        UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
+        return;
+      }
+
+      frmGuest frmGuest = new frmGuest(App.User, 0, false, EnumModule.Host, dtgGuestAdditional.IsReadOnly);
+      frmGuest.ShowDialog();
+      //Validacion del nuevo guest.
+    }
+
+    #endregion btnAddGuestAdditional_OnClick
+
+    #endregion GuestAdditional
 
     #endregion Eventos del formulario
 

@@ -6,14 +6,6 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closing="Window_Closing" ShowInTaskbar="False">
-    <!--<Window.Resources>
-        <Style TargetType="{x:Type DataGrid}">
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}"/>
-            </Style.Resources>
-            <Setter Property="AlternatingRowBackground" Value="LightGray"></Setter>
-        </Style>
-    </Window.Resources>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -272,15 +264,11 @@
                 <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
-                    <!--<DatePicker Name="dtmStart" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
-                    <!--<ScrollBar Name="updStart" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
-                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus"/>
+                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus" Width="170" Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
                 </Grid>
                 <Label Grid.Row="2" VerticalAlignment="Center" Content="To" HorizontalContentAlignment="Right" ></Label>
                 <Grid Name="pnlDtmEnd"  Grid.Row="2" Grid.Column="1">
-                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus"/>
-                    <!--<DatePicker Name="dtmEnd" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
-                    <!--<ScrollBar Name="updEnd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
+                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus" Width="170"  Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
                 </Grid>
             </Grid>
             <!--#endregion-->

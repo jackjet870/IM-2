@@ -435,8 +435,8 @@ namespace IM.BusinessRules.BR
         {
           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
-            var program = dbContext.LeadSources.Where(x => x.lsID == lsID).FirstOrDefault();
-            return program.lspg;
+            var program = dbContext.LeadSources.FirstOrDefault(x => x.lsID == lsID);
+            return program?.lspg;
           }
         });
       }

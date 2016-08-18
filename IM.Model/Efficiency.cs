@@ -27,9 +27,9 @@ namespace IM.Model
         public string efet { get; set; }
         public string efpd { get; set; }
     
-        public virtual EfficiencyType EfficiencyType { get; set; }
-        public virtual Period Period { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
+        public virtual EfficiencyType EfficiencyType { internal get; set; }
+        public virtual Period Period { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Personnel> Personnels { get; set; }
     }

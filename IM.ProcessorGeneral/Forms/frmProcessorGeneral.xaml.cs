@@ -341,6 +341,28 @@ namespace IM.ProcessorGeneral.Forms
     }
     #endregion
 
+    #region btnReportQueue_Click
+    /// <summary>
+    /// Configura la ruta para guardar los reportes.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [edgrodriguez] 17/Jun/2016 Created
+    /// </history>
+    private void btnReportQueue_Click(object sender, RoutedEventArgs e)
+    {
+      if (!ConfigRegistryHelper.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
+      _frmReportQueue.Show();
+      if (_frmReportQueue.WindowState == WindowState.Minimized)
+        _frmReportQueue.WindowState = WindowState.Normal;
+      _frmReportQueue.Activate();
+    }
+    #endregion
+
     #endregion
 
     #region Métodos Privados
@@ -1106,6 +1128,7 @@ namespace IM.ProcessorGeneral.Forms
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
         _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
       {
@@ -1321,6 +1344,7 @@ namespace IM.ProcessorGeneral.Forms
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
         _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
       {
@@ -1565,6 +1589,7 @@ namespace IM.ProcessorGeneral.Forms
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
         _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
       {
@@ -1771,28 +1796,7 @@ namespace IM.ProcessorGeneral.Forms
 
     #endregion SetupParameters
 
-    #endregion
-
-    /// <summary>
-    /// Configura la ruta para guardar los reportes.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [edgrodriguez] 17/Jun/2016 Created
-    /// </history>
-    private void btnReportQueue_Click(object sender, RoutedEventArgs e)
-    {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
-      _frmReportQueue.Show();
-      if (_frmReportQueue.WindowState == WindowState.Minimized)
-        _frmReportQueue.WindowState = WindowState.Normal;
-      _frmReportQueue.Activate();
-    }
-
+    #region ShowSystemCfg
     /// <summary>
     /// Muestra la ventana de configuracion
     /// </summary>
@@ -1814,5 +1818,8 @@ namespace IM.ProcessorGeneral.Forms
       }
       return _isConfigured;
     }
+    #endregion
+
+    #endregion
   }
 }

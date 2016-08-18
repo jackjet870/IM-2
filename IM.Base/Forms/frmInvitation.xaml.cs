@@ -1,23 +1,27 @@
-﻿using System.Windows;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Model.Enums;
-using IM.Model.Classes;
 using IM.Model;
-using IM.Base.Classes;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using IM.Styles.Classes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Data;
 using System.ComponentModel;
-using System;
-using System.Windows.Data;
-using IM.Styles.Classes;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using IM.Services.WirePRService;
 using System.Runtime.CompilerServices;
 using System.Linq;
+
+using System.Threading.Tasks;
+
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace IM.Base.Forms
 {
@@ -27,15 +31,19 @@ namespace IM.Base.Forms
   public partial class frmInvitation : Window, INotifyPropertyChanged
   {
     #region Propiedades, Atributos
+
     //Parametros del constructor
     public readonly EnumModule _module;
+
     public readonly EnumInvitationType _invitationType;
     public UserData _user;
     private int _guestId;
     public readonly bool _allowReschedule;
     public bool _isEditing = false;
+
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
+
     private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
     private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
     private bool _dontShowAgainGuestStatus = false;
@@ -69,7 +77,10 @@ namespace IM.Base.Forms
       field = value;
       OnPropertyChanged(propertyName);
     }
-    #endregion
+    private bool _isCellCommitGuestAdditional;
+
+    #endregion Propiedades, Atributos
+
     #endregion
     /// <summary>
     /// Inicializa en formulario de invitacion
@@ -97,6 +108,7 @@ namespace IM.Base.Forms
       #region Inicializar Grids
 
       #region dtgGift
+
       dtgGifts.InitializingNewItem += ((object sender, InitializingNewItemEventArgs e) =>
       {
         if (e.NewItem != null)
@@ -105,13 +117,14 @@ namespace IM.Base.Forms
         }
       });
       GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
-      #endregion
 
       GridHelper.SetUpGrid(dtgCCCompany, new GuestCreditCard());
 
       #endregion
+      #endregion dtgGift
 
     }
+
     #region Eventos de la ventana
 
     #region Window_Loaded
@@ -145,7 +158,8 @@ namespace IM.Base.Forms
         _busyIndicator.IsBusy = false;
       }
     }
-    #endregion
+
+    #endregion Window_Loaded
 
     #region imgButtonSave_MouseLeftButtonDown
     /// <summary>
@@ -169,9 +183,9 @@ namespace IM.Base.Forms
       {
         _isValid = InvitationValidationRules.ValidateInformationGrids(this, catObj);
       }
-
     }
-    #endregion
+
+    #endregion imgButtonSave_MouseLeftButtonDown
 
     #region imgButtonEdit_MouseLeftButtonDown
     /// <summary>
@@ -199,7 +213,8 @@ namespace IM.Base.Forms
         EditModeControlsBehavior();
       }
     }
-    #endregion
+
+    #endregion imgButtonEdit_MouseLeftButtonDown
 
     #region imgButtonPrint_MouseLeftButtonDown
     /// <summary>
@@ -213,9 +228,11 @@ namespace IM.Base.Forms
       //Generamos Reporte
       RptInvitationHelper.RptInvitation(_guestId, _user.User.peID);
     }
-    #endregion
+
+    #endregion imgButtonPrint_MouseLeftButtonDown
 
     #region imgButtonCancel_MouseLeftButtonDown
+
     /// <summary>
     /// Sirve para cancelar la edicion, y si no esta en modo edicion cierra el formulario de invitacion
     /// </summary>
@@ -253,11 +270,13 @@ namespace IM.Base.Forms
         Close();
       }
     }
-    #endregion
+
+    #endregion imgButtonCancel_MouseLeftButtonDown
 
     #region imgButtonLog_MouseLeftButtonDown
+
     /// <summary>
-    /// Abre el formulario de GuestLog se la pasa el guID, sirve para mostrar los movimientos que ha tenido el guID 
+    /// Abre el formulario de GuestLog se la pasa el guID, sirve para mostrar los movimientos que ha tenido el guID
     /// </summary>
     /// <history>
     /// [erosado] 11/08/2016  Created.
@@ -269,9 +288,11 @@ namespace IM.Base.Forms
       frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
-    #endregion
+
+    #endregion imgButtonLog_MouseLeftButtonDown
 
     #region imgButtonReLogin_MouseLeftButtonDown
+
     /// <summary>
     /// Permite Re-Login en la invitacion
     /// </summary>
@@ -304,7 +325,6 @@ namespace IM.Base.Forms
         Window_Loaded(this, null);
       }
     }
-    #endregion
 
     #region brdSearchButton_MouseLeftButtonDown
     /// <summary>
@@ -333,6 +353,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region btnChange_Click
+
     /// <summary>
     /// Evento del boton Change dentro de OtherInformation
     /// </summary>
@@ -343,9 +364,11 @@ namespace IM.Base.Forms
     {
       Change();
     }
-    #endregion
+
+    #endregion btnChange_Click
 
     #region btnReschedule_Click
+
     /// <summary>
     /// Evento del boton Reschedule dentro de OtherInformation
     /// </summary>
@@ -356,9 +379,11 @@ namespace IM.Base.Forms
     {
       Reschedule();
     }
-    #endregion
+
+    #endregion btnReschedule_Click
 
     #region btnRebook_Click
+
     /// <summary>
     /// Evento del boton Rebook dentro de OtherInformation
     /// </summary>
@@ -369,15 +394,19 @@ namespace IM.Base.Forms
     {
       Rebook();
     }
-    #endregion
+
+    #endregion btnRebook_Click
+
+    #endregion imgButtonReLogin_MouseLeftButtonDown
 
     #region cmbGuestStatus_SelectionChanged
+
     /// <summary>
     /// Evento del Combobox GuestStatus, Sirve para actualizar la caja de texto txtGiftMaxAuth dependiendo del GuestStatus que elija el usuario.
     /// </summary>
     ///<history>
     ///[erosado]  02/08/2016  Created.
-    /// </history>    
+    /// </history>
     private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       //Obtenemos el GuestStatusType del combobox cmbGuestStatus
@@ -390,9 +419,11 @@ namespace IM.Base.Forms
       //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
       //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
     }
-    #endregion
+
+    #endregion cmbGuestStatus_SelectionChanged
 
     #region cmbSalesRooms_SelectionChanged
+
     /// <summary>
     /// Obtiene la informacion de los tourTimes cada que se cambia de sala de ventas
     /// </summary>
@@ -403,18 +434,20 @@ namespace IM.Base.Forms
     {
       if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
-        //Consultamos los horarios disponibles 
+        //Consultamos los horarios disponibles
         catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
       }
       if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
-        //Consultamos los horarios disponibles 
+        //Consultamos los horarios disponibles
         catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
       }
     }
-    #endregion
+
+    #endregion cmbSalesRooms_SelectionChanged
 
     #region dtpBookDate_ValueChanged
+
     /// <summary>
     /// Obtiene la informacion de los tourTimes cada que se cambia la fecha de Book
     /// </summary>
@@ -426,13 +459,15 @@ namespace IM.Base.Forms
       //Si tiene una fecha y es una fecha valida
       if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
-        //Consultamos los horarios disponibles 
+        //Consultamos los horarios disponibles
         catObj.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
       }
     }
-    #endregion
+
+    #endregion dtpBookDate_ValueChanged
 
     #region dtpRescheduleDate_ValueChanged
+
     /// <summary>
     /// Obtiene la informacion de los tourTimes cada que se cambia la fecha de Reschedule
     /// </summary>
@@ -444,17 +479,17 @@ namespace IM.Base.Forms
       //Si tiene una fecha y es una fecha valida
       if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
-        //Consultamos los horarios disponibles 
+        //Consultamos los horarios disponibles
         cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
       }
     }
-    #endregion
 
-    #endregion
+    #endregion dtpRescheduleDate_ValueChanged
 
-    #region Controls Configuration
+    #endregion Eventos de la ventana
 
     #region ControlsConfiguration
+
     /// <summary>
     /// Prepara los controle para los diferentes tipos de invitacion
     /// </summary>
@@ -489,9 +524,11 @@ namespace IM.Base.Forms
       //Configuramos los controles de Change,Reschedule,Rebook
       SetupChangeRescheduleRebook();
     }
-    #endregion
 
-    #region  MenuBarConfiguration
+    #endregion ControlsConfiguration
+
+    #region MenuBarConfiguration
+
     /// <summary>
     /// Activa o desactiva los botones de la barra de menu dependiendo del modo de la invitacion
     /// </summary>
@@ -525,13 +562,13 @@ namespace IM.Base.Forms
         imgButtonLog.IsEnabled = true;
       }
     }
-    #endregion
 
-    #endregion
+    #endregion MenuBarConfiguration
 
     #region CollapsedControlsConfiguration
 
     #region CollapsedControls
+
     /// <summary>
     /// Colapsa los controles dependiendo del EnumModule
     /// </summary>
@@ -541,16 +578,18 @@ namespace IM.Base.Forms
     private void CollapsedControls()
     {
       /*Todos los controles por Default estan en Modo Visible
-       *Esta ventana solo colapsa controles que no se van a utilizar  
+       *Esta ventana solo colapsa controles que no se van a utilizar
        *Esto depende del EnumInvitationType */
       switch (_module)
       {
         case EnumModule.InHouse:
           InHouseCollapsed();
           break;
+
         case EnumModule.OutHouse:
           OutHouseCollapsed();
           break;
+
         case EnumModule.Host:
 
           if (_invitationType == EnumInvitationType.newExternal || _invitationType == EnumInvitationType.existing)
@@ -562,13 +601,16 @@ namespace IM.Base.Forms
             OutHouseCollapsed();
           }
           break;
+
         default:
           break;
       }
     }
-    #endregion
+
+    #endregion CollapsedControls
 
     #region InHouseCollapsed
+
     /// <summary>
     /// Colapsa controles para la invitacion InHouse
     /// </summary>
@@ -581,9 +623,11 @@ namespace IM.Base.Forms
       stkPRContact.Visibility = Visibility.Collapsed;
       stkFlightNumber.Visibility = Visibility.Collapsed;
     }
-    #endregion
+
+    #endregion InHouseCollapsed
 
     #region OutHouseCollapsed
+
     /// <summary>
     /// Colapsa controles para la invitacion OutHouse
     /// </summary>
@@ -601,13 +645,15 @@ namespace IM.Base.Forms
       brdCreditCard.Visibility = Visibility.Collapsed;
       brdRoomsQtyAndElectronicPurse.Visibility = Visibility.Collapsed;
     }
-    #endregion
 
-    #endregion
+    #endregion OutHouseCollapsed
+
+    #endregion CollapsedControlsConfiguration
 
     #region ControlBehavior
 
     #region ControlBehaviorConfiguration
+
     /// <summary>
     /// Sirve para configurar el comportamiento de los controles dependiendo del modo de la invitacion y el modulo desde donde se abre.
     /// </summary>
@@ -621,9 +667,11 @@ namespace IM.Base.Forms
         case EnumModule.InHouse:
           ControlsBehaviorInHouse();
           break;
+
         case EnumModule.OutHouse:
           ControlsBehaviorOutHouse();
           break;
+
         case EnumModule.Host:
           if (_invitationType == EnumInvitationType.newExternal || _invitationType == EnumInvitationType.existing)
           {
@@ -634,13 +682,16 @@ namespace IM.Base.Forms
             ControlsBehaviorOutHouse();
           }
           break;
+
         default:
           break;
       }
     }
-    #endregion
+
+    #endregion ControlBehaviorConfiguration
 
     #region ControlsBehaviorInHouse
+
     /// <summary>
     /// Cambia el comportamiento de los controles visbles en la invitacion InHouse
     /// </summary>
@@ -650,6 +701,7 @@ namespace IM.Base.Forms
     private void ControlsBehaviorInHouse()
     {
       #region Enable false
+
       chkguShow.IsEnabled = false;
       chkguInterval.IsEnabled = false;
       chkDirect.IsEnabled = _module == EnumModule.Host ? true : false;
@@ -659,11 +711,13 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
-      //btnAddGuestAdditional.IsEnabled = catObj.InvitationMode != EnumMode.ReadOnly;
-      //btnSearchGuestAdditional.IsEnabled = catObj.InvitationMode != EnumMode.ReadOnly;
-      #endregion
+      btnAddGuestAdditional.IsEnabled = catObj.InvitationMode != EnumMode.ReadOnly;
+      btnSearchGuestAdditional.IsEnabled = catObj.InvitationMode != EnumMode.ReadOnly;
+
+      #endregion Enable false
 
       #region IsReadOnly
+
       txtguID.IsReadOnly = true;
       txtguHReservID.IsReadOnly = true;
       txtguRef.IsReadOnly = true;
@@ -673,11 +727,11 @@ namespace IM.Base.Forms
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
       txtguAccountGiftsCard.IsReadOnly = true;
-      dtgAdditionalGuest.IsReadOnly = catObj.InvitationMode == EnumMode.ReadOnly;
+      dtgGuestAdditional.IsReadOnly = catObj.InvitationMode == EnumMode.ReadOnly;
 
-      #endregion
+      #endregion IsReadOnly
 
-      //Si es una invitacion existente 
+      //Si es una invitacion existente
       if (catObj.InvitationMode != EnumMode.Add)
       {
         //Desactivamos los siguientes controles.
@@ -691,9 +745,10 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion
+    #endregion ControlsBehaviorInHouse
 
     #region ControlsBehaviorOutHouse
+
     /// <summary>
     /// Cambia el comportamiento de los controles visbles en la invitacion OutHouse
     /// </summary>
@@ -703,20 +758,24 @@ namespace IM.Base.Forms
     private void ControlsBehaviorOutHouse()
     {
       #region Enable false
+
       chkguShow.IsEnabled = false;
       chkguInterval.IsEnabled = false;
       chkDirect.IsEnabled = false;
       btnChange.IsEnabled = false;
-      #endregion
+
+      #endregion Enable false
 
       #region IsReadOnly
+
       txtguID.IsReadOnly = true;
       dtpguInvitD.IsReadOnly = true;
       tpkguInvitT.IsReadOnly = true;
       txtguIdProfileOpera.IsReadOnly = true;
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
-      #endregion
+
+      #endregion IsReadOnly
 
       //Si OutHouse y es una invitacion existente
       if (_module == EnumModule.OutHouse && catObj.InvitationMode != EnumMode.Add)
@@ -728,11 +787,12 @@ namespace IM.Base.Forms
         dtpBookDate.IsEnabled = false;
         cmbBookT.IsEnabled = false;
       }
-
     }
-    #endregion
+
+    #endregion ControlsBehaviorOutHouse
 
     #region EditModeControlsBehavior
+
     /// <summary>
     /// Sirve para saber que se puede o que no se puede editar en una invitacion, dependiendo de los permisos del usuario
     /// </summary>
@@ -762,7 +822,7 @@ namespace IM.Base.Forms
         stkRescheduleDate.IsEnabled = false;
       }
 
-      //BOOKING DEPOSITS      
+      //BOOKING DEPOSITS
       //Si viene de InHouse o Host
       if (_module != EnumModule.OutHouse)
       {
@@ -781,7 +841,7 @@ namespace IM.Base.Forms
         //Si la fecha de booking original es antes de hoy
         if (catObj.CloneGuest.guBookD < serverDate)
         {
-          brdAdditionalGuest.IsEnabled = false;
+          dtgGuestAdditional.IsReadOnly = true;
         }
       }
 
@@ -811,7 +871,7 @@ namespace IM.Base.Forms
 
       if (_module == EnumModule.InHouse)
       {
-        //Si la fecha de Booking origial es antes de hoy No permitimos modificar 
+        //Si la fecha de Booking origial es antes de hoy No permitimos modificar
         if (catObj.CloneGuest.guBookD < serverDate)
         {
           brdCreditCard.IsEnabled = false;
@@ -820,9 +880,11 @@ namespace IM.Base.Forms
         }
       }
     }
-    #endregion
+
+    #endregion EditModeControlsBehavior
 
     #region SetReadOnly
+
     /// <summary>
     /// Deshabilita los controles principales
     /// </summary>
@@ -843,13 +905,15 @@ namespace IM.Base.Forms
       brdBookingDeposits.IsEnabled = false;
       brdCreditCard.IsEnabled = false;
       //Additional Guest
-      dtgAdditionalGuest.IsReadOnly = true;
+      dtgGuestAdditional.IsReadOnly = true;
 
       brdRoomsQtyAndElectronicPurse.IsEnabled = false;
     }
-    #endregion
+
+    #endregion SetReadOnly
 
     #region SetAdd
+
     /// <summary>
     /// Habilita los controles principales
     /// </summary>
@@ -870,7 +934,7 @@ namespace IM.Base.Forms
       brdBookingDeposits.IsEnabled = true;
       brdCreditCard.IsEnabled = true;
       //Additional Guest
-      dtgAdditionalGuest.IsEnabled = true;
+      dtgGuestAdditional.IsEnabled = true;
       brdRoomsQtyAndElectronicPurse.IsEnabled = true;
 
       //Si esta iniciando una edicion de invitacion desactivamos los siguientes controles
@@ -881,13 +945,15 @@ namespace IM.Base.Forms
         imgButtonSave.IsEnabled = true;
       }
     }
-    #endregion
 
-    #endregion
+    #endregion SetAdd
+
+    #endregion ControlBehavior
 
     #region Metodos Complementarios
 
     #region SetupChangeRescheduleRebook
+
     /// <summary>
     /// Permite / impide el cambio de booking, reschedule y rebook
     /// </summary>
@@ -939,7 +1005,7 @@ namespace IM.Base.Forms
           btnReschedule.IsEnabled = true;
           btnRebook.IsEnabled = true;
         }
-        //Si la fecha de invitacion es antes de hoy y No tiene reschedule y la fecha de booking es despues de hoy 
+        //Si la fecha de invitacion es antes de hoy y No tiene reschedule y la fecha de booking es despues de hoy
         else if (catObj.Guest.guInvitD < serverDate && !catObj.Guest.guResch &&
           catObj.Guest.guBookD > serverDate && _user.HasPermission(permission, EnumPermisionLevel.Standard))
         {
@@ -983,7 +1049,7 @@ namespace IM.Base.Forms
           btnChange.IsEnabled = true;
         }
       }
-      //Si la fecha de salida es antes que hoy o el usuario NO tiene permisos speciales 
+      //Si la fecha de salida es antes que hoy o el usuario NO tiene permisos speciales
       else
       {
         //No se permite cambiar reschedule ni rebook
@@ -992,9 +1058,11 @@ namespace IM.Base.Forms
         btnRebook.IsEnabled = false;
       }
     }
-    #endregion
+
+    #endregion SetupChangeRescheduleRebook
 
     #region LoadTourTimes
+
     /// <summary>
     /// Sirve para cargar los TourTimes disponibles
     /// </summary>
@@ -1036,9 +1104,11 @@ namespace IM.Base.Forms
       }
       return tourTimes;
     }
-    #endregion
+
+    #endregion LoadTourTimes
 
     #region Change
+
     /// <summary>
     /// Este evento de ejecuta desde el boton btnChange
     /// </summary>
@@ -1067,7 +1137,7 @@ namespace IM.Base.Forms
           //Si tiene permiso especial
           if (_user.HasPermission(permission, EnumPermisionLevel.Special))
           {
-            //PR Contact 
+            //PR Contact
             if (!cmbPRContact.IsEnabled)
             {
               stkPRContact.IsEnabled = true;
@@ -1088,7 +1158,7 @@ namespace IM.Base.Forms
       //Si no se permite Reschedule
       else
       {
-        //Fecha de Booking 
+        //Fecha de Booking
         stkBookDateAndTime.IsEnabled = true;
 
         //PR Contact
@@ -1109,9 +1179,10 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion
+    #endregion Change
 
     #region Reschedule
+
     /// <summary>
     /// Este metodo se ejecuta desde el boton btnReschedule
     /// </summary>
@@ -1141,11 +1212,12 @@ namespace IM.Base.Forms
 
       //Activamos el Check de reschedule
       chkReschedule.IsChecked = true;
-
     }
-    #endregion
+
+    #endregion Reschedule
 
     #region Rebook
+
     private void Rebook()
     {
       /*Nota: El proceso del Rebook consiste en la creacion de un nuevo Guest teniendo como guRef el ID del Guest anterior
@@ -1172,7 +1244,7 @@ namespace IM.Base.Forms
       }
       //Limpiamos la informacion del Guest ID
       catObj.Guest.guID = 0;
-      
+
       //Desactivamos Quinella
       catObj.Guest.guQuinella = false;
       //Desactivamos Show
@@ -1234,7 +1306,7 @@ namespace IM.Base.Forms
         catObj.Guest.guRoomsQty = 1;
       }
     }
-    #endregion
+    #endregion Rebook
 
     #region GetSearchReservationInfo
     /// <summary>
@@ -1268,13 +1340,14 @@ namespace IM.Base.Forms
 
     }
 
-    #endregion
+    #endregion   
 
     #endregion
 
     #region Eventos del GRID Invitation Gift
 
     #region BeginningEdit
+
     /// <summary>
     /// Se ejecuta antes de que entre en modo edicion alguna celda
     /// </summary>
@@ -1299,7 +1372,6 @@ namespace IM.Base.Forms
         {
           _dontShowAgainGuestStatus = true;
         }
-
       }
       else
       {
@@ -1315,7 +1387,7 @@ namespace IM.Base.Forms
         InvitationGift invitationGift = e.Row.Item as InvitationGift;
         //Obtenemos la celda que vamos a validar
         _IGCurrentCell = dtgGifts.CurrentCell;
-        //Hacemos la primera validacion 
+        //Hacemos la primera validacion
         InvitationValidationRules.StartEdit(ref invitationGift, ref _IGCurrentCell, dtgGifts, ref _hasError);
         //Si tuvo algun error de validacion cancela la edicion de la celda.
         e.Cancel = _hasError;
@@ -1327,9 +1399,11 @@ namespace IM.Base.Forms
         e.Cancel = true;
       }
     }
-    #endregion
+
+    #endregion BeginningEdit
 
     #region PreparingCellForEdit
+
     /// <summary>
     /// Se ejecuta cuando la celda entra en modo edicion
     /// </summary>
@@ -1342,9 +1416,11 @@ namespace IM.Base.Forms
       Control ctrl = e.EditingElement as Control;
       ctrl.Focus();
     }
-    #endregion
+
+    #endregion PreparingCellForEdit
 
     #region CellEditEnding
+
     /// <summary>
     /// Se ejecuta cuando la celda en edicion pierde el foco
     /// </summary>
@@ -1361,13 +1437,13 @@ namespace IM.Base.Forms
         {
           //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
           _isCellCancel = false;
-          //Obtenemos el Objeto 
+          //Obtenemos el Objeto
           InvitationGift invitationGift = e.Row.Item as InvitationGift;
 
           //Bandera que checata que todo salga bien en la validacion siguiente.
           bool _hasErrorValidateEdit = false;
           //Validamos la celda
-          //TODO:Revisar este metodo 
+          //TODO:Revisar este metodo
           //InvitationValidationRules.ValidateEdit(ref invitationGift, ref _hasErrorValidateEdit, ref _IGCurrentCell);
 
           //Si Paso las validaciones
@@ -1391,9 +1467,11 @@ namespace IM.Base.Forms
         }
       }
     }
-    #endregion
+
+    #endregion CellEditEnding
 
     #region RowEditEnding
+
     /// <summary>
     /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
     /// </summary>
@@ -1430,12 +1508,258 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion
+    #endregion RowEditEnding
 
-    #endregion
+    #endregion Eventos del GRID Invitation Gift
+
+    #region GuestAdditional
+
+    #region Eventos del GRID GuestAdditional
+
+    #region BeginningEdit
+
+    /// <summary>
+    /// Se ejecuta antes de que entre en modo edicion alguna celda
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (cmbSalesRooms.SelectedIndex == -1 && e.Column.SortMemberPath == "guID")
+      {
+        UIHelper.ShowMessage("First select a Sales Room ", MessageBoxImage.Warning, "Intelligence Marketing");
+
+        e.Cancel = true;
+        _hasError = true;
+        _isCellCancel = true;
+        tabGeneral.IsSelected = true;
+        cmbSalesRooms.Focus();
+      }
+      else
+      {
+        _hasError = false;
+        _isCellCancel = false;
+      }
+
+      //Si el grid no esta en modo edicion, permite hacer edicion.
+      if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
+      {
+        dtgGuestAdditional.BeginningEdit -= dtgGuestAdditional_BeginningEdit;
+        //Obtenemos la celda que vamos a validar
+        _IGCurrentCell = dtgGuestAdditional.CurrentCell;
+        //Hacemos la primera validacion
+        InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
+        //Si tuvo algun error de validacion cancela la edicion de la celda.
+        e.Cancel = _hasError;
+        dtgGuestAdditional.BeginningEdit += dtgGuestAdditional_BeginningEdit;
+      }
+      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+
+    #endregion BeginningEdit
+
+    #region PreparingCellForEdit
+
+    /// <summary>
+    /// Se ejecuta cuando la celda entra en modo edicion
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      //Sirve para agregar el Focus a las celdas
+      Control ctrl = e.EditingElement as Control;
+      ctrl?.Focus();
+    }
+
+    #endregion PreparingCellForEdit
+
+    #region CellEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la celda en edicion pierde el foco
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      //Si paso las validaciones del preparingCellForEdit
+      if (_hasError) return;
+      //Si viene en modo Commit
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
+        //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
+        _isCellCancel = false;
+        //Obtenemos el Objeto
+        Guest guestAdditionalRow = e.Row.Item as Guest;
+        Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow.guID));//await BRGuests.GetGuest(guestAdditionalRow.guID);
+        var NotValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(catObj.Guest, guestAdditional, _IGCurrentCell));
+        //Si Paso las validaciones
+        if (!NotValid)
+        {
+          e.Row.Item = guestAdditional;
+        }
+        //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
+        else
+        {
+          e.Cancel = true;
+          _isCellCancel = true;
+        }
+      }
+      //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
+      else
+      {
+        _isCellCancel = true;
+      }
+    }
+
+    #endregion CellEditEnding
+
+    #region RowEditEnding
+
+    /// <summary>
+    /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 02/08/2016  Created.
+    /// </history>
+    private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      DataGrid dtg = sender as DataGrid;
+
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        if (_isCellCommitGuestAdditional)
+        {
+          _isCellCommitGuestAdditional = false;
+          e.Cancel = true;
+        }
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        {
+          _isCellCommitGuestAdditional = false;
+          e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(catObj.Guest, (Guest)e.Row.Item, true)).Item1;
+          GridHelper.SelectRow(dtgGuestAdditional, e.Row.GetIndex(), blnEdit: true);
+        }
+        else
+        {
+          e.Cancel = true;
+        }        
+      }
+    }
+
+    #endregion RowEditEnding
+
+    #endregion Eventos del GRID GuestAdditional
+
+    #region btnSearchGuestAdditional_Click
+
+    /// <summary>
+    /// Abre la ventana SearchGuest
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private async void btnSearchGuestAdditional_Click(object sender, RoutedEventArgs e)
+    {
+      frmSearchGuest frmSrchGu = new frmSearchGuest(_user, _module == EnumModule.InHouse ? EnumProgram.Inhouse : EnumProgram.Outhouse)
+      {
+        Owner = this
+      };
+      frmSrchGu.ShowDialog();
+      //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
+      var guestAdditionalList = frmSrchGu.lstGuestAdd ?? new List<Guest>();
+      if (guestAdditionalList.Any())
+      {
+        List<string> lstMsg = new List<string>();
+        foreach (var ga in guestAdditionalList)
+        {
+          //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
+          //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
+          var validate = await InvitationValidationRules.ValidateAdditionalGuest(catObj.Guest, ga);
+          if (!validate.Item1) { lstMsg.Add($"Guest ID: {ga.guID} \t{validate.Item2}"); continue; }
+          if (validate.Item1 && catObj.AdditionalGuestList.Any(c => c.guID == ga.guID)) { lstMsg.Add($"Guest ID: {ga.guID} \tIt is already in the list."); continue; }
+          catObj.AdditionalGuestList.Add(ga);
+        };
+
+        if (lstMsg.Any())
+        {
+          UIHelper.ShowMessage(string.Join("\n", lstMsg));
+        }
+      }
+    }
+
+    #endregion btnSearchGuestAdditional_Click
+
+    #region guestDetails_Click
+
+    /// <summary>
+    /// Abre la ventana Guest, para mostrar la informacion.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void guestDetails_Click(object sender, RoutedEventArgs e)
+    {
+      var guest = dtgGuestAdditional.Items[dtgGuestAdditional.Items.CurrentPosition] as Guest;
+      if (guest == null || guest.guID == 0) return;
+      if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.guls))
+      {
+        UIHelper.ShowMessage("Specify the Lead Source", title: "Intelligence Marketing");
+        return;
+      }
+      if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.gusr))
+      {
+        UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
+        return;
+      }
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, true, _module, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      frmGuest.ShowDialog();
+    }
+
+    #endregion guestDetails_Click
+
+    #region btnAddGuestAdditional_OnClick
+
+    /// <summary>
+    /// Abre la ventana Guest, para crear el nuevo guest adicional.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 15/08/2016  Created.
+    /// </history>
+    private void BtnAddGuestAdditional_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.guls))
+      {
+        UIHelper.ShowMessage("Specify the Lead Source", title: "Intelligence Marketing");
+        return;
+      }
+      if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.gusr))
+      {
+        UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
+        return;
+      }
+
+      frmGuest frmGuest = new frmGuest(_user, 0, true, _module, dtgGuestAdditional.IsReadOnly);
+      frmGuest.ShowDialog();
+      //Validacion del nuevo guest.
+    }
+
+    #endregion btnAddGuestAdditional_OnClick
+
+    #endregion GuestAdditional
 
     #region Datagrid Boking Deposits
-    #region BeginningEdit 
+
+    #region BeginningEdit
+
     private void dtgBookingDeposits_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
       if (!GridHelper.IsInEditMode(dtgBookingDeposits))
@@ -1447,9 +1771,11 @@ namespace IM.Base.Forms
         e.Cancel = true;
       }
     }
-    #endregion
+
+    #endregion BeginningEdit
 
     #region CellEditEnding
+
     private void dtgBookingDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
@@ -1459,9 +1785,11 @@ namespace IM.Base.Forms
         e.EditingElement.Focus();
       }
     }
-    #endregion
+
+    #endregion CellEditEnding
 
     #region RowEditEnding
+
     private void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)

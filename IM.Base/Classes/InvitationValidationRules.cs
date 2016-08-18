@@ -1,17 +1,17 @@
-﻿using IM.Base.Helpers;
-using System.Windows.Controls;
-using IM.Model.Enums;
-using System;
-using System.Windows;
-using IM.Model;
+﻿using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
 using IM.Model.Helpers;
-using IM.Base.Forms;
-using System.Text.RegularExpressions;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using IM.Model.Classes;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace IM.Base.Classes
 {
@@ -123,6 +123,7 @@ namespace IM.Base.Classes
     #region Grid Invitation Gift
 
     #region StartEdit
+
     /// <summary>
     /// Inicia las validaciones de los campos del Grid
     /// </summary>
@@ -145,12 +146,13 @@ namespace IM.Base.Classes
             {
               UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
               _hasError = true;
-              //Asignamos la cantidad minima 
+              //Asignamos la cantidad minima
               invitationGift.igQty = 1;
               //Mandamos el foco a la columna igQty index[0].
               GridHelper.SelectRow(dtg, rowIndex, 0, true);
             }
             break;
+
           case "igAdults":
           case "igMinors":
           case "igExtraAdults":
@@ -170,10 +172,10 @@ namespace IM.Base.Classes
               currentCellInfo.Column.IsReadOnly = !gift.giWPax;
             }
             break;
+
           default:
             break;
         }
-
       }
       //Si el regalo ya fue entregado (No necesita validar las columnas)
       else
@@ -181,9 +183,11 @@ namespace IM.Base.Classes
         _hasError = false;
       }
     }
-    #endregion
+
+    #endregion StartEdit
 
     #region ValidateEdit
+
     /// <summary>
     /// Valida la informacion del Grid
     /// </summary>
@@ -215,23 +219,27 @@ namespace IM.Base.Classes
             Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref _hasError, nameof(invitationGift.igQty));
           }
           return _hasError;
+
         case "igAdults":
           //Validacion Numero de Adultos
           Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
           return _hasError;
+
         case "igMinors":
           //Validacion Numero de menores
           Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
           return _hasError;
+
         default:
           break;
       }
       return _hasError;
     }
 
-    #endregion
+    #endregion ValidateEdit
 
     #region AfterEdit
+
     /// <summary>
     /// Valida la informacion de la celda.
     /// </summary>
@@ -263,6 +271,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult));
           }
           break;
+
         case "iggi":
           //Si se selecciono el Gift
           if (!string.IsNullOrEmpty(invitationGift.iggi))
@@ -294,13 +303,12 @@ namespace IM.Base.Classes
             //Si es OutHouse y ya selecciono guestStatusType
             if (program == EnumToListHelper.GetEnumDescription(EnumProgram.Outhouse) && guestStatusType != null)
             {
-              //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour 
+              //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
               // TODO:  EDDER-> Cambiar el tipo de parametro guestStatusType por GuestStatusValidateData
               //_passValidate = Gifts.ValidateMaxQuantityGiftTour(dtg, guestStatusType, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
-
             }
 
-            //Calculamos los costos y los precios 
+            //Calculamos los costos y los precios
             Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
                 nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
                 nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
@@ -308,6 +316,7 @@ namespace IM.Base.Classes
                 nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false);
           }
           break;
+
         case "igAdults":
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
@@ -316,6 +325,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Adults);
           break;
+
         case "igMinors":
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
@@ -324,6 +334,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Minors);
           break;
+
         case "igExtraAdults":
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
@@ -332,6 +343,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.ExtraAdults);
           break;
+
         default:
           break;
       }
@@ -344,13 +356,14 @@ namespace IM.Base.Classes
       GridHelper.UpdateCellsFromARow(dtg);
     }
 
-    #endregion
+    #endregion AfterEdit
 
-    #endregion
+    #endregion Grid Invitation Gift
 
     #region Save Validation
 
     #region ValidateGeneral
+
     /// <summary>
     /// Validamos informacion general del formulario
     /// </summary>
@@ -375,7 +388,7 @@ namespace IM.Base.Classes
       return true;
     }
 
-    #endregion
+    #endregion ValidateGeneral
 
     public static bool ValidateInformationGrids(frmInvitation form, GuestInvitation dbContext)
     {
@@ -397,9 +410,9 @@ namespace IM.Base.Classes
     private static bool BookingDepositsValidation(ref frmInvitation form, GuestInvitation dbContext)
     {
       bool _isValid = true;
-      List<string> _fieldNameToValidate = new List<string>(){nameof(BookingDeposit.bdcu), nameof(BookingDeposit.bdpt), nameof(BookingDeposit.bdcc), nameof(BookingDeposit.bdCardNum)};
+      List<string> _fieldNameToValidate = new List<string>() { nameof(BookingDeposit.bdcu), nameof(BookingDeposit.bdpt), nameof(BookingDeposit.bdcc), nameof(BookingDeposit.bdCardNum) };
       //Validamos que no esten repetidos los campos Moneda, Forma de pago, Tipo de tarjeta de credito y numero de tarjeta de credito
-      if (!string.IsNullOrWhiteSpace(ObjectHelper.AreAnyDuplicates(dbContext.BookingDepositList.ToList(),_fieldNameToValidate)))
+      if (!string.IsNullOrWhiteSpace(ObjectHelper.AreAnyDuplicates(dbContext.BookingDepositList.ToList(), _fieldNameToValidate)))
       {
         UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
         form.dtgBookingDeposits.Focus();
@@ -408,12 +421,12 @@ namespace IM.Base.Classes
       //Validamos campo por campo que se hayan ingresado
       else
       {
-
       }
       return _isValid;
     }
 
     #region ValidateFolio
+
     /// <summary>
     /// Valida el Folio dependiendo del tipo de programa que sea InHouse o OutHouse
     /// Valida que el folio de reservacion InHouse no haya sido utilizado anteriormente
@@ -464,14 +477,15 @@ namespace IM.Base.Classes
           //Verificamos que sea valido.
           _isValid = BRFolios.ValidateFolioInvitationOutside(dbContext.Guest.guID, _serie, _numero);
         }
-
       }
 
       return _isValid;
     }
-    #endregion
+
+    #endregion ValidateFolio
 
     #region ValidateCloseDate
+
     /// <summary>
     //Valida que la fecha de Arrival se encuentreno se encuentre en fecha cerrada
     /// </summary>
@@ -493,9 +507,11 @@ namespace IM.Base.Classes
       }
       return _isValid;
     }
-    #endregion
 
-    #region  ValidateBookReschedule
+    #endregion ValidateCloseDate
+
+    #region ValidateBookReschedule
+
     /// <summary>
     /// Valida el booking y el reschedule
     /// </summary>
@@ -509,14 +525,16 @@ namespace IM.Base.Classes
     {
       //Validamos BookingDateTime Si no pasa la validacion retorna false
       if (!ValidateBookingDateTime(ref form, dbContext)) return false;
-      //Validamos RescheduleDateTime Si no pasa la validacion retorna false 
+      //Validamos RescheduleDateTime Si no pasa la validacion retorna false
       if (ValidateRescheduleDateTime(ref form, dbContext)) return false;
 
       return true;
     }
-    #endregion
+
+    #endregion ValidateBookReschedule
 
     #region ValidateRescheduleDateTime
+
     /// <summary>
     /// Valida la fecha y hora de reschedule
     /// </summary>
@@ -588,9 +606,10 @@ namespace IM.Base.Classes
       return _isValid;
     }
 
-    #endregion
+    #endregion ValidateRescheduleDateTime
 
     #region ValidateBookingDateTime
+
     /// <summary>
     /// Valida la fecha y hora de booking
     /// </summary>
@@ -618,6 +637,7 @@ namespace IM.Base.Classes
           }
 
           #region Validaciones Comunes CON y SIN permisos
+
           //validamos que la fecha de booking no sea despues de la fecha de salida
           if (dbContext.Guest.guBookD > dbContext.Guest.guCheckOutD)
           {
@@ -632,7 +652,8 @@ namespace IM.Base.Classes
             form.dtpBookDate.Focus();
             _isValid = false;
           }
-          #endregion
+
+          #endregion Validaciones Comunes CON y SIN permisos
 
           /*Si si nivel de permiso es SuperSpecial
            * y su permiso es de PRInvitation o HostInvitation dependiendo del tipo
@@ -671,14 +692,14 @@ namespace IM.Base.Classes
         {
           if (ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { _isValid = false; }
         }
-
       }
       return _isValid;
     }
 
-    #endregion
+    #endregion ValidateBookingDateTime
 
     #region ValidateFolioOuthouseFormat
+
     /// <summary>
     /// Validamos que el formato del folio sea Letra(s)-Numeros
     /// </summary>
@@ -712,9 +733,11 @@ namespace IM.Base.Classes
         return false;
       }
     }
-    #endregion
+
+    #endregion ValidateFolioOuthouseFormat
 
     #region InvitationGiftValidation
+
     /// <summary>
     /// Valida la informacion de los regalos de invitacion
     /// </summary>
@@ -753,19 +776,20 @@ namespace IM.Base.Classes
       }
       return _isValid;
     }
-    #endregion
 
-    #endregion
+    #endregion InvitationGiftValidation
 
     #region DataGrid Booking Deposits
+
     #region IsReaOnlyBookingDeposits
+
     /// <summary>
     /// indica si el grid sólo va a ser lectura
     /// </summary>
     /// <param name="enumMode">Modo en que se encuentra la ventana</param>
     /// <returns>True. Va a ser modo lectura | False. Se puede editar</returns>
     /// <history>
-    /// [emoguel] 12/08/2016 created 
+    /// [emoguel] 12/08/2016 created
     /// </history>
     public static bool IsReaOnlyBookingDeposits(EnumMode enumMode, Guest guest, bool blnNewInv, EnumPermisionLevel enumPermisionLevel)
     {
@@ -773,6 +797,8 @@ namespace IM.Base.Classes
       if (enumMode == EnumMode.Edit)
       {
         //Falta validar si no es el modulo outside
+
+        #endregion IsReaOnlyBookingDeposits
 
         // si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
         // (tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
@@ -784,9 +810,11 @@ namespace IM.Base.Classes
       }
       return false;
     }
-    #endregion
+
+    #endregion DataGrid Booking Deposits
 
     #region StartEditBokingDeposits
+
     /// <summary>
     /// Valida la celda que se quiere editar
     /// </summary>
@@ -798,7 +826,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [emoguel] created 10/08/2016
     /// </history>
-    public static bool StartEditBookingDeposits(string strColumn, BookingDeposit bookingDeposit,bool blnModifyPaymentPlace=true)
+    public static bool StartEditBookingDeposits(string strColumn, BookingDeposit bookingDeposit, bool blnModifyPaymentPlace = true)
     {
       switch (strColumn)
       {
@@ -820,9 +848,11 @@ namespace IM.Base.Classes
 
       return true;
     }
-    #endregion
+
+    #endregion StartEditBokingDeposits
 
     #region validateEditBookingDeposit
+
     /// <summary>
     /// Valida que la columna cumpla con los datos necesarios
     /// </summary>
@@ -834,22 +864,26 @@ namespace IM.Base.Classes
     /// [emoguel] 11/08/2016 created
     /// </history>
     /// <returns> false. no es valido | true. es valido</returns>
-    public static bool validateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement,List<BookingDeposit> lstBookingDeposits,int guestID)
+    public static bool validateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement, List<BookingDeposit> lstBookingDeposits, int guestID)
     {
       switch (strColumn)
       {
         #region Amount
+
         case "bdAmount":
           {
             return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
           }
-        #endregion
+
+        #endregion Amount
+
         #region Received
+
         case "bdReceived":
           {
-            if( validateEditNumber(bookingDeposit.bdReceived.ToString(), "Received", 999999, 0))
+            if (validateEditNumber(bookingDeposit.bdReceived.ToString(), "Received", 999999, 0))
             {
-              if(bookingDeposit.bdReceived>bookingDeposit.bdAmount)
+              if (bookingDeposit.bdReceived > bookingDeposit.bdAmount)
               {
                 UIHelper.ShowMessage("Received can not be greater than Deposit.");
                 bookingDeposit.bdReceived = bookingDeposit.bdAmount;
@@ -863,8 +897,11 @@ namespace IM.Base.Classes
 
             break;
           }
-        #endregion
+
+        #endregion Received
+
         #region Card Number
+
         case "bdCardNum":
           {
             if (bookingDeposit.bdpt == "CC")//Sólo si es tipo Credit Card hace las validaciones
@@ -884,12 +921,15 @@ namespace IM.Base.Classes
             }
             break;
           }
-        #endregion
+
+        #endregion Card Number
+
         #region Payment type
+
         case "bdpt":
           {
             //Validamos que se especifique el tipo de pago
-            if(string.IsNullOrWhiteSpace(bookingDeposit.bdpt))
+            if (string.IsNullOrWhiteSpace(bookingDeposit.bdpt))
             {
               UIHelper.ShowMessage("Specify the Payment Type");
               return false;
@@ -911,11 +951,14 @@ namespace IM.Base.Classes
               bookingDeposit.bdds = null;
               bookingDeposit.bdD = DateTime.Now;
               GridHelper.UpdateCellsFromARow(dtgBookingDeposits);
-            }            
+            }
             break;
           }
-        #endregion
+
+        #endregion Payment type
+
         #region Expiration date
+
         case "bdExpD":
           {
             if (bookingDeposit.bdpt == "CC")//Sólo se valida cuando es tipo Credit Card
@@ -929,20 +972,23 @@ namespace IM.Base.Classes
             }
             break;
           }
-        #endregion
+
+        #endregion Expiration date
+
         #region Tarjeta de credito y tipo de moneda
+
         case "bdcu":
         case "bdcc":
           {
             //Si es tarjeta de credito verificar que tenga el tipo de tarjeta
-            if(bookingDeposit.bdpt=="CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
+            if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
             {
               UIHelper.ShowMessage("Specify a credit card type");
               return false;
             }
 
             //Verificar que se especifique el currency
-            if(string.IsNullOrWhiteSpace(bookingDeposit.bdcu))
+            if (string.IsNullOrWhiteSpace(bookingDeposit.bdcu))
             {
               UIHelper.ShowMessage("Specify the Currency.");
               return false;
@@ -953,11 +999,14 @@ namespace IM.Base.Classes
               UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
               return false;
             }
-            
+
             break;
           }
-        #endregion
+
+        #endregion Tarjeta de credito y tipo de moneda
+
         #region Lugar de pago
+
         case "bdpc":
           {
             if (string.IsNullOrWhiteSpace(bookingDeposit.bdpc))
@@ -967,8 +1016,11 @@ namespace IM.Base.Classes
             }
             break;
           }
-        #endregion
+
+        #endregion Lugar de pago
+
         #region Number Autorization
+
         case "bdAuth":
           {
             if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdAuth))
@@ -978,8 +1030,11 @@ namespace IM.Base.Classes
             }
             break;
           }
-        #endregion
+
+        #endregion Number Autorization
+
         #region CxC
+
         case "CxC":
           {
             if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdpt != "CS")
@@ -989,8 +1044,11 @@ namespace IM.Base.Classes
             }
             break;
           }
-        #endregion
+
+        #endregion CxC
+
         #region Folio CxC
+
         case "bdFolioCxC":
           {
             if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdFolioCXC == null)
@@ -1003,20 +1061,20 @@ namespace IM.Base.Classes
               UIHelper.ShowMessage("CxC Folio is only for CxC distinct of zero.");
               return false;
             }
-            else if(bookingDeposit.bdFolioCXC!=null)
+            else if (bookingDeposit.bdFolioCXC != null)
             {
               //Verificar que el folio no esté en la lista y que no lo contenga un deposit en la BD
               List<BookingDeposit> lstDeposits = dtgBookingDeposits.ItemsSource.OfType<BookingDeposit>().ToList();
-              if(lstDeposits.Any(bd=>bd.bdFolioCXC==bookingDeposit.bdFolioCXC))
+              if (lstDeposits.Any(bd => bd.bdFolioCXC == bookingDeposit.bdFolioCXC))
               {
                 UIHelper.ShowMessage("Please select other Folio");
                 return false;
               }
-              else if(bookingDeposit.bdID>0)//Verificamos si el booking deposit se está actualizando
+              else if (bookingDeposit.bdID > 0)//Verificamos si el booking deposit se está actualizando
               {
-                if(lstBookingDeposits!=null && lstBookingDeposits.Where(bd=>bd.bdID==bookingDeposit.bdID && bd.bdFolioCXC==bookingDeposit.bdFolioCXC).ToList().Count>0)
+                if (lstBookingDeposits != null && lstBookingDeposits.Where(bd => bd.bdID == bookingDeposit.bdID && bd.bdFolioCXC == bookingDeposit.bdFolioCXC).ToList().Count > 0)
                 {
-                  if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1)) 
+                  if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1))
                   {
                     UIHelper.ShowMessage("Folio is in use.");
                     return false;
@@ -1033,16 +1091,19 @@ namespace IM.Base.Classes
               }
             }
             break;
-          } 
-          #endregion
+          }
+
+          #endregion Folio CxC
       }
       return true;
-    } 
-    #endregion
+    }
+
+    #endregion validateEditBookingDeposit
 
     #region validateEditNumber
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="number"></param>
     /// <param name="strTitle"></param>
@@ -1081,32 +1142,36 @@ namespace IM.Base.Classes
         return false;
       }
     }
-    #endregion
+
+    #endregion validateEditNumber
 
     #region AfertEditBookingDeposits
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    /// <param name="bookingDeposits"></param>    
+    /// <param name="bookingDeposits"></param>
     /// <returns>True. Son campos validos | False. Hay un campo invalido</returns>
     /// <history>
     /// [emoguel] 11/08/2016 created
     /// </history>
-    public static bool AfertEditBookingDeposits(BookingDeposit bookingDeposit,DataGrid dtgBookingDeposits,List<BookingDeposit>lstBookingsDeposits,int guestID)
+    public static bool AfertEditBookingDeposits(BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, List<BookingDeposit> lstBookingsDeposits, int guestID)
     {
-      PropertyInfo [] properties = bookingDeposit.GetType().GetProperties(System.Reflection.BindingFlags.Public | BindingFlags.Instance);
-      foreach(PropertyInfo pi in properties)
+      PropertyInfo[] properties = bookingDeposit.GetType().GetProperties(System.Reflection.BindingFlags.Public | BindingFlags.Instance);
+      foreach (PropertyInfo pi in properties)
       {
-        if(!validateEditBookingDeposit(pi.Name,bookingDeposit,dtgBookingDeposits,null,lstBookingsDeposits,guestID))
+        if (!validateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestID))
         {
           return false;
         }
       }
       return true;
     }
-    #endregion
+
+    #endregion AfertEditBookingDeposits
 
     #region isRepeatCreditCardInfo
+
     /// <summary>
     /// Validaciones del creditcard info
     /// </summary>
@@ -1127,7 +1192,132 @@ namespace IM.Base.Classes
       return false;
     }
     #endregion
-    #endregion
+    #endregion   
+
+    #region Validate Guest Additional
+
+    #region Grid Guest Additional
+
+    #region StartEdit
+
+    /// <summary>
+    /// Inicia las validaciones de los campos del Grid
+    /// </summary>
+    /// <param name="currentCellInfo">Celda que se esta editando</param>
+    /// <param name="dtg">El datagrid que se esta modificando</param>
+    /// <param name="_hasError">True tiene error | False No tiene</param>
+    public static void dtgGuestAdditional_StartEdit(ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
+    {
+      //Index del Row en edicion
+      int rowIndex = dtg.SelectedIndex != -1 ? dtg.SelectedIndex : 0;
+
+      switch (currentCellInfo.Column.SortMemberPath)
+      {
+        case "guFirstName1":
+          //Si no ha ingresado una cantidad
+          _hasError = true;
+          break;
+
+        case "guLastName1":
+          _hasError = true;
+          break;
+      }
+    }
+
+    #endregion StartEdit
+
+    #region ValidateEdit
+
+    /// <summary>
+    /// Valida la informacion del Grid
+    /// </summary>
+    /// <param name="guestAdditional">Objeto enlazada a la fila que se esta editando</param>
+    /// <param name="currentCellInfo">Celda que se esta editando</param>
+    /// <returns>
+    /// True  si tiene error| False si NO tiene
+    /// </returns>
+    /// <history>
+    /// [edgrodriguez] 16/08/2016  Created.
+    /// </history>
+    public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo)
+    {
+      bool _hasError = false;
+      switch (currentCellInfo.Column.SortMemberPath)
+      {
+        case "guID":
+          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, true)).Item1;
+          break;
+      }
+      return _hasError;
+    }
+
+    #endregion ValidateEdit
+
+    #endregion Grid Guest Additional
+
+    /// <summary>
+    /// Valida  que el guest adicional.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="additional"></param>
+    /// <returns> True | False </returns>
+    /// <history>
+    /// [edgrodriguez] 16/08/2016  Created.
+    /// </history>
+    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, bool showMsg = false)
+    {
+      bool IsValid = true;
+      string msg = "";
+      if (parent.guQuinella)
+      {
+        if (additional == null || (additional != null && additional.guID == 0))
+        {
+          msg = "Guest ID doesn't exists.";
+          IsValid = false;
+        }
+        else if (parent.guID > 0 && additional.guID == parent.guID)
+        {
+          msg = "The main guest can't be an additional guest.";
+          IsValid = false;
+        }
+        else if (!additional.guCheckIn)
+        {
+          msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} has not made Check-In.";
+          IsValid = false;
+        }
+        else if (!(parent.guID > 0 && parent.guRef != null))
+        {
+          // obtenemos un huesped principal que tenga como huesped adicional al huesped adicional en cuestion.
+          var guestAux = await BRGuests.GetMainGuest(additional.guID, (parent.guID > 0) ? parent.guID : 0);
+
+          //Si lo encontramos.
+          if (guestAux != null && guestAux.guID > 0)
+          {
+            msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already belongs to the invitation {guestAux.guID} - {guestAux.guLastName1} {guestAux.guFirstName1}.";
+            IsValid = false;
+          }
+        }
+        else if (additional.guInvit)
+        {
+          msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
+          IsValid = false;
+        }
+      }
+      else
+      {
+        msg = $"Invitations that are not Quinellas can not have additional guests.";
+        IsValid = false;
+      }
+
+      if (showMsg && !string.IsNullOrWhiteSpace(msg))
+      {
+        UIHelper.ShowMessage(msg, MessageBoxImage.Exclamation, "Intelligence Marketing");
+      }
+
+      return Tuple.Create(IsValid, msg);
+    }
+
+    #endregion Validate Guest Additional
 
     #region DataGrid Guest Credit Card
 

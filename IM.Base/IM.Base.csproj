@@ -129,6 +129,7 @@
     <Compile Include="Forms\frmSystemCfg.xaml.cs">
       <DependentUpon>frmSystemCfg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\ConfigRegistryHelper.cs" />
     <Compile Include="Helpers\CrystalReportHelper.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
@@ -174,9 +175,6 @@
     </Compile>
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmInvitationBase.xaml.cs">
-      <DependentUpon>frmInvitationBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmLogin.xaml.cs">
       <DependentUpon>frmLogin.xaml</DependentUpon>
@@ -304,10 +302,6 @@
     <Page Include="Forms\frmChangePassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmInvitationBase.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\frmLogin.xaml">
       <SubType>Designer</SubType>

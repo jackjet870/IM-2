@@ -405,27 +405,47 @@
                                 <!--#endregion-->
 
                                 <!--#region Additional Guest Row 7-->
-                                <Border x:Name="brdGuestsAdditional" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7"  Margin="0,1">
+                                <Border x:Name="brdAdditionalGuest" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7" Padding="2" Margin="0,1">
                                     <StackPanel>
                                         <TextBlock Text="Additional Guest" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button x:Name="btnSearchGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="btnSearchGuestAdditional_Click">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.ico" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <TextBlock Text="Search" HorizontalAlignment="Right" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="btnAddGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="BtnAddGuestAdditional_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Add.png" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <TextBlock Text="Add" HorizontalAlignment="Right" />
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                             <StackPanel>
-                                                <DataGrid  Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False" MaxHeight="80" Height="80">
+                                                <DataGrid  Name="dtgGuestAdditional"
+                                                           CanUserAddRows="True" CanUserSortColumns="False"
+                                                           Height="80" SelectionMode="Single"
+                                                           SelectionUnit="FullRow"
+                                                           ItemsSource="{Binding GuestAdditionalList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                           EnableRowVirtualization="True"
+                                                           IsSynchronizedWithCurrentItem="True"
+                                                           AutoGenerateColumns="False" CanUserReorderColumns="False"
+                                                           RowValidationErrorTemplate="{x:Null}"
+                                                           BeginningEdit="dtgGuestAdditional_BeginningEdit"
+                                                           PreparingCellForEdit="dtgGuestAdditional_PreparingCellForEdit"
+                                                           CellEditEnding="dtgGuestAdditional_CellEditEnding"
+                                                           RowEditEnding="dtgGuestAdditional_RowEditEnding">
+
                                                     <DataGrid.Columns>
-                                                        <DataGridTemplateColumn Header="Search" Width="55">
-                                                            <DataGridTemplateColumn.CellTemplate>
-                                                                <DataTemplate>
-                                                                    <Image Name="imgSearchGuest" Source="pack://application:,,,/IM.Styles;component/Images/Search.ico"  Height="15" />
-                                                                </DataTemplate>
-                                                            </DataGridTemplateColumn.CellTemplate>
-                                                        </DataGridTemplateColumn>
-                                                        <DataGridTextColumn Header="GUID" Binding="{Binding GuestObj.guID, ValidatesOnDataErrors=True}" />
-                                                        <DataGridTextColumn Header="Last Name" Binding="{Binding GuestObj.guLastName1}" IsReadOnly="True" />
-                                                        <DataGridTextColumn Header="First Name" Binding="{Binding GuestObj.guFirstName1}" IsReadOnly="True" />
+                                                        <DataGridTextColumn Header="GUID" ElementStyle="{StaticResource txt-ErrorInfo}" Binding="{Binding guID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                                                        <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
+                                                        <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
                                                         <DataGridTemplateColumn Width="55">
                                                             <DataGridTemplateColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" />
+                                                                    <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" MouseLeftButtonDown="guestDetails_Click" />
                                                                 </DataTemplate>
                                                             </DataGridTemplateColumn.CellTemplate>
                                                         </DataGridTemplateColumn>
@@ -467,12 +487,14 @@
                                                     <RowDefinition  Height="*" />
                                                 </Grid.RowDefinitions>
 
-                                                <StackPanel Grid.ColumnSpan="4">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <StackPanel VerticalAlignment="Center" Margin="3,0">
-                                                            <TextBlock Text="Member #" TextAlignment="Center" />
-                                                            <TextBox Name="txtguMembershipNum" Width="200" Text="{Binding GuestObj.guMembershipNum, Mode=TwoWay}" />
-                                                        </StackPanel>
+                           
+
+                                            <StackPanel Grid.ColumnSpan="4">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="3,0">
+                                                        <TextBlock Text="Member #" TextAlignment="Center" />
+                                                        <TextBox Name="txtguMembershipNum" Width="200" Text="{Binding GuestObj.guMembershipNum, Mode=TwoWay}" />
+                                                    </StackPanel>
                                                         <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="C. Code" TextAlignment="Center" />
                                                             <TextBox Name="txtguO1" Width="80" Text="{Binding GuestObj.guO1, Mode=TwoWay}" />

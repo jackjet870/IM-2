@@ -18,9 +18,10 @@ namespace IM.Inhouse
 
     public static UserData User;
 
-    #endregion
+    #endregion Propiedades
 
     #region Constructores y destructores
+
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
@@ -31,16 +32,18 @@ namespace IM.Inhouse
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-    #endregion
+
+    #endregion Constructores y destructores
 
     #region Metodos
 
     #region OnStartup
+
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
     /// <history>
-    /// [jorcanche] 11/04/2016  created 
+    /// [jorcanche] 11/04/2016  created
     ///   [erosado] 01/06/2016  Modified. Se agrego async
     /// </history>
     protected override async void OnStartup(StartupEventArgs e)
@@ -64,12 +67,15 @@ namespace IM.Inhouse
         User = frmLogin.UserData;
         Forms.frmInhouse frmMain = new Forms.frmInhouse();
         frmMain.ShowDialog();
+
         frmSplash.Close();
       }
     }
-    #endregion
+
+    #endregion OnStartup
 
     #region App_UnhandledException
+
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
@@ -86,9 +92,11 @@ namespace IM.Inhouse
         Application.Current.Shutdown();
       }
     }
-    #endregion
+
+    #endregion App_UnhandledException
 
     #region dataGrid_MouseLeftButtonUp
+
     /// <summary>
     /// Cambia el cmapo de busqueda del grid
     /// </summary>
@@ -105,7 +113,9 @@ namespace IM.Inhouse
         dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
     }
-    #endregion
-    #endregion
+
+    #endregion dataGrid_MouseLeftButtonUp
+
+    #endregion Metodos
   }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
@@ -16,8 +8,17 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Navigation;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -50,7 +51,7 @@ namespace IM.Inhouse.Forms
     private string _markets = "ALL", _guestName, _guestRoom, _guestReservation;
     private EnumScreen _screen = EnumScreen.Arrivals;
 
-    #endregion
+    #endregion Atributos
 
     #region Constructores y destructores
 
@@ -59,11 +60,12 @@ namespace IM.Inhouse.Forms
       InitializeComponent();
     }
 
-    #endregion
+    #endregion Constructores y destructores
 
     #region Metodos
 
     #region EnabledCtrls
+
     /// <summary>
     /// Configura los controles para que esten habilitados o deshabilidatos cuando se presionan los TabsControl
     /// </summary>
@@ -86,9 +88,10 @@ namespace IM.Inhouse.Forms
       listMarkets.IsEnabled = Mks;
     }
 
-    #endregion
+    #endregion EnabledCtrls
 
     #region LoadGrid
+
     /// <summary>
     /// Metodo que sirve para carga los DataGrid's segun su estado de Visibilidad
     /// </summary>
@@ -99,7 +102,7 @@ namespace IM.Inhouse.Forms
     {
       var serverDate = BRHelpers.GetServerDate();
       if (_guestArrivalViewSource == null || _guestPremanifestViewSource == null || _guestAvailableViewSource == null) return;
-  
+
       switch (_screen)
       {
         case EnumScreen.Arrivals: //GuestArrival
@@ -108,32 +111,35 @@ namespace IM.Inhouse.Forms
           var lstGuestArrivals = await BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
           _guestArrivalViewSource.Source = lstGuestArrivals.Select(parent => new ObjGuestArrival(parent, serverDate)).ToList();
           break;
+
         case EnumScreen.Availables: //GuestAvailable
           ccAvailables.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccPremanifest.Visibility = Visibility.Hidden;
           var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
           _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate));
           break;
+
         case EnumScreen.Premanifest: //GuestPremanifest
           ccPremanifest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
           var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
           _guestPremanifestViewSource.Source = lstGuestsPremanifest.Select(parent => new ObjGuestPremanifest(parent, serverDate)).ToList();
           break;
+
         case EnumScreen.Search: //GuestSearch
           ccGetGuest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccPremanifest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
           var lstSearchGuest = await BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid);
           _guestSearchedViewSource.Source = lstSearchGuest.Select(parent => new ObjGuestSearched(parent, serverDate)).ToList();
           break;
+
         default:
           throw new ArgumentOutOfRangeException();
       }
       StaEnd();
-     
     }
 
-    #endregion
+    #endregion LoadGrid
 
     #region ValidateCheckIn
 
@@ -149,7 +155,7 @@ namespace IM.Inhouse.Forms
       // impedimos modificar los datos si el sistema esta en modo de solo lectura
       //si tiene permiso estandar
       if (!App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard)) return true;
-      //si no tiene 
+      //si no tiene
       if (!checkIn) return true;
       //validamos que el huesped este en casa
       if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard) &&
@@ -173,7 +179,7 @@ namespace IM.Inhouse.Forms
       return result != MessageBoxResult.No;
     }
 
-    #endregion
+    #endregion ValidateCheckIn
 
     #region ValidateAvailability
 
@@ -195,7 +201,7 @@ namespace IM.Inhouse.Forms
       return false;
     }
 
-    #endregion
+    #endregion ValidateAvailability
 
     #region ValidateContact
 
@@ -227,7 +233,7 @@ namespace IM.Inhouse.Forms
       return false;
     }
 
-    #endregion
+    #endregion ValidateContact
 
     #region ValidateFollowUp
 
@@ -281,7 +287,7 @@ namespace IM.Inhouse.Forms
       return false;
     }
 
-    #endregion
+    #endregion ValidateFollowUp
 
     #region CheckIn
 
@@ -296,38 +302,44 @@ namespace IM.Inhouse.Forms
       int nColumn = dg.CurrentCell.Column.DisplayIndex;
       Type t = items.GetType();
       //Validamos
-      if (ValidateCheckIn((bool)t.GetProperty("guCheckIn").GetValue(items),        
+      if (ValidateCheckIn((bool)t.GetProperty("guCheckIn").GetValue(items),
         (DateTime)t.GetProperty("guCheckInD").GetValue(items),
         (DateTime)t.GetProperty("guCheckOutD").GetValue(items)))
       {
         #region Updated DataGrid
+
         var guestGuum = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         //Determinamos si el huesped debe estar como disponible
-        var guum = t.Name != "ObjGuestPremanifest" ? (byte) t.GetProperty("guum").GetValue(items) : guestGuum.guum;
-                                                  
+        var guum = t.Name != "ObjGuestPremanifest" ? (byte)t.GetProperty("guum").GetValue(items) : guestGuum.guum;
+
         if (guum.Equals(0))
         {
           t.GetProperty("guAvail").SetValue(items, true);
           dg.Items.Refresh();
-        } 
-        #endregion
+        }
+
+        #endregion Updated DataGrid
+
         #region Save DataBase
+
         var editGuest = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         editGuest.guCheckIn = true;
         editGuest.guAvail = guum.Equals(0);
         await BRGuests.SaveGuest(editGuest);
-        #endregion
+
+        #endregion Save DataBase
+
         GridHelper.SelectRow(dg, nIndex, nColumn);
-        //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox     
+        //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox
         return (bool)t.GetProperty("guCheckIn").GetValue(items);
       }
       //despalomeamos el checkbox porque no se pude hacer el checkin
       return false;
     }
 
-    #endregion
+    #endregion CheckIn
 
-    #endregion
+    #endregion Metodos
 
     #region ValidateCancelInvitation
 
@@ -358,13 +370,13 @@ namespace IM.Inhouse.Forms
       return false;
     }
 
-    #endregion
+    #endregion ValidateCancelInvitation
 
     #region ValidateLogin
 
     public frmLogin ValidateLogin()
     {
-      //Validamos las credenciales del usuario y sus permisos 
+      //Validamos las credenciales del usuario y sus permisos
       var log = new frmLogin();
       if (App.User.AutoSign)
       {
@@ -380,7 +392,7 @@ namespace IM.Inhouse.Forms
       return null;
     }
 
-    #endregion
+    #endregion ValidateLogin
 
     #region GetEquityReport
 
@@ -392,7 +404,7 @@ namespace IM.Inhouse.Forms
     /// <history>
     /// [ecanul] 06/04/2016 Created
     /// </history>
-    void GetEquityReport(object guest, int type)
+    private void GetEquityReport(object guest, int type)
     {
       StaStart("Loading Equity Report ...");
       switch (type)
@@ -403,18 +415,21 @@ namespace IM.Inhouse.Forms
             EquityHelpers.EquityReport(itemGuestArrival.guMembershipNum, itemGuestArrival.guCompany,
               (int)itemGuestArrival.agcl, (int)itemGuestArrival.gucl);
           break;
+
         case 2:
           var itemGuestAvailable = guest as GuestAvailable;
           if (itemGuestAvailable != null)
             EquityHelpers.EquityReport(itemGuestAvailable.guMembershipNum, itemGuestAvailable.guCompany,
               (int)itemGuestAvailable.agcl, (int)itemGuestAvailable.gucl);
           break;
+
         case 3:
           var itemGuestPremanifest = guest as GuestPremanifest;
           if (itemGuestPremanifest != null)
             EquityHelpers.EquityReport(itemGuestPremanifest.guMembershipNum, itemGuestPremanifest.guCompany,
               (int)itemGuestPremanifest.agcl, (int)itemGuestPremanifest.gucl);
           break;
+
         case 4:
           var itemGuestSearched = guest as GuestSearched;
           if (itemGuestSearched != null)
@@ -425,7 +440,7 @@ namespace IM.Inhouse.Forms
       StaEnd();
     }
 
-    #endregion
+    #endregion GetEquityReport
 
     #region OpenInfo
 
@@ -448,7 +463,9 @@ namespace IM.Inhouse.Forms
         if (frmCont._wasSave)
         {
           StaStart("Save Contact´s Info...");
+
           #region Update
+
           var item = dg.SelectedItem;
           Type t = item.GetType();
           t.GetProperty("guPRInfo").SetValue(item, frmCont.PRInfo);
@@ -456,17 +473,17 @@ namespace IM.Inhouse.Forms
           t.GetProperty("guInfo").SetValue(item, true);
           if (t.Name != "ObjGuestPremanifest") t.GetProperty("guInfoD").SetValue(item, frmCont.InfoD);
           dg.Items.Refresh();
-          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
-          #endregion
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
+
+          #endregion Update
         }
       }
       StaEnd();
     }
 
-    #endregion
+    #endregion OpenInfo
 
     #region OpenAvail
-
 
     public void OpenAvail(DataGrid dg, int guId, bool guCheckIn, object sender)
     {
@@ -488,8 +505,10 @@ namespace IM.Inhouse.Forms
         if (frmAvail._wasSaved)
         {
           StaStart("Save Information´s Availability...");
-          // Actualiza los datos del grid despues de guardar la informacion de disponibilidad PR de Disponibilidad y si se marco como no disponible 
+          // Actualiza los datos del grid despues de guardar la informacion de disponibilidad PR de Disponibilidad y si se marco como no disponible
+
           #region Updated
+
           var item = dg.SelectedItem;
           var t = item.GetType();
           if (t.Name != "ObjGuestPremanifest")
@@ -499,14 +518,15 @@ namespace IM.Inhouse.Forms
           }
           t.GetProperty("guAvail").SetValue(item, frmAvail.Avail);
           dg.Items.Refresh();
-          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
-          #endregion
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
+
+          #endregion Updated
         }
       }
       StaEnd();
     }
 
-    #endregion
+    #endregion OpenAvail
 
     #region OpenFollow
 
@@ -525,7 +545,9 @@ namespace IM.Inhouse.Forms
         if (frmFoll._wasSaved)
         {
           StaStart("Save Follow up screen");
+
           #region Updated
+
           var item = dg.SelectedItem;
           Type t = item.GetType();
           t.GetProperty("guFollowD").SetValue(item, frmFoll.FollowD);
@@ -534,14 +556,16 @@ namespace IM.Inhouse.Forms
           t.GetProperty("guAvail").SetValue(item, true);
           t.GetProperty("guInfo").SetValue(item, true);
           dg.Items.Refresh();
-          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
-          #endregion
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
+
+          #endregion Updated
+
           StaEnd();
         }
       }
     }
 
-    #endregion
+    #endregion OpenFollow
 
     #region CreateExcelReport
 
@@ -552,7 +576,7 @@ namespace IM.Inhouse.Forms
     /// <param name="WithGifts">Opcional true = PremanifestWithGifts | false reporte comun</param>
     /// [ecanul] 18/04/2016 Created
     /// [ecanul] 19/04/2016 Modificated Agregada funcionalidad para Aviables, Premanifest y Premanifest With Gifts
-    /// </history> 
+    /// </history>
     private async void CreateExcelReport(bool WithGifts = false)
     {
       bool hasData = false;
@@ -567,6 +591,7 @@ namespace IM.Inhouse.Forms
             hasData = true;
           }
           break;
+
         case EnumScreen.Availables:
           if (dgGuestAvailable.Items.Count > 0)
           {
@@ -576,6 +601,7 @@ namespace IM.Inhouse.Forms
             hasData = true;
           }
           break;
+
         case EnumScreen.Premanifest:
           if (dgGuestPremanifest.Items.Count > 0)
           {
@@ -602,7 +628,7 @@ namespace IM.Inhouse.Forms
         UIHelper.ShowMessage("There is no data.");
     }
 
-    #endregion
+    #endregion CreateExcelReport
 
     #region StaStart
 
@@ -618,7 +644,7 @@ namespace IM.Inhouse.Forms
       this.Cursor = Cursors.Wait;
     }
 
-    #endregion
+    #endregion StaStart
 
     #region StaEnd
 
@@ -633,21 +659,21 @@ namespace IM.Inhouse.Forms
       this.Cursor = null;
     }
 
-    #endregion
+    #endregion StaEnd
 
     #region Eventos del formulario
 
     #region Window_Loaded
 
     /// <summary>
-    /// Carga los controles que necesitamos 
+    /// Carga los controles que necesitamos
     /// </summary>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Inhouse_Loaded();
     }
 
-    #endregion
+    #endregion Window_Loaded
 
     #region Inhouse_Loaded
 
@@ -659,8 +685,8 @@ namespace IM.Inhouse.Forms
     /// </history>
     private async void Inhouse_Loaded()
     {
-      //Guardamos el log del login 
-      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName);     
+      //Guardamos el log del login
+      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName);
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
@@ -671,10 +697,10 @@ namespace IM.Inhouse.Forms
       txtLocation.Text = App.User.Location.loN;
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate();
-      dtpDate_ValueChanged(null,null);
+      dtpDate_ValueChanged(null, null);
       //Inicializamos las variables de los DataGrids
       _guestArrivalViewSource = (CollectionViewSource)FindResource("GuestArrivalViewSource");
-      _guestAvailableViewSource =(CollectionViewSource)FindResource("GuestAvailableViewSource");
+      _guestAvailableViewSource = (CollectionViewSource)FindResource("GuestAvailableViewSource");
       _guestPremanifestViewSource = (CollectionViewSource)FindResource("GuestPremanifestViewSource");
       _guestSearchedViewSource = (CollectionViewSource)FindResource("GuestSearchedViewSource");
 
@@ -684,18 +710,18 @@ namespace IM.Inhouse.Forms
       //Cargamos el listado de markets
       listMarkets.ItemsSource = await BRMarkets.GetMarkets(1);
 
-      //Abrimos el visualizador de  noticias    
+      //Abrimos el visualizador de  noticias
       var win = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is frmNotices);
       if (win != null)
       {
         win.Activate();
         return;
       }
-      win = new frmNotices {Owner = this};
+      win = new frmNotices { Owner = this };
       win.Show();
     }
 
-    #endregion
+    #endregion Inhouse_Loaded
 
     #region listMarkets_SelectionChanged
 
@@ -703,7 +729,7 @@ namespace IM.Inhouse.Forms
     /// ocurre el evento cuando se selecciona uno o mas mercados, los enlista en una cadena separados por comas
     /// </summary>
     /// <history>
-    /// [jorcanche] 09/03/2016 
+    /// [jorcanche] 09/03/2016
     /// </history>
     private void listMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -740,36 +766,47 @@ namespace IM.Inhouse.Forms
         case "rbYesAvailable":
           _available = 1;
           break;
+
         case "rbNoAvailable":
           _available = 0;
           break;
+
         case "rbBothAvailable":
           _available = 2;
           break;
+
         case "rbYesInvited":
           _invited = 1;
           break;
+
         case "rbNoInvited":
           _invited = 0;
           break;
+
         case "rbBothInvited":
           _invited = 2;
           break;
+
         case "rbYesOnGroup":
           _onGroup = 1;
           break;
+
         case "rbNoOnGroup":
           _onGroup = 0;
           break;
+
         case "rbBothOnGroup":
           _onGroup = 2;
           break;
+
         case "rbYesInfo":
           _info = 1;
           break;
+
         case "rbNoInfo":
           _info = 0;
           break;
+
         case "rbBothInfo":
           _info = 2;
           break;
@@ -778,7 +815,7 @@ namespace IM.Inhouse.Forms
       LoadGrid();
     }
 
-    #endregion
+    #endregion rb_Checked
 
     #region 1.- Arrival
 
@@ -799,7 +836,7 @@ namespace IM.Inhouse.Forms
       // GridHelper.SelectRow(dgGuestArrival, dgGuestArrival.SelectedIndex,dgGuestArrival.CurrentColumn.DisplayIndex)
     }
 
-    #endregion
+    #endregion ChkguCheckInArrival_Click
 
     #region ChkguAvailArrival_Click
 
@@ -815,7 +852,7 @@ namespace IM.Inhouse.Forms
       OpenAvail(dgGuestArrival, Arrival.guID, Arrival.guCheckIn, sender);
     }
 
-    #endregion
+    #endregion ChkguAvailArrival_Click
 
     #region ChkguInfoArrival_Click
 
@@ -832,7 +869,7 @@ namespace IM.Inhouse.Forms
       OpenInfo(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guCheckOutD, Arrival.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguInfoArrival_Click
 
     #region ChkFollowArrival_Click
 
@@ -845,10 +882,10 @@ namespace IM.Inhouse.Forms
     private void ChkFollowArrival_Click(object sender, RoutedEventArgs e)
     {
       var Arrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-      OpenFollow(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guFollow, Arrival.guAvail, Arrival.guInvit,Arrival.guCheckOutD, Arrival.guID, sender);
+      OpenFollow(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guFollow, Arrival.guAvail, Arrival.guInvit, Arrival.guCheckOutD, Arrival.guID, sender);
     }
 
-    #endregion
+    #endregion ChkFollowArrival_Click
 
     #region NotesArrival_MouseLeftButtonDown
 
@@ -860,8 +897,8 @@ namespace IM.Inhouse.Forms
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
         prnote.ShowInTaskbar = false;
-        prnote.ShowDialog(); 
-          
+        prnote.ShowDialog();
+
         if (prnote.SaveNote)
         {
           dgGuestArrival.SelectedItems.OfType<ObjGuestArrival>().ToList().ForEach(item => item.guPRNote = true);
@@ -870,7 +907,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion NotesArrival_MouseLeftButtonDown
 
     #region ChkBookCancArrival_Click
 
@@ -882,9 +919,9 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void ChkBookCancArrival_Click(object sender, RoutedEventArgs e)
     {
-      var chk = sender as CheckBox;     
+      var chk = sender as CheckBox;
       var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
-       
+
       if (guest == null || chk?.IsChecked == null) return;
 
       chk.IsChecked = !chk.IsChecked.Value;
@@ -893,7 +930,7 @@ namespace IM.Inhouse.Forms
       if (log == null) return;
       var bc = new frmBookingCancel(guest.guID, log.UserData.User)
       {
-        Owner = this       
+        Owner = this
       };
       bc.ShowDialog();
 
@@ -906,12 +943,12 @@ namespace IM.Inhouse.Forms
       dgGuestArrival.Items.Refresh();
     }
 
-    #endregion
+    #endregion ChkBookCancArrival_Click
 
     #region chkGuestsGroupsArrivals_Clic
 
     private async void chkGuestsGroupsArrivals_Click(object sender, RoutedEventArgs e)
-    {      
+    {
       bool show = true;
       bool group = false;
       frmGuestsGroups frmGgGu;
@@ -952,9 +989,11 @@ namespace IM.Inhouse.Forms
             case MessageBoxResult.Yes: //Crea Nuevo
               action = EnumAction.Add;
               break;
+
             case MessageBoxResult.No: //Agrega A
               action = EnumAction.AddTo;
               break;
+
             case MessageBoxResult.Cancel: //Cancela
               show = false;
               chk.IsChecked = false;
@@ -974,7 +1013,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion chkGuestsGroupsArrivals_Clic
 
     #region ReservationArrival_MouseLeftButtonUp
 
@@ -1001,10 +1040,9 @@ namespace IM.Inhouse.Forms
       {
         UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "GetRptReservationOrigos");
       }
-     
     }
 
-    #endregion
+    #endregion ReservationArrival_MouseLeftButtonUp
 
     #region ArrivalsEquity_MouseLeftButtonUp
 
@@ -1014,9 +1052,9 @@ namespace IM.Inhouse.Forms
       GetEquityReport(guest, 1);
     }
 
-    #endregion
+    #endregion ArrivalsEquity_MouseLeftButtonUp
 
-    #endregion
+    #endregion 1.- Arrival
 
     #region 2.- Availables
 
@@ -1027,17 +1065,17 @@ namespace IM.Inhouse.Forms
       //No contiene la columna ChekIn cuando es Available
     }
 
-    #endregion
+    #endregion ChkguCheckInAvailables_Click
 
     #region ChkguAvailAvailable_Click
 
     private void ChkguAvailAvailable_Click(object sender, RoutedEventArgs e)
     {
-      var Avilable =  dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
+      var Avilable = dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
       OpenAvail(dgGuestAvailable, Avilable.guID, Avilable.guCheckIn, sender);
     }
 
-    #endregion
+    #endregion ChkguAvailAvailable_Click
 
     #region ChkguInfoAvailable_Click
 
@@ -1048,7 +1086,7 @@ namespace IM.Inhouse.Forms
       OpenInfo(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guCheckOutD, Available.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguInfoAvailable_Click
 
     #region ChkFollowAvailable_Click
 
@@ -1057,10 +1095,10 @@ namespace IM.Inhouse.Forms
       //StaStart("Loading Follow Up screen...");
       var Available =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
-      OpenFollow(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guFollow, Available.guAvail,Available.guInvit, Available.guCheckOutD, Available.guID, sender);
+      OpenFollow(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guFollow, Available.guAvail, Available.guInvit, Available.guCheckOutD, Available.guID, sender);
     }
 
-    #endregion
+    #endregion ChkFollowAvailable_Click
 
     #region NotesAvailable_MouseLeftButtonUp
 
@@ -1080,7 +1118,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion NotesAvailable_MouseLeftButtonUp
 
     #region ChkBookCancAvailable_Click
 
@@ -1110,7 +1148,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion ChkBookCancAvailable_Click
 
     #region chkGuestsGroupsAviables
 
@@ -1157,9 +1195,11 @@ namespace IM.Inhouse.Forms
             case MessageBoxResult.Yes: //Crea Nuevo
               action = EnumAction.Add;
               break;
+
             case MessageBoxResult.No: //Agrega A
               action = EnumAction.AddTo;
               break;
+
             case MessageBoxResult.Cancel: //Cancela
               show = false;
               chk.IsChecked = false;
@@ -1179,7 +1219,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion chkGuestsGroupsAviables
 
     #region AviablesEquity_MouseLeftButtonUp
 
@@ -1189,9 +1229,9 @@ namespace IM.Inhouse.Forms
       GetEquityReport(guest, 2);
     }
 
-    #endregion
+    #endregion AviablesEquity_MouseLeftButtonUp
 
-    #endregion
+    #endregion 2.- Availables
 
     #region 3.- Premanifest
 
@@ -1204,15 +1244,17 @@ namespace IM.Inhouse.Forms
         chk.IsChecked = await CheckIn(dgGuestPremanifest);
     }
 
-    #endregion
+    #endregion ChkguCheckInPremanifest_Click
 
     #region ChkguAvailPremanifest_Click
+
     private void ChkguAvailPremanifest_Click(object sender, RoutedEventArgs e)
     {
       var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
       OpenAvail(dgGuestPremanifest, Premanifest.guID, Premanifest.guCheckIn, sender);
     }
-    #endregion
+
+    #endregion ChkguAvailPremanifest_Click
 
     #region ChkguInfoPremanifest_Click
 
@@ -1222,7 +1264,7 @@ namespace IM.Inhouse.Forms
       OpenInfo(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guCheckOutD, Premanifest.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguInfoPremanifest_Click
 
     #region ChkguFollowPremanifest_Click
 
@@ -1232,7 +1274,7 @@ namespace IM.Inhouse.Forms
       OpenFollow(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guFollow, Premanifest.guAvail, Premanifest.guInvit, Premanifest.guCheckOutD, Premanifest.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguFollowPremanifest_Click
 
     #region NotesPremanifest_MouseLeftButtonUp
 
@@ -1252,7 +1294,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion NotesPremanifest_MouseLeftButtonUp
 
     #region ChkBookCancPremanifest_Click
 
@@ -1277,7 +1319,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion ChkBookCancPremanifest_Click
 
     #region chkGuestsGroupsPremanifest
 
@@ -1325,9 +1367,11 @@ namespace IM.Inhouse.Forms
             case MessageBoxResult.Yes: //Crea Nuevo
               action = EnumAction.Add;
               break;
+
             case MessageBoxResult.No: //Agrega A
               action = EnumAction.AddTo;
               break;
+
             case MessageBoxResult.Cancel: //Cancela
               show = false;
               chk.IsChecked = false;
@@ -1347,7 +1391,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion chkGuestsGroupsPremanifest
 
     #region PremanifestEquity_MouseLeftButtonUp
 
@@ -1357,9 +1401,9 @@ namespace IM.Inhouse.Forms
       GetEquityReport(guest, 3);
     }
 
-    #endregion
+    #endregion PremanifestEquity_MouseLeftButtonUp
 
-    #endregion
+    #endregion 3.- Premanifest
 
     #region 4.- GetGuest
 
@@ -1373,7 +1417,7 @@ namespace IM.Inhouse.Forms
         chk.IsChecked = await CheckIn(guestSearchedDataGrid);
     }
 
-    #endregion
+    #endregion ChkguCheckInGetGuest_Click
 
     #region ChkguAvailGetGuest_Click
 
@@ -1383,7 +1427,7 @@ namespace IM.Inhouse.Forms
       OpenAvail(guestSearchedDataGrid, Searched.guID, Searched.guCheckIn, sender);
     }
 
-    #endregion
+    #endregion ChkguAvailGetGuest_Click
 
     #region ChkguInfoGetGuest_Click
 
@@ -1393,7 +1437,7 @@ namespace IM.Inhouse.Forms
       OpenInfo(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guCheckOutD, Searched.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguInfoGetGuest_Click
 
     #region ChkguFollowGetGuest_Click
 
@@ -1403,7 +1447,7 @@ namespace IM.Inhouse.Forms
       OpenFollow(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guFollow, Searched.guAvail, Searched.guInvit, Searched.guCheckOutD, Searched.guID, sender);
     }
 
-    #endregion
+    #endregion ChkguFollowGetGuest_Click
 
     #region NotesSearched_MouseLeftButtonUp
 
@@ -1423,7 +1467,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion NotesSearched_MouseLeftButtonUp
 
     #region ChkBookCancSearched_Click
 
@@ -1449,7 +1493,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion ChkBookCancSearched_Click
 
     #region GetGuestEquity_MouseLeftButtonUp
 
@@ -1459,9 +1503,9 @@ namespace IM.Inhouse.Forms
       GetEquityReport(guest, 4);
     }
 
-    #endregion
+    #endregion GetGuestEquity_MouseLeftButtonUp
 
-    #endregion
+    #endregion 4.- GetGuest
 
     #region chkGuestsGroupsSearched
 
@@ -1506,9 +1550,11 @@ namespace IM.Inhouse.Forms
             case MessageBoxResult.Yes: //Crea Nuevo
               action = EnumAction.Add;
               break;
+
             case MessageBoxResult.No: //Agrega A
               action = EnumAction.AddTo;
               break;
+
             case MessageBoxResult.Cancel: //Cancela
               show = false;
               chk.IsChecked = false;
@@ -1528,7 +1574,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion chkGuestsGroupsSearched
 
     #region dg_SelectionChanged
 
@@ -1544,7 +1590,7 @@ namespace IM.Inhouse.Forms
       if (dg != null) StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
     }
 
-    #endregion
+    #endregion dg_SelectionChanged
 
     #region Comments_LostFocus
 
@@ -1557,7 +1603,7 @@ namespace IM.Inhouse.Forms
         if (txt.Name == "guCommentsColumnArrival")
         {
           var row = dgGuestArrival.SelectedItem as GuestArrival;
-          guest =  await BRGuests.GetGuest(row.guID);
+          guest = await BRGuests.GetGuest(row.guID);
         }
         if (txt.Name == "guCommentsColumnAvailable")
         {
@@ -1579,7 +1625,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion Comments_LostFocus
 
     #region CommentsColumn_Loaded
 
@@ -1589,7 +1635,7 @@ namespace IM.Inhouse.Forms
       txt.Focus();
     }
 
-    #endregion
+    #endregion CommentsColumn_Loaded
 
     #region btnRefresh_Click
 
@@ -1599,11 +1645,12 @@ namespace IM.Inhouse.Forms
       LoadGrid();
     }
 
-    #endregion
+    #endregion btnRefresh_Click
 
     #region btnLogin_Click
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -1628,7 +1675,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion btnLogin_Click
 
     #region btnAbout_Click
 
@@ -1639,7 +1686,7 @@ namespace IM.Inhouse.Forms
       formAbout.ShowDialog();
     }
 
-    #endregion
+    #endregion btnAbout_Click
 
     #region btnPrint_Click
 
@@ -1650,13 +1697,14 @@ namespace IM.Inhouse.Forms
       StaEnd();
     }
 
-    #endregion
+    #endregion btnPrint_Click
 
     #region btnWithGifts_Click
 
     #region MyRegion
+
     /// <summary>
-    /// Crea el reporte 
+    /// Crea el reporte
     /// </summary>
     /// <history>
     /// [jorcanche] created 27/jul/2016
@@ -1664,10 +1712,12 @@ namespace IM.Inhouse.Forms
     private void btnWithGifts_Click(object sender, RoutedEventArgs e)
     {
       CreateExcelReport(true);
-    } 
-    #endregion
+    }
+
+    #endregion MyRegion
 
     #region dtpDate_ValueChanged
+
     /// <summary>
     /// Actualiza la variable global _serverDate y carga los controles
     /// </summary>
@@ -1683,8 +1733,9 @@ namespace IM.Inhouse.Forms
       _serverDate = dtpDate.Value.Value;
       txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, App.User.Location.loID);
       LoadGrid();
-    } 
-    #endregion
+    }
+
+    #endregion dtpDate_ValueChanged
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
@@ -1702,7 +1753,7 @@ namespace IM.Inhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.newExternal,login.UserData)
+        var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.newExternal, login.UserData)
         {
           Owner = this
         };
@@ -1710,16 +1761,14 @@ namespace IM.Inhouse.Forms
       }
     }
 
+    #endregion btnWithGifts_Click
 
-
-    #endregion
-
-    #endregion
+    #endregion listMarkets_SelectionChanged
 
     #region btnArrivals_Clicked
 
     /// <summary>
-    ///Evento que ocurre cuando se oprime el boton arrival y ejecuta las configuaraciones 
+    ///Evento que ocurre cuando se oprime el boton arrival y ejecuta las configuaraciones
     /// </summary>
     /// <history>[jorcanche] 22/03/2015</history>
     private void btnArrivals_Clicked(object sender, RoutedEventArgs e)
@@ -1727,15 +1776,15 @@ namespace IM.Inhouse.Forms
       StaStart("Loading Arrival...");
       EnabledCtrls(true, true, true, true);
       _screen = EnumScreen.Arrivals; // DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
-      LoadGrid();      
+      LoadGrid();
     }
 
-    #endregion
+    #endregion btnArrivals_Clicked
 
     #region btnAvailables_Clicked
 
     /// <summary>
-    ///Evento que ocurre cuando se oprime el boton Availables y ejecuta las configuaraciones 
+    ///Evento que ocurre cuando se oprime el boton Availables y ejecuta las configuaraciones
     /// </summary>
     /// <history>[jorcanche] 22/03/2015</history>
     private void btnAvailables_Clicked(object sender, RoutedEventArgs e)
@@ -1747,11 +1796,12 @@ namespace IM.Inhouse.Forms
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
     }
 
-    #endregion
+    #endregion btnAvailables_Clicked
 
     #region btnPremanifiest_Click
+
     /// <summary>
-    ///Evento que ocurre cuando se oprime el boton Premanifest y ejecuta las configuaraciones 
+    ///Evento que ocurre cuando se oprime el boton Premanifest y ejecuta las configuaraciones
     /// </summary>
     /// <history>[jorcanche] 22/03/2015</history>
     private void btnPremanifiest_Click(object sender, RoutedEventArgs e)
@@ -1762,9 +1812,11 @@ namespace IM.Inhouse.Forms
       LoadGrid();
       //Muestra el boton btnWitGifts que exporta el reporte Premanifest WithGifts
     }
-    #endregion
+
+    #endregion btnPremanifiest_Click
 
     #region btnGroups_Click
+
     private void btnGrouos_Click(object sender, RoutedEventArgs e)
     {
       frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.Value.Value, EnumAction.Search);
@@ -1772,7 +1824,7 @@ namespace IM.Inhouse.Forms
       frmGroups.ShowDialog();
     }
 
-    #endregion
+    #endregion btnGroups_Click
 
     #region btnDaysOff_Click
 
@@ -1782,7 +1834,7 @@ namespace IM.Inhouse.Forms
       frmDaysOff.ShowDialog();
     }
 
-    #endregion
+    #endregion btnDaysOff_Click
 
     #region btnSearchGuest_Click
 
@@ -1796,13 +1848,13 @@ namespace IM.Inhouse.Forms
     {
       StaStart("loading Searched...");
       //StaStart("loading Searched...");
-      var searchGuests = new frmSearchGuests {Owner = this};
-      //Validamos que se halla cerrado la ventana 
+      var searchGuests = new frmSearchGuests { Owner = this };
+      //Validamos que se halla cerrado la ventana
       StaEnd();
       searchGuests.ShowDialog();
       //Validamos que le halla dado aceptar y no Cerrar ventana.
       if (!searchGuests._Cancel)
-      {     
+      {
         //Traemos los Datos
         _guestDateTo = searchGuests._dateTo;
         _guestdateFrom = searchGuests._dateFrom;
@@ -1810,7 +1862,7 @@ namespace IM.Inhouse.Forms
         _guestName = searchGuests._name;
         _guestRoom = searchGuests._room;
         _guestReservation = searchGuests._reservation;
-        //Manipulamos los controlos 
+        //Manipulamos los controlos
         EnabledCtrls(false, false, false, false, false, false);
         _screen = EnumScreen.Search;
         StaStart("loading Searched...");
@@ -1818,7 +1870,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion btnSearchGuest_Click
 
     #region btnAssistance_Click
 
@@ -1829,35 +1881,39 @@ namespace IM.Inhouse.Forms
       frmAssistance.ShowDialog();
     }
 
-    #endregion
-    
+    #endregion btnAssistance_Click
+
     #region ChkInvit_Click
 
     /// <summary>
     /// Sirve para realizar una invitacion, o abrirla en modo lectura
     /// </summary>
     /// <history>
-    /// [jorcanche] 11/ago/2016 Modified. Se mejoro el Evento 
+    /// [jorcanche] 11/ago/2016 Modified. Se mejoro el Evento
     /// [erosado] 09/08/2016  Modified. Se habilito para que se inivie el nuevo formulario de invitacion.
     /// </history>
     private void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
-      var chk = sender as CheckBox;     
-      DataGrid dg; 
+      var chk = sender as CheckBox;
+      DataGrid dg;
       switch (_screen)
       {
         case EnumScreen.Arrivals:
           dg = dgGuestArrival;
           break;
+
         case EnumScreen.Availables:
           dg = dgGuestAvailable;
           break;
+
         case EnumScreen.Premanifest:
           dg = dgGuestPremanifest;
           break;
+
         case EnumScreen.Search:
           dg = guestSearchedDataGrid;
           break;
+
         default:
           throw new ArgumentOutOfRangeException();
       }
@@ -1871,22 +1927,23 @@ namespace IM.Inhouse.Forms
       var guCheckIn = t.GetProperty("guCheckIn").GetValue(item);
       var gagu = t.GetProperty("gagu").GetValue(item);
 
-      //Validamos Valores nulos 
+      //Validamos Valores nulos
       if (chk?.IsChecked == null) return;
 
       //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
       chk.IsChecked = !chk.IsChecked.Value;
 
-      if (ShowNotBookingMotive((bool) guAvail, (bool) guInfo, (bool) guInvit, (DateTime) guCheckOutD, (int) guId, dg))
+      if (ShowNotBookingMotive((bool)guAvail, (bool)guInfo, (bool)guInvit, (DateTime)guCheckOutD, (int)guId, dg))
       {
         //Despliega el formulario de Invitación
-        ShowInvitation((bool) guCheckIn, (int?) gagu, (int) guId, chk.IsChecked.Value);
+        ShowInvitation((bool)guCheckIn, (int?)gagu, (int)guId, chk.IsChecked.Value);
       }
     }
 
-    #endregion
+    #endregion ChkInvit_Click
 
     #region ShowInvitation
+
     /// <summary>
     /// Despliega el formulario de invitacion
     /// </summary>
@@ -1920,9 +1977,11 @@ namespace IM.Inhouse.Forms
         }
       }
     }
-    #endregion
+
+    #endregion ShowInvitation
 
     #region ValidateInvitation
+
     /// <summary>
     /// Valida los datos para desplegar el formulario de invitacion
     /// </summary>
@@ -1939,7 +1998,7 @@ namespace IM.Inhouse.Forms
         UIHelper.ShowMessage("Guest has not made Check-In.");
         return false;
       }
-      //Validamos que no sea un huesped adicional 
+      //Validamos que no sea un huesped adicional
       if (gagu != null)
       {
         UIHelper.ShowMessage("An additional guest can not have invitation.");
@@ -1950,10 +2009,12 @@ namespace IM.Inhouse.Forms
       if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
-    } 
-    #endregion
+    }
+
+    #endregion ValidateInvitation
 
     #region ShowNotBookingMotive
+
     /// <summary>
     /// Despliega el formulario que permite cambiar el motivo de no booking de un huesped
     /// </summary>
@@ -1964,8 +2025,8 @@ namespace IM.Inhouse.Forms
     /// <param name="guId">Id del Guest</param>
     /// <param name="dg">DataGrid del que se esta modificando</param>
     /// <history>
-    /// [JORCANCHE] created 16/08/2016 
-    /// </history>    
+    /// [JORCANCHE] created 16/08/2016
+    /// </history>
     private bool ShowNotBookingMotive(bool guAvail, bool guInfo, bool guInvit, DateTime guCheckOutD, int guId, DataGrid dg)
     {
       //Variable que servira para indicar si se abrira el formulario de Invitacion o Solo se guardare los motivos de no booking
@@ -1976,7 +2037,7 @@ namespace IM.Inhouse.Forms
       {
         showInvitation = false;
 
-        //desplegamos el formulario 
+        //desplegamos el formulario
         var frmNotBookingMotive = new frmNotBookingMotive(guId) { Owner = this };
         frmNotBookingMotive.ShowDialog();
 
@@ -1998,7 +2059,7 @@ namespace IM.Inhouse.Forms
             //Fecha y PR de no booking
             t.GetProperty("guNoBookD").SetValue(item, Convert.ToDateTime(frmNotBookingMotive.txtguNoBookD.Text));
             t.GetProperty("guPRNoBook").SetValue(item, frmNotBookingMotive.cbmguPRNoBook.SelectedValue);
-            //Motivo de no booking 
+            //Motivo de no booking
             t.GetProperty("gunb").SetValue(item, frmNotBookingMotive.cbmgunb.SelectedValue);
 
             dg.Items.Refresh();
@@ -2008,9 +2069,11 @@ namespace IM.Inhouse.Forms
       }
       return showInvitation;
     }
-    #endregion
+
+    #endregion ShowNotBookingMotive
 
     #region ValidateNotBookingMotive
+
     /// <summary>
     /// Valida si se debe de abrir el formulario NotBookingMotive
     /// </summary>
@@ -2019,8 +2082,8 @@ namespace IM.Inhouse.Forms
     /// <param name="guInvit">Si ya esta invitado</param>
     /// <param name="guCheckOutD">Si ya se fue del hotel</param>
     /// <history>
-    /// [JORCANCHE] created 16/08/2016 
-    /// </history>  
+    /// [JORCANCHE] created 16/08/2016
+    /// </history>
     private bool ValidateNotBookingMotive(bool guAvail, bool guInfo, bool guInvit, DateTime guCheckOutD)
     {
       //validamos que el huesped este disponible
@@ -2032,8 +2095,9 @@ namespace IM.Inhouse.Forms
       //validamos que el huesped haya hecho Check Out
       if (guCheckOutD > _serverDate) return false;
       return true;
-    } 
-    #endregion
+    }
+
+    #endregion ValidateNotBookingMotive
 
     #region Window_KeyDown
 
@@ -2059,12 +2123,12 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion
+    #endregion Window_KeyDown
 
     #region FrmInhouse_OnClosing
 
     /// <summary>
-    /// Cierra todas las ventanas 
+    /// Cierra todas las ventanas
     /// </summary>
     ///<history>
     /// [jorcanche] created 14/07/2016
@@ -2074,8 +2138,8 @@ namespace IM.Inhouse.Forms
       Application.Current.Shutdown();
     }
 
-    #endregion
+    #endregion FrmInhouse_OnClosing
 
-    #endregion
+    #endregion Eventos del formulario
   }
 }

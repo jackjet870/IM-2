@@ -1,20 +1,20 @@
-﻿using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.Base.Reports;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
 using System.Windows.Data;
-using IM.Model.Enums;
-using System.Globalization;
-using IM.Base.Classes;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Base.Reports;
-using System.Text;
-using IM.Model.Helpers;
-using System.Threading.Tasks;
 
 namespace IM.Base.Forms
 {
@@ -25,60 +25,72 @@ namespace IM.Base.Forms
   /// [lchairez] 16/02/2016 Created
   /// </history>
   public partial class frmInvitationBase : Window
-  { 
+  {
     #region Atributos
 
     #region Listas
+
     private List<InvitationGift> _lstGifts = new List<InvitationGift>();
     private List<BookingDeposit> _lstDeposits = new List<BookingDeposit>();
     private List<GuestCreditCard> _lstCreditsCard = new List<GuestCreditCard>();
     private List<Guest> _lstAdditionals = new List<Guest>();
     private List<GuestStatus> _lstGuestStatus = new List<GuestStatus>();
-    
+
     private List<objInvitGift> _lstObjInvitGift = null;
     private List<objInvitGuestStatus> _lstObjInvitGuestStatus = null;
     private List<objInvitCreditCard> _lstObjInvitCreditCard = null;
     private List<objInvitBookingDeposit> _lstObjInvitBookingDeposit = null;
     private List<objInvitAdditionalGuest> _lstObjInvitAdditionalGuest = null;
 
-    #endregion
+    #endregion Listas
 
     #region Objetos
+
     private Invitation invitation;
     private EnumModule _invitationType;
     private UserData _user;
     private LocationLogin _locationLogin;
     private LeadSourceLogin _leadSourceLogin;
-    
+
     #region Regalos
-    CollectionViewSource objInvitGiftViewSource;
-    CollectionViewSource giftShortViewSource;
-    #endregion
+
+    private CollectionViewSource objInvitGiftViewSource;
+    private CollectionViewSource giftShortViewSource;
+
+    #endregion Regalos
 
     #region Guest Status
-    CollectionViewSource objInvitGuestStatusViewSource;
-    CollectionViewSource guestStatusTypeViewSource;
-    objInvitGuestStatus objInvitGuestStatusTemp = new objInvitGuestStatus();
-    #endregion
+
+    private CollectionViewSource objInvitGuestStatusViewSource;
+    private CollectionViewSource guestStatusTypeViewSource;
+    private objInvitGuestStatus objInvitGuestStatusTemp = new objInvitGuestStatus();
+
+    #endregion Guest Status
 
     #region Credit Card
-    CollectionViewSource objInvitCreditCardViewSource;
-    CollectionViewSource creditCardTypeViewSource;
-    #endregion
+
+    private CollectionViewSource objInvitCreditCardViewSource;
+    private CollectionViewSource creditCardTypeViewSource;
+
+    #endregion Credit Card
 
     #region Deposits
-    CollectionViewSource objInvitBookingDepositViewSource;
-    CollectionViewSource currencyViewSource;
-    CollectionViewSource creditCardTypeDepositViewSource;
-    CollectionViewSource paymentTypeViewSource;
-    CollectionViewSource paymentPlaceViewSource;
-    #endregion
+
+    private CollectionViewSource objInvitBookingDepositViewSource;
+    private CollectionViewSource currencyViewSource;
+    private CollectionViewSource creditCardTypeDepositViewSource;
+    private CollectionViewSource paymentTypeViewSource;
+    private CollectionViewSource paymentPlaceViewSource;
+
+    #endregion Deposits
 
     #region Additional Guest
-    CollectionViewSource objInvitAdditionalGuestViewSource;
-    #endregion
 
-    #endregion
+    private CollectionViewSource objInvitAdditionalGuestViewSource;
+
+    #endregion Additional Guest
+
+    #endregion Objetos
 
     private const bool allowReschedule = true;
 
@@ -102,7 +114,8 @@ namespace IM.Base.Forms
     private decimal _qtyGift;
     private bool _isCCPaymentPay = false;
     private bool _allowReschedule = true;
-    #endregion
+
+    #endregion Atributos
 
     #region Constructores y destructores
 
@@ -125,11 +138,12 @@ namespace IM.Base.Forms
       InitializeComponent();
     }
 
-    #endregion
+    #endregion Constructores y destructores
 
     #region Métodos de la forma
 
     #region Método Loaded de la forma
+
     /// <summary>
     /// Configura los controles de la forma
     /// </summary>
@@ -148,7 +162,8 @@ namespace IM.Base.Forms
         btnEdit.IsEnabled = false;
       }
     }
-    #endregion
+
+    #endregion Método Loaded de la forma
 
     #region Métodos de los controles de la sección PR INFORMATION
 
@@ -279,13 +294,16 @@ namespace IM.Base.Forms
       EnableButtonsChangeRescheduleRebook(false, false, false);
 
       #region ID
+
       if (String.IsNullOrEmpty(txtRebookRef.Text))
         txtRebookRef.Text = txtGuid.Text;
 
       txtGuid.Text = String.Empty;
-      #endregion
+
+      #endregion ID
 
       #region Tipo de invitación
+
       chkQuiniella.IsChecked = false;
 
       chkShow.IsChecked = false;
@@ -294,10 +312,10 @@ namespace IM.Base.Forms
         _showDate = null;
       }
 
-
-      #endregion
+      #endregion Tipo de invitación
 
       #region Booking
+
       //Pr Contract
       if (_invitationType == EnumModule.OutHouse)
       {
@@ -313,7 +331,8 @@ namespace IM.Base.Forms
       txtBookingDate.SelectedDate = null;
       cmbBookingTime.SelectedIndex = -1;
 
-      #endregion
+      #endregion Booking
+
       // si tiene fecha de reschedule, limpia la informacion del reschedule
       if (txtRescheduleDate.SelectedDate.HasValue)
       {
@@ -336,26 +355,34 @@ namespace IM.Base.Forms
         _bookingCancel = false;
 
         #region Contacto
+
         txtPRContract.Text = String.Empty;
         cmbPRContract.SelectedIndex = -1;
-        #endregion
+
+        #endregion Contacto
       }
 
       #region Depositos
+
       txtBurned.Text = "0.0";
       cmbResort.SelectedIndex = -1;
-      #endregion
+
+      #endregion Depositos
 
       #region Regalos
+
       dtgGifts.ItemsSource = null;
-      #endregion
+
+      #endregion Regalos
 
       #region Número de habitaciones
+
       if (!String.IsNullOrEmpty(txtRoomQuantity.Text))
       {
         txtRoomQuantity.Text = "1";
       }
-      #endregion
+
+      #endregion Número de habitaciones
 
       EnableControls();
     }
@@ -476,7 +503,6 @@ namespace IM.Base.Forms
     /// </history>
     private void cmbBookingTime_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-
     }
 
     /// <summary>
@@ -487,7 +513,6 @@ namespace IM.Base.Forms
     /// </history>
     private void cmbRescheduleTime_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-
     }
 
     /// <summary>
@@ -520,9 +545,10 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion
+    #endregion Métodos de los controles de la sección PR INFORMATION
 
     #region Métodos de los controles de la sección GUEST INFORMATION (Search)
+
     /// <summary>
     /// Ejecuta el botón Search
     /// </summary>
@@ -540,7 +566,8 @@ namespace IM.Base.Forms
         txtReservationNumber.Text = search.lstGuestAdd[0].guHReservID.ToString();
       }
     }
-    #endregion
+
+    #endregion Métodos de los controles de la sección GUEST INFORMATION (Search)
 
     #region Métodos de los controles de la sección BUTTONS AREA (Edit / Print / Save / Cancel / Log)
 
@@ -635,12 +662,12 @@ namespace IM.Base.Forms
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-
     }
 
-    #endregion
-    
+    #endregion Métodos de los controles de la sección BUTTONS AREA (Edit / Print / Save / Cancel / Log)
+
     #region Métodos de los controles de la sección GIFTS
+
     /// <summary>
     /// Revisa que se ingrese la informacion correcta
     /// </summary>
@@ -665,6 +692,7 @@ namespace IM.Base.Forms
             _lstObjInvitGift[e.Row.GetIndex()].igQty = qty;
           }
           break;
+
         case "iggi":
           var iggi = e.EditingElement as ComboBox;
           if (iggi.SelectedValue != null && !String.IsNullOrEmpty(iggi.SelectedValue.ToString()))
@@ -673,10 +701,11 @@ namespace IM.Base.Forms
             _lstObjInvitGift[e.Row.GetIndex()].igAdults = 1;
           }
           break;
+
         case "igAdults":
           var asd = (objInvitGift)e.Row.Item;
           var igAdults = e.EditingElement as TextBox;
-          if(!int.TryParse(igAdults.Text, out qty) || qty == 0)
+          if (!int.TryParse(igAdults.Text, out qty) || qty == 0)
           {
             Helpers.UIHelper.ShowMessage("Adults can not be lower than 1");
             e.EditingElement.Focus();
@@ -714,10 +743,10 @@ namespace IM.Base.Forms
             e.Handled = false;
           else if (!char.IsDigit(e.Text, e.Text.Length - 1))
             e.Handled = true;
-        break;
+          break;
       }
     }
-    
+
     /// <summary>
     /// Calcula el valor de los regalos al cambiar de renglón
     /// </summary>
@@ -728,16 +757,18 @@ namespace IM.Base.Forms
       CalculateCostsPrices();
       CalculateTotalGifts();
     }
-    #endregion
+
+    #endregion Métodos de los controles de la sección GIFTS
 
     #region Métodos de los controles de la sección GUEST STATUS
+
     private void dtgGuestStatus_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       switch (e.Column.SortMemberPath)
       {
         case "gtgs":
           var gtgs = e.EditingElement as ComboBox;
-          if(gtgs.SelectedIndex != -1 )
+          if (gtgs.SelectedIndex != -1)
           {
             _lstObjInvitGuestStatus[e.Row.GetIndex()].gtgs = gtgs.SelectedValue.ToString();
             _lstObjInvitGuestStatus[e.Row.GetIndex()].gtQuantity = Convert.ToByte(1);
@@ -757,7 +788,8 @@ namespace IM.Base.Forms
         dtgGuestStatus.CanUserAddRows = false;
       }
     }
-    #endregion
+
+    #endregion Métodos de los controles de la sección GUEST STATUS
 
     #region Métodos de los controles de la sección OTHER INFORMATION
 
@@ -815,9 +847,10 @@ namespace IM.Base.Forms
       cmbCountry.SelectedValue = txtCountry.Text;
     }
 
-    #endregion
+    #endregion Métodos de los controles de la sección OTHER INFORMATION
 
     #region Métodos de los controles de la sección ADDITIONAL INFORMATION
+
     /// <summary>
     /// Agrega un huésped adicional
     /// </summary>
@@ -880,7 +913,7 @@ namespace IM.Base.Forms
       //  dtgAdditionalGuest.SelectedIndex = 0;
 
       objInvitAdditionalGuest item = null;
-      
+
       if (dtgAdditionalGuest.CurrentItem is objInvitAdditionalGuest)
         item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
 
@@ -912,7 +945,6 @@ namespace IM.Base.Forms
         dtgAdditionalGuest.CommitEdit();
         dtgAdditionalGuest.Items.Refresh();
       }
-      
     }
 
     /// <summary>
@@ -920,26 +952,34 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void  imgDetails_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void imgDetails_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      if(!(dtgAdditionalGuest.CurrentItem is objInvitAdditionalGuest)) return;
-      
-      var item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
-      if (item == null || item.guID == 0)
-      {
-        return;
-      }
-      var frmGuest = new frmGuest(_user, item.guID, true, _invitationType == EnumModule.InHouse, false);
-      frmGuest.Owner = this;
-      frmGuest.ShowDialog();
-      
+      //var item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
+      //if (item == null || item.guID == 0)
+      //{
+      //  return;
+      //}
+      //var frmGuest = new frmGuest(_user, item.guID, _invitationType == EnumInvitationType.InHouse);
+      //frmGuest.Owner = this;
+      //frmGuest.ShowDialog();
+
+      //var item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
+      //if (item == null || item.guID == 0)
+      //{
+      //  return;
+      //}
+      //var frmGuest = new frmGuest(_user, item.guID, true, _invitationType == EnumModule.InHouse, false);
+      //frmGuest.Owner = this;
+      //frmGuest.ShowDialog();
     }
-    #endregion
+
+    #endregion Métodos de los controles de la sección ADDITIONAL INFORMATION
 
     #region Métodos de los controles de la sección DEPOSIT
+
     private void dtgDeposits_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-      switch(dtgDeposits.CurrentCell.Column.SortMemberPath)
+      switch (dtgDeposits.CurrentCell.Column.SortMemberPath)
       {
         case "bdAmount":
         case "bdReceived":
@@ -955,11 +995,11 @@ namespace IM.Base.Forms
 
     private void dtgDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      switch(e.Column.SortMemberPath)
+      switch (e.Column.SortMemberPath)
       {
         case "bdpt":
           var bdpt = e.EditingElement as ComboBox;
-          if(bdpt.SelectedValue.ToString() == "CC")
+          if (bdpt.SelectedValue.ToString() == "CC")
           {
             _isCCPaymentPay = true;
           }
@@ -968,21 +1008,24 @@ namespace IM.Base.Forms
             _isCCPaymentPay = false;
           }
           break;
+
         case "bdcc":
           var bdcc = e.EditingElement as ComboBox;
-          if(_isCCPaymentPay && bdcc.SelectedIndex == -1)
+          if (_isCCPaymentPay && bdcc.SelectedIndex == -1)
           {
             Helpers.UIHelper.ShowMessage("Choose a Credit Card");
             e.Cancel = true;
           }
           break;
+
         case "":
           break;
+
         case "bdExpD":
           var dt = new DateTime();
           var bdExpD = e.EditingElement as TextBox;
-          if(_isCCPaymentPay)
-            if(String.IsNullOrEmpty(bdExpD.Text))
+          if (_isCCPaymentPay)
+            if (String.IsNullOrEmpty(bdExpD.Text))
             {
               Helpers.UIHelper.ShowMessage("Input a expire date (MM/YY)");
               e.Cancel = true;
@@ -997,11 +1040,12 @@ namespace IM.Base.Forms
                 e.Cancel = true;
               }
             }
-          
+
           break;
+
         case "bdCardNum":
           var cardNum = e.EditingElement as TextBox;
-          if(_isCCPaymentPay && String.IsNullOrEmpty(cardNum.Text))
+          if (_isCCPaymentPay && String.IsNullOrEmpty(cardNum.Text))
           {
             Helpers.UIHelper.ShowMessage("Type the last four Creedit Card's numbers");
             e.Cancel = true;
@@ -1013,9 +1057,10 @@ namespace IM.Base.Forms
             cardNum.Text = String.Empty;
           }
           break;
+
         case "bdAuth":
           var bdAuth = e.EditingElement as TextBox;
-          if(_isCCPaymentPay && String.IsNullOrEmpty(bdAuth.Text))
+          if (_isCCPaymentPay && String.IsNullOrEmpty(bdAuth.Text))
           {
             Helpers.UIHelper.ShowMessage("Input the Authorizathion ID");
             e.Cancel = true;
@@ -1024,9 +1069,11 @@ namespace IM.Base.Forms
           break;
       }
     }
-    #endregion
+
+    #endregion Métodos de los controles de la sección DEPOSIT
 
     #region Métodos Genéricos
+
     /// <summary>
     /// Revisa que los textbox númericos solo resivan números
     /// </summary>
@@ -1038,21 +1085,21 @@ namespace IM.Base.Forms
         e.Handled = false;
       else if (!char.IsDigit(e.Text, e.Text.Length - 1))
         e.Handled = true;
-
     }
 
-    #endregion
+    #endregion Métodos Genéricos
 
-    #endregion
+    #endregion Métodos de la forma
 
     #region Métodos públicos
+
     public async Task<bool> AccessValidate()
     {
       bool res = true;
-      
+
       if (_invitationMode == EnumInvitationMode.modAdd)//' si el huesped no ha sido invitado
       {
-        res =await ValidateEdit();
+        res = await ValidateEdit();
       }
 
       if (res)
@@ -1065,18 +1112,20 @@ namespace IM.Base.Forms
 
       return res;
     }
-    #endregion
+
+    #endregion Métodos públicos
 
     #region Métodos privados
 
     #region Métodos de permisos
+
     /// <summary>
     /// Validamos que se permita editar
     /// </summary>
     /// <returns>Boolean</returns>
     private async Task<bool> ValidateEdit()
     {
-      var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false,switchLoginUserMode:true);
+      var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false, switchLoginUserMode: true);
       if (_user.AutoSign)
       {
         login.UserData = _user;
@@ -1104,10 +1153,10 @@ namespace IM.Base.Forms
       }
 
       //validamos si tiene el usuario permiso sobre la locacion que se está trabajando
-      if(login.UserData.Location == null)
+      if (login.UserData.Location == null)
       {
         var locationByUser = await BRLocations.GetLocationsByUser(login.UserData.User.peID);
-        if(locationByUser.FirstOrDefault(l=> l.loID == _user.Location.loID) == null)
+        if (locationByUser.FirstOrDefault(l => l.loID == _user.Location.loID) == null)
         {
           Helpers.UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation");
           this.Close();
@@ -1120,12 +1169,14 @@ namespace IM.Base.Forms
           _user.LeadSource = _leadSourceLogin;
         }
       }
-      
+
       return true;
     }
-    #endregion
+
+    #endregion Métodos de permisos
 
     #region Métodos para la configuración de los controles
+
     /// <summary>
     /// Oculta o habilita los controles específicos de cada módulo.
     /// </summary>
@@ -1139,18 +1190,23 @@ namespace IM.Base.Forms
         case EnumModule.InHouse:
           InHouseControlsConfig();
           break;
+
         case EnumModule.OutHouse:
           OutHouseControlsConfig();
           break;
+
         case EnumModule.Host:
           HostControlsConfig();
           break;
+
         case EnumModule.Animation:
           AnimationControlsConfig();
           break;
+
         case EnumModule.Regen:
           RegenControlsConfig();
           break;
+
         case EnumModule.External:
           InHouseControlsConfig();
           ExternalControlsConfig();
@@ -1232,8 +1288,6 @@ namespace IM.Base.Forms
       lblSalesRoom2.Visibility = Visibility.Visible;
       txtSalesRoom2.Visibility = Visibility.Visible;
       grbElectronicPurse.Visibility = Visibility.Hidden;
-
-
     }
 
     /// <summary>
@@ -1258,7 +1312,6 @@ namespace IM.Base.Forms
       lblLocation2.Visibility = Visibility.Visible;
       txtLocation2.Visibility = Visibility.Visible;
       grbElectronicPurse.Visibility = Visibility.Hidden;
-
     }
 
     /// <summary>
@@ -1307,10 +1360,12 @@ namespace IM.Base.Forms
 
       enable = !(_invitationMode == EnumInvitationMode.modOnlyRead);
       _isNewInvitation = _invitationMode == EnumInvitationMode.modAdd || _isRebook;
+
       #region ID
+
       if (enable)
       {
-        //si es una invitacion outhouse nueva, permitimos definir el folio de la invitacion 
+        //si es una invitacion outhouse nueva, permitimos definir el folio de la invitacion
         if (_invitationType == EnumModule.OutHouse && _invitationMode == EnumInvitationMode.modAdd)
         {
           txtOutInvitation.IsEnabled = true;
@@ -1322,7 +1377,6 @@ namespace IM.Base.Forms
           {
             btnSearch.IsEnabled = true;
           }
-
         }
         //si es una invitacion outhouse, permitimos definir el folio de la invitacion outhouse
         else if (_invitationMode == EnumInvitationMode.modEdit && _invitationType == EnumModule.InHouse)
@@ -1330,26 +1384,36 @@ namespace IM.Base.Forms
           txtOutInvitation.IsEnabled = true;
         }
       }
-      #endregion
+
+      #endregion ID
 
       #region Profile Opera
+
       grbOperaInfo.IsEnabled = false;
-      #endregion
+
+      #endregion Profile Opera
 
       #region Quinella Show
+
       grbTypeInvitations.IsEnabled = enable;
-      #endregion
+
+      #endregion Quinella Show
 
       #region Language
+
       grbLanguage.IsEnabled = enable;
-      #endregion
+
+      #endregion Language
 
       #region Guest 1 y 2
+
       grbGuest1.IsEnabled = enable;
       grbGuest2.IsEnabled = enable;
-      #endregion
+
+      #endregion Guest 1 y 2
 
       #region PR information
+
       grbPrInfo.IsEnabled = enable;
 
       if (_invitationType == EnumModule.OutHouse)
@@ -1427,9 +1491,10 @@ namespace IM.Base.Forms
         }
       }
 
-      #endregion
+      #endregion PR information
 
       #region Deposits
+
       enableDeposits = enable;
 
       if (_invitationMode == EnumInvitationMode.modEdit)
@@ -1442,7 +1507,7 @@ namespace IM.Base.Forms
           if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value.Date >= _serverDateTime.Date)
               && ((_isNewInvitation || dtInvit.Date == _serverDateTime.Date)
                   || (_user.HasPermission(_invitationType == EnumModule.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
-                  && _bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date>= _serverDateTime.Date))
+                  && _bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date >= _serverDateTime.Date))
                   )
             )
           {
@@ -1457,9 +1522,11 @@ namespace IM.Base.Forms
       }
 
       grbDeposits.IsEnabled = enableDeposits;
-      #endregion
+
+      #endregion Deposits
 
       #region Guests Additional
+
       enableGuestsAdditional = enable;
       if (_invitationMode == EnumInvitationMode.modEdit)
       {
@@ -1479,13 +1546,17 @@ namespace IM.Base.Forms
         }
       }
       grbAdditionalInfo.IsEnabled = enableGuestsAdditional;
-      #endregion
+
+      #endregion Guests Additional
 
       #region Gifts
+
       grbGifts.IsEnabled = enable;
-      #endregion
+
+      #endregion Gifts
 
       #region Other Info
+
       grbOtherInfo.IsEnabled = enable;
 
       if (_invitationMode == EnumInvitationMode.modEdit)//si se esta modificando
@@ -1513,22 +1584,22 @@ namespace IM.Base.Forms
             txtDeparture.IsEnabled = false;
           }
         }
-
       }
-      #endregion
+
+      #endregion Other Info
 
       #region Credit Cards, Guests Status, Rooms Quantity
+
       enableCreditCardsGuestsStatusRoomsQuantity = enable;
 
       if (_invitationMode == EnumInvitationMode.modEdit)//si se esta modificando
       {
         if (_invitationType != EnumModule.OutHouse && _invitationType != EnumModule.Host)//si no es el modulo outside ni el de Host
         {
-
           //si la fecha de booking original es hoy o despues o es una invitacion nueva
           if ((_bookinDateOriginal.HasValue && _bookinDateOriginal.Value.Date >= _serverDateTime.Date) || _isNewInvitation)
           {
-            //OK 
+            //OK
           }
           else
           {
@@ -1539,32 +1610,40 @@ namespace IM.Base.Forms
       }
 
       #region Creadit Cards
+
       if (_invitationType == EnumModule.InHouse || _invitationType == EnumModule.Host)
       {
         grbCreditCards.IsEnabled = enableCreditCardsGuestsStatusRoomsQuantity;
         if (enable)
           txtCCCompany.IsEnabled = false;
       }
-      #endregion
+
+      #endregion Creadit Cards
 
       #region Guest Status
+
       grbGuestStatus.IsEnabled = enableCreditCardsGuestsStatusRoomsQuantity;
       if (enable)
         txtGuestStatus.IsEnabled = false;
-      #endregion
+
+      #endregion Guest Status
 
       #region Rooms Quantity
-      grbRoomQuantity.IsEnabled = enableCreditCardsGuestsStatusRoomsQuantity;
-      #endregion
 
-      #endregion
+      grbRoomQuantity.IsEnabled = enableCreditCardsGuestsStatusRoomsQuantity;
+
+      #endregion Rooms Quantity
+
+      #endregion Credit Cards, Guests Status, Rooms Quantity
 
       #region Electronic Purse
+
       if (_invitationType == EnumModule.InHouse)
       {
         grbElectronicPurse.IsEnabled = enable;
       }
-      #endregion
+
+      #endregion Electronic Purse
 
       #region Botones
 
@@ -1572,7 +1651,8 @@ namespace IM.Base.Forms
       btnPrint.IsEnabled = !enable;
       btnSave.IsEnabled = enable;
       btnCancel.IsEnabled = enable;
-      #endregion
+
+      #endregion Botones
 
       if (enable)//si se debe habilitar
       {
@@ -1590,8 +1670,6 @@ namespace IM.Base.Forms
         //deshabilitamos los botones de Change, Reschedule y Rebook
         EnableButtonsChangeRescheduleRebook(false, false, false, enable);
       }
-
-
     }
 
     /// <summary>
@@ -1679,14 +1757,12 @@ namespace IM.Base.Forms
           ////permitimos cambiar
           //btnChange.IsEnabled = true;
         }
-
       }
       else
       {
         //no se permite cambiar, reschedule, ni rebook
         EnableButtonsChangeRescheduleRebook(false, false, true);
       }
-
     }
 
     /// <summary>
@@ -1753,7 +1829,7 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion
+    #endregion Métodos para la configuración de los controles
 
     #region Métodos para cargar Controles e información del invitado
 
@@ -1772,23 +1848,29 @@ namespace IM.Base.Forms
         case EnumModule.InHouse:
           LoadInHouseControls();
           break;
+
         case EnumModule.OutHouse:
           LoadOutHouseControls();
           break;
+
         case EnumModule.Host:
           LoadHostControls();
           break;
+
         case EnumModule.Animation:
           LoadAnimationControls();
           break;
+
         case EnumModule.Regen:
           LoadRegenControls();
           break;
       }
 
       #region Datos del Invitado
+
       LoadGuestInformation();
-      #endregion
+
+      #endregion Datos del Invitado
     }
 
     /// <summary>
@@ -1800,18 +1882,21 @@ namespace IM.Base.Forms
     private async void LoadCommonControls()
     {
       #region User
+
       lblUser.Content = _user.User.peN;
-      #endregion
+
+      #endregion User
 
       #region ComboBoxes
+
       var languages = await IM.BusinessRules.BR.BRLanguages.GetLanguages(1);
       LoadComboBox(languages, cmbLanguage, "la", "ES");
 
-      var personnels = await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource != null ? _user.LeadSource.lsID : _leadSourceLogin.lsID, roles:"PR");
+      var personnels = await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource != null ? _user.LeadSource.lsID : _leadSourceLogin.lsID, roles: "PR");
       LoadComboBox(personnels, cmbPR, "pe");
 
-      var hotels = await IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
-      LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location!= null ? _user.Location.loN : _locationLogin.loN);
+      var hotels = await IM.BusinessRules.BR.BRHotels.GetHotels(nStatus: 1);
+      LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location != null ? _user.Location.loN : _locationLogin.loN);
       LoadComboBox(hotels, cmbResort, "hoID", "hoID", String.Empty);
 
       var agencies = await IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
@@ -1820,7 +1905,7 @@ namespace IM.Base.Forms
       var countries = await IM.BusinessRules.BR.BRCountries.GetCountries(1);
       LoadComboBox(countries, cmbCountry, "co");
 
-      var currencies =await IM.BusinessRules.BR.BRCurrencies.GetCurrencies(null, 1);
+      var currencies = await IM.BusinessRules.BR.BRCurrencies.GetCurrencies(null, 1);
       LoadComboBox(currencies, cmbCurrency, "cu", "US");
       //Combo del Grid de Depositos
       currencyViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("currencyViewSource")));
@@ -1833,16 +1918,16 @@ namespace IM.Base.Forms
       paymentTypeViewSource.Source = paymentTypes;
 
       //Combo del Grid de Depositos
-      var paymentePlaces =await BRPaymentPlaces.GetPaymentPlaces();
+      var paymentePlaces = await BRPaymentPlaces.GetPaymentPlaces();
       paymentPlaceViewSource = ((CollectionViewSource)(this.FindResource("paymentPlaceViewSource")));
       paymentPlaceViewSource.Source = paymentePlaces;
 
-      var maritalStatus =await IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
+      var maritalStatus = await IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
 
       var creditCards = await IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypes(null, -1);
-      
+
       //Combo del Grid de Depositos
       creditCardTypeDepositViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("creditCardTypeViewSource")));
       creditCardTypeDepositViewSource.Source = creditCards;
@@ -1854,9 +1939,9 @@ namespace IM.Base.Forms
       guestStatusTypeViewSource.Source = await IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
 
       giftShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = await IM.BusinessRules.BR.BRGifts.GetGiftsShort(_user.Location == null ? "ALL":_user.Location.loID, 1);
-      #endregion
+      giftShortViewSource.Source = await IM.BusinessRules.BR.BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
 
+      #endregion ComboBoxes
     }
 
     /// <summary>
@@ -1867,18 +1952,24 @@ namespace IM.Base.Forms
       var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestID);
 
       if (guest == null) return;
+
       #region Tipos de invitacion
+
       chkQuiniella.IsChecked = guest.guQuinella;
       chkShow.IsChecked = guest.guShow;
       chkInterval.IsChecked = guest.guInterval;
       _showDate = guest.guShowD;
-      #endregion
+
+      #endregion Tipos de invitacion
 
       #region Lenguaje
+
       cmbLanguage.SelectedValue = String.IsNullOrEmpty(guest.gula) ? String.Empty : guest.gula;
-      #endregion
+
+      #endregion Lenguaje
 
       #region Información del invitado
+
       txtGuid.Text = guest.guID.ToString();
 
       if (_invitationType != EnumModule.OutHouse)
@@ -1895,38 +1986,46 @@ namespace IM.Base.Forms
         txtOutInvitation.Text = guest.guOutInvitNum;
       }
 
-      #endregion
+      #endregion Información del invitado
 
       #region Perfil de Opera
 
       txtIDOpera.Text = guest.guIdProfileOpera;
       txtLastNameOpera.Text = guest.guLastNameOriginal;
       txtFirstNameOpera.Text = guest.guFirstNameOriginal;
-      #endregion
+
+      #endregion Perfil de Opera
 
       #region Guest 1
+
       txtLastNameGuest1.Text = guest.guLastName1;
       txtFirstNameGuest1.Text = guest.guFirstName1;
       txtAgeGuest1.Text = guest.guAge1.HasValue ? guest.guAge1.Value.ToString() : String.Empty;
       cmbMaritalStatusGuest1.SelectedValue = String.IsNullOrEmpty(guest.gums1) ? String.Empty : guest.gums1;
       txtOcuppationGuest1.Text = guest.guOccup1;
       txtEmailGuest1.Text = guest.guEmail1;
-      #endregion
+
+      #endregion Guest 1
 
       #region Guest 2
+
       txtLastNameGuest2.Text = guest.guLastname2;
       txtFirstNameGuest2.Text = guest.guFirstName2;
       txtAgeGuest2.Text = guest.guAge2.HasValue ? guest.guAge2.Value.ToString() : String.Empty;
       cmbMaritalStatusGuest2.SelectedValue = String.IsNullOrEmpty(guest.gums2) ? String.Empty : guest.gums2;
       txtOcuppationGuest2.Text = guest.guOccup2;
       txtEmailGuest2.Text = guest.guEmail2;
-      #endregion
+
+      #endregion Guest 2
 
       #region Gifts
+
       LoadGiftGrid();
-      #endregion
+
+      #endregion Gifts
 
       #region Información PR
+
       if (_invitationType == EnumModule.OutHouse)
       {
         cmbPRContract.SelectedValue = String.IsNullOrEmpty(guest.guPRInfo) ? String.Empty : guest.guPRInfo;
@@ -1950,12 +2049,10 @@ namespace IM.Base.Forms
       txtBookingDate.Text = guest.guBookD.HasValue ? guest.guBookD.Value.ToString("dd/MM/yyyy") : String.Empty;
       if (guest.guBookD.HasValue)
       {
-
         var times = IM.BusinessRules.BR.BRTourTimesAvailables.GetTourTimesAvailables(_user.LeadSource.lsID, txtSalesRoom.Text, txtBookingDate.SelectedDate.Value);
         LoadTimeComboBoxes(times, cmbBookingTime, "Text", "PickUp", guest.guBookT.HasValue ? guest.guBookT.Value.ToString() : String.Empty);
         cmbBookingTime.SelectedValue = guest.guBookT.HasValue ? guest.guBookT.Value.ToString() : String.Empty;
       }
-
 
       if (_invitationType != EnumModule.OutHouse)
       {
@@ -1967,10 +2064,9 @@ namespace IM.Base.Forms
           cmbRescheduleTime.SelectedValue = guest.guReschT.HasValue ? guest.guReschT.Value.ToString() : String.Empty;
         }
 
-
         chkResch.IsChecked = guest.guResch;
       }
-      
+
       if (_invitationType != EnumModule.Animation && _invitationType != EnumModule.Regen)
         chkBeforeInOut.IsChecked = guest.guAntesIO;
 
@@ -1983,9 +2079,10 @@ namespace IM.Base.Forms
 
       _bookingCancel = guest.guBookCanc;
 
-      #endregion
+      #endregion Información PR
 
       #region Other Information
+
       txtOtherInformation.Text = guest.guExtraInfo;
       txtRoom.Text = guest.guRoomNum;
       cmbHotel.SelectedValue = guest.guHotel;
@@ -1997,42 +2094,49 @@ namespace IM.Base.Forms
       txtArrival.Text = guest.guCheckInD.ToString("dd/MM/yyyy");
       txtDeparture.Text = guest.guCheckOutD.ToString("dd/MM/yyyy");
 
-      #endregion
+      #endregion Other Information
 
       #region Deposits
+
       txtBurned.Text = guest.guDepositTwisted.ToString("#.00");
       cmbPaymentType.SelectedValue = guest.gupt;
       cmbCurrency.SelectedValue = guest.gucu;
       cmbResort.SelectedValue = guest.guHotelB;
       LoadDepositGrid();
 
-      #endregion
+      #endregion Deposits
 
       #region Guest Status ***********************FALTA LLENAR EL GRID
+
       txtGuestStatus.Text = guest.guGStatus;
 
       LoadGuestStatusGrid();
       //LLENAR GRID
-      #endregion
+
+      #endregion Guest Status ***********************FALTA LLENAR EL GRID
 
       #region Room Quantity
+
       if (_invitationType != EnumModule.OutHouse)
         txtRoomQuantity.Text = guest.guRoomsQty.ToString();
-      #endregion
+
+      #endregion Room Quantity
 
       #region Credit Cards *************FALTA LLENAR GRID
+
       if (_invitationType == EnumModule.InHouse || _invitationType == EnumModule.Host)
       {
         txtCCCompany.Text = guest.guCCType;
         LoadCreditCardGrid();
       }
 
-
-      #endregion
+      #endregion Credit Cards *************FALTA LLENAR GRID
 
       #region Additional Information *********FALTA LLENAR EL GRID
+
       LoadAdditionalInformartionGrid();
-      #endregion
+
+      #endregion Additional Information *********FALTA LLENAR EL GRID
     }
 
     /// <summary>
@@ -2056,12 +2160,11 @@ namespace IM.Base.Forms
     /// </history>
     private async void LoadOutHouseControls()
     {
-      var personnels =await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
+      var personnels = await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
       LoadComboBox(personnels, cmbPRContract, "pe");
 
       var salesRooms = await IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
       LoadComboBox(salesRooms, cmbSalesRoom, "sr");
-
     }
 
     /// <summary>
@@ -2072,7 +2175,6 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadHostControls()
     {
-      
     }
 
     /// <summary>
@@ -2083,9 +2185,8 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadAnimationControls()
     {
-      
     }
-    
+
     /// <summary>
     /// Carga los controles del formulatio Invitation Regen
     /// </summary>
@@ -2094,10 +2195,9 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadRegenControls()
     {
-      
     }
 
-    #endregion
+    #endregion Controles generales, TextBox, DateTimaPickers
 
     #region Métodos genéricos para cargar ComboBoxes
 
@@ -2148,7 +2248,7 @@ namespace IM.Base.Forms
       combo.ItemsSource = items;
     }
 
-    #endregion
+    #endregion Métodos genéricos para cargar ComboBoxes
 
     #region Métodos para cargar los grids
 
@@ -2263,6 +2363,7 @@ namespace IM.Base.Forms
       objInvitCreditCardViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitCreditCardViewSource")));
       objInvitCreditCardViewSource.Source = _lstObjInvitCreditCard;
     }
+
     /// Carga la información del Grid de los invitados extra
     /// </summary>
     private async void LoadAdditionalInformartionGrid()
@@ -2280,21 +2381,23 @@ namespace IM.Base.Forms
       _lstAdditionals = aGuests;
       objInvitAdditionalGuestViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitAdditionalGuestViewSource")));
       objInvitAdditionalGuestViewSource.Source = _lstObjInvitAdditionalGuest;
-      
     }
 
-    #endregion
+    #endregion Métodos para cargar los grids
 
     #region Método para asignación de Usuario
+
     private void AssignUser()
     {
       lblUser.Content = _user.User.peN;
     }
-    #endregion
 
-    #endregion
+    #endregion Método para asignación de Usuario
+
+    #endregion Métodos para cargar Controles e información del invitado
 
     #region Métodos para guardar la información del invitado
+
     /// <summary>
     /// Guarda la informaciónde la forma en la base de datos
     /// </summary>
@@ -2304,45 +2407,57 @@ namespace IM.Base.Forms
       var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestID);
 
       #region Tipos de invitacion
+
       guest.guQuinella = ForBooleanValue(chkQuiniella.IsChecked);
       guest.guShow = ForBooleanValue(chkShow.IsChecked);
       guest.guInterval = true;// ForBooleanValue(chkInterval.IsChecked);
-      #endregion
+
+      #endregion Tipos de invitacion
 
       #region Lenguaje
+
       guest.gula = ForStringValue(cmbLanguage.SelectedValue);
-      #endregion
+
+      #endregion Lenguaje
 
       #region Información del invitado
-      guest.guInvitD = String.IsNullOrEmpty(txtDate.Text) ?  DateTime.Today : Convert.ToDateTime(txtDate.Text);
-      guest.guInvitT = String.IsNullOrEmpty(txtTime.Text) ?  DateTime.Now : Convert.ToDateTime(txtTime.Text);
+
+      guest.guInvitD = String.IsNullOrEmpty(txtDate.Text) ? DateTime.Today : Convert.ToDateTime(txtDate.Text);
+      guest.guInvitT = String.IsNullOrEmpty(txtTime.Text) ? DateTime.Now : Convert.ToDateTime(txtTime.Text);
       guest.guInvit = true;
-      #endregion
+
+      #endregion Información del invitado
 
       #region Guest 1
+
       guest.guLastName1 = ForStringValue(txtLastNameGuest1.Text);
       guest.guFirstName1 = ForStringValue(txtFirstNameGuest1.Text);
-      guest.guAge1 = String.IsNullOrEmpty(txtAgeGuest1.Text) ? (byte?) null : Convert.ToByte(txtAgeGuest1.Text);
+      guest.guAge1 = String.IsNullOrEmpty(txtAgeGuest1.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest1.Text);
       guest.gums1 = ForStringValue(cmbMaritalStatusGuest1.SelectedValue);
       guest.guOccup1 = ForStringValue(txtOcuppationGuest1.Text);
       guest.guEmail1 = ForStringValue(txtEmailGuest1.Text);
-      #endregion
+
+      #endregion Guest 1
 
       #region Guest 2
+
       guest.guLastname2 = ForStringValue(txtLastNameGuest2.Text);
       guest.guFirstName2 = ForStringValue(txtFirstNameGuest2.Text);
       guest.guAge2 = String.IsNullOrEmpty(txtAgeGuest2.Text) ? (byte?)null : Convert.ToByte(txtAgeGuest2.Text);
       guest.gums2 = ForStringValue(cmbMaritalStatusGuest2.SelectedValue);
       guest.guOccup2 = ForStringValue(txtOcuppationGuest2.Text);
       guest.guEmail2 = ForStringValue(txtEmailGuest2.Text);
-      #endregion
+
+      #endregion Guest 2
 
       #region Gifts
+
       SaveGifts();
-      
-      #endregion
+
+      #endregion Gifts
 
       #region Información PR
+
       if (_invitationType == EnumModule.OutHouse)
       {
         guest.guPRInfo = ForStringValue(txtPRContract.Text);
@@ -2365,10 +2480,9 @@ namespace IM.Base.Forms
       if (_invitationType != EnumModule.OutHouse)
       {
         guest.guReschD = txtRescheduleDate.SelectedDate.HasValue ? txtRescheduleDate.SelectedDate : null;
-        guest.guReschT = txtRescheduleDate.SelectedDate.HasValue && !String.IsNullOrEmpty(cmbRescheduleTime.SelectedValue.ToString()) ? Convert.ToDateTime(cmbRescheduleTime.SelectedValue.ToString()) : (DateTime?) null;
+        guest.guReschT = txtRescheduleDate.SelectedDate.HasValue && !String.IsNullOrEmpty(cmbRescheduleTime.SelectedValue.ToString()) ? Convert.ToDateTime(cmbRescheduleTime.SelectedValue.ToString()) : (DateTime?)null;
         guest.guResch = ForBooleanValue(chkResch.IsChecked);
       }
-
 
       if (_invitationType != EnumModule.Animation && _invitationType != EnumModule.Regen)
         guest.guAntesIO = ForBooleanValue(chkBeforeInOut.IsChecked);
@@ -2380,60 +2494,67 @@ namespace IM.Base.Forms
         guest.guloInvit = ForStringValue(txtLocation2.Text);
       }
 
-      #endregion
+      #endregion Información PR
 
       #region Other Information
+
       guest.guExtraInfo = ForStringValue(txtOtherInformation.Text);
       guest.guRoomNum = ForStringValue(txtRoom.Text);
       guest.guHotel = ForStringValue(cmbHotel.SelectedValue);
-      guest.guag= ForStringValue(txtAgency.Text);
+      guest.guag = ForStringValue(txtAgency.Text);
       guest.guco = ForStringValue(txtCountry.Text);
       guest.guPax = ForDecimalValue(txtPax.Text);
       guest.guCheckInD = txtArrival.SelectedDate.HasValue ? txtArrival.SelectedDate.Value : guest.guCheckInD;
       guest.guCheckOutD = txtDeparture.SelectedDate.HasValue ? txtDeparture.SelectedDate.Value : guest.guCheckOutD;
 
-      #endregion
+      #endregion Other Information
 
       #region Deposits
+
       guest.guDepositTwisted = ForDecimalValue(txtBurned.Text);
       guest.gupt = ForStringValue(cmbPaymentType.SelectedValue);
       guest.gucu = ForStringValue(cmbCurrency.SelectedValue);
       guest.guHotelB = ForStringValue(cmbResort.SelectedValue);
 
       SaveBookingDeposits();
-      #endregion
 
-      #region Guest Status 
+      #endregion Deposits
+
+      #region Guest Status
+
       guest.guGStatus = ForStringValue(txtGuestStatus.Text);
       SaveGuestStatus();
-      #endregion
+
+      #endregion Guest Status
 
       #region Room Quantity
+
       if (_invitationType != EnumModule.OutHouse)
         guest.guRoomsQty = ForIntegerValue(txtRoomQuantity.Text);
-      #endregion
+
+      #endregion Room Quantity
 
       #region Credit Cards
+
       if (_invitationType == EnumModule.InHouse || _invitationType == EnumModule.Host)
       {
         guest.guCCType = ForStringValue(txtCCCompany.Text);
         SaveCreditCards();
       }
 
+      #endregion Credit Cards
 
-      #endregion
+      #region Additional Information
 
-      #region Additional Information 
       SaveAdditionalGuests();
-      #endregion
+
+      #endregion Additional Information
 
       invitation.Guest = guest;
 
-      
       IM.BusinessRules.BR.BRGuests.SaveGuestInvitation(invitation);
-
     }
-    
+
     /// <summary>
     /// Guarda todos los regalos asignados
     /// </summary>
@@ -2467,23 +2588,19 @@ namespace IM.Base.Forms
 
       //Obtenemos los regalos que se modificarán
       invitation.UpdatedGifts = gifts.Where(c => c.iggu != 0).ToList();
-      
+
       //Obtenemos los regalos nuevos para asignales los precios y el invitado
       var newGifts = gifts.Where(c => c.iggu == 0).ToList();
       if (newGifts.Any())
       {
         //Asignamos el guest a los nuevos regalos
-        newGifts.ForEach(c=> 
+        newGifts.ForEach(c =>
         {
           c.iggu = c.iggu != 0 ? c.iggu : _guestID;
           c.igct = !String.IsNullOrEmpty(c.igct) ? c.igct : "MARKETING";
         });
         invitation.NewGifts.AddRange(newGifts);
       }
-
-      
-      
-
     }
 
     /// <summary>
@@ -2498,7 +2615,6 @@ namespace IM.Base.Forms
 
       if (_lstObjInvitGuestStatus.Any())
       {
-
         //Asignamos el guest
         _lstObjInvitGuestStatus.ForEach(c =>
         {
@@ -2517,7 +2633,7 @@ namespace IM.Base.Forms
         invitation.NewGuestStatus.AddRange(gs); //Agregamos lo que tiene el grid
       }
     }
-    
+
     /// <summary>
     /// Guarda las tarjetas de credito del invitado
     /// </summary>
@@ -2527,7 +2643,7 @@ namespace IM.Base.Forms
       invitation.UpdatedCreditCards = new List<Model.GuestCreditCard>();
       invitation.DeletedCreditCards = new List<Model.GuestCreditCard>();
 
-      if(_lstObjInvitCreditCard.Any())
+      if (_lstObjInvitCreditCard.Any())
       {
         //Asignamos el guest a la lista
         _lstObjInvitCreditCard.ForEach(c =>
@@ -2592,7 +2708,7 @@ namespace IM.Base.Forms
         {
           //Buscamos los depositos en la lista que es igual a la base de datos
           var d = _lstDeposits.SingleOrDefault(de => de.bdID == row.bdID);
-          if(d != null)//si está se actualiza
+          if (d != null)//si está se actualiza
           {
             d.bdAmount = row.bdAmount;
             d.bdAuth = row.bdAuth;
@@ -2614,7 +2730,6 @@ namespace IM.Base.Forms
           }
         }
       }
-      
     }
 
     /// <summary>
@@ -2626,14 +2741,15 @@ namespace IM.Base.Forms
       invitation.UpdatedAdditional = new List<Guest>();
       invitation.DeletedAdditional = new List<Guest>();
 
-      foreach(var row in _lstObjInvitAdditionalGuest)
+      foreach (var row in _lstObjInvitAdditionalGuest)
       {
         var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(row.guID);
         invitation.NewAdditional.Add(guest); //Agregamos lo que tiene el grid
         invitation.DeletedAdditional.Add(guest);//Borramos lo que tenia la base de datos
       }
     }
-    #endregion
+
+    #endregion Métodos para guardar la información del invitado
 
     #region Métodos para validar al información
 
@@ -2657,7 +2773,6 @@ namespace IM.Base.Forms
         res = false;
 
       return res;
-
     }
 
     /// <summary>
@@ -2764,7 +2879,7 @@ namespace IM.Base.Forms
         txtPax.Focus();
         res = false;
       }
-      else if (System.Text.RegularExpressions.Regex.IsMatch(txtPax.Text, @"[^0-9.-]+"))//validamos que el pax sea númerico 
+      else if (System.Text.RegularExpressions.Regex.IsMatch(txtPax.Text, @"[^0-9.-]+"))//validamos que el pax sea númerico
       {
         Helpers.UIHelper.ShowMessage("Pax control accepts numbers");
         txtPax.Focus();
@@ -2794,7 +2909,7 @@ namespace IM.Base.Forms
         cmbCountry.Focus();
         res = false;
       }
-      
+
       return res;
     }
 
@@ -2868,7 +2983,7 @@ namespace IM.Base.Forms
             break;
           }
         }
-        if(msjErrorGifts.Length > 0)
+        if (msjErrorGifts.Length > 0)
         {
           msjErrorGifts.Append("Do you want to modify the gifts?");
           var msgRes = MessageBox.Show(msjErrorGifts.ToString(), title, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -2876,14 +2991,13 @@ namespace IM.Base.Forms
           {
             res = false;
           }
-          else 
+          else
           {
             res = true;
           }
         }
-        
       }
-      
+
       if (!res)
       {
         tbiGeneral.IsSelected = true;
@@ -2900,7 +3014,7 @@ namespace IM.Base.Forms
     {
       bool res = true;
       string title = "Deposit Section";
-      
+
       if (_lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).Any()) // validamos que se especifique la moneda
       {
         foreach (var row in _lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).ToList())
@@ -3099,7 +3213,7 @@ namespace IM.Base.Forms
       bool res;
       res = ValidateBookingDateTime();
 
-      if(res)
+      if (res)
       {
         ValidateRescheduleDateTime();
       }
@@ -3115,15 +3229,16 @@ namespace IM.Base.Forms
     {
       bool res = true;
 
-      if(!txtBookingDate.SelectedDate.HasValue)
+      if (!txtBookingDate.SelectedDate.HasValue)
       {
         Helpers.UIHelper.ShowMessage("Specify a Booking Date");
         txtBookingDate.Focus();
         res = false;
       }
-      else if(_user.Permissions.Where(p=> p.plN == "SuperSpecial").Any())// si tiene permiso super especial de invitaciones
+      else if (_user.Permissions.Where(p => p.plN == "SuperSpecial").Any())// si tiene permiso super especial de invitaciones
       {
         #region Instrucciones
+
         /*
         Permiso super especial (4) cuando hace una nueva.
         1. No puede hacer invitacion antes de la fecha de llegada
@@ -3131,7 +3246,8 @@ namespace IM.Base.Forms
         3. Si puede hacer invitaciones de dias anteriores
         4. Tiene un periodo de 30 dias despues de la fecha de salida para hacer la invitacion
         */
-        #endregion
+
+        #endregion Instrucciones
 
         if (DateTime.Today >= txtBookingDate.SelectedDate.Value.AddDays(30)) //validamos que el invitado no tenga un mes de que haya salido
         {
@@ -3142,7 +3258,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        if(txtBookingDate.SelectedDate.Value.Date < DateTime.Today.Date)//validamos que la fecha de booking no sea antes de hoy
+        if (txtBookingDate.SelectedDate.Value.Date < DateTime.Today.Date)//validamos que la fecha de booking no sea antes de hoy
         {
           Helpers.UIHelper.ShowMessage("Booking date can not be before today.");
           txtBookingDate.Focus();
@@ -3165,7 +3281,7 @@ namespace IM.Base.Forms
         res = false;
       }
 
-      if(cmbBookingTime.SelectedValue == null || String.IsNullOrEmpty(cmbBookingTime.SelectedValue.ToString()) || cmbBookingTime.SelectedIndex == -1)
+      if (cmbBookingTime.SelectedValue == null || String.IsNullOrEmpty(cmbBookingTime.SelectedValue.ToString()) || cmbBookingTime.SelectedIndex == -1)
       {
         Helpers.UIHelper.ShowMessage("Specify a Booking Time.");
         cmbBookingTime.Focus();
@@ -3190,7 +3306,7 @@ namespace IM.Base.Forms
 
       if (!txtRescheduleDate.SelectedDate.HasValue)
       {
-        errorMessage ="Specify the reschedule date.";
+        errorMessage = "Specify the reschedule date.";
         res = false;
       }
       else if (txtDeparture.SelectedDate.HasValue && (txtRescheduleDate.SelectedDate.Value.Date > txtDeparture.SelectedDate.Value.Date)) //validamos que la fecha de reschedule no sea despues de la fecha de salida
@@ -3230,7 +3346,7 @@ namespace IM.Base.Forms
 
       return res;
     }
-       
+
     /// <summary>
     /// Validamos la información introducida en el campo Expiration
     /// </summary>
@@ -3238,14 +3354,14 @@ namespace IM.Base.Forms
     private bool ValidateExpirationDate(string date)
     {
       bool res = true;
-      
+
       DateTime dt = new DateTime();
       res = DateTime.TryParseExact(date, "MM/yy", new CultureInfo("es-MX"), DateTimeStyles.None, out dt);
 
       return res;
     }
 
-    #endregion
+    #endregion Métodos para validar al información
 
     #region Métodos para asignar valores al objeto Guest
 
@@ -3259,7 +3375,7 @@ namespace IM.Base.Forms
       if (value == null) return String.Empty;
       return String.IsNullOrEmpty(value.ToString()) ? String.Empty : value.ToString().Trim();
     }
-    
+
     /// <summary>
     /// Devuelme un decimal
     /// </summary>
@@ -3290,12 +3406,7 @@ namespace IM.Base.Forms
       return value.HasValue ? value.Value : false;
     }
 
-
-
-
-
-
-    #endregion
+    #endregion Métodos para asignar valores al objeto Guest
 
     #region Métodos para calcular los costos de los regalos
 
@@ -3303,14 +3414,14 @@ namespace IM.Base.Forms
     /// Calcula los costos y precios de adultos y menores de un regalo
     /// </summary>
     /// <param name="useCxCCost">Indica si se utilizará el costo del empleado</param>
-    private void CalculateCostsPrices (bool useCxCCost = false)
+    private void CalculateCostsPrices(bool useCxCCost = false)
     {
       decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
-      
-      foreach(var row in _lstObjInvitGift)
+
+      foreach (var row in _lstObjInvitGift)
       {
         var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
-        if(gift != null)
+        if (gift != null)
         {
           // Costos
           // si se va a usar el costo de empleado
@@ -3346,7 +3457,7 @@ namespace IM.Base.Forms
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="onlyCancellled"></param>
     /// <param name="cancel"></param>
@@ -3354,9 +3465,8 @@ namespace IM.Base.Forms
     {
       decimal cost, price, totalCost = 0, totalPrice = 0;
 
-      foreach(var row in _lstObjInvitGift)
+      foreach (var row in _lstObjInvitGift)
       {
-        
         // calculamos el costo del regalo
         cost = row.igPriceA + row.igPriceM;
 
@@ -3364,13 +3474,11 @@ namespace IM.Base.Forms
         price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
 
         //si se desean todos los regalos
-        if(!onlyCancellled)
+        if (!onlyCancellled)
         {
           totalCost += cost;
           totalPrice += price;
         }
-       
-
       }
       txtTotalCost.Text = totalCost.ToString("$#,##0.00;$(#,##0.00)");
       txtTotalPrice.Text = totalPrice.ToString("$#,##0.00;$(#,##0.00)");
@@ -3386,22 +3494,21 @@ namespace IM.Base.Forms
     {
       decimal maxAuthGifts = 0;
 
-      foreach(var row in _lstObjInvitGuestStatus)
+      foreach (var row in _lstObjInvitGuestStatus)
       {
         if (row.gtgs != null && row.gtQuantity > 0)
         {
           var guestStatusType = await BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs });
-          var guestStaType=guestStatusType.FirstOrDefault();
+          var guestStaType = guestStatusType.FirstOrDefault();
           maxAuthGifts += row.gtQuantity * guestStaType.gsMaxAuthGifts;
         }
       }
 
       txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
     }
-    #endregion
 
-    #endregion
+    #endregion Métodos para calcular los costos de los regalos
 
+    #endregion Métodos privados
   }
 }
-

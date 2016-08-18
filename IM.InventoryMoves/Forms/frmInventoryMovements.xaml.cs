@@ -260,6 +260,66 @@ namespace IM.InventoryMovements
     }
     #endregion
 
+    #region grdNew_CellEditEnding
+    /// <summary>
+    /// Proceso que se activa al terminar de editar una celda.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 03/Ago/2016 Created
+    /// </history>
+    private void grdNew_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      grdNew.CellEditEnding -= grdNew_CellEditEnding;
+      var _objWhsMov = e.Row.Item as objWhsMovs;
+      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
+      var column = e.Column.SortMemberPath;
+      switch (column)
+      {
+        case "wmQty":
+          var textbox = e.EditingElement as TextBox;
+          if (string.IsNullOrWhiteSpace(textbox.Text) || textbox.Text == "0")
+          {
+            UIHelper.ShowMessage("Enter a quantity.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
+            GridHelper.SelectRow(grdNew, lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
+            _HasError = true;
+            e.Cancel = true;
+          }
+          break;
+      }
+      grdNew.CellEditEnding += grdNew_CellEditEnding;
+    }
+    #endregion
+
+    #region grdNew_BeginningEdit
+    /// <summary>
+    /// Proceso que se activa antes de comenzar a editar una celda.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 03/Ago/2016 Created
+    /// </history>
+    private void grdNew_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      var column = e.Column.SortMemberPath;
+      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
+      objWhsMovs _objWhsMov = grdNew.CurrentCell.Item as objWhsMovs;
+      if (_HasError) { e.Cancel = true; _HasError = false; return; }
+      switch (column)
+      {
+        case "wmgi":
+          if (_objWhsMov != null && _objWhsMov.wmQty == 0)
+          {
+            UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            _HasError = true;
+            e.Cancel = true;
+            //grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
+            GridHelper.SelectRow(grdNew, lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
+          }
+          break;
+      }
+    }
+    #endregion
+
     #endregion
 
     #region Metodos Privados
@@ -312,51 +372,7 @@ namespace IM.InventoryMovements
       _getGiftsViewSource.Source = await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
     }
     #endregion
-       
+
     #endregion
-
-    private void grdNew_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-    {
-      grdNew.CellEditEnding -= grdNew_CellEditEnding;
-      var _objWhsMov = e.Row.Item as objWhsMovs;
-      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
-      var column = e.Column.SortMemberPath;
-      switch (column)
-      {
-        case "wmQty":
-          var textbox = e.EditingElement as TextBox;
-          if (string.IsNullOrWhiteSpace(textbox.Text) || textbox.Text == "0")
-          {
-            UIHelper.ShowMessage("Enter a quantity.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-            grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
-            GridHelper.SelectRow(grdNew,lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
-            _HasError = true;
-            e.Cancel = true;
-          }
-          break;
-      }
-      grdNew.CellEditEnding += grdNew_CellEditEnding;
-    }
-
-    private void grdNew_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-      var column = e.Column.SortMemberPath;
-      var lstwhsmovs = (List<objWhsMovs>)_objWhsMovsViewSource.Source;
-      objWhsMovs _objWhsMov = grdNew.CurrentCell.Item as objWhsMovs;
-      if (_HasError) { e.Cancel = true; _HasError = false; return; }
-      switch (column)
-      {
-        case "wmgi":
-          if (_objWhsMov != null && _objWhsMov.wmQty == 0)
-          {
-            UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-            _HasError = true;
-            e.Cancel = true;
-            //grdNew.CurrentCell = new DataGridCellInfo(_objWhsMov, grdNew.Columns.FirstOrDefault());
-            GridHelper.SelectRow(grdNew, lstwhsmovs.IndexOf(_objWhsMov), blnEdit: true);
-          }
-          break;
-      }
-    }
   }
 }
