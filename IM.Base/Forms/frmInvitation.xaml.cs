@@ -38,7 +38,7 @@ namespace IM.Base.Forms
     private bool _dontShowAgainGuestStatus = false;
     public bool _isRebook = false;
     public GuestInvitationRules catObj { get; set; }
-        
+
     private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda
     #endregion
     /// <summary>
@@ -82,6 +82,12 @@ namespace IM.Base.Forms
     #region Eventos de la ventana
 
     #region Window_Loaded
+    /// <summary>
+    /// Evento que se genera al cargar la ventana
+    /// </summary>
+    ///<history>
+    ///[erosado]  17/08/2016  Created.
+    /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       try
@@ -109,6 +115,12 @@ namespace IM.Base.Forms
     #endregion
 
     #region imgButtonSave_MouseLeftButtonDown
+    /// <summary>
+    /// Evento que se genera al presionar el boton Save
+    /// </summary>
+    ///<history>
+    ///[erosado]  17/08/2016  Created.
+    /// </history>
     private void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       bool _isValid = true;
@@ -129,6 +141,12 @@ namespace IM.Base.Forms
     #endregion
 
     #region imgButtonEdit_MouseLeftButtonDown
+    /// <summary>
+    /// Evento que se genera al presionar el boton Edit
+    /// </summary>
+    ///<history>
+    ///[erosado]  17/08/2016  Created.
+    /// </history>
     private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       //Si el Guest ya hizo Show No podemos editar nada.
@@ -151,10 +169,16 @@ namespace IM.Base.Forms
     #endregion
 
     #region imgButtonPrint_MouseLeftButtonDown
+    /// <summary>
+    /// Evento que se genera al presionar el boton Print
+    /// </summary>
+    ///<history>
+    ///[erosado]  17/08/2016  Created.
+    /// </history>
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var j = catObj;
-
+      //Generamos Reporte
+      RptInvitationHelper.RptInvitation(_guestId, _user.User.peID);
     }
     #endregion
 
@@ -181,7 +205,7 @@ namespace IM.Base.Forms
         DataContext = null;
         catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
         await catObj.LoadAll();
-        DataContext = catObj;
+        DataContext = catObj.GuestInvitation;
         SetReadOnly();
 
         //Habilitamos los botones editar e imprimir
@@ -242,10 +266,23 @@ namespace IM.Base.Forms
         _user = login.UserData;
         //Cargar de nuevo la invitacion
         catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
-        DataContext = catObj;
+        DataContext = catObj.GuestInvitation;
         //Configuramos de nuevo todo
         Window_Loaded(this, null);
       }
+    }
+    #endregion
+
+    #region brdSearchButton_MouseLeftButtonDown
+    /// <summary>
+    /// Obtiene un Folio de Reservacion
+    /// </summary>
+    /// <history>
+    /// [erosado] 17/08/2016  Created.
+    /// </history>
+    private void brdSearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      //Desde Aqui invocamos al Search Reservation
     }
     #endregion
 
@@ -284,7 +321,7 @@ namespace IM.Base.Forms
     /// </history>
     private void btnRebook_Click(object sender, RoutedEventArgs e)
     {
-
+      Rebook();
     }
     #endregion
 
@@ -318,12 +355,12 @@ namespace IM.Base.Forms
     /// </history>
     private void cmbSalesRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
         catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
       }
-      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
         catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
@@ -341,7 +378,7 @@ namespace IM.Base.Forms
     private void dtpBookDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       //Si tiene una fecha y es una fecha valida
-      if (dtpBookDate.Value.HasValue && dtpBookDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
         catObj.GuestInvitation.TourTimes = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpBookDate.Value.Value);
@@ -359,7 +396,7 @@ namespace IM.Base.Forms
     private void dtpRescheduleDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       //Si tiene una fecha y es una fecha valida
-      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate.Value != DateTime.MinValue && cmbSalesRooms.SelectedItem != null)
+      if (dtpRescheduleDate.Value.HasValue && dtpRescheduleDate?.Value != DateTime.MinValue && cmbSalesRooms?.SelectedItem != null)
       {
         //Consultamos los horarios disponibles 
         cmbBookT.ItemsSource = LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
@@ -939,12 +976,16 @@ namespace IM.Base.Forms
         //Booking
         if (bookingDate)
         {
-          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.GuestInvitation.CloneGuest.guBookD, catObj.GuestInvitation.CloneGuest.guBookT, serverDate);
+          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate,
+            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guBookD : null,
+            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guBookT : null, serverDate);
         }
         //Reschedule
         else
         {
-          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate, catObj.GuestInvitation.CloneGuest.guReschD, catObj.GuestInvitation.CloneGuest.guReschT, serverDate);
+          tourTimes = BRTourTimesAvailables.GetTourTimesAvailables(leadSource, salesRoom, selectedDate,
+            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guReschD : null,
+            catObj.GuestInvitation.CloneGuest != null ? catObj.GuestInvitation.CloneGuest.guReschT : null, serverDate);
         }
       }
       return tourTimes;
@@ -1063,6 +1104,9 @@ namespace IM.Base.Forms
     {
       //Nota: Cuando es un Rebook, se genera un nuevo Guest y en su guRef se escribe el GuestID del padre
       _isRebook = true;
+      //Cambiamos el modo de la invitacion
+      catObj.GuestInvitation.InvitationMode = EnumMode.Add;
+
       var serverDate = BRHelpers.GetServerDate();
       var permission = _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations;
 
@@ -1072,25 +1116,79 @@ namespace IM.Base.Forms
       btnRebook.IsEnabled = false;
 
       //Si guRef es null o cero
-      if (catObj.GuestInvitation.Guest.guRef == null || catObj.GuestInvitation.Guest.guRef ==0)
+      if (catObj.GuestInvitation.Guest.guRef == null || catObj.GuestInvitation.Guest.guRef == 0)
       {
         //Le asignamos el valor del GuestID
         catObj.GuestInvitation.Guest.guRef = catObj.GuestInvitation.Guest.guID;
       }
 
-      //Guest id = ""
-      
+      //Limpiamos la informacion del Guest ID
+      catObj.GuestInvitation.Guest.guID = 0;
+
+
       //Desactivamos Quinella
       chkguQuinella.IsChecked = false;
       //Desactivamos Show
       chkguShow.IsChecked = false;
       //Limpiamos la informacion del show
-      
-      
+      if (catObj.GuestInvitation.Guest.guShowD != null)
+      {
+        catObj.GuestInvitation.Guest.guShowD = null;
+      }
 
+      //Booking
 
+      //PR Contact
+      catObj.GuestInvitation.Guest.guPRInfo = "";
+
+      //PR
+      catObj.GuestInvitation.Guest.guPRInvit1 = "";
+
+      //Fecha y Hora del Booking
+      catObj.GuestInvitation.Guest.guBookD = null;
+      catObj.GuestInvitation.Guest.guBookT = null;
+
+      if (catObj.GuestInvitation.Guest.guReschD != null || catObj.GuestInvitation.Guest.guReschD != DateTime.MinValue)
+      {
+        //Limpiamos fecha y hora Reschedule
+        catObj.GuestInvitation.Guest.guReschD = null;
+        catObj.GuestInvitation.Guest.guReschT = null;
+
+        //Limpiamos fecha y hora en que se hizo el reschedule
+        catObj.GuestInvitation.Guest.guReschDT = null;
+      }
+
+      if (_module == EnumModule.InHouse)
+      {
+        //No directa
+        catObj.GuestInvitation.Guest.guDirect = false;
+
+        //Invitacion No cancelada
+        catObj.GuestInvitation.Guest.guBookCanc = false;
+
+        //Contactacion
+
+        //Fecha de contacto
+        catObj.GuestInvitation.Guest.guInfoD = null;
+
+        //PR Contacto
+        catObj.GuestInvitation.Guest.guPRInfo = "";
+      }
+
+      //Depositos
+      catObj.GuestInvitation.Guest.guDeposit = 0;
+      catObj.GuestInvitation.Guest.guDepositTwisted = 0;
+      catObj.GuestInvitation.Guest.guHotel = "";
+
+      //Regalos
+      catObj.GuestInvitation.InvitationGiftList = new ObservableCollection<InvitationGift>();
+
+      //Numero de habitaciones
+      if (catObj.GuestInvitation.Guest.guRoomsQty != 0)
+      {
+        catObj.GuestInvitation.Guest.guRoomsQty = 1;
+      }
     }
-
     #endregion
 
     #endregion
@@ -1278,7 +1376,7 @@ namespace IM.Base.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control,catObj.GuestInvitation.CloneBookingDepositList,catObj.GuestInvitation.Guest.guID);
+        e.Cancel = !InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.GuestInvitation.CloneBookingDepositList, catObj.GuestInvitation.Guest.guID);
         e.EditingElement.Focus();
       }
     }
@@ -1288,24 +1386,27 @@ namespace IM.Base.Forms
     private void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
-      {        
-        if(_isCellCommitDeposit)
+      {
+        if (_isCellCommitDeposit)
         {
           _isCellCommitDeposit = false;
           e.Cancel = true;
         }
-        else if(Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
           _isCellCommitDeposit = false;
-          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit,sender as DataGrid, catObj.GuestInvitation.CloneBookingDepositList, catObj.GuestInvitation.Guest.guID);          
+          e.Cancel = !InvitationValidationRules.AfertEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, catObj.GuestInvitation.CloneBookingDepositList, catObj.GuestInvitation.Guest.guID);
         }
         else
         {
           e.Cancel = true;
         }
       }
-    }  
+    }
     #endregion
+
     #endregion
+
+
   }
 }

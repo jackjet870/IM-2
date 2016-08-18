@@ -397,7 +397,7 @@ namespace IM.Outhouse.Forms
         }
         if (isInvit || login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
+          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
           invitacion.ShowDialog();
         }
       }

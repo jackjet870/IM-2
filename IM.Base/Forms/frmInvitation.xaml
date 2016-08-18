@@ -123,7 +123,20 @@
                                 <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                             </StackPanel>
                         </Border>
-                        <TextBlock Name="txbMode" Text="" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                        <StackPanel Margin="2">
+                            
+                            <TextBlock Name="txbMode" Text="{Binding InvitationInfo}" VerticalAlignment="Center" FontSize="14" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                            <TextBlock Name="txbInformation" VerticalAlignment="Center" FontSize="10" Foreground="Gray" TextWrapping="Wrap" FontWeight="Bold" Margin="10,2,10,0">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{} Guest ID:{0} | Guest Name: {1} {2}">
+                                        <Binding Path="Guest.guID" />
+                                        <Binding Path="Guest.guFirstName1" />
+                                        <Binding Path="Guest.guLastName1" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                        
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -159,7 +172,7 @@
                                                         <TextBlock Text="Rsrv. Num.*" TextAlignment="Center"/>
                                                         <TextBox Name="txtguHReservID" Width="100" Text="{Binding Guest.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
                                                     </StackPanel>
-                                                    <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
+                                                    <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0" MouseLeftButtonDown="brdSearchButton_MouseLeftButtonDown">
                                                         <StackPanel Orientation="Horizontal">
                                                             <Viewbox Stretch="Uniform" Width="20">
                                                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
