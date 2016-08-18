@@ -851,7 +851,7 @@ namespace IM.BusinessRules.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("180")]
         public int USP_OR_ReportsProcessorOuthouse_TimeOut {
@@ -860,6 +860,18 @@ namespace IM.BusinessRules.Properties {
             }
             set {
                 this["USP_OR_ReportsProcessorOuthouse_TimeOut"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_ValidateFolioInvitationOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_ValidateFolioInvitationOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_ValidateFolioInvitationOutside_Timeout"] = value;
             }
         }
     }

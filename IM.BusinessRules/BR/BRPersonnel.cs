@@ -7,7 +7,6 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using IM.BusinessRules.Properties;
 
 namespace IM.BusinessRules.BR
@@ -113,7 +112,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<PersonnelShort>> GetPersonnel(string leadSources = "ALL", string salesRooms = "ALL",
       string roles = "ALL", int status = 1, string permission = "ALL",
-      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL" , string idPersonnel = "ALL")
+      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL", string idPersonnel = "ALL")
     {
       return await Task.Run(() =>
       {
@@ -158,7 +157,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 03/05/2016
     /// [vku] 13/Jul/2016 Modified. Agregué Include Personnel_Liner
     /// </history>
-    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null,bool blnLiner=false)
+    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null, bool blnLiner = false)
     {
       List<Personnel> lstPersonnel = await Task.Run(() =>
         {
@@ -168,12 +167,12 @@ namespace IM.BusinessRules.BR
                         select pe;
 
             if (nStatus != -1)//Filtro por estatus
-          {
+            {
               bool blnStatus = Convert.ToBoolean(nStatus);
               query = query.Where(pe => pe.peA == blnStatus);
             }
 
-            if(blnLiner)
+            if (blnLiner)
             {
               query = query.Include(pe => pe.Personnel_Liner);
             }
@@ -181,12 +180,12 @@ namespace IM.BusinessRules.BR
             if (personnel != null)
             {
               if (!string.IsNullOrWhiteSpace(personnel.peID))//Filtro por ID
-            {
+              {
                 query = query.Where(pe => pe.peID == personnel.peID);
               }
 
               if (!string.IsNullOrWhiteSpace(personnel.pede))//Filtro por dept
-            {
+              {
                 query = query.Where(pe => pe.pede == personnel.pede);
               }
             }
@@ -195,7 +194,7 @@ namespace IM.BusinessRules.BR
           }
         });
       return lstPersonnel;
-    } 
+    }
     #endregion
 
     #region GetPersonnelAccess
@@ -319,9 +318,9 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 22/06/2016
     /// </history>
-    public static async Task<int> SavePersonnel(string idUser,Personnel personnel, bool blnUpdate,List<PersonnelPermission> lstPermissionAdd,List<PersonnelPermission> lstPermissionDel, List<PersonnelPermission>lstPermissionUpd,
-      List<PersonnelAccess> lstLeadSourceDel,List<PersonnelAccess> lstLeadSourceAdd, List<PersonnelAccess> lstWarehouseDel, List<PersonnelAccess> lstWarehousesAdd, List<PersonnelAccess> lstSalesRoomDel, 
-      List<PersonnelAccess> lstSalesRoomAdd,List<Role>lstRoleDel,List<Role>lstRoleAdd,bool blnPostLog,bool blnTeamsLog)
+    public static async Task<int> SavePersonnel(string idUser, Personnel personnel, bool blnUpdate, List<PersonnelPermission> lstPermissionAdd, List<PersonnelPermission> lstPermissionDel, List<PersonnelPermission> lstPermissionUpd,
+      List<PersonnelAccess> lstLeadSourceDel, List<PersonnelAccess> lstLeadSourceAdd, List<PersonnelAccess> lstWarehouseDel, List<PersonnelAccess> lstWarehousesAdd, List<PersonnelAccess> lstSalesRoomDel,
+      List<PersonnelAccess> lstSalesRoomAdd, List<Role> lstRoleDel, List<Role> lstRoleAdd, bool blnPostLog, bool blnTeamsLog)
     {
       int nRes = await Task.Run(() =>
         {
@@ -335,13 +334,13 @@ namespace IM.BusinessRules.BR
                 #region Personnel
                 if (blnUpdate)//Actualizar
                 {
-                   personnelSave= dbContext.Personnels.Where(pe => pe.peID == personnel.peID).Include(pe => pe.Roles).FirstOrDefault();
+                  personnelSave = dbContext.Personnels.Where(pe => pe.peID == personnel.peID).Include(pe => pe.Roles).FirstOrDefault();
                   //dbContext.Entry(personnel).State = EntityState.Modified;
                   ObjectHelper.CopyProperties(personnelSave, personnel);
                 }
                 else//Agregar
                 {
-                  if(dbContext.Personnels.Where(pe=>pe.peID==personnel.peID).FirstOrDefault()!=null)
+                  if (dbContext.Personnels.Where(pe => pe.peID == personnel.peID).FirstOrDefault() != null)
                   {
                     return -1;
                   }
@@ -351,8 +350,8 @@ namespace IM.BusinessRules.BR
                     personnelSave = personnel;
                   }
                 }
-                #endregion                
-                
+                #endregion
+
                 #region PersonnelPermission
                 //Eliminar
                 lstPermissionDel.ForEach(pp =>
@@ -377,17 +376,19 @@ namespace IM.BusinessRules.BR
 
                 #region Roles
                 //Del
-                personnelSave.Roles.Where(ro => lstRoleDel.Any(roo => ro.roID == roo.roID)).ToList().ForEach(ro => {
+                personnelSave.Roles.Where(ro => lstRoleDel.Any(roo => ro.roID == roo.roID)).ToList().ForEach(ro =>
+                {
                   personnelSave.Roles.Remove(ro);
                 });
-                
+
                 //Add
                 lstRoleAdd = dbContext.Roles.AsEnumerable().Where(ro => lstRoleAdd.Any(roo => ro.roID == roo.roID)).ToList();
-                lstRoleAdd.ForEach(ro => {
+                lstRoleAdd.ForEach(ro =>
+                {
                   personnelSave.Roles.Add(ro);
-                });                
+                });
                 #endregion
-                
+
                 #region leadSource
                 //Eliminar
                 lstLeadSourceDel.ForEach(pl =>
@@ -416,7 +417,8 @@ namespace IM.BusinessRules.BR
                 });
 
                 //Add
-                lstSalesRoomAdd.ForEach(pl => {
+                lstSalesRoomAdd.ForEach(pl =>
+                {
                   pl.plpe = personnelSave.peID;
                   pl.plLSSR = "SR";
                   dbContext.PersonnelAccessList.Add(pl);
@@ -433,7 +435,8 @@ namespace IM.BusinessRules.BR
                 });
 
                 //Add
-                lstWarehousesAdd.ForEach(pl => {
+                lstWarehousesAdd.ForEach(pl =>
+                {
                   pl.plpe = personnelSave.peID;
                   pl.plLSSR = "WH";
                   dbContext.PersonnelAccessList.Add(pl);
@@ -455,7 +458,7 @@ namespace IM.BusinessRules.BR
                 #endregion
 
                 #region TeamsLog
-                if(blnTeamsLog)
+                if (blnTeamsLog)
                 {
                   TeamLog teamLog = new TeamLog();
                   teamLog.tlDT = dtmServerDate;
@@ -468,7 +471,7 @@ namespace IM.BusinessRules.BR
                 }
                 #endregion
 
-               int nSave= dbContext.SaveChanges();
+                int nSave = dbContext.SaveChanges();
                 transacction.Commit();
                 return nSave;
               }
@@ -505,7 +508,7 @@ namespace IM.BusinessRules.BR
         });
 
       return nRes;
-    } 
+    }
     #endregion
 
     #region GetPersonnelStatistics
@@ -530,6 +533,33 @@ namespace IM.BusinessRules.BR
       return personnelStatistics;
     }
     #endregion
-   
+
+
+    #region IsFrontToMiddle
+    /// <summary>
+    /// Determina si un personal es Front To Middle
+    /// </summary>
+    /// <param name="personnelID">Clave del personal</param>
+    /// <param name="pR1">Clave del PR 1 (Opcional)</param>
+    /// <param name="pR2">Clave del PR 2 (Opcional)</param>
+    /// <param name="pR3">Clave del PR 3 (Opcional)</param>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [aalcocer] created 13/08/2016
+    /// </history>
+    public static async Task<bool> IsFrontToMiddle(string personnelID, string pR1 = null, string pR2 = null, string pR3 = null)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var result = dbContext.USP_OR_EsFrontToMiddle(personnelID, pR1, pR2, pR3).FirstOrDefault();
+          return Convert.ToBoolean(result);
+        }
+      });
+    }
+    #endregion
+
+
   }
 }

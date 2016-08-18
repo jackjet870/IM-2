@@ -74,7 +74,7 @@ namespace IM.Base.Helpers
         else
         {
           // si no se envio el mensaje
-          if (!string.IsNullOrEmpty(message))
+          if (string.IsNullOrEmpty(message))
           {
             message = "Specify a value";
           }
@@ -276,12 +276,12 @@ namespace IM.Base.Helpers
         parents.ForEach(tb => tb.IsSelected = true);
         container.UpdateLayout();
         control.Focus();
-      }
 
-      //Si la showMessage viene activa muestra el mensaje
-      if (showMessage)
-      {
-        UIHelper.ShowMessage(strMsj.TrimEnd('\n'), title: "Intelligence Marketing");
+        //Si la showMessage viene activa muestra el mensaje
+        if (showMessage)
+        {
+          UIHelper.ShowMessage(strMsj.TrimEnd('\n'), title: "Intelligence Marketing");
+        }
       }
 
       return strMsj.TrimEnd('\n');
