@@ -6508,5 +6508,18 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_FolioValidCXC", numberParameter, guestIDParameter, activeParameter, actionParameter);
         }
+    
+        public virtual int USP_OR_SetAccountingCode(Nullable<int> guestID, string activity)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var activityParameter = activity != null ?
+                new ObjectParameter("Activity", activity) :
+                new ObjectParameter("Activity", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SetAccountingCode", guestIDParameter, activityParameter);
+        }
     }
 }

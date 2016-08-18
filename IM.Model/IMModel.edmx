@@ -7453,6 +7453,10 @@
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SetAccountingCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Activity" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_TransferAddAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferAddAgenciesHotel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferAddContracts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -18201,6 +18205,10 @@
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
             <Parameter Name="Active" Mode="In" Type="Boolean" />
             <Parameter Name="Action" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SetAccountingCode">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="Activity" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -31335,6 +31343,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_FolioValidCXC" FunctionName="IMModel.Store.USP_OR_FolioValidCXC" />
+          <FunctionImportMapping FunctionImportName="USP_OR_SetAccountingCode" FunctionName="IMModel.Store.USP_OR_SetAccountingCode" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
