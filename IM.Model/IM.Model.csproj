@@ -1388,9 +1388,6 @@
     <Compile Include="UserLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="USP_OR_ValidateInvitation.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="ValidationData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

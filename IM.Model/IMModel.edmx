@@ -18255,7 +18255,7 @@
             <Parameter Name="Location" Mode="In" Type="String" />
             <Parameter Name="Invited" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_ValidateInvitation" ReturnType="Collection(IMModel.USP_OR_ValidateInvitation)">
+          <FunctionImport Name="USP_OR_ValidateInvitation" ReturnType="Collection(IMModel.ValidationData)">
             <Parameter Name="ChangedBy" Mode="In" Type="String" />
             <Parameter Name="PR" Mode="In" Type="String" />
             <Parameter Name="Location" Mode="In" Type="String" />
@@ -23224,10 +23224,6 @@
         <ComplexType Name="PostShort">
           <Property Type="String" Name="Post" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="PostN" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="USP_OR_ValidateInvitation">
-          <Property Type="String" Name="Focus" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Message" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -31407,8 +31403,8 @@
           <FunctionImportMapping FunctionImportName="USP_IM_SaveGuestAdditional" FunctionName="IMModel.Store.USP_IM_SaveGuestAdditional" />
           <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestsAdditional" FunctionName="IMModel.Store.USP_OR_UpdateGuestsAdditional" />
           <FunctionImportMapping FunctionImportName="USP_OR_ValidateInvitation" FunctionName="IMModel.Store.USP_OR_ValidateInvitation">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.USP_OR_ValidateInvitation">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationData">
                 <ScalarProperty Name="Focus" ColumnName="Focus" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
               </ComplexTypeMapping>

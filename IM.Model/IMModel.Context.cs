@@ -6582,7 +6582,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestsAdditional", guestParameter, pRParameter, dateParameter, locationParameter, invitedParameter);
         }
     
-        public virtual ObjectResult<USP_OR_ValidateInvitation> USP_OR_ValidateInvitation(string changedBy, string pR, string location, string leadSource, string salesRoom, string agency, string country)
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateInvitation(string changedBy, string pR, string location, string leadSource, string salesRoom, string agency, string country)
         {
             var changedByParameter = changedBy != null ?
                 new ObjectParameter("ChangedBy", changedBy) :
@@ -6612,7 +6612,7 @@ namespace IM.Model
                 new ObjectParameter("Country", country) :
                 new ObjectParameter("Country", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<USP_OR_ValidateInvitation>("USP_OR_ValidateInvitation", changedByParameter, pRParameter, locationParameter, leadSourceParameter, salesRoomParameter, agencyParameter, countryParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateInvitation", changedByParameter, pRParameter, locationParameter, leadSourceParameter, salesRoomParameter, agencyParameter, countryParameter);
         }
     }
 }
