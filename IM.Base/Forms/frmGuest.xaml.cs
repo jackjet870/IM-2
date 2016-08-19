@@ -78,6 +78,9 @@ namespace IM.Base.Forms
       LoadControls();
       UIHelper.SetUpControls(new Guest(), this);
       DataContext = _catObj;
+
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+
       //Detenemos el BusyIndicator
       _busyIndicator.IsBusy = false;
     }
