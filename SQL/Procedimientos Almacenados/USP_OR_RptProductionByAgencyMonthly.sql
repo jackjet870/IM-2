@@ -2,30 +2,25 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_Rpt
 drop procedure [dbo].[USP_OR_RptProductionByAgencyMonthly]
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
-
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
 ** Devuelve los datos para el reporte de produccion por agencia y mes
 ** 
-** [wtorres]	09/Sep/2009 Creado
-** [wtorres]	14/May/2010 Agregue las columnas de bookings netos y shows netos
-** [wtorres]	24/Nov/2010 Agregue el parametro @BasedOnArrival
-** [wtorres]	20/Dic/2013 Agregue el parametro @ConsiderQuinellas
-** [aalcocer]	10/Jun/2016 Se modifica el tipo de dato del campo clave de agencias a varchar(max)
+** [wtorres]	09/Sep/2009 Created
+** [wtorres]	14/May/2010 Modified. Agregue las columnas de bookings netos y shows netos
+** [wtorres]	24/Nov/2010 Modified. Agregue el parametro @BasedOnArrival
+** [wtorres]	20/Dic/2013 Modified. Agregue el parametro @ConsiderQuinellas
+** [aalcocer]	10/Jun/2016 Modified. Se modifica el tipo de dato del campo clave de agencias a varchar(max)
 **
 */
 create procedure [dbo].[USP_OR_RptProductionByAgencyMonthly]
-	@DateFrom datetime,					-- Fecha desde
-	@DateTo datetime,					-- Fecha hasta
+	@DateFrom datetime,				-- Fecha desde
+	@DateTo datetime,				-- Fecha hasta
 	@Agencies varchar(max) = 'ALL',	-- Claves de agencias
-	@ConsiderQuinellas bit = 0,			-- Indica si se debe considerar quinielas
-	@BasedOnArrival bit = 0				-- Indica si se debe basar en la fecha de llegada
+	@ConsiderQuinellas bit = 0,		-- Indica si se debe considerar quinielas
+	@BasedOnArrival bit = 0			-- Indica si se debe basar en la fecha de llegada
 as
 set nocount on
 
@@ -202,10 +197,3 @@ select
 from #tbl_Data
 group by [Year], [Month], MonthN
 order by [Year], AgencyTotal, Agency, LeadSourceTotal, LeadSource, [Month]
-
-GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
-GO
-

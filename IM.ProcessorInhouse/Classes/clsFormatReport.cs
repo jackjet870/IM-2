@@ -1223,7 +1223,7 @@ namespace IM.ProcessorInhouse.Classes
         new ExcelFormatTable { Title = "PR Name", PropertyName = "PRN", Axis = ePivotFieldAxis.Row, Order = 2 },
 
         new ExcelFormatTable { Title = "Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 3, Function = DataFieldFunctions.Sum},
-        new ExcelFormatTable { Title = "Score", PropertyName = "Score", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 4, Function = DataFieldFunctions.Sum},
+        new ExcelFormatTable { Title = "Score", PropertyName = "Score", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 4, Function = DataFieldFunctions.Sum},
 
         new ExcelFormatTable { Title = "T Shows", PropertyName = "TShows", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 5, Function = DataFieldFunctions.Sum},
         new ExcelFormatTable { Title = "T Score", PropertyName = "TScore", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 6, Function = DataFieldFunctions.Sum, Sort = eSortType.Descending}

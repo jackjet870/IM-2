@@ -270,7 +270,7 @@ namespace IM.ProcessorInhouse.Forms
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null,
         EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
         EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false,
-        EnumOnlyWholesalers?  enumOnlyWholesalers = null)
+        EnumOnlyWholesalers? enumOnlyWholesalers = null)
     {
       ConfigureDates(blnOneDate, enumPeriod);
       ConfigureFilters(enumBasedOnArrival, enumBasedOnPRLocation, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, enumOnlyWholesalers);
@@ -417,7 +417,8 @@ namespace IM.ProcessorInhouse.Forms
     /// Guarda los datos seleccionados por el usuario.
     /// </summary>
     /// <history>
-    /// [aalcocer] 23/03/2016 Created
+    /// [aalcocer] 23/Mar/2016 Created
+    /// [wtorres]  18/Ago/2016 Modified. Ahora guarda el rango de noches seleccionado
     /// </history>
     private void SaveFrmFilterValues()
     {
@@ -453,7 +454,7 @@ namespace IM.ProcessorInhouse.Forms
       }
       if (pnlGiftsQuantity.IsVisible)
       {
-        _frmIh._clsFilter.LstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);        
+        _frmIh._clsFilter.LstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
       }
 
       if (cboDate.IsEnabled)
@@ -472,10 +473,24 @@ namespace IM.ProcessorInhouse.Forms
       _frmIh._clsFilter.StrApplication = txtApplication.Text;
       _frmIh._clsFilter.IntCompany = Convert.ToInt32(txtCompany.Text);
       _frmIh._clsFilter.Club = (Club)cboClub.SelectedItem;
-      if(cboSaveCourtesyTours.SelectedItem!=null)
+      if (cboSaveCourtesyTours.SelectedItem != null)
         _frmIh._clsFilter.EnumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       if (cboExternal.SelectedItem != null)
         _frmIh._clsFilter.EnumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+
+      // [wtorres] 18/Ago/2016 guardamos el rango de noches seleccionado
+      if (txtStartN.IsVisible)
+      {
+        int nightsFrom, nightsTo;
+        if (int.TryParse(txtStartN.Text, out nightsFrom))
+        {
+          _frmIh._clsFilter.IntStartN = nightsFrom;
+        }
+        if (int.TryParse(txtEndN.Text, out nightsTo))
+        {
+          _frmIh._clsFilter.IntEndN = nightsTo;
+        }
+      }
     }
 
     #endregion saveFrmFilterValues
@@ -491,7 +506,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void LoadUserFilters()
     {
-      if(cboDate.IsEnabled)
+      if (cboDate.IsEnabled)
         cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == _frmIh._clsFilter.CboDateSelected) ? _frmIh._clsFilter.CboDateSelected : EnumPredefinedDate.DatesSpecified;
 
       dtmStart.Value = cboDate.IsEnabled ? _frmIh._clsFilter.DtmStart : _frmIh._clsFilter.DtmInit;
@@ -500,7 +515,7 @@ namespace IM.ProcessorInhouse.Forms
       chkQuinellas.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumQuinellas);
       chkDetailGifts.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumDetailGifts);
       chkSalesByMembershipType.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumSalesByMemberShipType);
-      chkOnlyWholesalers.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumOnlyWholesalers); 
+      chkOnlyWholesalers.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumOnlyWholesalers);
       txtApplication.Text = _frmIh._clsFilter.StrApplication;
       txtCompany.Text = $"{_frmIh._clsFilter.IntCompany}";
       if (_frmIh._clsFilter.Club != null)
