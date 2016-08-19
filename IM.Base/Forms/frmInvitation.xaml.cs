@@ -137,6 +137,9 @@ namespace IM.Base.Forms
         _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
         //Cargamos la informacion
         await catObj.LoadAll();
+        
+        Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts,"igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+
         //Cargamos la UI dependiendo del tipo de Invitacion
         ControlsConfiguration();
         //Configuramos los controles (Maxlength, caracteres etc.)
@@ -202,17 +205,7 @@ namespace IM.Base.Forms
 
           UIHelper.ShowMessage("The data was saved successfully");
 
-          _busyIndicator.IsBusy = true;
-          _busyIndicator.BusyContent = "Please wait, we are reloading your invitation...";
-
-          //Cargamos la invitacion pero en modo lectura
-          DataContext = null;
-          catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
-          await catObj.LoadAll();
-          DataContext = catObj;
-          SetReadOnly();
-
-          _busyIndicator.IsBusy =false;
+          this.Close();
         }
       }
       catch (Exception ex)
