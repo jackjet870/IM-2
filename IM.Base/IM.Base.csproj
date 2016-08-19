@@ -120,8 +120,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
-    <Compile Include="Classes\CommonCatObject.cs" />
     <Compile Include="Classes\Gifts.cs" />
+    <Compile Include="Classes\GuestInvitationRules.cs" />
     <Compile Include="Classes\InvitationConverter.cs" />
     <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
@@ -132,12 +132,16 @@
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\GiftType.cs" />
+    <Compile Include="Forms\frmSearchReservation.xaml.cs">
+      <DependentUpon>frmSearchReservation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSystemCfg.xaml.cs">
       <DependentUpon>frmSystemCfg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\ConfigRegistryHelper.cs" />
     <Compile Include="Helpers\CrystalReportHelper.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\PrinterHelper.cs" />
     <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
@@ -180,9 +184,6 @@
     </Compile>
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmInvitationBase.xaml.cs">
-      <DependentUpon>frmInvitationBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmLogin.xaml.cs">
       <DependentUpon>frmLogin.xaml</DependentUpon>
@@ -311,11 +312,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\frmInvitationBase.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Forms\frmLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSearchReservation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -340,6 +341,10 @@
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IM.Services\IM.Services.csproj">
+      <Project>{96edcb7e-349a-4988-a8ae-ebe1f5fe3060}</Project>
+      <Name>IM.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\IM.Styles\IM.Styles.csproj">
       <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>

@@ -31,6 +31,6 @@ namespace IM.Model
         public virtual Period Period { internal get; set; }
         public virtual SalesRoom SalesRoom { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Personnel> Personnels { internal get; set; }
+        public virtual ICollection<Personnel> Personnels { get; set; }
     }
 }

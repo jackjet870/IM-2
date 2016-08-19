@@ -102,7 +102,7 @@ namespace IM.Base.Helpers
       }
       else // Si es Generica
       {
-         message = GetMessageError(ex);
+        message = GetMessageError(ex);
       }
       return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
@@ -184,17 +184,17 @@ namespace IM.Base.Helpers
     /// [emoguel] modified 11/07/2016
     /// [erosado] Modified. 12/08/2016. Se agrego para que acepte el MaxLenght de las cajas de texto o si no tuviera aceptaria las de la propiedad MaxLengthPropertyClass
     /// </history>
-    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode=EnumMode.ReadOnly,bool blnCharacters=false,EnumDatabase database=EnumDatabase.IntelligentMarketing)where T:class
+    public static void SetUpControls<T>(T obj, UIElement ui, EnumMode enumMode = EnumMode.ReadOnly, bool blnCharacters = false, EnumDatabase database = EnumDatabase.IntelligentMarketing) where T : class
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor
-      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(obj,database);
+      List<Model.Classes.ColumnDefinition> lstColumnsDefinitions = BRHelpers.GetFieldsByTable<T>(obj, database);
 
       Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
       {
 
         #region DataGrid
-        List<DataGrid> lstDataGrids = lstControls.Where(cl => cl is DataGrid &&  !((DataGrid)cl).IsReadOnly).OfType<DataGrid>().ToList();
+        List<DataGrid> lstDataGrids = lstControls.Where(cl => cl is DataGrid && !((DataGrid)cl).IsReadOnly).OfType<DataGrid>().ToList();
         lstDataGrids.ForEach(dtg => dtg.Sorting += GridHelper.dtg_Sorting);
         #endregion
 
@@ -213,20 +213,20 @@ namespace IM.Base.Helpers
           //}
           #endregion
 
-          if (control != null && columnDefinition!=null)//Verifcamos que tengamos un control
-          {            
+          if (control != null && columnDefinition != null)//Verifcamos que tengamos un control
+          {
             TextBox txt = control as TextBox;//Convertimos el control a texbox
             TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
-            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt) == 0 ? txt.MaxLength : MaxLengthPropertyClass.GetMaxLength(txt);            
+            int maxLengthProp = MaxLengthPropertyClass.GetMaxLength(txt) == 0 ? txt.MaxLength : MaxLengthPropertyClass.GetMaxLength(txt);
             EnumFormatInput formatInput = FormatInputPropertyClass.GetFormatInput(txt);//Formato del campo de texto
             switch (typeCode)
             {
               #region String
               case TypeCode.String:
               case TypeCode.Char:
-                {                  
+                {
                   txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;//Asignamos el maxLength                  
-                  if(formatInput==EnumFormatInput.NotSpecialCharacters)
+                  if (formatInput == EnumFormatInput.NotSpecialCharacters)
                   {
                     txt.PreviewTextInput += TextBoxHelper.TextInputSpecialCharacters;
                   }
@@ -236,21 +236,21 @@ namespace IM.Base.Helpers
 
               #region Decimal
               case TypeCode.Decimal:
-              case TypeCode.Double:                
+              case TypeCode.Double:
                 {
                   //Si permite decimales
-                  if (columnDefinition.scale>0 || PrecisionPropertyClass.GetPrecision(txt) != "0,0")
+                  if (columnDefinition.scale > 0 || PrecisionPropertyClass.GetPrecision(txt) != "0,0")
                   {
-                    if(PrecisionPropertyClass.GetPrecision(txt)=="0,0")
+                    if (PrecisionPropertyClass.GetPrecision(txt) == "0,0")
                     {
                       PrecisionPropertyClass.SetPrecision(txt, columnDefinition.precision - columnDefinition.scale + "," + columnDefinition.scale);
                     }
-                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;                    
+                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;
                     txt.PreviewKeyDown += TextBoxHelper.Decimal_PreviewKeyDown;
                     txt.GotFocus += TextBoxHelper.DecimalGotFocus;
                     if (enumMode != EnumMode.Search)
                     {
-                      txt.LostFocus += TextBoxHelper.LostFocus;                      
+                      txt.LostFocus += TextBoxHelper.LostFocus;
                     }
                   }
                   //Si sólo permite enteros
@@ -262,9 +262,9 @@ namespace IM.Base.Helpers
                     {
                       txt.LostFocus += TextBoxHelper.LostFocus;
                       txt.GotFocus += TextBoxHelper.IntGotFocus;
-                    }                    
-                  }                  
-                  txt.MaxLength = (maxLengthProp > 0)?maxLengthProp: columnDefinition.maxLength;                  
+                    }
+                  }
+                  txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength;
                   break;
                 }
               #endregion
@@ -274,6 +274,7 @@ namespace IM.Base.Helpers
                 {
                   txt.MaxLength = 3;
                   txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
+                  txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.Search)
                   {
                     txt.LostFocus += TextBoxHelper.LostFocus;
@@ -286,8 +287,8 @@ namespace IM.Base.Helpers
               case TypeCode.Int16:
               case TypeCode.Int32:
               case TypeCode.Int64:
-                {                 
-                  
+                {
+
                   switch (formatInput)
                   {
                     case EnumFormatInput.Number:
@@ -296,9 +297,9 @@ namespace IM.Base.Helpers
                       break;
                     case EnumFormatInput.NumberNegative:
                       txt.PreviewTextInput += TextBoxHelper.IntWithNegativeTextInput;
-                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp+1 : columnDefinition.maxLength+1;
+                      txt.MaxLength = (maxLengthProp > 0) ? maxLengthProp + 1 : columnDefinition.maxLength + 1;
                       break;
-                  }                  
+                  }
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.Search)
                   {
@@ -324,12 +325,12 @@ namespace IM.Base.Helpers
                     txt.MaxLength = 10;
                   }
                   break;
-                } 
+                }
                 #endregion
 
             }
-          }           
-            
+          }
+
         }
         #endregion
       }
@@ -426,7 +427,7 @@ namespace IM.Base.Helpers
         }
         GetParentCollection(parent, logicalCollection);
       }
-    } 
+    }
     #endregion
 
     #region UiSetDatacontext
@@ -491,10 +492,10 @@ namespace IM.Base.Helpers
                 {
                   Binding binding = new Binding();
                   binding.Mode = bindingMode;
-                  binding.Path = new PropertyPath(pi.Name);                  
+                  binding.Path = new PropertyPath(pi.Name);
                   if (bindingMode != BindingMode.OneWay)
                   {
-                    binding.StringFormat = "{0:C}";                    
+                    binding.StringFormat = "{0:C}";
                   }
                   control.SetBinding(TextBox.TextProperty, binding);
                 }
@@ -555,6 +556,54 @@ namespace IM.Base.Helpers
       if (exception.InnerException == null) return message;
       message = GetMessageError(exception.InnerException);
       return message;
+    }
+    #endregion
+
+    #region UpdateTarget
+    /// <summary>
+    /// Refresca los controles para que se actualicen la informacion que tiene el objeto
+    /// </summary>
+    /// <param name="control">Control</param>
+    /// <history>
+    /// [erosado] 18/08/2016  Created.
+    /// </history>
+    public static void UpdateTarget(Control control)
+    {
+      List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(control);//Obtenemos la lista de controles del contenedor
+      lstControls.ForEach(cl =>
+      {
+        switch (cl.GetType().Name)
+        {
+          case "TextBox":
+            {
+              var bindingProperty = cl.GetBindingExpression(TextBox.TextProperty);
+              if (bindingProperty != null)
+              {
+                bindingProperty.UpdateTarget();
+              }
+              break;
+            }
+          case "ComboBox":
+            {
+              var bindingProperty = cl.GetBindingExpression(ComboBox.SelectedValueProperty);
+              if (bindingProperty != null)
+              {
+                bindingProperty.UpdateTarget();
+              }
+              break;
+            }
+          case "CheckBox":
+            {
+              var bindingProperty = cl.GetBindingExpression(CheckBox.IsCheckedProperty);
+              if (bindingProperty != null)
+              {
+                bindingProperty.UpdateTarget();
+              }
+              break;
+            }
+
+        }
+      });
     }
     #endregion
 

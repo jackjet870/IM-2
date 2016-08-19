@@ -130,9 +130,13 @@
     </Compile>
     <Compile Include="Classes\ColumnDefinition.cs" />
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
+    <Compile Include="Classes\EntityBase.cs" />
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
+    <Compile Include="Classes\GiftType.cs" />
+    <Compile Include="Classes\GuestInvitation.cs" />
+    <Compile Include="Classes\GuestShow.cs" />
     <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\ItemsList.cs" />
     <Compile Include="Classes\Item.cs" />

@@ -6508,5 +6508,78 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_FolioValidCXC", numberParameter, guestIDParameter, activeParameter, actionParameter);
         }
+    
+        public virtual int USP_OR_SetAccountingCode(Nullable<int> guestID, string activity)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var activityParameter = activity != null ?
+                new ObjectParameter("Activity", activity) :
+                new ObjectParameter("Activity", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SetAccountingCode", guestIDParameter, activityParameter);
+        }
+    
+        public virtual int USP_IM_ADDEfficiencySalesmen(Nullable<int> efficiencyID, string salemanID)
+        {
+            var efficiencyIDParameter = efficiencyID.HasValue ?
+                new ObjectParameter("EfficiencyID", efficiencyID) :
+                new ObjectParameter("EfficiencyID", typeof(int));
+    
+            var salemanIDParameter = salemanID != null ?
+                new ObjectParameter("SalemanID", salemanID) :
+                new ObjectParameter("SalemanID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_IM_ADDEfficiencySalesmen", efficiencyIDParameter, salemanIDParameter);
+        }
+    
+        public virtual int USP_IM_DeleteEfficiencySalesmen(Nullable<int> efficiencyID)
+        {
+            var efficiencyIDParameter = efficiencyID.HasValue ?
+                new ObjectParameter("EfficiencyID", efficiencyID) :
+                new ObjectParameter("EfficiencyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_IM_DeleteEfficiencySalesmen", efficiencyIDParameter);
+        }
+    
+        public virtual int USP_IM_SaveGuestAdditional(Nullable<int> guID, string additionalGuestID)
+        {
+            var guIDParameter = guID.HasValue ?
+                new ObjectParameter("guID", guID) :
+                new ObjectParameter("guID", typeof(int));
+    
+            var additionalGuestIDParameter = additionalGuestID != null ?
+                new ObjectParameter("AdditionalGuestID", additionalGuestID) :
+                new ObjectParameter("AdditionalGuestID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_IM_SaveGuestAdditional", guIDParameter, additionalGuestIDParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGuestsAdditional(Nullable<int> guest, string pR, Nullable<System.DateTime> date, string location, Nullable<bool> invited)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var invitedParameter = invited.HasValue ?
+                new ObjectParameter("Invited", invited) :
+                new ObjectParameter("Invited", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestsAdditional", guestParameter, pRParameter, dateParameter, locationParameter, invitedParameter);
+        }
     }
 }

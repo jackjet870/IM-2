@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PalaceResorts.Common.PalaceTools;
 using IM.Services.CallCenterService;
 using IM.Model.Enums;
-using IM.Base.Helpers;
-using System.Windows;
 
 namespace IM.Services.Helpers
 {
@@ -50,7 +44,7 @@ namespace IM.Services.Helpers
       // si es palace Premier
       else
       {
-        if(_servicePremier == null)
+        if (_servicePremier == null)
         {
           //Creamos una instancia del servicio 
           _servicePremier = new CallCenterServiceInterface();
@@ -82,6 +76,7 @@ namespace IM.Services.Helpers
     /// </history>
     public static RptEquity GetRptEquity(string membershipNum, int company, EnumClub club)
     {
+
       MemberRequest request = new MemberRequest();
       RptEquityResponse response = null;
       RptEquity report = null;
@@ -96,7 +91,7 @@ namespace IM.Services.Helpers
 
       // Si ocurrio un error
       if (response.HasErrors)
-        UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
+        throw new Exception(response.ExceptionInfo.Message);
 
       var data = response.Data;
       if (data.Length > -1)

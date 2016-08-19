@@ -2,27 +2,23 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_Rpt
 drop procedure [dbo].[USP_OR_RptUnavailableMotivesByAgency]
 GO
 
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
 ** Devuelve los datos para el reporte de Unavailable Motives by Angency
 ** 
-** [lchairez]	05/Nov/2013 Creado
-** [wtorres]	08/Nov/2013 Cambie el tipo de datos del porcentaje de llegadas
-** [aalcocer]	10/Jun/2016 Se modifica el tipo de dato del campo clave de agencias a varchar(max)
+** [lchairez]	05/Nov/2013 Created
+** [wtorres]	08/Nov/2013 Modified. Cambie el tipo de datos del porcentaje de llegadas
+** [aalcocer]	10/Jun/2016 Modified. Se modifica el tipo de dato del campo clave de agencias a varchar(max)
 **
 */
 CREATE PROCEDURE [dbo].[USP_OR_RptUnavailableMotivesByAgency]
-	@DateFrom AS DATETIME,				-- Fecha desde
-	@DateTo AS DATETIME,				-- Fecha hasta
-	@LeadSources AS VARCHAR(8000),		-- Claves de Lead Sources
-	@Markets varchar(8000) = 'ALL',		-- Claves de mercados
-	@Agencies varchar(max) = 'ALL'		-- Claves de agencias
+	@DateFrom AS DATETIME,			-- Fecha desde
+	@DateTo AS DATETIME,			-- Fecha hasta
+	@LeadSources AS VARCHAR(8000),	-- Claves de Lead Sources
+	@Markets varchar(8000) = 'ALL',	-- Claves de mercados
+	@Agencies varchar(max) = 'ALL'	-- Claves de agencias
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -67,4 +63,3 @@ BEGIN
 DROP TABLE #Data
 	
 END
-GO

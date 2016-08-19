@@ -1,4 +1,6 @@
-﻿namespace IM.Model.Enums
+﻿using System.ComponentModel;
+
+namespace IM.Model.Enums
 {
   /// <summary>
   /// Enumerado para el manejo de modos de datos
@@ -12,14 +14,20 @@
   /// </history>
   public enum EnumMode
   {
+    [Description("Read Only")]
     ReadOnly,
+    [Description("Add")]
     Add,
+    [Description("Edit")]
     Edit,
+    [Description("Edit Partial")]
     EditPartial,
 
     //TODO: TONY -> Por favor elimina esta opcion. La utilizas en Gifts Receipts y Meal Tickets
     PreviewEdit,
+    [Description("Search")]
     Search,
+    [Description("Delete")]
     Delete
   }
 }

@@ -1,11 +1,10 @@
 ﻿using PalaceResorts.Common.PalaceTools;
 using IM.Services.ClubesService;
 using IM.Model.Enums;
-using IM.Base.Helpers;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace IM.Services.Helpers
 {
@@ -97,7 +96,7 @@ namespace IM.Services.Helpers
 
       //si ocurrio un error
       if (response.HasErrors)
-        UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptEquity");
+        throw new Exception(response.ExceptionInfo.Message);
       else
         report = response.Data;
 
@@ -115,22 +114,24 @@ namespace IM.Services.Helpers
     /// </history>
     public async static Task<Vendedor[]> GetSalesMen()
     {
-      Vendedor [] Vendedores = await Task.Run(() =>
-        {
-          VendedorRequest request = new VendedorRequest();
-          VendedorResponse response = null;
-          Vendedor[] vendedor = null;
 
-          response = Current().ObtenerCatalogoVendedores(request);
+      Vendedor[] Vendedores = await Task.Run(() =>
+      {
+        VendedorRequest request = new VendedorRequest();
+        VendedorResponse response = null;
+        Vendedor[] vendedor = null;
+
+        response = Current().ObtenerCatalogoVendedores(request);
         //si ocurrio un error
         if (response.HasErrors)
-            UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetSalesMen");
-          else
-            vendedor = response.Data;
+          throw new Exception(response.ExceptionInfo.Message);
+        else
+          vendedor = response.Data;
 
-          return vendedor;
-        });
+        return vendedor;
+      });
       return Vendedores;
+
     }
     #endregion
 
@@ -146,13 +147,13 @@ namespace IM.Services.Helpers
 
       return await Task.Run(() =>
       {
+
         ProductRequest request = new ProductRequest();
         ProductResponse response = null;
-
         response = Current().GetProductsBySystem(request);
         //si ocurrio un error
         if (response.HasErrors)
-          UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetProductsBySystem");
+          throw new Exception(response.ExceptionInfo.Message);
 
         return response.Data.OrderBy(pd => pd.DESCRIPCION).ToList();
       });

@@ -1,9 +1,7 @@
 ﻿using System;
-using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Services.HotelService;
 using PalaceResorts.Common.PalaceTools;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +27,7 @@ namespace IM.Services.Helpers
     {
       get
       {
-        
+
         if (_service == null)
         {
           //creamos una instancia del servicio
@@ -41,7 +39,7 @@ namespace IM.Services.Helpers
           requestHander.Headers = ServiceHelper.GetSecurityTokenHeaders();
           _service.RequestHeaderValue = requestHander;
         }
-        
+
         return _service;
 
       }
@@ -51,22 +49,24 @@ namespace IM.Services.Helpers
     #region Metodos
 
     #region GetReservationsByArrivalDate
-      /// <summary>
-      /// Obtiene las reservaciones por dia
-      /// </summary>
-      /// <param name="zone">Zona</param>
-      /// <param name="dateFrom">Desde</param>
-      /// <param name="dateTo">Hasta</param>
-      /// <param name="hotels">Hoteles</param>
-      /// <returns>List<ReservationOrigosTransfer></ReservationOrigosTransfer></returns>
-      /// <history>
-      /// [michan] 14/04/2016  Created
-      /// </history>
-    public async static Task<List<ReservationOrigosTransfer>> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels, System.Threading.CancellationToken cancellationToken)
+    /// <summary>
+    /// Obtiene las reservaciones por dia
+    /// </summary>
+    /// <param name="zone">Zona</param>
+    /// <param name="dateFrom">Desde</param>
+    /// <param name="dateTo">Hasta</param>
+    /// <param name="hotels">Hoteles</param>
+    /// <returns>List<ReservationOrigosTransfer></ReservationOrigosTransfer></returns>
+    /// <history>
+    /// [michan] 14/04/2016  Created
+    /// </history>
+    public async static Task<List<ReservationOrigosTransfer>> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels)
     {
-      List<ReservationOrigosTransfer> lstOrigosTransfer = null;
-      await Task.Run(() =>
+
+      return await Task.Run(() =>
       {
+
+        List<ReservationOrigosTransfer> lstOrigosTransfer = null;
         QueryRequest request = new QueryRequest();
         ReservationOrigosTransferResponse response = new ReservationOrigosTransferResponse();
         //configuramos el Request
@@ -76,21 +76,26 @@ namespace IM.Services.Helpers
         request.Hotel = hotels;
         //invocamos al servicio web
         response = Current.GetReservationsByArrivalDate(request);
+        if (response.HasErrors)
+          throw new Exception(response.ExceptionInfo.Message);
 
         if (response.Data.Length > 0)
         {
           lstOrigosTransfer = response.Data?.Cast<ReservationOrigosTransfer>().ToList();
         }
-      }, cancellationToken);
-    return lstOrigosTransfer;
+        return lstOrigosTransfer;
+      });
+
     }
     #endregion
 
     #region ObtenerFactoresConversion
-    public async static Task<Rmmoney> ObtenerFactoresConversion(string strHotel, System.Threading.CancellationToken cToken = new System.Threading.CancellationToken())
+    public async static Task<Rmmoney> ObtenerFactoresConversion(string strHotel)
     {
-      Rmmoney canadianCurrency = null;
-      await Task.Run(() => { 
+
+      return await Task.Run(() =>
+      {
+        Rmmoney canadianCurrency = null;
         HotelStringRequest request = new HotelStringRequest();
         RmmoneyResponse response = new RmmoneyResponse();
         // configuramos el request
@@ -100,12 +105,15 @@ namespace IM.Services.Helpers
         request.FechaFinal = serverDate;
         //invocamos al servicio web
         response = Current.ObtenerFactoresConversion(request);// ObtenerFactoresConversion
+        if (response.HasErrors)
+          throw new Exception(response.ExceptionInfo.Message);
         if (response.Data.Length > 0 && response.Data != null)
         {
           canadianCurrency = response.Data.SingleOrDefault(currency => currency.code == "DC");
         }
-      }, cToken);
-      return canadianCurrency;
+        return canadianCurrency;
+      });
+
 
 
     }

@@ -55,5 +55,25 @@ namespace IM.BusinessRules.BR
       return lstPost;
     }
     #endregion
+
+    /// <summary>
+    /// Devuelve el puesto de un empleado en una fecha determinada
+    /// </summary>
+    /// <param name="personnelID">Clave del personal</param>
+    /// <param name="date">Fecha</param>
+    /// <returns>PostShort</returns>
+    /// <history>
+    /// [aalcocer] created 16/08/2016
+    /// </history>
+    public static async Task<PostShort> GetPersonnelPostByDate(string personnelID, DateTime date)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_ObtenerPuestoDePersonalPorFecha(personnelID, date).FirstOrDefault();
+        }
+      });
+    }
   }
 }

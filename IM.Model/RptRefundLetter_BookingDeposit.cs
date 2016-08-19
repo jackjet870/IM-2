@@ -17,7 +17,7 @@ namespace IM.Model
         public string AmountLetter { get; set; }
         public string Currency { get; set; }
         public string CCType { get; set; }
-        public string CardNum { get; set; }
+        public Nullable<int> CardNum { get; set; }
         public string ExpDate { get; set; }
         public string Auth { get; set; }
     }
