@@ -1011,7 +1011,7 @@ namespace IM.Base.Classes
 
         #region Folio CxC
 
-        case "bdFolioCxC":
+        case "bdFolioCXC":
           {
             if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdFolioCXC == null)
             {
