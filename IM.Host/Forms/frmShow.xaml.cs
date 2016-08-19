@@ -47,7 +47,7 @@ namespace IM.Host.Forms
     private ObservableCollection<InvitationGift> _invitationGiftList = new ObservableCollection<InvitationGift>();
     private bool _blnLoading;
     private byte _ocWelcomeCopies;
-    private bool _isCellCommitDeposit = false;
+  	private bool _isCellCommitDeposit = false;
     private ObservableCollection<Guest> _guestAdditionalList = new ObservableCollection<Guest>();
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
@@ -2135,9 +2135,10 @@ namespace IM.Host.Forms
         {
           if (dtgDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
+            e.Cancel = true;            
             //Regresamos el foco a la columna con el dato mal
             dtgDeposits.CellEditEnding -= dtgDeposits_CellEditEnding;
-            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);            
             dtgDeposits.CellEditEnding += dtgDeposits_CellEditEnding;
           }
           else
@@ -2161,12 +2162,12 @@ namespace IM.Host.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitDeposit)
+        if (_isCellCommitDeposit)//Si es cancalado desde la celda
         {
           _isCellCommitDeposit = false;
           e.Cancel = true;
         }
-        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))//Si es commit con el enter o con el tab
         {
           int columnIndex = 0;
           _isCellCommitDeposit = false;
@@ -2177,7 +2178,7 @@ namespace IM.Host.Forms
             GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
           }
         }
-        else
+        else//Cancelar
         {
           e.Cancel = true;
         }

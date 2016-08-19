@@ -777,7 +777,7 @@
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
-                                                    <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
+                                                        <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:dd/MM/yyyy}'}" IsReadOnly="True" />
                                                     <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged,StringFormat={}{n:2}}"/>
                                                     <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged,StringFormat={}{n:2}}"/>
                                                     <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">

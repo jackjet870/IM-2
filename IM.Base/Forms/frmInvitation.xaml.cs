@@ -41,8 +41,8 @@ namespace IM.Base.Forms
     private bool _dontShowAgainGuestStatus = false;
     public bool _isRebook = false;
     public GuestInvitationRules catObj { get; set; }
-    private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda
-
+    private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda de Deposits
+    private bool _isCellCommitCC = false;//Valida si el commit se hace desde la celda de credit cards
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -1790,7 +1790,12 @@ namespace IM.Base.Forms
     #region Datagrid Boking Deposits
 
     #region BeginningEdit
-
+    /// <summary>
+    /// Valida que no se puedan habilitar mas de una fila
+    /// </summary>
+    /// <history>
+    /// [emoguel] 19/08/2016
+    /// </history>
     private void dtgBookingDeposits_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
       if (!GridHelper.IsInEditMode(dtgBookingDeposits))
@@ -1852,7 +1857,7 @@ namespace IM.Base.Forms
           _isCellCommitDeposit = false;
           e.Cancel = true;
         }
-        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab) || !e.Row.IsNewItem)
         {
           int columnIndex = 0;
           _isCellCommitDeposit = false;
@@ -1902,57 +1907,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region Eventos del Grid Guest Credit Card 
-
-    #region SelectionChangedCurrencyCcCompanyColumn
-    /// <summary>
-    /// Valida que no se repitan los Credi Card
-    /// </summary>
-    /// <history>
-    /// [jorcanche] created 17/ago/2016
-    /// </history>   
-    private void SelectionChangedCurrencyCcCompanyColumn(object sender, SelectionChangedEventArgs e)
-    {
-      //Obtenemos el Row Seleccionado, y luego validamos si es nulo 
-      var drSelected = dtgCCCompany.ItemContainerGenerator.ContainerFromIndex(dtgCCCompany.SelectedIndex) as DataGridRow;
-      if (drSelected == null) return;
-      //Con el Row obtenido extraemos el contenido de la celda de la clumna de CrediCard y luego validamos si es nulo
-      var getCellContent = dtgCCCompany.Columns[1].GetCellContent(drSelected);
-      if (getCellContent == null) return;
-      //Obtenemos el Parent del contenido de la celda y validamos si es nulo
-      var dcCreditCard = getCellContent.Parent as DataGridCell;
-      var creditCard = dcCreditCard?.Content as ComboBox;
-      if (creditCard?.SelectedValue == null) return;
-      if (catObj.GuestCreditCardList.Count(gcc => gcc.gdcc == creditCard.SelectedValue.ToString()) > 1)
-      {
-        UIHelper.ShowMessage("Credit Cards must not be repeat");
-        creditCard.SelectedIndex = -1;
-      }
-    }
-    #endregion
-
-    #region LoadedCurrencyCcCompanyColumn
-    /// <summary>
-    /// Valida que primero se ingrese el Quantity
-    /// </summary>
-    /// <history>
-    /// [jorcanche] created 17/ago/2016
-    /// </history>   
-    private void LoadedCurrencyCcCompanyColumn(object sender, RoutedEventArgs e)
-    {
-      var creditCard = (GuestCreditCard)dtgCCCompany.CurrentItem;
-
-      if (creditCard.gdQuantity == 0)
-      {
-        UIHelper.ShowMessage("Enter the quantity first");
-        cmbCurrencyCCCompany.IsReadOnly = true;
-      }
-      else
-      {
-        cmbCurrencyCCCompany.IsReadOnly = false;
-      }
-    }
-    #endregion
-
+    
     #region dtgCCCompany_RowEditEnding
     /// <summary>
     /// Valida que esten completos los Row si al terminar la edicion quedo algo nulo la elimina 
@@ -1962,33 +1917,109 @@ namespace IM.Base.Forms
     /// </history> 
     private void dtgCCCompany_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      catObj.GuestCreditCardList.ToList().ForEach(guestCreditCardList =>
+      if (e.EditAction == DataGridEditAction.Commit)
       {
-        guestCreditCardList.gdgu = catObj.Guest.guID;
-        if (string.IsNullOrEmpty(guestCreditCardList.gdcc) || guestCreditCardList.gdQuantity == 0)
+        if (_isCellCommitDeposit)
         {
-          catObj.GuestCreditCardList.Remove(guestCreditCardList);
+          _isCellCommitDeposit = false;
+          e.Cancel = true;
         }
-      });
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab) || !e.Row.IsNewItem)
+        {
+          int columnIndex = 0;
+          _isCellCommitDeposit = false;
+          GuestCreditCard guestCreditCard = e.Row.Item as GuestCreditCard;
+          if (guestCreditCard.gdQuantity == 0)
+          {            
+            e.Cancel = true;
+            columnIndex = dtgCCCompany.Columns.FirstOrDefault(cl => cl.SortMemberPath == "gdQuantity").DisplayIndex;
+          }
+          else if (string.IsNullOrWhiteSpace(guestCreditCard.gdcc))
+          {
+            columnIndex = dtgCCCompany.Columns.FirstOrDefault(cl => cl.SortMemberPath == "gdcc").DisplayIndex;
+            e.Cancel = true;
+          }
+          if (e.Cancel)
+          { 
+           _isCellCommitDeposit = true;//true para que no haga el commit
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
+          }
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+        
+      }
     }
     #endregion
 
-    #region dtgCCCompany_LostKeyboardFocus
+    #region dtgCCCompany_BeginningEdit
     /// <summary>
-    /// Valida que no este en nulo la columna de Quantity y habilita la columna de CreditCard
+    /// Bloquea la opcion de crear un nuevo registro a menos que se le haya hecho commit a un regristro
+    /// No deja habilitar el combobox de creditCard
     /// </summary>
     /// <history>
-    /// [jorcanche] created 17/ago/2016
-    /// </history> 
-    private void dtgCCCompany_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    /// [emoguel] 19/08/2016 created
+    /// </history>
+    private void dtgCCCompany_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
-      cmbCurrencyCCCompany.IsReadOnly = false;
-
-      var txt = e.OldFocus as TextBox;
-
-      if (txt != null && string.IsNullOrEmpty(txt.Text))
+      if (!GridHelper.IsInEditMode(dtgBookingDeposits))
       {
-        txt.Text = "0";
+        if (e.Column.SortMemberPath == "gdcc")
+        {
+          GuestCreditCard guestCreditCard = e.Row.Item as GuestCreditCard;
+          if (guestCreditCard.gdQuantity <= 0)
+          {
+            UIHelper.ShowMessage("Enter the quantity first");
+            e.Cancel = true;
+          }
+        }
+      }
+      else
+      {
+        e.Cancel = true;
+      }
+    }
+    #endregion
+
+    #region dtgCCCompany_CellEditEnding
+    /// <summary>
+    /// Verificar que el valor insertado en la columna sea un valor valido
+    /// </summary>
+    /// <history>
+    /// [emoguel] 19/08/2016 created
+    /// </history>
+    private void dtgCCCompany_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      if (e.EditAction == DataGridEditAction.Commit)
+      {
+        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
+        GuestCreditCard guestCreditCard = e.Row.Item as GuestCreditCard;
+        switch (e.Column.SortMemberPath)
+        {
+          case "gdQuantity":
+            {
+              if (guestCreditCard.gdQuantity == 0)
+              {
+                UIHelper.ShowMessage("Quantity can not be 0.");
+                e.Cancel = true;                
+              }
+              break;
+            }
+          case "gdcc":
+            {
+              e.Cancel = GridHelper.HasRepeatItem(e.EditingElement as Control, dtgCCCompany, false, "gdcc");
+              break;
+            }
+        }
+        if(e.Cancel)
+        {
+          //Regresamos el foco a la columna con el dato mal
+          dtgCCCompany.CellEditEnding -= dtgCCCompany_CellEditEnding;
+          GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
+          dtgCCCompany.CellEditEnding += dtgCCCompany_CellEditEnding;
+        }
       }
     }
     #endregion

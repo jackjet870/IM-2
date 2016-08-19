@@ -296,13 +296,13 @@
                                     <Image Height="18" Source="{Binding ReservacionImage}" MouseLeftButtonUp="ReservationArrival_MouseLeftButtonUp" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>                        
                         <DataGridTemplateColumn x:Name="guCheckInColumn" IsReadOnly="False"  Header="In" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn.CellTemplate>                            
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guRoomNumColumn" IsReadOnly="True"  Binding="{Binding guRoomNum}" Header="Room" Width="auto" />
                         <DataGridTextColumn x:Name="guLastName1Column" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto" />

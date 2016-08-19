@@ -666,7 +666,7 @@
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" RowValidationErrorTemplate="{x:Null}" >
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                                        <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:dd/MM/yyyy}'}" IsReadOnly="True"/>
                                                     <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged}"/>
                                                     <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged}"/>
                                                     <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">
@@ -768,8 +768,8 @@
                                                     <TextBox Name="txtguCCType" Text="{Binding Guest.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}"
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"    LostKeyboardFocus="dtgCCCompany_LostKeyboardFocus"            
-                                                                            RowEditEnding="dtgCCCompany_RowEditEnding"  >
+                                                       AutoGenerateColumns="False" PreparingCellForEdit="dtgGifts_PreparingCellForEdit" CanUserAddRows="True" CanUserReorderColumns="False" BeginningEdit="dtgCCCompany_BeginningEdit" 
+                                                                          CellEditEnding="dtgCCCompany_CellEditEnding"  RowEditEnding="dtgCCCompany_RowEditEnding" >
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="Qty" x:Name="gdQuantity" Binding="{Binding gdQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Width="40" styClasses:MaxLengthPropertyClass.MaxLength="1"/>
                                                         <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="250"
@@ -777,12 +777,6 @@
                                                                             DisplayMemberPath="ccN"                                                                                
                                                                             SelectedValuePath="ccID"                                                                           
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}" >
-                                                            <DataGridComboBoxColumn.EditingElementStyle>
-                                                                <Style TargetType="ComboBox">
-                                                                    <EventSetter Event="SelectionChanged" Handler="SelectionChangedCurrencyCcCompanyColumn"/>
-                                                                    <EventSetter Event="Loaded" Handler="LoadedCurrencyCcCompanyColumn"/>
-                                                                </Style>
-                                                            </DataGridComboBoxColumn.EditingElementStyle>
                                                         </DataGridComboBoxColumn>
                                                         <DataGridTextColumn Header="gdgu" Binding="{Binding gdgu, Mode=TwoWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" Visibility="Hidden"/>
                                                     </DataGrid.Columns>

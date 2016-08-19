@@ -1027,7 +1027,7 @@ namespace IM.Base.Classes
             {
               //Verificar que el folio no esté en la lista y que no lo contenga un deposit en la BD
               List<BookingDeposit> lstDeposits = dtgBookingDeposits.ItemsSource.OfType<BookingDeposit>().ToList();
-              if (lstDeposits.Any(bd => bd.bdFolioCXC == bookingDeposit.bdFolioCXC))
+              if (lstDeposits.Where(bd => bd.bdFolioCXC == bookingDeposit.bdFolioCXC).Count()>1)
               {
                 UIHelper.ShowMessage("Please select other Folio");
                 return false;
@@ -1036,18 +1036,20 @@ namespace IM.Base.Classes
               {
                 if (lstBookingDeposits != null && lstBookingDeposits.Where(bd => bd.bdID == bookingDeposit.bdID && bd.bdFolioCXC == bookingDeposit.bdFolioCXC).ToList().Count > 0)
                 {
-                  if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1))
+                  string folio = BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1);
+                  if (folio!= "VALIDO")
                   {
-                    UIHelper.ShowMessage("Folio is in use.");
+                    UIHelper.ShowMessage(folio);
                     return false;
                   }
                 }
               }
               else
               {
-                if (!BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 0))
+                string folio = BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1);
+                if (folio != "VALIDO")
                 {
-                  UIHelper.ShowMessage("Folio is in use.");
+                  UIHelper.ShowMessage(folio);
                   return false;
                 }
               }

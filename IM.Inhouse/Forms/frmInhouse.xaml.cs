@@ -829,11 +829,11 @@ namespace IM.Inhouse.Forms
     /// <history>[jorcanche] 09/01/2015</history>
     private async void ChkguCheckInArrival_Click(object sender, RoutedEventArgs e)
     {
-      //Se debe igualar el valor del check al valor que arroje las validaciones
+      //Se debe igualar el valor del check al valor que arroje las validaciones      
       var chk = sender as CheckBox;
-      if (chk.IsChecked.Value)
-        chk.IsChecked = await CheckIn(dgGuestArrival);
-      // GridHelper.SelectRow(dgGuestArrival, dgGuestArrival.SelectedIndex,dgGuestArrival.CurrentColumn.DisplayIndex)
+      chk.IsChecked = !chk.IsChecked.Value;
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = await CheckIn(dgGuestArrival);      
     }
 
     #endregion ChkguCheckInArrival_Click
