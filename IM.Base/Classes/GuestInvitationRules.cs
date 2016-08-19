@@ -4,13 +4,9 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Services.WirePRService;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IM.Base.Classes
@@ -23,18 +19,10 @@ namespace IM.Base.Classes
     private int _guID;
     private bool _fromFrmGuest;
 
-    //private GuestInvitation _guestInvitation;
-    //public GuestInvitation GuestInvitation
-    //{
-    //  get { return _guestInvitation; }
-    //  set { SetField(ref _guestInvitation, value); }
-    //}
-
-    #region Constructor
+    #region Constructores
 
     public GuestInvitationRules(EnumModule module, EnumInvitationType invitationType, UserData user, int guID = 0)
     {
-      //GuestInvitation = new GuestInvitation();
       _module = module;
       _invitationType = invitationType;
       _user = user;
@@ -135,7 +123,6 @@ namespace IM.Base.Classes
     #endregion
 
     #endregion LoadAll
-
 
     #region DefaultValueInvitation
 
@@ -583,14 +570,8 @@ namespace IM.Base.Classes
             break;
         }
       }
-
-      //Hacemos una copia del objeto
-      Guest copyGuest = new Guest();
-      ObjectHelper.CopyProperties(copyGuest, guestObj);
-
       //Notificamos cambios
       Guest = guestObj;
-      CloneGuest = copyGuest;
     }
 
     #endregion Load Guest
@@ -665,16 +646,20 @@ namespace IM.Base.Classes
       ////Crea una copia de la lista
       CloneAdditionalGuestList = ObjectHelper.CopyProperties(result);
     }
-
     #endregion Load AdditionalGuest
 
     #endregion Invitation Info
 
     #region Other Methods
+    /// <summary>
+    /// Asignamos los valores de ReservationOrigos a nuestro objeto Guest
+    /// </summary>
+    /// <param name="reservationOrigos">ReservationOrigos</param>
+    /// <history>
+    /// [erosado] 18/08/2016  Created.
+    /// </history>
     public void SetRervationOrigosInfo(ReservationOrigos reservationOrigos)
     {
-      //catObj = DataContext as GuestInvitation;
-
       //Asignamos el folio de reservacion
       Guest.guHReservID = reservationOrigos.Folio;
       Guest.guLastName1 = reservationOrigos.LastName;
@@ -686,33 +671,21 @@ namespace IM.Base.Classes
       decimal pax = 0;
       bool convertPax = decimal.TryParse($"{reservationOrigos.Adults}.{reservationOrigos.Children}", out pax);
       Guest.guPax = pax;
-
+      //Obtenemos el Id del Hotel
+      var ls = BRLeadSources.GetLeadSourceByID(reservationOrigos.Hotel);
+      Guest.guHotel = ls?.lsho;
+      //Country
       Guest.guco = Countries.Where(x => x.coN == reservationOrigos.Country).Select(x => x.coID).FirstOrDefault();
-      Guest.guag = Agencies.Where(x => x.agN == reservationOrigos.Agency).Select(x => x.agID).FirstOrDefault();
-      Guest.guHotel = Hotels.Where(x => x.hoGroup == reservationOrigos.Hotel).Select(x => x.hoID).FirstOrDefault();
+      //Agency
+      Guest.guag = Agencies.Where(x => x.agN.ToUpper() == reservationOrigos.Agency.ToUpper()).Select(x => x.agID).FirstOrDefault();
+      //Company
       Guest.guCompany = reservationOrigos.Company;
+      //Membership
       Guest.guMembershipNum = reservationOrigos.Membership;
-
+      //Notificamos el cambio
       OnPropertyChanged(nameof(Guest));
     }
     #endregion
 
-    #region Implementacion INotifyPropertyChange
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return;
-      field = value;
-      OnPropertyChanged(propertyName);
-    }
-
-    #endregion Implementacion INotifyPropertyChange
-  }
 }

@@ -1261,7 +1261,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] 18/08/2016 created
     /// </history>
     public async static Task<int> SaveGuestInvitation(GuestInvitation guestInvitation, EnumProgram enumProgram, EnumModule enumModule, UserData user, EnumMode enumMode,
-      string computerName, string iPAddress, GuestMovementType guestMovementType, short hoursDiff)
+      string computerName, string iPAddress, EnumGuestsMovementsType guestMovementType, short hoursDiff)
     {
       return await Task.Run(() =>
       {
@@ -1374,7 +1374,7 @@ namespace IM.BusinessRules.BR
               int nSave = 0;
 
               //Guest
-              dbContext.Entry(guestInvitation.Guest).State = (enumMode == EnumMode.Edit) ? EntityState.Modified : EntityState.Added;
+              dbContext.Entry(guestInvitation.Guest).State = (guestInvitation.Guest.guID>0) ? EntityState.Modified : EntityState.Added;
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
 
               //Recargamos el codigo contable
@@ -1483,6 +1483,8 @@ namespace IM.BusinessRules.BR
               string strguCCType = string.Empty;
 
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
+              //string.Join(',', guestInvitation.GuestCreditCardList.Where(x=> x.gdQuantity > 1).Select()
+
               guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
               {
                 if (gcc.gdQuantity > 1)
@@ -1496,7 +1498,7 @@ namespace IM.BusinessRules.BR
               strguCCType = strguCCType.TrimEnd(',');
 
               //Escojemos los primeros 30 caracteres porque es el límite del campo 
-              guestInvitation.Guest.guCCType = strguCCType.Substring(0, 30);
+              guestInvitation.Guest.guCCType = strguCCType.Length > 30 ? strguCCType.Substring(0, 30) : strguCCType;
 
               #endregion
 
@@ -1673,5 +1675,33 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetAdditionalGuest
+
+    #region ValidateInvitation
+    /// <summary>
+    /// Sirve para validar si los datos existen si no existen devuelven mensaje de error 
+    /// </summary>
+    /// <param name="changedBy"></param>
+    /// <param name="pR"></param>
+    /// <param name="location"></param>
+    /// <param name="leadSource"></param>
+    /// <param name="salesRoom"></param>
+    /// <param name="agency"></param>
+    /// <param name="country"></param>
+    /// <returns>List<ValidationData></returns>
+    /// <history>
+    /// [erosado] 19/08/2016  Created.
+    /// </history>
+    public static async Task<List<ValidationData>> ValidateInvitation(string changedBy, string pR, string location, string leadSource, string salesRoom, string agency, string country)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_ValidateInvitation(changedBy, pR, location, leadSource, salesRoom, agency, country).ToList();
+        }
+
+      });
+    }
+    #endregion
   }
 }

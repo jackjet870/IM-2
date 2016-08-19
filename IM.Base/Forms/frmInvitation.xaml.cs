@@ -4,21 +4,15 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using IM.Styles.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
-using IM.Services.WirePRService;
 using System.Runtime.CompilerServices;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace IM.Base.Forms
@@ -49,7 +43,7 @@ namespace IM.Base.Forms
     public GuestInvitationRules catObj { get; set; }
     private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda
 
-  
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)
@@ -168,20 +162,63 @@ namespace IM.Base.Forms
     ///<history>
     ///[erosado]  17/08/2016  Created.
     /// </history>
-    private void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      bool _isValid = true;
+      try
+      {
+        bool _isValid = true;
 
-      //Validamos controles comunes y validaciones basicas
-      if (!InvitationValidationRules.ValidateGeneral(this, catObj))
-      {
-        _isValid = false;
-        tabGeneral.TabIndex = 0;
+        //Validamos controles comunes y validaciones basicas
+        if (!InvitationValidationRules.ValidateGeneral(this, catObj))
+        {
+          _isValid = false;
+          tabGeneral.TabIndex = 0;
+        }
+        //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
+        if (_isValid)
+        {
+          _isValid = InvitationValidationRules.ValidateInformationGrids(this, catObj);
+        }
+        //Validamos que la informacion exista
+        if (_isValid)
+        {
+          //Validamos si existen los datos
+          _isValid = await ValidateExist();
+        }
+        //Guardamos la informacion
+        if (_isValid)
+        {
+          _busyIndicator.IsBusy = true;
+          _busyIndicator.BusyContent = "Saving invitation...";
+
+          var GuestInvitation = catObj as GuestInvitation;
+
+          var hoursDiff = _module != EnumModule.Host ? _user.LeadSource.lsHoursDif : _user.SalesRoom.srHoursDif;
+
+          var result = await BRGuests.SaveGuestInvitation(GuestInvitation, catObj.Program, _module, _user, catObj.InvitationMode,
+            ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
+
+          _busyIndicator.IsBusy = false;
+
+          UIHelper.ShowMessage("The data was saved successfully");
+
+          _busyIndicator.IsBusy = true;
+          _busyIndicator.BusyContent = "Please wait, we are reloading your invitation...";
+
+          //Cargamos la invitacion pero en modo lectura
+          DataContext = null;
+          catObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
+          await catObj.LoadAll();
+          DataContext = catObj;
+          SetReadOnly();
+
+          _busyIndicator.IsBusy =false;
+        }
       }
-      //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
-      if (_isValid)
+      catch (Exception ex)
       {
-        _isValid = InvitationValidationRules.ValidateInformationGrids(this, catObj);
+        _busyIndicator.IsBusy = false;
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -338,19 +375,14 @@ namespace IM.Base.Forms
     /// </history>
     private void brdSearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-       frmSearchReservation search = new frmSearchReservation(_user) { Owner = this };
+      frmSearchReservation search = new frmSearchReservation(_user) { Owner = this };
 
       // Verificamos si se selecciono un guest
       if (search.ShowDialog().Value)
       {
         //Seteamos la informacion de SearchGuest en nuestro objeto Guest
-        SetRervationOrigosInfo(search._reservationInfo);
-
         catObj.SetRervationOrigosInfo(search._reservationInfo);
-
-        UIHelper.UpdateTarget(this);
       }
-
     }
     #endregion
 
@@ -830,7 +862,8 @@ namespace IM.Base.Forms
       if (_module != EnumModule.OutHouse)
       {
         //Si el huesped no se ha ido, o la fecha en que se hizo la invitacion ya pasó o (no tiene permiso de invitacion  y la fecha de Booking es menor a la fecha de hoy)
-        if (catObj.Guest.guCheckOutD <= serverDate || catObj.Guest.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.CloneGuest.guBookD < serverDate))
+        if (catObj.Guest.guCheckOutD <= serverDate || catObj.Guest.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || catObj.
+          Guest.guBookD < serverDate))
         {
           //No permitimos modificacion de depositos desactivamos todo el contenedor
           brdBookingDeposits.IsEnabled = false;
@@ -1227,10 +1260,10 @@ namespace IM.Base.Forms
        * este proceso se interpreta como la creacion de una nueva invitacion en un nuevo Guest que tiene como referencia
        * guRef = guID del padre.
        * */
-      
+
       ////Encendemos la bandera indicando que es un Rebook
       //_isRebook = true;
-      
+
       //Cambiamos el modo de la invitacion esto sirve para futuras validaciones
       catObj.InvitationMode = EnumMode.Add;
 
@@ -1292,7 +1325,7 @@ namespace IM.Base.Forms
 
         //Fecha de contacto
         catObj.Guest.guInfoD = null;
-       
+
       }
 
       //Depositos
@@ -1311,41 +1344,58 @@ namespace IM.Base.Forms
     }
     #endregion Rebook
 
-    #region GetSearchReservationInfo
+    #region ValidateExist
     /// <summary>
-    /// Asignamos los valores de ReservationOrigos a nuestro objeto Guest
+    /// Valida que los datos sean correctos, consulta al USP_OR_ValidateInvitation
     /// </summary>
-    /// <param name="reservationOrigos">ReservationOrigos</param>
     /// <history>
-    /// [erosado] 18/08/2016  Created.
+    /// [erosado] 19/08/2016  Created.
     /// </history>
-    private void SetRervationOrigosInfo(ReservationOrigos reservationOrigos)
+    /// <returns>True isValid | False No</returns>
+    private async Task<bool> ValidateExist()
     {
-      //catObj = DataContext as GuestInvitation;
+      bool isValid = true;
+      var result = await BRGuests.ValidateInvitation(_user.User.peID, catObj.Guest.guPRInvit1, catObj.Guest.guloInvit, catObj.Guest.guls, catObj.Guest.gusr, catObj.Guest.guag, catObj.Guest.guco);
 
-      //Asignamos el folio de reservacion
-      catObj.Guest.guHReservID = reservationOrigos.Folio;
-      catObj.Guest.guLastName1 = reservationOrigos.LastName;
-      catObj.Guest.guFirstName1 = reservationOrigos.FirstName;
-      catObj.Guest.guCheckInD = reservationOrigos.Arrival;
-      catObj.Guest.guCheckOutD = reservationOrigos.Departure;
-      catObj.Guest.guRoomNum = reservationOrigos.Room;
-      //Calculamos Pax
-      decimal pax = 0;
-      bool convertPax = decimal.TryParse($"{reservationOrigos.Adults}.{reservationOrigos.Children}", out pax);
-      catObj.Guest.guPax = pax;
+      if (result.Any())
+      {
+        //Recorremos el resultado en busca de algun error
+        result.ForEach(x =>
+        {
+          if (!string.IsNullOrEmpty(x.Focus))
+          {
+            isValid = false;
 
-      catObj.Guest.guco = reservationOrigos.Country;
-      catObj.Guest.guag = reservationOrigos.Agency;
-      catObj.Guest.guHotel = reservationOrigos.Hotel;
-      catObj.Guest.guCompany = reservationOrigos.Company;
-      catObj.Guest.guMembershipNum = reservationOrigos.Membership;
-
+            switch (x.Focus)
+            {
+              case "ChangedBy":
+                break;
+              case "PR":
+                cmbPR.Focus();
+                break;
+              case "SalesRoom":
+                cmbSalesRooms.Focus();
+                break;
+              case "Location":
+                cmbLocation.Focus();
+                break;
+              case "Agency":
+                cmbOtherInfoAgency.Focus();
+                break;
+              case "Country":
+                cmbOtherInfoCountry.Focus();
+                break;
+            }
+            UIHelper.ShowMessage(x.Message);
+            tabGeneral.IsSelected = true;
+          }
+        });
+      }
+      return isValid;
     }
+    #endregion
 
     #endregion   
-
-    #endregion
 
     #region Eventos del GRID Invitation Gift
 
@@ -1430,7 +1480,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 08/08/2016  Created.
     /// </history>
-    private async void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       //Si paso las validaciones del preparingCellForEdit
       if (!_hasError)
@@ -1443,19 +1493,11 @@ namespace IM.Base.Forms
           //Obtenemos el Objeto
           InvitationGift invitationGift = e.Row.Item as InvitationGift;
 
-          //Bandera que checata que todo salga bien en la validacion siguiente.
-          bool _hasErrorValidateEdit = false;
-          //Validamos la celda
-          //TODO:Revisar este metodo
-          //InvitationValidationRules.ValidateEdit(ref invitationGift, ref _hasErrorValidateEdit, ref _IGCurrentCell);
-
           //Si Paso las validaciones
-          if (!_hasErrorValidateEdit)
+          if (!InvitationValidationRules.ValidateEdit(ref invitationGift, ref _IGCurrentCell))
           {
-            //Obtenemos el program
-            var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
 
-            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, program);
+            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, catObj.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else
@@ -1566,23 +1608,6 @@ namespace IM.Base.Forms
 
     #endregion BeginningEdit
 
-    #region PreparingCellForEdit
-
-    /// <summary>
-    /// Se ejecuta cuando la celda entra en modo edicion
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 15/08/2016  Created.
-    /// </history>
-    private void dtgGuestAdditional_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
-    {
-      //Sirve para agregar el Focus a las celdas
-      Control ctrl = e.EditingElement as Control;
-      ctrl?.Focus();
-    }
-
-    #endregion PreparingCellForEdit
-
     #region CellEditEnding
 
     /// <summary>
@@ -1654,7 +1679,7 @@ namespace IM.Base.Forms
         else
         {
           e.Cancel = true;
-        }        
+        }
       }
     }
 
@@ -1725,7 +1750,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, catObj.InvitationMode ==EnumMode.ReadOnly) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, catObj.InvitationMode == EnumMode.ReadOnly) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1752,7 +1777,7 @@ namespace IM.Base.Forms
         return;
       }
 
-      frmGuest frmGuest = new frmGuest(_user, 0, _module, dtgGuestAdditional.IsReadOnly) {GuestParent = catObj.Guest,  Owner = this};
+      frmGuest frmGuest = new frmGuest(_user, 0, _module, dtgGuestAdditional.IsReadOnly) { GuestParent = catObj.Guest, Owner = this };
       frmGuest.ShowDialog();
       //Validacion del nuevo guest.
       //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
@@ -1763,7 +1788,7 @@ namespace IM.Base.Forms
       var validate = await InvitationValidationRules.ValidateAdditionalGuest(catObj.Guest, guestAdditional, true);
       if (validate.Item1)
         catObj.AdditionalGuestList.Add(guestAdditional);
-      }
+    }
 
     #endregion btnAddGuestAdditional_OnClick
 
@@ -1797,11 +1822,11 @@ namespace IM.Base.Forms
     private void dtgBookingDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
-      { 
-        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));        
-        if(!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.CloneBookingDepositList, catObj.Guest.guID))
+      {
+        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
+        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, catObj.CloneBookingDepositList, catObj.Guest.guID))
         {
-          if (dtgBookingDeposits.CurrentColumn!=null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
+          if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
             //Regresamos el foco a la columna con el dato mal
             dtgBookingDeposits.CellEditEnding -= dtgBookingDeposits_CellEditEnding;
@@ -1838,8 +1863,8 @@ namespace IM.Base.Forms
         {
           int columnIndex = 0;
           _isCellCommitDeposit = false;
-          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit,sender as DataGrid, catObj.CloneBookingDepositList,catObj.Guest.guID,ref columnIndex);          
-          if(e.Cancel)
+          e.Cancel = !InvitationValidationRules.EndingEditBookingDeposits(e.Row.Item as BookingDeposit, sender as DataGrid, catObj.CloneBookingDepositList, catObj.Guest.guID, ref columnIndex);
+          if (e.Cancel)
           {
             _isCellCommitDeposit = true;//true para que no haga el commit
             GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
@@ -1883,7 +1908,6 @@ namespace IM.Base.Forms
     #endregion
     #endregion
 
-
     #region Eventos del Grid Guest Credit Card 
 
     #region SelectionChangedCurrencyCcCompanyColumn
@@ -1909,7 +1933,7 @@ namespace IM.Base.Forms
       {
         UIHelper.ShowMessage("Credit Cards must not be repeat");
         creditCard.SelectedIndex = -1;
-      }     
+      }
     }
     #endregion
 
@@ -1974,8 +1998,10 @@ namespace IM.Base.Forms
         txt.Text = "0";
       }
     }
-    #endregion 
+    #endregion
 
     #endregion
+
+
   }
 }

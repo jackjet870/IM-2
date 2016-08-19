@@ -2290,7 +2290,7 @@ namespace IM.Host.Forms
           {
             //Obtenemos el program
 
-            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType);
+            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _enumProgram);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else

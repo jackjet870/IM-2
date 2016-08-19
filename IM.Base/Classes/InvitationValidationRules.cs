@@ -250,7 +250,7 @@ namespace IM.Base.Classes
     /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
     /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
     public static void AfterEdit(DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
-      ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, string program = "")
+      ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, EnumProgram program)
     {
       //bool _passValidate = false;
       //Obtenemos el Gift
@@ -301,7 +301,7 @@ namespace IM.Base.Classes
             Gifts.ValidateMaxQuantity(gift, invitationGift.igQty, false, ref invitationGift, nameof(invitationGift.igQty));
 
             //Si es OutHouse y ya selecciono guestStatusType
-            if (program == EnumToListHelper.GetEnumDescription(EnumProgram.Outhouse) && guestStatusType != null)
+            if (program == EnumProgram.Outhouse && guestStatusType != null)
             {
               //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
               // TODO:  EDDER-> Cambiar el tipo de parametro guestStatusType por GuestStatusValidateData
@@ -376,8 +376,8 @@ namespace IM.Base.Classes
       string _res = string.Empty;
       //Validamos el folio de reservacion (InHouse & OutHouse)
       if (!ValidateFolio(ref form, dbContext)) return false;
-      //Si la fecha de Arrival esta en fecha Cerrada
-      if (!ValidateCloseDate(dbContext)) return false;
+      //Si la fecha de un booking no este en fecha cerrada
+      if (!ValidateBookingCloseDate(dbContext)) return false;
       //Validamos que el Numero de habitaciones este en el rango permitido
       if (!ValidateHelper.ValidateNumber(dbContext.Guest.guRoomsQty, 1, 5, "Rooms Quantity")) return false;
       //Validamos que se ingresen datos en los campos obligatorios
@@ -390,6 +390,13 @@ namespace IM.Base.Classes
 
     #endregion ValidateGeneral
 
+    #region ValidateInformationGrids
+    /// <summary>
+    /// Valida la informacion de los grids antes de guardad
+    /// </summary>
+    /// <param name="form">frmInvitation</param>
+    /// <param name="dbContext">GuestInvitation</param>
+    /// <returns></returns>
     public static bool ValidateInformationGrids(frmInvitation form, GuestInvitation dbContext)
     {
       bool _isValid = true;
@@ -402,28 +409,21 @@ namespace IM.Base.Classes
       }
       //Validamos los regalos de la invitacion
       else if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
-      else if (!BookingDepositsValidation(ref form, dbContext)) _isValid = false;
-
-      return _isValid;
-    }
-
-    private static bool BookingDepositsValidation(ref frmInvitation form, GuestInvitation dbContext)
-    {
-      bool _isValid = true;
-      List<string> _fieldNameToValidate = new List<string>() { nameof(BookingDeposit.bdcu), nameof(BookingDeposit.bdpt), nameof(BookingDeposit.bdcc), nameof(BookingDeposit.bdCardNum) };
-      //Validamos que no esten repetidos los campos Moneda, Forma de pago, Tipo de tarjeta de credito y numero de tarjeta de credito
-      if (!string.IsNullOrWhiteSpace(ObjectHelper.AreAnyDuplicates(dbContext.BookingDepositList.ToList(), _fieldNameToValidate)))
+      //Validamos las Tarjetas de credito
+      else if (!ValidateGuestCreditCard(dbContext.GuestCreditCardList.ToList())) _isValid = false;
+      
+      //Burned Hotel
+      else if (string.IsNullOrEmpty(dbContext.Guest.guHotelB) && dbContext.Guest.guDepositTwisted >0)
       {
-        UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
-        form.dtgBookingDeposits.Focus();
+        UIHelper.ShowMessage("Specify the Resorts");
+        form.cmbGuestStatus.Focus();
         _isValid = false;
       }
-      //Validamos campo por campo que se hayan ingresado
-      else
-      {
-      }
+
       return _isValid;
     }
+    #endregion
+
 
     #region ValidateFolio
 
@@ -487,20 +487,15 @@ namespace IM.Base.Classes
     #region ValidateCloseDate
 
     /// <summary>
-    //Valida que la fecha de Arrival se encuentreno se encuentre en fecha cerrada
+    //Valida que la fecha de Arrival se encuentre y que la fecha de Booking NO se encuentre en fecha cerrada
     /// </summary>
     /// <param name="dbContext">CommonCatObject</param>
     /// <returns>True is Valid | False No</returns>
-    private static bool ValidateCloseDate(GuestInvitation dbContext)
+    private static bool ValidateBookingCloseDate(GuestInvitation dbContext)
     {
       bool _isValid = true;
-      if (dbContext.Guest.guBookD == null)
-      {
-        UIHelper.ShowMessage("Please select an Arrival date");
-        _isValid = false;
-      }
-      //Si la fecha de Arrival esta en fecha Cerrada
-      if (dbContext.Guest.guBookD < dbContext.CloseDate)
+      //Si la fecha de Booking esta en fecha Cerrada
+      if (dbContext.Guest.guBookD != null && dbContext.Guest.guBookD < dbContext.CloseDate)
       {
         UIHelper.ShowMessage("It's not allowed to make Invitations for a closed date.");
         _isValid = false;
@@ -526,7 +521,7 @@ namespace IM.Base.Classes
       //Validamos BookingDateTime Si no pasa la validacion retorna false
       if (!ValidateBookingDateTime(ref form, dbContext)) return false;
       //Validamos RescheduleDateTime Si no pasa la validacion retorna false
-      if (ValidateRescheduleDateTime(ref form, dbContext)) return false;
+      if (!ValidateRescheduleDateTime(ref form, dbContext)) return false;
 
       return true;
     }
@@ -646,7 +641,7 @@ namespace IM.Base.Classes
             _isValid = false;
           }
           //validamos que la fecha de booking no sea antes de la fecha de llegada
-          else if (dbContext.Guest.guBookD < dbContext.Guest.guCheckOutD)
+          else if (dbContext.Guest.guBookD < dbContext.Guest.guCheckInD)
           {
             UIHelper.ShowMessage("Booking date can not be before Check In date.");
             form.dtpBookDate.Focus();
@@ -690,7 +685,7 @@ namespace IM.Base.Classes
 
         if (_isValid)
         {
-          if (ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { _isValid = false; }
+          if (!ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { _isValid = false; }
         }
       }
       return _isValid;

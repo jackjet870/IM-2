@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         Title="Invitation"
         d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="SingleBorderWindow"
-        ShowInTaskbar="False" Loaded="Window_Loaded">
+        ShowInTaskbar="False" Loaded="Window_Loaded" d:DataContext="{d:DesignInstance Classes:GuestInvitationRules}">
     <Window.Resources>
         <ResourceDictionary>
             <Classes:InvitationConverter x:Key="converterInvitation" />
@@ -168,8 +168,8 @@
                                                         <TextBox Name="txtguID" Width="100" Text="{Binding Guest.guID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <StackPanel Name="stkRsrvNum" VerticalAlignment="Center" Margin="3">
-                                                        <TextBlock Text="Rsrv. Num.*" TextAlignment="Center"/>
-                                                        <TextBox Name="txtguHReservID" Width="100" Text="{Binding Guest.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Rsrv. Num."/>
+                                                        <TextBlock Text="Rsrv. Num." TextAlignment="Center"/>
+                                                        <TextBox Name="txtguHReservID" Width="100" Text="{Binding Guest.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                     <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0" MouseLeftButtonDown="brdSearchButton_MouseLeftButtonDown">
                                                         <StackPanel Orientation="Horizontal">
@@ -306,7 +306,7 @@
                                             <StackPanel Name="stkGuest2" Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Last Name" TextAlignment="Center"/>
-                                                    <TextBox Name="txtguLastName2" Width="100" Text="{Binding Guest.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguLastName2" Width="100" Text="{Binding Guest.guLastname2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center">
                                                     <TextBlock Text="First Name" TextAlignment="Center"/>
@@ -663,7 +663,7 @@
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel>
                                             <DataGrid BeginningEdit="dtgBookingDeposits_BeginningEdit" CellEditEnding="dtgBookingDeposits_CellEditEnding" RowEditEnding="dtgBookingDeposits_RowEditEnding" PreparingCellForEdit="dtgGifts_PreparingCellForEdit" Name="dtgBookingDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding BookingDepositList}" 
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False">
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" RowValidationErrorTemplate="{x:Null}" >
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                                     <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
@@ -769,7 +769,7 @@
                                                 </StackPanel>
                                                 <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}"
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"    LostKeyboardFocus="dtgCCCompany_LostKeyboardFocus"            
-                                                                            RowEditEnding="dtgCCCompany_RowEditEnding" >
+                                                                            RowEditEnding="dtgCCCompany_RowEditEnding"  >
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="Qty" x:Name="gdQuantity" Binding="{Binding gdQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=False}" Width="40" styClasses:MaxLengthPropertyClass.MaxLength="1"/>
                                                         <DataGridComboBoxColumn x:Name="cmbCurrencyCCCompany" Header="Credit Card" Width="250"
@@ -823,7 +823,7 @@
                                                            AutoGenerateColumns="False" CanUserReorderColumns="False"
                                                            RowValidationErrorTemplate="{x:Null}"
                                                            BeginningEdit="dtgGuestAdditional_BeginningEdit"
-                                                           PreparingCellForEdit="dtgGuestAdditional_PreparingCellForEdit"
+                                                           PreparingCellForEdit="dtgGifts_PreparingCellForEdit"
                                                            CellEditEnding="dtgGuestAdditional_CellEditEnding"
                                                            RowEditEnding="dtgGuestAdditional_RowEditEnding">
 
