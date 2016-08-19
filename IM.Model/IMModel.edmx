@@ -10109,7 +10109,7 @@
           <Property Name="guCompany" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
           <Property Name="guSaveProgram" Type="Boolean" Nullable="false" />
           <Property Name="guWithQuinella" Type="Boolean" Nullable="false" />
-          <Property Name="guIdProfileOpera" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="guIdProfileOpera" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="guAvailBySystem" Type="Boolean" Nullable="false" />
           <Property Name="gurt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="gucl" Type="Int32" />

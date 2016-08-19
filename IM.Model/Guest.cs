@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Guest()
         {
+            this.guIdProfileOpera = "";
             this.DepositsRefunds = new HashSet<DepositRefund>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.Groups = new HashSet<Group>();

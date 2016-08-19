@@ -41,6 +41,14 @@ namespace IM.Base.Classes
       _guID = guID;
     }
 
+    public GuestInvitationRules(EnumModule module, UserData user, int guID = 0)
+    {
+      _user = user;
+      _guID = guID;
+      _module = module;
+      _fromFrmGuest = true;
+    }
+
     #endregion Constructor
 
     #region DefaultValues
@@ -128,13 +136,6 @@ namespace IM.Base.Classes
 
     #endregion LoadAll
 
-    public GuestInvitationRules(EnumModule module, UserData user, int guID = 0)
-    {      
-      _user = user;
-      _guID = guID;
-      _module = module;
-      _fromFrmGuest = true;
-    }
 
     #region DefaultValueInvitation
 
@@ -160,12 +161,16 @@ namespace IM.Base.Classes
       }
       //Si No trae GuestID Invitacion Nueva
       else
-      {       
+      {
+        CloneInvitationGiftList = new List<InvitationGift>();
+        CloneAdditionalGuestList = new List<Guest>();
         InvitationGiftList = new ObservableCollection<InvitationGift>();
         AdditionalGuestList = new ObservableCollection<Guest>();
         if (_fromFrmGuest) return;
         BookingDepositList = new ObservableCollection<BookingDeposit>();
         GuestCreditCardList = new ObservableCollection<GuestCreditCard>();
+        CloneGuestCreditCardList = new List<GuestCreditCard>();
+        CloneBookingDepositList = new List<BookingDeposit>();
       }
 
       //Carga el Mensaje de la invitacion
@@ -494,6 +499,10 @@ namespace IM.Base.Classes
         guestObj = await BRGuests.GetGuest(guID, true);
       }
 
+      //Clonamos el Guest
+      CloneGuest = new Guest();
+      ObjectHelper.CopyProperties(CloneGuest, guestObj);
+
       //Obtenemos la fecha y hora del servidor
       var serverDate = BRHelpers.GetServerDate();
       var serverTime = BRHelpers.GetServerDateTime();
@@ -581,7 +590,7 @@ namespace IM.Base.Classes
 
       //Notificamos cambios
       Guest = guestObj;
-      CloneGuest = guestObj;
+      CloneGuest = copyGuest;
     }
 
     #endregion Load Guest
@@ -657,6 +666,10 @@ namespace IM.Base.Classes
       CloneAdditionalGuestList = ObjectHelper.CopyProperties(result);
     }
 
+    #endregion Load AdditionalGuest
+
+    #endregion Invitation Info
+
     #region Other Methods
     public void SetRervationOrigosInfo(ReservationOrigos reservationOrigos)
     {
@@ -683,12 +696,6 @@ namespace IM.Base.Classes
       OnPropertyChanged(nameof(Guest));
     }
     #endregion
-
-
-
-    #endregion Load AdditionalGuest
-
-    #endregion Invitation Info
 
     #region Implementacion INotifyPropertyChange
 

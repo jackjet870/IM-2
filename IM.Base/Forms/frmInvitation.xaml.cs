@@ -15,9 +15,7 @@ using System.Threading.Tasks;
 using IM.Services.WirePRService;
 using System.Runtime.CompilerServices;
 using System.Linq;
-
 using System.Threading.Tasks;
-
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -119,6 +117,8 @@ namespace IM.Base.Forms
       GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
 
       GridHelper.SetUpGrid(dtgCCCompany, new GuestCreditCard());
+
+      GridHelper.SetUpGrid(dtgGuestAdditional, new Guest());
 
       #endregion
       #endregion dtgGift
@@ -1711,6 +1711,8 @@ namespace IM.Base.Forms
     /// </history>
     private void guestDetails_Click(object sender, RoutedEventArgs e)
     {
+      if (dtgGuestAdditional.Items.CurrentPosition == -1) return;
+
       var guest = dtgGuestAdditional.Items[dtgGuestAdditional.Items.CurrentPosition] as Guest;
       if (guest == null || guest.guID == 0) return;
       if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.guls))
@@ -1723,7 +1725,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, true, _module, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, catObj.InvitationMode ==EnumMode.ReadOnly) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1737,7 +1739,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [edgrodriguez] 15/08/2016  Created.
     /// </history>
-    private void BtnAddGuestAdditional_OnClick(object sender, RoutedEventArgs e)
+    private async void BtnAddGuestAdditional_OnClick(object sender, RoutedEventArgs e)
     {
       if (catObj != null && string.IsNullOrWhiteSpace(catObj.Guest.guls))
       {
@@ -1750,10 +1752,18 @@ namespace IM.Base.Forms
         return;
       }
 
-      frmGuest frmGuest = new frmGuest(_user, 0, true, _module, dtgGuestAdditional.IsReadOnly);
+      frmGuest frmGuest = new frmGuest(_user, 0, _module, dtgGuestAdditional.IsReadOnly) {GuestParent = catObj.Guest,  Owner = this};
       frmGuest.ShowDialog();
       //Validacion del nuevo guest.
-    }
+      //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
+      var guestAdditional = frmGuest.NewGuest ?? new Guest();
+
+      //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
+      //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
+      var validate = await InvitationValidationRules.ValidateAdditionalGuest(catObj.Guest, guestAdditional, true);
+      if (validate.Item1)
+        catObj.AdditionalGuestList.Add(guestAdditional);
+      }
 
     #endregion btnAddGuestAdditional_OnClick
 

@@ -441,10 +441,10 @@
                                                            RowEditEnding="dtgGuestAdditional_RowEditEnding">
 
                                                     <DataGrid.Columns>
-                                                        <DataGridTextColumn Header="GUID" ElementStyle="{StaticResource txt-ErrorInfo}" Binding="{Binding guID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                                                        <DataGridTextColumn Header="GUID" ElementStyle="{StaticResource txt-ErrorInfo}" Binding="{Binding guID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" styClasses:FormatInputPropertyClass.FormatInput="Number" />
                                                         <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
                                                         <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
-                                                        <DataGridTemplateColumn Width="55">
+                                                        <DataGridTemplateColumn Width="55" IsReadOnly="True">
                                                             <DataGridTemplateColumn.CellTemplate>
                                                                 <DataTemplate>
                                                                     <Image Name="imgDetails" Source="pack://application:,,,/IM.Styles;component/Images/Details.ico"  Height="15" MouseLeftButtonDown="guestDetails_Click" />

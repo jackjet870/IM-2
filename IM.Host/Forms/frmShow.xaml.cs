@@ -312,6 +312,9 @@ namespace IM.Host.Forms
       // establecemos el numero de copias
       OcWelcomeCopies = frmHost._configuration.ocWelcomeCopies;
 
+      //Configuramos el gridGuestAdditional.
+      GridHelper.SetUpGrid(dtgGuestAdditional, new Guest());
+
       // habilitamos / deshabilitamos la invitacion externa
       EnableOutsideInvitation();
       busyIndicator.IsBusy = _blnLoading = false;
@@ -1912,6 +1915,7 @@ namespace IM.Host.Forms
     /// </history>
     private void guestDetails_Click(object sender, RoutedEventArgs e)
     {
+      if (dtgGuestAdditional.Items.CurrentPosition == -1) return;
       var guest = dtgGuestAdditional.Items[dtgGuestAdditional.Items.CurrentPosition] as Guest;
       if (guest == null || guest.guID == 0) return;
       if (GuestObj != null && string.IsNullOrWhiteSpace(txtguls.Text))
@@ -1924,7 +1928,7 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(App.User, guest.guID, false, EnumModule.Host, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      frmGuest frmGuest = new frmGuest(App.User, guest.guID, EnumModule.Host, dtgGuestAdditional.IsReadOnly) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1951,7 +1955,7 @@ namespace IM.Host.Forms
         return;
       }
 
-      frmGuest frmGuest = new frmGuest(App.User, 0, false, EnumModule.Host, dtgGuestAdditional.IsReadOnly);
+      frmGuest frmGuest = new frmGuest(App.User, 0, EnumModule.Host, dtgGuestAdditional.IsReadOnly);
       frmGuest.ShowDialog();
       //Validacion del nuevo guest.
     }
