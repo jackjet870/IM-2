@@ -20,8 +20,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using IM.Services.WirePRService;
 using PalaceResorts.Common.PalaceTools;
-using PalaceResorts.Common.Notifications.WinForm;
 using Xceed.Wpf.Toolkit;
 using LanguageHelper = IM.Base.Helpers.LanguageHelper;
 
@@ -36,6 +36,7 @@ namespace IM.Host.Forms
   public partial class frmShow : INotifyPropertyChanged
   {
     #region Atributos
+    private UserData _user;
     private readonly int _guestCurrent;
     private EnumProgram _enumProgram;
     private DateTime _dateCurrent;
@@ -115,6 +116,7 @@ namespace IM.Host.Forms
     public frmShow(int guestID)
     {
       _guestCurrent = guestID;
+      _user = App.User;
       InitializeComponent();
       DataContext = this;
       _guestShow = new GuestShow();
@@ -968,8 +970,8 @@ namespace IM.Host.Forms
     /// </history>
     private async Task Save()
     {
-      // indicamos que ya se le dio el show al invitado
-      if (_guestObj.guTimeInT != null && !_guestObj.guShow)
+     // indicamos que ya se le dio el show al invitado
+        if (_guestObj.guTimeInT != null && !_guestObj.guShow)
         chkguShow.IsChecked = true;
 
       // checamos si los datos de Self Gen estan correctamente llenados
@@ -1174,6 +1176,39 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    #region GetSearchReservationInfo
+    /// <summary>
+    /// Asignamos los valores de ReservationOrigos a nuestro objeto Guest
+    /// </summary>
+    /// <param name="reservationOrigos">ReservationOrigos</param>
+    /// <history>
+    /// [aalcocer] 19/08/2016  Created.
+    /// </history>
+    private void SetRervationOrigosInfo(ReservationOrigos reservationOrigos)
+    {
+     
+      //Asignamos el folio de reservacion
+      _guestObj.guHReservID = reservationOrigos.Folio;
+      _guestObj.guLastName1 = reservationOrigos.LastName;
+      _guestObj.guFirstName1 = reservationOrigos.FirstName;
+      _guestObj.guCheckInD = reservationOrigos.Arrival;
+      _guestObj.guCheckOutD = reservationOrigos.Departure;
+      _guestObj.guRoomNum = reservationOrigos.Room;
+      //Calculamos Pax
+      decimal pax = 0;
+      bool convertPax = decimal.TryParse($"{reservationOrigos.Adults}.{reservationOrigos.Children}", out pax);
+      _guestObj.guPax = pax;
+
+      _guestObj.guco = frmHost._lstCountries.Where(x => x.coN == reservationOrigos.Country).Select(x => x.coID).FirstOrDefault();
+      _guestObj.guag = frmHost._lstAgencies.Where(x => x.agN == reservationOrigos.Agency).Select(x => x.agID).FirstOrDefault();
+      _guestObj.guHotel = frmHost._lstHotel.Where(x => x.hoGroup == reservationOrigos.Hotel).Select(x => x.hoID).FirstOrDefault();
+      _guestObj.guCompany = reservationOrigos.Company;
+      _guestObj.guMembershipNum = reservationOrigos.Membership;
+
+    }
+
+    #endregion   
+
 
     #endregion Metodos
 
@@ -1246,6 +1281,8 @@ namespace IM.Host.Forms
       //cargamos los datos del show
       await LoadRecord();
 
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+
       //mostramos la clave y el nombre del huesped en el titulo del formulario
       Title = $"{Title} - {_guestObj.guID}, {Common.GetFullName(_guestObj.guLastName1, _guestObj.guFirstName1)}";
 
@@ -1270,6 +1307,29 @@ namespace IM.Host.Forms
 
 
     #endregion Window_Loaded
+
+    #region brdSearchButton_MouseLeftButtonDown
+    /// <summary>
+    /// Obtiene un Folio de Reservacion
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 19/08/2016  Created.
+    /// </history>
+    private void brdSearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      frmSearchReservation search = new frmSearchReservation(_user) { Owner = this };
+
+      // Verificamos si se selecciono un guest
+      if (search.ShowDialog().Value)
+      {
+        //Seteamos la informacion de SearchGuest en nuestro objeto Guest
+        SetRervationOrigosInfo(search._reservationInfo);
+
+        UIHelper.UpdateTarget(this);
+      }
+
+    }
+    #endregion
 
     #region imgButtonCancel_OnMouseLeftButtonDown
 
@@ -1453,9 +1513,23 @@ namespace IM.Host.Forms
     private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (!await Validate()) return;
-      await Save();
-      SendEmail();
-      Close();
+      try
+      {
+        busyIndicator.IsBusy = true;
+        busyIndicator.BusyContent = "Saving show...";
+        await Save();
+        SendEmail();
+        busyIndicator.IsBusy = false;
+
+        UIHelper.ShowMessage("The data was saved successfully");
+
+        Close();
+      }
+      catch (Exception ex)
+      {
+        busyIndicator.IsBusy = false;
+        UIHelper.ShowMessage(ex);
+      }
     }
 
     #endregion imgButtonSave_MouseLeftButtonDown
@@ -1963,6 +2037,29 @@ namespace IM.Host.Forms
     #endregion btnAddGuestAdditional_OnClick
 
     #endregion GuestAdditional
+
+    #region cmbGuestStatus_SelectionChanged
+
+    /// <summary>
+    /// Evento del Combobox GuestStatus, Sirve para actualizar la caja de texto txtGiftMaxAuth dependiendo del GuestStatus que elija el usuario.
+    /// </summary>
+    ///<history>
+    ///[aalcocer]  19/08/2016  Created.
+    /// </history>
+    private void cmbGuestStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      //Obtenemos el GuestStatusType del combobox cmbGuestStatus
+      var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
+
+      txtGiftMaxAuth.Text = string.Format("{0:C2}", guStatusType != null ? guStatusType.gsMaxAuthGifts : 0);
+
+      //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
+      //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
+      //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
+      //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
+    }
+
+    #endregion cmbGuestStatus_SelectionChanged
 
     #endregion Eventos del formulario
 

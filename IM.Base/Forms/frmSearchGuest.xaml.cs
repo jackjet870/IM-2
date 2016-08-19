@@ -147,7 +147,7 @@ namespace IM.Base.Forms
 
           // Cargamos el combo de LeadSource
           cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID, EnumProgram.Outhouse);
-          cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
+          cmbLeadSourse.SelectedValue = user.LeadSource?.lsID;
           // Cargamos el combo de Sales Room
           cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRoomsByUser(user.User.peID);
           cmbSalesRoom.SelectedIndex = -1;

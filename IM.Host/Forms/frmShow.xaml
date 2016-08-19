@@ -112,7 +112,7 @@
                                                     <TextBlock Text="Rsrv. Num." TextAlignment="Center" />
                                                     <TextBox Name="txtguHReservID" Width="100" Text="{Binding GuestObj.guHReservID, Mode=TwoWay}" IsEnabled="False" />
                                                 </StackPanel>
-                                                <Border x:Name="brdSearchReservation" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" Margin="3,0">
+                                                <Border x:Name="brdSearchReservation" MouseLeftButtonDown="brdSearchButton_MouseLeftButtonDown" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" Margin="3,0">
                                                     <StackPanel Orientation="Horizontal">
                                                         <Viewbox Stretch="Uniform" Width="20">
                                                             <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" />
@@ -177,11 +177,11 @@
                                                         </Grid.RowDefinitions>
                                                         <StackPanel x:Name="stkShows" Orientation="Horizontal"  Margin="3,0">
                                                             <CheckBox x:Name="chkguShow" Content="Shows" IsChecked="{Binding GuestObj.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Margin="3"  Checked ="chkguShow_Checked"  Unchecked ="chkguShow_Checked"/>
-                                                            <xctk:DateTimePicker x:Name="dtpguShowD" Tag="Show Date" Width="110" Value="{Binding GuestObj.guShowD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy"  KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
+                                                            <xctk:DateTimePicker x:Name="dtpguShowD" Tag="Show Date" Value="{Binding GuestObj.guShowD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="3,0" Grid.Column="1">
                                                             <TextBlock Text="Book" TextAlignment="Center" VerticalAlignment="Center" Margin="3" />
-                                                            <xctk:DateTimePicker x:Name="dtpguBookD" IsEnabled="False" Width="110"  Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
+                                                            <xctk:DateTimePicker x:Name="dtpguBookD" IsEnabled="False" Value="{Binding GuestObj.guBookD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
                                                         </StackPanel>
                                                         <StackPanel x:Name="stkPresentedInvitation" Orientation="Horizontal" Margin="3,0" Grid.Row="1">
                                                             <CheckBox x:Name="chkguPresentedInvitation" Tag="if the guest presented invitation" Content="Presented Invitation" HorizontalAlignment="Center" IsChecked="{Binding GuestObj.guPresentedInvitation, Mode=TwoWay}" Margin="3" />
@@ -245,23 +245,23 @@
                                                         <StackPanel Orientation="Horizontal"  Margin="3,0">
                                                             <TextBlock Text="Time In" Margin="3" VerticalAlignment="Center" />
                                                             <Button x:Name="btnIn" Width="20" Height="15" Background="LightGreen" Margin="3" Click="btnIn_Click" />
-                                                            <xctk:TimePicker x:Name="tpkguTimeInT" Width="80" Value="{Binding GuestObj.guTimeInT, Mode=TwoWay}" Margin="3" Format="Custom" FormatString="HH:mm" />
+                                                            <xctk:TimePicker x:Name="tpkguTimeInT" Style="{StaticResource tpk-Time-TK}" Value="{Binding GuestObj.guTimeInT,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="3,0">
                                                             <TextBlock Text="Time Out" Margin="3" VerticalAlignment="Center" />
                                                             <Button x:Name="btnOut" Width="20" Height="15" Background="Red" Margin="3" Click="btnOut_Click" />
-                                                            <xctk:TimePicker x:Name="tpkguTimeOutT"  Width="80" Text="{Binding GuestObj.guTimeOutT, Mode=TwoWay}" Margin="3" Format="Custom" FormatString="HH:mm" />
+                                                            <xctk:TimePicker x:Name="tpkguTimeOutT" Style="{StaticResource tpk-Time-TK}" Value="{Binding GuestObj.guTimeOutT,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         </StackPanel>
                                                     </StackPanel>
                                                     <Separator Height="7" />
                                                     <StackPanel x:Name="stkCheckInOut" Orientation="Horizontal">
                                                         <StackPanel Orientation="Horizontal"  Margin="3,0">
                                                             <TextBlock Text="Arrival" Margin="3" VerticalAlignment="Center" />
-                                                            <xctk:DateTimePicker x:Name="dtpguCheckInD" Tag="check-in date" Width="110" Value="{Binding GuestObj.guCheckInD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy"  KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
+                                                            <xctk:DateTimePicker x:Name="dtpguCheckInD" Tag="check-in date" Margin="0" Value="{Binding GuestObj.guCheckInD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="3,0">
                                                             <TextBlock Text="Departure" Margin="3" VerticalAlignment="Center" />
-                                                            <xctk:DateTimePicker x:Name="dtpguCheckOutD" Tag="check-out date" Width="110" Value="{Binding GuestObj.guCheckOutD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" FormatString="dd/MM/yyyy"  KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
+                                                            <xctk:DateTimePicker x:Name="dtpguCheckOutD" Tag="check-out date" Margin="0" Value="{Binding GuestObj.guCheckOutD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -279,20 +279,20 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center"  Margin="3,0">
                                                     <TextBlock Text="Taxi In" TextAlignment="Center" />
-                                                    <TextBox x:Name="txtguTaxiIn" Height="23"   Width="80" Text="{Binding GuestObj.guTaxiIn, Mode=TwoWay, StringFormat=N2}" />
+                                                    <TextBox x:Name="txtguTaxiIn" Height="23"   Width="80" Text="{Binding GuestObj.guTaxiIn, Mode=TwoWay, StringFormat=N2}" HorizontalContentAlignment="Right" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Taxi In Rcpt." TextAlignment="Center" />
-                                                    <TextBox x:Name="txtguTaxiIngr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiIngr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    <TextBox x:Name="txtguTaxiIngr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiIngr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" HorizontalContentAlignment="Right" IsReadOnly="True" />
                                                 </StackPanel>
                                                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                                                 <StackPanel VerticalAlignment="Center"  Margin="3,0">
                                                     <TextBlock Text="Taxi Out" TextAlignment="Center" />
-                                                    <TextBox x:Name="txtguTaxiOut" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOut, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    <TextBox x:Name="txtguTaxiOut" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOut, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" HorizontalContentAlignment="Right" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center"  Margin="3,0">
                                                     <TextBlock Text="Taxi Out Rcpt." TextAlignment="Center" />
-                                                    <TextBox x:Name="txtguTaxiOutgr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOutgr, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    <TextBox x:Name="txtguTaxiOutgr" Height="23" Width="80" Text="{Binding GuestObj.guTaxiOutgr, Mode=TwoWay, StringFormat=N2, NotifyOnValidationError=true, ValidatesOnExceptions=true}" HorizontalContentAlignment="Right" IsReadOnly="True" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -308,7 +308,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center"  Margin="3,0">
                                                     <TextBlock Text="Lead Source" TextAlignment="Center" />
-                                                    <TextBox Name="txtguls" Width="100" Text="{Binding GuestObj.guls, Mode=TwoWay}" />
+                                                    <TextBox Name="txtguls" Width="100" Text="{Binding GuestObj.guls, Mode=TwoWay}" IsReadOnly="True" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Location" TextAlignment="Center" />
@@ -316,7 +316,7 @@
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center"  Margin="3,0">
                                                     <TextBlock Text="Sales Room" TextAlignment="Center" />
-                                                    <TextBox x:Name="txtgusr" Width="100" Text="{Binding GuestObj.gusr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                    <TextBox x:Name="txtgusr" Width="100" Text="{Binding GuestObj.gusr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsReadOnly="True" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -499,11 +499,11 @@
                                                     </StackPanel>
                                                         <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="C. Code" TextAlignment="Center" />
-                                                            <TextBox Name="txtguO1" Width="80" Text="{Binding GuestObj.guO1, Mode=TwoWay}" />
+                                                            <TextBox Name="txtguO1" Width="80" Text="{Binding GuestObj.guO1, Mode=TwoWay}" IsReadOnly="True" />
                                                         </StackPanel>
                                                         <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="Children" TextAlignment="Center" />
-                                                            <TextBox Name="txtguChildren" Width="80" Text="{Binding GuestObj.guChildren, Mode=TwoWay}" />
+                                                            <TextBox Name="txtguChildren" Width="30" Text="{Binding GuestObj.guChildren, Mode=TwoWay}" HorizontalContentAlignment="Right" />
                                                         </StackPanel>
                                                         <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                             <TextBlock Text="Age(s)" TextAlignment="Center" />
@@ -539,7 +539,7 @@
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="3,0">
                                                             <TextBlock Text="Pax" VerticalAlignment="Center" />
-                                                            <TextBox x:Name="txtguPax" Height="23" AcceptsReturn="False" Width="33" Text="{Binding GuestObj.guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding GuestObj.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -648,7 +648,7 @@
 
                                                         <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         <DataGridTextColumn Header="Charge To" Binding="{Binding igct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                        <DataGridTextColumn Header="Receipt" IsReadOnly="True" Binding="{Binding iggr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        <DataGridTextColumn Header="Receipt" IsReadOnly="True"  Binding="{Binding iggr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         <DataGridTextColumn Header="Folios" IsReadOnly="True" Binding="{Binding igFolios, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         <DataGridTextColumn Header="Comments" Binding="{Binding igComments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </DataGrid.Columns>
@@ -656,15 +656,15 @@
                                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                                     <StackPanel VerticalAlignment="Center">
                                                         <TextBlock Text="Max Auth" TextAlignment="Center" />
-                                                        <TextBox Name="txtGiftMaxAuth" Width="100" />
+                                                        <TextBox Name="txtGiftMaxAuth" Width="100" IsReadOnly="True" />
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0">
                                                         <TextBlock Text="Total Cost" TextAlignment="Center" />
-                                                        <TextBox Name="txtGiftTotalCost" Width="100" />
+                                                        <TextBox Name="txtGiftTotalCost" Width="100" IsReadOnly="True" />
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center">
                                                         <TextBlock Text="Total Price" TextAlignment="Center" />
-                                                        <TextBox Name="txtGiftTotalPrice" Width="100" />
+                                                        <TextBox Name="txtGiftTotalPrice" Width="100" IsReadOnly="True" />
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -680,7 +680,7 @@
                                             <StackPanel>
                                                 <StackPanel Name="stkCcCompany">
                                                     <TextBlock Text="CC Company"/>
-                                                    <TextBox Name="txtguCCType" Text="{Binding Guest.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBox Name="txtguCCType" IsEnabled="False" Text="{Binding GuestObj.guCCType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 </StackPanel>
                                                 <DataGrid Name="dtgCCCompany"  Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding GuestCreditCardList}"
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"    LostKeyboardFocus="dtgCCCompany_LostKeyboardFocus"            
@@ -718,12 +718,12 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel HorizontalAlignment="Left">
                                                     <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.(Model:GuestStatusType.gsID), StringFormat='Guest Status ID: {0}'}" Margin="0,5" />
-                                                    <ComboBox Name="cmbGuestStatus" Tag="Guest Status" Width="250"  TextSearch.TextPath="gsN"
+                                                    <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
                                                           ItemsSource="{Binding Source={StaticResource dsGuestStatusTypes}}" Style="{StaticResource cbx-General}"
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.(Model:GuestStatusType.gsN), RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
-                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay}"/>
+                                                          SelectedValue="{Binding GuestObj.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -830,7 +830,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel>
                                                     <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5" />
-                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}}" />
+                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding GuestObj.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}}" HorizontalContentAlignment="Right" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5" />
@@ -861,7 +861,7 @@
                                                     </StackPanel>
                                                     <StackPanel>
                                                         <TextBlock Text="Rcpt" TextAlignment="Center" Margin="0,5" />
-                                                        <TextBox Name="txtguDepositgr" Width="120" Text="{Binding GuestObj.guDepositgr, Mode=TwoWay}" />
+                                                        <TextBox Name="txtguDepositgr" Width="120" Text="{Binding GuestObj.guDepositgr, Mode=TwoWay}" HorizontalContentAlignment="Right" IsReadOnly="True" />
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -877,7 +877,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Date" TextAlignment="Center" />
-                                                    <TextBox Name="txtguDepositSaleD" Width="71" Text="{Binding GuestObj.guDepositSaleD, Mode=TwoWay}" />
+                                                    <xctk:DateTimePicker x:Name="dtpguDepositSaleD" Value="{Binding GuestObj.guDepositSaleD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />                                                   
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Consecutive" TextAlignment="Center" />
@@ -885,7 +885,7 @@
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="3,0">
                                                     <TextBlock Text="Amount" TextAlignment="Center" />
-                                                    <TextBox Name="txtguDepSale" Width="71" Text="{Binding GuestObj.guDepSale, Mode=TwoWay}" />
+                                                    <TextBox Name="txtguDepSale" Width="71" Text="{Binding GuestObj.guDepSale, Mode=TwoWay, StringFormat=\{0:F\}, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>

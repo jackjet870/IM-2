@@ -1200,7 +1200,8 @@ namespace IM.BusinessRules.BR
               strguCCType = strguCCType.TrimEnd(',');
 
               //Escojemos los primeros 30 caracteres porque es el límite del campo 
-              guestShow.Guest.guCCType = strguCCType.Substring(0, 30);
+              //guestShow.Guest.guCCType = strguCCType.Substring(0, 30);
+              guestShow.Guest.guCCType = strguCCType.Length > 30 ? strguCCType.Substring(0, 30) : strguCCType;
               #endregion
 
               #region Proceso GuestsStatus
