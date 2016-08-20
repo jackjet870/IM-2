@@ -31,12 +31,10 @@
     <!--#region DEFINICION DE COLUMN's y ROW's-->
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
-      <ColumnDefinition Width="100" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="43" />
-      <RowDefinition Height="190" />
-      <RowDefinition Height="72" />
+
     </Grid.RowDefinitions>
     <!--#endregion-->
 
@@ -46,16 +44,10 @@
     </Viewbox>
     <!--#endregion-->
 
-    <!--#region TEXBOX RANGE-->
-    <Grid Grid.Column="1" Margin="0,5,-287,181" Grid.RowSpan="2" >
-      <TextBlock x:Name="txtRange" Text="RANGE DATE" Margin="10,0,10,29" Width="Auto" TextAlignment="Center" FontSize="13" FontWeight="Bold"/>
-      <TextBlock x:Name="txtDate" Text="DATE: DAYOFWEEK DAY" Margin="10,23,10,7" Width="Auto" TextAlignment="Center" FontSize="15" FontStyle="Normal" FontWeight="Bold"/>
-    </Grid>
-    <!--#endregion-->
-
-    <!--#region GRID-->
-    <Grid  Grid.Column="1" Grid.Row="1" Margin="0,10,-287,56" Grid.RowSpan="2" >
-      <DataGrid x:Name="grdExchangeRate" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource dsExchangeRates}}" Margin="1" CanUserAddRows="False">
+    <StackPanel Orientation="Vertical" Grid.Column="1">
+      <TextBlock x:Name="txtRange" Text="RANGE DATE" Margin="10,10,10,0" Width="Auto" TextAlignment="Center" Background="#147F79" FontSize="13" Foreground="White" FontWeight="Bold"/>
+      <TextBlock x:Name="txtDate" Text="DATE: DAYOFWEEK DAY" Margin="10,10,10,7" Width="Auto" HorizontalAlignment="Center" TextAlignment="Center" Background="#147F79" FontSize="15" Foreground="White" FontWeight="Bold" />
+      <DataGrid x:Name="grdExchangeRate" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource dsExchangeRates}}" Margin="10,0,10,10" CanUserAddRows="False" Height="216">
         <DataGrid.Resources>
           <Style TargetType="DataGridRow">
             <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
@@ -71,26 +63,43 @@
           <DataGridTextColumn x:Name="RatePesosColumn" Binding="{Binding RatePesos, StringFormat={}{0:$ 0.00000000}}" Header="Pesos" Width="Auto" IsReadOnly="True"/>
         </DataGrid.Columns>
       </DataGrid>
-    </Grid>
-    <!--#endregion-->
-
-    <!--#region OPCIONES DE BOTONES-->
-    <Grid Grid.Column="1" Grid.Row="2" Margin="0,22,-287,-12">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-
-      </Grid.RowDefinitions>
       <StackPanel Orientation="Vertical" >
-        <StackPanel Orientation="Horizontal">
-          <Button x:Name="btnEdit" Content="Edit" Margin="73,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnEdit_Click" Template="{StaticResource ButtonTemplate}"/>
-          <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="btnCancel_Click" Template="{StaticResource ButtonTemplate}"/>
-          <Button x:Name="btnAdd" Content="Add" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnAdd_Click" Template="{StaticResource ButtonTemplate}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <Border x:Name="btnEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnEdit_MouseLeftButtonDown">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
+              </Viewbox>
+              <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
+          <Border x:Name="btnCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnCancel_MouseLeftButtonDown" Margin="10,0,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
+              </Viewbox>
+              <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
+          <Border x:Name="btnAdd" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnAdd_MouseLeftButtonDown" Margin="10,0,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png"/>
+              </Viewbox>
+              <TextBlock Text="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
+          <Border x:Name="btnLog" Grid.Row="1" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnLog_MouseLeftButtonDown" Margin="10,0,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png"/>
+              </Viewbox>
+              <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
         </StackPanel>
-        <Button x:Name="btnLog" Grid.Row="1" Content="Log" HorizontalAlignment="Center" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnLog_Click" Template="{StaticResource ButtonTemplate}"/>
       </StackPanel>
-    </Grid>
-    <!--#endregion-->
-
+    </StackPanel>
   </Grid>
   <!--#endregion-->
 

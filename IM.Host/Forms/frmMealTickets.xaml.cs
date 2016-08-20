@@ -11,6 +11,7 @@ using IM.Base.Helpers;
 using System.Collections.Generic;
 using IM.Host.Classes;
 using IM.Model.Enums;
+using System.Collections.ObjectModel;
 
 namespace IM.Host.Forms
 {
@@ -30,7 +31,8 @@ namespace IM.Host.Forms
     public bool _reanOnly = true;
     private EnumMode _modeOpen;
     private EnumOpenBy _openBy;
-    List<MealTicket> lstMealTicket;
+    List<MealTicket> lstMealTicket = new List<MealTicket>();
+    private ObservableCollection<MealTicket> obsMealTicket;
     public bool HasMealTicket;
     CollectionViewSource dsMealTicket;
     #endregion
@@ -91,6 +93,8 @@ namespace IM.Host.Forms
       // Se verifica si tiene permisos de edición!
       InitializeComponent();
 
+      GridHelper.SetUpGrid(grdMealTicket, new MealTicket());
+
       dtpFrom.Value = frmHost.dtpServerDate.AddDays(-(frmHost.dtpServerDate.Day) + 1);
       dtpTo.Value = frmHost.dtpServerDate;
     }
@@ -129,7 +133,7 @@ namespace IM.Host.Forms
         case EnumOpenBy.Button:
           if (_modeOpen == EnumMode.ReadOnly)
           {
-            btnAdd.IsEnabled = false;
+            btnAdd.IsEnabled = btnDelete.IsEnabled = false;
           }
           else if (_modeOpen == EnumMode.Edit)
           {
@@ -140,7 +144,7 @@ namespace IM.Host.Forms
         case EnumOpenBy.Checkbox:
           if (_modeOpen == EnumMode.ReadOnly)
           {
-            btnAdd.IsEnabled = false;
+            btnAdd.IsEnabled = btnDelete.IsEnabled = false;
             stkSearch.Visibility = Visibility.Collapsed;
           }
           else if (_modeOpen == EnumMode.Edit)
@@ -150,32 +154,10 @@ namespace IM.Host.Forms
           }
 
           AdjustsControlsAndColumns();
-          dsMealTicket.Source = lstMealTicket;
+          obsMealTicket = new ObservableCollection<MealTicket>(lstMealTicket);
+          dsMealTicket.Source = obsMealTicket;
           break;
       }
-
-      //// Verificamos si es usuario estandar o de solo lectura!
-      //switch (_modeOpen)
-      //{
-      //  case EnumMode.Add:
-      //  case EnumMode.Edit:
-      //    ControlsVisibility(true, Visibility.Visible, false, Visibility.Hidden);
-      //    break;
-      //  case EnumMode.Search:
-      //    ControlsVisibility(false, Visibility.Visible, false, Visibility.Hidden);
-      //    break;
-      //  case EnumMode.ReadOnly:
-      //    // Se muestran y ocultan los controles necesarios
-      //    ControlsVisibility(false, Visibility.Hidden, true, Visibility.Hidden);
-      //    AdjustsControlsAndColumns();
-      //    dsMealTicket.Source = lstMealTicket;
-      //    break;
-      //  case EnumMode.PreviewEdit:
-      //    ControlsVisibility(true, Visibility.Hidden, true, Visibility.Hidden);
-      //    AdjustsControlsAndColumns();
-      //    dsMealTicket.Source = lstMealTicket;
-      //    break;
-      //}
     }
     #endregion
 
@@ -222,7 +204,9 @@ namespace IM.Host.Forms
       if (dtpTo.Value.Value.Date != null) { toDate = dtpTo.Value.Value.Date; }
 
       // Realizamos la busqueda con los parametros ingresados!
-      dsMealTicket.Source = await BRMealTickets.GetMealTickets(mlTicket, folio, rateType, fromDate, toDate);
+      //lstMealTicket = await BRMealTickets.GetMealTickets(mlTicket, folio, rateType, fromDate, toDate);
+      obsMealTicket = new ObservableCollection<MealTicket>(await BRMealTickets.GetMealTickets(mlTicket, folio, rateType, fromDate, toDate));
+      dsMealTicket.Source = obsMealTicket;
 
       #region ColumnsVisibility
       // Se verifica que el SelectedItem no sea null
@@ -232,7 +216,7 @@ namespace IM.Host.Forms
         if (itemRate.raID != 4) { controlColumnVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden); }
         // Es external
         else { controlColumnVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Visible); }
-      } 
+      }
       #endregion
 
       _busyIndicator.IsBusy = false;
@@ -255,7 +239,7 @@ namespace IM.Host.Forms
       if (mealTicketsDetail.ShowDialog().Value)
       {
         if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_guestID); }
-        else { btnSearch_Click(null, null); }
+        else if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Button) { obsMealTicket.Add(mealTicketsDetail._mealTicketCurrency); }
       }
     }
     #endregion
@@ -281,9 +265,11 @@ namespace IM.Host.Forms
 
         if (frmealTkt.ShowDialog().Value)
         {
-          ObjectHelper.CopyProperties(mealTicket, frmealTkt._mealTicketCurrency);
+          int indexOrigin = obsMealTicket.IndexOf(mealTicket);
+          MealTicket _mealTicket =  ObjectHelper.CopyProperties(frmealTkt._mealTicketCurrency);
 
           if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Checkbox) { dsMealTicket.Source = BRMealTickets.GetMealTickets(_guestID); }
+          else if (_modeOpen == EnumMode.Edit && _openBy == EnumOpenBy.Button) { obsMealTicket.Insert(indexOrigin, _mealTicket); obsMealTicket.Remove(mealTicket); }
         }
       }
     }
@@ -444,13 +430,76 @@ namespace IM.Host.Forms
       if (grd != null && grd.Items.Count > 0)
       {
         MealTicket mtck = grd.SelectedItem as MealTicket;
-        // verificamos si ya se imprimio
-        if (mtck.mePrinted) { btnPrint.IsEnabled = false; }
-        else
+        if (mtck != null)
         {
-          // verificamos que no se modo lectura
-          if (_modeOpen != EnumMode.ReadOnly) { btnPrint.IsEnabled = true; }
-          else { btnPrint.IsEnabled = false; }
+          // verificamos si ya se imprimio
+          if (mtck.mePrinted) { btnPrint.IsEnabled = false; }
+          else
+          {
+            // verificamos que no se modo lectura
+            if (_modeOpen != EnumMode.ReadOnly) { btnPrint.IsEnabled = true; }
+            else { btnPrint.IsEnabled = false; }
+          }
+        }
+      }
+    }
+    #endregion
+
+    #region btnDelete_Click
+    /// <summary>
+    /// Elimina los MealTicket seleccionados
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void btnDelete_Click(object sender, RoutedEventArgs e)
+    {
+      if (grdMealTicket.SelectedItems.Count > 0)
+      {
+        DeleteMealTickets();
+      }
+      else
+      {
+        UIHelper.ShowMessage("Select any Meal Ticket", MessageBoxImage.Information);
+      }
+    }
+    #endregion
+
+    #region DeleteMealTickets
+    /// <summary>
+    /// Elimina los Meal Tickets Seleccionados.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void DeleteMealTickets()
+    {
+      // Obtenemos los items seleccionados para eliminar
+      if (grdMealTicket.SelectedItems.Count > 0)
+      {
+        if (UIHelper.ShowMessage("Are you sure you want to delete these meal tickets?", MessageBoxImage.Question) == MessageBoxResult.Yes)
+        {
+          // Eliminamos los tickets de comida
+          grdMealTicket.SelectedItems.Cast<MealTicket>().ToList().ForEach(async mealticket => { await BREntities.OperationEntity(mealticket, EnumMode.Delete); obsMealTicket.Remove(mealticket); });
+        }
+      }
+    }
+    #endregion
+
+    #region grdMealTicket_PreviewCanExecute
+    /// <summary>
+    /// Elimina los MealTicket seleccionados
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void grdMealTicket_PreviewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+    {
+      if (e.Command == DataGrid.DeleteCommand)
+      {
+        if (btnDelete.IsEnabled)
+        {
+          DeleteMealTickets();
         }
       }
     } 

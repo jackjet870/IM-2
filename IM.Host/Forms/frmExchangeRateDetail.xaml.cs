@@ -16,7 +16,7 @@ namespace IM.Host.Forms
   /// <history>
   /// [vipacheco] 03/14/2016 Created
   /// </history>
-  public partial class frmExchangeRateEdit : Window
+  public partial class frmExchangeRateDetail : Window
   {
     #region Variables
     // Variable que indica el modo de apertura de la ventana
@@ -35,7 +35,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 10/Agosto/2016 Modified -> Se eliminaron parametros y se optimizo el contructor
     /// </history>
-    public frmExchangeRateEdit(EnumMode modeOpen)
+    public frmExchangeRateDetail(EnumMode modeOpen)
     {
       InitializeComponent();
       _modeOpen = modeOpen;

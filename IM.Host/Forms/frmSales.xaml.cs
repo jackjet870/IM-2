@@ -52,7 +52,7 @@ namespace IM.Host.Forms
     private Sale _saleNew = new Sale();
 
     //Payments
-    private ObservableCollection<Payment> _payments;
+    private System.Collections.ObjectModel.ObservableCollection<Payment> _payments;
 
     //Sale Type Category 
     private string _saleTypeCategory;
@@ -299,7 +299,7 @@ namespace IM.Host.Forms
         SetOutOfPending();
 
         //Cargamos los pagos de la venta      
-        _payments = new ObservableCollection<Payment>(await BRPayments.GetPaymentsbySale(_saleNew.saID));
+        _payments = new System.Collections.ObjectModel.ObservableCollection<Payment>(await BRPayments.GetPaymentsbySale(_saleNew.saID));
         dgpayment.DataContext = _payments;
 
         //Nombre del huesped
@@ -326,7 +326,7 @@ namespace IM.Host.Forms
         _loading = false;
 
         //Dejamos vacios los tipos de pago     
-        _payments = new ObservableCollection<Payment>();
+        _payments = new System.Collections.ObjectModel.ObservableCollection<Payment>();
         dgpayment.DataContext = _payments;
 
         //Limpiamos el nombre

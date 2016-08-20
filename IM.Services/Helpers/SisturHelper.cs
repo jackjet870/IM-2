@@ -344,7 +344,7 @@ namespace IM.Services.Helpers
 
         }
       }
-      return "None gift was saved in Sistur as Promotion";
+      return string.Empty;
     }
     #endregion
 

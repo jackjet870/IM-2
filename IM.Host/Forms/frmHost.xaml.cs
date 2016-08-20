@@ -137,7 +137,7 @@ namespace IM.Host
         StatusBarReg.Content = "No Records";
         return;
       }
-      StatusBarReg.Content = string.Format("{0}/{1}", grdPremanifestHost.Items.IndexOf(grdPremanifestHost.CurrentItem) + 1, grdPremanifestHost.Items.Count);
+      StatusBarReg.Content = string.Format("{0}/{1}", grdPremanifestHost.Items.CurrentPosition + 1, grdPremanifestHost.Items.Count);
     }
     #endregion
 

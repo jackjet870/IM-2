@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateEdit"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateDetail"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="Exchange Rate Detail" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">

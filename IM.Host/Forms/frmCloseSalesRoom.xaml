@@ -9,46 +9,40 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCloseSalesRoom"
         mc:Ignorable="d"
         Title="Close Sales Room" Height="306.883" Width="819" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" ShowInTaskbar="False">
-  <!--
-    <Window.Resources>
-        <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:GetSalesRoom}, CreateList=True}"/>
-    </Window.Resources>
--->
-
   <Grid Margin="10,0,10,2" >
     <StackPanel x:Name="stkPanel" Orientation="Horizontal" Margin="3,3,3,60" >
       <GroupBox x:Name="grpShows" Header="Shows" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Height="196" Width="193">
         <Grid>
-          <Label x:Name="lblCloseShowsLast" Content="Last Closed Day" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Height="23" Width="87"/>
+          <TextBlock x:Name="txbCloseShowsLast" Text="Last Closed Day" HorizontalAlignment="Center" TextAlignment="Center" Margin="1,10,2,0" VerticalAlignment="Top" Width="178" Background="#147F79" FontSize="12" Foreground="White"/>
           <xctk:DateTimePicker x:Name="dtpCloseShowsLast" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Margin="1,34,0,0" IsEnabled="False" FontWeight="Bold" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
-          <Label x:Name="lblCloseShows" Content="Close Day" HorizontalAlignment="Left" Margin="60,71,0,0" VerticalAlignment="Top" Height="23" Width="58"/>
-          <xctk:DateTimePicker x:Name="dtpCloseShows" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="178" FontSize="10" Height="24" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
+          <TextBlock x:Name="txbCloseShows" Text="Close Day" HorizontalAlignment="Center" TextAlignment="Center" Margin="1,71,2,0" VerticalAlignment="Top" Width="178" Background="#147F79" FontSize="12" Foreground="White"/>
+          <xctk:DateTimePicker x:Name="dtpCloseShows" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
           <Button x:Name="btnCloseShows" Content="Close" HorizontalAlignment="Left" Margin="46,138,0,0" VerticalAlignment="Top" Width="86" Click="btnCloseShows_Click" Height="27" Template="{Binding Source={StaticResource ButtonTemplate}}" Foreground="White"/>
         </Grid>
       </GroupBox>
       <GroupBox x:Name="grpMealTickets" Header="Meal Tickets" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Height="196" Width="193">
         <Grid>
-          <Label x:Name="lblCloseMealTicketsLast" Content="Last Closed Day" HorizontalAlignment="Left" Margin="27,10,0,0" VerticalAlignment="Top" Height="23" Width="87" Grid.Column="1"/>
+          <TextBlock x:Name="txbCloseMealTicketsLast" Text="Last Closed Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="1,10,1,0" VerticalAlignment="Top" Background="#147F79" FontSize="12" Foreground="White"/>
           <xctk:DateTimePicker x:Name="dtpCloseMealTicketsLast" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Margin="1,34,0,0" Grid.ColumnSpan="4" IsEnabled="False" FontWeight="Bold" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
-          <Label x:Name="lblCloseMealTickets" Content="Close Day" HorizontalAlignment="Left" Margin="50,71,0,0" VerticalAlignment="Top" Height="23" Width="58"/>
-          <xctk:DateTimePicker x:Name="dtpCloseMealTicket" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="178" FontSize="10" Height="24" Grid.ColumnSpan="4" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
+          <TextBlock x:Name="txbCloseMealTickets" Text="Close Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="1,71,1,0" VerticalAlignment="Top" Background="#147F79" FontSize="12" Foreground="White"/>
+          <xctk:DateTimePicker x:Name="dtpCloseMealTicket" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Grid.ColumnSpan="4" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
           <Button x:Name="btnCloseMealTickets" Content="Close" HorizontalAlignment="Left" Margin="50,138,0,0" VerticalAlignment="Top" Width="86" Click="btnCloseMealTickets_Click" Height="27" Grid.Column="1" Template="{Binding Source={StaticResource ButtonTemplate}}" Foreground="White"/>
         </Grid>
       </GroupBox>
       <GroupBox x:Name="grpSales" Header="Sales" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Height="196" Width="193">
         <Grid>
-          <Label x:Name="lblCloseSalesLast" Content="Last Closed Day" HorizontalAlignment="Left" Margin="27,10,0,0" VerticalAlignment="Top" Height="23" Width="87" Grid.Column="1"/>
+          <TextBlock x:Name="txbCloseSalesLast" Text="Last Closed Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="1,10,2,0" VerticalAlignment="Top" Background="#147F79" FontSize="12" Foreground="White" />
           <xctk:DateTimePicker x:Name="dtpCloseSalesLast" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Margin="1,34,0,0" Grid.ColumnSpan="4" IsEnabled="False" FontWeight="Bold" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
-          <Label x:Name="lblCloseSales" Content="Close Day" HorizontalAlignment="Left" Margin="50,71,0,0" VerticalAlignment="Top" Height="23" Width="58"/>
+          <TextBlock x:Name="txbCloseSales" Text="Close Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="1,71,2,0" VerticalAlignment="Top" Background="#147F79" FontSize="12" Foreground="White"/>
           <xctk:DateTimePicker x:Name="dtpCloseSales" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="178" FontSize="10" Height="24" Grid.ColumnSpan="4" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
           <Button x:Name="btnCloseSales" Content="Close" HorizontalAlignment="Left" Margin="50,138,0,0" VerticalAlignment="Top" Width="86" Click="btnCloseSales_Click" Height="27" Template="{Binding Source={StaticResource ButtonTemplate}}" Foreground="White"/>
         </Grid>
       </GroupBox>
       <GroupBox x:Name="grpGiftsReceipts" Header="Gifts Receipts" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Height="196" Width="193">
         <Grid>
-          <Label x:Name="lblCloseGiftsReceiptsLast" Content="Last Closed Day" HorizontalAlignment="Left" Margin="27,10,0,0" VerticalAlignment="Top" Height="23" Width="87" Grid.Column="1"/>
+          <TextBlock x:Name="txbCloseGiftsReceiptsLast" Text="Last Closed Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="2,10,0,0" VerticalAlignment="Top" Width="177" Background="#147F79" FontSize="12" Foreground="White"/>
           <xctk:DateTimePicker x:Name="dtpCloseGiftsReceiptsLast" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="179" FontSize="10" Height="24" Margin="1,34,0,0" Grid.ColumnSpan="4" FontWeight="Bold" IsEnabled="False" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
-          <Label x:Name="lblCloseGiftsReceipts" Content="Close Day" HorizontalAlignment="Left" Margin="50,71,0,0" VerticalAlignment="Top" Height="23" Width="58"/>
+          <TextBlock x:Name="txbCloseGiftsReceipts" Text="Close Day" HorizontalAlignment="Stretch" TextAlignment="Center" Margin="3,71,1,0" VerticalAlignment="Top" Background="#147F79" FontSize="12" Foreground="White"/>
           <xctk:DateTimePicker x:Name="dtpCloseGiftsReceipts" HorizontalAlignment="Left" Margin="1,94,0,0" VerticalAlignment="Top" Width="178" FontSize="10" Height="24" Grid.ColumnSpan="4" Style="{StaticResource dtp-DateRange-TK}" TextAlignment="Center"/>
           <Button x:Name="btnCloseGiftsReceipts" Content="Close" HorizontalAlignment="Left" Margin="50,138,0,0" VerticalAlignment="Top" Width="86" Click="btnCloseGiftsReceipts_Click" Height="27" Template="{Binding Source={StaticResource ButtonTemplate}}" Foreground="White"/>
         </Grid>

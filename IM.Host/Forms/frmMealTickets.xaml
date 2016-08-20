@@ -65,7 +65,7 @@
 
       </StackPanel>
 
-      <DataGrid x:Name="grdMealTicket" Grid.Row="1" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" IsReadOnly="True" Margin="10,9,10,5" SelectionUnit="FullRow" SelectionMode="Extended" SelectionChanged="grdMealTicket_SelectionChanged">
+      <DataGrid x:Name="grdMealTicket" Grid.Row="1" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,9,10,5" SelectionUnit="FullRow" SelectionMode="Extended" SelectionChanged="grdMealTicket_SelectionChanged" IsReadOnly="True" CommandManager.PreviewCanExecute="grdMealTicket_PreviewCanExecute">
         <DataGrid.Resources>
           <Style TargetType="DataGridRow">
             <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
@@ -98,11 +98,16 @@
         </DataGrid.Columns>
       </DataGrid>
       <Grid Grid.Row="2">
-        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Right" Width="75" Click="btnAdd_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="0,10,94,15"/>
-        <Button x:Name="btnClose" Content="Close" Width="75" Click="btnClose_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="780,10,10,15"/>
-        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Width="75" Click="btnPrint_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="11,12,0,12"/>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="239*"/>
+          <ColumnDefinition Width="626*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Right" Width="75" Click="btnAdd_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="0,10,179,15" Grid.Column="1"/>
+        <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Right" Width="75" Click="btnDelete_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="0,10,94,15" Grid.Column="1"/>
+        <Button x:Name="btnClose" Content="Close" Width="75" Click="btnClose_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="541,10,10,15" Grid.Column="1"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Width="75" Click="btnPrint_Click" Height="25" Template="{StaticResource ButtonTemplate}" Margin="11,12,0,12" IsEnabled="False"/>
       </Grid>
-  
+
     </Grid>
   </xctk:BusyIndicator >
 

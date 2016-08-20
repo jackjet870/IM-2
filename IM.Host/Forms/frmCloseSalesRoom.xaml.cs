@@ -222,10 +222,10 @@ namespace IM.Host.Forms
       if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.Standard))
       {
         // Ocultamos los label's
-        lblCloseShows.Visibility = Visibility.Collapsed;
-        lblCloseMealTickets.Visibility = Visibility.Collapsed;
-        lblCloseSales.Visibility = Visibility.Collapsed;
-        lblCloseGiftsReceipts.Visibility = Visibility.Collapsed;
+        txbCloseShows.Visibility = Visibility.Collapsed;
+        txbCloseMealTickets.Visibility = Visibility.Collapsed;
+        txbCloseSales.Visibility = Visibility.Collapsed;
+        txbCloseGiftsReceipts.Visibility = Visibility.Collapsed;
 
         // Ocultamos los datapicker's
         dtpCloseShows.Visibility = Visibility.Collapsed;

@@ -13,14 +13,14 @@
     <CollectionViewSource x:Key="dsMealTicketType" d:DesignSource="{d:DesignInstance {x:Type Model:MealTicketType}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsAgency" d:DesignSource="{d:DesignInstance {x:Type Model:Agency}, CreateList=True}"/>
   </Window.Resources>
-  <Grid Margin="0,0,0,11">
+  <Grid Margin="0,0,0,0">
     <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <StackPanel x:Name="stkHead" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel x:Name="stkHead" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
       <StackPanel Orientation="Vertical" Margin="5">
         <TextBlock x:Name="lblRateType" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top"/>
         <ComboBox x:Name="cboRateType" HorizontalAlignment="Center" VerticalAlignment="Top" Width="183" Height="25" SelectedValue="{Binding mera}" SelectedValuePath="raID" ItemsSource="{Binding Source={StaticResource dsRateType}}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>
@@ -57,19 +57,19 @@
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock x:Name="txbAdults" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Adults" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meAdults}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtAdults_LostFocus"/>
+            <TextBox x:Name="txtAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meAdults}" PreviewTextInput="txtEvaluation_PreviewTextInput" PreviewKeyDown="txtAdults_PreviewKeyDown" LostFocus="txtAdults_LostFocus"/>
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock x:Name="txbMinors" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Minors" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meMinors}" PreviewTextInput="txtEvaluation_PreviewTextInput" LostFocus="txtMinors_LostFocus"/>
+            <TextBox x:Name="txtMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding meMinors}" PreviewTextInput="txtEvaluation_PreviewTextInput" PreviewKeyDown="txtMinors_PreviewKeyDown" LostFocus="txtMinors_LostFocus"/>
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock x:Name="txbTAdults" HorizontalAlignment="Center" TextWrapping="Wrap" Text="T. Adults" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtTAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTAdults, StringFormat={}{0:$0.00}}"/>
+            <TextBox x:Name="txtTAdults" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="60" IsReadOnly="True" Text="{Binding meTAdults, StringFormat={}{0:$0.00}}"/>
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock x:Name="txbTMinors" HorizontalAlignment="Center" TextWrapping="Wrap" Text="T. Minors" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtTMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding meTMinors, StringFormat={}{0:$0.00}}"/>
+            <TextBox x:Name="txtTMinors" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="60" IsReadOnly="True" Text="{Binding meTMinors, StringFormat={}{0:$0.00}}"/>
           </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -86,7 +86,7 @@
         </StackPanel>
       </Grid>
     </StackPanel>
-    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
       <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="75" Click="btnSave_Click" Height="20" Foreground="White" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
       <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Center"  Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Height="20" Foreground="White" Click="btnCancel_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
     </StackPanel>

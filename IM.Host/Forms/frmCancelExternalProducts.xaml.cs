@@ -164,7 +164,7 @@ namespace IM.Host.Forms
       // Si se desea cancelar el recibo
       if (!Exchange)
       {
-        grbGiftsReceiptExchange.Visibility = Visibility.Collapsed;
+        stkGiftsExchange.Visibility = Visibility.Collapsed;
         WindowMain.Height = 424; // Ajustamos la ventana
       }
 
@@ -225,16 +225,14 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region btnSave_Click
+    #region btnSave_MouseLeftButtonDown
     /// <summary>
     /// Guarda la informacion
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 16/Mayo/2016 Created
     /// </history>
-    private async void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (Validate())
       {
@@ -603,12 +601,10 @@ namespace IM.Host.Forms
     /// <summary>
     /// Cierra el formulario
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 16/Mayo/2016 Created
     /// </history>
-    private void btnClose_Click(object sender, RoutedEventArgs e)
+    private void btnClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       DialogResult = false;
       Close();
@@ -768,10 +764,10 @@ namespace IM.Host.Forms
 
           ReceiptsGifts.AfterEdit(ref grdExchange, _Guest.guID, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
                                         pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: txtTotalGiftsExchange, pTxtgrCxCGifts: txtgrcxcGifts,
-                                        pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrcxcAdj, pTxtgrMaxAuthGifts: txtMaxAuthGifts, pLblgrMaxAuthGifts: lblMaxAuthGiftsCaption);
+                                        pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrcxcAdj, pTxtgrMaxAuthGifts: txtMaxAuthGifts, pLblgrMaxAuthGifts: txbMaxAuthGiftsCaption);
 
           CalculateTotalGifts();
-          lblMaxAuthGiftsCaption.Visibility = Visibility.Visible;
+          txbMaxAuthGiftsCaption.Visibility = Visibility.Visible;
           txtMaxAuthGifts.Visibility = Visibility.Visible;
 
           // Verificamos si se actualiza los costs CxC

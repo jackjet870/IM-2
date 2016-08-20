@@ -67,7 +67,7 @@ namespace IM.Host.Forms
         StatusBarReg.Content = "No Records";
         return;
       }
-      StatusBarReg.Content = string.Format("{0}/{1}", getExchangeRateLogDataGrid.Items.IndexOf(getExchangeRateLogDataGrid.CurrentItem) + 1, getExchangeRateLogDataGrid.Items.Count);
+      StatusBarReg.Content = string.Format("{0}/{1}", getExchangeRateLogDataGrid.Items.IndexOf(getExchangeRateLogDataGrid.Items.CurrentItem) + 1, getExchangeRateLogDataGrid.Items.Count);
     } 
     #endregion
 

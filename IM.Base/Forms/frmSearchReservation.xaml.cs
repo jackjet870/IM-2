@@ -88,7 +88,9 @@ namespace IM.Base.Forms
     {
       if (ValidateCriteria())
       {
+        _busyIndicator.IsBusy = true;
         await LoadGrid();
+        _busyIndicator.IsBusy = false;
       }
     }
     #endregion
@@ -151,7 +153,6 @@ namespace IM.Base.Forms
           return;
         }
         grdGuests.ItemsSource = reservation;
-        grdGuests.SelectedIndex = 0;
       }
       catch (Exception exception)
       {
@@ -284,7 +285,48 @@ namespace IM.Base.Forms
         StatusBarReg.Content = "0/0";
         return;
       }
-      StatusBarReg.Content = string.Format("{0}/{1}", grdGuests.Items.IndexOf(grdGuests.Items.CurrentItem) + 1, grdGuests.Items.Count);
+      StatusBarReg.Content = string.Format("{0}/{1}", grdGuests.Items.IndexOf(grdGuests.CurrentItem) + 1, grdGuests.Items.Count);
+    }
+    #endregion
+
+    #region Cell_DoubleClick    
+    /// <summary>
+    /// Selecciona la infomacion del guest pulsado
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 18/Agosto/2016 Created
+    /// </history>
+    private void grdGuest_DoubleClick(object sender, RoutedEventArgs e)
+    {
+      // Construimos el formulario a mostrar
+      _reservationInfo = grdGuests.SelectedItem as ReservationOrigos;
+      DialogResult = true;
+      Close();
+
+  }
+    #endregion
+
+    #region grdReceipts_KeyDown
+    /// <summary>
+    /// Seleciona la infomacion del guest seleccionado
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 18/Agosto/2016 Created
+    /// </history>
+    private void grdGuest_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            grdGuest_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+}
+      }
+      e.Handled = blnHandled;
     }
     #endregion
 

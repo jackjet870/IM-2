@@ -76,25 +76,29 @@ namespace IM.Host.Forms
           if (_modeOpen == EnumMode.Add)
           {
             stkHead.Visibility = Visibility.Collapsed;
-            Height = 172.438; Width = 593.59;
+            Height = 149; Width = 593.59;
             dtpDate.Value = frmHost.dtpServerDate.Date;
+            chkPrinted.IsEnabled = chkCancel.IsEnabled = false;
           }
           else if (_modeOpen == EnumMode.Edit)
           {
             stkHead.Visibility = Visibility.Collapsed;
-            Height = 172.438; Width = 593.59;
+            Height = 149; Width = 593.59;
             DataContext = _mealTicketCurrency;
             dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost.dtpServerDate : _mealTicketCurrency.meD.Date;
           }
           break;
         case EnumOpenBy.Button:
+          Height = 200; Width = 593.59;
           if (_modeOpen == EnumMode.Add)
           {
             dtpDate.Value = frmHost.dtpServerDate.Date;
+            chkPrinted.IsEnabled = chkCancel.IsEnabled = false;
           }
           else if (_modeOpen == EnumMode.Edit)
           {
             DataContext = _mealTicketCurrency;
+            cboRateType_SelectionChanged(null, null);
             dtpDate.Value = _mealTicketCurrency.meD.Date;
           }
           break;
@@ -112,9 +116,9 @@ namespace IM.Host.Forms
     /// </history>
     private void cboRateType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      RateType _rateType = (RateType)cboRateType.SelectedItem;
+      RateType _rateType = cboRateType.SelectedItem as RateType;
 
-      if (_modeOpen != EnumMode.ReadOnly && _modeOpen != EnumMode.Edit && _openBy != EnumOpenBy.Checkbox)
+      if (_openBy == EnumOpenBy.Button)
       {
         if (_rateType != null) // Se verifica que el SelectedItem no sea null
         {
@@ -162,6 +166,7 @@ namespace IM.Host.Forms
     #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      DialogResult = false;
       Close();
     }
     #endregion
@@ -175,13 +180,7 @@ namespace IM.Host.Forms
     /// </history>
     private void txtEvaluation_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-      string _value = e.Text;
-
-      // Se valida que solamente sean Digitos Numericos
-      if (!char.IsDigit(Convert.ToChar(_value)))
-      {
-        e.Handled = true;
-      }
+      e.Handled = !ValidateHelper.OnlyDecimals(e.Text, sender as TextBox);
     }
     #endregion
 
@@ -220,7 +219,7 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region validateFields
+    #region validateGeneral
     /// <summary>
     /// Valida los campos obligatorios segun sea requerido
     /// </summary>
@@ -299,19 +298,23 @@ namespace IM.Host.Forms
     /// </history>
     private void cboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      RateType _rateType = (RateType)cboRateType.SelectedItem;
-      MealTicketType _mealTicketType = (MealTicketType)cboType.SelectedItem;
+      RateType _rateType = cboRateType.SelectedItem as RateType;
+      MealTicketType _mealTicketType = cboType.SelectedItem as MealTicketType;
 
       if (_mealTicketType != null)
       {
         if (!_mealTicketType.myWPax)
         {
+          txtAdults.Text = $"{1}";
+          txtMinors.Text = $"{0}";
+          txtAdults.IsEnabled = txtMinors.IsEnabled = false;
           txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 0 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
           decimal _minors = (_meQty * ((txtMinors.Text != "") ? Convert.ToInt32(txtMinors.Text) : 0) * ((_mealTicketType != null) ? _mealTicketType.myPriceM : 0));
           txtTMinors.Text = string.Format("{0:$0.00}", Convert.ToDouble(_minors));
         }
         else
         {
+          txtAdults.IsEnabled = txtMinors.IsEnabled = true;
           txtAdults.Text = ((txtAdults.Text != "") ? txtAdults.Text : "0");
           txtMinors.Text = ((txtMinors.Text != "") ? txtMinors.Text : "0");
           txtTAdults.Text = ((txtTAdults.Text != "") ? txtTAdults.Text : "$0.00");
@@ -332,21 +335,34 @@ namespace IM.Host.Forms
     /// </history>
     private void txtAdults_LostFocus(object sender, RoutedEventArgs e)
     {
-      RateType _rateType = (RateType)cboRateType.SelectedItem;
-      MealTicketType _mealTicketType = (MealTicketType)cboType.SelectedItem;
+      CalculateTotalAdults();
+    }
+    #endregion
+
+    #region CalculateTotalAdults
+    /// <summary>
+    /// Calcula el total de adulto
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void CalculateTotalAdults()
+    {
+      RateType _rateType = cboRateType.SelectedItem as RateType;
+      MealTicketType _mealTicketType = cboType.SelectedItem as MealTicketType;
 
       if (_mealTicketType != null)
       {
         if (!_mealTicketType.myWPax)
         {
-          txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 0 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
+          txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 1 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
         }
         else
         {
-          txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 0 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
+          txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 1 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
         }
       }
-    }
+    } 
     #endregion
 
     #region txtMinors_LostFocus
@@ -358,8 +374,21 @@ namespace IM.Host.Forms
     /// </history>
     private void txtMinors_LostFocus(object sender, RoutedEventArgs e)
     {
-      RateType _rateType = (RateType)cboRateType.SelectedItem;
-      MealTicketType _mealTicketType = (MealTicketType)cboType.SelectedItem;
+      CalculateTotalMinors();
+    }
+    #endregion
+
+    #region CalculateTotalMinors
+    /// <summary>
+    /// Calcula los totales de los minors
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void CalculateTotalMinors()
+    {
+      RateType _rateType = cboRateType.SelectedItem as RateType;
+      MealTicketType _mealTicketType = cboType.SelectedItem as MealTicketType;
 
       if (_mealTicketType != null)
       {
@@ -374,7 +403,7 @@ namespace IM.Host.Forms
           txtTMinors.Text = string.Format("{0:$0.00}", Convert.ToDouble(_minors));
         }
       }
-    }
+    } 
     #endregion
 
     #region btnSave_Click
@@ -388,32 +417,32 @@ namespace IM.Host.Forms
     {
       if (ValidateGeneral())
       {
-        RateType _rateType = (RateType)cboRateType.SelectedItem; 
-        MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; 
-        PersonnelShort _personnel = (PersonnelShort)cboCollaborator.SelectedItem;
-        AgencyShort _agency = (AgencyShort)cboAgency.SelectedItem;
+        RateType _rateType = cboRateType.SelectedItem as RateType; 
+        MealTicketType _mealType = cboType.SelectedItem as MealTicketType; 
+        PersonnelShort _personnel = cboCollaborator.SelectedItem as PersonnelShort;
+        AgencyShort _agency = cboAgency.SelectedItem as AgencyShort;
 
         int _meAdults = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtAdults.Text);
         int _meMinors = Convert.ToInt32((txtMinors.Text == "") ? "0" : txtMinors.Text);
         string _meTAdultsString = txtTAdults.Text.TrimStart('$');
         string _meTMinorsString = txtTMinors.Text.TrimStart('$');
 
-        // Row New with GuestID == 0
-        if (_modeOpen == EnumMode.Add && frmMealTickets._guestID == 0)
+        // Agrega un nuevo Meal Ticket
+        if (_modeOpen == EnumMode.Add)
         {
           // Obtenemos el folio a asignar
           int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);
 
-          MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
+          _mealTicketCurrency = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
 
           //Actualizamos el folio!
-          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, folioNew + "");
+          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, $"{folioNew}");
 
           //Guardamos el Meal Ticket Creado
-          BRMealTickets.InsertNewMealTicket(_newMealticket);
+          BRMealTickets.InsertNewMealTicket(_mealTicketCurrency);
         }
-        // Edition Row with GuestID == 0
-        else if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID == 0)
+        // Modo edicion
+        else
         {
           int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 
@@ -430,7 +459,7 @@ namespace IM.Host.Forms
           _mealTicketCurrency.meComments = txtComments.Text;
           _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
           _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
-          _mealTicketCurrency.mera = _rateType.raID;
+          _mealTicketCurrency.mera = frmMealTickets._guestID > 0 ? 1 : _rateType.raID;
           _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
           _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
           _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
@@ -442,55 +471,104 @@ namespace IM.Host.Forms
 
           // Insertamos el nuevo Meal Ticket con el folio asignado
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
+
         }
-        // Row New with GuestID != 0
-        if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID != 0)
-        {
-          // Obtenemos el folio a asignar
-          int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
 
-          MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
 
-          //Actualizamos el folio!
-          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, folioNew + "");
+        //// Row New with GuestID == 0
+        //if (_modeOpen == EnumMode.Add && frmMealTickets._guestID == 0)
+        //{
+        //  // Obtenemos el folio a asignar
+        //  int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);
 
-          //Guardamos el Meal Ticket Creado
-          BRMealTickets.InsertNewMealTicket(_newMealticket);
-        }
-        // Edition Row with GuestID != 0
-        else if (_modeOpen == EnumMode.ReadOnly && frmMealTickets._guestID != 0)
-        {
-          int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
+        //  MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
 
-          // Creamos el Meal Ticket con el guestID
-          _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
-          _mealTicketCurrency.megu = frmMealTickets._guestID;
-          _mealTicketCurrency.meQty = frmMealTickets._Qty;
-          _mealTicketCurrency.meType = _mealType.myID;
-          _mealTicketCurrency.meAdults = _meAdults;
-          _mealTicketCurrency.meMinors = _meMinors;
-          _mealTicketCurrency.meFolios = folio + "";
-          _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
-          _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
-          _mealTicketCurrency.meComments = txtComments.Text;
-          _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
-          _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
-          _mealTicketCurrency.mera = 1;
-          _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
-          _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
-          _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
-          _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
-          _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+        //  //Actualizamos el folio!
+        //  BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, folioNew + "");
 
-          //Actualizamos el folio!
-          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, _mealTicketCurrency.meFolios);
+        //  //Guardamos el Meal Ticket Creado
+        //  BRMealTickets.InsertNewMealTicket(_newMealticket);
+        //}
+        //// Edition Row with GuestID == 0
+        //else if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID == 0)
+        //{
+        //  int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
 
-          // Insertamos el nuevo Meal Ticket con el folio asignado
-          BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
-        }
+        //  // Creamos el Meal Ticket con el guestID
+        //  _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
+        //  _mealTicketCurrency.megu = frmMealTickets._guestID;
+        //  _mealTicketCurrency.meQty = frmMealTickets._Qty;
+        //  _mealTicketCurrency.meType = _mealType.myID;
+        //  _mealTicketCurrency.meAdults = _meAdults;
+        //  _mealTicketCurrency.meMinors = _meMinors;
+        //  _mealTicketCurrency.meFolios = folio + "";
+        //  _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
+        //  _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
+        //  _mealTicketCurrency.meComments = txtComments.Text;
+        //  _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
+        //  _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
+        //  _mealTicketCurrency.mera = _rateType.raID;
+        //  _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
+        //  _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
+        //  _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
+        //  _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
+        //  _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+
+        //  //Actualizamos el folio!
+        //  BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, _mealTicketCurrency.meFolios);
+
+        //  // Insertamos el nuevo Meal Ticket con el folio asignado
+        //  BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
+        //}
+        //// Row New with GuestID != 0
+        //if (_modeOpen == EnumMode.Edit && frmMealTickets._guestID != 0)
+        //{
+        //  // Obtenemos el folio a asignar
+        //  int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
+
+        //  MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
+
+        //  //Actualizamos el folio!
+        //  BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, folioNew + "");
+
+        //  //Guardamos el Meal Ticket Creado
+        //  BRMealTickets.InsertNewMealTicket(_newMealticket);
+        //}
+        //// Edition Row with GuestID != 0
+        //else if (_modeOpen == EnumMode.ReadOnly && frmMealTickets._guestID != 0)
+        //{
+        //  int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
+
+        //  // Creamos el Meal Ticket con el guestID
+        //  _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
+        //  _mealTicketCurrency.megu = frmMealTickets._guestID;
+        //  _mealTicketCurrency.meQty = frmMealTickets._Qty;
+        //  _mealTicketCurrency.meType = _mealType.myID;
+        //  _mealTicketCurrency.meAdults = _meAdults;
+        //  _mealTicketCurrency.meMinors = _meMinors;
+        //  _mealTicketCurrency.meFolios = folio + "";
+        //  _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
+        //  _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
+        //  _mealTicketCurrency.meComments = txtComments.Text;
+        //  _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
+        //  _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
+        //  _mealTicketCurrency.mera = 1;
+        //  _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
+        //  _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
+        //  _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
+        //  _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
+        //  _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+
+        //  //Actualizamos el folio!
+        //  BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, _mealTicketCurrency.meFolios);
+
+        //  // Insertamos el nuevo Meal Ticket con el folio asignado
+        //  BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
+        //}
         //Actualizamos el campo guMealTicket del Guest
         BRGuests.UpdateFieldguMealTicket(true, frmMealTickets._guestID);
 
+        DialogResult = true;
         Close();
       }
     }
@@ -535,6 +613,37 @@ namespace IM.Host.Forms
         meAuthorizedBy = App.User.User.peID
       };
     }
+    #endregion
+    #region txtAdults_PreviewKeyDown
+    /// <summary>
+    /// Calcula el total de adults cuando se presiona Enter
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void txtAdults_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        CalculateTotalAdults();
+      }
+    }
+    #endregion
+
+    #region txtMinors_PreviewKeyDown
+    /// <summary>
+    /// calcula el total de minors cuando se presione enter
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 19/Agosto/2016 Created
+    /// </history>
+    private void txtMinors_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        CalculateTotalMinors();
+      }
+    } 
     #endregion
   }
 }

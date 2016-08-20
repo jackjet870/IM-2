@@ -153,6 +153,9 @@
     <Compile Include="Forms\frmCancelExternalProducts.xaml.cs">
       <DependentUpon>frmCancelExternalProducts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmExchangeRateDetail.xaml.cs">
+      <DependentUpon>frmExchangeRateDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmGiftsReceiptPayments.xaml.cs">
       <DependentUpon>frmGiftsReceiptPayments.xaml</DependentUpon>
     </Compile>
@@ -198,6 +201,7 @@
     <Compile Include="Forms\frmShowsSalesmen.xaml.cs">
       <DependentUpon>frmShowsSalesmen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ObserableCollection.cs" />
     <Compile Include="Reports\rptBookingDeposits1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -276,10 +280,6 @@
       <DependentUpon>rptRefundLetter.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Page Include="Forms\frmAddExchangeRate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Forms\frmEntryFieldsData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -300,9 +300,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\frmExchangeRateEdit.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Forms\frmExchangeRateDetail.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\frmExchangeRateLog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -376,14 +376,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Forms\frmAddExchangeRate.xaml.cs">
-      <DependentUpon>frmAddExchangeRate.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmExchangeRate.xaml.cs">
       <DependentUpon>frmExchangeRate.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmExchangeRateEdit.xaml.cs">
-      <DependentUpon>frmExchangeRateEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmExchangeRateLog.xaml.cs">
       <DependentUpon>frmExchangeRateLog.xaml</DependentUpon>

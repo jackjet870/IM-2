@@ -134,7 +134,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 05/03/2016 Created
     /// </history>
-    private void btnLog_Click(object sender, RoutedEventArgs e)
+    private void btnLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       ExchangeRateData itemRow = grdExchangeRate.SelectedItem as ExchangeRateData;
 
@@ -146,10 +146,8 @@ namespace IM.Host.Forms
       }
       else
       {
-        UIHelper.ShowMessage("Select a exchange rate", MessageBoxImage.Information);
+        UIHelper.ShowMessage("Select an exchange rate", MessageBoxImage.Information);
       }
-
-
     }
     #endregion
 
@@ -160,7 +158,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 03/14/2016 Created
     /// </history>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
+    private void btnEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // Habilitamos los botones correspondientes.
       btnCancel.IsEnabled = true;
@@ -175,7 +173,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 03/14/2016 Created
     /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    private void btnCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // Deshabilitamos los botones correspondientes.
       btnEdit.IsEnabled = true;
@@ -190,7 +188,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 03/14/2016 Created
     /// </history>
-    private void btnAdd_Click(object sender, RoutedEventArgs e)
+    private void btnAdd_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       // Se verifica si esta en modo edicion
       if (!btnEdit.IsEnabled)
@@ -204,7 +202,7 @@ namespace IM.Host.Forms
       {
         // Mandamos ejecutar el formulario para agregar nuevo Exchange Rate
         ExchangeRateData exchangeCurrent = grdExchangeRate.SelectedItem as ExchangeRateData;
-        frmExchangeRateEdit frmExchangeEdit = new frmExchangeRateEdit(EnumMode.Add) { Owner = this };
+        frmExchangeRateDetail frmExchangeEdit = new frmExchangeRateDetail(EnumMode.Add) { Owner = this };
         frmExchangeEdit.lstCurrencies = lstDistict;
 
         // Si se agregó un nuevo item
@@ -254,7 +252,7 @@ namespace IM.Host.Forms
         // Verificamos que no sea currency MEX
         if (!exchangeCurrent.excu.Equals("MEX"))
         {
-          frmExchangeRateEdit frmExchangeEdit = new frmExchangeRateEdit(EnumMode.Edit) { Owner = this };
+          frmExchangeRateDetail frmExchangeEdit = new frmExchangeRateDetail(EnumMode.Edit) { Owner = this };
           // clonamos las propiedades del ExchangeRateData a editar
           frmExchangeEdit.exchangeDate = ObjectHelper.CopyProperties(exchangeCurrent);
 
@@ -314,6 +312,5 @@ namespace IM.Host.Forms
         calDate.SelectedDate = e.AddedDate.Value.AddDays(day - 1);
     }
     #endregion
-
   }
 }

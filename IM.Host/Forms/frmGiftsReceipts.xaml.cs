@@ -101,6 +101,7 @@ namespace IM.Host.Forms
       _dtpClose = BRSalesRooms.GetCloseSalesRoom(EnumEntities.GiftsReceipts, App.User.SalesRoom.srID);
 
       InitializeComponent();
+      UIHelper.SetUpControls(new GiftsReceiptDetail(), tbMain);
     }
     #endregion
 
@@ -369,7 +370,7 @@ namespace IM.Host.Forms
       await Load_Payments(txtgrID.Text);
 
       // Obtenemos los datos del huesped
-      GetGuestData(txtgrgu.Text != "" ? Convert.ToInt32(txtgrgu.Text) : 0);
+      await GetGuestData(txtgrgu.Text != "" ? Convert.ToInt32(txtgrgu.Text) : 0);
 
       _busyIndicator.IsBusy = false;
 
@@ -383,7 +384,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 18/Abril/2016 Created
     /// </history>
-    private void New_GiftReceipt()
+    private async void New_GiftReceipt()
     {
       _newGiftReceipt = true;
 
@@ -399,7 +400,7 @@ namespace IM.Host.Forms
       if (_guestID > 0)
       {
         // sugerimos los datos del huesped
-        GetGuestData(_guestID);
+        await GetGuestData(_guestID);
         txtgrgu.IsEnabled = false;
         txtgrCxCComments.Text = txtgrComments.Text = "";
       }
@@ -1009,7 +1010,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Abril/2016 Created
     /// </history>
-    private async void GetGuestData(int guestID)
+    private async Task GetGuestData(int guestID)
     {
       // validamos que se haya enviado una clave de huesped
       if (guestID == 0)
@@ -1032,7 +1033,7 @@ namespace IM.Host.Forms
         //cbogrpe.SelectedIndex = _guestShort.guPRInfo
 
         List<PersonnelShort> lstPersonnel = cbogrpe.ItemsSource as List<PersonnelShort>;
-        int index = lstPersonnel.FindIndex(x => x.peID.Equals(_guestShort.guPRInfo));
+        int index = lstPersonnel.FindIndex(x => x.peID.Equals(_guestShort.guPRInvit1));
         if (index != -1)
           cbogrpe.SelectedIndex = index;
         else
@@ -2159,12 +2160,12 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 20/Abril/2016 Created
     /// </history>
-    private void txtgrgu_LostFocus(object sender, RoutedEventArgs e)
+    private async void txtgrgu_LostFocus(object sender, RoutedEventArgs e)
     {
       // Verificamos que el Guest ID exista
       if (txtgrgu.Text != "")
       {
-        GetGuestData(Convert.ToInt32(txtgrgu.Text));
+        await GetGuestData(Convert.ToInt32(txtgrgu.Text));
 
         if (_guestShort == null)
         {
@@ -2210,7 +2211,7 @@ namespace IM.Host.Forms
     {
       if (e.Command == DataGrid.DeleteCommand)
       {
-        GiftsReceiptPaymentShort giftDelete = (GiftsReceiptPaymentShort)grdPayments.SelectedItem;
+        GiftsReceiptPaymentShort giftDelete = grdPayments.SelectedItem as GiftsReceiptPaymentShort;
         _lstPaymentsDelete.Add(giftDelete);
       }
     }
@@ -2220,8 +2221,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Actualiza los campos del guest
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 20/Abril/2016 Created
     /// </history>
@@ -2233,82 +2232,6 @@ namespace IM.Host.Forms
       }
     }
     #endregion
-
-    //#region btnRemoveGift_Click
-    ///// <summary>
-    ///// Funcion que elimina uno o varios row seleccionados del grid Gifts Detail
-    ///// </summary>
-    ///// <param name="sender"></param>
-    ///// <param name="e"></param>
-    ///// <history>
-    ///// [vipacheco] 20/Abril/2016 Created
-    ///// </history>
-    //private void btnRemoveGift_Click(object sender, RoutedEventArgs e)
-    //{
-    //  if (grdGifts.SelectedItems.Count == 0)
-    //  {
-    //    UIHelper.ShowMessage("Select a row!", MessageBoxImage.Information);
-    //    return;
-    //  }
-
-    //  // Obtenemos los index de los row a eliminar
-    //  string giftsNoDelete = "";
-    //  List<GiftsReceiptDetail> indexRemove = new List<GiftsReceiptDetail>();
-    //  foreach (GiftsReceiptDetail item in grdGifts.SelectedItems)
-    //  {
-    //    GiftsReceiptDetail _selected;
-    //    if (item is GiftsReceiptDetail)
-    //    {
-    //      _selected = item;
-
-    //      if (_selected.geInPVPPromo)
-    //        giftsNoDelete += frmHost._lstGifts.Where(x => x.giID == _selected.gegi).Select(s => s.giN).First() + "\r\n";
-    //      else
-    //        indexRemove.Add(_selected);
-    //    }
-    //  }
-
-    //  //Verificamos si algun gift de los seleccionados no se elimino
-    //  if (giftsNoDelete != "")
-    //    UIHelper.ShowMessage("You can not delete the gifts: \r\n" + giftsNoDelete + " because have been given in Sistur promotions", MessageBoxImage.Information);
-
-    //  // eliminamos los row seleccionados
-    //  for (int i = 0; i <= indexRemove.Count - 1; i++)
-    //  {
-    //    GiftsReceiptDetail item = indexRemove[i];
-
-    //    if (_newExchangeGiftReceipt || _newGiftReceipt)
-    //      obsGifts.Remove(item);
-    //    else
-    //    {
-    //      var _cointains = obsGiftsComplet.Where(x => x.gegi == item.gegi).SingleOrDefault(); // Verificamos si existe en la lista inicial
-
-    //      // si se encuentra
-    //      if (_cointains != null)
-    //      {
-    //        if (_modeOpen == EnumMode.PreviewEdit || _modeOpen == EnumMode.Edit)
-    //        {
-    //          GiftsReceiptDetail _deleteGift = BRGiftsReceiptDetail.GetGiftReceiptDetail(item.gegr, item.gegi);
-
-    //          // Verificamos que no se encuentre en el log de acciones
-    //          List<KeyValuePair<EnumMode, GiftsReceiptDetail>> _actionpreview = logGiftDetail.Where(x => x.Value.gegi == _deleteGift.gegi).ToList();
-
-    //          if (_actionpreview != null && _actionpreview.Count > 0)
-    //          {
-    //            // eliminamos todas las acciones anteriores
-    //            foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> current in _actionpreview)
-    //            {
-    //              logGiftDetail.Remove(current);
-    //            }
-    //          }
-    //          logGiftDetail.Add(new KeyValuePair<EnumMode, GiftsReceiptDetail>(EnumMode.Delete, _deleteGift));
-    //        }
-    //      }
-    //      obsGifts.Remove(item);
-    //    }
-    //  }
-    //}
-    //#endregion
 
     #region SavePromotionsOpera
     /// <summary>

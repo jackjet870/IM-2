@@ -88,7 +88,6 @@
                 <TextBlock x:Name="lblTo" TextWrapping="Wrap" Text="To" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <xctk:DateTimePicker x:Name="dtpTo" Width="130" Height="22" Format="ShortDate" TextAlignment="Left"/>
               </StackPanel>
-
               <Button x:Name="btnSearch" Content="Search" Height="25" Width="75" Margin="25,0,0,0" Click="btnSearch_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
             </StackPanel>
           </GroupBox>
@@ -170,7 +169,7 @@
                 <TextBlock x:Name="lblgrRoomNum" HorizontalAlignment="Left" Margin="374,81,0,0" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="374,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grRoomNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" PreviewTextInput="int_PreviewTextInput" Grid.Column="2" MaxLength="6"/>
                 <TextBlock x:Name="lblgrPax" HorizontalAlignment="Left" Margin="447,81,0,0" TextWrapping="Wrap" Text="Pax" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="447,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grPax,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:0.0}, FallbackValue=0.0}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" MaxLength="4"/>
+                <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="447,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grPax,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, FallbackValue=0.0}" IsReadOnly="True" Grid.Column="2" MaxLength="4"/>
                 <TextBlock x:Name="lblgrTaxiOut" HorizontalAlignment="Left" Margin="519,81,0,0" TextWrapping="Wrap" Text="Taxi Out" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="519,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOut, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" MaxLength="19"/>
                 <TextBlock x:Name="lblgrTaxiOutDiff" HorizontalAlignment="Left" Margin="592,81,0,0" TextWrapping="Wrap" Text="Taxi Out Diff" VerticalAlignment="Top" Grid.Column="2"/>
