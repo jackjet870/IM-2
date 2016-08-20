@@ -280,7 +280,8 @@ namespace IM.Host.Forms
 
             // Guardamos las promociones en Sistur
             string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
-            UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save promotions in sistur");
+            if(!string.IsNullOrEmpty(msjSavePromotionsSistur))
+              UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save promotions in sistur");
           }
         }
 

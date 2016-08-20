@@ -1618,15 +1618,17 @@ namespace IM.Host.Forms
       {
         // Guardamos las promociones de Sistur
         string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(receiptID, txtChangedBy.Text, App.User.User.peID);
-        UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save Promotions Sistur");
+        if (!string.IsNullOrWhiteSpace(msjSavePromotionsSistur))
+          UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save Promotions Sistur");
       }
 
       // si se maneja cargos a habitacion en Opera
       if (ConfigHelper.GetString("UseRoomCharges").ToUpper().Equals("TRUE"))
       {
         // guardamos los cargos a habitacion en Opera
-        string msj = WirePRHelper.SaveRoomChargesOpera(receiptID, txtChangedBy.Text);
-        UIHelper.ShowMessage(msj, MessageBoxImage.Information, "Gifts Receipt");
+        string msjGiftsReceipt = WirePRHelper.SaveRoomChargesOpera(receiptID, txtChangedBy.Text);
+        if(!string.IsNullOrWhiteSpace(msjGiftsReceipt))
+          UIHelper.ShowMessage(msjGiftsReceipt, MessageBoxImage.Information, "Gifts Receipt");
       }
 
       // si se maneja promociones de Opera

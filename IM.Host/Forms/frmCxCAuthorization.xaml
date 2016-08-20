@@ -181,7 +181,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TabControl x:Name="tbcAuthorized" Style="{StaticResource TabControlStyle}">
+                    <TabControl x:Name="tbcAuthorized" Style="{StaticResource TabControlStyle}" Height="27">
                         <TabItem x:Name="Unauthorized" Header="Unauthorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
                         <TabItem x:Name="Authorized" Header="Authorized CxC's" Style="{StaticResource TabItemStyle}" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown"/>
                     </TabControl>
@@ -194,7 +194,18 @@
         <!--#region  DataGrid Principal-->
         <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,10">
             <Grid Background="#FFE5E5E5">
-                <DataGrid x:Name="dtgCxC"  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+                <DataGrid x:Name="dtgCxC"
+                          AutoGenerateColumns="False" 
+                          EnableRowVirtualization="True" 
+                          ItemsSource="{Binding}" 
+                          RowDetailsVisibilityMode="VisibleWhenSelected" 
+                          CanUserAddRows="False" 
+                          CanUserDeleteRows="False" 
+                          CanUserResizeColumns="False" 
+                          CanUserResizeRows="False"
+                          AlternatingRowBackground="LightBlue" 
+                          AlternationCount="2" 
+                          SelectionMode="Single">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt" IsReadOnly="True" Width="auto"/>
@@ -212,16 +223,7 @@
                         <DataGridTextColumn x:Name="grcxcTaxiOutColumn" Binding="{Binding grcxcTaxiOut, StringFormat=\{0:C\}}" Header="CxC Taxi Out" IsReadOnly="True" Width="auto"/>
                         <DataGridTextColumn x:Name="CxCColumn" Binding="{Binding CxC, StringFormat=\{0:C\}}" Header="CxC" IsReadOnly="True" Width="auto"/>
 
-                        <!--<DataGridCheckBoxColumn x:Name="AuthorizedColumn" Header="Auth." Width="auto" Binding="{Binding Authorized,  Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridCheckBoxColumn.CellStyle>
-                                <Style>
-                                    <EventSetter Event="CheckBox.Checked" Handler="AuthorizedBox_Click"/>
-                                    <EventSetter Event="CheckBox.Unchecked" Handler="AuthorizedBox_Click"/>
-                                   
-                                </Style>
-                            </DataGridCheckBoxColumn.CellStyle>
 
-                        </DataGridCheckBoxColumn>-->
 
                         <DataGridTemplateColumn Header="Auth." Width="auto">
                             <DataGridTemplateColumn.CellTemplate>

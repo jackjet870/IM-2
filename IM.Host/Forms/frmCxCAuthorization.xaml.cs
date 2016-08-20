@@ -17,6 +17,7 @@ using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
+ 
   /// <summary>
   /// Interaction logic for frmCxCAuthorization.xaml
   /// </summary>
@@ -382,8 +383,7 @@ namespace IM.Host.Forms
     private void AuthorizedBox_Click(object sender, RoutedEventArgs e)
     {
       var item = dtgCxC.SelectedItem as CxCData;
-      var columns = dtgCxC.CurrentCell.Column.DisplayIndex;
-      
+            
       decimal convertToDecimal = 0;
 
       string convert = (item.grAmountPaid != null) ? item.grAmountPaid.Value.ToString() : "0";
@@ -748,34 +748,6 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region AuthComments LostFocus
-    /// <summary>
-    /// Metodo para rellenar el Texbox de comentarios
-    /// </summary>
-    /// <history>
-    /// [michan] 20/06/2016 Created
-    /// </history>
-    private void AuthComments_LostFocus(object sender, RoutedEventArgs e)
-    {
-      var item = dtgCxC.SelectedItem as CxCData;
-      var txt = sender as TextBox;
-      item.grcxcAuthComments = txt.Text;
-    }
-    #endregion
-
-    #region AuthComments Loaded
-    /// <summary>
-    /// Metodo que se ejecuta despues de que el Texbox de comentarios ha finalizado
-    /// </summary>
-    /// <history>
-    /// [michan] 21/06/2016 Created
-    /// </history>
-    private void AuthComments_Loaded(object sender, RoutedEventArgs e)
-    {
-      var txt = sender as TextBox;
-      txt.Focus();
-    }
-        #endregion
 
     #region Status
         
@@ -860,7 +832,8 @@ namespace IM.Host.Forms
     
     private void dtgCxC_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      
+      var dg = sender as DataGrid;
+      if (dg != null) StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
     }
     
   }
