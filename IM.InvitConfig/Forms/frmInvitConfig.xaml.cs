@@ -9,7 +9,7 @@ using IM.Model;
 using IM.Model.Enums;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace IM.InvitConfig.Forms
 {
@@ -22,8 +22,8 @@ namespace IM.InvitConfig.Forms
   public partial class frmInvitConfig : Window, IRichTextBoxToolBar
   {
     #region Variables Globales
-    private InvitationText _rtfInvitation;
-    private RichTextBox _rtb; 
+    private InvitationText _rtfInvitation = new InvitationText();
+    private RichTextBox _rtb;
     #endregion
 
     #region Contructores y destructores
@@ -31,26 +31,26 @@ namespace IM.InvitConfig.Forms
     {
       InitializeComponent();
       #region Manejadores de Eventos
-      tbrStyle.eColorPick += new EventHandler(ColorPick);
-      tbrStyle.eExportRTF += new EventHandler(ExportRTF);
-      tbrStyle.eLoadRTF += new EventHandler(LoadRTF);
-      tbrStyle.eTextBold += new EventHandler(TextBold);
-      tbrStyle.eTextCenter += new EventHandler(TextCenter);
-      tbrStyle.eTextItalic += new EventHandler(TextItalic);
-      tbrStyle.eTextLeft += new EventHandler(TextLeft);
-      tbrStyle.eTextRight += new EventHandler(TextRight);
-      tbrStyle.eTextStrikeOut += new EventHandler(TextStrikeOut);
-      tbrStyle.eTextUnderLine += new EventHandler(TextUnderLine);
-      tbrFontStyle.eChangeFontFamily += new EventHandler(ChangeFontFamily);
-      tbrFontStyle.eChangeFontSize += new EventHandler(ChangeFontSize);
+      tbrStyle.eColorPick += ColorPick;
+      tbrStyle.eExportRTF += ExportRTF;
+      tbrStyle.eLoadRTF += LoadRTF;
+      tbrStyle.eTextBold += TextBold;
+      tbrStyle.eTextCenter += TextCenter;
+      tbrStyle.eTextItalic += TextItalic;
+      tbrStyle.eTextLeft += TextLeft;
+      tbrStyle.eTextRight += TextRight;
+      tbrStyle.eTextStrikeOut += TextStrikeOut;
+      tbrStyle.eTextUnderLine += TextUnderLine;
+      tbrFontStyle.eChangeFontFamily += ChangeFontFamily;
+      tbrFontStyle.eChangeFontSize += ChangeFontSize;
       #endregion
-    } 
+    }
     #endregion
 
     #region Eventos
     public void ChangeFontFamily(object sender, EventArgs e)
-    {      
-      RichTextBoxToolBar.OnChangeFontFamily(ref _rtb, ref tbrFontStyle.cbxfontFamilies);
+    {
+      RichTextBoxToolBar.OnChangeFontFamily(ref _rtb, ref tbrFontStyle.cbxfontFamilies);     
     }
 
     public void ChangeFontSize(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace IM.InvitConfig.Forms
 
     public void ColorPick(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnColorPick(ref _rtb);
+      RichTextBoxToolBar.OnColorPick(ref _rtb, ref tbrStyle.imgColorPick);
     }
 
     public void ExportRTF(object sender, EventArgs e)
@@ -75,27 +75,27 @@ namespace IM.InvitConfig.Forms
 
     public void TextBold(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnTextBold(ref _rtb);
+      RichTextBoxToolBar.OnTextBold(ref _rtb);     
     }
 
     public void TextCenter(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnTextCenter(ref _rtb);
+      RichTextBoxToolBar.OnTextCenter(ref _rtb);     
     }
 
     public void TextItalic(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnTextItalic(ref _rtb);
+      RichTextBoxToolBar.OnTextItalic(ref _rtb);     
     }
 
     public void TextLeft(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnTextLeft(ref _rtb);
+      RichTextBoxToolBar.OnTextLeft(ref _rtb);      
     }
 
     public void TextRight(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnTextRight(ref _rtb);
+      RichTextBoxToolBar.OnTextRight(ref _rtb);      
     }
 
     public void TextStrikeOut(object sender, EventArgs e)
@@ -220,6 +220,7 @@ namespace IM.InvitConfig.Forms
     #endregion
 
     #region btnSave_Click
+
     /// <summary>
     /// Guarda losa cambios de la edición 
     /// </summary>
@@ -233,25 +234,45 @@ namespace IM.InvitConfig.Forms
         StaStart("Save Invit...");
         EnableControls(true, false, true, false);
         rtbFooter.IsReadOnly = rtbHeader.IsReadOnly = true;
+
         #region Carga de Header y Footer
+
         //Se almacena en una variabele los RTF´s
         var header = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbHeader);
         var footer = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbFooter);
         StaEnd();
 
-        //Si almenos un RichTexBox se modifico entonces se hace la actualización
-        if (_rtfInvitation.itRTFFooter == footer && _rtfInvitation.itRTFHeader == header) return;
-        _rtfInvitation.itRTFFooter = footer;
-        _rtfInvitation.itRTFHeader = header;
-        await BREntities.OperationEntity(_rtfInvitation, EnumMode.Edit);
+        //Si es nula la entidad quiere decir que no existe en la base de datos así que hay que agrgarlo
+        //de lo contrario se modifica
+        if (_rtfInvitation == null)
+        {
+          _rtfInvitation = new InvitationText
+          {
+            itls = cmbLeadSource.SelectedValue.ToString(),
+            itla = cmbLanguage.SelectedValue.ToString(),
+            itRTFFooter = footer,
+            itRTFHeader = header
+          };
+          await BREntities.OperationEntity(_rtfInvitation, EnumMode.Add);
+        }
+        else
+        {
+          //Si almenos un RichTexBox se modifico entonces se hace la actualización
+          if (_rtfInvitation.itRTFFooter == footer && _rtfInvitation.itRTFHeader == header) return;
+          _rtfInvitation.itRTFFooter = footer;
+          _rtfInvitation.itRTFHeader = header;
+          await BREntities.OperationEntity(_rtfInvitation, EnumMode.Edit);
+        }      
         StaEnd();
+
         #endregion
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error);
       }
-    } 
+    }
+
     #endregion
 
     #region btnCancel_Click
@@ -416,5 +437,18 @@ namespace IM.InvitConfig.Forms
     }
     #endregion
 
+    #region SelectionChanged
+    /// <summary>
+    /// Modifica los controles segun el las propiedades del texto seleccionado
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 20/08/2016
+    ///  </history>
+    private void SelectionChanged(object sender, RoutedEventArgs e)
+    {
+      RichTextBoxToolBar.OnSalectionChanded(ref _rtb, ref tbrFontStyle, ref tbrStyle);
+    }
+
+    #endregion
   }
 }

@@ -61,7 +61,7 @@ namespace IM.Inhouse.Forms
       cbmguPRNoBook.SelectedValue = _guest.guPRNoBook;
 
       // establecemos el modo lectura
-      SetMode(EnumMode.PreviewEdit);
+      SetMode(EnumMode.ReadOnly);
     }
     #endregion
 
@@ -99,7 +99,7 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void SetMode(EnumMode enumMode)
     {
-      var enable = enumMode != EnumMode.PreviewEdit;
+      var enable = enumMode != EnumMode.ReadOnly;
       //Controles del detalle 
       txtguNoBookD.IsEnabled = cbmgunb.IsEnabled = cbmguPRNoBook.IsEnabled = enable;
 

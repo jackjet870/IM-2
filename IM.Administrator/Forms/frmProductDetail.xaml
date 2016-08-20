@@ -50,7 +50,7 @@
                 <DockPanel Name="dcpText" Grid.Row="4" IsEnabled="False" LastChildFill="True">
                     <UC:ToolBarRtfFontStyle DockPanel.Dock="Top" Name="ucRichTextBoxToolBar2" Margin="3,0,3,0" />
                     <UC:ToolBarRtfStyle DockPanel.Dock="Left" Margin="8,3,0,0" Name="ucRichTextBoxToolBar1"/>
-                    <RichTextBox DockPanel.Dock="Top" x:FieldModifier="public" Margin="8,8,0,0" x:Name="richTextBox" BorderThickness="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                    <RichTextBox DockPanel.Dock="Top" x:FieldModifier="public" Margin="8,8,0,0" x:Name="richTextBox" BorderThickness="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" SelectionChanged="richTextBox_SelectionChanged">
                         <RichTextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">

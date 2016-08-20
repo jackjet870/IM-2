@@ -252,7 +252,7 @@ namespace IM.Administrator.Forms
     /// </history>
     public void TextItalic(object sender, EventArgs e)
     {
-      throw new NotImplementedException();
+      RichTextBoxToolBar.OnTextItalic(ref richTextBox);
     }
     #endregion
 
@@ -265,7 +265,7 @@ namespace IM.Administrator.Forms
     /// </histoty>
     public void TextUnderLine(object sender, EventArgs e)
     {
-      throw new NotImplementedException();
+      RichTextBoxToolBar.OnTextUnderLine(ref richTextBox);
     }
     #endregion
 
@@ -332,7 +332,7 @@ namespace IM.Administrator.Forms
     /// </history>
     public void ColorPick(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnColorPick(ref richTextBox);
+      RichTextBoxToolBar.OnColorPick(ref richTextBox, ref ucRichTextBoxToolBar1.imgColorPick);
     }
     #endregion
 
@@ -529,8 +529,22 @@ namespace IM.Administrator.Forms
         UIHelper.ShowMessage(ex);
       }
     }
+
     #endregion
 
+    #endregion
+
+    #region richTextBox_SelectionChanged
+    /// <summary>
+    /// Modifica los controles segun el las propiedades del texto seleccionado
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 20/08/2016
+    ///  </history>
+    private void richTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+    {
+      RichTextBoxToolBar.OnSalectionChanded(ref richTextBox, ref ucRichTextBoxToolBar2, ref ucRichTextBoxToolBar1);
+    } 
     #endregion
   }
 }

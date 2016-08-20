@@ -493,9 +493,7 @@ namespace IM.Host.Forms
     /// [jorcanche] 20/05/2016
     /// </history>
     private void SetMode(EnumMode mode)
-    {
-     
-
+    {    
       var blnEnable = mode != EnumMode.ReadOnly ? true : false;
       //Grid principal
       dtgSale.IsEnabled = !blnEnable;

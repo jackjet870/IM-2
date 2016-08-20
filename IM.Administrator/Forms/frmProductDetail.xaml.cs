@@ -240,7 +240,7 @@ namespace IM.Administrator.Forms
     /// </history>
     public void ColorPick(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnColorPick(ref richTextBox);
+      RichTextBoxToolBar.OnColorPick(ref richTextBox, ref ucRichTextBoxToolBar1.imgColorPick);
     }
     #endregion
 
@@ -502,9 +502,22 @@ namespace IM.Administrator.Forms
       skpStatus.Visibility = Visibility.Hidden;
       txtStatus.Text = "";
       Cursor = null;
-    } 
-    #endregion
+    }
     #endregion
 
+    #endregion
+
+    #region richTextBox_SelectionChanged
+    /// <summary>
+    /// Modifica los controles segun el las propiedades del texto seleccionado
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 20/08/2016
+    ///  </history>
+    private void richTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+    {
+      RichTextBoxToolBar.OnSalectionChanded(ref richTextBox, ref ucRichTextBoxToolBar2, ref ucRichTextBoxToolBar1);
+    } 
+    #endregion
   }
 }

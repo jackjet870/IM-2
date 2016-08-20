@@ -187,7 +187,7 @@
 
             <!--#region Contenido RichTextBox-->
             <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black"  Grid.Column="1" >
-                <RichTextBox x:FieldModifier="public" Grid.Column="1" x:Name="richTextBox" BorderThickness="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                <RichTextBox x:FieldModifier="public" Grid.Column="1" x:Name="richTextBox" BorderThickness="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" SelectionChanged="richTextBox_SelectionChanged">
                     <RichTextBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">
