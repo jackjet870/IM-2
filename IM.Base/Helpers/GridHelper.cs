@@ -707,7 +707,9 @@ namespace IM.Base.Helpers
                   (maxLengthProp > 0 && maxLengthProp <= 3) ? maxLengthProp : 3)); //Asignamos el maxLength 
                 style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
                   new TextCompositionEventHandler(TextBoxHelper.ByteTextInput))); //Validar enteros
-                break;
+                  style.Setters.Add(new EventSetter(UIElement.KeyDownEvent,
+                  new KeyEventHandler(TextBoxHelper.Decimal_PreviewKeyDown))); //Validar enteros
+                  break;
               }
 
                 #endregion

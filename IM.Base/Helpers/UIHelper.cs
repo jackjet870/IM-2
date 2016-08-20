@@ -272,7 +272,7 @@ namespace IM.Base.Helpers
               #region Byte
               case TypeCode.Byte:
                 {
-                  txt.MaxLength = 3;
+                  txt.MaxLength = (maxLengthProp > 0 && maxLengthProp <= 3) ? maxLengthProp : 3;
                   txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.Search)
