@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Classes="clr-namespace:IM.Base.Classes"
+        xmlns:Converters="clr-namespace:IM.Base.Converters"
         xmlns:styClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"        
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -14,7 +15,7 @@
         ShowInTaskbar="False" Loaded="Window_Loaded" d:DataContext="{d:DesignInstance Classes:GuestInvitationRules}">
     <Window.Resources>
         <ResourceDictionary>
-            <Classes:InvitationConverter x:Key="converterInvitation" />
+            <Converters:MathOperationConverter x:Key="MathOperationConverter"/>
             <CollectionViewSource x:Key="giftList" Source="{Binding Gifts}" />
             <CollectionViewSource x:Key="currencyList" Source="{Binding Currencies}" />
             <CollectionViewSource x:Key="paymentTypeList" Source="{Binding PaymentTypes}" />
@@ -31,7 +32,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTimePicker-TK.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>                
+        </ResourceDictionary>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=LoadCombo}" Key="F5" Modifiers="Ctrl" />
@@ -123,7 +124,7 @@
                             </StackPanel>
                         </Border>
                         <StackPanel Margin="2">
-                            
+
                             <TextBlock Name="txbMode" Text="{Binding InvitationInfo}" VerticalAlignment="Center" FontSize="14" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
                             <TextBlock Name="txbInformation" VerticalAlignment="Center" FontSize="10" Foreground="Gray" TextWrapping="Wrap" FontWeight="Bold" Margin="10,2,10,0">
                                 <TextBlock.Text>
@@ -135,7 +136,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
                         </StackPanel>
-                        
+
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -542,7 +543,7 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel HorizontalAlignment="Left">
                                                             <TextBlock Text="Pax" Margin="0,5"/>
-                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding Guest.guPax, Mode=TwoWay, StringFormat={}{0:n2}, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="Arrival*" Margin="0,5"/>
@@ -656,34 +657,34 @@
                                 </Border>
                                 <!--#endregion-->
 
-                            <!--#region Deposits Row 2-->
+                                <!--#region Deposits Row 2-->
                                 <Border x:Name="brdBookingDeposits" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
-                                <StackPanel >
-                                    <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-                                    <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
-                                        <StackPanel>
-                                            <DataGrid BeginningEdit="dtgBookingDeposits_BeginningEdit" CellEditEnding="dtgBookingDeposits_CellEditEnding" RowEditEnding="dtgBookingDeposits_RowEditEnding" PreparingCellForEdit="dtgGifts_PreparingCellForEdit" Name="dtgBookingDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding BookingDepositList}" 
+                                    <StackPanel >
+                                        <TextBlock Text="Deposits" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                        <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                            <StackPanel>
+                                                <DataGrid BeginningEdit="dtgBookingDeposits_BeginningEdit" CellEditEnding="dtgBookingDeposits_CellEditEnding" RowEditEnding="dtgBookingDeposits_RowEditEnding" PreparingCellForEdit="dtgGifts_PreparingCellForEdit" Name="dtgBookingDeposits" Margin="0,0,0,10" MaxHeight="80" Height="80" ItemsSource="{Binding BookingDepositList}" 
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" RowValidationErrorTemplate="{x:Null}" >
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:dd/MM/yyyy}'}" IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">
-                                                        <DataGridTextColumn.ElementStyle>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Text" >
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource ResourceKey=converterInvitation}">
-                                                                            <Binding Path="bdAmount"/>
-                                                                            <Binding Path="bdReceived"/>
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </DataGridTextColumn.ElementStyle>
-                                                    </DataGridTextColumn>
-                                                    <DataGridComboBoxColumn x:Name="cmbCurrencyDeposits" Header="Currency" Width="90"                                                                           
+                                                        <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:N2}}"/>
+                                                        <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">
+                                                            <DataGridTextColumn.ElementStyle>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" >
+                                                                        <Setter.Value>
+                                                                            <MultiBinding Converter="{StaticResource ResourceKey=MathOperationConverter}" ConverterParameter="REST">
+                                                                                <Binding Path="bdAmount"/>
+                                                                                <Binding Path="bdReceived"/>
+                                                                            </MultiBinding>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </DataGridTextColumn.ElementStyle>
+                                                        </DataGridTextColumn>
+                                                        <DataGridComboBoxColumn x:Name="cmbCurrencyDeposits" Header="Currency" Width="90"                                                                           
                                                                             SelectedValueBinding="{Binding bdcu,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="cuN"
                                                                             SelectedValuePath="cuID"
@@ -698,7 +699,7 @@
                                                                             DisplayMemberPath="dsN"
                                                                             SelectedValuePath="dsID"
                                                                             ItemsSource="{Binding Source={StaticResource disputeStatusList}}"/>
-                                                    <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
+                                                        <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
                                                                             SelectedValueBinding="{Binding bdpc,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="pcN"
                                                                             SelectedValuePath="pcID"
@@ -708,22 +709,22 @@
                                                                             DisplayMemberPath="ccN"
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
-                                                    <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel>
-                                                    <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
-                                                    <TextBox Name="txtBurned" Width="120" Text="{Binding Guest.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
-                                                </StackPanel>
-                                                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
-                                                    <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
+                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                                        <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel>
+                                                        <TextBlock Text="Burned" TextAlignment="Center" Margin="0,5"/>
+                                                        <TextBox Name="txtBurned" Width="120" Text="{Binding Guest.guDepositTwisted, Mode=TwoWay, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
+                                                        <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
                                                               ItemsSource="{Binding Currencies}" Style="{StaticResource cbx-General}" 
                                                               ItemTemplate="{StaticResource cbx-Currency-Concat}"
                                                               ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}"

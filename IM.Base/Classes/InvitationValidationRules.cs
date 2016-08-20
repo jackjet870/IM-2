@@ -1082,8 +1082,8 @@ namespace IM.Base.Classes
     {
       if (!string.IsNullOrWhiteSpace(number))
       {
-        int numb = 0;
-        int.TryParse(number, out numb);
+        decimal numb = 0;
+        decimal.TryParse(number, out numb);
         if (blnValidateBounds)
         {
           if (numb > maxNumber)

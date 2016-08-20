@@ -205,7 +205,7 @@ namespace IM.Base.Forms
 
           UIHelper.ShowMessage("The data was saved successfully");
 
-          this.Close();
+          Close();
         }
       }
       catch (Exception ex)
@@ -333,6 +333,7 @@ namespace IM.Base.Forms
     /// </history>
     private async void imgButtonReLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      
       var login = new frmLogin(loginType: EnumLoginType.Location, program: catObj.Program,
       validatePermission: true, permission: _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations,
       permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: _user.Location.loID);

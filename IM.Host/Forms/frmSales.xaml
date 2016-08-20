@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"        
+        xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"  
+        xmlns:Converters="clr-namespace:IM.Base.Converters;assembly=IM.Base"
         Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
         mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
@@ -24,7 +25,7 @@
             <Setter Property="Margin" Value="3,0,3,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <base:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueC"/>
+        <Converters:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueC"/>
     </Window.Resources>
     <Window.Style>
         <Style TargetType="{x:Type Window}">

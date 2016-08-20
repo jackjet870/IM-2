@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"
+        xmlns:Converters="clr-namespace:IM.Base.Converters;assembly=IM.Base"
         xmlns:styleClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
         mc:Ignorable="d" Title="Mail Outs Configuration"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     WindowState="Normal" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.Resources>
-        <base:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueConverterHelper"/>
+        <Converters:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueConverterHelper"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=RefreshDataSource}" Key="F5" Modifiers="Ctrl"/>
