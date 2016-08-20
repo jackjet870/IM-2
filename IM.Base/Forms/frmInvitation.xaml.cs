@@ -20,7 +20,7 @@ namespace IM.Base.Forms
   /// <summary>
   /// Interaction logic for frmInvitation.xaml
   /// </summary>
-  public partial class frmInvitation : Window, INotifyPropertyChanged
+  public partial class frmInvitation : Window
   {
     #region Propiedades, Atributos
 
@@ -35,45 +35,17 @@ namespace IM.Base.Forms
 
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
-
     private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
     private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
     private bool _dontShowAgainGuestStatus = false;
     public bool _isRebook = false;
-    public GuestInvitationRules catObj { get; set; }
     private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda de Deposits
     private bool _isCellCommitCC = false;//Valida si el commit se hace desde la celda de credit cards
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    #region SetField
-    /// <summary>
-    /// Sirve para setear valores a una propiedad, implementa INotifyPropertyChanged
-    /// Si el nuevo valor es diferente del que ya tenia asignado Se lo asigna.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="field">ref _atributo o propiedad</param>
-    /// <param name="value">value</param>
-    /// <param name="propertyName">Nombre de la propiedad</param>
-    /// <history>
-    /// [erosado] 17/08/2016  Created.
-    /// </history>
-    public void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return;
-      field = value;
-      OnPropertyChanged(propertyName);
-    }
-    private bool _isCellCommitGuestAdditional;
+    private bool _isCellCommitGuestAdditional;//Valida si el commit se hace desde la celda de GuestAdditional
+    public GuestInvitationRules catObj { get; set; }
 
     #endregion Propiedades, Atributos
 
-    #endregion
     /// <summary>
     /// Inicializa en formulario de invitacion
     /// </summary>
@@ -93,7 +65,6 @@ namespace IM.Base.Forms
       _user = user;
       _invitationType = invitationType;
       DataContext = catObj;
-
       _allowReschedule = allowReschedule;
       InitializeComponent();
 
@@ -116,7 +87,6 @@ namespace IM.Base.Forms
 
       #endregion
       #endregion dtgGift
-
     }
 
     #region Eventos de la ventana
@@ -137,8 +107,8 @@ namespace IM.Base.Forms
         _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
         //Cargamos la informacion
         await catObj.LoadAll();
-        
-        Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts,"igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+
+        Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
 
         //Cargamos la UI dependiendo del tipo de Invitacion
         ControlsConfiguration();
@@ -333,7 +303,7 @@ namespace IM.Base.Forms
     /// </history>
     private async void imgButtonReLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      
+
       var login = new frmLogin(loginType: EnumLoginType.Location, program: catObj.Program,
       validatePermission: true, permission: _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations,
       permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: _user.Location.loID);
@@ -1908,7 +1878,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region Eventos del Grid Guest Credit Card 
-    
+
     #region dtgCCCompany_RowEditEnding
     /// <summary>
     /// Valida que esten completos los Row si al terminar la edicion quedo algo nulo la elimina 
@@ -1920,18 +1890,18 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitDeposit)
+        if (_isCellCommitCC)
         {
-          _isCellCommitDeposit = false;
+          _isCellCommitCC = false;
           e.Cancel = true;
         }
         else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab) || !e.Row.IsNewItem)
         {
           int columnIndex = 0;
-          _isCellCommitDeposit = false;
+          _isCellCommitCC = false;
           GuestCreditCard guestCreditCard = e.Row.Item as GuestCreditCard;
           if (guestCreditCard.gdQuantity == 0)
-          {            
+          {
             e.Cancel = true;
             columnIndex = dtgCCCompany.Columns.FirstOrDefault(cl => cl.SortMemberPath == "gdQuantity").DisplayIndex;
           }
@@ -1941,8 +1911,8 @@ namespace IM.Base.Forms
             e.Cancel = true;
           }
           if (e.Cancel)
-          { 
-           _isCellCommitDeposit = true;//true para que no haga el commit
+          {
+            _isCellCommitCC = true;//true para que no haga el commit
             GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
           }
         }
@@ -1950,7 +1920,7 @@ namespace IM.Base.Forms
         {
           e.Cancel = true;
         }
-        
+
       }
     }
     #endregion
@@ -1995,7 +1965,7 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
+        _isCellCommitCC = (Keyboard.IsKeyDown(Key.Enter));
         GuestCreditCard guestCreditCard = e.Row.Item as GuestCreditCard;
         switch (e.Column.SortMemberPath)
         {
@@ -2004,7 +1974,7 @@ namespace IM.Base.Forms
               if (guestCreditCard.gdQuantity == 0)
               {
                 UIHelper.ShowMessage("Quantity can not be 0.");
-                e.Cancel = true;                
+                e.Cancel = true;
               }
               break;
             }
@@ -2014,7 +1984,7 @@ namespace IM.Base.Forms
               break;
             }
         }
-        if(e.Cancel)
+        if (e.Cancel)
         {
           //Regresamos el foco a la columna con el dato mal
           dtgCCCompany.CellEditEnding -= dtgCCCompany_CellEditEnding;
@@ -2026,7 +1996,6 @@ namespace IM.Base.Forms
     #endregion
 
     #endregion
-
 
   }
 }

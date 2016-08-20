@@ -117,6 +117,7 @@
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />
     <Compile Include="Converters\ByteToBooleanConverter.cs" />
+    <Compile Include="Converters\DateAndTimeConverter.cs" />
     <Compile Include="Converters\MathOperationConverter.cs" />
     <Compile Include="Forms\frmGuestsMovements.xaml.cs">
       <DependentUpon>frmGuestsMovements.xaml</DependentUpon>

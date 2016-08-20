@@ -17,24 +17,6 @@ using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
-  // This returns true if sale is on or above targe, otherwise false
-  public class AmountConverter : IValueConverter
-  {
-
-    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    {
-      double amountpay;
-      string convert = (value != null) ? value.ToString() : "0";
-      Double.TryParse(convert, out amountpay);
-      return (amountpay > 0.00) ? true : false;
-    }
-    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    {
-      throw new NotImplementedException();
-    }
-  }
-
-
   /// <summary>
   /// Interaction logic for frmCxCAuthorization.xaml
   /// </summary>

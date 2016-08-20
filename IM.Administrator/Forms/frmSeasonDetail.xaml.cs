@@ -15,62 +15,6 @@ using System.Globalization;
 
 namespace IM.Administrator.Forms
 {
-  #region DateTimeConvert
-  /// <summary>
-  ///   Formatea las fechas de temporada
-  /// </summary>
-  /// <history>
-  ///   [vku] 27/Jul/2016 Created
-  /// </history>
-  public class DateTimeConverterSS : IValueConverter
-  {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      if (value is DateTime)
-      {
-        var test = (DateTime)value;
-        if (test == DateTime.MinValue)
-        {
-          return "";
-        }
-        var date = test.ToString("dd/MM/yyyy");
-        return (date);
-      }
-
-      return string.Empty;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      if (ValidateHelper.IsDate(value.ToString()))
-      {
-        var test = DateTime.Parse(value.ToString());
-        if (test == DateTime.MinValue)
-        {
-          return "";
-        }
-        return (test);
-      }
-      return string.Empty;
-    }
-  }
-  #endregion
-
-  #region ItemSeasonDates
-  /// <summary>
-  ///   Clase para el manejo de rango de fechas no asignadas
-  /// </summary>
-  /// <history>
-  ///   [vku] 27/Jul/2016 Created
-  /// </history>
-  public class ItemSeasonDates
-  {
-    public int Num { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime Finish { get; set; }
-  }
-  #endregion
-
   /// <summary>
   /// Interaction logic for frmSeasonDetail.xaml
   /// </summary>

@@ -227,9 +227,9 @@ namespace IM.Base.Forms
     /// Se ejecuta cuando la celda en edicion pierde el foco
     /// </summary>
     /// <history>
-    /// [erosado] 08/08/2016  Created.
+    /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    private async void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       //Si paso las validaciones del preparingCellForEdit
       if (!_hasError)
@@ -402,7 +402,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel] modified se volvió async
     /// </history>
-    private async void CalculateMaxAuthGifts()
+    private void CalculateMaxAuthGifts()
     {
       //decimal maxAuthGifts = 0;
 

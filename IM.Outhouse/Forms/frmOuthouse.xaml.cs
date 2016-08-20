@@ -352,7 +352,7 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private async void Invit_Click(object sender, RoutedEventArgs e)
+    private void Invit_Click(object sender, RoutedEventArgs e)
     {
       var guest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
       var chk = sender as CheckBox;

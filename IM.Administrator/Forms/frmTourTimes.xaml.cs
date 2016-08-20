@@ -13,47 +13,6 @@ using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
-  #region DateTimeConvert
-  /// <summary>
-  ///   Formatea los horarios de tour
-  /// </summary>
-  /// <history>
-  ///   [vku] 05/Jul/2016 Created
-  /// </history>
-  public class DateTimeConverter : IValueConverter
-  {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      if (value is DateTime)
-      {
-        var test = (DateTime)value;
-        if (test == DateTime.MinValue)
-        {
-          return "";
-        }
-        var date = test.ToString("hh:mm tt");
-        return (date);
-      }
-
-      return string.Empty;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      if (ValidateHelper.IsValidTimeFormat(value.ToString()))
-      {
-        var test = DateTime.Parse(value.ToString());
-        if (test == DateTime.MinValue)
-        {
-          return "";
-        }
-        return (test);
-      }
-      return string.Empty;
-    }
-  }
-  #endregion
-
   /// <summary>
   /// Interaction logic for frmTourTimes.xaml
   /// Catalogo de horarios de tour por dia

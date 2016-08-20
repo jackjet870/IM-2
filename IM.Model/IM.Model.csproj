@@ -129,6 +129,7 @@
     <Compile Include="Classes\GuestInvitation.cs" />
     <Compile Include="Classes\GuestShow.cs" />
     <Compile Include="Classes\Invitation.cs" />
+    <Compile Include="Classes\ItemSeasonDates.cs" />
     <Compile Include="Classes\ItemsList.cs" />
     <Compile Include="Classes\Item.cs" />
     <Compile Include="Classes\MemberSalesmanClubles.cs" />
