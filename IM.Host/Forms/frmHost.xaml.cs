@@ -432,7 +432,7 @@ namespace IM.Host
       _lstTasks.Add(Task.Run(async () =>
       {
         // Tipos de tarifa
-        _lstRateType = await BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
+        _lstRateType = await BRRateTypes.GetRateTypes(null, 1, true, true);
       }));
       _lstTasks.Add(Task.Run(async () =>
       {

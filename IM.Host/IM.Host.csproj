@@ -201,7 +201,6 @@
     <Compile Include="Forms\frmShowsSalesmen.xaml.cs">
       <DependentUpon>frmShowsSalesmen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ObserableCollection.cs" />
     <Compile Include="Reports\rptBookingDeposits1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
