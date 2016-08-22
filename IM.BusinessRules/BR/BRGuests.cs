@@ -1072,7 +1072,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 18/08/2016  Created.
     /// </history>
-    public static async Task<int> SaveGuestShow(GuestShow guestShow,UserData user, string changedBy, string machineName,string ipAddress)
+    public static async Task<int> SaveGuestShow(GuestShow guestShow, UserData user, string changedBy, string machineName, string ipAddress)
     {
       return await Task.Run(() =>
       {
@@ -1081,15 +1081,15 @@ namespace IM.BusinessRules.BR
           DateTime dtServerNow = BRHelpers.GetServerDateTime();
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-          try
-          {
-            int result = 0;
-            //Guardamos los cambios en el Guest
-            dbContext.Entry(guestShow.Guest).State = EntityState.Modified;
-            result = dbContext.SaveChanges();
+            try
+            {
+              int result = 0;
+              //Guardamos los cambios en el Guest
+              dbContext.Entry(guestShow.Guest).State = EntityState.Modified;
+              result = dbContext.SaveChanges();
 
-            //Guardamos el Log del guest
-            dbContext.USP_OR_SaveGuestLog(guestShow.Guest.guID, user.SalesRoom.srHoursDif, changedBy);
+              //Guardamos el Log del guest
+              dbContext.USP_OR_SaveGuestLog(guestShow.Guest.guID, user.SalesRoom.srHoursDif, changedBy);
 
               #region Proceso Invitation Gifts
               //Invitation Gift a Eliminar
@@ -1184,23 +1184,11 @@ namespace IM.BusinessRules.BR
               );
 
               //Creamos la variable en donde se van a concatenar 
-              string strguCCType = string.Empty;
-
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
-              guestShow.GuestCreditCardList.ToList().ForEach(gcc =>
-              {
-                if (gcc.gdQuantity > 1)
-                {
-                  strguCCType = strguCCType + gcc.gdQuantity;
-                }
-                strguCCType = strguCCType + gcc.gdcc + ", ";
-              });
-
-              //Eliminamos la ultima coma
-              strguCCType = strguCCType.TrimEnd(',');
+              string strguCCType = string.Join(", ", guestShow.GuestCreditCardList.
+                Select(x => (x.gdQuantity > 1 ? x.gdQuantity + " " : string.Empty) + x.gdcc));
 
               //Escojemos los primeros 30 caracteres porque es el límite del campo 
-              //guestShow.Guest.guCCType = strguCCType.Substring(0, 30);
               guestShow.Guest.guCCType = strguCCType.Length > 30 ? strguCCType.Substring(0, 30) : strguCCType;
               #endregion
 
@@ -1227,7 +1215,7 @@ namespace IM.BusinessRules.BR
               dbContext.USP_OR_SaveGuestMovement(guestShow.Guest.guID, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Show), changedBy, machineName, ipAddress);
               result += dbContext.SaveChanges();
               #endregion
-              
+
               //Confirmammos la transaccion
               transaction.Commit();
               return result;
@@ -1375,7 +1363,7 @@ namespace IM.BusinessRules.BR
               int nSave = 0;
 
               //Guest
-              dbContext.Entry(guestInvitation.Guest).State = (guestInvitation.Guest.guID>0) ? EntityState.Modified : EntityState.Added;
+              dbContext.Entry(guestInvitation.Guest).State = (guestInvitation.Guest.guID > 0) ? EntityState.Modified : EntityState.Added;
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
 
               //Recargamos el codigo contable
@@ -1481,23 +1469,10 @@ namespace IM.BusinessRules.BR
               );
 
               //Creamos la variable en donde se van a concatenar 
-              string strguCCType = string.Empty;
-
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
-              //string.Join(',', guestInvitation.GuestCreditCardList.Where(x=> x.gdQuantity > 1).Select()
-
-              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
-              {
-                if (gcc.gdQuantity > 1)
-                {
-                  strguCCType = strguCCType + gcc.gdQuantity;
-                }
-                strguCCType = strguCCType + gcc.gdcc + ", ";
-              });
-
-              //Eliminamos la ultima coma
-              strguCCType = strguCCType.TrimEnd(',');
-
+              string strguCCType = string.Join(", ", guestInvitation.GuestCreditCardList.
+                Select(x => (x.gdQuantity > 1 ? x.gdQuantity + " " : string.Empty) + x.gdcc));
+              
               //Escojemos los primeros 30 caracteres porque es el límite del campo 
               guestInvitation.Guest.guCCType = strguCCType.Length > 30 ? strguCCType.Substring(0, 30) : strguCCType;
 
@@ -1528,8 +1503,8 @@ namespace IM.BusinessRules.BR
                   dbContext.USP_OR_UpdateGuestsAdditional(guestInvitation.Guest.guID, guestInvitation.Guest.guPRInvit1, dtServerNow, user.Location.loID, guestInvitation.Guest.guInvit);
                   guestInvitation.AdditionalGuestList.ToList().ForEach(c =>
                   {
-                  //Guardamos el Log del guestAdditional
-                  dbContext.USP_OR_SaveGuestMovement(guestInvitation.Guest.guID, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Contact), user.User.peID, computerName, iPAddress);
+                    //Guardamos el Log del guestAdditional
+                    dbContext.USP_OR_SaveGuestMovement(guestInvitation.Guest.guID, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Contact), user.User.peID, computerName, iPAddress);
                   });
                 }
               }
@@ -1546,14 +1521,14 @@ namespace IM.BusinessRules.BR
             }
             catch
             {
-              transacction.Rollback();              
+              transacction.Rollback();
               throw;
             }
           }
           #endregion
         }
       });
-    } 
+    }
     #endregion
 
     #region SetDeposits
@@ -1607,7 +1582,7 @@ namespace IM.BusinessRules.BR
               //Guest
               dbContext.Entry(guestInvitation.Guest).State = (guestInvitation.Guest.guID > 0) ? EntityState.Modified : EntityState.Added;
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
-                            
+
               #region Gifts
               //Invitation Gift a Eliminar
               #region Eliminar

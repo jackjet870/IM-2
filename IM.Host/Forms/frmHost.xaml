@@ -334,13 +334,18 @@
                 </Style>
               </DataGridTemplateColumn.HeaderStyle>
             </DataGridTemplateColumn>
-            <DataGridCheckBoxColumn x:Name="guTourColumn" Binding="{Binding guTour}" Header="Tour" Width="SizeToHeader">
-              <DataGridCheckBoxColumn.HeaderStyle>
+                        <DataGridTemplateColumn x:Name="guTourColumn"  Header="Tour" Width="SizeToHeader">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guTour}"  Click="ShowShow_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Tour"/>
                 </Style>
-              </DataGridCheckBoxColumn.HeaderStyle>
-            </DataGridCheckBoxColumn>
+                </DataGridTemplateColumn.HeaderStyle>
+            </DataGridTemplateColumn>
             <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
               <DataGridTemplateColumn.CellTemplate >
                 <DataTemplate>
