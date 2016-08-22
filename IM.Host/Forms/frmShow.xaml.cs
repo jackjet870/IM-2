@@ -2162,7 +2162,7 @@ namespace IM.Host.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitDeposit)//Si es cancalado desde la celda
+        if (_isCellCommitDeposit && e.Row.GetIndex() == dtgDeposits.ItemsSource.OfType<object>().ToList().Count)//Si es cancalado desde la celda
         {
           _isCellCommitDeposit = false;
           e.Cancel = true;

@@ -1805,7 +1805,8 @@ namespace IM.Base.Forms
           {
             //Regresamos el foco a la columna con el dato mal
             dtgBookingDeposits.CellEditEnding -= dtgBookingDeposits_CellEditEnding;
-            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
+            dtgBookingDeposits.CurrentCell = new DataGridCellInfo(e.Row.Item, dtgBookingDeposits.Columns[0]);
+            //GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), e.Column.DisplayIndex, true);
             dtgBookingDeposits.CellEditEnding += dtgBookingDeposits_CellEditEnding;
           }
           else
@@ -1829,12 +1830,12 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitDeposit)
+        if (_isCellCommitDeposit && e.Row.GetIndex()==dtgBookingDeposits.ItemsSource.OfType<object>().ToList().Count)//Verificar si es un registro nuevo
         {
           _isCellCommitDeposit = false;
           e.Cancel = true;
         }
-        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab) || !e.Row.IsNewItem)
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))//Si fue commit con el enter desde el la fila
         {
           int columnIndex = 0;
           _isCellCommitDeposit = false;
@@ -1845,7 +1846,7 @@ namespace IM.Base.Forms
             GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
           }
         }
-        else
+        else//Cancela el commit de la fila
         {
           e.Cancel = true;
         }
@@ -1896,12 +1897,12 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitCC)
+        if (_isCellCommitCC && e.Row.GetIndex()== dtgCCCompany.ItemsSource.OfType<object>().ToList().Count)
         {
           _isCellCommitCC = false;
           e.Cancel = true;
         }
-        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab) || !e.Row.IsNewItem)
+        else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
           int columnIndex = 0;
           _isCellCommitCC = false;

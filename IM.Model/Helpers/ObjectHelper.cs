@@ -80,7 +80,7 @@ namespace IM.Model.Helpers
     public static List<T> CopyProperties<T>(List<T> lstToClone) where T : class, new()
     {
       List<T> lstClone = new List<T>();
-      if (lstToClone != null)
+      if (lstToClone != null && lstClone!=null)
       {
         lstToClone.ForEach(obj =>
         {
@@ -226,51 +226,7 @@ namespace IM.Model.Helpers
       }
       return true;
     }
-    #endregion
-
-    #region IsEqualsList
-    /// <summary>
-    ///  Compara si todos los datos de ambas listas son iguales
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="lstNew">Lista nueva</param>
-    /// <param name="lstOld">Lista antigua</param>
-    /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
-    /// <history>
-    ///   [vku] 05/Ago/2016 Created
-    /// </history>
-    public static bool IsEqualsList<T>(List<T> lstNew, List<T> lstOld)
-    {
-      var lst1 = lstNew.Where(i => !lstOld.Contains(i)).ToList();
-      var lst2 = lstOld.Where(i => !lstNew.Contains(i)).ToList();
-      if (lst1.Count() > 0 || lst2.Count() > 0)
-      {
-        return false;
-      }
-      return true;
-    }
-    #endregion
-
-    #region IsEqualList2
-    /// <summary>
-    ///   Compara si todos los datos de ambas listas son iguales
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="lstNew">Lista nueva</param>
-    /// <param name="lstOld">Lista antigua</param>
-    /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
-    /// <history>
-    ///   [vku] 05/Ago/2016 Created
-    /// </history>
-    public static bool IsEqualsList2<T>(List<T> lstNew, List<T> lstOld)
-    {
-      bool blnIsEqual = false;
-      if (lstNew.All(item => lstOld.Contains(item)) && lstOld.All(item => lstNew.Contains(item)))
-        blnIsEqual = true;
-      return blnIsEqual;
-    }
-    #endregion
-
+    #endregion    
     #endregion
 
     #region ObjectToList
@@ -312,24 +268,52 @@ namespace IM.Model.Helpers
     /// <typeparam name="T">Object</typeparam>
     /// <param name="list">List<Object></param>
     /// <param name="lstFieldName"> Field Name List</param></param>
+    /// <param name="blnWithAnd">True. Compara todos los campos que vienen en lstFieldName | False. compara campo por campo de que los vienen en lstFieldName</param>
     /// <returns>string message Hay duplicados| string.Empty no hay duplicados</returns>
     /// <history>
     /// [erosado] 09/08/2016  Created.
     /// </history>
-    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName)
+    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName,bool blnWithAnd=false)
     {
       bool _isValid = false;
       string _message = string.Empty;
-      if (list.Any() && lstFieldName.Any())
+      if (blnWithAnd)
       {
-        foreach (var item in lstFieldName)
+        if (list.Any() && lstFieldName.Any())
         {
-          _isValid = list.GroupBy(e => e.GetType().GetProperty(item).GetValue(e)).Any(x => x.Count() > 1);
-
-          if (_isValid)
+          Type type = list.GetType();
+          List<T> lstResults = new List<T>();
+          List<PropertyInfo> properties = type.GetProperties(BindingFlags.CreateInstance | BindingFlags.DeclaredOnly).Where(pi=>pi.GetMethod.IsVirtual && lstFieldName.Contains(pi.Name)).ToList();
+          foreach (var pi in properties)//Recorremos la lista de 
           {
-            _message = $"We found a duplicate element on {item} column";
-            break;
+            if(_isValid) { break; }//Romper el ciclo
+            var value = type.GetProperty(pi.Name).GetValue(pi);
+            foreach (var item in list)
+            {
+              lstResults = list.Where(property => type.GetProperty(pi.Name).GetValue(property) == value ||
+                                      (value != null && value.Equals(type.GetProperty(pi.Name).GetValue(property)))).ToList();
+              if(lstResults.Count>1)
+              {
+                _isValid = true;
+                _message = $"We found a duplicate element on {pi.Name} column";
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        if (list.Any() && lstFieldName.Any())
+        {
+          foreach (var item in lstFieldName)
+          {
+            _isValid = list.GroupBy(e => e.GetType().GetProperty(item).GetValue(e)).Any(x => x.Count() > 1);
+
+            if (_isValid)
+            {
+              _message = $"We found a duplicate element on {item} column";
+              break;
+            }
           }
         }
       }

@@ -806,6 +806,15 @@ namespace IM.Base.Classes
           {
             return blnModifyPaymentPlace;
           }
+        case "bdFolioCXC":
+          {
+            if((bookingDeposit.bdAmount - bookingDeposit.bdReceived)<=0)
+            {
+              return false;
+            }
+            break;
+          }
+          
       }
 
       return true;
@@ -1013,16 +1022,19 @@ namespace IM.Base.Classes
 
         case "bdFolioCXC":
           {
+            //Si el CxC es mayor a cero y el Folio CxC es null o cero
             if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) > 0 && bookingDeposit.bdFolioCXC == null)
             {
               UIHelper.ShowMessage("Specify the CxC folio.");
               return false;
             }
+            //Si el folio es diferente de null o cero y el CXC es 0
             else if ((bookingDeposit.bdAmount - bookingDeposit.bdReceived) == 0 && bookingDeposit.bdFolioCXC != null)
             {
               UIHelper.ShowMessage("CxC Folio is only for CxC distinct of zero.");
               return false;
             }
+            //Si el folioCxC es diferente de null
             else if (bookingDeposit.bdFolioCXC != null)
             {
               //Verificar que el folio no esté en la lista y que no lo contenga un deposit en la BD
@@ -1053,6 +1065,10 @@ namespace IM.Base.Classes
                   return false;
                 }
               }
+            }
+            else//Volver nulo el booking Deposits
+            {
+              bookingDeposit.bdFolioCXC = null;
             }
             break;
           }

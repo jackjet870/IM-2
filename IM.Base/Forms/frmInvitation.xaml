@@ -667,7 +667,7 @@
                                                         <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:dd/MM/yyyy}'}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:N2}}"/>
-                                                        <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:N2}}"/>
                                                         <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">
                                                             <DataGridTextColumn.ElementStyle>
                                                                 <Style TargetType="TextBlock">
