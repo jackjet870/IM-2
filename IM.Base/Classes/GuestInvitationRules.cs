@@ -358,7 +358,7 @@ namespace IM.Base.Classes
 
     private async Task LoadSalesRooms()
     {
-      var result = await BRSalesRooms.GetSalesRooms(0);
+      var result = await BRSalesRooms.GetSalesRooms(1);
       SalesRoom = result;
     }
 

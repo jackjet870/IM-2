@@ -28,7 +28,7 @@ namespace IM.Base.Forms
     private EnumModule _module;
 
     //private bool _isInvitation;
-    private bool _wasSelectedByKeyboard;
+
 
     private DataGridCellInfo _igCurrentCell;//Celda que se esta modificando
     private bool _hasError; //Sirve para las validaciones True hubo Error | False NO
@@ -40,7 +40,7 @@ namespace IM.Base.Forms
     
     #region Objetos
 
-    private Invitation _invitation;
+    
 
     #endregion Objetos
 

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using IM.Model.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace IM.ProcessorSales.Classes
 {
-  public class MultiDateHelpper : INotifyPropertyChanged, IDataErrorInfo
+  public class MultiDateHelpper : EntityBase, IDataErrorInfo
   {
     private string _salesRoom;
 
@@ -37,20 +38,6 @@ namespace IM.ProcessorSales.Classes
     {
       get { return _isMain; }
       set { SetField(ref _isMain, value); }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return;
-      field = value;
-      OnPropertyChanged(propertyName);
     }
 
     public string Error => string.Concat(this[SalesRoom], " ", this[DtStart.ToShortDateString()], " ", this[DtEnd.ToShortDateString()]);
