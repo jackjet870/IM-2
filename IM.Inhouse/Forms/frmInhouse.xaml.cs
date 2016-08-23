@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
@@ -16,10 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Navigation;
-using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
 using Cursors = System.Windows.Input.Cursors;
@@ -1936,7 +1934,8 @@ namespace IM.Inhouse.Forms
       if (ShowNotBookingMotive((bool)guAvail, (bool)guInfo, (bool)guInvit, (DateTime)guCheckOutD, (int)guId, dg))
       {
         //Despliega el formulario de Invitación
-        ShowInvitation((bool)guCheckIn, (int?)gagu, (int)guId, chk.IsChecked.Value);
+        ShowInvitation((bool)guCheckIn, (int?)gagu, (int)guId, chk.IsChecked.Value, dg);
+
       }
     }
 
@@ -1951,10 +1950,11 @@ namespace IM.Inhouse.Forms
     /// <param name="gagu">Si es un Guest Adicional</param>
     /// <param name="guId">Id del Guest</param>
     /// <param name="isInvit">Si ya se invito el guest</param>
+    /// <param name="dg">Datagrid que se actualizara</param>
     /// <history>
     /// [jorcanche] 16/ago/2016 Created
     /// </history>
-    private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit)
+    private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit, DataGrid dg)
     {
       if (ValidateInvitation(guCheckIn, gagu))
       {
@@ -1974,11 +1974,121 @@ namespace IM.Inhouse.Forms
         {
           var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
           invitacion.ShowDialog();
+          //actualizamos los datos del grid
+          UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);          
         }
+       
       }
     }
 
     #endregion ShowInvitation
+
+    #region UpdateGridInvitation
+
+    /// <summary>
+    /// Actualiza el datagrid de OutHouse
+    /// </summary>
+    /// <param name="invitacion">Formulario de Incitación</param>
+    /// <param name="module">En que modulo se esta invocando</param>
+    /// <param name="dg">DataGrid Current</param>
+    private void UpdateGridInvitation(Guest invitacion, EnumModule module, DataGrid dg)
+    {
+      var item = dg.SelectedItem;
+      var t = item.GetType();
+      var  lstProperties = t.GetProperties().ToList();
+
+      //***********************************************Disponible ***********************************************
+      if (lstProperties.Any(c => c.Name == "guInvit"))
+      {
+        t.GetProperty("guInvit").SetValue(item, true);
+      }
+
+      //***********************************************Seguimiento*********************************************** 
+      if (lstProperties.Any(c => c.Name == "guFollow"))
+      {
+        //Si estaba contactado y no como invitado 
+        if ((bool) t.GetProperty("guInfo").GetValue(item) &&
+            (bool) t.GetProperty("guInvit").GetValue(item) == false)
+        {
+          //Con seguimiento 
+          t.GetProperty("guFollow").SetValue(item, true);
+
+          //PR y Fecha de seguimiento
+          if (string.IsNullOrEmpty(t.GetProperty("guPRFollow").GetValue(item)?.ToString()))
+          {
+            t.GetProperty("guPRFollow").SetValue(item, invitacion.guPRInvit1);
+            t.GetProperty("guFollowD").SetValue(item, invitacion.guInvitD);
+          }
+        }
+      }
+      //***********************************************Contactacion ***********************************************
+      if (lstProperties.Any(c => c.Name == "guInfo"))
+      {        
+        //Contactado
+        t.GetProperty("guInfo").SetValue(item, true);
+
+        //PR y fecha de contactacion
+        if (string.IsNullOrEmpty(t.GetProperty("guPRInfo").GetValue(item)?.ToString()))
+        {
+          t.GetProperty("guPRInfo").SetValue(item, invitacion.guPRInvit1);
+          t.GetProperty("guInfoD").SetValue(item, invitacion.guInvitD);
+        }
+      }
+
+      //***********************************************Invitacion ***********************************************
+      //Invitado
+      t.GetProperty("guInvit").SetValue(item, true);
+
+      //PR de Invitación
+      if (lstProperties.Any(c => c.Name == "guPRInvit1"))
+      {
+        t.GetProperty("guPRInvit1").SetValue(item, invitacion.guPRInvit1);
+      }
+
+      //Invitacion no cancelada
+      if (lstProperties.Any(c => c.Name == "guBookCanc"))
+      {
+        t.GetProperty("guBookCanc").SetValue(item, false);
+      }
+
+      //Fecha de no booking
+      if (lstProperties.Any(c => c.Name == "guBookD"))
+      {
+        t.GetProperty("guBookD").SetValue(item, invitacion.guBookD);
+      }
+
+      //Hora de booking
+      if (lstProperties.Any(c => c.Name == "guBookT"))
+      {
+        if (module != EnumModule.OutHouse)
+        {
+          if (invitacion.guResch)
+          {
+            if (invitacion.guReschD == invitacion.guReschT)
+            {
+              t.GetProperty("guBookT").SetValue(item, invitacion.guReschT);
+            }
+          }
+          else
+          {
+            t.GetProperty("guBookT").SetValue(item, invitacion.guBookT);
+          }
+        }
+        else
+        {
+          t.GetProperty("guBookT").SetValue(item, invitacion.guBookT);
+        }
+      }
+      //Quiniela
+      if (lstProperties.Any(c => c.Name == "guQuinella"))
+      {
+        t.GetProperty("guQuinella").SetValue(item, invitacion.guQuinella);
+      }
+
+      dg.Items.Refresh();      
+    }
+
+    #endregion
 
     #region ValidateInvitation
 

@@ -386,7 +386,7 @@ namespace IM.Outhouse.Forms
         frmLogin login = null;
         if (!isInvit)
         {
-          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
 
           if (App.User.AutoSign)
           {
@@ -399,11 +399,119 @@ namespace IM.Outhouse.Forms
         {
           var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
           invitacion.ShowDialog();
+          UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
         }
       }
     }
 
     #endregion ShowInvitation
+
+    #region UpdateGridInvitation
+
+    /// <summary>
+    /// Actualiza el datagrid de inhouse
+    /// </summary>
+    /// <param name="invitacion">Formulario de Incitación</param>
+    /// <param name="module">En que modulo se esta invocando</param>
+    /// <param name="dg">DataGrid Current</param>
+    private void UpdateGridInvitation(Guest invitacion, EnumModule module, DataGrid dg)
+    {
+      var item = dg.SelectedItem;
+      var t = item.GetType();
+      var lstProperties = t.GetProperties().ToList();
+
+      //***********************************************Disponible ***********************************************
+      if (lstProperties.Any(c => c.Name == "guInvit"))
+      {
+        t.GetProperty("guInvit").SetValue(item, true);
+      }
+
+      //***********************************************Seguimiento*********************************************** 
+      if (lstProperties.Any(c => c.Name == "guFollow"))
+      {
+        //Si estaba contactado y no como invitado 
+        if ((bool)t.GetProperty("guInfo").GetValue(item) &&
+            (bool)t.GetProperty("guInvit").GetValue(item) == false)
+        {
+          //Con seguimiento 
+          t.GetProperty("guFollow").SetValue(item, true);
+
+          //PR y Fecha de seguimiento
+          if (string.IsNullOrEmpty(t.GetProperty("guPRFollow").GetValue(item)?.ToString()))
+          {
+            t.GetProperty("guPRFollow").SetValue(item, invitacion.guPRInvit1);
+            t.GetProperty("guFollowD").SetValue(item, invitacion.guInvitD);
+          }
+        }
+      }
+      //***********************************************Contactacion ***********************************************
+      if (lstProperties.Any(c => c.Name == "guInfo"))
+      {
+        //Contactado
+        t.GetProperty("guInfo").SetValue(item, true);
+
+        //PR y fecha de contactacion
+        if (string.IsNullOrEmpty(t.GetProperty("guPRInfo").GetValue(item)?.ToString()))
+        {
+          t.GetProperty("guPRInfo").SetValue(item, invitacion.guPRInvit1);
+          t.GetProperty("guInfoD").SetValue(item, invitacion.guInvitD);
+        }
+      }
+
+      //***********************************************Invitacion ***********************************************
+      //Invitado
+      t.GetProperty("guInvit").SetValue(item, true);
+
+      //PR de Invitación
+      if (lstProperties.Any(c => c.Name == "guPRInvit1"))
+      {
+        t.GetProperty("guPRInvit1").SetValue(item, invitacion.guPRInvit1);
+      }
+
+      //Invitacion no cancelada
+      if (lstProperties.Any(c => c.Name == "guBookCanc"))
+      {
+        t.GetProperty("guBookCanc").SetValue(item, false);
+      }
+
+      //Fecha de no booking
+      if (lstProperties.Any(c => c.Name == "guBookD"))
+      {
+        t.GetProperty("guBookD").SetValue(item, invitacion.guBookD);
+      }
+
+      //Hora de booking
+      if (lstProperties.Any(c => c.Name == "guBookT"))
+      {
+        if (module != EnumModule.OutHouse)
+        {
+          if (invitacion.guResch)
+          {
+            if (invitacion.guReschD == invitacion.guReschT)
+            {
+              t.GetProperty("guBookT").SetValue(item, invitacion.guReschT);
+            }
+          }
+          else
+          {
+            t.GetProperty("guBookT").SetValue(item, invitacion.guBookT);
+          }
+        }
+        else
+        {
+          t.GetProperty("guBookT").SetValue(item, invitacion.guBookT);
+        }
+      }
+      //Quiniela
+      if (lstProperties.Any(c => c.Name == "guQuinella"))
+      {
+        t.GetProperty("guQuinella").SetValue(item, invitacion.guQuinella);
+      }
+
+      dg.Items.Refresh();
+    }
+
+    #endregion
 
     #region Window_KeyDown
 
