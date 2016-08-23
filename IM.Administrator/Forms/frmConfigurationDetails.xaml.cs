@@ -62,7 +62,7 @@ namespace IM.Administrator.Forms
         cboocTourTimesSchema.IsEnabled = true;
         cboocBoss.IsEnabled = true;
         txtocVATRate.IsEnabled = true;
-        UIHelper.SetUpControls(configurations, this);
+        UIHelper.SetUpControls(configurations, this, mode, blnCharacters: true);
       }   
       skpStatus.Visibility = Visibility.Collapsed;
     }

@@ -46,7 +46,7 @@
             <TextBox x:Name="txtocWelcomeCopies" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" Text="{Binding ocWelcomeCopies}" Height="27" Tag="guest registration copies" IsEnabled="False"/>
             <ComboBox x:Name="cboocTourTimesSchema" Grid.Column="1" Grid.Row="4" VerticalAlignment="Top" SelectedValuePath="tcID" DisplayMemberPath="tcN" SelectedValue="{Binding ocTourTimesSchema}"  Height="27" Tag="tour times schema" IsEnabled="False"/>
             <ComboBox x:Name="cboocBoss" Grid.Column="1" Grid.Row="5" VerticalAlignment="Top" SelectedValuePath="peID" DisplayMemberPath="peN" SelectedValue="{Binding ocBoss}" Height="27" Tag="boss" IsEnabled="False"/>
-            <TextBox x:Name="txtocVATRate" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Text="{Binding ocVATRate, StringFormat=P2}" Height="27" Tag="vat rate" IsEnabled="False"/>
+            <TextBox x:Name="txtocVATRate" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Validation.ErrorTemplate="{x:Null}" Text="{Binding ocVATRate, StringFormat={}{0:0.00}% }" Height="27" Tag="vatrate" IsEnabled="False"/>
             <!--#endregion-->
         </Grid>
         <!--#region Botones-->
