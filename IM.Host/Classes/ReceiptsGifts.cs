@@ -368,10 +368,6 @@ namespace IM.Host.Classes
             row.geCharge = 0;
           }
           break;
-        case nameof(row.gegi):
-          // Verificamos que no se encuentre repetido el Gift
-          string xd = ObjectHelper.AreAnyDuplicates(dtg.Items.OfType<GiftsReceiptDetail>().ToList(), new List<string>() { nameof(row.gegi) });
-          break;
       }
       return cancel;
 
@@ -945,29 +941,6 @@ namespace IM.Host.Classes
     }
     #endregion
 
-    //#region LoadGuesStatusInfo
-    ///// <summary>
-    ///// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
-    ///// </summary>
-    ///// <param name="receiptID"></param>
-    ///// <param name="pGuestID"></param>
-    ///// <history>
-    ///// [vipacheco] 19/Abril/2016 Created
-    ///// [vipacheco] 29/Junio/2016 Modified --> Migrado a esta clase  y agregado un parametro mas de referencia
-    ///// </history>
-    //public static void LoadGuesStatusInfo(int pReceiptID, int pGuestID, ref bool pApplyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo)
-    //{
-    //  pApplyGuestStatusValidation = false;
-
-    //  pGuestStatusInfo = BRGuestStatus.GetGuestStatusInfo(pGuestID, pReceiptID);
-
-    //  // Solo si esta configurado se realiza la revision
-    //  if (pGuestStatusInfo != null)
-    //    if (pGuestStatusInfo.gsMaxQtyTours > 0)
-    //      pApplyGuestStatusValidation = true;
-    //}
-    //#endregion
-
     #region CalculateCharge
     /// <summary>
     /// Calcula el cargo de regalos segun el tipo de calculo
@@ -1291,7 +1264,7 @@ namespace IM.Host.Classes
       if (pGuestID > 0 && !pIsExchange)
       {
         // actualizamos los regalos de la invitacion
-        UpdateInvitsGifts(pReceiptID, pGuestID, pGiftsDetail);
+        await UpdateInvitsGifts(pReceiptID, pGuestID, pGiftsDetail);
       }
 
     }
@@ -1306,16 +1279,16 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 11/Julio/2016 Created
     /// </history>
-    public async static void UpdateInvitsGifts(int pReceiptID, int pGuestID, ObservableCollection<GiftsReceiptDetail> pGiftsReceipts)
+    public async static Task UpdateInvitsGifts(int pReceiptID, int pGuestID, ObservableCollection<GiftsReceiptDetail> pGiftsReceipts)
     {
-      bool blnUpd = false;
-
       //  seleccionamos los regalos de la invitacion
       var lstResult = await BRInvitsGifts.GetInvitsGiftsByGuestID(pGuestID);
 
       // actualizamos los regalos en la BD
       foreach (var item in pGiftsReceipts)
       {
+        bool blnUpd = false;
+
         // si se ingreso la cantidad, el regalo y a quien se carga
         if (item.geQty != 0 && item.gegi != null && item.gect != null)
         {

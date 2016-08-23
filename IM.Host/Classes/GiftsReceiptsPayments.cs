@@ -1,4 +1,7 @@
 ﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +98,77 @@ namespace IM.Host.Classes
       }
 
       return true;
+    }
+    #endregion
+
+    #region SavePayments
+    /// <summary>
+    /// Realiza las validaciones de los campos introducidos en el grid de Payments y los guarda en la BD
+    /// </summary>
+    /// <param name="giftReceiptID">Clave del recibo de regalo</param>
+    /// <param name="dtg">Datagrid de Payments</param>
+    /// <param name="isNew">TRUE -> Es un nuevo GiftsReceipt o nuevo ExchangeRate | FALSE -> No es nuevo</param>
+    /// <param name="_lstPaymentsDelete">Lista que contiene el registro de los Payments eliminados.</param>
+    /// <history>
+    /// [vipacheco] 27/Abril/2016 Created
+    /// </history>
+    public static async Task SavePayments(int giftReceiptID, DataGrid dtg, bool isNew, List<GiftsReceiptPaymentShort> _lstPaymentsDelete)
+    {
+      foreach (var item in dtg.Items)
+      {
+        GiftsReceiptPaymentShort currentItem;
+
+        if (item is GiftsReceiptPaymentShort)
+        {
+          currentItem = item as GiftsReceiptPaymentShort;
+
+          // Construimos la entidad tipo GiftsReceiptsPayments
+          GiftsReceiptPayment giftsReceiptPayments = new GiftsReceiptPayment
+          {
+            gypt = currentItem.gypt,
+            gycu = currentItem.gycu,
+            gyAmount = currentItem.gyAmount,
+            gyRefund = currentItem.gyRefund,
+            gysb = string.IsNullOrEmpty(currentItem.gysb) ? null : currentItem.gysb,
+            gype = currentItem.gype,
+            gybk = currentItem.gybk,
+          };
+          if (currentItem.gygr == 0)
+            giftsReceiptPayments.gygr = giftReceiptID;
+
+          if (isNew) // Si es de nueva creacion se agregan todos.
+          {
+            await BREntities.OperationEntity(giftsReceiptPayments, Model.Enums.EnumMode.Add);
+          }
+          else // Si se estan editando
+          {
+            // Verificamos si el Gift se encuentra en la BD.
+            GiftsReceiptPayment _giftPayment = BRGiftsReceiptsPayments.GetGiftReceiptPayment(currentItem.gygr, currentItem.gyID);
+
+            if (_giftPayment != null) // Si existe este registro se verifica si algun campo se edito
+            {
+              if (_giftPayment.gyAmount != currentItem.gyAmount || _giftPayment.gypt != currentItem.gypt ||
+                  _giftPayment.gybk != currentItem.gybk || _giftPayment.gycu != currentItem.gycu || _giftPayment.gype != currentItem.gype ||
+                  _giftPayment.gyRefund != currentItem.gyRefund || _giftPayment.gysb != currentItem.gysb)
+              {
+                giftsReceiptPayments.gyID = currentItem.gyID;
+                giftsReceiptPayments.gygr = currentItem.gygr;
+                await BREntities.OperationEntity(giftsReceiptPayments, Model.Enums.EnumMode.Edit);
+              }
+            }
+            else // registro nuevo
+            {
+              await BREntities.OperationEntity(giftsReceiptPayments, Model.Enums.EnumMode.Add);
+            }
+
+            // Se verifica si se elimino alguno de la lista original
+            if (_lstPaymentsDelete.Count > 0)
+            {
+              await BREntities.OperationEntities(_lstPaymentsDelete, Model.Enums.EnumMode.Delete);
+            }
+          }
+        }
+      }
     }
     #endregion
 

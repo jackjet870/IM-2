@@ -360,8 +360,6 @@ namespace IM.Base.Helpers
           i++;
         }
       }
-      //Grid.IsReadOnly = false;
-
       return false;
     }
     #endregion
