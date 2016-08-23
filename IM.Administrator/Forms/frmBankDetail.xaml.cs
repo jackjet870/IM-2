@@ -147,7 +147,7 @@ namespace IM.Administrator.Forms
             List<SalesRoom> lstDel = _oldLstSalesRoom.Where(sr => !lstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
             var grid = dgrSalesRoom;
             int nRes = await BRBanks.SaveBank(bank, (enumMode == EnumMode.Edit), lstAdd, lstDel);
-            var banks = await BRBanks.GetBanks(bank: bank);
+            var banks = await BRBanks.GetBanks(bank: bank,blnInclude:true);
             bank = banks.FirstOrDefault();
             UIHelper.ShowMessageResult("Bank", nRes);
             if (nRes > 0)
