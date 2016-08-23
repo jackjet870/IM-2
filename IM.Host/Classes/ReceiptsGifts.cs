@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using IM.Base.Classes;
+using IM.Model.Helpers;
 
 namespace IM.Host.Classes
 {
@@ -366,6 +367,10 @@ namespace IM.Host.Classes
           {
             row.geCharge = 0;
           }
+          break;
+        case nameof(row.gegi):
+          // Verificamos que no se encuentre repetido el Gift
+          string xd = ObjectHelper.AreAnyDuplicates(dtg.Items.OfType<GiftsReceiptDetail>().ToList(), new List<string>() { nameof(row.gegi) });
           break;
       }
       return cancel;
@@ -1238,7 +1243,7 @@ namespace IM.Host.Classes
           // Si se encuentra el regalo
           else
           {
-            await BREntities.OperationEntity(result, EnumMode.Edit);
+            await BREntities.OperationEntity(current, EnumMode.Edit);
           }
         }
       }

@@ -1202,7 +1202,7 @@ namespace IM.Host
         frmGiftsReceipts.ShowDialog();
 
         // si cambio el estatus de regalos recibidos
-        if (!chkSelected.IsChecked.Value && !string.IsNullOrEmpty(frmGiftsReceipts.txtgrID.Text.Trim()))
+        if (!string.IsNullOrEmpty(frmGiftsReceipts.txtgrID.Text.Trim()))
         {
           chkSelected.IsChecked = true;
         }
