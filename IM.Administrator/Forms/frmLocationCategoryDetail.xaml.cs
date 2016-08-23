@@ -124,7 +124,7 @@ namespace IM.Administrator.Forms
         btnAccept.Visibility = Visibility.Collapsed;
         skpStatus.Visibility = Visibility.Visible;
         txtStatus.Text = "Saving data...";
-        string strMsj = ValidateHelper.ValidateForm(this, "Location",blnDatagrids:true);
+        string strMsj = ValidateHelper.ValidateForm(this, "Location", blnDatagrids: true);
         if (strMsj == "")
         {
           List<Location> lstAdd = lstLocations.Where(lo => !_oldLocations.Any(loo => loo.loID == lo.loID)).ToList();

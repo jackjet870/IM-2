@@ -384,7 +384,10 @@ namespace IM.Base.Classes
       if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(form, "Invitation", blnDatagrids: true, showMessage: true))) return false;
       //Validamos el Booking y el Reschedule
       if (!ValidateBookReschedule(ref form, dbContext)) return false;
-
+      //Validamos Pax
+      if (!ValidateHelper.ValidateNumber(dbContext.Guest.guPax, 0.1M, 1000, "Pax number")) return false;
+      //Validamos el codigo contable
+      //TODO: esta validacion no se hizo por que aun esta en desarrollo
       return true;
     }
 

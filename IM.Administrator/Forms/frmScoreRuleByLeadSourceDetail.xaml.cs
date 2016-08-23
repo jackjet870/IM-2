@@ -100,7 +100,7 @@ namespace IM.Administrator.Forms
         skpStatus.Visibility = Visibility.Visible;
         txtStatus.Text = "Saving Data...";
         btnAccept.Visibility = Visibility.Collapsed;
-        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule",blnDatagrids:true);
+        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule", blnDatagrids: true);
         if (strMsj == "")
         {          
           List<ScoreRuleByLeadSourceDetail> lstScoreDetail = (List<ScoreRuleByLeadSourceDetail>)dgrScores.ItemsSource;

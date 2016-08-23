@@ -140,7 +140,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Bank",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Bank", blnDatagrids: true);
           if (strMsj == "")
           {
             List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();

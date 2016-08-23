@@ -180,7 +180,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Segment Category",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Segment Category", blnDatagrids: true);
           if (strMsj == "")
           {            
             List<Item> lstAdd = lstItems.Where(it => !_lstOldItems.Any(itt => itt.UserId == it.UserId)).ToList();

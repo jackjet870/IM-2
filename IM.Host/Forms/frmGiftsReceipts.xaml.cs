@@ -1889,7 +1889,7 @@ namespace IM.Host.Forms
     private bool ValidateGeneral()
     {
       // Validamos los campos obligatorios
-      string strmsj = ValidateHelper.ValidateForm(General, "", false);
+      string strmsj = ValidateHelper.ValidateForm(General, "");
       if (!string.IsNullOrEmpty(strmsj))
       {
         UIHelper.ShowMessage(strmsj, MessageBoxImage.Information, "Gifts Receipt");

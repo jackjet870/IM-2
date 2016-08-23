@@ -541,7 +541,7 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel HorizontalAlignment="Left">
                                                             <TextBlock Text="Pax" Margin="0,5"/>
-                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBox Name="txtguPax" Width="50" Validation.ErrorTemplate="{x:Null}" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N1}}"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="Arrival*" Margin="0,5"/>

@@ -464,7 +464,7 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos la fecha de show
-      if (_guestObj.guShow && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkShows, string.Empty, false, showMessage: true)))
+      if (_guestObj.guShow && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkShows, string.Empty, showMessage: true)))
         blnValid = false;
 
       //validamos que la fecha de show no este en una fecha cerrada
@@ -476,7 +476,7 @@ namespace IM.Host.Forms
 
       // validamos que indique si presento invitacion
       else if (_guestObj.guShow && _enumProgram == EnumProgram.Outhouse
-        && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPresentedInvitation, string.Empty, false, showMessage: true)))
+        && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPresentedInvitation, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el tipo de show
@@ -492,15 +492,15 @@ namespace IM.Host.Forms
         blnValid = false;
 
       // validamos la fecha de llegada y la fecha de salida
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkCheckInOut, string.Empty, false, showMessage: true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkCheckInOut, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el estado civil, apellido y nombre
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest1, string.Empty, false, showMessage: true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest1, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el estado civil de su acompañante
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest2, string.Empty, false, showMessage: true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest2, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos la locacion
@@ -545,7 +545,7 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos el pais, la agencia, el hotel y el numero de habitacion
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdOtherInfo, string.Empty, false, showMessage: true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdOtherInfo, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el numero de bookings
@@ -567,7 +567,7 @@ namespace IM.Host.Forms
         blnValid = false;
 
       // validamos los estatus de invitados
-      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, false, showMessage: true)))
+      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, showMessage: true)))
         blnValid = false;
 
       return blnValid;
@@ -588,15 +588,15 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos los depositos
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdDeposits, string.Empty, false, true, true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdDeposits, string.Empty, true, true)))
         blnValid = false;
 
       // validamos el PR 1
-      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPR1, string.Empty, false, showMessage: true)))
+      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPR1, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el equipo de vendedores si es un Self Gen
-      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkTeam, string.Empty, false, showMessage: true)))
+      else if (_guestObj.guSelfGen && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkTeam, string.Empty, showMessage: true)))
         blnValid = false;
 
       return blnValid;
@@ -617,7 +617,7 @@ namespace IM.Host.Forms
       var blnValid = true;
 
       // validamos que se haya ingresado la locacion
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdPlaces, string.Empty, false, showMessage: true)))
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdPlaces, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos que la locacion exista

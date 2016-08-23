@@ -44,13 +44,12 @@ namespace IM.Base.Helpers
     {
       TextBox txt = (TextBox)sender;
       bool blnValid = (e.Text == "." && !txt.Text.Trim().Contains("."));
-
+      string text = "";
       #region IsNumeric
       if (blnValid || char.IsNumber(Convert.ToChar(e.Text)))//Si es númerico
       {
         string precisionProperty = PrecisionPropertyClass.GetPrecision(txt);//Obtenemos la precision        
-        var precision = precisionProperty.Split(',');//Separamos el presicion y el scale--->Presicion[0]=Enteros, Presicion[1]=Decimales permitidos
-        string text = "";
+        var precision = precisionProperty.Split(',');//Separamos el presicion y el scale--->Presicion[0]=Enteros, Presicion[1]=Decimales permitidos        
         text = (!string.IsNullOrWhiteSpace(txt.SelectedText)) ? txt.Text.Remove(txt.SelectionStart, txt.SelectionLength).Insert(txt.CaretIndex, e.Text) : txt.Text.Insert(txt.CaretIndex, e.Text);//Quitamos el texto que se va a remplazar
 
         if (text.Contains('.'))//Si contiene punto decimal
@@ -85,7 +84,6 @@ namespace IM.Base.Helpers
       {
         e.Handled = true;
       }
-
     }
     #endregion
 

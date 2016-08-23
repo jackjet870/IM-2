@@ -125,7 +125,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Unavailable Motives",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Unavailable Motives", blnDatagrids: true);
           if (unavailableMotive.umID == 0)
           {
             strMsj += (strMsj == "") ? "" : " \n " + "ID can not be 0";

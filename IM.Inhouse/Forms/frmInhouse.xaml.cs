@@ -1756,6 +1756,12 @@ namespace IM.Inhouse.Forms
           Owner = this
         };
         invitacion.ShowDialog();
+        
+        //Si se guardó la información
+        if (invitacion.SaveGuestInvitation)
+        {
+         
+        }
       }
     }
 
@@ -1974,8 +1980,13 @@ namespace IM.Inhouse.Forms
         {
           var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
           invitacion.ShowDialog();
-          //actualizamos los datos del grid
-          UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);          
+          //Si se guardó la información
+          if (invitacion.SaveGuestInvitation)
+          {
+            //actualizamos los datos del grid
+            //TODO:Revisar este metodo JORGE CANCHE
+            UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);
+          }
         }
        
       }

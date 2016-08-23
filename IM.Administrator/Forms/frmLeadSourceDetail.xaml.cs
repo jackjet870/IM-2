@@ -148,7 +148,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source", blnDatagrids: true);
           if (strMsj=="")
           {
             #region Locations

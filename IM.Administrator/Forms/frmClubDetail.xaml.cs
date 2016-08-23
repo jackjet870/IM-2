@@ -78,7 +78,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Club", blnDatagrids : true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Club", blnDatagrids: true);
           if (club.clID == 0)
           {
             strMsj += (strMsj == "") ? "" : " \n " + "The Club ID can not be 0.";

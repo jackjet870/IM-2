@@ -158,7 +158,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Program",blnDatagrids:true);
+        string strMsj = ValidateHelper.ValidateForm(this, "Program", blnDatagrids: true);
         if(strMsj=="")
         {
           skpStatus.Visibility = Visibility.Visible;

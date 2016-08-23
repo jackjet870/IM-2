@@ -179,7 +179,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Hidden;
-          string strMsj = ValidateHelper.ValidateForm(this, "Personnel",false,blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Personnel", blnDatagrids: true);
           string strValidate = ValidateGeneral();
           if (strValidate != "")
           {

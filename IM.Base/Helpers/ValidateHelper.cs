@@ -186,104 +186,100 @@ namespace IM.Base.Helpers
     /// [emoguel] modified Se cambió los IsNullorWhiteSpace por IsNullOrEmpty
     /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
     /// [erosado] 05/08/2016  Modified. Se corrigió la validacion del DateTimePicker, y se agrego una bandera para que el metodo se encargue de mandar el ShowMessage
+    /// [erosado] 23/08/2016  Modified. Se optimizo el codigo, se agregó switch case en lugar de if-else, se corrigio que mande el focus a el primer elmento que falle.
     /// </history>
-    public static string ValidateForm(UIElement container, string strForm, bool blnValidateVisibility = true, bool blnDatagrids = false, bool showMessage = false)
+    public static string ValidateForm(UIElement container, string strForm, bool blnDatagrids = false, bool showMessage = false)
     {
       var strMsj = "";
       var lstControls = UIHelper.GetChildParentCollection<Control>(container);
-      //buscamos todos los controles de la ventana
+      var listInvalid = new List<Control>();
+
       if (blnDatagrids)
       {
-        var lstGrids = lstControls.Where(co => co is DataGrid).Select(co => co as DataGrid).ToList();
-        if (lstGrids != null)
-        {
-          foreach (DataGrid dgr in lstGrids)
-          {
+        var lstGrids = lstControls.OfType<DataGrid>().ToList();
 
-            if (GridHelper.IsInEditMode(dgr,false))
-            {              
-              var parents = UIHelper.GetParentCollection<TabItem>(dgr);
-              parents.ForEach(tb => tb.IsSelected = true);
-              container.UpdateLayout();
-              dgr.Focus();
-              return "Please finish editing the list. \n";              
-            }
+        foreach (DataGrid dgr in lstGrids)
+        {
+          if (GridHelper.IsInEditMode(dgr, false))
+          {
+            var parents = UIHelper.GetParentCollection<TabItem>(dgr);
+            parents.ForEach(tb => tb.IsSelected = true);
+            container.UpdateLayout();
+            dgr.Focus();
+            return "Please finish editing the list. \n";
           }
         }
       }
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
+
       foreach (var control in lstControls)
       {
-        #region TextBox
-
-        if (control is TextBox) //Si es Textbox
+        switch (control.GetType().Name)
         {
-          var txt = (TextBox)control;
-          #region Remover espacios
-          txt.Text = txt.Text.Trim();
-          var binding = txt.GetBindingExpression(TextBox.TextProperty);
-          if (binding != null)
-          {
-            binding.UpdateSource();
-          }
-          #endregion
-          if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
-          if ((blnValidateVisibility && txt.IsVisible) || !blnValidateVisibility)
-            strMsj += $"Specify the {strForm}  { txt.Tag }. \n";
+          case "TextBox":
+            var txt = (TextBox)control;
+            #region Remover espacios
+            txt.Text = txt.Text.Trim();
+            var binding = txt.GetBindingExpression(TextBox.TextProperty);
+            binding?.UpdateSource();
+            #endregion
+            if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
+            if (txt.Visibility == Visibility.Visible)
+            {
+              strMsj += $"Specify the {strForm}  { txt.Tag }. \n";
+              listInvalid.Add(control);
+            }
+            break;
+
+          case "ComboBox":
+            var cmb = (ComboBox)control;
+            if (cmb.SelectedIndex > -1) continue;
+            if (cmb.Visibility == Visibility.Visible)
+            {
+              strMsj += $"Specify the {strForm } {cmb.Tag}. \n";
+              listInvalid.Add(control);
+            }
+            break;
+
+          case "PasswordBox":
+            var pwd = (PasswordBox)control;
+            #region Remover espacios
+            pwd.Password = pwd.Password.Trim();
+            #endregion
+            if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
+            if (pwd.Visibility == Visibility.Visible)
+            {
+              strMsj += $"Specify the {strForm } {pwd.Tag}. \n";
+              listInvalid.Add(control);
+            }
+            break;
+
+          case "DateTimePicker":
+            var dtp = (DateTimePicker)control;
+
+            if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
+            if (dtp.Visibility == Visibility.Visible)
+            {
+              strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
+              listInvalid.Add(control);
+            }
+            break;
         }
-        #endregion
-
-        #region Combobox
-
-        else if (control is ComboBox)
-        {
-          var cmb = (ComboBox)control;
-          if (cmb.SelectedIndex > -1) continue;
-          if ((blnValidateVisibility && cmb.IsVisible) || !blnValidateVisibility)
-            strMsj += $"Specify the {strForm } {cmb.Tag}. \n";
-        }
-        #endregion
-
-        #region PasswordBox
-
-        else if (control is PasswordBox)
-        {
-          var pwd = (PasswordBox)control;
-          #region Remover espacios
-          pwd.Password = pwd.Password.Trim();
-          #endregion
-          if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
-          if ((blnValidateVisibility && pwd.IsVisible) || !blnValidateVisibility)
-            strMsj += $"Specify the {strForm } {pwd.Tag}. \n";
-        }
-        #endregion
-
-        #region DateTimePicker
-        else if (control is DateTimePicker)
-        {
-          var dtp = (DateTimePicker)control;
-
-          if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
-          if ((blnValidateVisibility && dtp.IsVisible) || !blnValidateVisibility)
-            strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
-        }
-        #endregion
       }
-      if (strMsj != "") //Mandamos el foco al primer campo
+
+      if (strMsj != "")
       {
-        var control = lstControls.FirstOrDefault();
+        var control = listInvalid.FirstOrDefault();
         var parents = UIHelper.GetParentCollection<TabItem>(control);
         parents.ForEach(tb => tb.IsSelected = true);
         container.UpdateLayout();
-        control.Focus();
-
+        control?.Focus();
         //Si la showMessage viene activa muestra el mensaje
         if (showMessage)
         {
           UIHelper.ShowMessage(strMsj.TrimEnd('\n'), title: "Intelligence Marketing");
         }
       }
-
       return strMsj.TrimEnd('\n');
     }
 

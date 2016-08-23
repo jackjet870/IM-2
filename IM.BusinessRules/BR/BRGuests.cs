@@ -1367,7 +1367,8 @@ namespace IM.BusinessRules.BR
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
 
               //Recargamos el codigo contable
-              dbContext.USP_OR_SetAccountingCode(guestInvitation.Guest.guID, "MK");
+              //TODO:Se comento esta linea por que actualmente se esta desarrollando el codigo contable
+              //dbContext.USP_OR_SetAccountingCode(guestInvitation.Guest.guID, "MK");
 
               //Guardamos el historico del huesped
               dbContext.USP_OR_SaveGuestLog(guestInvitation.Guest.guID, hoursDiff, user.User.peID);

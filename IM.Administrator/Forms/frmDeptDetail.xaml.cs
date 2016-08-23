@@ -73,7 +73,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Dept",blnDatagrids:true);
+        string strMsj = ValidateHelper.ValidateForm(this, "Dept", blnDatagrids: true);
         if (strMsj == "")
         {
           btnAccept.Visibility = Visibility.Collapsed;

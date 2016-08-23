@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Gift", false, true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Gift", true);
           string strGeneral = ValidateGeneral();
 
           if (strGeneral != "") { strMsj += (strMsj != "") ? " \n " + strGeneral : strGeneral; }

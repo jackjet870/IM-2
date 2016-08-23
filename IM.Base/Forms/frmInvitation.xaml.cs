@@ -28,17 +28,18 @@ namespace IM.Base.Forms
     public UserData _user;
     private readonly int _guestId;
     public readonly bool _allowReschedule;
-    public bool _isEditing = false;
+    public bool _isEditing;
 
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
-    private bool _hasError = false; //Sirve para las validaciones True hubo Error | False NO
-    private bool _isCellCancel = false;//Sirve para cuando se cancela la edicion de una Celda
-    private bool _dontShowAgainGuestStatus = false;
-    private bool _isCellCommitDeposit = false;//Valida si el commit se hace desde la celda de Deposits
-    private bool _isCellCommitCC = false;//Valida si el commit se hace desde la celda de credit cards
+    private bool _hasError; //Sirve para las validaciones True hubo Error | False NO
+    private bool _isCellCancel;//Sirve para cuando se cancela la edicion de una Celda
+    private bool _dontShowAgainGuestStatus;
+    private bool _isCellCommitDeposit;//Valida si el commit se hace desde la celda de Deposits
+    private bool _isCellCommitCC;//Valida si el commit se hace desde la celda de credit cards
     private bool _isCellCommitGuestAdditional;//Valida si el commit se hace desde la celda de GuestAdditional
     public GuestInvitationRules CatObj { get; set; }
+    public bool SaveGuestInvitation { get; set; }
 
     #endregion Propiedades, Atributos
 
@@ -170,7 +171,7 @@ namespace IM.Base.Forms
           _busyIndicator.IsBusy = false;
 
           UIHelper.ShowMessage("The data was saved successfully");
-
+          SaveGuestInvitation = true;
           Close();
         }
       }
@@ -631,7 +632,9 @@ namespace IM.Base.Forms
     private void InHouseCollapsed()
     {
       stkOutInvitation.Visibility = Visibility.Collapsed;
+      //Para que funcione el ValidateHelper debemos collapsar el control que se valida, aunque su padre ya este collapsado
       stkPRContact.Visibility = Visibility.Collapsed;
+      cmbPRContact.Visibility = Visibility.Collapsed;
       stkFlightNumber.Visibility = Visibility.Collapsed;
     }
 
@@ -721,7 +724,7 @@ namespace IM.Base.Forms
       btnRebook.IsEnabled = false;
       btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
       btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
-
+      brdSearchButton.IsEnabled = string.IsNullOrWhiteSpace(CatObj.Guest.guHReservID);
       #endregion Enable false
 
       #region IsReadOnly
