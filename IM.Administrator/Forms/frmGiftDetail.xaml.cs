@@ -826,24 +826,32 @@ namespace IM.Administrator.Forms
       if (!ValidateHelper.validateCharacters((gift.giShortN != null) ? gift.giShortN : ""))//Validar los caracteres especiales en giftShort
       {
         strMsj += "Can not use &, %, '' or blank space in short name. \n";
+        tbiGeneral.IsSelected = true;
+        tbiGeneral.UpdateLayout();
         txtgiShortN.Focus();
       }
 
       if (gift.giQty == 0)//Validar la cantidad
       {
         strMsj += "Please specify the quantity. \n";
+        tbiGeneral.IsSelected = true;
+        tbiGeneral.UpdateLayout();
         txtgiQty.Focus();
       }
 
       if (chkgiMonetary.IsChecked == true && gift.giAmount == 0)//Validar el Amount
       {
         strMsj += "Monetary gifts should specify the amount. \n";
+        tbiGeneral.IsSelected = true;
+        tbiGeneral.UpdateLayout();
         txtgiAmount.Focus();
       }
 
       if (dgrLocations.Items.Count - 1 == 0)//Que tenga mínimo una locacion
       {
         strMsj += "Specify at least one Location. \n";
+        tbiItems.IsSelected = true;
+        tbiItems.UpdateLayout();
         dgrLocations.Focus();
       }
 
@@ -852,6 +860,8 @@ namespace IM.Administrator.Forms
         if (dgrGiftInPack.Items.Count - 1 == 0)
         {
           strMsj += "Specify at least one Gift. \n";
+          tbiItems.IsSelected = true;
+          tbiItems.UpdateLayout();
           dgrGiftInPack.Focus();
         }
       }
