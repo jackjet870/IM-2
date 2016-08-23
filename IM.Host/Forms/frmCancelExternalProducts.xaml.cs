@@ -398,7 +398,7 @@ namespace IM.Host.Forms
             if (_EnumExternalProduct != EnumExternalProduct.expElectronicPurse)
             {
               if (await SisturHelper.CancelPromotionSistur(strGift, (string)type.GetProperty("gePVPPromotion").GetValue(item, null), cboProgram.SelectedValue.ToString(),
-                                          cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, _PromotionsSystem, GiftsCancelled))
+                                          cboLeadSource.SelectedValue.ToString(), PropertyOpera, _ReceiptID, txtReservation, GiftsCancelled))
               {
                 // Cancelamos el regalo en origos
                 await BRGiftsReceipts.CancelGiftPromotionSistur(_ReceiptID, strGift);

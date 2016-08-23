@@ -18,7 +18,6 @@ namespace IM.Host.Forms
     public static bool Result = false;
     private List<GetGiftsReceiptsAdditional> _lstGiftsAdditional;
     public frmGiftsReceipts _frmGiftsReceipt;
-    CollectionViewSource _dsGiftsReceiptsAdditional;
 
     #region frmGiftsReceiptsAdditional
     /// <summary>
@@ -47,8 +46,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 12/Mayo/2016 Created
     /// </history>
@@ -62,14 +59,12 @@ namespace IM.Host.Forms
     /// <summary>
     /// Carga los componentes y la informacion inicial
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] [vipacheco] 12/Mayo/2016 Created
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _dsGiftsReceiptsAdditional = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptsAdditional")));
+      CollectionViewSource _dsGiftsReceiptsAdditional = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptsAdditional")));
 
       // Obtenemos los Gifts Adicionales
       _lstGiftsAdditional = BRGiftsReceipts.GetGiftsReceiptsAdditional(_GuestID);
@@ -83,14 +78,14 @@ namespace IM.Host.Forms
         }
         else
         {
-          btnCancel.Visibility = Visibility.Hidden;
-          btnSave.Visibility = Visibility.Hidden;
+          btnCancel.Visibility = Visibility.Collapsed;
+          btnSave.Visibility = Visibility.Collapsed;
         }
       }
       else
       {
-        btnCancel.Visibility = Visibility.Hidden;
-        btnSave.Visibility = Visibility.Hidden;
+        btnCancel.Visibility = Visibility.Collapsed;
+        btnSave.Visibility = Visibility.Collapsed;
       }
     } 
     #endregion
@@ -99,8 +94,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Guarda los Gifts Receipt Additional ingresados
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 12/Mayo/2016 Created
     /// </history>
@@ -292,7 +285,5 @@ namespace IM.Host.Forms
       }
     } 
     #endregion
-
-
   }
 }

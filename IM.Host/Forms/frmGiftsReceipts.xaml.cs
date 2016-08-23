@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using IM.Base.Classes;
+using System.Data.Entity.Validation;
 
 namespace IM.Host.Forms
 {
@@ -100,7 +101,7 @@ namespace IM.Host.Forms
       _dtpClose = BRSalesRooms.GetCloseSalesRoom(EnumEntities.GiftsReceipts, App.User.SalesRoom.srID);
 
       InitializeComponent();
-      UIHelper.SetUpControls(new GiftsReceiptDetail(), tbMain);
+      //UIHelper.SetUpControls(new GiftsReceiptDetail(), tbMain);
     }
     #endregion
 
@@ -398,12 +399,14 @@ namespace IM.Host.Forms
         // sugerimos los datos del huesped
         await GetGuestData(_guestID);
         txtgrgu.IsEnabled = false;
+        txtgrGuest.IsReadOnly = txtgrGuest2.IsReadOnly = false;
         txtgrCxCComments.Text = txtgrComments.Text = "";
       }
       // Si se esta buscando
       else
       {
         txtgrgu.IsReadOnly = false;
+        txtgrGuest.IsReadOnly = txtgrGuest2.IsReadOnly = false;
         txtgrgu.Text = txtgrNum.Text = txtgrls.Text = txtgrMemberNum.Text = txtGuestName.Text = txtReservationCaption.Text = "";
         txtAgencyCaption.Text = txtProgramCaption.Text = txtgrGuest.Text = txtgrGuest2.Text = "";
         txtgrCxCComments.Text = txtgrComments.Text = "";
@@ -1567,6 +1570,8 @@ namespace IM.Host.Forms
       CalculateCharge(ref _frmNull);
       PersonnelShort host = cbogrHost.SelectedItem as PersonnelShort;
       PersonnelShort offered = cbogrpe.SelectedItem as PersonnelShort;
+      GiftsReceiptDetail.grGuest = txtgrGuest.Text;
+      GiftsReceiptDetail.grGuest2 = txtgrGuest2.Text;
       //// Verificamos si es un Gift Receipt nuevo!
       if (string.IsNullOrEmpty(txtgrID.Text))
       {
@@ -1587,9 +1592,7 @@ namespace IM.Host.Forms
         if (guest.guQuinella && !guest.guGiftsReceived && App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
         {
           // esplegamos el formulario de generacion de recibos de regalos
-          frmGiftsReceiptsAdditional _frmGifsAdditional = new frmGiftsReceiptsAdditional(this, Convert.ToInt32(txtgrgu.Text));
-          _frmGifsAdditional.ShowInTaskbar = false;
-          _frmGifsAdditional.Owner = this;
+          frmGiftsReceiptsAdditional _frmGifsAdditional = new frmGiftsReceiptsAdditional(this, Convert.ToInt32(txtgrgu.Text)) { Owner = this };
           _frmGifsAdditional.ShowDialog();
         }
         #endregion
@@ -1605,6 +1608,23 @@ namespace IM.Host.Forms
 
       // Guardamos los regalos
       await ReceiptsGifts.Save(obsGifts, receiptID, Convert.ToInt32(txtgrgu.Text), _newExchangeGiftReceipt);
+
+      // Guardamos los pagos
+      await GiftsReceiptsPayments.SavePayments(receiptID, grdPayments, (_newExchangeGiftReceipt || _newGiftReceipt), _lstPaymentsDelete);
+
+      // Si el recibo no esta cancelado ni cerrado
+      if (!chkgrCancel.IsChecked.Value)
+      {
+        // Si no se esta buscando
+        if (_guestID > 0)
+        {
+          // Actualizamos los datos de la invitacion
+          await UpdateGuest();
+        }
+      }
+
+      // Guardamos el historico de recibo de regalos
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), txtChangedBy.Text);
 
       // si se manejan promociones de sistur
       if (ConfigHelper.GetString("UseSisturPromotions").ToUpper().Equals("TRUE"))
@@ -1631,20 +1651,6 @@ namespace IM.Host.Forms
         SavePromotionsOpera(receiptID);
       }
 
-      // Guardamos los pagos
-      await SavePayments(receiptID);
-
-      // Si el recibo no esta cancelado ni cerrado
-      if (!chkgrCancel.IsChecked.Value)
-      {
-        // Si no se esta buscando
-        if (_guestID > 0)
-        {
-          // Actualizamos los datos de la invitacion
-          await UpdateGuest();
-        }
-      }
-
       brdExchange.Visibility = Visibility.Hidden;
 
       // Actualizamos las banderas
@@ -1654,11 +1660,7 @@ namespace IM.Host.Forms
       logGiftDetail.Clear();
       _lstPaymentsDelete.Clear();
 
-      // Guardamos el historico de recibo de regalos
-      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), txtChangedBy.Text);
-
       Controls_Reading_Mode();
-
     }
     #endregion
 
@@ -1707,73 +1709,6 @@ namespace IM.Host.Forms
       if (Update)
         await BREntities.OperationEntity(_guest, Model.Enums.EnumMode.Edit);
 
-    }
-    #endregion
-
-    #region SavePayments
-    /// <summary>
-    /// Realiza las validaciones de los campos introducidos en el grid de Payments y los guarda en la BD
-    /// </summary>
-    /// <param name="GiftReceipt"></param>
-    /// <history>
-    /// [vipacheco] 27/Abril/2016 Created
-    /// </history>
-    private async Task SavePayments(int GiftReceipt)
-    {
-      foreach (var item in grdPayments.Items)
-      {
-        GiftsReceiptPaymentShort _selected;
-
-        if (item is GiftsReceiptPaymentShort)
-        {
-          _selected = (GiftsReceiptPaymentShort)item;
-
-          // Construimos la entidad tipo GiftsReceiptsPayments
-          GiftsReceiptPayment _newGiftsPayments = new GiftsReceiptPayment
-          {
-            gypt = _selected.gypt,
-            gycu = _selected.gycu,
-            gyAmount = _selected.gyAmount,
-            gyRefund = _selected.gyRefund,
-            gysb = string.IsNullOrEmpty(_selected.gysb) ? null : _selected.gysb,
-            gype = _selected.gype,
-            gybk = _selected.gybk,
-          };
-          if (_selected.gygr == 0)
-            _newGiftsPayments.gygr = GiftReceipt;
-
-          if (_newGiftReceipt || _newExchangeGiftReceipt) // Si es de nueva creacion se agregan todos.
-          {
-            await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Add);
-          }
-          else // Si se estan editando
-          {
-            // Verificamos si el Gift se encuentra en la BD.
-            GiftsReceiptPayment _giftPayment = BRGiftsReceiptsPayments.GetGiftReceiptPayment(_selected.gygr, _selected.gyID);
-
-            if (_giftPayment != null) // Si existe este registro se verifica si algun campo se edito
-            {
-              if (_giftPayment.gyAmount != _selected.gyAmount || _giftPayment.gypt != _selected.gypt ||
-                  _giftPayment.gybk != _selected.gybk || _giftPayment.gycu != _selected.gycu || _giftPayment.gype != _selected.gype ||
-                  _giftPayment.gyRefund != _selected.gyRefund || _giftPayment.gysb != _selected.gysb)
-              {
-                _newGiftsPayments.gyID = _selected.gyID;
-                _newGiftsPayments.gygr = _selected.gygr;
-                await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Edit);
-              }
-            }
-            else // registro nuevo
-            {
-              await BREntities.OperationEntity(_newGiftsPayments, Model.Enums.EnumMode.Add);
-            }
-
-            // Se verifica si se elimino alguno de la lista original
-            if (_lstPaymentsDelete.Count > 0)
-              await BREntities.OperationEntities(_lstPaymentsDelete, Model.Enums.EnumMode.Delete);
-
-          }
-        }
-      }
     }
     #endregion
 
@@ -2099,7 +2034,7 @@ namespace IM.Host.Forms
       if (grdReceipts.Items.Count == 0)
       {
         // Si no se esta buscando
-        if (_guestID > 0)
+        if (_guestID > 0 && _modeOpenBy != EnumOpenBy.Button)
         {
           _Undo = true;
           Close();
@@ -2193,8 +2128,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Crea el row nuevo con valores por default en el grid Payments
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 20/Abril/2016 Created
     /// </history>
@@ -2594,6 +2527,7 @@ namespace IM.Host.Forms
         bool isExchange = chkgrExchange.IsChecked.Value;
         // Validamos la celda
         bool HasErrorValidate = await ReceiptsGifts.ValidateEdit(dataGrid, giftsReceiptDetail, isExchange, _currentCell);
+
         // Si no tiene errores se hacen los calculos.
         if (!HasErrorValidate)
         {
