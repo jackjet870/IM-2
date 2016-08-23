@@ -37,7 +37,6 @@ namespace IM.Model
         public Nullable<System.DateTime> ocTransferMembershipsStartD { get; set; }
         public Nullable<System.DateTime> ocTransferMembershipsEndD { get; set; }
         public decimal ocVATRate { get; set; }
-        public Nullable<System.DateTime> ocInvitationsCloseD { get; set; }
     
         public virtual Personnel Personnel_Administrator { internal get; set; }
         public virtual Personnel Personnel_Boss { internal get; set; }

@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using IM.Model.Classes;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace IM.Base.Classes
 {
-  internal class objReportQueue : INotifyPropertyChanged
+  internal class objReportQueue : EntityBase
   {
     public string Id { get; set; }
 
@@ -31,20 +29,6 @@ namespace IM.Base.Classes
     {
       get { return _exists; }
       set { SetField(ref _exists, value); }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return;
-      field = value;
-      OnPropertyChanged(propertyName);
     }
   }
 }

@@ -128,7 +128,7 @@ namespace IM.Base.Helpers
 
       //Auto Ajuste de columnas de  acuerdo a su contenido
       //ws.Cells[ws.Dimension.Address].AutoFitColumns();
-      AutoFitColumns(ref ws);
+      AutoFitColumns(ref ws, dt.Columns.Count, dt.Rows.Count + filasTotalesFiltros);
       //Centramos el titulo de la aplicacion
       ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
       //Centramos el titulo del reporte
@@ -224,6 +224,7 @@ namespace IM.Base.Helpers
       //Cargamos la tabla dinamica.
       var pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows + 1, 1],
         wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
+      pivotTable.ApplyWidthHeightFormats = false;
 
       if (isPivot)
       {
@@ -430,6 +431,8 @@ namespace IM.Base.Helpers
           }
         });
       }
+
+      AutoFitColumns(ref wsPivot, dtData.Columns.Count, totalFilterRows,true);
 
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -965,7 +968,7 @@ namespace IM.Base.Helpers
       #endregion
 
       //Ajustamos las columnas al contenido.
-      AutoFitColumns(ref wsData);
+      AutoFitColumns(ref wsData, dtTable.Columns.Count, rowNumber);
 
       #region SaveFile
       FileInfo pathFinalFile;
@@ -1585,7 +1588,7 @@ namespace IM.Base.Helpers
         #endregion Agregando Datos
       }
 
-      AutoFitColumns(ref wsData);
+      AutoFitColumns(ref wsData, pivotedTable.Columns.Count, rowNumber);
 
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -2127,6 +2130,7 @@ namespace IM.Base.Helpers
 
             #endregion Agrupado
           }
+          AutoFitColumns(ref wsData, pair.Item1.Columns.Count, rowNumber);
         }
         else
         {
@@ -2141,9 +2145,9 @@ namespace IM.Base.Helpers
             range.Style.Fill.PatternType = ExcelFillStyle.Solid;
             range.Style.Fill.BackgroundColor.SetColor(Color.Cyan);
             range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            range.AutoFitColumns();
           }
         }
-        AutoFitColumns(ref wsData);
       }
 
       FileInfo pathFinalFile;
@@ -2712,7 +2716,7 @@ namespace IM.Base.Helpers
       }
       //Ajustamos las celdas a su contenido.
       //wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
-      AutoFitColumns(ref wsData);
+      AutoFitColumns(ref wsData, dtTable.Columns.Count, rowNumber);
 
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -3932,6 +3936,7 @@ namespace IM.Base.Helpers
     #endregion SetDataFieldShowDataAsAttribute
 
     #region AutoFitColumns
+
     /// <summary>
     /// Aplica el auto ajuste de las columnas segun el contenido.
     /// Recorre las columnas y aplica el ajuste del texto al tamaño de la columna y
@@ -3940,19 +3945,22 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 30/06/2016  Created.
     /// </history>
-    private static void AutoFitColumns(ref ExcelWorksheet ws)
+    private static void AutoFitColumns(ref ExcelWorksheet ws, int Col, int Row, bool isDynamicPivot = false)
     {
-      ws.Cells.AutoFitColumns();
-
-      var totalCols = ws.Cells.Columns;
-      for (int i = 1; i <= totalCols; i++)
+      using (var range = ws.Cells[1, 1, (isDynamicPivot)? ws.Cells.End.Row : ws.Dimension.Rows, (isDynamicPivot) ? ws.Cells.End.Column:ws.Dimension.Columns])
       {
-        var column = ws.Column(i);
-        column.Width = column.Width > ColumnMaxWidth ? ColumnMaxWidth : column.Width;
-        column.Style.WrapText = column.Width == ColumnMaxWidth ;
-
+        range.AutoFitColumns();
+        if (isDynamicPivot) return;
+        for (int i = 1; i <= ws.Dimension.Columns; i++)
+        {
+          var column = ws.Column(i);
+          column.Width = column.Width > ColumnMaxWidth ? ColumnMaxWidth : column.Width;
+          column.Style.WrapText = column.Width == ColumnMaxWidth;
+        }
+        range.AutoFitColumns();
       }
     }
+
     #endregion
 
     #region ReorderColumns

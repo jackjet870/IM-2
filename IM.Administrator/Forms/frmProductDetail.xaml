@@ -1,0 +1,107 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmProductDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:UC="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
+        Title="Product Detail" Height="530" Width="620">
+    <DockPanel LastChildFill="True" >
+
+        <!--#region  Botones-->
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">            
+            <StackPanel Orientation="Horizontal" Name="skpStatus" Visibility="Visible" Margin="4,0,0,4">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+        </Grid>
+        <!--#endregion-->
+
+        <Grid Name="grdContent" >
+            <!--#region Columnas del grid-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="55*" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <ColumnDefinition Width="45*"/>
+            </Grid.ColumnDefinitions>
+            <!--#endregion-->
+            <!--#region Left-->
+            <Grid  Margin="0,10,0,0" Grid.Column="0" >
+                <!--#region Formato del grid-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="33"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--#endregion-->
+                <!--#region títulos-->
+                <Label Grid.Column="0" Grid.Row="0">ID</Label>
+                <Label Grid.Column="0" Grid.Row="1">Description</Label>
+                <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Language</Label>
+                <!--#endregion-->
+                <TextBox Name="txtprID" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding prID}" CharacterCasing="Upper" IsEnabled="False" Margin="69,0,0,0" />
+                <TextBox Name="txtprN" Tag="description" Grid.Row="1" IsEnabled="False" Height="27" VerticalAlignment="Top" Text="{Binding prN}" Margin="69,0,0,0" />
+                <CheckBox Name="chkprA" Grid.Column="0" Grid.Row="2" IsEnabled="False" VerticalAlignment="Center" IsChecked="{Binding prA}" Margin="69,0,0,0" >Active</CheckBox>
+                <ComboBox SelectedIndex="0" Name="cmbLanguages" Grid.Column="0" SelectedValuePath="laID" DisplayMemberPath="laN" SelectionChanged="cmbLanguages_SelectionChanged" IsEnabled="False" Grid.Row="3" VerticalAlignment="Top" Margin="69,5,0,0" Height="27"/>
+                <DockPanel Name="dcpText" Grid.Row="4" IsEnabled="False" LastChildFill="True">
+                    <UC:ToolBarRtfFontStyle DockPanel.Dock="Top" Name="ucRichTextBoxToolBar2" Margin="3,0,3,0" />
+                    <UC:ToolBarRtfStyle DockPanel.Dock="Left" Margin="8,3,0,0" Name="ucRichTextBoxToolBar1"/>
+                    <RichTextBox DockPanel.Dock="Top" x:FieldModifier="public" Margin="8,8,0,0" x:Name="richTextBox" BorderThickness="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" SelectionChanged="richTextBox_SelectionChanged">
+                        <RichTextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCut.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Copy" Command="ApplicationCommands.Copy">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Paste" Command="ApplicationCommands.Paste">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BPaste.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>                                
+                            </ContextMenu>
+                        </RichTextBox.ContextMenu>
+                    </RichTextBox>
+                </DockPanel>
+            </Grid>
+            <!--#endregion-->
+            <!--#region Right-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition  />
+                </Grid.RowDefinitions>
+                <DataGrid Name="dgrGift" IsReadOnly="True" Margin="10,10,10,0" IsSynchronizedWithCurrentItem="True" CellEditEnding="dgrGift_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
+                  CanUserResizeColumns="False" CanUserResizeRows="False" RowEditEnding="dgrGift_RowEditEnding" >
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn  Width="35*" x:Name="cmbGiftID" DisplayMemberPath="giID" SelectedValuePath="giID"
+                                         SelectedValueBinding="{Binding giID}"  Header="Gift" >
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Gift-Concat}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="TextSearch.TextPath" Value="giN"/>
+                                    <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Gift-Concat}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+
+                        </DataGridComboBoxColumn>                        
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <!--#endregion-->
+        </Grid>
+    </DockPanel>
+</Window>

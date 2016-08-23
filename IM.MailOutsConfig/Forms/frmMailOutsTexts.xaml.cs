@@ -625,7 +625,7 @@ namespace IM.MailOutsConfig.Forms
 
     public void ColorPick(object sender, EventArgs e)
     {
-      RichTextBoxToolBar.OnColorPick(ref richTextBox);
+      RichTextBoxToolBar.OnColorPick(ref richTextBox, ref ucRichTextBoxToolBar1.imgColorPick);
     }
 
     public void ExportRTF(object sender, EventArgs e)
@@ -674,5 +674,17 @@ namespace IM.MailOutsConfig.Forms
     }
     #endregion
 
+    #region richTextBox_SelectionChanged
+    /// <summary>
+    /// Modifica los controles segun el las propiedades del texto seleccionado
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 20/08/2016
+    ///  </history>
+    private void richTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+    {
+      RichTextBoxToolBar.OnSalectionChanded(ref richTextBox, ref ucRichTextBoxToolBar2, ref ucRichTextBoxToolBar1);
+    } 
+    #endregion
   }
 }

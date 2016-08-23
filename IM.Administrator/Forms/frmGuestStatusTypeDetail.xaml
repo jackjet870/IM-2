@@ -1,0 +1,52 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmGuestStatusTypeDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
+        Title="Guest Status Type Detail" Height="368" Width="308" DataContext="{Binding guestStaTyp}">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Start age</Label>
+        <Label Grid.Column="0" Grid.Row="3">End age</Label>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Maximun Authorized amount of gifts" TextWrapping="WrapWithOverflow"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Maximun quanty of tours" TextWrapping="WrapWithOverflow"/>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtgsID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding gsID}" IsEnabled="False" CharacterCasing="Upper" />
+        <TextBox Name="txtgsN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding gsN}" IsEnabled="False" />
+        <TextBox Name="txtgsAgeStart" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeStart}" IsEnabled="False"  />
+        <TextBox Name="txtgsAgeEnd" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeEnd}" IsEnabled="False" />
+        <TextBox Name="txtgsMaxAuthGifts" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxAuthGifts,StringFormat={}{0:C}}" IsEnabled="False" />
+        <TextBox Name="txtgsMaxQtyTours" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxQtyTours}" IsEnabled="False" />
+        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding gsA}" Height="13" IsEnabled="False">Active</CheckBox>
+        <CheckBox Name="chkAllTour" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding gsAllowTourDisc}" Height="13" IsEnabled="False">Allow discount tour </CheckBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Name="skpStatus" Visibility="Collapsed" Margin="0,0,0,7" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Saving Data..."/>
+        </StackPanel>
+        <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

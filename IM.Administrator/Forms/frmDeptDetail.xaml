@@ -1,0 +1,59 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmDeptDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"                        
+        mc:Ignorable="d" Loaded="Window_Loaded"
+        Title="Dept Detail" Height="408" Width="368" Closing="Window_Closing">
+    <DockPanel LastChildFill="True" >
+        <!--#region Top-->
+        <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
+            <!--#region Formato del grid-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="28"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region títulos-->
+            <Label Grid.Column="0" Grid.Row="0">ID</Label>
+            <Label Grid.Column="0" Grid.Row="1">Description</Label>
+            <!--#endregion-->
+            <TextBox Name="txtdeID" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding deID}" CharacterCasing="Upper" IsEnabled="False" Margin="69,0,0,0" />
+            <TextBox Name="txtdeN" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding deN}" Margin="69,0,0,0" />
+            <CheckBox Name="chkdeA" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding deA}" Height="12" Margin="69,0,0,0" >Active</CheckBox>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region  Botones-->
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Grid Sales Room-->
+        <DataGrid Name="dgrPersonnel" Margin="79,0,14,0" IsSynchronizedWithCurrentItem="True" Grid.Column="1" CellEditEnding="dgrPersonnels_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
+                  CanUserResizeColumns="False" CanUserResizeRows="False" RowEditEnding="dgrPersonnel_RowEditEnding" >
+            <DataGrid.Columns>
+                <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" SelectedValuePath="peID"
+                                         SelectedValueBinding="{Binding peID}" DisplayMemberPath="peN"  Header="Personnel" >
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Personnel-Concat}"/>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="TextSearch.TextPath" Value="peN"/>
+                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=cbx-Personnel-Concat}"/>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>                    
+                </DataGridComboBoxColumn>
+                <DataGridCheckBoxColumn Header="Active" x:Name="chkpeA" Width="22*" IsReadOnly="True" Binding="{Binding peA,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>

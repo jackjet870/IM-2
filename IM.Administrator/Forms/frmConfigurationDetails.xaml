@@ -1,0 +1,62 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmConfigurationDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" Closing="Window_Closing"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="Configuration Detail" Height="407" Width="600" DataContext="{Binding configurations}" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+    <Grid>
+        <!--#region RowDefinitions GridPrincipal-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="15*" />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region Controles-->
+        <Grid Grid.Row="0" Margin="10,10,14,2">
+            <!--#region columnas y filas-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="75*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region titulos-->
+            <Label Grid.Column="0" Grid.Row="0">Data base version</Label>
+            <Label Grid.Column="0" Grid.Row="1">Weey Day Start</Label>
+            <Label Grid.Column="0" Grid.Row="2">Administrator User</Label>
+            <Label Grid.Column="0" Grid.Row="3">Guest Registration Copies</Label>
+            <Label Grid.Column="0" Grid.Row="4">Tour Times Schema</Label>
+            <Label Grid.Column="0" Grid.Row="5">Boss</Label>
+            <Label Grid.Column="0" Grid.Row="6">VAT Rate</Label>
+            <!--#endregion-->
+            <!--#region Datos-->
+            <TextBox x:Name="txtocDBVersion" Grid.Column="1" Height="27" VerticalAlignment="Top" Text="{Binding ocDBVersion}" Tag="data base version"  IsEnabled="False" />
+            <ComboBox x:Name="cboocWeekDayStart" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" SelectedValuePath="wdDay" DisplayMemberPath="wdN" SelectedValue="{Binding ocWeekDayStart}" Height="27" Tag="week day start" IsEnabled="False"/>
+            <ComboBox x:Name="cboocAdminUser" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" SelectedValuePath="peID" DisplayMemberPath="peN" SelectedValue="{Binding ocAdminUser}" Height="27" Tag="administrator user" IsEnabled="False"/>
+            <TextBox x:Name="txtocWelcomeCopies" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" Text="{Binding ocWelcomeCopies}" Height="27" Tag="guest registration copies" IsEnabled="False"/>
+            <ComboBox x:Name="cboocTourTimesSchema" Grid.Column="1" Grid.Row="4" VerticalAlignment="Top" SelectedValuePath="tcID" DisplayMemberPath="tcN" SelectedValue="{Binding ocTourTimesSchema}"  Height="27" Tag="tour times schema" IsEnabled="False"/>
+            <ComboBox x:Name="cboocBoss" Grid.Column="1" Grid.Row="5" VerticalAlignment="Top" SelectedValuePath="peID" DisplayMemberPath="peN" SelectedValue="{Binding ocBoss}" Height="27" Tag="boss" IsEnabled="False"/>
+            <TextBox x:Name="txtocVATRate" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Validation.ErrorTemplate="{x:Null}" Text="{Binding ocVATRate, StringFormat={}{0:0.00}% }" Height="27" Tag="vatrate" IsEnabled="False"/>
+            <!--#endregion-->
+        </Grid>
+        <!--#region Botones-->
+        <StackPanel Name="skpStatus" HorizontalAlignment="Left" Height="29" Margin="10,3,0,0" Visibility="Visible" VerticalAlignment="Top" Width="71" Grid.Row="1">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
+        <Button x:Name="btnAccept" Content="_Accept" HorizontalAlignment="Left" Margin="438,3,0,0" Grid.Row="1" VerticalAlignment="Top" Width="60" Height="30" Visibility="Hidden" Click="btnAccept_Click"/>
+        <Button x:Name="btnCancel" Content="_Cancel" HorizontalAlignment="Left" Margin="520,3,0,0" Grid.Row="1" VerticalAlignment="Top" Width="60" Height="30" Click="btnCancel_Click"/>
+        <!--#endregion-->
+        <!--#endregion-->
+    </Grid>
+</Window>

@@ -26,39 +26,39 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<MealTicket>> GetMealTickets(int mealTicket = 0, string folio = "", int rateType = 0, DateTime? dateIni = null, DateTime? dateFinal = null)
     {
-      List<MealTicket> lstResult = new List<MealTicket>();
-
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          IQueryable<MealTicket> query = Enumerable.Empty<MealTicket>().AsQueryable();
+
           #region Meal Ticket ID
           if (mealTicket != 0) // Busqueda solo con el Meal Ticket ID
-            lstResult = dbContext.MealTickets.Where(x => x.meID == mealTicket).ToList();
+            query = dbContext.MealTickets.Where(x => x.meID == mealTicket);
           #endregion
 
           #region Folio
-          if (lstResult.Count == 0 && folio != "") // Busqueda solo con el Folio
-            lstResult = dbContext.MealTickets.Where(x => x.meFolios == folio).ToList();
+          if (!query.Any() && folio != "") // Busqueda solo con el Folio
+            query = dbContext.MealTickets.Where(x => x.meFolios == folio);
           else if (folio != "")
-            lstResult = lstResult.Where(x => x.meFolios == folio).ToList();
+            query = query.Where(x => x.meFolios == folio);
           #endregion
 
           #region RateType
-          if (lstResult.Count == 0 && rateType != 0) // Busqueda solo con el Rate Type
-            lstResult = dbContext.MealTickets.Where(x => x.mera == rateType).ToList();
+          if (!query.Any() && rateType != 0) // Busqueda solo con el Rate Type
+            query = dbContext.MealTickets.Where(x => x.mera == rateType);
           else if (rateType != 0)
-            lstResult = lstResult.Where(x => x.mera == rateType).ToList();
+            query = query.Where(x => x.mera == rateType);
           #endregion
 
           #region Fechas
           if (dateIni != null && dateFinal != null) // Busqueda solo con el rango de fechas
-            lstResult = lstResult.Where(x => x.meD >= dateIni && x.meD <= dateFinal).ToList();
+            query = query.Where(x => x.meD >= dateIni && x.meD <= dateFinal);
           #endregion
+
+          return query.ToList();
         }
       });
-
-      return lstResult;
     }
     #endregion
 

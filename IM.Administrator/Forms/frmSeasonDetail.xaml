@@ -1,0 +1,101 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmSeasonDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Converter="clr-namespace:IM.Base.Converters;assembly=IM.Base"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"
+        mc:Ignorable="d" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="Season Detail" Height="480" Width="500" DataContext="{Binding season}" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing">
+    <Window.Resources>
+        <Converter:DateAndTimeConverter x:Key="DateTimeConverterSS"/>
+    </Window.Resources>
+    <Grid Margin="10,10,14,2">
+        <Grid.RowDefinitions>
+            <!--#region Filas-->
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="10*" />
+            <!--#endregion-->
+        </Grid.RowDefinitions>
+        <!--#region Detalles de la temporada-->
+        <Grid Grid.Column="0" Grid.Row="0">
+            <!--#region Filas y Columnas-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="75*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region Titulos-->
+            <Label Grid.Column="0" Grid.Row="0">ID</Label>
+            <Label Grid.Column="0" Grid.Row="1">Description</Label>
+            <Label Grid.Column="0" Grid.Row="2">Closing Factor</Label>
+            <!--#endregion-->
+            <!--#region Datos-->
+            <TextBox x:Name="txtssID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding ssID}" IsEnabled="False"></TextBox>
+            <TextBox x:Name="txtDescrip" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding ssN}" IsEnabled="False"></TextBox>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
+                <TextBox x:Name="txtClosFac" Grid.Column="1" Grid.Row="2" Height="27" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding ssClosingFactor, StringFormat=N2}" IsEnabled="False"></TextBox>
+                <Label Height="27" VerticalAlignment="Top" VerticalContentAlignment="Center">%</Label>
+            </StackPanel>
+            <CheckBox x:Name="chkActive" Grid.Column="1" Grid.Row="3" Width="50" Height="15" IsChecked="{Binding ssA}" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False">Active</CheckBox>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+        <!--#region Fechas de la temporada-->
+        <Grid Grid.Column="0" Grid.Row="1">
+            <!--#region Filas y columnas-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <!--#endregion-->
+            <!--#region Año-->
+            <Label x:Name="lblYear" Grid.ColumnSpan="3" Content="lblYear" HorizontalContentAlignment="Center"></Label>
+            <!--#endregion-->
+            <!--#region Grid Dates-->
+            <DataGrid x:Name="dgrDates" Grid.Column="0" Grid.Row="1" Height="200" ItemsSource="{Binding}" VerticalAlignment="Top" AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" CanUserAddRows="True" 
+                  CanUserResizeColumns="False" CanUserResizeRows="False" CellEditEnding="dgrDates_CellEditEnding" RowEditEnding="dgrDates_RowEditEnding" BeginningEdit="dgrDates_BeginningEdit">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="txtFrom" Header="From" Width="*" Binding="{Binding sdStartD, Converter={StaticResource DateTimeConverterSS}, ConverterParameter=DATE, Mode=TwoWay}"/>
+                    <DataGridTextColumn x:Name="txtTo" Header="To" Width="*" Binding="{Binding sdEndD, Converter={StaticResource DateTimeConverterSS}, ConverterParameter=DATE,  Mode=TwoWay}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+            <!--#region Btns-->
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                <Button x:Name="btnBack" Content="Back" Margin="0,5,0,5" VerticalAlignment="Center" Width="40" Height="30" Click="btnBack_Click"/>
+                <Button x:Name="btnNext" Content="Next" Margin="0,5,0,5" VerticalAlignment="Center" Width="40" Height="30"  Click="btnNext_Click"/>
+            </StackPanel>
+            <!--#endregion-->
+            <!--#region Grid Dates Unassigned-->
+            <DataGrid x:Name="dgrDatesUnassigned" Grid.Column="2" Grid.Row="1" Height="200" VerticalAlignment="Top" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="From" Width="*" Binding="{Binding Start, Converter={StaticResource DateTimeConverterSS}, ConverterParameter=DATE}"/>
+                    <DataGridTextColumn Header="To" Width="*" Binding="{Binding Finish, Converter={StaticResource DateTimeConverterSS}, ConverterParameter=DATE}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+        <!--#region Buttons-->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Name="skpStatus"  Margin="10,6,96,13" Visibility="Visible" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
+        <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="0" Grid.Row="2" Margin="0,6,96,13"  HorizontalAlignment="Right" Visibility="Hidden" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="0" Grid.Row="2" Margin="0,6,21,13"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->    
+    </Grid>
+</Window>

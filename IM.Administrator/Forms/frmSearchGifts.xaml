@@ -1,0 +1,63 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmSearchGifts"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" ResizeMode="NoResize"
+        Title="Gifts Search" Height="257" Width="440">
+    <DockPanel LastChildFill="True" Margin="10,10,10,5">
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Name="skpStatus" Visibility="Visible" Margin="0,6,96,0" HorizontalAlignment="Left">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Visibility="Hidden" Content="_Accept" Margin="0,5,74,0"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,5,0,0"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--#region Labels-->
+            <Label Grid.Row="0" Grid.Column="0" Content="Product Electronic Purse" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Label Grid.Row="0" Grid.Column="1" Content="Promotion Sistur" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Transacction Type Opera" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Promotion Opera" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="Category" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <!--#endregion-->
+            <!--#region Combobox-->
+            <ComboBox Name="cmbProdElecPurse" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" DisplayMemberPath="DESCRIPCION" SelectedValuePath="IDPRODUCTO" SelectedValue="{Binding giProductGiftsCard}"/>
+            <ComboBox Name="cmbPromSistur" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" DisplayMemberPath="nombre" SelectedValuePath="clave" SelectedValue="{Binding giPVPPromotion}"/>
+            <ComboBox Name="cmbTranTypes" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" DisplayMemberPath="Description" SelectedValuePath="Trx_code" SelectedValue="{Binding giOperaTransactionType}"/>
+            <ComboBox Name="cmbPromotionOpera" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" >
+                <ComboBoxItem Name="ALL">ALL</ComboBoxItem>
+                <ComboBoxItem Name="ANY">ANY</ComboBoxItem>
+                <ComboBoxItem Name="NONE">NONE</ComboBoxItem>                
+                    <TextBox Name="SELECTED" Width="200"/>
+            </ComboBox>
+            <Grid Grid.Row="2" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <!--#region Labels-->
+                <Label Grid.Row="0" Grid.Column="0" Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <Label Grid.Row="0" Grid.Column="1" Content="Package" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <!--#endregion-->
+                <!--#region Combobox-->
+                <ComboBox Name="cmbStatus" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" DisplayMemberPath="sName" SelectedValuePath="sValue"/>
+                <ComboBox Name="cmbPackage" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" DisplayMemberPath="sName" SelectedValuePath="sValue"/>
+                <!--#endregion-->
+            </Grid>
+            <ComboBox Name="cmbGiftsCategory" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" DisplayMemberPath="gcN" SelectedValuePath="gcID" SelectedValue="{Binding gigc}"/>
+            <!--#endregion-->
+        </Grid>        
+    </DockPanel>
+</Window>

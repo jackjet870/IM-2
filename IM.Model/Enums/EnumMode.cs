@@ -21,10 +21,7 @@ namespace IM.Model.Enums
     [Description("Edit")]
     Edit,
     [Description("Edit Partial")]
-    EditPartial,
-
-    //TODO: TONY -> Por favor elimina esta opcion. La utilizas en Gifts Receipts y Meal Tickets
-    PreviewEdit,
+    EditPartial,  
     [Description("Search")]
     Search,
     [Description("Delete")]

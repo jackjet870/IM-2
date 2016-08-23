@@ -23,18 +23,20 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de TourTimeAvailable</returns>
     /// <history>
     /// [lchairez] 10/03/2016 Created.
+    /// [erosado] 22/08/2016  Modified. se agrego async y await se optimizo.
     /// </history>
-    public static List<TourTimeAvailable> GetTourTimesAvailables(string leadSource, string salesRoom, DateTime selectedDate
+    public static async Task<List<TourTimeAvailable>> GetTourTimesAvailables(string leadSource, string salesRoom, DateTime selectedDate
                                                                   , DateTime? originalDate = null, DateTime? originalTime = null
                                                                   ,DateTime? currentDate = null)
     {
-
-      using(var dbContex = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContex.Database.CommandTimeout = 60;
-        return dbContex.USP_OR_GetTourTimesAvailables(leadSource, salesRoom, selectedDate, originalDate, originalTime, currentDate == null ? DateTime.Today : currentDate).ToList();
-      }
-
+        using (var dbContex = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContex.Database.CommandTimeout = 60;
+          return dbContex.USP_OR_GetTourTimesAvailables(leadSource, salesRoom, selectedDate, originalDate, originalTime, currentDate ?? DateTime.Today).ToList();
+        }
+      });
     }
     #endregion
   }

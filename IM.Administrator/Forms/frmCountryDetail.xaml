@@ -1,0 +1,52 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmCountryDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Title="Country Detail" Height="328" Width="338" Closing="Window_Closing" DataContext="{Binding country}">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="75*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Language</Label>
+        <TextBlock Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" TextWrapping="WrapWithOverflow" Text="Unavailable Motive"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="2" TextWrapping="WrapWithOverflow" Text="Nationality"/>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtcoID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding coID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtcoN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding coN}"  IsEnabled="False" />
+        <ComboBox Name="cmbLang" Grid.Column="1" Grid.Row="2" Tag="language" Height="27" VerticalAlignment="Top" DisplayMemberPath="laN" SelectedValuePath="laID" SelectedValue="{Binding cola}" IsEnabled="False"/>
+        <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="3" Tag="unavailable motive" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding coum}" IsEnabled="False"/>
+        <TextBox Name="txtcoNationality" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding coNationality}"  IsEnabled="False"/>
+        <Grid Grid.Column="1" Grid.Row="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox Name="chkSil" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding coList}" Height="13" IsEnabled="False">Show In List</CheckBox>
+            <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding coA}" Height="13" IsEnabled="False">Active</CheckBox>            
+        </Grid>
+
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

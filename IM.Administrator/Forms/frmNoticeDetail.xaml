@@ -1,0 +1,153 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmNoticeDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:UC="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Closing="Window_Closing" Loaded="Window_Loaded"
+        Title="Notice Detail" Height="530" Width="620">
+    <!--#region Resource-->
+    <Window.Resources>
+        <Style TargetType="wpftk:DateTimePicker">            
+            <Setter Property="ToolTip" Value="Select a date"/>            
+            <Setter Property="CultureInfo" Value="en-US"/>
+            <Setter Property="Format" Value="Custom"/>
+            <Setter Property="FormatString" Value="ddd d MMM yyyy"/>
+            <Setter Property="DefaultValue" Value="{x:Static sys:DateTime.Today}"/>
+            <Setter Property="DisplayDefaultValueOnEmptyText" Value="True"/>
+            <Setter Property="TimePickerVisibility" Value="Collapsed"/>
+            <Setter Property="Focusable" Value="True"/>
+            <Setter Property="IsReadOnly" Value="False"/>
+            <Setter Property="AllowTextInput" Value="False"/>
+            <Setter Property="AllowSpin" Value="True"/>
+            <Setter Property="AutoCloseCalendar" Value="True"/>
+            <Setter Property="Watermark" Value="Select a Date"/>
+            <Setter Property="IsUndoEnabled" Value="False"/>
+        </Style>
+    </Window.Resources>
+    <!--#endregion-->
+    <DockPanel LastChildFill="True">
+        <!--#region  Botones-->
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Name="skpStatus" Visibility="Visible" Margin="4,0,0,4">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+        </Grid>
+        <!--#endregion-->
+        <!--#region Contenedor-->
+        <Grid Name="grdContent">
+            <!--#region  Columnas-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="55*"/>
+            </Grid.ColumnDefinitions>
+            <!--#endregion-->
+
+            <!--#region Left-->
+            <Grid Margin="0 10 0 0" Grid.Column="0">
+                <!--#region  Rows-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="48"/>
+                    <RowDefinition Height="48" />
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--#endregion-->                
+                <!--#region  Títulos-->
+                <Label Grid.Row="0" Content="ID"/>
+                <Label Grid.Row="1" Content="Description"/>
+                <!--#endregion-->
+                
+                <!--#region Campos-->
+                <TextBox IsEnabled="False" Tag="ID" Name="txtnoID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding noID}" Margin="69 0 0 0"/>
+                <TextBox Name="txtnoTitle" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding noTitle}" Margin="69 0 0 0"/>
+                <CheckBox Name="chknoA" Grid.Row="2" Content="Active" IsChecked="{Binding noA}" Margin="69 0 0 0"/>
+
+                <GroupBox Name="gbxPrograms" Header="Program" Grid.Row="3" Margin="5 0 0 0" BorderThickness="3">
+                    <Grid>
+                        <ComboBox Height="27" SelectedIndex="0" Name="cmbPrograms" VerticalAlignment="Top" Margin="0 0 79 0" SelectedValuePath="pgID" DisplayMemberPath="pgN"/>
+                        <Button Name="btnAsignLsbyPg" Click="btnAsignLsbyPg_Click" Content="Assign" VerticalAlignment="Top" HorizontalAlignment="Right" Width="72" Height="27" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Name="gbxZones" Header="Zone" Grid.Row="4" Margin="5 0 0 0" BorderThickness="3">
+                    <Grid>
+                        <ComboBox Height="27" Name="cmbZones" SelectedIndex="0" VerticalAlignment="Top" Margin="0 0 79 0" SelectedValuePath="znID" DisplayMemberPath="znN"/>
+                        <Button Name="btnAssignLsbyZn" Click="btnAssignLsbyZn_Click" Content="Assign" VerticalAlignment="Top" HorizontalAlignment="Right" Width="72" Height="27" />
+                    </Grid>
+                </GroupBox>
+                <DataGrid Name="dgrLeadSources" RowEditEnding="dgrLeadSources_RowEditEnding" AutoGenerateColumns="False" Grid.Row="5" Margin="5 5 0 0" CanUserResizeRows="False" CellEditEnding="DataGrid_CellEditEnding">
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn Width="*" x:Name="cmbLeadSources" Header="Lead Sources (0)" SelectedValueBinding="{Binding lsID}" DisplayMemberPath="lsN" SelectedValuePath="lsID"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="KeyDown" Handler="dgrLeadSources_KeyDown"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region  Right-->
+            <Grid Margin="0 10 0 0" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <!--#region Title-->
+                <Label Content="Range Date" Grid.Column="1" Grid.Row="0"/>
+                <Label Content="From" Grid.Column="1" Grid.Row="1"/>
+                <Label Content="To" Grid.Column="1" Grid.Row="2"/>
+                <!--#endregion-->
+                
+                <!--#region  Content-->
+                <ComboBox SelectionChanged="cmbRangeDate_SelectionChanged" Name="cmbRangeDate" VerticalAlignment="Top" Grid.Row="0" Margin="69,0,0,0" Height="25" DisplayMemberPath="Value" SelectedValuePath="Key" />                
+                <wpftk:DateTimePicker Value="{Binding noStartD}" Name="dtpkFrom" Grid.Row="1" Height="25" Margin="69 0 0 0"/>
+                <wpftk:DateTimePicker Value="{Binding noEndD}" Name="dtpkTo" Grid.Row="2" Height="25" Margin="69 0 0 0"/>
+                <!--#region  Ritch TextBox-->
+                <DockPanel Name="dcpText" Grid.Row="4" LastChildFill="True">
+                    <UC:ToolBarRtfFontStyle DockPanel.Dock="Top" Name="ucRichTextBoxToolBar2" Margin="3,0,3,0" />
+                    <UC:ToolBarRtfStyle DockPanel.Dock="Left" Margin="8,3,0,0" Name="ucRichTextBoxToolBar1"/>
+                    <RichTextBox DockPanel.Dock="Top" x:FieldModifier="public" Margin="8,8,0,0" x:Name="richTextBox" BorderThickness="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SelectionChanged="richTextBox_SelectionChanged">
+                        <RichTextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCut.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Copy" Command="ApplicationCommands.Copy">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Paste" Command="ApplicationCommands.Paste">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BPaste.png" Width="12"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                            </ContextMenu>
+                        </RichTextBox.ContextMenu>
+                    </RichTextBox>
+                </DockPanel>
+                <!--#endregion-->
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>

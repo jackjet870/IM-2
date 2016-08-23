@@ -1,0 +1,43 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmPostLogDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
+        Title="Post Log Detail" SizeToContent="WidthAndHeight" Closing="Window_Closing">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="75*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Name="lblppID" Grid.Column="0" Grid.Row="0" >ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Date/Time</Label>
+        <Label Grid.Column="0" Grid.Row="2">Changed By</Label>
+        <Label Grid.Column="0" Grid.Row="3">Person</Label>
+        <Label Name="lblpppo" Grid.Column="0" Grid.Row="4">Post</Label>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtppID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding ppID}" CharacterCasing="Upper" IsEnabled="False" Margin="0,0,0,15" Width="235" />        
+        <TextBox Name="txtppDT" Grid.Column="1" Grid.Row="1" Tag="Date/Time" Height="27" VerticalAlignment="Stretch" Text="{Binding ppDT}"  IsEnabled="False" Margin="0,0,0,15" />
+        <DatePicker Name="dpppDT" Grid.Column="1"  Grid.Row="1" Height="27" VerticalAlignment="Stretch" Margin="0,0,0,15" Visibility="Hidden"/>
+        <ComboBox Name="cmbppChangedBy" Grid.Column="1" Grid.Row="2" Tag="Changed By" Height="27" VerticalAlignment="Top" DisplayMemberPath="peN" SelectedValuePath="peID" SelectedValue="{Binding ppChangedBy}" IsEnabled="False" Margin="0,0,0,15" Width="235"/>
+        <ComboBox Name="cmbpppe" Grid.Column="1" Grid.Row="3" Tag="Person" Height="27" VerticalAlignment="Top" DisplayMemberPath="peN" SelectedValuePath="peID" SelectedValue="{Binding pppe}" IsEnabled="False" Margin="0,0,0,15" Width="235"/>
+        <ComboBox Name="cmbpppo" Grid.Column="1" Grid.Row="4" Tag="Post" Height="27" VerticalAlignment="Top" DisplayMemberPath="poN" SelectedValuePath="poID" SelectedValue="{Binding pppo}" IsEnabled="False" Margin="0,0,0,15" Width="235"/>
+        
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7,75,7"  HorizontalAlignment="Right" Visibility="Hidden" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

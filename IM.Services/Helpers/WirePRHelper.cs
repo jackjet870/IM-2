@@ -121,8 +121,9 @@ namespace IM.Services.Helpers
       Response = Current.Origos_reservas_ficticias_Guardar(Request);
 
       // Si ocurrio un error
-      //if (Response.HasErrors)
-      //  UIHelper.ShowMessage(Response.ExceptionInfo.Message, MessageBoxImage.Error, "Origos_reservas_ficticias_Guardar");
+      if (Response.HasErrors)
+        throw new Exception(Response.ExceptionInfo.Message);
+     
 
       return Data;
     }
@@ -165,7 +166,7 @@ namespace IM.Services.Helpers
         }
         return "Gifts were successfully saved in Opera as Room Charges";
       }
-      return "None gift was saved in Opera as Room Charge";
+      return string.Empty;
     }
     #endregion
 

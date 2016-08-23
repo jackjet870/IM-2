@@ -55,9 +55,9 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" FontSize="14" Margin="5" Text="Header" FontWeight="Black"/>
-                <RichTextBox Grid.Row="1" Margin="5" Name="rtbHeader" IsReadOnly="True" GotFocus="rtb_GotFocus"/>
+                <RichTextBox Grid.Row="1" Margin="5" Name="rtbHeader" IsReadOnly="True" GotFocus="rtb_GotFocus"  SelectionChanged="SelectionChanged"/>
                 <TextBlock Grid.Row="2" FontSize="14" Margin="5" FontWeight="Black" Text="Footer"/>
-                <RichTextBox Grid.Row="3"  Margin="5" Name="rtbFooter" IsReadOnly="True" GotFocus="rtb_GotFocus"/>
+                <RichTextBox Grid.Row="3"  Margin="5" Name="rtbFooter" IsReadOnly="True" GotFocus="rtb_GotFocus" SelectionChanged="SelectionChanged"/>
             </Grid>
         </Border>
         <StackPanel Grid.Column="2" Grid.Row="1">

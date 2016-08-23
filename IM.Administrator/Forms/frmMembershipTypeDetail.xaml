@@ -1,0 +1,53 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmMembershipTypeDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
+        Title="Membership Type Detail" DataContext="{Binding membershipType}" SizeToContent="WidthAndHeight">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Group</Label>
+        <Label Name="lblLevel" Grid.Column="0" Grid.Row="3">Level</Label>
+        <Label Name="lblFrom" Grid.Column="0" Grid.Row="4" Content="Amount from"/>
+        <Label Name="lblTo" Grid.Column="0" Grid.Row="5" Content="Amount to" />
+        <Label Name="lblStatus" Grid.Column="0" Grid.Row="6" Content="Status" Visibility="Collapsed" />
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtmtID" Grid.Column="1" Grid.Row="0" Height="27" Margin="0,0,0,15" Tag="ID" VerticalAlignment="Top" Text="{Binding mtID}" Width="235" CharacterCasing="Upper" />
+        <TextBox Name="txtmtN" Grid.Column="1" Grid.Row="1" Height="27" Margin="0,0,0,15" Tag="description" VerticalAlignment="Top" Width="235" Text="{Binding mtN}"  />
+        <ComboBox Name="cmbmtGroup" Grid.Column="1" Grid.Row="2" Margin="0,0,0,15" Tag="Membership Group" Height="27" VerticalAlignment="Top" SelectedValuePath="mgID" DisplayMemberPath="mgN" SelectedValue="{Binding mtGroup}"/>
+        <TextBox Name="txtmtLevel" Grid.Column="1" Grid.Row="3" Margin="0,0,0,15" Tag="Level" Height="27" VerticalAlignment="Top" Text="{Binding mtLevel}" Width="235" />
+        <TextBox Name="txtmtFrom" Grid.Column="1" Grid.Row="4" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtFrom,StringFormat={}{0:C}}" Width="235"  />
+        <TextBox Name="txtmtTo" Grid.Column="1" Grid.Row="5" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtTo,StringFormat={}{0:C}}" Width="235"  />
+        <CheckBox Name="chkmtA" Grid.Column="1" Grid.Row="6" Margin="0,0,0,15" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding mtA}" Height="13" >Active</CheckBox>
+        <ComboBox Name="cmbSta" Grid.Column="1" Grid.Row="6"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235" Visibility="Collapsed"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,0,0,7" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

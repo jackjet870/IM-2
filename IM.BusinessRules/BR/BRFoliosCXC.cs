@@ -113,12 +113,12 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] 16-08-2016 created
     /// </history>
-    public static bool FolioValidateCXC(int folio, int guestID, bool active, int action)
+    public static string FolioValidateCXC(int folio, int guestID, bool active, int action)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        string result = dbContext.USP_OR_FolioValidCXC(folio, guestID, active, action).ToString();
-        return result == "VALIDO";
+        var result = dbContext.USP_OR_FolioValidCXC(folio, guestID, active, action).ToList();
+        return result[0].ToString();
       }
     } 
     #endregion

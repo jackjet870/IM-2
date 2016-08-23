@@ -16,7 +16,7 @@ namespace IM.Model
     using System.Linq;
     
     public partial class IMEntities : DbContext
-  {
+    {
     #region Constructores y destructores
 
     /// <summary>
@@ -28,17 +28,17 @@ namespace IM.Model
     /// </history>
     public IMEntities(string connectionString)
       : base(connectionString)
-    {
+        {
       Configuration.ProxyCreationEnabled = false;
-    }
-
+        }
+    
     #endregion
 
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    {
-      throw new UnintentionalCodeFirstException();
-    }
-
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
         public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Assistance> Assistances { get; set; }
@@ -6580,6 +6580,39 @@ namespace IM.Model
                 new ObjectParameter("Invited", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestsAdditional", guestParameter, pRParameter, dateParameter, locationParameter, invitedParameter);
+        }
+    
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateInvitation(string changedBy, string pR, string location, string leadSource, string salesRoom, string agency, string country)
+        {
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var countryParameter = country != null ?
+                new ObjectParameter("Country", country) :
+                new ObjectParameter("Country", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateInvitation", changedByParameter, pRParameter, locationParameter, leadSourceParameter, salesRoomParameter, agencyParameter, countryParameter);
         }
     }
 }

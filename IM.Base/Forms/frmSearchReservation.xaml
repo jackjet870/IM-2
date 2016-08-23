@@ -60,7 +60,7 @@
                 <wpftk:DateTimePicker x:Name="dtpEnd" Style="{StaticResource dtp-DateRange-TK}" ValueChanged="dtp_ValueChanged" TextAlignment="Center" Margin="5,0,3,0" Width="160"/>
               </StackPanel>
               <StackPanel VerticalAlignment="Center" Style="{StaticResource stk-style}">
-                <Border x:Name="btnSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSearch_MouseLeftButtonDown" Background="White">
+                <Border x:Name="btnSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSearch_MouseLeftButtonDown">
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
                     <Viewbox Stretch="Uniform" Width="20">
                       <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
@@ -77,13 +77,19 @@
 
       <!--#region gridGuests-->
 
-      <DataGrid Grid.Row="1" x:Name="grdGuests" FontSize="13"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" Margin="10,0,10,0" IsReadOnly="True" SelectionChanged="grdGuests_SelectionChanged" SelectionMode="Extended" SelectionUnit="FullRow" ItemsSource="{Binding}">
+      <DataGrid Grid.Row="1" x:Name="grdGuests" FontSize="13"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" Margin="10,0,10,0" IsReadOnly="True" SelectionChanged="grdGuests_SelectionChanged" ItemsSource="{Binding}">
+        <DataGrid.Resources>
+          <Style TargetType="DataGridRow">
+            <EventSetter Event="MouseDoubleClick" Handler="grdGuest_DoubleClick"/>
+            <EventSetter Event="KeyDown" Handler="grdGuest_KeyDown"/>
+          </Style>
+        </DataGrid.Resources>
         <DataGrid.Columns>
           <DataGridTextColumn x:Name="hotelColumn" Width="auto" Header="Hotel" Binding="{Binding Hotel}"/>
           <DataGridTextColumn x:Name="folioColumn" Width="Auto" Header="Folio" Binding="{Binding Folio}"/>
           <DataGridTextColumn x:Name="statusColumn" Width="auto" Header="Status" Binding="{Binding Status}"/>
-          <DataGridTextColumn x:Name="lastNameColumn" Width="Auto" Header="Last Name" Binding="{Binding lastName}"/>
-          <DataGridTextColumn x:Name="firstNameColumn" Width="Auto" Header="First Name" Binding="{Binding firstName}"/>
+          <DataGridTextColumn x:Name="lastNameColumn" Width="Auto" Header="Last Name" Binding="{Binding LastName}"/>
+          <DataGridTextColumn x:Name="firstNameColumn" Width="Auto" Header="First Name" Binding="{Binding FirstName}"/>
           <DataGridTextColumn x:Name="arrivalColumn" Width="Auto" Header="Arrival" Binding="{Binding Arrival}"/>
           <DataGridTextColumn x:Name="DepartureColumn" Width="Auto" Header="Departure" Binding="{Binding Departure}"/>
           <DataGridTextColumn x:Name="roomColumn" Width="Auto" Header="Room" Binding="{Binding Room}"/>
@@ -107,7 +113,7 @@
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Border x:Name="btnOK" Grid.Column="1"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnOk_MouseLeftButtonDown" Background="White" HorizontalAlignment="Right">
+        <Border x:Name="btnOK" Grid.Column="1"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnOk_MouseLeftButtonDown" HorizontalAlignment="Right">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="58">
             <Viewbox Stretch="Uniform" Width="20">
               <Image Source="pack://application:,,,/IM.Styles;component/Images/BOk.png" />
@@ -115,7 +121,7 @@
             <TextBlock Text="Ok" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Black" Margin="5,0,0,0"/>
           </StackPanel>
         </Border>
-        <Border x:Name="btnCancel" Grid.Column="2"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnCancel_MouseLeftButtonDown" Background="White" HorizontalAlignment="Right" Margin="10,5,10,5">
+        <Border x:Name="btnCancel" Grid.Column="2"  Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnCancel_MouseLeftButtonDown" HorizontalAlignment="Right" Margin="10,5,10,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="58">
             <Viewbox Stretch="Uniform" Width="20">
               <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png" />

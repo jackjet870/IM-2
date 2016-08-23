@@ -10,7 +10,7 @@
         xmlns:classes="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
     x:Class="IM.Base.Forms.frmGuest"
         mc:Ignorable="d"
-        Title="Guest" Height="700" Width="700" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="frmGuest_Loaded">
+        Title="Guest" Height="700" Width="700" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="frmGuest_Loaded" d:DataContext="{d:DesignInstance Classes:GuestInvitationRules}">
     <Window.Resources>
         <ResourceDictionary>
             <CollectionViewSource x:Key="giftList" Source="{Binding Gifts}" />
@@ -122,7 +122,7 @@
                     <!--#region DEPARTURE-->
                     <Label Grid.Column="4" Grid.Row="0" x:Name="lblDeparture" HorizontalAlignment="Center" Content="Departure" />
                     <!--<DatePicker Grid.Column="6" Grid.Row="1" x:Name="txtDeparture" />-->
-                    <xctk:DateTimePicker Name="dtpDeparture" Grid.Column="4" Grid.Row="1" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding Guest.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Width="Auto" />
+                    <xctk:DateTimePicker Name="dtpDeparture" Grid.Column="4" Grid.Row="1" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding Guest.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Width="Auto"/>
                     <!--#endregion-->
                 </Grid>
             </GroupBox>
@@ -203,7 +203,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Last Name" />
-                        <TextBox  Grid.ColumnSpan="2" Grid.Row="1" x:Name="txtguLastName2" Text="{Binding Guest.guLastName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox  Grid.ColumnSpan="2" Grid.Row="1" x:Name="txtguLastName2" Text="{Binding Guest.guLastname2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Text="First Name" />
                         <TextBox  Grid.ColumnSpan="2" Grid.Row="3" x:Name="txtguFirstName2" Text="{Binding Guest.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

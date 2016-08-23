@@ -2,18 +2,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
-using IM.Model.Helpers;
 using System.Data.Entity.Validation;
 using IM.BusinessRules.BR;
 using IM.Styles.Classes;
 using IM.Styles.Enums;
+using PalaceResorts.Common.Notifications.WinForm;
 
 namespace IM.Base.Helpers
 {
@@ -77,8 +76,9 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="ex">Mensaje de la excepcion</param>
     ///<history>
-    ///[erosado]  28/05/2016  Created.
-    ///[erosado]  08/07/2016  Se agregó buscar excepcion de tipo entityValidationException.
+    ///[erosado]  28/May/2016 Created.
+    ///[erosado]  08/Jul/2016 Modified. Se agregó buscar excepcion de tipo entityValidationException.
+    ///[wtorres]  13/Ago/2016 Modified. Ahora envia un correo electronico con la excepcion
     /// </history>
     public static MessageBoxResult ShowMessage(Exception ex)
     {
@@ -87,7 +87,8 @@ namespace IM.Base.Helpers
       List<DbValidationError> errorList = null;
       var dbEntityValidationException = ex as DbEntityValidationException; // Casteamos la excepcion generica.
 
-      if (dbEntityValidationException != null && dbEntityValidationException.EntityValidationErrors.Any()) //Si es es de tipo DBEntityValidationException
+      // si es una excepcion de validacion de Entity Framework
+      if (dbEntityValidationException != null && dbEntityValidationException.EntityValidationErrors.Any())
       {
         errorList = new List<DbValidationError>();
         dbEntityValidationException.EntityValidationErrors.OfType<DbEntityValidationResult>().ToList().ForEach(objVR =>
@@ -104,6 +105,11 @@ namespace IM.Base.Helpers
       {
         message = GetMessageError(ex);
       }
+
+      // notificamos la excepcion por correo electronico
+      Notifier.AsyncSendException(ex);
+
+      // desplegamos el mensaje de la excepcion
       return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
     #endregion ShowMessage
@@ -272,7 +278,7 @@ namespace IM.Base.Helpers
               #region Byte
               case TypeCode.Byte:
                 {
-                  txt.MaxLength = 3;
+                  txt.MaxLength = (maxLengthProp > 0 && maxLengthProp <= 3) ? maxLengthProp : 3;
                   txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
                   txt.PreviewKeyDown += TextBoxHelper.ValidateSpace;
                   if (enumMode != EnumMode.Search)

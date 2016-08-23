@@ -221,21 +221,30 @@ namespace IM.Base.Classes
     /// </history>
     public static bool ValidateMaxAuthGifts(string totalCostGifts, string maxAuthGifts)
     {
-      decimal pcurTotalGifts = Convert.ToDecimal(totalCostGifts.TrimStart('$'));
-      decimal pcurMaxAuthGifts = Convert.ToDecimal(maxAuthGifts.TrimStart('$'));
+      decimal totalCost = 0;
+      decimal maxAuth = 0;
+
+      if (decimal.TryParse(totalCostGifts.TrimStart('$'), out totalCost) && decimal.TryParse(maxAuthGifts.TrimStart('$'), out maxAuth))
+      {
 
       // si se rebasa el monto maximo de regalos
-      if (pcurTotalGifts > pcurMaxAuthGifts)
-      {
-        decimal curCharge = pcurTotalGifts - pcurMaxAuthGifts;
-        string message = "The maximum amount authorized of gifts has been exceeded. \r\n" +
-                              "Max authorized = " + String.Format("{0:C2", pcurMaxAuthGifts) + "\r\n" +
-                              "Total Gifts = " + string.Format("{0:C2}", pcurTotalGifts) + "\r\n" +
-                              "It will generate a charge of " + string.Format("{0:C2}", curCharge) + " to PR \r\n Save anyway?";
+        if (totalCost > maxAuth)
+        {
+          decimal curCharge = totalCost - totalCost;
+          string message = "The maximum amount authorized of gifts has been exceeded. \r\n" +
+                                "Max authorized = " + String.Format("{0:C2}", totalCost) + "\r\n" +
+                                "Total Gifts = " + string.Format("{0:C2}", totalCost) + "\r\n" +
+                                "It will generate a charge of " + string.Format("{0:C2}", curCharge) + " to PR \r\n Save anyway?";
 
+          return UIHelper.ShowMessage(message, MessageBoxImage.Question) == MessageBoxResult.Yes ? true : false;
+        }
 
-        return UIHelper.ShowMessage(message, MessageBoxImage.Question) == MessageBoxResult.Yes ? true : false;
       }
+
+
+
+
+
 
       return true;
     }
@@ -488,7 +497,7 @@ namespace IM.Base.Classes
       }
 
       return true;
-    } 
+    }
     #endregion
 
     #region CalculateAdultsMinorsByPax

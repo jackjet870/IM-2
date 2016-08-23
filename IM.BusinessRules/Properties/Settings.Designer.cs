@@ -793,7 +793,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
         public int USP_IM_RptStatisticsByFTB_Timeout {
             get {
                 return ((int)(this["USP_IM_RptStatisticsByFTB_Timeout"]));
@@ -851,7 +851,7 @@ namespace IM.BusinessRules.Properties {
             }
         }
         
-         [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("180")]
         public int USP_OR_ReportsProcessorOuthouse_TimeOut {
@@ -862,7 +862,7 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_ReportsProcessorOuthouse_TimeOut"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]

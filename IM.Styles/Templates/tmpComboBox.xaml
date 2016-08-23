@@ -562,6 +562,7 @@
         </Border>
     </DataTemplate>
     <!--#endregion-->
+    
     <!--#region Gift-->
     <DataTemplate x:Key="cbx-Gift-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
@@ -604,8 +605,8 @@
                 </StackPanel>
 
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
-                            Grid.Column="1" Grid.Row="0" Text="{Binding Tour, StringFormat='TourTime: {0:HH:mm}'}" />
-                <TextBlock  Text="{Binding PickUp, StringFormat='PickUpTime: {0:HH:mm}'}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding Tour, StringFormat='Tour Time: {0:HH:mm}'}" />
+                <TextBlock  Text="{Binding PickUp, StringFormat='Pick Up Time: {0:HH:mm}'}" TextAlignment="Justify" FontSize="10"
                             Grid.Column="1" Grid.Row="1" />
             </Grid>
         </Border>

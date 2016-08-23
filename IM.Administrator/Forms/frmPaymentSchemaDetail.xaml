@@ -1,0 +1,51 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmPaymentSchemaDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded"
+        Title="Payment Schema Detail" Height="338" Width="338" Closing="Window_Closing">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>            
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Couples From</Label>
+        <Label Grid.Column="0" Grid.Row="3">Couples To</Label>
+        <Label Grid.Column="0" Grid.Row="4">Show Factor</Label>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtpasID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding pasID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtpasN" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding pasN}" />
+        <TextBox Name="txtpasCoupleFrom" Grid.Column="1" Grid.Row="2" Height="27" Tag="Couples From" VerticalAlignment="Top" Text="{Binding pasCoupleFrom}" />
+        <TextBox Name="txtpasCoupleTo" Grid.Column="1" Grid.Row="3" Height="27" Tag="Couples To" VerticalAlignment="Top" Text="{Binding pasCoupleTo}" />
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Name="txtpasShowFactor" Grid.Column="0" Height="27" VerticalAlignment="Top" Tag="Show Factor" HorizontalAlignment="Stretch" Text="{Binding pasShowFactor}" />
+            <Label Grid.Column="1" HorizontalAlignment="Right">%</Label>
+        </Grid>        
+        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding pasA}" Height="14" >Active</CheckBox>
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

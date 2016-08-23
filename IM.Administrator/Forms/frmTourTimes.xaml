@@ -1,0 +1,163 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmTourTimes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"
+        xmlns:Converters="clr-namespace:IM.Base.Converters;assembly=IM.Base"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="Tour Time" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Converters:DateAndTimeConverter x:Key="DateTimeConverter"/>
+    </Window.Resources>
+    <DockPanel LastChildFill="True">
+        <!--#region Status bar-->
+        <StatusBar DockPanel.Dock="Bottom" Height="24" >
+            <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem Grid.Column="3" x:Name="status" HorizontalAlignment="Center" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Height="16" Width="16" />
+                    <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Tour Times." HorizontalAlignment="Right" Width="85"/>
+        </StatusBar>
+        <!--#endregion-->
+        <!--#region toolbar -->
+        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" />
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <!--#endregion-->
+        <!--#region Contenido-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!--#region Filtros-->
+            <Grid Grid.Row="0" Margin="6,6,6,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <!--#region titulos-->
+                <Label Name = "lblSchemaBy" Grid.Column="0" Grid.Row="0">Schema by</Label>
+                <Label Name ="lblLeadSource" Grid.Column="0" Grid.Row="1">Lead Source</Label>
+                <Label Name ="lblSalesRoom" Grid.Column="0" Grid.Row="2">Sales Room</Label>
+                <Label Name ="lblWeekDay" Grid.Column="0" Grid.Row="3">Week Day</Label>
+                <!--#endregion-->
+                <!--#region Datos-->
+                <ComboBox x:Name="cboSchema" Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" SelectedValuePath="tcID" DisplayMemberPath="tcN" Height="27" Tag="schema by" SelectionChanged="cboSchema_SelectionChanged"/>
+                <ComboBox x:Name="cboLeadSource" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" SelectedValuePath="lsID" DisplayMemberPath="lsN" Height="27" SelectedIndex="0" Tag="lead source" SelectionChanged="cboLeadSource_SelectionChanged"/>
+                <ComboBox x:Name="cboSalesRoom" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" SelectedValuePath="srID" DisplayMemberPath="srN" Height="27" SelectedIndex="0" Tag="sales room" SelectionChanged="cboSalesRoom_SelectionChanged"/>
+                <ComboBox x:Name="cboWeekDay" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" SelectedValuePath="wdDay" DisplayMemberPath="wdN" SelectedIndex="0" Height="27" Tag="week day" SelectionChanged="cboWeekDay_SelectionChanged"/>
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+            <!--#region DataGrid de Tour Times-->
+            <DataGrid Name="dgrTourTimes" Width="300" Height="320" Grid.Row="1" Margin="6,1,6,6" AutoGenerateColumns="False" RowEditEnding="dgrTourTimes_RowEditEnding" DataContext="{Binding}"
+                ItemsSource="{Binding}" SelectionMode="Single" CanUserAddRows="True" AddingNewItem="dgrTourTimes_AddingNewItem" BeginningEdit="dgrTourTimes_BeginningEdit" CellEditEnding="dgrTourTimes_CellEditEnding" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserResizeRows="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="txtTt" Header="Tour Time" Width="*" Binding="{Binding ttT, ValidatesOnDataErrors=True, NotifyOnValidationError=True, Converter={StaticResource DateTimeConverter}, ConverterParameter=TIME}" />
+                    <DataGridTextColumn x:Name="txtPckUpT"  Header="Pickup Time" Width="*" Binding="{Binding ttPickUpT, ValidatesOnDataErrors=True, NotifyOnValidationError=True, Converter={StaticResource DateTimeConverter}, ConverterParameter=TIME}"/>
+                    <DataGridTextColumn x:Name="txtMaxBooks" Header="Max Books" Width="*" Binding="{Binding ttMaxBooks, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+            <!--#region CopyTourTimes-->
+            <StackPanel x:Name="pnlCopy" Grid.Column="1" Grid.RowSpan="2">
+                <GroupBox x:Name="grpCopy" Margin="5,5,5,5" Header="Copy TourTimes">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <!--#region to Lead Source-->
+                        <GroupBox Grid.Row="0" Header="To Lead Source" Margin="5,5,5,5">
+                            <StackPanel x:Name="stkCopyToLeadSource" Orientation="Horizontal">
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Label>Lead Source</Label>
+                                    <ComboBox x:Name="cboLeadSourceTo" VerticalAlignment="Center" SelectedValuePath="lsID" DisplayMemberPath="lsN" Height="27" Width="250"/>
+                                </StackPanel>
+                                <Button x:Name="btnCopyToLeadSource" Margin="5,5,5,5" Width="90" Height="80" Click="btnCopyToLeadSource_Click">
+                                    <StackPanel>
+                                        <Image Width="24" Height="24" HorizontalAlignment="Center" Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap">Copy Tour Times To Lead Source</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <!--#endregion-->
+                        <!--#region to Sales Room-->
+                        <GroupBox Grid.Row="1" Header="To Sales Room" Margin="5,5,5,5">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Label>Sales Room</Label>
+                                    <ComboBox x:Name="cboSalesRoomTo" VerticalAlignment="Center" SelectedValuePath="srID" DisplayMemberPath="srN" Height="27" Width="250"/>
+                                </StackPanel>
+                                <Button x:Name="btnCopyToSalesRoom" Margin="5,5,5,5" Width="90" Height="80" Click="btnCopyToSalesRoom_Click">
+                                    <StackPanel>
+                                        <Image Width="24" Height="24" HorizontalAlignment="Center" Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap">Copy Tour Times To Sales Room</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <!--#endregion-->
+                        <!--#region BtnsCopy-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button x:Name="btnCopyToSalesRoomsWeekDaysOfLeadSource" Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Width="170" Height="80" VerticalAlignment="Top" Click="btnCopyToSalesRoomsWeekDaysOfLeadSource_Click">
+                                    <StackPanel>
+                                        <Image Width="24" Height="24" HorizontalAlignment="Center" Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap">Copy Tour Times To Sales Rooms and Week Days Of Lead Source</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="btnCopyToLeadSourcesOfProgram"  Width="170" Height="80" VerticalAlignment="Top" Click="btnCopyToLeadSourcesOfProgram_Click" Margin="0,5,0,0">
+                                    <StackPanel>
+                                        <Image Width="24" Height="24" HorizontalAlignment="Center" Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap"><Run Text="Copy Tour Times To Lead Sources Of Program"/></TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="16,5,0,0">
+                                <Button x:Name="btnCopyToWeekDaysOfSalesRoom" Width="170" Height="80" VerticalAlignment="Top" Click="btnCopyToWeekDaysOfSalesRoom_Click">
+                                    <StackPanel>
+                                        <Image Width="24" Height="24" HorizontalAlignment="Center" Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" />
+                                        <TextBlock TextAlignment="Center" TextWrapping="Wrap"><Run Text="Copy Tour Times To Week Days Of Sales Room"/></TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <!--#endregion-->
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>
