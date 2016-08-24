@@ -23,6 +23,7 @@
         <Setter Property="Padding" Value="2"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Focusable" Value="True"/>
     </Style>
     <!--#endregion-->
 

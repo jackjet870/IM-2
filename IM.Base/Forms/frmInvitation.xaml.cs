@@ -138,6 +138,9 @@ namespace IM.Base.Forms
       {
         bool isValid = true;
 
+        //Asignamos el focus al boton
+        imgButtonSave.Focus();
+
         //Validamos controles comunes y validaciones basicas
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
         {
