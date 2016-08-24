@@ -35,13 +35,12 @@ namespace IM.Host.Forms
     #region Atributos
 
     private readonly UserData _user;
-    private readonly int _guestCurrent;
+    private readonly int _guestId;
     private EnumProgram _enumProgram;
     private DateTime _dateCurrent;
     private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
     private bool _blnLoading;
-    private byte _ocWelcomeCopies;
-    private bool _isCellCommitDeposit = false;
+   
 
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
@@ -50,14 +49,14 @@ namespace IM.Host.Forms
 
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
+    private bool _hasError; //Sirve para las validaciones True hubo Error | False NO
+    private bool _isCellCancel;//Sirve para cuando se cancela la edicion de una Celda
+    private bool _dontShowAgainGuestStatus;
+    private bool _isCellCommitDeposit;//Valida si el commit se hace desde la celda de Deposits
+    private bool _isCellCommitCC;//Valida si el commit se hace desde la celda de credit cards
+    private bool _isCellCommitGuestAdditional;//Valida si el commit se hace desde la celda de GuestAdditional
 
-    private bool _dontShowAgainGuestStatus = false;
-    private bool _isCellCommitCC = false;//Valida si el commit se hace desde la celda de credit cards
-
-    private bool _hasError;
-    private bool _isCellCancel;
-    private DataGridCellInfo _IGCurrentCellGuestAdditional;
-    private bool _isCellCommitGuestAdditional;
+  
 
     #endregion Atributos
 
@@ -65,7 +64,7 @@ namespace IM.Host.Forms
 
     public frmShow(int guestID)
     {
-      _guestCurrent = guestID;
+      _guestId = guestID;
       _user = App.User;
       InitializeComponent();
       GuestShow = new GuestShow();
@@ -222,7 +221,7 @@ namespace IM.Host.Forms
       lstTasks.Add(Task.Run(async () =>
       {
         // cargamos los datos del huesped
-        var result = await BRGuests.GetGuest(_guestCurrent);
+        var result = await BRGuests.GetGuest(_guestId);
         GuestShow.Guest = result;
         GuestShow.CloneGuest = ObjectHelper.CopyProperties(result);
       }));
@@ -230,7 +229,7 @@ namespace IM.Host.Forms
       lstTasks.Add(Task.Run(async () =>
       {
         //cargamos los regalos de invitacion
-        var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestCurrent);
+        var result = await BRInvitsGifts.GetInvitsGiftsByGuestID(_guestId);
         GuestShow.InvitationGiftList = new ObservableCollection<InvitationGift>(result);
         GuestShow.CloneInvitationGiftList = ObjectHelper.CopyProperties(result);
       }));
@@ -238,7 +237,7 @@ namespace IM.Host.Forms
       lstTasks.Add(Task.Run(async () =>
       {
         //cargamos los depositos
-        var result = await BRBookingDeposits.GetBookingDeposits(_guestCurrent);
+        var result = await BRBookingDeposits.GetBookingDeposits(_guestId);
         GuestShow.BookingDepositList = new ObservableCollection<BookingDeposit>(result);
         GuestShow.CloneBookingDepositList = ObjectHelper.CopyProperties(result);
       }));
@@ -246,7 +245,7 @@ namespace IM.Host.Forms
       lstTasks.Add(Task.Run(async () =>
       {
         //cargamos las tarjetas de credito
-        var result = await BRGuestCreditCard.GetGuestCreditCard(_guestCurrent);
+        var result = await BRGuestCreditCard.GetGuestCreditCard(_guestId);
         GuestShow.GuestCreditCardList = new ObservableCollection<GuestCreditCard>(result);
         GuestShow.CloneGuestCreditCardList = ObjectHelper.CopyProperties(result);
       }));
@@ -254,7 +253,7 @@ namespace IM.Host.Forms
       lstTasks.Add(Task.Run(async () =>
       {
         //cargamos las tarjetas de credito
-        var result = await BRGuests.GetAdditionalGuest(_guestCurrent);
+        var result = await BRGuests.GetAdditionalGuest(_guestId);
         GuestShow.AdditionalGuestList = new ObservableCollection<Guest>(result);
         GuestShow.CloneAdditionalGuestList = ObjectHelper.CopyProperties(result);
       }));
@@ -340,7 +339,7 @@ namespace IM.Host.Forms
         var showSalesman = new ShowSalesman
         {
           Guest = GuestShow.Guest,
-          shgu = _guestCurrent,
+          shgu = _guestId,
           shUp = true,
           shpe = personnelShort.peID,
           Personnel = new Personnel
@@ -1243,7 +1242,7 @@ namespace IM.Host.Forms
     /// </history>
     private void imgButtonLog_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmGuestLog = new frmGuestLog(_guestCurrent) { Owner = this };
+      var frmGuestLog = new frmGuestLog(_guestId) { Owner = this };
       frmGuestLog.ShowDialog();
     }
 
@@ -1305,7 +1304,7 @@ namespace IM.Host.Forms
       await Save();
 
       //Se imprime el reporte.
-      var lstRptGuestRegistration = await BRGuests.GetGuestRegistration(_guestCurrent);
+      var lstRptGuestRegistration = await BRGuests.GetGuestRegistration(_guestId);
       if (lstRptGuestRegistration.Any())
       {
         var guestRegistration = (lstRptGuestRegistration[0] as List<RptGuestRegistration>).Select(c => new objRptGuestRegistrationIM(c)).FirstOrDefault();
@@ -1360,7 +1359,7 @@ namespace IM.Host.Forms
         //Obtenermos los vendedores
 
         GetSalesmen();
-        var salessalesmen = new frmShowsSalesmen(_guestCurrent, _showSalesmanList)
+        var salessalesmen = new frmShowsSalesmen(_guestId, _showSalesmanList)
         { Owner = this };
         salessalesmen.ShowDialog();
       }
@@ -1682,7 +1681,7 @@ namespace IM.Host.Forms
 
     #endregion Eventos del formulario
 
-    #region Eventos del GRID Invitation Gift
+    #region Eventos del GRID Gift
 
     #region BeginningEdit
 
@@ -1690,7 +1689,7 @@ namespace IM.Host.Forms
     /// Se ejecuta antes de que entre en modo edicion alguna celda
     /// </summary>
     /// <history>
-    /// [erosado] 08/08/2016  Created.
+    /// [aalcocer] 08/08/2016  Created.
     /// </history>
     private void dtgGifts_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
@@ -1746,7 +1745,7 @@ namespace IM.Host.Forms
     /// Se ejecuta cuando la celda entra en modo edicion
     /// </summary>
     /// <history>
-    /// [erosado] 08/08/2016  Created.
+    /// [aalcocer] 08/08/2016  Created.
     /// </history>
     private void dtgGifts_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
@@ -1763,7 +1762,7 @@ namespace IM.Host.Forms
     /// Se ejecuta cuando la celda en edicion pierde el foco
     /// </summary>
     /// <history>
-    /// [erosado] 08/08/2016  Created.
+    /// [aalcocer] 08/08/2016  Created.
     /// </history>
     private void dtgGifts_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
@@ -1805,7 +1804,7 @@ namespace IM.Host.Forms
     /// Se ejecuta cuando la fila pierde el foco, o termina la edicion (Commit o Cancel)
     /// </summary>
     /// <history>
-    /// [erosado] 02/08/2016  Created.
+    /// [aalcocer] 02/08/2016  Created.
     /// </history>
     private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
 
@@ -1839,7 +1838,7 @@ namespace IM.Host.Forms
 
     #endregion RowEditEnding
 
-    #endregion Eventos del GRID Invitation Gift
+    #endregion Eventos del GRID Gift
 
     #region GuestAdditional
 
