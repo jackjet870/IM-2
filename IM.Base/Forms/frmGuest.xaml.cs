@@ -121,6 +121,7 @@ namespace IM.Base.Forms
       //Obtenemos el GuestStatusType del combobox cmbGuestStatus
       var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
 
+      
       txtGiftMaxAuth.Text = $"{guStatusType?.gsMaxAuthGifts ?? 0:C2}";
 
       //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
@@ -254,7 +255,7 @@ namespace IM.Base.Forms
             //TODO: Revisar el program Edgar
             //var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
 
-            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _igCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _catObj.Program);
+            InvitationValidationRules.AfterEdit(_guestId,dtgGifts, ref invitationGift, _igCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _catObj.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else

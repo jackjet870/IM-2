@@ -249,16 +249,15 @@ namespace IM.Base.Classes
     /// <param name="txtTotalCost">Caja de texto donde se pondrá el resultado del calculo de Costos</param>
     /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
     /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
-    public static void AfterEdit(DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
+    public static void AfterEdit(int guestId,DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
       ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, EnumProgram program)
     {
-      //bool _passValidate = false;
       //Obtenemos el Gift
       var gift = BRGifts.GetGiftId(invitationGift.iggi);
 
       switch (currentCell.Column.SortMemberPath)
       {
-        case "igQty":
+        case nameof(invitationGift.igQty):
           //Si son diferentes de NULL
           if (invitationGift?.igQty >= 0 && invitationGift?.igAdults >= 0 && invitationGift?.igMinors >= 0 &&
              invitationGift?.igExtraAdults >= 0)
@@ -272,7 +271,7 @@ namespace IM.Base.Classes
           }
           break;
 
-        case "iggi":
+        case nameof(invitationGift.iggi):
           //Si se selecciono el Gift
           if (!string.IsNullOrEmpty(invitationGift.iggi))
           {
@@ -301,11 +300,12 @@ namespace IM.Base.Classes
             Gifts.ValidateMaxQuantity(gift, invitationGift.igQty, false, ref invitationGift, nameof(invitationGift.igQty));
 
             //Si es OutHouse y ya selecciono guestStatusType
-            if (program == EnumProgram.Outhouse && guestStatusType != null)
+            if (program == EnumProgram.Outhouse && guestStatusType != null && guestId != 0)
             {
+              //Obtenemos el GuestStatusInfo
+              var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(guestId,0);
               //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
-              // TODO:  EDDER-> Cambiar el tipo de parametro guestStatusType por GuestStatusValidateData
-              //_passValidate = Gifts.ValidateMaxQuantityGiftTour(dtg, guestStatusType, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
+              Gifts.ValidateGiftsGuestStatus(dtg, guestStatusInfo, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
             }
 
             //Calculamos los costos y los precios
@@ -317,7 +317,7 @@ namespace IM.Base.Classes
           }
           break;
 
-        case "igAdults":
+        case nameof(invitationGift.igAdults):
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
               nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
@@ -326,7 +326,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Adults);
           break;
 
-        case "igMinors":
+        case nameof(invitationGift.igMinors):
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
               nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
@@ -335,7 +335,7 @@ namespace IM.Base.Classes
               nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Minors);
           break;
 
-        case "igExtraAdults":
+        case nameof(invitationGift.igExtraAdults):
           // calculamos los costos y precios
           Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
               nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),

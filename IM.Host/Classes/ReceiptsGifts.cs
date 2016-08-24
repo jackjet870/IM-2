@@ -1377,7 +1377,6 @@ namespace IM.Host.Classes
       // Si hay GuestStatus o se debe validar
       if (pGuestStatus != null && pGuestStatus.gsMaxQtyTours > 0)
       {
-        // TODO: Eliminar cuando se hayan hecho las pruebas suficientes con el metodo generico.
         blnvalid = Gifts.ValidateGiftsGuestStatus(dtg, pGuestStatus, "geQty", "gegi");
       }
 

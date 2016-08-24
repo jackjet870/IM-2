@@ -663,13 +663,6 @@ namespace IM.Outhouse.Forms
     private async void btnNewInv_Click(object sender, RoutedEventArgs e)
     {
       //TODO: Jorge revisar la instancia al nuevo formulario, 
-      //var invit = new frmInvitationBase(EnumModule.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
-      //{
-      //  Owner = this,
-      //  ShowInTaskbar = false
-      //};
-      //invit.ShowDialog();
-
       //External Invitation
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
