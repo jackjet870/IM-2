@@ -211,7 +211,8 @@ namespace IM.Base.Helpers
         //Renombramos las columnas.
         dtData.Columns.Cast<DataColumn>().ToList().ForEach(c =>
         {
-          c.ColumnName = formatColumns[dtData.Columns.IndexOf(c)].Title ?? formatColumns[dtData.Columns.IndexOf(c)].PropertyName;
+          var colName = formatColumns[dtData.Columns.IndexOf(c)];
+          c.ColumnName = (string.IsNullOrWhiteSpace(colName.SuperHeader)) ? (formatColumns[dtData.Columns.IndexOf(c)].Title ?? formatColumns[dtData.Columns.IndexOf(c)].PropertyName) : (formatColumns[dtData.Columns.IndexOf(c)].PropertyName ?? formatColumns[dtData.Columns.IndexOf(c)].Title);
         });
 
         //Cargamos los datos en la hoja0.
@@ -279,7 +280,7 @@ namespace IM.Base.Helpers
           .OrderBy(c => c.Order)
           .ToList().ForEach(col =>
           {
-            var ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[col.Title ?? col.PropertyName]);
+            var ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[(string.IsNullOrWhiteSpace(col.SuperHeader) ? col.Title ?? col.PropertyName : col.PropertyName ?? col.Title)]);
 
             if (!isPivot) //Si se va manejar el formato tabular.
               ptfField.ShowAll = false;
@@ -315,7 +316,7 @@ namespace IM.Base.Helpers
           .ToList().ForEach(rowFormat =>
           {
             //Lo Agregamos a la lista de Filas.
-            var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[rowFormat.Title ?? rowFormat.PropertyName]);
+            var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[(string.IsNullOrWhiteSpace(rowFormat.SuperHeader) ? rowFormat.Title ?? rowFormat.PropertyName : rowFormat.PropertyName ?? rowFormat.Title)]);
 
             if (!isPivot) //Si se va manejar el formato tabular.
             {
@@ -369,7 +370,7 @@ namespace IM.Base.Helpers
           .OrderBy(c => c.Order)
           .ToList().ForEach(valueFormat =>
           {
-            var valueField = pivotTable.DataFields.Add(pivotTable.Fields[valueFormat.Title ?? valueFormat.PropertyName]);
+            var valueField = pivotTable.DataFields.Add(pivotTable.Fields[(string.IsNullOrWhiteSpace(valueFormat.SuperHeader) ? valueFormat.Title ?? valueFormat.PropertyName : valueFormat.PropertyName ?? valueFormat.Title)]);
 
             if (!isPivot)
             {
@@ -442,10 +443,10 @@ namespace IM.Base.Helpers
         }
         else
         {
-          pathFinalFile = SaveExcelFilePath(pk, fileFullPath);          
+          pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
         }
       }
-      
+
       return pathFinalFile;
     }
 
