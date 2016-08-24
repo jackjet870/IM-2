@@ -199,7 +199,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [erosado] 27/07/2016  Created.
     /// </history>
-    internal static bool ValidateEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo)
+    public static bool ValidateEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo)
     {
       bool _hasError = false;
       switch (currentCellInfo.Column.SortMemberPath)

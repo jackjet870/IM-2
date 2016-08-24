@@ -758,7 +758,7 @@ namespace IM.Base.Helpers
           {
             foreach(DataGridColumn column in dtg.Columns)
             {
-              DataGridCell cell = dtg.Columns[column.DisplayIndex].GetCellContent(rowEdit).Parent as DataGridCell;
+              DataGridCell cell = dtg.Columns[column.DisplayIndex].GetCellContent(rowEdit)?.Parent as DataGridCell;
               if (cell != null && cell.IsEditing)
               {                
                 return true;

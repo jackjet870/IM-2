@@ -1079,6 +1079,11 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           DateTime dtServerNow = BRHelpers.GetServerDateTime();
+          //Establecemos el deposito
+          SetDeposits(guestShow.BookingDepositList.ToList(), guestShow.Guest);
+
+          // definimos al huesped interval
+          guestShow.Guest.guInterval = true;
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
             try

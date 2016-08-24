@@ -1101,11 +1101,9 @@ namespace IM.Host
         var frmShow = new frmShow(guest.guID) { Owner = this };
         frmShow.ShowDialog();
 
-        if (!Convert.ToBoolean(chkSelected.IsChecked) && Convert.ToBoolean(frmShow.chkguShow.IsChecked)
-          || Convert.ToBoolean(chkSelected.IsChecked) && !Convert.ToBoolean(frmShow.chkguShow.IsChecked))
-        {
-          chkSelected.IsChecked = true;
-        }
+        ((GuestPremanifestHost) grdPremanifestHost.SelectedItem).guShow = frmShow.GuestShow.Guest.guShow;
+        ((GuestPremanifestHost)grdPremanifestHost.SelectedItem).guTour = frmShow.GuestShow.Guest.guTour;
+        grdPremanifestHost.Items.Refresh();
       }
     }
     #endregion
