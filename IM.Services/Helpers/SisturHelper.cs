@@ -73,7 +73,7 @@ namespace IM.Services.Helpers
         if (Program == "IH")
         {
           // si es una invitacion inhouse
-          if (txtReservation.Text != null)
+          if (!string.IsNullOrEmpty(txtReservation.Text))
           {
             Hotel = LeadSource;
             Reservation = txtReservation.Text;

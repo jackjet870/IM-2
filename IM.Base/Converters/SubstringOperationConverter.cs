@@ -7,7 +7,7 @@ namespace IM.Base.Converters
   public class SubstringOperationConverter : IValueConverter
   {
     /// <summary>
-    /// Obtiene el string con el maxlengh correspondiente a la propiedad.
+    /// 
     /// </summary>
     /// <param name="value">Valor asignado al control</param>
     /// <param name="targetType">Tipo de dato que tiene el value del control</param>
@@ -18,6 +18,22 @@ namespace IM.Base.Converters
     /// [vipacheco] 23/08/2016 Created
     /// </history>
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      return value;
+    }
+
+    /// <summary>
+    /// Obtiene el string con el maxlengh correspondiente a la propiedad.
+    /// </summary>
+    /// <param name="value">Valor asignado al control</param>
+    /// <param name="targetType">Tipo de dato que tiene el value del control</param>
+    /// <param name="trueValue">ConverterParameter</param>
+    /// <param name="culture">CultureInfo</param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 23/08/2016 Created
+    /// </history>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
       if (!string.IsNullOrEmpty(value as string))
       {
@@ -36,22 +52,6 @@ namespace IM.Base.Converters
       {
         return value;
       }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value">Valor asignado al control</param>
-    /// <param name="targetType">Tipo de dato que tiene el value del control</param>
-    /// <param name="trueValue">ConverterParameter</param>
-    /// <param name="culture">CultureInfo</param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 23/08/2016 Created
-    /// </history>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      return value;
     }
   }
 }

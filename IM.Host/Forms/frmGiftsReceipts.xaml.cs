@@ -1570,8 +1570,6 @@ namespace IM.Host.Forms
       CalculateCharge(ref _frmNull);
       PersonnelShort host = cbogrHost.SelectedItem as PersonnelShort;
       PersonnelShort offered = cbogrpe.SelectedItem as PersonnelShort;
-      GiftsReceiptDetail.grGuest = txtgrGuest.Text;
-      GiftsReceiptDetail.grGuest2 = txtgrGuest2.Text;
       //// Verificamos si es un Gift Receipt nuevo!
       if (string.IsNullOrEmpty(txtgrID.Text))
       {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Windows;
 
 namespace IM.Services.Helpers
 {
@@ -106,26 +107,29 @@ namespace IM.Services.Helpers
     /// </history>
     public static long Origos_reservas_ficticias_Guardar(string hotel, int folio, string FirstName, string LastName)
     {
-
-      origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest();
       IntegerResponse Response = null;
-      long Data = 0;
 
       // Configuramos el Request
-      Request.data.hotel = hotel;
-      Request.data.folio = folio;
-      Request.data.FirstName = FirstName;
-      Request.data.LastName = LastName;
+      origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest()
+      {
+        data = new origos_reservas_ficticias
+        {
+          hotel = hotel,
+          folio = folio,
+          FirstName = FirstName,
+          LastName = LastName
+        }
+      };
 
       // Invocamos al servicio web
       Response = Current.Origos_reservas_ficticias_Guardar(Request);
 
       // Si ocurrio un error
       if (Response.HasErrors)
-        throw new Exception(Response.ExceptionInfo.Message);
+        MessageBox.Show(Response.ExceptionInfo.Message, "Origos_reservas_ficticias_Guardar");
 
 
-      return Data;
+      return Response.Numero;
     }
     #endregion
 

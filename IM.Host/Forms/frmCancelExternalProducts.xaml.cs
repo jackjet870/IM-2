@@ -9,6 +9,7 @@ using PalaceResorts.Common.PalaceTools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -272,6 +273,7 @@ namespace IM.Host.Forms
           // guardamos el recibo de regalos exchange
           await SaveReceiptExchange();
 
+          grdExchange.IsReadOnly = true;
           // si tiene regalos de intercambio
           if (grdExchange.Items.Count > 0)
           {
@@ -280,7 +282,7 @@ namespace IM.Host.Forms
 
             // Guardamos las promociones en Sistur
             string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
-            if(!string.IsNullOrEmpty(msjSavePromotionsSistur))
+            if (!string.IsNullOrEmpty(msjSavePromotionsSistur))
               UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save promotions in sistur");
           }
         }
@@ -349,7 +351,9 @@ namespace IM.Host.Forms
         grClosed = false,
         grCxCAppD = null,
         grTaxiOutDiff = 0,
-        grGuest2 = _GRResult.grGuest2
+        grGuest2 = _GRResult.grGuest2,
+        grcucxcTaxiOut = _GRResult.grcucxcTaxiOut,
+        grpt = _GRResult.grpt
       };
 
       // Guardamos el Gift Receipt

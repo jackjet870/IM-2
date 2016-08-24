@@ -2,7 +2,10 @@
 using IM.Host.Classes;
 using IM.Model;
 using PalaceResorts.Common.PalaceTools;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -39,7 +42,7 @@ namespace IM.Host.Forms
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
         btnSave.Visibility = Visibility.Hidden;
 
-    } 
+    }
     #endregion
 
     #region btnCancel_Click
@@ -49,7 +52,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Mayo/2016 Created
     /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)                                          
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       Close();
     }
@@ -87,7 +90,7 @@ namespace IM.Host.Forms
         btnCancel.Visibility = Visibility.Collapsed;
         btnSave.Visibility = Visibility.Collapsed;
       }
-    } 
+    }
     #endregion
 
     #region btnSave_Click
@@ -127,6 +130,7 @@ namespace IM.Host.Forms
           await BRGiftsReceiptLog.SaveGiftsReceiptsLog(lngReceiptID, _frmGiftsReceipt.txtChangedBy.Text);
         }
       }
+      Close();
     }
     #endregion
 
@@ -206,6 +210,7 @@ namespace IM.Host.Forms
     }
     #endregion
 
+
     #region AddGifts
     /// <summary>
     /// Agrega los regalos de un recibo de regalos
@@ -283,7 +288,7 @@ namespace IM.Host.Forms
         Current.iggr = ReceiptID;
         await BREntities.OperationEntity(Current, Model.Enums.EnumMode.Edit);
       }
-    } 
+    }
     #endregion
   }
 }
