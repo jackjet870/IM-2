@@ -110,7 +110,7 @@
 
                     <!--#region PAX-->
                     <Label Grid.Column="2" Grid.Row="0" x:Name="lblPax" HorizontalAlignment="Center" Content="Pax" />
-                    <TextBox Grid.Column="2" Grid.Row="1" x:Name="txtguPax" PreviewTextInput="PreviewTextInput" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Column="2" Grid.Row="1" x:Name="txtguPax" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <!--#endregion-->
 
                     <!--#region ARRIVAL-->
@@ -162,7 +162,7 @@
                         <TextBox  Grid.ColumnSpan="2" Grid.Row="3" x:Name="txtguFirstName1" Text="{Binding Guest.guFirstName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Grid.Column="0"  Grid.Row="4" Text="Age" />
-                        <TextBox  Grid.Column="0" Grid.Row="5" x:Name="txtguAge1" PreviewTextInput="PreviewTextInput" Text="{Binding Guest.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="18" VerticalAlignment="Top" />
+                        <TextBox  Grid.Column="0" Grid.Row="5" x:Name="txtguAge1" Text="{Binding Guest.guAge1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="18" VerticalAlignment="Top" />
 
                         <TextBlock Grid.Column="1" Grid.Row="4" Text="Marital Status" />
                         <ComboBox Name="cmbMaritalStatusGuest1" Grid.Column="1" Grid.Row="5" TextSearch.TextPath="msID"
@@ -209,7 +209,7 @@
                         <TextBox  Grid.ColumnSpan="2" Grid.Row="3" x:Name="txtguFirstName2" Text="{Binding Guest.guFirstName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Grid.Column="0"  Grid.Row="4" Text="Age" />
-                        <TextBox  Grid.Column="0" Grid.Row="5" x:Name="txtguAge2" PreviewTextInput="PreviewTextInput" Text="{Binding Guest.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox  Grid.Column="0" Grid.Row="5" x:Name="txtguAge2" Text="{Binding Guest.guAge2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Grid.Column="1" Grid.Row="4" Text="Marital Status" />
                         <ComboBox Name="cmbMaritalStatusGuest2" Grid.Column="2" Grid.Row="5" TextSearch.TextPath="msID"

@@ -60,26 +60,7 @@ namespace IM.ProcessorGeneral.Classes
 
     #region CxC
 
-    #region ExportRptCxC
-    /// <summary>
-    /// Obtiene los datos para exportar a Excel el reporte de RptCxC
-    /// </summary>
-    /// <param name="strReport">Nombre del reporte</param>
-    /// <param name="dateRangeFileName">Rango de fechas</param>
-    /// <param name="filters">Filtros</param>
-    /// <param name="lstRptCxC">Lista de datos para el reporte.</param>
-    /// <returns> FileInfo </returns>
-    /// <history>
-    /// [edgrodriguez] 17/May/2016 Created
-    /// </history>
-    public static FileInfo ExportRptCxC(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxCExcel> lstRptCxC)
-    {
-      var dtData = TableHelper.GetDataTableFromList(lstRptCxC, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters,strReport, string.Empty, clsFormatReport.RptCxc(), blnShowSubtotal: true, fileFullPath: fileFullPath);
-    }
-    #endregion
-
-    #region ExportRptCxCByType
+    #region ExportRptCxc
     /// <summary>
     /// Obtiene los datos para exportar a Excel el reporte de RptCxC
     /// </summary>
@@ -91,10 +72,30 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptCxCByType(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxC> lstRptCxC)
+    public static FileInfo ExportRptCxc(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxC> lstRptCxC)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptCxC, true, false, true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData,strReport, string.Empty, clsFormatReport.RptCxcByType(), true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.RptCxc(), true, fileFullPath: fileFullPath);
+    }
+    #endregion
+
+    #region ExportRptCxcByType
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptCxC
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="fileFullPath"></param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptCxC">Lista de datos para el reporte.</param>
+    /// <returns> FileInfo </returns>
+    /// <history>
+    /// [edgrodriguez] 17/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptCxcByType(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxCExcel> lstRptCxC)
+    {
+      var dtData = TableHelper.GetDataTableFromList(lstRptCxC, true);
+      return EpplusHelper.CreateExcelCustom(dtData, filters,strReport, string.Empty, clsFormatReport.RptCxcByType(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -293,7 +294,7 @@ namespace IM.ProcessorGeneral.Classes
                       .ThenBy(c => c.grID)
                       .ToList();
 
-      return EpplusHelper.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptDeps, true, true),strReport, string.Empty, clsFormatReport.RptDeposits(), true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptDeps, true),strReport, string.Empty, clsFormatReport.RptDeposits(), true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -362,9 +363,9 @@ namespace IM.ProcessorGeneral.Classes
     /// Obtiene los datos para Exportar a Excel el reporte de Burned Deposits by Resort.
     /// </summary>
     /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="fileFullPath"></param>
     /// <param name="filters"></param>
     /// <param name="lstRptBurnedDeposits">Lista de BurnedDepositsByResorts,Currency, PaymentType y Sales</param>
-    /// <param name="dateRangeFileName"></param>
     /// <param name="dtmStart"></param>
     /// <param name="dtmEnd"></param>
     /// <returns> FileInfo </returns>
@@ -416,7 +417,7 @@ namespace IM.ProcessorGeneral.Classes
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters,strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters,strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -827,7 +828,7 @@ namespace IM.ProcessorGeneral.Classes
                               }).ToList();
 
       //Convertimos la lista a datatable.
-      var dt = TableHelper.GetDataTableFromList(rptGiftsManifest, true, true);
+      var dt = TableHelper.GetDataTableFromList(rptGiftsManifest, true);
       //Obtenemos el formato del reporte.
       var format = clsFormatReport.RptGiftsManifest();
       //Asignamos el tipo de eje que tendran algunas columnas.
@@ -968,7 +969,7 @@ namespace IM.ProcessorGeneral.Classes
                                 gr.Comments
                               }).ToList();
       //Convertimos la lista a datatable.
-      var dt = TableHelper.GetDataTableFromList(rptGiftsReceipts, true, true);
+      var dt = TableHelper.GetDataTableFromList(rptGiftsReceipts, true);
       //Obtenemos el formato del reporte.
       var format = clsFormatReport.RptGiftsReceipts();
       //Asignamos el tipo de eje que tendran algunas columnas.
@@ -1206,7 +1207,7 @@ namespace IM.ProcessorGeneral.Classes
                     {
                       gr.Program,
                       gr.Receipt,
-                      Date = $"{gr.Date.ToString("dd/MM/yyyy")} {gr.ExchangeRate}",
+                      gr.Date,//Date = $"{gr.Date.ToString("dd/MM/yyyy")} {gr.ExchangeRate}",
                       gr.Cancel,
                       CancelDate = (gr.CancelDate != null) ? gr.CancelDate?.ToString("dd/MM/yyy") : "",
                       gr.SalesRoom,
@@ -1227,6 +1228,7 @@ namespace IM.ProcessorGeneral.Classes
                       gr.PriceMX,
                       gr.PriceCAN,
                       gr.TotalToPay,
+                      gr.ExchangeRate,
                       PaymentTotal = (py != null) ? lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Sum(c => c.Item3.AmountUS) : 0,
                       Difference = (py != null) ? gr.TotalToPay - (lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Sum(c => c.Item3.AmountUS)) : 0,
                       User = (py != null) ? string.Join(",", lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Select(c => c.Item3.User).Distinct().ToList()) : "",
@@ -1237,7 +1239,7 @@ namespace IM.ProcessorGeneral.Classes
                       PaymentType = (py != null) ? py.Item3.PaymentType : ""
                     }
         ).ToList();
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(source,true,true), filters,strReport, string.Empty, clsFormatReport.RptGiftsSale(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(source,true), filters,strReport, string.Empty, clsFormatReport.RptGiftsSale(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1256,7 +1258,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptGiftsUsedBySistur(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsUsedBySistur> lstRptGiftsSistur)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptGiftsSistur, true, true), filters,strReport, string.Empty, clsFormatReport.RptGiftsUsedBySistur(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptGiftsSistur, true), filters,strReport, string.Empty, clsFormatReport.RptGiftsUsedBySistur(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1348,7 +1350,7 @@ namespace IM.ProcessorGeneral.Classes
         .ThenBy(c => c.GUID)
         .ThenBy(c => c.ShowDate)
         .ToList();
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutNew, true, true), filters, strReport, string.Empty, clsFormatReport.RptInOut(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutNew, true), filters, strReport, string.Empty, clsFormatReport.RptInOut(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1420,7 +1422,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptGuestNoShows(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestsNoShows> lstRptGuestNoShows)
     {
-      return EpplusHelper.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestNoShows, true, true),strReport, string.Empty, clsFormatReport.RptGuestNoShow(), true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestNoShows, true),strReport, string.Empty, clsFormatReport.RptGuestNoShow(), true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1876,7 +1878,7 @@ namespace IM.ProcessorGeneral.Classes
         c.PR1 = $"{c.PR1} {c.PR1N}";
       });
 
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutPr, true, true), filters,strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters,strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1894,7 +1896,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptPersonnelAccess(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnelAccess> lstRptPersonnelAccess)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true, true), filters,strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true), filters,strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -2105,7 +2107,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptSalesByProgramLeadSourceMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptSalesByProgramLeadSourceMarket> lstRptSalesByProgramLeadSourceMarkets)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true, true), filters,strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true), filters,strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 

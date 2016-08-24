@@ -11,6 +11,7 @@ using IM.Base.Helpers;
 using System.IO;
 using IM.ProcessorGeneral.Classes;
 using IM.Base.Forms;
+using IM.Model.Helpers;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -571,16 +572,16 @@ namespace IM.ProcessorGeneral.Forms
 
           #region CxC
           case "CxC":
-            var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
-            if (lstRptCxCExcel.Any())
-              finfo = clsReports.ExportRptCxC(strReportName, fileFullPath, filters, lstRptCxCExcel);
+            var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
+            if (lstRptCxC.Any())
+              finfo = clsReports.ExportRptCxc(strReportName, fileFullPath, filters, lstRptCxC);
             break;
           #endregion
           #region CxC By Type
           case "CxC By Type":
-            var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
-            if (lstRptCxC.Any())
-              finfo = clsReports.ExportRptCxCByType(strReportName, fileFullPath, filters, lstRptCxC);
+           var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
+            if (lstRptCxCExcel.Any())
+              finfo = clsReports.ExportRptCxcByType(strReportName, fileFullPath, filters, lstRptCxCExcel);
             break;
           #endregion
           #region CxC Deposits
@@ -839,9 +840,9 @@ namespace IM.ProcessorGeneral.Forms
             break;
 
           #endregion
-          #region Manifest
+          #region Manifest by Lead Source
 
-          case "Manifest by LS":
+          case "Manifest by Lead Source":
             var lstRptManifestRangeByLs = await BRReportsBySalesRoom.GetRptManifestRangeByLs(filter.StartDate,
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
@@ -1646,7 +1647,7 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "Gifts Used by Sistur", rptGroup = "Gifts"},
 
           new {rptNombre = "Manifest", rptGroup = "Guests"},
-          new {rptNombre = "Manifest by LS", rptGroup = "Guests"},
+          new {rptNombre = "Manifest by Lead Source", rptGroup = "Guests"},
           new {rptNombre = "No Shows", rptGroup = "Guests"},
           new {rptNombre = "Guests No Buyers", rptGroup = "Guests"},
           new {rptNombre = "In & Out", rptGroup = "Guests"},

@@ -11,7 +11,7 @@ namespace IM.Model.Classes
   /// <history>
   /// [erosado]       14/03/2016 Created
   /// [aalcocer]      28/03/2016 Modified. Se agregan mas propiedades y se establecen por default algunas propiedades
-  /// [edgrodriguez]  12/04/2016 Modified. Se agregan las propiedaes IsGroup, AggregateFunction
+  /// [edgrodriguez]  12/04/2016 Modified. Se agregan las propiedades IsGroup, AggregateFunction
   /// [edgrodriguez]  15/04/2016 Modified. Se agrega la propiedad IsCalculated
   /// [aalcocer]      18/04/2016 Modified. Se agrega la propiedad TotalsRowFunction
   /// [aalcocer]      17/05/2016 Modified. Se agrega la propiedad IsVisible, por default verdadero

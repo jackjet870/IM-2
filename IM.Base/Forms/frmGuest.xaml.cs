@@ -554,11 +554,9 @@ namespace IM.Base.Forms
     {
       var pass = EncryptHelper.Encrypt(txtPassword.Password);
 
-      var valid = BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
+      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text,pass,_user.LeadSource.lsID).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
 
-      if (valid.Focus == string.Empty) return true;
-
-      var res = false;
+      if (string.IsNullOrWhiteSpace(valid?.Focus)) return true;
 
       //desplegamos el mensaje de error
       UIHelper.ShowMessage(valid.Message);
@@ -575,7 +573,7 @@ namespace IM.Base.Forms
           txtPassword.Focus();
           break;
       }
-      return res;
+      return false;
     }
 
     #endregion Métodos para Válidar la información
