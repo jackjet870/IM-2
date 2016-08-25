@@ -824,6 +824,7 @@ namespace IM.ProcessorGeneral.Classes
                                 gr.Minors,
                                 gr.Folios,
                                 Cost = (gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
+                                //Total = //(gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
                                 gr.Comments
                               }).ToList();
 
@@ -1422,7 +1423,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptGuestNoShows(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestsNoShows> lstRptGuestNoShows)
     {
-      return EpplusHelper.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestNoShows, true),strReport, string.Empty, clsFormatReport.RptGuestNoShow(), true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptGuestNoShows, true), filters, strReport, string.Empty, clsFormatReport.RptGuestNoShow(), fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1506,7 +1507,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptMembershipsByAgencyMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMembershipsByAgencyMarket> lstRptMembershipsAgencyM)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptMembershipsAgencyM, true, false), filters,strReport, string.Empty, clsFormatReport.RptMembershipsByAgencyMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);//, blnRowGrandTotal: true);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptMembershipsAgencyM, true, false), filters,strReport, string.Empty, clsFormatReport.RptMembershipsByAgencyMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1525,7 +1526,7 @@ namespace IM.ProcessorGeneral.Classes
     public static FileInfo ExportRptMembershipsByHost(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMembershipsByHost> lstRptMembershipsHost)
     {
       lstRptMembershipsHost.ForEach(c => c.guEntryHost = $"{c.guEntryHost} {c.guEntryHostN}");
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptMembershipsHost, true, false), filters,strReport, string.Empty, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true, fileFullPath: fileFullPath);//, blnRowGrandTotal: true);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptMembershipsHost, true, false), filters,strReport, string.Empty, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1565,7 +1566,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptProductionBySalesRoomMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomMarket> lstRptProductionBySrm)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySrm, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySrm, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1583,7 +1584,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptProductionBySalesRoomMarketSubMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomProgramMarketSubmarket> lstRptProductionBySrmSm)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySrmSm, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarketSubMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySrmSm, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarketSubMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1601,7 +1602,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptProductionByShowProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByShowProgram> lstRptProductionByShowProgram)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgram, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionByShowProgram(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgram, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionByShowProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1619,7 +1620,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptProductionByShowProgramProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByShowProgramProgram> lstRptProductionByShowProgramProgram)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgramProgram, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionByShowProgramProgram(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgramProgram, true, false), filters,strReport, string.Empty, clsFormatReport.RptProductionByShowProgramProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1642,7 +1643,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptCloserStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCloserStatistics> lstRptCloserStatistic)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters,strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters,strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1661,7 +1662,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptLinerStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptLinerStatistics> lstRptCloserStatistic)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters,strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters,strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1730,7 +1731,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptTaxiIn(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisIn> lstRptTaxiIn)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters,strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters,strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
