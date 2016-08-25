@@ -172,8 +172,8 @@
                     <DataGridTextColumn x:Name="guRoomNumColumn" IsReadOnly="True"  Binding="{Binding guRoomNum}" Header="Room" Width="auto"/>
                     <DataGridTextColumn x:Name="guLastName1Column" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto"/>
                     <DataGridTextColumn x:Name="guFirstName1Column" IsReadOnly="True"  Binding="{Binding guFirstName1}" Header="First Name" Width="auto"/>
-                    <DataGridTextColumn x:Name="guCheckInDColumn" IsReadOnly="True"  Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" Header="Chk-In D" Width="auto" Visibility="Collapsed"/>
-                    <DataGridTextColumn x:Name="guCheckOutDColumn" IsReadOnly="True"  Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" Header="Chk-Out D" Width="auto" Visibility="Collapsed"/>
+                    <DataGridTextColumn x:Name="guCheckInDColumn" IsReadOnly="True"  Binding="{Binding guCheckInD, StringFormat=MM/dd/yyyy}" Header="Chk-In D" Width="auto" Visibility="Collapsed"/>
+                    <DataGridTextColumn x:Name="guCheckOutDColumn" IsReadOnly="True"  Binding="{Binding guCheckOutD, StringFormat=MM/dd/yyyy}" Header="Chk-Out D" Width="auto" Visibility="Collapsed"/>
                     <DataGridTextColumn x:Name="gucoColumn" IsReadOnly="True"  Binding="{Binding guco}" Header="Country ID" Width="auto"/>
                     <DataGridTextColumn x:Name="coNColumn" IsReadOnly="True"  Binding="{Binding coN}" Header="Country" Width="auto"/>
                     <DataGridTextColumn x:Name="guagColumn" IsReadOnly="True"  Binding="{Binding guag}" Header="Agency ID" Width="auto"/>
@@ -193,7 +193,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="guPRInfoColumn" IsReadOnly="True" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto"/>
-                    <DataGridTextColumn x:Name="guInfoDColumn" IsReadOnly="True" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto"/>
+                    <DataGridTextColumn x:Name="guInfoDColumn" IsReadOnly="True" Binding="{Binding guInfoD, StringFormat=MM/dd/yyyy}" Header="Cont D" Width="auto"/>
                     <DataGridTemplateColumn x:Name="guInvitColumn" IsReadOnly="False" Header="Invit" Width="auto">
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
@@ -201,11 +201,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD, StringFormat=dd/MM/yyyy}" Header="Invit D" Width="auto" Visibility="Collapsed"/>
-                    <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto"/>
-                    <DataGridTextColumn x:Name="guBookTColumn" IsReadOnly="True" Binding="{Binding guBookT, StringFormat=HH:mm:ss}" Header="Book T" Width="auto"/>
-                    <DataGridTextColumn x:Name="guPRInvit1Column" Binding="{Binding glPRInvit1}" Header="PR B" Width="auto" Visibility="Collapsed"/>
-                    <DataGridTextColumn x:Name="guMembershipNumColumn" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto" Visibility="Collapsed"/>
+                    <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD, StringFormat=MM/dd/yyyy}" Header="Invit D" Width="auto" Visibility="Collapsed"/>
+                    <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD, StringFormat=MM/dd/yyyy}" Header="Book D" Width="auto"/>
+                    <DataGridTextColumn x:Name="guBookTColumn" IsReadOnly="True" Binding="{Binding guBookT, StringFormat=HH:mm}" Header="Book T" Width="auto"/>
+                    <DataGridTextColumn x:Name="guPRInvit1Column" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto" Visibility="Visible"/>
+                    <DataGridTextColumn x:Name="guMembershipNumColumn" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto" Visibility="Visible"/>
                     <DataGridTemplateColumn x:Name="guBookCancColumn" IsReadOnly="false"  Header="C.Bk" Width="auto" Visibility="Collapsed">
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>

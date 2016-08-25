@@ -13,7 +13,9 @@ namespace IM.Base.Classes
   /// </history>
  
     #region Invitation
-    public class RptInvitationIM : RptInvitation {
+    public class RptInvitationIM : RptInvitation
+  {
+    public DateTime BookT => guBookT ?? new DateTime(1899, 12, 31);
     public DateTime InvitT => guInvitT ?? new DateTime(1899, 12, 31);
     public DateTime InvitD => guInvitD ?? new DateTime(1899, 12, 31);
     public RptInvitationIM(RptInvitation parent)
