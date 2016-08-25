@@ -176,6 +176,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          Cursor = Cursors.Wait;
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Hidden;
@@ -235,6 +236,7 @@ namespace IM.Administrator.Forms
       {
         skpStatus.Visibility = Visibility.Collapsed;
         btnAccept.Visibility = Visibility.Visible;
+        Cursor = Cursors.Arrow;
       }
     }
     #endregion

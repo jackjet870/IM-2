@@ -279,7 +279,7 @@ namespace IM.BusinessRules.BR
 
                 int nSave = dbContext.SaveChanges();
                 transacction.Commit();
-                return nSave;
+                return 1;
               }
               catch
               {

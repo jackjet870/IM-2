@@ -862,7 +862,7 @@ namespace IM.Administrator.Forms
           strMsj += "Specify at least one Gift. \n";
           tbiItems.IsSelected = true;
           tbiItems.UpdateLayout();
-          dgrGiftInPack.Focus();
+          dgrGiftInPack.Focus();         
         }
       }
       return strMsj.TrimEnd('\n');
