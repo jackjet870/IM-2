@@ -1225,7 +1225,7 @@ namespace IM.Host.Forms
     private void btnIn_Click(object sender, RoutedEventArgs e)
     {
       if (GuestShow.Guest.guTimeInT == null)
-        tpkguTimeInT.Value = DateTime.Now;
+        tpkguTimeInT.Value = BRHelpers.GetServerDateTime();
       chkguShow.IsChecked = true;
       chkguShow.IsEnabled = false;
     }
@@ -1260,7 +1260,7 @@ namespace IM.Host.Forms
     {
       if (GuestShow.Guest.guTimeOutT == null)
       {
-        tpkguTimeOutT.Value = DateTime.Now;
+        tpkguTimeOutT.Value = BRHelpers.GetServerDateTime();
         if (GuestShow.Guest.guTimeInT == null)
           tpkguTimeInT.Value = GuestShow.Guest.guTimeOutT;
       }
@@ -1468,9 +1468,9 @@ namespace IM.Host.Forms
       }
       else if (GuestShow.Guest.guShowD == null)
       {
-        dtpguShowD.Value = BRHelpers.GetServerDateTime();
+        dtpguShowD.Value = BRHelpers.GetServerDate();
         if (GuestShow.Guest.guTimeInT == null)
-          tpkguTimeInT.Value = DateTime.Now;
+          tpkguTimeInT.Value = BRHelpers.GetServerDateTime();
       }
     }
 
