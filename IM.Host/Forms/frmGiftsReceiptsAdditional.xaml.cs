@@ -115,6 +115,9 @@ namespace IM.Host.Forms
           // Agregamos el recibo de regalos
           lngReceiptID = await AddReceipt(lngGuestID);
 
+          GiftsReceiptsShort giftReceiptShort = new GiftsReceiptsShort() { grID = lngReceiptID, grNum = "", grExchange = false };
+          _frmGiftsReceipt.obsGiftsReceipt.Add(giftReceiptShort);
+
           // Agregamos los regalos del recibo
           AddGifts(lngGuestID, lngReceiptID);
 

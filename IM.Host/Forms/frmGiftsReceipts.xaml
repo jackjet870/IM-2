@@ -62,31 +62,31 @@
           <GroupBox Grid.Column="1" x:Name="grbSelectionCriteria" BorderThickness="1" BorderBrush="Black" Header="Selection Criteria" FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" Margin="16,3,0,0" VerticalAlignment="Top" Height="67" Width="854">
             <StackPanel Orientation="Horizontal">
               <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="lblCgrID" TextWrapping="Wrap" Text="Receipt ID" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCgrID" TextWrapping="Wrap" Text="Receipt ID" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtCgrID" Height="23" AcceptsReturn="False" Width="70" FontWeight="Normal" PreviewTextInput="int_PreviewTextInput"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblCgrNum" TextWrapping="Wrap" Text="Receipt Num" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCgrNum" TextWrapping="Wrap" Text="Receipt Num" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtCgrNum" Height="23"  AcceptsReturn="False" Width="70" FontWeight="Normal"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblCgrgu" TextWrapping="Wrap" Text="GUID" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCgrgu" TextWrapping="Wrap" Text="GUID" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtCgrgu" Height="23" AcceptsReturn="False" Width="80" FontWeight="Normal" PreviewTextInput="int_PreviewTextInput"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblCgrGuest" TextWrapping="Wrap" Text="Guest Name"  FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCgrGuest" TextWrapping="Wrap" Text="Guest Name"  FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtCgrGuest" Height="23" AcceptsReturn="False" Width="150" FontWeight="Normal"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblCReservation" TextWrapping="Wrap" Text="Reservation" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCReservation" TextWrapping="Wrap" Text="Reservation" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtCReservation" Height="23" AcceptsReturn="False" Width="60" FontWeight="Normal" PreviewTextInput="int_PreviewTextInput"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblCgrDFrom" TextWrapping="Wrap" Text="From" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbCgrDFrom" TextWrapping="Wrap" Text="From" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <xctk:DateTimePicker x:Name="dtpCgrDFrom" Width="130" Height="22" Format="ShortDate" TextAlignment="Left"/>
               </StackPanel>
               <StackPanel Orientation="Vertical" Margin="5,0,0,0">
-                <TextBlock x:Name="lblTo" TextWrapping="Wrap" Text="To" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="txbTo" TextWrapping="Wrap" Text="To" FontWeight="Normal" FontSize="11" HorizontalAlignment="Center"/>
                 <xctk:DateTimePicker x:Name="dtpTo" Width="130" Height="22" Format="ShortDate" TextAlignment="Left"/>
               </StackPanel>
               <Button x:Name="btnSearch" Content="Search" Height="25" Width="75" Margin="25,0,0,0" Click="btnSearch_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
@@ -137,43 +137,43 @@
                   <ColumnDefinition Width="123*"/>
                   <ColumnDefinition Width="693*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="lblgrID" HorizontalAlignment="Left" Margin="10,3,0,0" TextWrapping="Wrap" Text="Receipt ID" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="txbgrID" HorizontalAlignment="Left" Margin="10,3,0,0" TextWrapping="Wrap" Text="Receipt ID" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                 <TextBox x:Name="txtgrID" HorizontalAlignment="Left" Height="23" Margin="10,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding GiftsReceiptDetail.grID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False}" IsReadOnly="True" PreviewTextInput="int_PreviewTextInput" Grid.ColumnSpan="2"/>
-                <TextBlock x:Name="lblgrD" HorizontalAlignment="Left" Margin="66.182,3,0,0" TextWrapping="Wrap" Text="Date" VerticalAlignment="Top" Grid.Column="1"/>
+                <TextBlock x:Name="txbgrD" HorizontalAlignment="Left" Margin="66.182,3,0,0" TextWrapping="Wrap" Text="Date" VerticalAlignment="Top" Grid.Column="1"/>
                 <xctk:DateTimePicker x:Name="dtpgrD" HorizontalAlignment="Left" Margin="66.182,17,0,0" VerticalAlignment="Top" Width="124" Format="ShortDate" Value="{Binding GiftsReceiptDetail.grD, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, FallbackValue=x:Static sys:DateTime.Today}" IsReadOnly="True" TextAlignment="Left" Tag="Date" Grid.ColumnSpan="2" Grid.Column="1"/>
-                <TextBlock x:Name="lblgrNum" HorizontalAlignment="Left" Margin="71,3,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrNum" HorizontalAlignment="Left" Margin="71,3,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="71,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="70" Text="{Binding GiftsReceiptDetail.grNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrls" HorizontalAlignment="Left" Margin="144,3,0,0" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrls" HorizontalAlignment="Left" Margin="144,3,0,0" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrls" HorizontalAlignment="Left" Height="23" Margin="144,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding GiftsReceiptDetail.grls, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Grid.Column="2" />
-                <TextBlock x:Name="lblgrlo" HorizontalAlignment="Left" Margin="228,3,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrlo" HorizontalAlignment="Left" Margin="228,3,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Grid.Column="2"/>
                 <ComboBox x:Name="cbogrlo" HorizontalAlignment="Left" Margin="228,17,0,0" VerticalAlignment="Top" Width="133" DisplayMemberPath="loN" ItemsSource="{Binding Source={StaticResource dsLocations}}" SelectedValuePath="loID" SelectedValue="{Binding GiftsReceiptDetail.grlo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="false" Tag="Location" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrsr" HorizontalAlignment="Left" Margin="364,3,0,0" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrsr" HorizontalAlignment="Left" Margin="364,3,0,0" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Grid.Column="2"/>
                 <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Left" Margin="364,17,0,0" VerticalAlignment="Top" Width="134" DisplayMemberPath="srN" ItemsSource="{Binding Source={StaticResource dsSalesRooms}}" SelectedValuePath="srID" SelectedValue="{Binding GiftsReceiptDetail.grsr, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="false" Tag="Sales Room" Grid.Column="2"/>
                 <ComboBox x:Name="cboHotel" HorizontalAlignment="Left" Margin="229,95,0,0" VerticalAlignment="Top" Width="140" DisplayMemberPath="hoID" ItemsSource="{Binding Source={StaticResource dsHotels}}" SelectedValuePath="hoID" SelectedValue="{Binding GiftsReceiptDetail.grHotel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="false" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrMemberNum" HorizontalAlignment="Left" Margin="501,3,0,0" TextWrapping="Wrap" Text="Membership #" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrMemberNum" HorizontalAlignment="Left" Margin="501,3,0,0" TextWrapping="Wrap" Text="Membership #" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrMemberNum" HorizontalAlignment="Left" Height="23" Margin="501,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100" Text="{Binding GiftsReceiptDetail.grMemberNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrgu" HorizontalAlignment="Left" Margin="10,41,0,0" TextWrapping="Wrap" Text="GUID" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="txbgrgu" HorizontalAlignment="Left" Margin="10,41,0,0" TextWrapping="Wrap" Text="GUID" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                 <TextBox x:Name="txtgrgu" HorizontalAlignment="Left" Height="23" Margin="10,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding GiftsReceiptDetail.grgu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False}" IsReadOnly="True" MaxLength="10" Tag="guest ID" PreviewTextInput="int_PreviewTextInput" LostFocus="txtgrgu_LostFocus" PreviewKeyDown="txtgrgu_PreviewKeyDown" Grid.ColumnSpan="2"/>
-                <TextBlock x:Name="lblGuestName" HorizontalAlignment="Left" Margin="65.182,41,0,0" TextWrapping="Wrap" Text="Guest Name" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1"/>
+                <TextBlock x:Name="txbGuestName" HorizontalAlignment="Left" Margin="65.182,41,0,0" TextWrapping="Wrap" Text="Guest Name" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1"/>
                 <TextBox x:Name="txtGuestName" HorizontalAlignment="Left" Height="23" Margin="65.182,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="155" IsReadOnly="True" Grid.ColumnSpan="2" Grid.Column="1" />
-                <TextBlock x:Name="lblReservationCaption" HorizontalAlignment="Left" Margin="101,41,0,0" TextWrapping="Wrap" Text="Rsrv. Num." VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbReservationCaption" HorizontalAlignment="Left" Margin="101,41,0,0" TextWrapping="Wrap" Text="Rsrv. Num." VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtReservationCaption" HorizontalAlignment="Left" Height="23" Margin="101,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="81" IsReadOnly="True" Grid.Column="2"/>
-                <TextBlock x:Name="lblAgencyCaption" HorizontalAlignment="Left" Margin="186,41,0,0" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbAgencyCaption" HorizontalAlignment="Left" Margin="186,41,0,0" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtAgencyCaption" HorizontalAlignment="Left" Height="23" Margin="186,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="184" IsReadOnly="True" Grid.Column="2"/>
-                <TextBlock x:Name="lblProgramCaption" HorizontalAlignment="Left" Margin="375,40,0,0" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbProgramCaption" HorizontalAlignment="Left" Margin="375,40,0,0" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtProgramCaption" HorizontalAlignment="Left" Height="23" Margin="375,55,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100" IsReadOnly="True" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrGuest" HorizontalAlignment="Left" Margin="10,81,0,0" TextWrapping="Wrap" Text="Guest 1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="txbgrGuest" HorizontalAlignment="Left" Margin="10,81,0,0" TextWrapping="Wrap" Text="Guest 1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                 <TextBox x:Name="txtgrGuest" HorizontalAlignment="Left" Height="23" Margin="10,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="170" Text="{Binding GiftsReceiptDetail.grGuest, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SubstringOperation}}" IsReadOnly="True" MaxLength="20" Grid.ColumnSpan="3"/>
-                <TextBlock x:Name="lblgrGuest2" HorizontalAlignment="Left" Margin="50,81,0,0" TextWrapping="Wrap" Text="Guest 2" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrGuest2" HorizontalAlignment="Left" Margin="50,81,0,0" TextWrapping="Wrap" Text="Guest 2" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrGuest2" HorizontalAlignment="Left" Height="23" Margin="50,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="170" Text="{Binding GiftsReceiptDetail.grGuest2, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SubstringOperation}}" IsReadOnly="True" MaxLength="20" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrHotel" HorizontalAlignment="Left" Margin="230,81,0,0" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBlock x:Name="lblgrRoomNum" HorizontalAlignment="Left" Margin="374,81,0,0" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrHotel" HorizontalAlignment="Left" Margin="230,81,0,0" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrRoomNum" HorizontalAlignment="Left" Margin="374,81,0,0" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="374,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grRoomNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" PreviewTextInput="int_PreviewTextInput" Grid.Column="2" MaxLength="6"/>
-                <TextBlock x:Name="lblgrPax" HorizontalAlignment="Left" Margin="447,81,0,0" TextWrapping="Wrap" Text="Pax" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrPax" HorizontalAlignment="Left" Margin="447,81,0,0" TextWrapping="Wrap" Text="Pax" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="447,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grPax,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, FallbackValue=0.0, StringFormat={}{0:0.00}}" IsReadOnly="True" Grid.Column="2" MaxLength="4"/>
-                <TextBlock x:Name="lblgrTaxiOut" HorizontalAlignment="Left" Margin="519,81,0,0" TextWrapping="Wrap" Text="Taxi Out" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrTaxiOut" HorizontalAlignment="Left" Margin="519,81,0,0" TextWrapping="Wrap" Text="Taxi Out" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="519,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOut, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" MaxLength="19"/>
-                <TextBlock x:Name="lblgrTaxiOutDiff" HorizontalAlignment="Left" Margin="592,81,0,0" TextWrapping="Wrap" Text="Taxi Out Diff" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBlock x:Name="txbgrTaxiOutDiff" HorizontalAlignment="Left" Margin="592,81,0,0" TextWrapping="Wrap" Text="Taxi Out Diff" VerticalAlignment="Top" Grid.Column="2"/>
                 <TextBox x:Name="txtgrTaxiOutDiff" HorizontalAlignment="Left" Height="23" Margin="592,95,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding GiftsReceiptDetail.grTaxiOutDiff, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="Decimal_PreviewTextInput" Grid.Column="2" />
                 <CheckBox x:Name="chkgrExchange" Content="Exchange" HorizontalAlignment="Left" Margin="618,5,0,0" VerticalAlignment="Top" IsChecked="{Binding GiftsReceiptDetail.grExchange, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" Grid.Column="2"/>
                 <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="612,23,0,0" VerticalAlignment="Top" Width="Auto" Grid.Column="2">
@@ -193,13 +193,13 @@
                           ItemTemplate="{StaticResource cbx-Personnel-Concat}"
                           IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2" Height="21"/>
                 <TextBlock x:Name="lblgrHost" HorizontalAlignment="Left" Margin="0.182,151,0,0" Width="Auto" TextWrapping="Wrap" Text="Gifts Hostess" VerticalAlignment="Top" Grid.Column="1"/>
-                <ComboBox x:Name="cbogrHost" HorizontalAlignment="Right" Margin="0,147,503,0" VerticalAlignment="Top" Width="244" 
+                <ComboBox x:Name="cbogrHost" HorizontalAlignment="Left" Margin="77,150,0,0" VerticalAlignment="Top" Width="244" 
                           IsEnabled="false" Tag="host(ess)" Grid.Column="1" TextSearch.TextPath="peID" SelectedValuePath="peID"
                           SelectedValue="{Binding GiftsReceiptDetail.grHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                          ItemTemplate="{StaticResource cbx-Personnel-Concat}" Grid.ColumnSpan="2" Height="21"/>
-                <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="226,125,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Grid.Column="2"/>
-                <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="292,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding GiftsReceiptDetail.grComments, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
+                          ItemTemplate="{StaticResource cbx-Personnel-Concat}" Height="21" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="226,128,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Grid.Column="2"/>
+                <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="292,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding GiftsReceiptDetail.grComments, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
                 <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="812" Height="177" Grid.ColumnSpan="3">
                   <Grid>
                     <TextBlock x:Name="lblgrMaxAuthGifts" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Bottom" Margin="66,0,0,2"/>

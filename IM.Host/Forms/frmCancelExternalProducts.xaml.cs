@@ -44,7 +44,6 @@ namespace IM.Host.Forms
 
     private string _CancelField; // Nombre del campo que indica si el regalo esta cancelado en el sistema externo
     private string PropertyOpera; // Propiedad de Opera asociada a la sala de ventas
-    private EnumPromotionsSystem _PromotionsSystem;// Sistema de promociones
 
     CollectionViewSource _dsSalesRoom;
     CollectionViewSource _dsLeadSource;
@@ -82,14 +81,14 @@ namespace IM.Host.Forms
       // Si es monedero electronico
       if (_EnumExternalProduct == EnumExternalProduct.expElectronicPurse)
       {
-        this.Title = "Cancel Electronic Purse";
+        Title = "Cancel Electronic Purse";
         _CancelField = "geCancelElectronicPurse";
         geCancelPVPPromoColumn.Visibility = Visibility.Hidden;
       }
       // si son las promociones de Sistur
       else
       {
-        this.Title = "Cancel Sistur Promotions";
+        Title = "Cancel Sistur Promotions";
         _CancelField = "geCancelPVPPromo";
         geCancelElectronicPurseColumn.Visibility = Visibility.Hidden;
       }
@@ -120,22 +119,6 @@ namespace IM.Host.Forms
       txtQtyEPurses.Text = $"{_Guest.guQtyGiftsCard}";
       txtAccountInvitation.Text = _Guest.guAccountGiftsCard == "" ? null : _Guest.guAccountGiftsCard;
 
-      // Por default cancelamos las promociones en el sistemas de promociones de PVP
-      _PromotionsSystem = EnumPromotionsSystem.PVP;
-
-      // Si es Inhouse
-      if (_Guest.lspg.Equals("IH"))
-      {
-        if ((bool)_Guest.lsUseSistur)
-          _PromotionsSystem = EnumPromotionsSystem.Sistur;
-      }
-      // Si es OutHouse
-      else
-      {
-        if ((bool)_Guest.srUseSistur)
-          _PromotionsSystem = EnumPromotionsSystem.Sistur;
-      }
-
       // Monto maximo de reagalos
       txtMaxAuthGifts.Text = string.Format("{0:C2}", MaxAuthGifts);
 
@@ -158,7 +141,7 @@ namespace IM.Host.Forms
       // Activamos la bandera para saber si se ajustaran costos CxC
       _applicationAdj = CurAdjustment > 0 ? true : false;
 
-      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
+      ReceiptsGifts.CalculateCharge(_GuestID, FrmGiftsReceipt.cbogrct.SelectedItem as ChargeTo, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
                                               ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
                                               ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.lblgrMaxAuthGifts);
 
@@ -824,7 +807,6 @@ namespace IM.Host.Forms
       }
     }
     #endregion
-
 
   }
 }
