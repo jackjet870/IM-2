@@ -12,6 +12,7 @@ using System.Windows.Media;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace IM.Host.Forms
 {
@@ -28,6 +29,7 @@ namespace IM.Host.Forms
     private int _dayCurrent;
     private int _dayLimit;
     public static decimal _exchangeRateMEX;
+    private ObservableCollection<ExchangeRateData> obsExchangeRate;
     #endregion
 
     #region CONSTRUCTORES
@@ -48,6 +50,7 @@ namespace IM.Host.Forms
       _monthCurrent = calDate.SelectedDate.Value.Month;
       _dayCurrent = calDate.SelectedDate.Value.Day;
 
+      btnCancel.IsEnabled = false;
       //Validamos permisos del usuario
       if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.Standard))
       {
@@ -79,7 +82,8 @@ namespace IM.Host.Forms
 
       // Iniciamos las collectiones de los recursos.
       CollectionViewSource dsExchangeRates = ((CollectionViewSource)(FindResource("dsExchangeRates")));
-      dsExchangeRates.Source = lstExchangeRates;
+      obsExchangeRate = new ObservableCollection<ExchangeRateData>(lstExchangeRates);
+      dsExchangeRates.Source = obsExchangeRate;
 
     }
     #endregion
@@ -312,5 +316,34 @@ namespace IM.Host.Forms
         calDate.SelectedDate = e.AddedDate.Value.AddDays(day - 1);
     }
     #endregion
+
+    #region grdExchangeRate_PreviewCanExecute
+    /// <summary>
+    /// Elimina los Exchange Rate seleccionados.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 26/Agosto/2016 Created
+    /// </history>
+    private void grdExchangeRate_PreviewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+    {
+      if (e.Command == DataGrid.DeleteCommand)
+      {
+        // Obtenemos los items seleccionados para eliminar
+        if (grdExchangeRate.SelectedItems.Count > 0)
+        {
+          if (UIHelper.ShowMessage("Are you sure you want to delete these exchange rate?", MessageBoxImage.Question) == MessageBoxResult.Yes)
+          {
+            // Eliminamos los tickets de comida
+            grdExchangeRate.SelectedItems.Cast<ExchangeRateData>().ToList().ForEach(async exchangerate => { await BREntities.OperationEntity(exchangerate, EnumMode.Delete); obsExchangeRate.Remove(exchangerate); });
+          }
+          else
+          {
+            e.Handled = true;
+          }
+        }
+      }
+    } 
+    #endregion
+
   }
 }

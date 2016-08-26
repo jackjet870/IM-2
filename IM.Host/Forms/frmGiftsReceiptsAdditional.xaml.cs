@@ -147,8 +147,8 @@ namespace IM.Host.Forms
     {
       // Obtenemos los datos del huesped
       Guest _Guest = await BRGuests.GetGuest(GuestID);
-      string _FullName = Common.GetFullName(_Guest.guLastName1, _Guest.guFirstName1);
-      string _FullName2 = Common.GetFullName(_Guest.guLastname2, _Guest.guFirstName2);
+      string _FullName = Common.GetFullName(_Guest.guLastName1 ?? "", _Guest.guFirstName1 ?? "");
+      string _FullName2 = Common.GetFullName(_Guest.guLastname2 ?? "", _Guest.guFirstName2 ?? "");
       var hostess = _frmGiftsReceipt.cbogrHost.SelectedItem as PersonnelShort;
       var offered = _frmGiftsReceipt.cbogrpe.SelectedItem as PersonnelShort;
 
@@ -259,11 +259,7 @@ namespace IM.Host.Forms
       // Aplicamos los cambios en la BD
       if (_lstGiftReceiptDetail.Count > 0)
       {
-        //_lstGiftReceiptDetail.ForEach(x => BREntities.OperationEntity(x, Model.Enums.EnumMode.add));
-        foreach (GiftsReceiptDetail item in _lstGiftReceiptDetail)
-        {
-          await BREntities.OperationEntity(item, Model.Enums.EnumMode.Add);
-        }
+        _lstGiftReceiptDetail.ForEach(async item => await BREntities.OperationEntity(item, Model.Enums.EnumMode.Add));
       }
 
     }

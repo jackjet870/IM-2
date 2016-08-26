@@ -469,10 +469,11 @@ namespace IM.Host.Forms
     /// <summary>
     /// Elimina los Meal Tickets Seleccionados.
     /// </summary>
+    /// <returns>TRUE -> Se elimino los meal tickets | FALSE -> No se elimino ninguno</returns>
     /// <history>
     /// [vipacheco] 19/Agosto/2016 Created
     /// </history>
-    private void DeleteMealTickets()
+    private bool DeleteMealTickets()
     {
       // Obtenemos los items seleccionados para eliminar
       if (grdMealTicket.SelectedItems.Count > 0)
@@ -481,8 +482,11 @@ namespace IM.Host.Forms
         {
           // Eliminamos los tickets de comida
           grdMealTicket.SelectedItems.Cast<MealTicket>().ToList().ForEach(async mealticket => { await BREntities.OperationEntity(mealticket, EnumMode.Delete); obsMealTicket.Remove(mealticket); });
+          return true;
         }
       }
+
+      return false;
     }
     #endregion
 
@@ -499,7 +503,14 @@ namespace IM.Host.Forms
       {
         if (btnDelete.IsEnabled)
         {
-          DeleteMealTickets();
+          if (!DeleteMealTickets())
+          {
+            e.Handled = true;
+          }
+        }
+        else
+        {
+          e.Handled = true;
         }
       }
     } 

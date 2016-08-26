@@ -47,7 +47,7 @@
     <StackPanel Orientation="Vertical" Grid.Column="1">
       <TextBlock x:Name="txtRange" Text="RANGE DATE" Margin="10,10,10,0" Width="Auto" TextAlignment="Center" Background="#147F79" FontSize="13" Foreground="White" FontWeight="Bold"/>
       <TextBlock x:Name="txtDate" Text="DATE: DAYOFWEEK DAY" Margin="10,10,10,7" Width="Auto" HorizontalAlignment="Center" TextAlignment="Center" Background="#147F79" FontSize="15" Foreground="White" FontWeight="Bold" />
-      <DataGrid x:Name="grdExchangeRate" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource dsExchangeRates}}" Margin="10,0,10,10" CanUserAddRows="False" Height="216">
+      <DataGrid x:Name="grdExchangeRate" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource dsExchangeRates}}" Margin="10,0,10,10" CanUserAddRows="False" Height="216" CommandManager.PreviewCanExecute="grdExchangeRate_PreviewCanExecute">
         <DataGrid.Resources>
           <Style TargetType="DataGridRow">
             <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
