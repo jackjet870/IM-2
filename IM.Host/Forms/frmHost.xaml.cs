@@ -1225,14 +1225,14 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 10/Agosto/2016 Created
     /// </history>
-    private void dtgPremanifestHost_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    private async void dtgPremanifestHost_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
     {
       DataGrid dataGrid = sender as DataGrid;
       GuestPremanifestHost guest = dataGrid.Items.CurrentItem as GuestPremanifestHost;
       _currentCell = grdPremanifestHost.CurrentCell;
       // Verificamos que no exista el guest current
-      if (_guestCurrent == null) { _guestCurrent = BRGuests.GetGuestById(guest.guID); }
-      else if (_guestCurrent.guID != guest.guID) { _guestCurrent = BRGuests.GetGuestById(guest.guID); }
+      if (_guestCurrent == null) { _guestCurrent =await  BRGuests.GetGuest(guest.guID,true); }
+      else if (_guestCurrent.guID != guest.guID) { _guestCurrent = await BRGuests.GetGuest(guest.guID,true); }
 
       switch (_currentCell.Column.SortMemberPath)
       {

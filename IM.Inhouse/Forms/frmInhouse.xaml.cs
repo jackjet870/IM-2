@@ -323,7 +323,7 @@ namespace IM.Inhouse.Forms
         var editGuest = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         editGuest.guCheckIn = true;
         editGuest.guAvail = guum.Equals(0);
-        await BRGuests.SaveGuest(editGuest);
+        await BREntities.OperationEntity(editGuest,EnumMode.Edit);
 
         #endregion Save DataBase
 
@@ -1619,7 +1619,7 @@ namespace IM.Inhouse.Forms
           guest = await BRGuests.GetGuest(row.guID);
         }
         guest.guComments = txt.Text;
-        await BRGuests.SaveGuest(guest);
+        await BREntities.OperationEntity(guest,EnumMode.Edit);
       }
     }
 

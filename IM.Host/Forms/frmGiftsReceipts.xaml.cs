@@ -1585,7 +1585,7 @@ namespace IM.Host.Forms
 
         #region GiftsReceiptsAdditional
         // Cargamos los datos del huesped
-        Guest guest = BRGuests.GetGuestById(Convert.ToInt32(txtgrgu.Text));
+        Guest guest = await BRGuests.GetGuest(Convert.ToInt32(txtgrgu.Text),true);
 
         if (guest.guQuinella && !guest.guGiftsReceived && App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
         {

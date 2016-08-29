@@ -122,7 +122,7 @@ namespace IM.Host.Forms
           AddGifts(lngGuestID, lngReceiptID);
 
           // Indica que el huesped ya tiene recibo de regalos
-          Guest _Guest = BRGuests.GetGuestById(lngGuestID);
+          Guest _Guest = await BRGuests.GetGuest(lngGuestID,true);
           _Guest.guGiftsReceived = true;
           await BREntities.OperationEntity(_Guest, Model.Enums.EnumMode.Edit);
 

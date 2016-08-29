@@ -323,7 +323,7 @@ namespace IM.Outhouse.Forms
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
       Guest pre = await BRGuests.GetGuest(row.guID);
       pre.guComments = txt.Text;
-      await BRGuests.SaveGuest(pre);
+      await BREntities.OperationEntity(pre, EnumMode.Edit);
     }
 
     #endregion guCommentsColumnArrival_LostFocus

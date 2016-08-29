@@ -1064,7 +1064,7 @@ namespace IM.Host.Forms
       if (res == string.Empty)
       {
         GuestShow.Guest.guNotifiedEmailShowNotInvited = true;
-        await BRGuests.SaveGuest(GuestShow.Guest);
+        await BREntities.OperationEntity(GuestShow.Guest, EnumMode.Edit);
       }
       else
       {

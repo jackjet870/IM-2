@@ -313,7 +313,7 @@ namespace IM.InvitConfig.Forms
       var guest = await BRGuests.GetGuest(0);
       guest.guls = cmbLeadSource.SelectedValue.ToString();
       guest.gula = cmbLanguage.SelectedValue.ToString();
-      await BRGuests.SaveGuest(guest);
+      await BREntities.OperationEntity(guest, EnumMode.Edit);
       RptInvitationHelper.RptInvitation();
       StaEnd();
     }
