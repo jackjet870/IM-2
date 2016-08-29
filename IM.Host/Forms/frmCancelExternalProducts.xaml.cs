@@ -720,7 +720,6 @@ namespace IM.Host.Forms
       DataGrid dataGrid = sender as DataGrid;
       GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
       _currentCell = grdExchange.CurrentCell;
-
       ReceiptsGifts.StartEdit(EnumMode.Edit, giftsReceiptDetail, ref _currentCell, ref grdExchange, ref bandCancel);
     }
     #endregion

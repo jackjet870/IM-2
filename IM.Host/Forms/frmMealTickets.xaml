@@ -35,27 +35,27 @@
       </Grid.RowDefinitions>
 
       <StackPanel x:Name="stkSearch" Grid.Row="0" >
-        <GroupBox x:Name="grbSelectionCriteria" Grid.Row="0" Header="Selection Criteria" Margin="10,10,10,0" Height="65">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="60">
+        <GroupBox x:Name="grbSelectionCriteria" Grid.Row="0" Header="Selection Criteria" Margin="10,10,10,0">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock x:Name="lblMtID" TextWrapping="Wrap" Text="Meal Ticket ID"/>
+              <TextBlock x:Name="txbMtID" TextAlignment="Center" TextWrapping="Wrap" Text="Meal Ticket ID" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
               <TextBox x:Name="txtMealTicket" Height="23" AcceptsReturn="False" Width="100"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Folio" VerticalAlignment="Top"/>
+              <TextBlock x:Name="txbmkFolio" TextAlignment="Center" TextWrapping="Wrap" Text="Folio" VerticalAlignment="Top" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
               <TextBox x:Name="txtFolio" Height="23" AcceptsReturn="False" Width="100"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Width="59"/>
+              <TextBlock x:Name="lblRateType" TextAlignment="Center" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Margin="0,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
               <ComboBox x:Name="cboRateType"  DataContext="{StaticResource dsRateType}" Width="145" SelectedValuePath="raID" ItemsSource="{Binding}" DisplayMemberPath="raN"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock x:Name="lblFrom" HorizontalAlignment="Left" TextWrapping="Wrap" Text="From" VerticalAlignment="Top"/>
-              <xctk:DateTimePicker x:Name="dtpFrom" Width="141" Format="LongDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
+              <TextBlock x:Name="lblFrom" TextAlignment="Center" TextWrapping="Wrap" Text="From" VerticalAlignment="Top" Margin="10,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
+              <xctk:DateTimePicker x:Name="dtpFrom" Width="141" Format="ShortDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock x:Name="lblTo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="To" VerticalAlignment="Top"/>
-              <xctk:DateTimePicker x:Name="dtpTo" Width="140" Format="LongDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
+              <TextBlock x:Name="lblTo" TextAlignment="Center" TextWrapping="Wrap" Text="To" VerticalAlignment="Top" Margin="10,5,0,5" Background="#147F79" FontSize="12" Foreground="White"/>
+              <xctk:DateTimePicker x:Name="dtpTo" Width="140" Format="ShortDate" TextAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" />
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
               <Button x:Name="btnSearch" Content="Search" Width="75" Click="btnSearch_Click" Height="30" Template="{StaticResource ButtonTemplate}"/>

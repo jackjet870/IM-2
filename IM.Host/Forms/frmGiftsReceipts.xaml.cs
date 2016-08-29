@@ -541,8 +541,8 @@ namespace IM.Host.Forms
       cboSalesRoom.IsEnabled = _Enable && (txtgrgu.Text == "" || App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special));
 
       // Grid de regalos
-      grdGifts.IsReadOnly = !_Enable;
-      grdPayments.IsReadOnly = !_Enable;
+      dtgGifts.IsReadOnly = !_Enable;
+      dtgPayments.IsReadOnly = !_Enable;
       if (_Enable)
         _modeOpenGrid = EnumMode.Edit;
       else
@@ -624,8 +624,8 @@ namespace IM.Host.Forms
       ControlEnable(false, false, false, false, false, false, true, true, false);
 
       //controlEditionGifts(Visibility.Hidden, Visibility.Hidden); --> Modificado por efectos de prueba
-      grdGifts.IsReadOnly = true;
-      grdPayments.IsReadOnly = true;
+      dtgGifts.IsReadOnly = true;
+      dtgPayments.IsReadOnly = true;
 
       // Comments
       txtgrComments.IsReadOnly = true;
@@ -825,7 +825,7 @@ namespace IM.Host.Forms
       dsGiftsDetail.Source = obsGifts;
 
       // calculamos el monto total de regalos
-      Gifts.CalculateTotalGifts(grdGifts, EnumGiftsType.ReceiptGifts, "geQty", "gegi", "gePriceM", "gePriceMinor", "gePriceAdult", "gePriceA", "gePriceExtraAdult", txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: "geSale");
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.ReceiptGifts, "geQty", "gegi", "gePriceM", "gePriceMinor", "gePriceAdult", "gePriceA", "gePriceExtraAdult", txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: "geSale");
 
       // configuramos la informacion de GuestStatus que se validara
       if (_guestID > 0 || txtgrID.Text != "")
@@ -1079,7 +1079,7 @@ namespace IM.Host.Forms
       BRExchangeRate.GetExchangeRatesByDate(dtmReceipt);
 
       // Recorremos los pagos
-      foreach (var item in grdPayments.Items)
+      foreach (var item in dtgPayments.Items)
       {
         GiftsReceiptPaymentShort _current;
         if (item is GiftsReceiptPaymentShort)
@@ -1407,7 +1407,7 @@ namespace IM.Host.Forms
     private async Task<bool> CancelExternalProducts()
     {
       int rowCountgeInElectronicPurse = 0, rowcountgeCancelElectronicPurse = 0, rowCountgeInPVPPromo = 0, rowCountgeCancelPVPPromo = 0;
-      foreach (GiftsReceiptDetail item in grdGifts.Items)
+      foreach (GiftsReceiptDetail item in dtgGifts.Items)
       {
         rowCountgeInElectronicPurse += Convert.ToInt32(item.geInElectronicPurse);
         rowcountgeCancelElectronicPurse += Convert.ToInt32(item.geCancelElectronicPurse);
@@ -1466,7 +1466,7 @@ namespace IM.Host.Forms
     private bool ValidateCancelSisturPromotions()
     {
       int rowCountgeInPVPPromo = 0, rowCountgeCancelPVPPromo = 0;
-      foreach (GiftsReceiptDetail item in grdGifts.Items)
+      foreach (GiftsReceiptDetail item in dtgGifts.Items)
       {
         rowCountgeInPVPPromo += Convert.ToInt32(item.geInPVPPromo);
         rowCountgeCancelPVPPromo += Convert.ToInt32(item.geCancelPVPPromo);
@@ -1608,7 +1608,7 @@ namespace IM.Host.Forms
       await ReceiptsGifts.Save(obsGifts, receiptID, Convert.ToInt32(txtgrgu.Text), _newExchangeGiftReceipt);
 
       // Guardamos los pagos
-      await GiftsReceiptsPayments.SavePayments(receiptID, grdPayments, (_newExchangeGiftReceipt || _newGiftReceipt), _lstPaymentsDelete);
+      await GiftsReceiptsPayments.SavePayments(receiptID, dtgPayments, (_newExchangeGiftReceipt || _newGiftReceipt), _lstPaymentsDelete);
 
       // Si el recibo no esta cancelado ni cerrado
       if (!chkgrCancel.IsChecked.Value)
@@ -1821,6 +1821,7 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateGeneral()
     {
+      int guest = 0;
       // Validamos los campos obligatorios
       string strmsj = ValidateHelper.ValidateForm(General, "");
       if (!string.IsNullOrEmpty(strmsj))
@@ -1844,12 +1845,12 @@ namespace IM.Host.Forms
         return false;
       }
       // Validamos los regalos
-      else if (!ReceiptsGifts.Validate(obsGifts, _validateMaxAuthGifts, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, grdGifts))
+      else if (!ReceiptsGifts.Validate(obsGifts, _validateMaxAuthGifts, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, dtgGifts))
       {
         return false;
       }
       // validamos los pagos
-      else if (!GiftsReceiptsPayments.Validate(grdPayments))
+      else if (!GiftsReceiptsPayments.Validate(dtgPayments))
       {
         return false;
       }
@@ -1863,6 +1864,21 @@ namespace IM.Host.Forms
       // validamos que los datos del recibo de regalos existan
       else if (!ValidateExist())
         return false;
+
+      // Validamos que el GuestID no sea 0  y que exista
+      else if (int.TryParse(txtgrgu.Text, out guest))
+      {
+        if (guest == 0)
+        {
+          UIHelper.ShowMessage("Guest ID not found", MessageBoxImage.Information);
+          return false;
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Guest ID not found", MessageBoxImage.Information);
+        return false;
+      }
 
       return true;
     }
@@ -2062,7 +2078,7 @@ namespace IM.Host.Forms
         await Load_Record();
         _newExchangeGiftReceipt = false;
       }
-      grdPayments.IsReadOnly = true;
+      dtgPayments.IsReadOnly = true;
 
       // Reiniciamos las variable globales
       logGiftDetail.Clear();
@@ -2148,7 +2164,7 @@ namespace IM.Host.Forms
     {
       if (e.Command == DataGrid.DeleteCommand)
       {
-        GiftsReceiptPaymentShort giftDelete = grdPayments.SelectedItem as GiftsReceiptPaymentShort;
+        GiftsReceiptPaymentShort giftDelete = dtgPayments.SelectedItem as GiftsReceiptPaymentShort;
         _lstPaymentsDelete.Add(giftDelete);
       }
     }
@@ -2347,9 +2363,9 @@ namespace IM.Host.Forms
     {
       DataGrid dataGrid = sender as DataGrid;
       GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
-      _currentCell = grdGifts.CurrentCell;
+      _currentCell = dtgGifts.CurrentCell;
 
-      ReceiptsGifts.StartEdit(_modeOpenGrid, giftsReceiptDetail, ref _currentCell, ref grdGifts, ref HasErrors);
+      ReceiptsGifts.StartEdit(_modeOpenGrid, giftsReceiptDetail, ref _currentCell, ref dtgGifts, ref HasErrors);
     }
     #endregion
 
@@ -2518,7 +2534,7 @@ namespace IM.Host.Forms
     {
       if (!HasErrors)
       {
-        grdGifts.CellEditEnding -= grdGifts_CellEditEnding;
+        dtgGifts.CellEditEnding -= grdGifts_CellEditEnding;
         DataGrid dataGrid = sender as DataGrid;
         GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
 
@@ -2529,11 +2545,11 @@ namespace IM.Host.Forms
         // Si no tiene errores se hacen los calculos.
         if (!HasErrorValidate)
         {
-          ReceiptsGifts.AfterEdit(ref grdGifts, _guest == null ? 0 : _guest.guID, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: (ChargeTo)cbogrct.SelectedItem,
+          ReceiptsGifts.AfterEdit(ref dtgGifts, _guest == null ? 0 : _guest.guID, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: (ChargeTo)cbogrct.SelectedItem,
                                   pLeadSourceID: txtgrls.Text, pTxtTotalCost: txtTotalCost, pTxtTotalPrice: txtTotalPrice, pTxtTotalToPay: txtTotalToPay, pTxtgrCxCGifts: txtgrCxCGifts,
                                   pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrCxCAdj, pTxtgrMaxAuthGifts: txtgrMaxAuthGifts, pLblgrMaxAuthGifts: lblgrMaxAuthGifts);
         }
-        grdGifts.CellEditEnding += grdGifts_CellEditEnding;
+        dtgGifts.CellEditEnding += grdGifts_CellEditEnding;
       }
 
       // Verificamos si se puso en modo lectura la celda
@@ -2594,7 +2610,7 @@ namespace IM.Host.Forms
     private void grdGifts_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       // calculamos el monto total de regalos
-      Gifts.CalculateTotalGifts(grdGifts, EnumGiftsType.ReceiptGifts, "geQty", "gegi", "gePriceM", "gePriceMinor", "gePriceAdult", "gePriceA", "gePriceExtraAdult", txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: "geSale");
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.ReceiptGifts, "geQty", "gegi", "gePriceM", "gePriceMinor", "gePriceAdult", "gePriceA", "gePriceExtraAdult", txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: "geSale");
     }
     #endregion
 
@@ -2621,6 +2637,22 @@ namespace IM.Host.Forms
       grbGifts.Height = 225;
     }
     #endregion
+
+    #region Cancel_Click
+    /// <summary>
+    /// Recalcula los costos cuando se pulsa un checkbox Sale
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 25/Mayo/2016 Created
+    /// </history>
+    private void UpdateSale_Click(object sender, RoutedEventArgs e)
+    {
+      var row = dtgGifts.SelectedItem as GiftsReceiptDetail;
+      row.geSale = Convert.ToBoolean((sender as CheckBox).IsChecked);
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.ReceiptGifts, nameof(row.geQty), nameof(row.gegi), nameof(row.gePriceM), nameof(row.gePriceMinor), nameof(row.gePriceAdult), nameof(row.gePriceA), nameof(row.gePriceExtraAdult), txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: nameof(row.geSale));
+    }
+    #endregion
+
 
   }
 }

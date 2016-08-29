@@ -211,7 +211,7 @@
                     <TextBlock x:Name="lblTotalToPayCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Bottom" Margin="617,0,0,2"/>
                     <TextBox x:Name="txtTotalToPay" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" Margin="685,0,0,-3"/>
 
-                    <DataGrid x:Name="grdGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                    <DataGrid x:Name="dtgGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" 
                               ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, UpdateSourceTrigger=PropertyChanged}"
                               IsSynchronizedWithCurrentItem="True" Margin="0,2,0,23" RowDetailsVisibilityMode="Collapsed"
                               CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" 
@@ -399,13 +399,20 @@
                           </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <!--#endregion-->
-                        <DataGridCheckBoxColumn x:Name="geSaleColumn" Binding="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Sale" Width="SizeToHeader">
-                          <DataGridCheckBoxColumn.HeaderStyle>
+                        <DataGridTemplateColumn Header="Sale" Width="SizeToHeader" >
+                          <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                               <Setter Property="ToolTip" Value="Gift Sale Type"/>
                             </Style>
-                          </DataGridCheckBoxColumn.HeaderStyle>
-                        </DataGridCheckBoxColumn>
+                          </DataGridTemplateColumn.HeaderStyle>
+                          <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                              <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center">
+                                <CheckBox IsChecked="{Binding Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="UpdateSale_Click" />
+                              </ContentControl>
+                            </DataTemplate>
+                          </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="geInPVPPromoColumn" Binding="{Binding geInPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In Sistur" Width="SizeToHeader" IsReadOnly="True">
                           <DataGridCheckBoxColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -467,7 +474,7 @@
                   <Grid Margin="0,2,0,-2">
                     <TextBlock x:Name="lblTotalPaymentsCaption" HorizontalAlignment="Left" Margin="708,26,0,0" TextWrapping="Wrap" Text="Total Payments" VerticalAlignment="Top" Width="88"/>
                     <TextBox x:Name="txtTotalPayments" HorizontalAlignment="Left" Height="23" Margin="708,39,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="78" IsReadOnly="True" Text="0.00"/>
-                    <DataGrid x:Name="grdPayments" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                    <DataGrid x:Name="dtgPayments" AutoGenerateColumns="False" EnableRowVirtualization="True" 
                               ItemsSource="{Binding Source={StaticResource dsPayments}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               Margin="0,0,98,0" IsReadOnly="True" CanUserAddRows="True" CanUserDeleteRows="True" CanUserReorderColumns="False"
                               AddingNewItem="dgGiftsReceiptPaymentShort_AddingNewItem" 
@@ -551,7 +558,7 @@
                       <RowDefinition Height="*"/>
                       <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <DataGrid x:Name="dgBookingDeposit" Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsBookingDeposit}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
+                    <DataGrid x:Name="dtgBookingDeposit" Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsBookingDeposit}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
                       <DataGrid.Columns>
                         <DataGridTextColumn x:Name="bdAmountColumn" Binding="{Binding bdAmount, StringFormat={}{0:0.00}}" Header="Deposit" Width="SizeToHeader"/>
                         <DataGridTextColumn x:Name="bdReceivedColumn" Binding="{Binding bdReceived, StringFormat={}{0:0.00}}" Header="Received" Width="SizeToHeader"/>

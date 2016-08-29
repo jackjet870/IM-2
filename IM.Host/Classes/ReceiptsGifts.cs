@@ -172,8 +172,8 @@ namespace IM.Host.Classes
               pCancel = false;
               break;
             // Regalos tipo venta y comentarios
-            case "geSale":
-            case "geComments":
+            case nameof(row.geSale):
+            case nameof(row.geComments):
               // si no se ha ingresado la cantidad
               if (row.geQty == 0)
               {
@@ -185,6 +185,7 @@ namespace IM.Host.Classes
               {
                 pCancel = false;
                 cell.Column.IsReadOnly = false;
+                break;
               }
               break;
             // las demas columnas no se permiten modificar
