@@ -487,7 +487,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPROuthouse> lstRptProductionByPROuthouseComm = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumBasedOnBooking);
             if (lstRptProductionByPROuthouseComm.Any())
@@ -505,7 +505,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = await BRReportsByLeadSource.GetRptProductionByAge(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByAgeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeOuthouse);
@@ -522,7 +522,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByAgeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgeSalesRoomOuthouse);
@@ -575,7 +575,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByAgencyMarketHotelOuthouse.Any())
               finfo = clsReports.ExportRptProductionByAgencyMarketHotelOuthouse(strReport, fileFullPath, filters, lstRptProductionByAgencyMarketHotelOuthouse);
@@ -592,7 +592,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByCoupleTypeOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeOuthouse);
@@ -609,7 +609,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Any())
               finfo = clsReports.ExportRptProductionByCoupleTypeSalesRoomOuthouse(strReport, fileFullPath, filters, lstRptProductionByCoupleTypeSalesRoomOuthouse);
@@ -625,7 +625,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByFlightSalesRoom> lstRptProductionByFlightSalesRoom = await BRReportsByLeadSource.GetRptProductionByFlightSalesRoom(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByFlightSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByFlightSalesRoom(strReport, fileFullPath, filters, lstRptProductionByFlightSalesRoom);
@@ -642,7 +642,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = await BRReportsByLeadSource.GetRptProductionByGiftInvitation(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
              EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByGiftInvitation.Any())
@@ -661,7 +661,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = await BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
              EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByGiftInvitationSalesRoom.Any())
@@ -695,7 +695,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByHotel> lstRptProductionByHotel = await BRReportsByLeadSource.GetRptProductionByHotel(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByHotel.Any())
               finfo = clsReports.ExportRptProductionByHotel(strReport, fileFullPath, filters, lstRptProductionByHotel);
@@ -710,7 +710,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByHotelSalesRoom> lstRptProductionByHotelSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelSalesRoom(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByHotelSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelSalesRoom);
@@ -725,7 +725,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByHotelGroup> lstRptProductionByHotelGroup = await BRReportsByLeadSource.GetRptProductionByHotelGroup(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByHotelGroup.Any())
               finfo = clsReports.ExportRptProductionByHotelGroup(strReport, fileFullPath, filters, lstRptProductionByHotelGroup);
@@ -740,7 +740,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByHotelGroupSalesRoom> lstRptProductionByHotelGroupSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelGroupSalesRoom(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByHotelGroupSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByHotelGroupSalesRoom(strReport, fileFullPath, filters, lstRptProductionByHotelGroupSalesRoom);
@@ -756,7 +756,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_dtmStart, _dtmEnd,
                 string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSaveCourtesyTours);
             if (lstRptProductionByNationalityOuthouse.Any())
@@ -774,7 +774,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumSaveCourtesyTours);
             if (lstRptProductionByNationalitySalesRoomOuthouse.Any())
@@ -810,7 +810,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdAll,
                _enumBasedOnBooking);
             if (lstRptProductionByPRSalesRoomOuthouse.Any())
@@ -828,7 +828,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDepositsFlyersShow = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumBasedOnBooking);
             if (lstRptProductionByPRSalesRoomDepositsFlyersShow.Any())
@@ -864,7 +864,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomFlyers = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdNoDeposit,
                _enumBasedOnBooking);
             if (lstRptProductionByPRSalesRoomFlyers.Any())
@@ -882,7 +882,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPROuthouse> lstRptProductionByPRDepositsFlyersShowOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
-               EnumProgram.Outhouse,
+               EnumProgram.All,
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumBasedOnBooking);
             if (lstRptProductionByPRDepositsFlyersShowOuthouse.Any())
@@ -900,7 +900,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPROuthouse> lstRptProductionByPRDepositsOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                  string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                  "ALL",
-                 EnumProgram.Outhouse,
+                 EnumProgram.All,
                  EnumFilterDeposit.fdDeposit,
                  _enumBasedOnBooking);
             if (lstRptProductionByPRDepositsOuthouse.Any())
@@ -918,7 +918,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByPROuthouse> lstRptProductionByPRFlyersOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                  string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                  "ALL",
-                 EnumProgram.Outhouse,
+                 EnumProgram.All,
                  EnumFilterDeposit.fdNoDeposit,
                  _enumBasedOnBooking);
             if (lstRptProductionByPRFlyersOuthouse.Any())
@@ -952,7 +952,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByWave> lstRptProductionByWave = await BRReportsByLeadSource.GetRptProductionByWave(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByWave.Any())
               finfo = clsReports.ExportRptProductionByWave(strReport, fileFullPath, filters, lstRptProductionByWave);
@@ -967,7 +967,7 @@ namespace IM.ProcessorOuthouse.Forms
             List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom = await BRReportsByLeadSource.GetRptProductionByWaveSalesRoom(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               "ALL",
-              EnumProgram.Outhouse,
+              EnumProgram.All,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByWaveSalesRoom.Any())
               finfo = clsReports.ExportRptProductionByWaveSalesRoom(strReport, fileFullPath, filters, lstRptProductionByWaveSalesRoom);
@@ -1135,7 +1135,7 @@ namespace IM.ProcessorOuthouse.Forms
             ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencySalesRoomOuthouseData(_dtmStart, _dtmEnd,
               "ALL",
              string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
-              EnumProgram.All,
+              EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
             if (lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse.Any())
@@ -1232,7 +1232,7 @@ namespace IM.ProcessorOuthouse.Forms
               "ALL",
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
               EnumProgram.Outhouse,
-              EnumFilterDeposit.fdDepositShowsNoDeposit);
+              EnumFilterDeposit.fdAll);
             if (lstRptProductionByGuestStatusOuthouse.Any())
               finfo = clsReports.ExportRptProductionByGuestStatusOuthouse(strReport, fileFullPath, filters, lstRptProductionByGuestStatusOuthouse);
             break;

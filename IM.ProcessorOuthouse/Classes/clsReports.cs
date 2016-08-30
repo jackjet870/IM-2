@@ -370,7 +370,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
-        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), true, true, true, fileFullPath: fileFullPath);
       }
     }
     #endregion ExportRptProductionByAgencyOuthouse
@@ -597,6 +597,8 @@ namespace IM.ProcessorOuthouse.Classes
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByCoupleTypeSalesRoomOuthouse(), showRowGrandTotal: true, fileFullPath: fileFullPath);
     }
 
+    #endregion ExportRptProductionByCoupleTypeSalesRoomOuthouse
+
     #region ExportRptProductionByFlightSalesRoom
     /// <summary>
     ///  Obtiene los datos para el reporte productionByFlightSalesRoom
@@ -640,8 +642,6 @@ namespace IM.ProcessorOuthouse.Classes
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByFlightSalesRoom(), showRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
-
-    #endregion ExportRptProductionByCoupleTypeSalesRoomOuthouse
 
     #region ExportRptProductionByGiftInvitation
 
@@ -830,8 +830,8 @@ namespace IM.ProcessorOuthouse.Classes
     {
       var lstRptProductionByHotelSalesRoomAux = lstRptProductionByHotelSalesRoom.Select(c => new
       {
-        c.HotelID,
         c.SalesRoomID,
+        c.HotelID,
         c.Books,
         c.InOuts,
         c.GrossBooks,
@@ -874,8 +874,8 @@ namespace IM.ProcessorOuthouse.Classes
     {
       var lstRptProductionByHotelGroupAux = lstRptProductionByHotelGroup.Select(c => new
       {
-        c.HotelID,
         c.hoGroup,
+        c.HotelID,
         c.Books,
         c.InOuts,
         c.GrossBooks,
@@ -1116,8 +1116,8 @@ namespace IM.ProcessorOuthouse.Classes
         c.Shows,
         c.Sales_PROC,
         c.SalesAmount_PROC,
-        c.Sales_PEND,
-        c.SalesAmount_PEND,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
         c.Sales_CANCEL,
         c.SalesAmount_CANCEL,
         c.Sales_TOTAL,
