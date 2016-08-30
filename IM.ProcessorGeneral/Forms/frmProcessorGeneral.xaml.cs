@@ -30,27 +30,6 @@ namespace IM.ProcessorGeneral.Forms
     private bool _isConfigured;
     public clsFilter _clsFilter;
 
-    //public List<int> _lstGifts = new List<int>();
-    //public List<int> _lstGiftsCate = new List<int>();
-    //public List<int> _lstSalesRoom = new List<int>();
-    //public List<int> _lstLeadSources = new List<int>();
-    //public List<int> _lstPrograms = new List<int>();
-    //public List<int> _lstRateTypes = new List<int>();
-    //public EnumPredefinedDate? _cboDateSelected;
-    //public DateTime _dtmStart = DateTime.Now.Date;
-    //public DateTime _dtmEnd = DateTime.Now.Date;
-    //public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
-    //public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
-    //public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
-    //public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.NoDetailGifts;
-    //public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail;
-    //public EnumStatus _enumStatus = EnumStatus.staActives;
-    //public EnumGiftsReceiptType _enumGiftsReceiptType = EnumGiftsReceiptType.grtAll;
-    //public string _GuestID = "";
-    //public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
-    //public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.ExcludeSaveCourtesyTours;
-    //public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
-
     #endregion
 
     #region Constructor
@@ -757,7 +736,7 @@ namespace IM.ProcessorGeneral.Forms
               (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
 
             if (lstRptGiftsSale.Any())
-              finfo = clsReports.ExportRptGiftsSale(strReportName, fileFullPath, filters, lstRptGiftsSale);
+              finfo = await clsReports.ExportRptGiftsSale(strReportName, fileFullPath, filters, lstRptGiftsSale);
             break;
 
           #endregion
@@ -847,7 +826,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRangeByLs.Any())
-              finfo = clsReports.ExportRptManifestRangeByLs(strReportName, fileFullPath, filters, lstRptManifestRangeByLs);
+              finfo = await clsReports.ExportRptManifestRangeByLs(strReportName, fileFullPath, filters, lstRptManifestRangeByLs);
             break;
 
           #endregion
@@ -1539,7 +1518,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? EnumBasedOnArrival.BasedOnArrival
                   : EnumBasedOnArrival.NoBasedOnArrival);
             if (lstRptProductionByLsMarketMonthly.Any())
-              finfo = clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReportName, fileFullPath, filters,
                 lstRptProductionByLsMarketMonthly);
             break;
 

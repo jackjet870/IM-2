@@ -1190,11 +1190,8 @@ namespace IM.Base.Classes
     /// <param name="currentCellInfo">Celda que se esta editando</param>
     /// <param name="dtg">El datagrid que se esta modificando</param>
     /// <param name="_hasError">True tiene error | False No tiene</param>
-    public static void dtgGuestAdditional_StartEdit(ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
+    public static bool dtgGuestAdditional_StartEdit(ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
     {
-      //Index del Row en edicion
-      int rowIndex = dtg.SelectedIndex != -1 ? dtg.SelectedIndex : 0;
-
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guFirstName1":
@@ -1206,6 +1203,7 @@ namespace IM.Base.Classes
           _hasError = true;
           break;
       }
+      return _hasError;
     }
 
     #endregion StartEdit

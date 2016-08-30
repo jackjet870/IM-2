@@ -1550,37 +1550,17 @@ namespace IM.Base.Forms
       if (cmbSalesRooms.SelectedIndex == -1 && e.Column.SortMemberPath == "guID")
       {
         UIHelper.ShowMessage("First select a Sales Room ", MessageBoxImage.Warning, "Intelligence Marketing");
-
         e.Cancel = true;
-        _hasError = true;
-        _isCellCancel = true;
         tabGeneral.IsSelected = true;
+        tabGeneral.UpdateLayout();
         cmbSalesRooms.Focus();
       }
-      else
+      else if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
       {
-        _hasError = false;
-        _isCellCancel = false;
-      }
-
-      //Si el grid no esta en modo edicion, permite hacer edicion.
-      if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
-      {
-        dtgGuestAdditional.BeginningEdit -= dtgGuestAdditional_BeginningEdit;
-        //Obtenemos la celda que vamos a validar
         _IGCurrentCell = dtgGuestAdditional.CurrentCell;
-        //Hacemos la primera validacion
-        InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
-        //Si tuvo algun error de validacion cancela la edicion de la celda.
-        e.Cancel = _hasError;
-        dtgGuestAdditional.BeginningEdit += dtgGuestAdditional_BeginningEdit;
+        e.Cancel = InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
+      }       
       }
-      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
-      else
-      {
-        e.Cancel = true;
-      }
-    }
 
     #endregion BeginningEdit
 
@@ -1594,34 +1574,20 @@ namespace IM.Base.Forms
     /// </history>
     private void dtgGuestAdditional_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      //Si paso las validaciones del preparingCellForEdit
-      if (_hasError) return;
-      //Si viene en modo Commit
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
-        //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
-        _isCellCancel = false;
-        //Obtenemos el Objeto
         Guest guestAdditionalRow = e.Row.Item as Guest;
-        Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));//await BRGuests.GetGuest(guestAdditionalRow.guID);
+        Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));
         var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(CatObj.Guest, guestAdditional, _IGCurrentCell));
-        //Si Paso las validaciones
         if (!notValid)
         {
           e.Row.Item = guestAdditional;
         }
-        //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
         else
         {
           e.Cancel = true;
-          _isCellCancel = true;
         }
-      }
-      //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
-      else
-      {
-        _isCellCancel = true;
       }
     }
 
@@ -1637,22 +1603,25 @@ namespace IM.Base.Forms
     /// </history>
     private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid dtg = sender as DataGrid;
-
-      if (e.EditAction == DataGridEditAction.Commit)
+      if(e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitGuestAdditional)
+        if (_isCellCommitGuestAdditional && e.Row.GetIndex() == dtgGuestAdditional.ItemsSource.OfType<object>().ToList().Count)
         {
           _isCellCommitGuestAdditional = false;
           e.Cancel = true;
         }
         else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
+          int columnIndex = 0;
           _isCellCommitGuestAdditional = false;
           e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(CatObj.Guest, (Guest)e.Row.Item, true)).Item1;
-          GridHelper.SelectRow(dtgGuestAdditional, e.Row.GetIndex(), blnEdit: true);
+          if (e.Cancel)
+          {
+            _isCellCommitGuestAdditional = true;//true para que no haga el commit
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
+          }
         }
-        else
+        else//Cancela el commit de la fila
         {
           e.Cancel = true;
         }
@@ -1726,7 +1695,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj?.InvitationMode == EnumMode.ReadOnly) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, CatObj?.InvitationMode == EnumMode.ReadOnly) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1753,7 +1722,7 @@ namespace IM.Base.Forms
         return;
       }
 
-      frmGuest frmGuest = new frmGuest(_user, 0, _module, dtgGuestAdditional.IsReadOnly) { GuestParent = CatObj?.Guest, Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, 0, _module, CatObj.Program, dtgGuestAdditional.IsReadOnly) { GuestParent = CatObj?.Guest, Owner = this };
       frmGuest.ShowDialog();
       //Validacion del nuevo guest.
       //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
