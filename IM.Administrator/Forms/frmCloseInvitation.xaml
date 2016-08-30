@@ -5,21 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Title="Close Invitation" Height="300" Width="300" Loaded="Window_Loaded">
     <Grid>
         <GroupBox x:Name="groupBox" Header="Close Date" HorizontalAlignment="Left" Height="253" Margin="10,10" VerticalAlignment="Top" Width="272">
             <StackPanel Orientation="Vertical" >
                 <Label Content="Last Closed Date" HorizontalAlignment="Center" Margin="0,10"></Label>
-                <DatePicker Name="dtpkLastClose" Margin="5,0" IsEnabled="False" SelectedDateFormat="Long"></DatePicker>
+                <wpftk:DateTimePicker Name="dtpkLastClose" Tag="Date" Margin="5,0" IsEnabled="False" Style="{StaticResource dtp-DateRange-TK}" Width="auto" />
                 <Label Content="Close Date" HorizontalAlignment="Center" Margin="0,10"></Label>
-                <DatePicker Name="dtpkCloseInvit" Margin="5,0" SelectedDateFormat="Long" SelectedDateChanged="dtpkCloseInvit_SelectedDateChanged">
-                    <DatePicker.Resources>
-                        <Style TargetType="DatePickerTextBox">
-                            <Setter Property="IsReadOnly" Value="True"/>
-                        </Style>
-                    </DatePicker.Resources>
-                </DatePicker>
+                <wpftk:DateTimePicker Name="dtpkCloseInvit" Tag="Date" Margin="5,0" Style="{StaticResource dtp-DateRange-TK}" Width="auto" ValueChanged="dtpkCloseInvit_ValueChanged" />
                 <Button x:Name="btnCloseShows" Content="Close" HorizontalAlignment="Center" Height="32" Margin="0,50" Width="77" Click="btnCloseShows_Click"/>
             </StackPanel>
         </GroupBox>

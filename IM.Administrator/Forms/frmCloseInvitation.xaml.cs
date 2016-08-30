@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 
@@ -12,6 +11,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   /// <history>
   ///   [vku] 16/Jun/2016 Created
+  ///   [vku] 30/Ago/2016 Modified. Elimine el evento dtpkCloseDate_SelectedDateChanged ahora se utiliza dtpkCloseInvit_ValueChanged
   /// </history>
   public partial class frmCloseInvitation : Window
   {
@@ -20,10 +20,12 @@ namespace IM.Administrator.Forms
     DateTime closeInvit = DateTime.Today.AddDays(-1);
     #endregion
 
+    #region Constructor
     public frmCloseInvitation()
     {
       InitializeComponent();
     }
+    #endregion
 
     #region Eventos
 
@@ -39,8 +41,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       GetCloseDate();
-      dtpkCloseInvit.SelectedDate = closeInvit;
-     //dtpkCloseInvit.DisplayDateEnd = closeInvit;   
+      dtpkCloseInvit.Value = closeInvit;  
     }
     #endregion
 
@@ -88,18 +89,18 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region dtpkCloseDate_SelectedDateChanged
+    #region dtpkCloseInvit_ValueChanged
     /// <summary>
     ///   Guarda la fecha seleccionada para el cierre de invitaciones
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    ///   [vku] 16/Jun/2016 Created
+    ///   [vku] 30/Ago/2016 Created
     /// </history>
-    private void dtpkCloseInvit_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    private void dtpkCloseInvit_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      closeInvit = (DateTime)dtpkCloseInvit.SelectedDate;
+      closeInvit = dtpkCloseInvit.Value.Value;
     }
     #endregion
 
@@ -122,7 +123,7 @@ namespace IM.Administrator.Forms
         var result = await BRConfiguration.GetCloseDate();
         lastClosedDate = (DateTime)result;
 
-        dtpkLastClose.SelectedDate = lastClosedDate;
+        dtpkLastClose.Value = lastClosedDate;
       }
       catch (Exception ex)
       {
@@ -142,7 +143,7 @@ namespace IM.Administrator.Forms
     protected bool ValidateCloseInvitationDate()
     {
       bool blnValid = true;
-      if (dtpkCloseInvit.SelectedDate > BRHelpers.GetServerDate())
+      if (dtpkCloseInvit.Value.Value > BRHelpers.GetServerDate())
       {
         blnValid = false;
         UIHelper.ShowMessage("Close date can't be greater than today");
@@ -152,6 +153,5 @@ namespace IM.Administrator.Forms
     #endregion
 
     #endregion
-
   }
 }
