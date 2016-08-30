@@ -617,7 +617,7 @@ namespace IM.Host
 
         filters.Add(new Tuple<string, string>("Date Range", dateRange));
         filters.Add(new Tuple<string, string>("Sales Room", App.User.SalesRoom.srID));
-        var fileinfo = EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
+        var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable,IM.Model.Classes.ExcelFormatItemsList>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);

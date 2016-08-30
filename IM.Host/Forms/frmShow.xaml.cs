@@ -1280,7 +1280,7 @@ namespace IM.Host.Forms
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       imgButtonPrint.Focus();
-
+      if (!await Validate()) return;
       if (GuestShow.Guest.guReimpresion > 0)
       {
         frmReimpresionMotives _frmReimpresion = new frmReimpresionMotives()
@@ -1857,35 +1857,12 @@ namespace IM.Host.Forms
       if (cmbgusr.SelectedIndex == -1 && e.Column.SortMemberPath == "guID")
       {
         UIHelper.ShowMessage("First select a Sales Room ", MessageBoxImage.Warning, "Intelligence Marketing");
-
         e.Cancel = true;
-        _hasError = true;
-        _isCellCancel = true;
-        tabGeneral.IsSelected = true;
-        cmbgusr.Focus();
       }
-      else
+      else if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
       {
-        _hasError = false;
-        _isCellCancel = false;
-      }
-
-      //Si el grid no esta en modo edicion, permite hacer edicion.
-      if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
-      {
-        dtgGuestAdditional.BeginningEdit -= dtgGuestAdditional_BeginningEdit;
-        //Obtenemos la celda que vamos a validar
         _IGCurrentCell = dtgGuestAdditional.CurrentCell;
-        //Hacemos la primera validacion
-        InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
-        //Si tuvo algun error de validacion cancela la edicion de la celda.
-        e.Cancel = _hasError;
-        dtgGuestAdditional.BeginningEdit += dtgGuestAdditional_BeginningEdit;
-      }
-      //Si ya se encuenta en modo EDIT cancela la edicion, para no salirse de la celda sin hacer Commit antes
-      else
-      {
-        e.Cancel = true;
+        e.Cancel = InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
       }
     }
 
@@ -1901,34 +1878,20 @@ namespace IM.Host.Forms
     /// </history>
     private void dtgGuestAdditional_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      //Si paso las validaciones del preparingCellForEdit
-      if (_hasError) return;
-      //Si viene en modo Commit
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
-        //esta bandera se pone en falso por que No se ha cancelado la edicion de la celda
-        _isCellCancel = false;
-        //Obtenemos el Objeto
         Guest guestAdditionalRow = e.Row.Item as Guest;
         Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));//await BRGuests.GetGuest(guestAdditionalRow.guID);
         var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(GuestShow.Guest, guestAdditional, _IGCurrentCell));
-        //Si Paso las validaciones
         if (!notValid)
         {
           e.Row.Item = guestAdditional;
         }
-        //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
         else
         {
           e.Cancel = true;
-          _isCellCancel = true;
         }
-      }
-      //Si entra en modo Cancel Se enciende esta bandera ya que servira en RowEditEnding
-      else
-      {
-        _isCellCancel = true;
       }
     }
 
@@ -1944,26 +1907,29 @@ namespace IM.Host.Forms
     /// </history>
     private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      DataGrid dtg = sender as DataGrid;
-
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitGuestAdditional)
+        if (_isCellCommitGuestAdditional && e.Row.GetIndex() == dtgGuestAdditional.ItemsSource.OfType<object>().ToList().Count)
         {
           _isCellCommitGuestAdditional = false;
           e.Cancel = true;
         }
         else if (Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Tab))
         {
+          int columnIndex = 0;
           _isCellCommitGuestAdditional = false;
           e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, (Guest)e.Row.Item, true)).Item1;
-          GridHelper.SelectRow(dtgGuestAdditional, e.Row.GetIndex(), blnEdit: true);
+          if (e.Cancel)
+          {
+            _isCellCommitGuestAdditional = true;//true para que no haga el commit
+            GridHelper.SelectRow(sender as DataGrid, e.Row.GetIndex(), columnIndex, true);
+          }
         }
-        else
+        else//Cancela el commit de la fila
         {
           e.Cancel = true;
         }
-      }
+      }      
     }
 
     #endregion RowEditEnding
@@ -2033,7 +1999,7 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, dtgGuestAdditional.IsReadOnly) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -2060,12 +2026,12 @@ namespace IM.Host.Forms
         return;
       }
 
-      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, dtgGuestAdditional.IsReadOnly) { GuestParent = GuestShow?.Guest, Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, _enumProgram, dtgGuestAdditional.IsReadOnly) { GuestParent = GuestShow?.Guest, Owner = this };
       frmGuest.ShowDialog();
       //Validacion del nuevo guest.
       //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
       var guestAdditional = frmGuest.NewGuest ?? new Guest();
-
+      if (guestAdditional.guID == 0) return;
       //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
       //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
       var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow?.Guest, guestAdditional, true);

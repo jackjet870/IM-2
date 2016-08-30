@@ -7,6 +7,8 @@ using IM.Base.Helpers;
 using System.Data;
 using System.Collections;
 using IM.Base.Reports;
+using System.Threading.Tasks;
+using IM.Model.Classes;
 
 namespace IM.ProcessorGeneral.Classes
 {
@@ -470,7 +472,7 @@ namespace IM.ProcessorGeneral.Classes
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters,strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: !byPr, blnShowSubtotal: byPr, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
 
     }
     #endregion
@@ -824,7 +826,7 @@ namespace IM.ProcessorGeneral.Classes
                                 gr.Minors,
                                 gr.Folios,
                                 Cost = (gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
-                                //Total = //(gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
+                                TotalCost = lstGiftManifest.Where(c => c.ReceiptID == gr.ReceiptID).Sum(c => c.PriceAdults + c.PriceMinors),
                                 gr.Comments
                               }).ToList();
 
@@ -962,6 +964,7 @@ namespace IM.ProcessorGeneral.Classes
                                 GiftN = gm?.giN,
                                 Quantity = (gm != null && gm.giWPax) ? (gr.Adults + gr.Minors) : gr.Quantity,
                                 Cost = (gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
+                                TotalCost = lstGiftReceipt.Where(c=>c.ReceiptID==gr.ReceiptID).Sum( c=> c.PriceAdults + c.PriceMinors), 
                                 gr.WithCost,
                                 gr.PublicPrice,
                                 gr.Adults,
@@ -1099,7 +1102,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsSale(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsSale)
+    public static async Task<FileInfo> ExportRptGiftsSale(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsSale)
     {
       var lstGiftReceipts = lstRptGiftsSale[0] as List<RptGiftsSale>;
       var lstGiftPayments = lstRptGiftsSale[1] as List<RptGiftsSale_Payment>;
@@ -1138,7 +1141,7 @@ namespace IM.ProcessorGeneral.Classes
           //Recorremos los recibos de regalo.
           for (var i = 0; i < sales.Count; i++)
           {
-              
+
             if (sales[i].Difference == 0) continue;
 
             do
@@ -1152,7 +1155,7 @@ namespace IM.ProcessorGeneral.Classes
                 curBalance = 0;
                 curBalanceUs = 0;
               }
-              else if (Math.Abs(sales[i].Difference ?? 0) <= Math.Abs(curBalanceUs))
+              else //if (Math.Abs(sales[i].Difference ?? 0) <= Math.Abs(curBalanceUs))
               {
                 curPayment = sales[i].Difference ?? 0 / payment.ExchangeRate;
                 curPaymentUs = sales[i].Difference ?? 0;
@@ -1184,7 +1187,7 @@ namespace IM.ProcessorGeneral.Classes
               lstSalesPayments.Add(Tuple.Create(sales[i].Receipt, sales[0].Gift,
                 new RptGiftsSale_Payment
                 {
-                  Amount = curBalanceUs/payment.ExchangeRate,
+                  Amount = curBalanceUs / payment.ExchangeRate,
                   User = payment.User,
                   UserN = payment.UserN,
                   Source = payment.Source,
@@ -1202,13 +1205,13 @@ namespace IM.ProcessorGeneral.Classes
       }
 
       var source = (from gr in lstGiftReceipts
-                    join gp in lstSalesPayments on new {gr.Receipt, gr.Gift } equals new { Receipt = gp.Item1, Gift = gp.Item2 } into pays
+                    join gp in lstSalesPayments on new { gr.Receipt, gr.Gift } equals new { Receipt = gp.Item1, Gift = gp.Item2 } into pays
                     from py in pays.DefaultIfEmpty()
                     select new
                     {
                       gr.Program,
                       gr.Receipt,
-                      gr.Date,//Date = $"{gr.Date.ToString("dd/MM/yyyy")} {gr.ExchangeRate}",
+                      gr.Date,
                       gr.Cancel,
                       CancelDate = (gr.CancelDate != null) ? gr.CancelDate?.ToString("dd/MM/yyy") : "",
                       gr.SalesRoom,
@@ -1230,6 +1233,7 @@ namespace IM.ProcessorGeneral.Classes
                       gr.PriceCAN,
                       gr.TotalToPay,
                       gr.ExchangeRate,
+                      gr.Comments,
                       PaymentTotal = (py != null) ? lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Sum(c => c.Item3.AmountUS) : 0,
                       Difference = (py != null) ? gr.TotalToPay - (lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Sum(c => c.Item3.AmountUS)) : 0,
                       User = (py != null) ? string.Join(",", lstSalesPayments.Where(c => c.Item1 == gr.Receipt && c.Item2 == gr.Gift).Select(c => c.Item3.User).Distinct().ToList()) : "",
@@ -1240,7 +1244,7 @@ namespace IM.ProcessorGeneral.Classes
                       PaymentType = (py != null) ? py.Item3.PaymentType : ""
                     }
         ).ToList();
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(source,true), filters,strReport, string.Empty, clsFormatReport.RptGiftsSale(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(source, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsSale(), isPivot: true, blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1387,14 +1391,15 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 13/Jun/2016 Created
     /// </history>
-    public static FileInfo ExportRptManifestRangeByLs(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptManifestRange)
+    public static async Task<FileInfo> ExportRptManifestRangeByLs(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptManifestRange)
     {
       var lstRptManifest = lstRptManifestRange[0] as List<RptManifestByLSRange>;
-      var lstBookings = lstRptManifestRange[1] as List<RptManifestByLSRange_Bookings>;     
-           
+      var lstBookings = lstRptManifestRange[1] as List<RptManifestByLSRange_Bookings>;
+
       var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
 
-      var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new {
+      var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new
+      {
         c.guloInvit,
         c.LocationN,
         guBookTime = c.guBookT,
@@ -1402,7 +1407,7 @@ namespace IM.ProcessorGeneral.Classes
         c.Bookings
       }).ToList(), true, false);
 
-      return EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
+      return await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, IM.Model.Classes.ExcelFormatItemsList>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, strReport, string.Empty, blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
@@ -1706,10 +1711,10 @@ namespace IM.ProcessorGeneral.Classes
 
       var dtHostessTime = TableHelper.GetDataTableFromList(hostessTime);
 
-      return EpplusHelper.ExportRptWeeklyMonthlyHostess(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>, string>> {
+      return EpplusHelper.ExportRptWeeklyMonthlyHostess(new List<Tuple<DataTable, ExcelFormatItemsList, string>> {
         Tuple.Create(weeklyMonthly, clsFormatReport.RptWeeklyMonthlyHostessByPr(),strReport+" By PR"),
         Tuple.Create(dtHostessTime,clsFormatReport.RptWeeklyMonthlyHostessByTourTime(),strReport+" By Tour Time")
-      }, filters, strReport, string.Empty, blnShowSubtotal: true, fileFullPath: fileFullPath);
+      }, filters, strReport, string.Empty, blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1828,7 +1833,7 @@ namespace IM.ProcessorGeneral.Classes
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1856,7 +1861,7 @@ namespace IM.ProcessorGeneral.Classes
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1879,7 +1884,7 @@ namespace IM.ProcessorGeneral.Classes
         c.PR1 = $"{c.PR1} {c.PR1N}";
       });
 
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters,strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters, strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1919,38 +1924,62 @@ namespace IM.ProcessorGeneral.Classes
     public static FileInfo ExportRptSelfGen(string strReport, string fileFullPath, List<Tuple<string, string>> filters, Tuple<List<RptSelfGen>, List<Sale>, List<Personnel>> lstRptselfGenTuple, DateTime dtmStart, DateTime dtmEnd)
     {
       var lstRptSelfGen = (from pe in lstRptselfGenTuple.Item3
-        select new
-        {
-          PRID = pe.peID,
-          PRN = pe.peN,
-          PRps = pe.peps,
-          Shows = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c=> c.guShowD != null && (c.guShowD >= dtmStart && c.guShowD <= dtmEnd)),
-          IO = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c => c.guInOut),
-          WO = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c => c.guWalkOut),
+                           select new
+                           {
+                             PRID = pe.peID,
+                             PRN = pe.peN,
+                             PRps = pe.peps,
+                             Shows = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c => c.guShowD != null && (c.guShowD >= dtmStart && c.guShowD <= dtmEnd)),
+                             IO = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c => c.guInOut),
+                             WO = lstRptselfGenTuple.Item1.Where(c => c.guPRInvit1 == pe.peID).Count(c => c.guWalkOut),
 
-          Proc = lstRptselfGenTuple.Item2.Where(c=> c.saPR1 == pe.peID).Count(c => c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd)) && c.sast != "DG"),
-          ProcAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd))).Sum(c=> c.saGrossAmount),
+                             Proc = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID).Count(c => c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd)) && c.sast != "DG"),
+                             ProcAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd))).Sum(c => c.saGrossAmount),
 
-          OOP = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd)) && c.sast != "DG"),
-          OOPAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount),
+                             OOP = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd)) && c.sast != "DG"),
+                             OOPAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount),
 
-          Cancel = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd) && c.sast != "DG"),
-          CancelAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd)).Sum(c=>c.saGrossAmount),
+                             Cancel = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd) && c.sast != "DG"),
+                             CancelAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd)).Sum(c => c.saGrossAmount),
 
-          CancelF = 0m,
-          Subtotal = 0m,
+                             Subtotal = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd))).Sum(c => c.saGrossAmount) +
+                             lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount),
 
-          TotalProc = 0m,
+                             TotalProc = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID).Count(c => c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd)) && c.sast != "DG") +
+                             lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount) -
+                             lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd) && c.sast != "DG"),
 
-          TotalProcAmount = (lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd))).Sum(c => c.saGrossAmount)+
-          lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount))-
-          lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd)).Sum(c => c.saGrossAmount),
-          Eff = 0m,
-          CI = 0m,
-          AvgSale = 0m,
-          Pending = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && (c.saProcD == null || c.saProcD > dtmEnd) && c.saD >= dtmStart && c.saD <= dtmEnd),
-          PendingAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && (c.saProcD == null || c.saProcD > dtmEnd) && c.saD >= dtmStart && c.saD <= dtmEnd).Sum(c=>c.saGrossAmount)
-        }).Distinct().ToList();
+                             TotalProcAmount = (lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD == c.saProcD && (c.saD >= dtmStart && c.saD <= dtmEnd))).Sum(c => c.saGrossAmount) +
+                             lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saD != c.saProcD && (c.saProcD >= dtmStart && c.saProcD <= dtmEnd))).Sum(c => c.saGrossAmount)) -
+                             lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && c.saProcD != null && (c.saCancelD >= dtmStart && c.saCancelD <= dtmEnd)).Sum(c => c.saGrossAmount),
+
+                             Pending = lstRptselfGenTuple.Item2.Count(c => c.saPR1 == pe.peID && (c.saProcD == null || c.saProcD > dtmEnd) && c.saD >= dtmStart && c.saD <= dtmEnd),
+                             PendingAmount = lstRptselfGenTuple.Item2.Where(c => c.saPR1 == pe.peID && (c.saProcD == null || c.saProcD > dtmEnd) && c.saD >= dtmStart && c.saD <= dtmEnd).Sum(c => c.saGrossAmount)
+                           }).Distinct()
+                           .Select(c => new
+                           {
+                             c.PRID,
+                             c.PRN,
+                             c.PRps,
+                             c.Shows,
+                             c.IO,
+                             c.WO,
+                             c.Proc,
+                             c.ProcAmount,
+                             c.OOP,
+                             c.OOPAmount,
+                             c.Cancel,
+                             c.CancelAmount,
+                             c.Subtotal,
+                             c.TotalProc,
+                             c.TotalProcAmount,
+                             c.Pending,
+                             c.PendingAmount,
+                             CancelF = c.Subtotal > 0 ? c.CancelAmount / c.Subtotal : c.CancelAmount == 0 ? 0 : 1,
+                             Eff = c.Shows == 0 ? 0 : c.TotalProcAmount / c.Shows,
+                             CI = c.Shows == 0 ? 0 : c.TotalProc / c.Shows,
+                             AvgSale = c.TotalProc == 0 ? 0 : c.TotalProcAmount / c.TotalProc,
+                           }).ToList();
 
       lstRptSelfGen = lstRptSelfGen.Distinct().OrderBy(c => c.PRps)
         .ThenByDescending(c => c.TotalProcAmount).ToList();
@@ -2049,9 +2078,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByLeadSourceMarketMonthly(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByLeadSourceMarketMonthly> lstRptProdLsmMonthly)
+    public static async Task<FileInfo> ExportRptProductionByLeadSourceMarketMonthly(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByLeadSourceMarketMonthly> lstRptProdLsmMonthly)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProdLsmMonthly, true), filters,strReport, string.Empty, clsFormatReport.RptProductionByLeadSourceMarketMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProdLsmMonthly, true), filters, strReport, string.Empty, clsFormatReport.RptProductionByLeadSourceMarketMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 

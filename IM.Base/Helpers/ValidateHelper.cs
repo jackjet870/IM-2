@@ -206,7 +206,12 @@ namespace IM.Base.Helpers
             parents.ForEach(tb => tb.IsSelected = true);
             container.UpdateLayout();
             dgr.Focus();
-            return "Please finish editing the list. \n";
+
+            if (showMessage)
+            {
+              UIHelper.ShowMessage("Please finish editing the list.", title: "Intelligence Marketing");
+              return "Not Valid";
+            }
           }
         }
       }

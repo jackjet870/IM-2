@@ -26,6 +26,7 @@ namespace IM.Base.Forms
     private readonly int _guestId;
     private bool _isReadOnly;
     private EnumModule _module;
+    private EnumProgram _program;
 
     //private bool _isInvitation;
 
@@ -48,13 +49,14 @@ namespace IM.Base.Forms
 
     #region Constructores y destructores
 
-    public frmGuest(UserData user, int guestId, EnumModule module, bool isReadOnly = false)
+    public frmGuest(UserData user, int guestId, EnumModule module,EnumProgram program, bool isReadOnly = false)
     {
       WindowStartupLocation = WindowStartupLocation.CenterScreen;
       _user = user;
       _guestId = guestId;
       _isReadOnly = isReadOnly;
       _module = module;
+      _program = program;
       InitializeComponent();
     }
 
@@ -325,7 +327,7 @@ namespace IM.Base.Forms
               grbGuestStatus.IsEnabled = !_isReadOnly;
 
       dtpArrival.IsEnabled =
-        dtpDeparture.IsEnabled =(_module==EnumModule.InHouse);
+        dtpDeparture.IsEnabled = !(_program == EnumProgram.Inhouse);
     }
 
     #endregion Configuración de controles
@@ -441,8 +443,8 @@ namespace IM.Base.Forms
     private bool ValidateChangedByExist()
     {
       var pass = EncryptHelper.Encrypt(txtPassword.Password);
-      
-      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text,pass,_user.LeadSource.lsID).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
+
+      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text, pass, _catObj.Guest.guls).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
        
       if (string.IsNullOrWhiteSpace(valid?.Focus)) return true;
 
