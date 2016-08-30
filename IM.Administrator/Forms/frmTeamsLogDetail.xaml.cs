@@ -8,6 +8,8 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using Xceed.Wpf.Toolkit;
+using System.Windows.Data;
 
 namespace IM.Administrator.Forms
 {
@@ -46,12 +48,12 @@ namespace IM.Administrator.Forms
       if(enumMode!=EnumMode.ReadOnly)
       {
         cmbtlpe.IsEnabled = true;
-        btnAccept.Visibility = Visibility.Visible;
-        txttlDT.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;        
         cmbtlTeamType.IsEnabled = true;
         cmbtlTeam.IsEnabled = true;
         cmbtlPlaceID.IsEnabled = true;
         UIHelper.SetUpControls(teamLog, this);
+        dptlDT.IsReadOnly = false;
         if (enumMode == EnumMode.Search)
         {
           Title = "Search";
@@ -59,8 +61,11 @@ namespace IM.Administrator.Forms
           lbltlID.Visibility = Visibility.Collapsed;
           cmbtlTeamType.Visibility = Visibility.Collapsed;
           lblTT.Visibility = Visibility.Collapsed;
-          txttlDT.Visibility = Visibility.Collapsed;
-          dptlDT.Visibility = Visibility.Visible;
+          BindingOperations.ClearBinding(dptlDT, DateTimePicker.ValueProperty);
+          dptlDT.KeyDown += dptlDT_KeyDown;
+          dptlDT.AllowTextInput = true;
+          dptlDT.FormatString = "ddd d MMM yyyy";
+          dptlDT.TimePickerVisibility = Visibility.Collapsed;
           cmbtlTeam.Visibility = Visibility.Collapsed;
           cmbtlPlaceID.Visibility = Visibility.Collapsed;
           cmbtlChangedBy.IsEnabled = true;
@@ -68,7 +73,7 @@ namespace IM.Administrator.Forms
           lblTM.Visibility = Visibility.Collapsed;
           if (blnDate)
           {
-            dptlDT.SelectedDate = teamLog.tlDT;
+            dptlDT.Value = teamLog.tlDT;
           }
         }
         else
@@ -119,10 +124,10 @@ namespace IM.Administrator.Forms
       {
         if (enumMode == EnumMode.Search)
         {
-          if (dptlDT.SelectedDate != null)
+          if (dptlDT.Value != null)
           {
             blnDate = true;
-            teamLog.tlDT = Convert.ToDateTime(dptlDT.SelectedDate);
+            teamLog.tlDT = Convert.ToDateTime(dptlDT.Value);
           }
           else
           {
@@ -225,7 +230,7 @@ namespace IM.Administrator.Forms
               lblSr.Content = "Location";
               cmbtlPlaceID.DisplayMemberPath = "loN";
               cmbtlPlaceID.SelectedValuePath = "loID";
-              List<Location> lstLocations =await BRLocations.GetLocations(1, blnTeamsLog: true);
+              List<Model.Location> lstLocations =await BRLocations.GetLocations(1, blnTeamsLog: true);
               cmbtlPlaceID.ItemsSource = lstLocations;
               break;
             }
@@ -274,6 +279,27 @@ namespace IM.Administrator.Forms
           }
       }
 
+    }
+    #endregion
+
+    #region dptlDT_KeyDown
+    /// <summary>
+    /// Deja vacio el valor del dateTimePicker
+    /// </summary>
+    /// <history>
+    /// [emoguel] 29/08/2016 created
+    /// </history>
+    private void dptlDT_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete || e.Key == Key.Back)
+      {
+        e.Handled = true;
+        dptlDT.Value = null;
+      }
+      else if (!(e.Key == Key.Escape))
+      {
+        e.Handled = true;
+      }
     }
     #endregion
 
