@@ -414,8 +414,7 @@ namespace IM.Administrator.Forms
             {
               if (Validate(ttbylssr))
               {
-                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
-                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                if (UIHelper.ShowMessage("Are you sure you want add new Tour Time?", MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                   dgr.CommitEdit();
                   status.Visibility = Visibility.Visible;
@@ -454,8 +453,7 @@ namespace IM.Administrator.Forms
             {
               if (Validate(ttbylssrwd))
               {
-                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
-                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                if (UIHelper.ShowMessage("Are you sure you want add new Tour Time?", MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                   dgr.CommitEdit();
                   status.Visibility = Visibility.Visible;
@@ -495,8 +493,7 @@ namespace IM.Administrator.Forms
             {
               if(Validate(ttbysrwd))
               {
-                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
-                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                if (UIHelper.ShowMessage("Are you sure you want add new Tour Time?", MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                   dgr.CommitEdit();
                   status.Visibility = Visibility.Visible;
@@ -799,8 +796,8 @@ namespace IM.Administrator.Forms
           return;
         else
         {
-          if (MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
-             " to the Lead Source " + "\"" +cboLeadSourceTo.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+          if (UIHelper.ShowMessage("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
+             " to the Lead Source " + "\"" +cboLeadSourceTo.Text+"\"" + "?", MessageBoxImage.Question) == MessageBoxResult.Yes)
           {
             if(_enumTourTimes == EnumTourTimesSchema.ttsByLeadSourceSalesRoom)    
               await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomToLeadSource(cboLeadSource.SelectedValue.ToString(), cboLeadSourceTo.SelectedValue.ToString());
@@ -831,8 +828,8 @@ namespace IM.Administrator.Forms
           return;
         else
         {
-          if (MessageBox.Show("Are you sure you want to copy the tour times of the Sales Room " + "\"" +cboSalesRoom.Text+"\"" +
-             " to the Sales Room " + "\"" +cboSalesRoomTo.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+          if (UIHelper.ShowMessage("Are you sure you want to copy the tour times of the Sales Room " + "\"" +cboSalesRoom.Text+"\"" +
+             " to the Sales Room " + "\"" +cboSalesRoomTo.Text+"\"" + "?",  MessageBoxImage.Question) == MessageBoxResult.Yes)
           {
             switch (_enumTourTimes)
             {
@@ -876,8 +873,8 @@ namespace IM.Administrator.Forms
             return;
           else
           {
-            if (MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source "  + "\""+cboLeadSource.Text+"\"" +
-             ", Sales Room " + "\""+cboSalesRoom.Text+"\"" + ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Sales Rooms & Week Days of Lead Source " + "\""+cboLeadSource.Text+"\"" +  "?", "Tour Times", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            if (UIHelper.ShowMessage("Are you sure you want to copy the tour times of the Lead Source "  + "\""+cboLeadSource.Text+"\"" +
+             ", Sales Room " + "\""+cboSalesRoom.Text+"\"" + ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Sales Rooms & Week Days of Lead Source " + "\""+cboLeadSource.Text+"\"" +  "?", MessageBoxImage.Question) == MessageBoxResult.Yes)
               await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource(cboLeadSource.SelectedValue.ToString(), cboSalesRoom.SelectedValue.ToString(), cboWeekDay.SelectedValue.ToString());
           }
         }
@@ -903,8 +900,8 @@ namespace IM.Administrator.Forms
       {
         string strProgram;
         strProgram = await BRPrograms.GetProgram(cboLeadSource.SelectedValue.ToString());
-        if(MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
-             " to all others Lead Sources of Program " + "\""+strProgram+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        if(UIHelper.ShowMessage("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
+             " to all others Lead Sources of Program " + "\""+strProgram+"\"" + "?", MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           if(_enumTourTimes == EnumTourTimesSchema.ttsByLeadSourceSalesRoom)
             await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram(cboLeadSource.SelectedValue.ToString());
@@ -935,8 +932,8 @@ namespace IM.Administrator.Forms
           return;
         else
         {
-          if(MessageBox.Show("Are you sure you want to copy the tour times of the Sales Room " + "\""+cboSalesRoom.Text+"\"" +
-             ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Week Days of Sales Room " + "\""+cboSalesRoom.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+          if(UIHelper.ShowMessage("Are you sure you want to copy the tour times of the Sales Room " + "\""+cboSalesRoom.Text+"\"" +
+             ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Week Days of Sales Room " + "\""+cboSalesRoom.Text+"\"" + "?", MessageBoxImage.Question) == MessageBoxResult.Yes)
             await BRTourTimes.CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom(cboSalesRoom.SelectedValue.ToString(), cboWeekDay.SelectedValue.ToString());
         }
       }

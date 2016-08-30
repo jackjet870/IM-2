@@ -195,7 +195,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        if (System.Windows.MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        if (UIHelper.ShowMessage("There is no assistance for this week.\nWould you like to generate?",MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
           lstPersonAssist.ForEach(c =>

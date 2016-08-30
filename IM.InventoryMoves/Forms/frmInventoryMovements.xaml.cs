@@ -338,13 +338,13 @@ namespace IM.InventoryMovements
       DateTime dtmsrGiftsRcptCloseD = _salesRoom.srGiftsRcptCloseD;
       if (dtmsrGiftsRcptCloseD >= dtpDate.Value.Value)
       {
-        MessageBox.Show("Date already close. New movements can not be added.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Date already close. New movements can not be added.");
         dtpDate.Value = dtmsrGiftsRcptCloseD.AddDays(1);
         blnValid = false;
       }
       else if (dtpDate.Value.Value > _dtmServerdate)
       {
-        MessageBox.Show("Date can not be greater than today.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Date can not be greater than today.");
         dtpDate.Value = _dtmServerdate;
         blnValid = false;
       }

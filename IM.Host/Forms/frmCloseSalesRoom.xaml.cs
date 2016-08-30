@@ -18,7 +18,6 @@ namespace IM.Host.Forms
   public partial class frmCloseSalesRoom : Window
   {
     #region VARIABLES
-    //private UserData _userData;
     private DateTime _serverDate;
     #endregion
 

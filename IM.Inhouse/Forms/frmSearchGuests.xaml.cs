@@ -126,7 +126,7 @@ namespace IM.Inhouse.Forms
       if (!picker.SelectedDate.HasValue)
       {
         //Cuando el usuario ingresa una fecha invalida
-        MessageBox.Show("Specify the Date", "date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Specify the Date");
         //Y le asignamos la fecha del servidor (la actual hora actual)
         picker.SelectedDate = BRHelpers.GetServerDate();
       }

@@ -412,7 +412,7 @@ namespace IM.Inhouse.Forms
     {
       if (txtDescription.IsEnabled == true)
       {
-        MessageBoxResult msr = System.Windows.MessageBox.Show("This form is currently in edit mode. Please save or undo your changes before closing it.", "Closing", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        MessageBoxResult msr = UIHelper.ShowMessage("This form is currently in edit mode. Please save or undo your changes before closing it.", MessageBoxImage.Question);
         if (msr == MessageBoxResult.No)
           e.Cancel = true;
       }

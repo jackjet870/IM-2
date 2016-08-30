@@ -290,7 +290,7 @@ namespace IM.Administrator.Forms
         else
         {
           string sNombre = item.Name;
-          MessageBox.Show("could not show the window " + sNombre);
+          UIHelper.ShowMessage("could not show the window " + sNombre);
         }
       }
       else//Se pone el foco en la ventana

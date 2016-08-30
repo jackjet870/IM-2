@@ -19,12 +19,9 @@ namespace IM.Host.Forms
   /// </summary>
   public partial class frmSalesRoomsLog : Window
   {
-    //private UserData _userData;
     CollectionViewSource _salesRoomLog;
     public frmSalesRoomsLog()
     {
-      //_userData = UserData;
-
       InitializeComponent();
     }
 
@@ -32,9 +29,6 @@ namespace IM.Host.Forms
     {
 
       _salesRoomLog = ((CollectionViewSource)(this.FindResource("dsSalesRoomLog")));
-      // Load data by setting the CollectionViewSource.Source property:
-      // salesRoomLogViewSource.Source = [generic data source]
-
       _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(App.User.SalesRoom.srID);
 
       CkeckKeysPress(StatusBarCap, Key.Capital);

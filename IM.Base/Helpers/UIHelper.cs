@@ -21,7 +21,6 @@ namespace IM.Base.Helpers
   /// </summary>
   /// <history>
   ///   [wtorres]  01/03/2016 Created
-  ///   
   ///   [ecanul] 17/05/2016 Modified Agregado metodo GetErrorMessage
   /// </history>
   public class UIHelper

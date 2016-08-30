@@ -172,8 +172,8 @@ namespace IM.Inhouse.Forms
       }
       //Preguntamos al usuario si en verdan desea darle Check In al Huesped
       var result =
-        MessageBox.Show("Are you sure you want to mark this record as Check-in? \n This change can not be undone.",
-          "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        UIHelper.ShowMessage("Are you sure you want to mark this record as Check-in? \n This change can not be undone.",
+         MessageBoxImage.Question);
       return result != MessageBoxResult.No;
     }
 
@@ -971,7 +971,7 @@ namespace IM.Inhouse.Forms
         //impedimos modificar los datos si el sistema esta en modo de solo lectura
         if (App.Current.Properties.IsReadOnly)
         {
-          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          UIHelper.ShowMessage("The system is in read-only mode");
           show = false;
         } //Si no esta en modo ReadOnly
         else
@@ -1177,7 +1177,7 @@ namespace IM.Inhouse.Forms
         //impedimos modificar los datos si el sistema esta en modo de solo lectura
         if (App.Current.Properties.IsReadOnly)
         {
-          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          UIHelper.ShowMessage("The system is in read-only mode");
           show = false;
         } //Si no esta en modo ReadOnly
         else
@@ -1349,7 +1349,7 @@ namespace IM.Inhouse.Forms
         //impedimos modificar los datos si el sistema esta en modo de solo lectura
         if (App.Current.Properties.IsReadOnly)
         {
-          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          UIHelper.ShowMessage("The system is in read-only mode");
           show = false;
         } //Si no esta en modo ReadOnly
         else
@@ -1532,7 +1532,7 @@ namespace IM.Inhouse.Forms
         //impedimos modificar los datos si el sistema esta en modo de solo lectura
         if (App.Current.Properties.IsReadOnly)
         {
-          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          UIHelper.ShowMessage("The system is in read-only mode");
           show = false;
         } //Si no esta en modo ReadOnly
         else

@@ -47,7 +47,7 @@ namespace IM.Base.Helpers
       }
       catch (Exception ex)
       {
-        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
         return null;
       }
     }

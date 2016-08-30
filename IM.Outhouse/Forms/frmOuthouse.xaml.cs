@@ -568,8 +568,8 @@ namespace IM.Outhouse.Forms
         return;
       }
 
-      var result = MessageBox.Show("Are you sure you want to delete this invitation?", "Delete", MessageBoxButton.YesNo,
-        MessageBoxImage.Question, MessageBoxResult.No);
+      var result = UIHelper.ShowMessage("Are you sure you want to delete this invitation?",
+        MessageBoxImage.Question);
 
       if (result == MessageBoxResult.Yes)
       {
@@ -642,11 +642,11 @@ namespace IM.Outhouse.Forms
       if (dgGuestPremanifest.Items.Count > 0)
       {
         var remanifestOutside = BRGeneralReports.GetRptPremanifestOutSide(dtpDate.Value.Value, App.User.LeadSource.lsID);
-        ReportsToExcel.PremanifestToExcel(remanifestOutside); //, dtpDate.Value.Value);
+        ReportsToExcel.PremanifestToExcel(remanifestOutside);
       }
       else
       {
-        MessageBox.Show("There is no data", "IM Outhouse");
+        UIHelper.ShowMessage("There is no data");
       }
     }
 

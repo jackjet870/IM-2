@@ -558,7 +558,7 @@ namespace IM.Host
       //Verificamos si el usuario cuenta con los permisos suficientes
       if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly))
       {
-        MessageBox.Show("User doesn't have access", "Exchange Rate");
+        UIHelper.ShowMessage("User doesn't have access");
         return;
       }
 
@@ -726,7 +726,7 @@ namespace IM.Host
       // Validamos que tenga permiso de lectura de cierre de sala de ventas
       if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly))
       {
-        MessageBox.Show("Access denied.", "Close Sales Room");
+        UIHelper.ShowMessage("Access denied.");
         return;
       }
 

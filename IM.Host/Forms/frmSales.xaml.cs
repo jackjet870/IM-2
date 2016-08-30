@@ -1313,8 +1313,6 @@ namespace IM.Host.Forms
     ///</history>
     private void chksaCancel_Checked(object sender, RoutedEventArgs e)
     {
-      //txtsaCancelD.Text = chksaCancel.IsChecked != null && chksaCancel.IsChecked.Value ? BRHelpers.GetServerDate().ToString("dd/MM/yyyy") : string.Empty;
-      //MessageBox.Show(_sale.saCancelD.ToString());   
       if (_loading) return;
       _saleNew.saCancelD = _saleNew.saCancel ? (DateTime?)BRHelpers.GetServerDate() : null;
       txtsaCancelD.Text = _saleNew.saCancelD.ToString();

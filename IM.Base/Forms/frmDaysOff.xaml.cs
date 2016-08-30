@@ -125,7 +125,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        MessageBox.Show("No salesman has been selected", "Days Off");
+        UIHelper.ShowMessage("No salesman has been selected");
       }
     }
 
@@ -161,13 +161,13 @@ namespace IM.Base.Forms
       //Valida que al menos haya un dia libre
       if (numDays == 0)
       {
-        MessageBox.Show("Specify at least one day off", "Specify a day", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Specify at least one day off");
         return false;
       }
       //Valida que no tenga mas de 2 dias libres
       if (numDays > 2)
       {
-        MessageBox.Show("The Personnel should not take more than 2 days off", "Maximum 2 days", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("The Personnel should not take more than 2 days off");
         return false;
       }
       return true;

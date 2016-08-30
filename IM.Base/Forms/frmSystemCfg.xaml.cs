@@ -69,12 +69,12 @@ namespace IM.Base.Forms
     {
       if (cmbPrinterInvitation.SelectedIndex == -1)
       {
-        MessageBox.Show("Select one printer invitation please", "Select Printer", MessageBoxButton.OK, MessageBoxImage.Warning);
+        UIHelper.ShowMessage("Select one printer invitation please");
         return;
       }
       else if (cmbPrinterMeal.SelectedIndex == -1)
       {
-        MessageBox.Show("Select one printer meal ticket please", "Select Printer", MessageBoxButton.OK, MessageBoxImage.Warning);
+        UIHelper.ShowMessage("Select one printer meal ticket please");
         return;
       }
 
@@ -172,8 +172,8 @@ namespace IM.Base.Forms
       }
       catch (Exception ex)
       {
-        string message = String.Format("Can not save the configuration printer\n {0}", ex.Message);
-        MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        string message = String.Format("Can not save the configuration printer\n {0}", ex?.Message);
+        UIHelper.ShowMessage(message,MessageBoxImage.Error);
         return;
       }
     }

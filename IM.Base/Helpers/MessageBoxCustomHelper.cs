@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Threading.Tasks;
 
 namespace IM.Base.Helpers
 {
@@ -96,7 +93,7 @@ namespace IM.Base.Helpers
     #region Public Methods
 
     /// <summary>
-    /// Modiifica el texto de lo9s botones de un MessageBox
+    /// Modiifica el texto de los botones de un MessageBox
     /// </summary>
     /// <param name="textoBotones">Lista de labels para los botones</param>
     /// <remarks>Internamente se llama a EsperarYCambiarMsgBoxWC
