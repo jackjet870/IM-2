@@ -1129,80 +1129,80 @@ namespace IM.ProcessorGeneral.Classes
 
         decimal curPayment = 0;//Pago Actual
         decimal curPaymentUs = 0;//Pago Actual Dlls
-
+        decimal curBalance = 0;
+        decimal curBalanceUs = 0;
         //Recorremos los pagos.
         foreach (var payment in payments)
         {
           //Asignamos el monto del pago al balance actual.
-          var curBalance = payment.Amount ?? 0;//Balance Actual
+          curBalance = payment.Amount ?? 0;//Balance Actual
           //Asignamos el monto del pago en Dlls al balance actual.
-          var curBalanceUs = payment.AmountUS ?? 0;//Balance Actual Dlls
-
-          //Recorremos los recibos de regalo.
-          for (var i = 0; i < sales.Count; i++)
+          curBalanceUs = payment.AmountUS ?? 0;//Balance Actual Dlls
+          
+          do
           {
-
-            if (sales[i].Difference == 0) continue;
-
-            do
+            int index = 0;
+            var sale = sales.FirstOrDefault(c => c.Receipt == payment.Receipt && c.Difference != 0);
+            if (sale != null)
             {
-              if (Math.Abs(sales[i].Difference ?? 0) > Math.Abs(curBalanceUs))
+              index = sales.IndexOf(sale);
+
+              if (Math.Abs(sales[index].Difference ?? 0) > Math.Abs(curBalanceUs))
               {
                 curPayment = curBalance;
                 curPaymentUs = curBalanceUs;
-                //Se resta el pago.
-                sales[i].Difference -= curBalanceUs;
                 curBalance = 0;
                 curBalanceUs = 0;
               }
               else //if (Math.Abs(sales[i].Difference ?? 0) <= Math.Abs(curBalanceUs))
               {
-                curPayment = sales[i].Difference ?? 0 / payment.ExchangeRate;
-                curPaymentUs = sales[i].Difference ?? 0;
-                curBalance = curBalance - curPayment;
-                curBalanceUs = curBalanceUs - curPaymentUs;
-
-                //Se resta el pago
-                sales[i].Difference -= curPaymentUs;
+                curPayment = (sales[index].Difference ?? 0) / payment.ExchangeRate;
+                curPaymentUs = sales[index].Difference ?? 0;
+                curBalance -= curPayment;
+                curBalanceUs -= curPaymentUs;
               }
-              lstSalesPayments.Add(Tuple.Create(sales[i].Receipt, sales[i].Gift,
-                new RptGiftsSale_Payment
-                {
-                  Amount = curPayment,
-                  User = payment.User,
-                  UserN = payment.UserN,
-                  Source = payment.Source,
-                  Currency = payment.Currency,
-                  PaymentType = payment.PaymentType,
-                  Receipt = payment.Receipt,
-                  AmountUS = curPaymentUs,
-                  ExchangeRate = payment.ExchangeRate
-                }));
-
-              if (sales[i].Difference == 0) break;
-            } while (curBalanceUs > 0);
-
-            if (i == sales.Count - 1 && curBalanceUs > 0 && sales[i].Difference == 0)
+              lstSalesPayments.Add(Tuple.Create(sales[index].Receipt, sales[index].Gift,
+            new RptGiftsSale_Payment
             {
-              lstSalesPayments.Add(Tuple.Create(sales[i].Receipt, sales[0].Gift,
-                new RptGiftsSale_Payment
-                {
-                  Amount = curBalanceUs / payment.ExchangeRate,
-                  User = payment.User,
-                  UserN = payment.UserN,
-                  Source = payment.Source,
-                  Currency = payment.Currency,
-                  PaymentType = payment.PaymentType,
-                  Receipt = payment.Receipt,
-                  AmountUS = curBalanceUs,
-                  ExchangeRate = payment.ExchangeRate
-                }));
+              Amount = curPayment,
+              User = payment.User,
+              UserN = payment.UserN,
+              Source = payment.Source,
+              Currency = payment.Currency,
+              PaymentType = payment.PaymentType,
+              Receipt = payment.Receipt,
+              AmountUS = curPaymentUs,
+              ExchangeRate = payment.ExchangeRate
+            }));
             }
-            if (sales[i].Difference == 0) continue;
-            if (sales[i].Difference < 0 || curBalanceUs == 0) break;
-          }
+            else
+            {
+              curPayment = curBalance;
+              curPaymentUs = curBalanceUs;
+              curBalance = 0;
+              curBalanceUs = 0;
+              lstSalesPayments.Add(Tuple.Create(sales[index].Receipt, sales[index].Gift,
+             new RptGiftsSale_Payment
+             {
+               Amount = 0,
+               User = payment.User,
+               UserN = payment.UserN,
+               Source = payment.Source,
+               Currency = payment.Currency,
+               PaymentType = payment.PaymentType,
+               Receipt = payment.Receipt,
+               AmountUS = 0,
+               ExchangeRate = payment.ExchangeRate
+             }));
+              lstSalesPayments[lstSalesPayments.Count - 1].Item3.Amount += curPayment;
+              lstSalesPayments[lstSalesPayments.Count - 1].Item3.AmountUS += curPaymentUs;
+              
+            }            
+
+            sales[index].Difference -= curPaymentUs;
+          } while (Math.Abs(curBalanceUs) > 0);         
         }
-      }
+      }     
 
       var source = (from gr in lstGiftReceipts
                     join gp in lstSalesPayments on new { gr.Receipt, gr.Gift } equals new { Receipt = gp.Item1, Gift = gp.Item2 } into pays

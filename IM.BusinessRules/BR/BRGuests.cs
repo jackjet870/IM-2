@@ -1017,11 +1017,14 @@ namespace IM.BusinessRules.BR
               dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
               #endregion
               #region Add
-              GuestStatus guestStatus = new GuestStatus();
-              guestStatus.gtQuantity = 1;
-              guestStatus.gtgu = guestShow.Guest.guID;
-              guestStatus.gtgs = guestShow.Guest.guGStatus;
-              dbContext.Entry(guestStatus).State = EntityState.Added;
+              if (guestShow.Guest.guStatus != null)
+              {
+                GuestStatus guestStatus = new GuestStatus();
+                guestStatus.gtQuantity = 1;
+                guestStatus.gtgu = guestShow.Guest.guID;
+                guestStatus.gtgs = guestShow.Guest.guGStatus;
+                dbContext.Entry(guestStatus).State = EntityState.Added;
+              }
               #endregion
               #endregion
 
@@ -1304,11 +1307,14 @@ namespace IM.BusinessRules.BR
               dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
               #endregion
               #region Add
-              GuestStatus guestStatus = new GuestStatus();
-              guestStatus.gtQuantity = 1;
-              guestStatus.gtgu = guestInvitation.Guest.guID;
-              guestStatus.gtgs = guestInvitation.Guest.guGStatus;
-              dbContext.Entry(guestStatus).State = EntityState.Added;
+              if (guestInvitation.Guest.guStatus != null)
+              {
+                GuestStatus guestStatus = new GuestStatus();
+                guestStatus.gtQuantity = 1;
+                guestStatus.gtgu = guestInvitation.Guest.guID;
+                guestStatus.gtgs = guestInvitation.Guest.guGStatus;
+                dbContext.Entry(guestStatus).State = EntityState.Added;
+              }
               #endregion
               #endregion
 
@@ -1438,17 +1444,20 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region GuestStatus
-              //Eliminamos los regsitros
+              //Eliminamos los registros
               #region Delete
               var lstGuestStatusDel = dbContext.GuestsStatus.Where(gs => gs.gtgu == guestInvitation.Guest.guID);
               dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
               #endregion
               #region Add
-              GuestStatus guestStatus = new GuestStatus();
-              guestStatus.gtQuantity = 1;
-              guestStatus.gtgu = guestInvitation.Guest.guID;
-              guestStatus.gtgs = guestInvitation.Guest.guGStatus;
-              dbContext.Entry(guestStatus).State = EntityState.Added;
+              if (guestInvitation.Guest.guGStatus != null)
+              {
+                GuestStatus guestStatus = new GuestStatus();
+                guestStatus.gtQuantity = 1;
+                guestStatus.gtgu = guestInvitation.Guest.guID;
+                guestStatus.gtgs = guestInvitation.Guest.guGStatus;
+                dbContext.Entry(guestStatus).State = EntityState.Added;
+              }
               #endregion
               #endregion
 

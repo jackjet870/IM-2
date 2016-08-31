@@ -724,7 +724,7 @@ new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", 
       lst.Add("Price US", "PriceUS", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price MX", "PriceMX", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price CAN", "PriceCAN", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, AggregateFormat: DataFieldFunctions.Sum);
       lst.Add("Total To Pay", "TotalToPay", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Payment Total", "PaymentTotal", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Difference", "Difference", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);

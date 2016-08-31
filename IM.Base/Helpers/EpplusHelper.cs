@@ -4618,7 +4618,6 @@ namespace IM.Base.Helpers
       {
         var filteredRows = sourceTable.Select(filter);
         var objList = filteredRows.Select(x => x.Field<object>(format.PropertyName)).ToArray();
-
         switch (format.AggregateFunction)
         {
           case DataFieldFunctions.Average:
