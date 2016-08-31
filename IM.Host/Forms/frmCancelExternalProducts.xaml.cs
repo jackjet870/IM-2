@@ -141,9 +141,9 @@ namespace IM.Host.Forms
       // Activamos la bandera para saber si se ajustaran costos CxC
       _applicationAdj = CurAdjustment > 0 ? true : false;
 
-      ReceiptsGifts.CalculateCharge(_GuestID, FrmGiftsReceipt.cbogrct.SelectedItem as ChargeTo, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
+      ReceiptsGifts.CalculateCharge(_GuestID, FrmGiftsReceipt.cmbgrct.SelectedItem as ChargeTo, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
                                               ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
-                                              ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.lblgrMaxAuthGifts);
+                                              ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.txbgrMaxAuthGifts);
 
       // Si se desea cancelar el recibo
       if (!Exchange)
@@ -200,10 +200,10 @@ namespace IM.Host.Forms
       // Si se desea cancelar el recibo
       else
       {
-        CheckAllCell(ref grdCancel, _CancelField);
+        CheckAllCell(ref dtgCancel, _CancelField);
         TextBox x = null;
-        ReceiptsGifts.CalculateTotalGifts(grdCancel, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref x, ref x);
-        grdCancel.IsReadOnly = true;
+        ReceiptsGifts.CalculateTotalGifts(dtgCancel, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref x, ref x);
+        dtgCancel.IsReadOnly = true;
       }
 
     }
@@ -256,12 +256,12 @@ namespace IM.Host.Forms
           // guardamos el recibo de regalos exchange
           await SaveReceiptExchange();
 
-          grdExchange.IsReadOnly = true;
+          dtgExchange.IsReadOnly = true;
           // si tiene regalos de intercambio
-          if (grdExchange.Items.Count > 0)
+          if (dtgExchange.Items.Count > 0)
           {
             // guardamos los regalos de intercambio
-            GiftsExchange.Save(ReceiptExchangeID, grdExchange);
+            GiftsExchange.Save(ReceiptExchangeID, dtgExchange);
 
             // Guardamos las promociones en Sistur
             string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
@@ -363,7 +363,7 @@ namespace IM.Host.Forms
       List<string> GiftsCancelled = new List<string>();
 
       // recorremos los regalos
-      foreach (var item in grdCancel.Items)
+      foreach (var item in dtgCancel.Items)
       {
         Type type = item.GetType();
         var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
@@ -452,7 +452,7 @@ namespace IM.Host.Forms
     private bool Validate()
     {
       // Validamos los regalos a cancelar
-      if (!GiftsCancel.Validate(grdCancel, _CancelField))
+      if (!GiftsCancel.Validate(dtgCancel, _CancelField))
         return false;
 
       // Validamos el recibo exchange
@@ -500,8 +500,14 @@ namespace IM.Host.Forms
       // Si se debe generar un recibo exchange
       if (_Exchange)
       {
+        // Validamos que no este en modo edicion
+        if (GridHelper.IsInEditMode(dtgExchange))
+        {
+          UIHelper.ShowMessage("The grid Gifts Receipt Exchange this mode edition");
+          return false;
+        }
         // validamos los regalos de intercambio
-        if (!GiftsExchange.Validate(grdExchange))
+        if (!GiftsExchange.Validate(dtgExchange))
           return false;
         // validamos que no se vayan a duplicar los regalos en el recibo exchange
         else if (!ValidateGiftsRepeated())
@@ -523,7 +529,7 @@ namespace IM.Host.Forms
     /// </history>
     private void Cancel_Click(object sender, RoutedEventArgs e)
     {
-      GiftsCancel.CalculateTotalGifts(grdCancel, ref txtTotalGiftsCancel, true, _CancelField);
+      GiftsCancel.CalculateTotalGifts(dtgCancel, ref txtTotalGiftsCancel, true, _CancelField);
       CalculateTotalGifts();
       _FrmGiftsReceipt.CalculateCharge(ref _FrmCancelExternalProducts);
     }
@@ -539,8 +545,8 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateGiftsRepeated()
     {
-      List<string> aGiftsCancelled = GiftsCancel.GetItems(grdCancel, EnumCheckedStatus.Checked, _CancelField);
-      List<string> aGiftsExchange = GiftsExchange.GetItems(grdExchange);
+      List<string> aGiftsCancelled = GiftsCancel.GetItems(dtgCancel, EnumCheckedStatus.Checked, _CancelField);
+      List<string> aGiftsExchange = GiftsExchange.GetItems(dtgExchange);
 
       // si tiene regalos de intercambio
       if (aGiftsExchange.Count > 0)
@@ -675,7 +681,7 @@ namespace IM.Host.Forms
     {
       if (e.Command == DataGrid.DeleteCommand)
       {
-        GiftsReceiptDetail _deleteGift = grdExchange.SelectedItem as GiftsReceiptDetail;
+        GiftsReceiptDetail _deleteGift = dtgExchange.SelectedItem as GiftsReceiptDetail;
         decimal TotalGiftsExchange = string.IsNullOrEmpty(txtTotalGiftsExchange.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsExchange.Text.Trim(new char[] { '$' }));
         decimal result = TotalGiftsExchange - _deleteGift.gePriceA;
         txtTotalGiftsExchange.Text = string.Format("{0:C2}", result > 0 ? result : 0);
@@ -719,8 +725,8 @@ namespace IM.Host.Forms
     {
       DataGrid dataGrid = sender as DataGrid;
       GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
-      _currentCell = grdExchange.CurrentCell;
-      ReceiptsGifts.StartEdit(EnumMode.Edit, giftsReceiptDetail, ref _currentCell, ref grdExchange, ref bandCancel);
+      _currentCell = dtgExchange.CurrentCell;
+      ReceiptsGifts.StartEdit(EnumMode.Edit, giftsReceiptDetail, ref _currentCell, ref dtgExchange, ref bandCancel);
     }
     #endregion
 
@@ -735,7 +741,7 @@ namespace IM.Host.Forms
     {
       if (!bandCancel)
       {
-        grdExchange.CellEditEnding -= grdExchange_CellEditEnding;
+        dtgExchange.CellEditEnding -= grdExchange_CellEditEnding;
         DataGrid dataGrid = sender as DataGrid;
         ComboBox comboBox = e.EditingElement as ComboBox;
         GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
@@ -749,7 +755,7 @@ namespace IM.Host.Forms
           ChargeTo pChargeTo = frmHost._lstChargeTo.Where(x => x.ctID.ToUpper() == "MARKETING").Single();
           LeadSource pLeadSource = cboLeadSource.SelectedItem as LeadSource;
 
-          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest.guID, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
+          ReceiptsGifts.AfterEdit(ref dtgExchange, _Guest.guID, row: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: _isExchangeReceipt,
                                         pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: txtTotalGiftsExchange, pTxtgrCxCGifts: txtgrcxcGifts,
                                         pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrcxcAdj, pTxtgrMaxAuthGifts: txtMaxAuthGifts, pLblgrMaxAuthGifts: txbMaxAuthGiftsCaption);
 
@@ -770,7 +776,7 @@ namespace IM.Host.Forms
         {
           e.Cancel = true;
         }
-        grdExchange.CellEditEnding += grdExchange_CellEditEnding;
+        dtgExchange.CellEditEnding += grdExchange_CellEditEnding;
       }
       // Verificamos si se puso en modo lectura la celda
       if (_currentCell.Column.IsReadOnly)

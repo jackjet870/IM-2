@@ -10,10 +10,13 @@
   <Window.Resources>
     <CollectionViewSource x:Key="dsGiftsReceiptsAdditional" d:DesignSource="{d:DesignInstance {x:Type Model:GetGiftsReceiptsAdditional}, CreateList=True}"/>
   </Window.Resources>
-  <Grid DataContext="{StaticResource dsGiftsReceiptsAdditional}">
-    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="115,242,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
-    <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="253,242,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
-    <DataGrid x:Name="dgGuestsAdditional" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,10,44" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <!--#region DatGrid-->
+    <DataGrid x:Name="dtgGuestsAdditional" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptsAdditional}}" Margin="10,10,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False">
       <DataGrid.Columns>
         <DataGridCheckBoxColumn x:Name="generateColumn" Binding="{Binding Generate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Generate" Width="SizeToHeader" IsReadOnly="false"/>
         <DataGridTextColumn x:Name="gaAdditionalColumn" Binding="{Binding gaAdditional}" Header="GUID" Width="SizeToHeader" IsReadOnly="True"/>
@@ -22,5 +25,26 @@
         <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Receipt ID" Width="*" IsReadOnly="True"/>
       </DataGrid.Columns>
     </DataGrid>
+    <!--#endregion-->
+    <!--#region Botones -->
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+      <Border x:Name="btnSave" Style="{StaticResource brd-ButtonsBig}"  MouseLeftButtonDown="btnSave_MouseLeftButtonDown" Margin="0,0,15,0">
+        <StackPanel Orientation="Horizontal">
+          <Viewbox Stretch="Uniform" Width="20">
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png" />
+          </Viewbox>
+          <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+        </StackPanel>
+      </Border>
+      <Border x:Name="btnCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnCancel_MouseLeftButtonDown">
+        <StackPanel Orientation="Horizontal">
+          <Viewbox Stretch="Uniform" Width="20">
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png" />
+          </Viewbox>
+          <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+    <!--#endregion-->
   </Grid>
 </Window>

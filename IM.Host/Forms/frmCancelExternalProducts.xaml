@@ -7,7 +7,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmCancelExternalProducts"
         mc:Ignorable="d"
         Name="WindowMain"
-        Title="Cancel External Products" Height="660.658" Width="742.761" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Cancel External Products" Height="658.506" Width="742.761" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
   <Window.Resources>
     <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsPrograms" d:DesignSource="{d:DesignInstance {x:Type Model:Program}, CreateList=True}"/>
@@ -17,235 +17,237 @@
     <CollectionViewSource x:Key="dsGiftsReceiptDetail" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetail}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsGiftsReceiptPackage" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPackageItem}, CreateList=True}"/>
   </Window.Resources>
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
 
-    <StackPanel x:Name="stkGuest" Grid.Row="0">
-      <Border Margin="10" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-        <StackPanel Orientation="Vertical">
-          <TextBlock Text="Guest" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <StackPanel x:Name="stkGuest" Grid.Row="0">
+        <Border Margin="10" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
           <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
-              <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="txbReceiptID" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Receipt ID" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtReceipt" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" Width="65" IsReadOnly="True"/>
+            <TextBlock Text="Guest" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+            <StackPanel Orientation="Vertical">
+              <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
+                <StackPanel Orientation="Vertical">
+                  <TextBlock x:Name="txbReceiptID" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Receipt ID" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtReceipt" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" Width="65" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbGuestID" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Guest ID" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtGuestID" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" Width="65" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbNameInvitation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtNameInvitation" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbSalesRoom" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Center" VerticalAlignment="Top" Width="143" SelectedValuePath="srID" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}" DisplayMemberPath="srN" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0" Width="149">
+                  <TextBlock x:Name="txbProgram" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <ComboBox x:Name="cboProgram" HorizontalAlignment="Center" VerticalAlignment="Top" Width="149" SelectedValuePath="pgID" ItemsSource="{Binding Source={StaticResource dsPrograms}}" DisplayMemberPath="pgN" IsEnabled="False"/>
+                </StackPanel>
               </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbGuestID" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Guest ID" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtGuestID" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" Width="65" IsReadOnly="True"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbNameInvitation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtNameInvitation" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbSalesRoom" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Center" VerticalAlignment="Top" Width="143" SelectedValuePath="srID" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}" DisplayMemberPath="srN" IsEnabled="False"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0" Width="149">
-                <TextBlock x:Name="txbProgram" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <ComboBox x:Name="cboProgram" HorizontalAlignment="Center" VerticalAlignment="Top" Width="149" SelectedValuePath="pgID" ItemsSource="{Binding Source={StaticResource dsPrograms}}" DisplayMemberPath="pgN" IsEnabled="False"/>
+              <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="5,0,5,10">
+                  <TextBlock x:Name="txbLeadSource" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <ComboBox x:Name="cboLeadSource" HorizontalAlignment="Left" VerticalAlignment="Top" Width="143" SelectedValuePath="lsID" ItemsSource="{Binding Source={StaticResource dsLeadSource}}" DisplayMemberPath="lsN" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbReservation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Reservation" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtReservation" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                  <TextBlock x:Name="txbArrival" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Arrival" VerticalAlignment="Top" Margin="10,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <xctk:DateTimePicker x:Name="dtpArrival" Style="{StaticResource dtp-DateRange-TK}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                  <TextBlock x:Name="txbDeparture" HorizontalAlignment="Stretch" TextAlignment="Center" Text="Departure" VerticalAlignment="Top" Margin="10,0,0,2" Background="#147F79" FontSize="12" Foreground="White" />
+                  <xctk:DateTimePicker x:Name="dtpDeparture" Style="{StaticResource dtp-DateRange-TK}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbQtyEPurses" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Qty E-Purses" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtQtyEPurses" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="69" IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+                  <TextBlock x:Name="txbAccountInvitation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Acoount" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
+                  <TextBox x:Name="txtAccountInvitation" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="79" IsReadOnly="True"/>
+                </StackPanel>
               </StackPanel>
             </StackPanel>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <StackPanel x:Name="stkGiftsToCancel" Grid.Row="1">
+        <Border Margin="10,0,10,0" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="Gifts To Cancel" TextAlignment="Center" Margin="5,5,5,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+            <!--#region Datagrid-->
+            <DataGrid x:Name="dtgCancel" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetailCancel}}" IsSynchronizedWithCurrentItem="True" Margin="5" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserReorderColumns="False" SelectionMode="Single" Height="115" >
+              <DataGrid.Resources>
+                <!--#region ESTILOS DEL DATAGRID-->
+                <Style TargetType="{x:Type DataGridRow}">
+                  <Style.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                  </Style.Resources>
+                </Style>
+
+                <!--#endregion-->
+              </DataGrid.Resources>
+              <DataGrid.Columns>
+                <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                  <DataGridCheckBoxColumn.EditingElementStyle>
+                    <Style TargetType="CheckBox">
+                      <EventSetter Event="Click" Handler="Cancel_Click"/>
+                      <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
+                      <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                      <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.EditingElementStyle>
+                  <DataGridCheckBoxColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Receipt"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn x:Name="geCancelPVPPromoColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                  <DataGridCheckBoxColumn.EditingElementStyle>
+                    <Style TargetType="CheckBox">
+                      <EventSetter Event="Click" Handler="Cancel_Click"/>
+                      <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
+                      <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                      <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.EditingElementStyle>
+                  <DataGridCheckBoxColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Receipt"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn x:Name="geQtyColumn" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Quantity"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="qtyUnitColumn" Binding="{Binding QtyUnit}" Header="Unit" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Unit Quantity"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn x:Name="gegiColumn" SelectedValueBinding="{Binding gegi}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" IsReadOnly="True"/>
+                <DataGridTextColumn x:Name="geAdultsColumn" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geMinorsColumn" Binding="{Binding geMinors}" Header="Minors" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geExtraAdultsColumn" Binding="{Binding geExtraAdults}" Header="E. Adults" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Adults Extra"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceAColumn" Binding="{Binding gePriceA, StringFormat={}{0:$0.00}}" Header="C. Adults" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Cost of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceMColumn" Binding="{Binding gePriceM, StringFormat={}{0:$0.00}}" Header="C. Minors" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Cost of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceAdultColumn" Binding="{Binding gePriceAdult, StringFormat={}{0:$0.00}}" Header="P. Adults" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceMinorColumn" Binding="{Binding gePriceMinor, StringFormat={}{0:$0.00}}" Header="P. Minors" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceExtraAdultColumn" Binding="{Binding gePriceExtraAdult, StringFormat={}{0:$0.00}}" Header="P.E. Adults" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price Of Extra Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geFoliosColumn" Binding="{Binding geFolios}" Header="Folios" Width="SizeToHeader" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn x:Name="geSaleColumn" Binding="{Binding geSale}" Header="Sale" Width="SizeToHeader" IsReadOnly="True">
+                  <DataGridCheckBoxColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Gift Sale Type"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn x:Name="geCommentsColumn" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Comments"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+
+            <!--#endregion-->
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <StackPanel x:Name="stkGiftsExchange" Grid.Row="2">
+        <Border Margin="10,5,10,0" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="Gifts Receipt Exchange" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal">
-              <StackPanel Orientation="Vertical" Margin="5,0,5,10">
-                <TextBlock x:Name="txbLeadSource" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <ComboBox x:Name="cboLeadSource" HorizontalAlignment="Left" VerticalAlignment="Top" Width="143" SelectedValuePath="lsID" ItemsSource="{Binding Source={StaticResource dsLeadSource}}" DisplayMemberPath="lsN" IsEnabled="False"/>
+              <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                <TextBlock x:Name="txbgrNum" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Center" Width="120" Margin="5,0"/>
               </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbReservation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Reservation" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtReservation" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="txbArrival" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Arrival" VerticalAlignment="Top" Margin="10,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <xctk:DateTimePicker x:Name="dtpArrival" Style="{StaticResource dtp-DateRange-TK}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="txbDeparture" HorizontalAlignment="Stretch" TextAlignment="Center" Text="Departure" VerticalAlignment="Top" Margin="10,0,0,2" Background="#147F79" FontSize="12" Foreground="White" />
-                <xctk:DateTimePicker x:Name="dtpDeparture" Style="{StaticResource dtp-DateRange-TK}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbQtyEPurses" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Qty E-Purses" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtQtyEPurses" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="69" IsReadOnly="True"/>
-              </StackPanel>
-              <StackPanel Orientation="Vertical" Margin="5,0,5,0">
-                <TextBlock x:Name="txbAccountInvitation" HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" Text="Acoount" VerticalAlignment="Top" Margin="0,0,0,2" Background="#147F79" FontSize="12" Foreground="White"/>
-                <TextBox x:Name="txtAccountInvitation" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="79" IsReadOnly="True"/>
+              <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                <TextBlock x:Name="txbgrComments" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBox x:Name="txtgrComments" Height="40" TextWrapping="Wrap" VerticalAlignment="Top" Width="432" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible" Margin="5,0,5,0"/>
               </StackPanel>
             </StackPanel>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-    </StackPanel>
-
-    <StackPanel x:Name="stkGiftsToCancel" Grid.Row="1">
-      <Border Margin="10,0,10,0" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-        <StackPanel Orientation="Vertical">
-          <TextBlock Text="Gifts To Cancel" TextAlignment="Center" Margin="5,5,5,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-          <!--#region Datagrid-->
-          <DataGrid x:Name="grdCancel" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetailCancel}}" IsSynchronizedWithCurrentItem="True" Margin="5" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserReorderColumns="False" SelectionMode="Single" Height="115" >
-            <DataGrid.Resources>
-              <!--#region ESTILOS DEL DATAGRID-->
-              <Style TargetType="{x:Type DataGridRow}">
-                <Style.Resources>
-                  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                  <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                  <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
-                </Style.Resources>
-              </Style>
-
-              <!--#endregion-->
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-              <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-                <DataGridCheckBoxColumn.EditingElementStyle>
-                  <Style TargetType="CheckBox">
-                    <EventSetter Event="Click" Handler="Cancel_Click"/>
-                    <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
-                    <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                  </Style>
-                </DataGridCheckBoxColumn.EditingElementStyle>
-                <DataGridCheckBoxColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Receipt"/>
-                  </Style>
-                </DataGridCheckBoxColumn.HeaderStyle>
-              </DataGridCheckBoxColumn>
-              <DataGridCheckBoxColumn x:Name="geCancelPVPPromoColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <DataGridCheckBoxColumn.EditingElementStyle>
-                  <Style TargetType="CheckBox">
-                    <EventSetter Event="Click" Handler="Cancel_Click"/>
-                    <EventSetter Event="CheckBox.Unchecked" Handler="Cancel_Click"/>
-                    <EventSetter Event="CheckBox.Checked" Handler="Cancel_Click"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                  </Style>
-                </DataGridCheckBoxColumn.EditingElementStyle>
-                <DataGridCheckBoxColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Receipt"/>
-                  </Style>
-                </DataGridCheckBoxColumn.HeaderStyle>
-              </DataGridCheckBoxColumn>
-              <DataGridTextColumn x:Name="geQtyColumn" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="qtyUnitColumn" Binding="{Binding QtyUnit}" Header="Unit" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Unit Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridComboBoxColumn x:Name="gegiColumn" SelectedValueBinding="{Binding gegi}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" IsReadOnly="True"/>
-              <DataGridTextColumn x:Name="geAdultsColumn" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geMinorsColumn" Binding="{Binding geMinors}" Header="Minors" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geExtraAdultsColumn" Binding="{Binding geExtraAdults}" Header="E. Adults" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults Extra"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAColumn" Binding="{Binding gePriceA, StringFormat={}{0:$0.00}}" Header="C. Adults" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMColumn" Binding="{Binding gePriceM, StringFormat={}{0:$0.00}}" Header="C. Minors" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAdultColumn" Binding="{Binding gePriceAdult, StringFormat={}{0:$0.00}}" Header="P. Adults" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMinorColumn" Binding="{Binding gePriceMinor, StringFormat={}{0:$0.00}}" Header="P. Minors" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceExtraAdultColumn" Binding="{Binding gePriceExtraAdult, StringFormat={}{0:$0.00}}" Header="P.E. Adults" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price Of Extra Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geFoliosColumn" Binding="{Binding geFolios}" Header="Folios" Width="SizeToHeader" IsReadOnly="True"/>
-              <DataGridCheckBoxColumn x:Name="geSaleColumn" Binding="{Binding geSale}" Header="Sale" Width="SizeToHeader" IsReadOnly="True">
-                <DataGridCheckBoxColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Gift Sale Type"/>
-                  </Style>
-                </DataGridCheckBoxColumn.HeaderStyle>
-              </DataGridCheckBoxColumn>
-              <DataGridTextColumn x:Name="geCommentsColumn" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Comments"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-            </DataGrid.Columns>
-          </DataGrid>
-
-          <!--#endregion-->
-        </StackPanel>
-      </Border>
-    </StackPanel>
-
-    <StackPanel x:Name="stkGiftsExchange" Grid.Row="2">
-      <Border Margin="10,5,10,0" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-        <StackPanel Orientation="Vertical">
-          <TextBlock Text="Gifts Receipt Exchange" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-          <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-              <TextBlock x:Name="txbgrNum" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White"/>
-              <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Center" Width="120" Margin="5,0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-              <TextBlock x:Name="txbgrComments" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White"/>
-              <TextBox x:Name="txtgrComments" Height="40" TextWrapping="Wrap" VerticalAlignment="Top" Width="432" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible" Margin="5,0,5,0"/>
-            </StackPanel>
-          </StackPanel>
-          <!--#region Datagrid-->
-          <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" 
-                    ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="5,5,5,5" 
+            <!--#region Datagrid-->
+            <DataGrid x:Name="dtgExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                    ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,5" 
                     IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" 
                     CanUserSortColumns="False" SelectionMode="Single" CanUserResizeRows="False" 
                     PreparingCellForEdit="grdExchange_PreparingCellForEdit" 
@@ -253,309 +255,172 @@
                     RowEditEnding="grdGifts_RowEditEnding"
                     CommandManager.PreviewExecuted="grdExchange_PreviewExecuted" Height="127">
 
-            <DataGrid.RowHeaderTemplate >
-              <DataTemplate>
-                <Expander Expanded="GiftsPacks_Expanded" Collapsed="GiftsPacks_Collapsed" Style="{StaticResource ExpanderTemplate}"/>
-              </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-            <DataGrid.Columns>
-              <DataGridTextColumn x:Name="geQtyColumn1" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="qtyUnitColumn1" Binding="{Binding QtyUnit}" Header="Unit" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Unit Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridComboBoxColumn x:Name="gegiColumn1" SelectedValueBinding="{Binding gegi, UpdateSourceTrigger=PropertyChanged}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" />
-              <DataGridTextColumn x:Name="geAdultsColumn1" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geMinorsColumn1" Binding="{Binding geMinors}" Header="Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geExtraAdultsColumn1" Binding="{Binding geExtraAdults}" Header="E. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults Extra"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAColumn1" Binding="{Binding gePriceA}" Header="C. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMColumn1" Binding="{Binding gePriceM}" Header="C. Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAdultColumn1" Binding="{Binding gePriceAdult}" Header="P. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMinorColumn1" Binding="{Binding gePriceMinor}" Header="P. Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceExtraAdultColumn1" Binding="{Binding gePriceExtraAdult}" Header="P. E. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price Of Extra Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geFoliosColumn1" Binding="{Binding geFolios}" Header="Folios" Width="SizeToHeader"/>
-              <DataGridCheckBoxColumn x:Name="geSaleColumn1" Binding="{Binding geSale}" Header="Sale" Width="SizeToHeader">
-                <DataGridCheckBoxColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Gift Sale Type"/>
-                  </Style>
-                </DataGridCheckBoxColumn.HeaderStyle>
-              </DataGridCheckBoxColumn>
-              <DataGridTextColumn x:Name="geCommentsColumn1" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader"/>
-            </DataGrid.Columns>
+              <DataGrid.RowHeaderTemplate >
+                <DataTemplate>
+                  <Expander Expanded="GiftsPacks_Expanded" Collapsed="GiftsPacks_Collapsed" Style="{StaticResource ExpanderTemplate}"/>
+                </DataTemplate>
+              </DataGrid.RowHeaderTemplate>
+              <DataGrid.Columns>
+                <DataGridTextColumn x:Name="geQtyColumn1" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Quantity"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="qtyUnitColumn1" Binding="{Binding QtyUnit}" Header="Unit" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Unit Quantity"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn x:Name="gegiColumn1" SelectedValueBinding="{Binding gegi, UpdateSourceTrigger=PropertyChanged}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" />
+                <DataGridTextColumn x:Name="geAdultsColumn1" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geMinorsColumn1" Binding="{Binding geMinors}" Header="Minors" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geExtraAdultsColumn1" Binding="{Binding geExtraAdults}" Header="E. Adults" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Number of Adults Extra"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceAColumn1" Binding="{Binding gePriceA}" Header="C. Adults" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Cost of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceMColumn1" Binding="{Binding gePriceM}" Header="C. Minors" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Cost of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceAdultColumn1" Binding="{Binding gePriceAdult}" Header="P. Adults" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price of Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceMinorColumn1" Binding="{Binding gePriceMinor}" Header="P. Minors" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price of Minors"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="gePriceExtraAdultColumn1" Binding="{Binding gePriceExtraAdult}" Header="P. E. Adults" Width="SizeToHeader">
+                  <DataGridTextColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Total Price Of Extra Adults"/>
+                    </Style>
+                  </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="geFoliosColumn1" Binding="{Binding geFolios}" Header="Folios" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="geSaleColumn1" Binding="{Binding geSale}" Header="Sale" Width="SizeToHeader">
+                  <DataGridCheckBoxColumn.HeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                      <Setter Property="ToolTip" Value="Gift Sale Type"/>
+                    </Style>
+                  </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn x:Name="geCommentsColumn1" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader"/>
+              </DataGrid.Columns>
 
-            <DataGrid.RowDetailsTemplate>
-              <DataTemplate>
-                <ListView ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPackage}}" IsEnabled="True">
-                  <ListView.ItemTemplate>
-                    <DataTemplate>
-                      <WrapPanel>
-                        <Viewbox Width="16" Stretch="Uniform" >
-                          <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
-                        </Viewbox>
-                        <TextBlock/>
-                        <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>
-                      </WrapPanel>
-                    </DataTemplate>
-                  </ListView.ItemTemplate>
-                </ListView>
-              </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-          </DataGrid>
-          <!--#endregion-->
-        </StackPanel>
-      </Border>
-
-      <!--<GroupBox x:Name="grbGiftsReceiptExchange" Header="Gifts Receipt Exchange" HorizontalAlignment="Left" VerticalAlignment="Top" Width="724" Height="206" Margin="10,0,0,0">
-        <Grid >
-
-
-          <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" 
-                    ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,52,10,10" 
-                    IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" 
-                    CanUserSortColumns="False" SelectionMode="Single" CanUserResizeRows="False" 
-                    PreparingCellForEdit="grdExchange_PreparingCellForEdit" 
-                    CellEditEnding="grdExchange_CellEditEnding" 
-                    RowEditEnding="grdGifts_RowEditEnding"
-                    CommandManager.PreviewExecuted="grdExchange_PreviewExecuted">
-
-            <DataGrid.RowHeaderTemplate >
-              <DataTemplate>
-                <Expander Expanded="GiftsPacks_Expanded" Collapsed="GiftsPacks_Collapsed" Style="{StaticResource ExpanderTemplate}"/>
-              </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-            <DataGrid.Columns>
-              <DataGridTextColumn x:Name="geQtyColumn1" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="qtyUnitColumn1" Binding="{Binding QtyUnit}" Header="Unit" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Unit Quantity"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridComboBoxColumn x:Name="gegiColumn1" SelectedValueBinding="{Binding gegi, UpdateSourceTrigger=PropertyChanged}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" />
-              <DataGridTextColumn x:Name="geAdultsColumn1" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geMinorsColumn1" Binding="{Binding geMinors}" Header="Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geExtraAdultsColumn1" Binding="{Binding geExtraAdults}" Header="E. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Number of Adults Extra"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAColumn1" Binding="{Binding gePriceA}" Header="C. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMColumn1" Binding="{Binding gePriceM}" Header="C. Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Cost of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceAdultColumn1" Binding="{Binding gePriceAdult}" Header="P. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceMinorColumn1" Binding="{Binding gePriceMinor}" Header="P. Minors" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price of Minors"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="gePriceExtraAdultColumn1" Binding="{Binding gePriceExtraAdult}" Header="P. E. Adults" Width="SizeToHeader">
-                <DataGridTextColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Total Price Of Extra Adults"/>
-                  </Style>
-                </DataGridTextColumn.HeaderStyle>
-              </DataGridTextColumn>
-              <DataGridTextColumn x:Name="geFoliosColumn1" Binding="{Binding geFolios}" Header="Folios" Width="SizeToHeader"/>
-              <DataGridCheckBoxColumn x:Name="geSaleColumn1" Binding="{Binding geSale}" Header="Sale" Width="SizeToHeader">
-                <DataGridCheckBoxColumn.HeaderStyle>
-                  <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="ToolTip" Value="Gift Sale Type"/>
-                  </Style>
-                </DataGridCheckBoxColumn.HeaderStyle>
-              </DataGridCheckBoxColumn>
-              <DataGridTextColumn x:Name="geCommentsColumn1" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader"/>
-            </DataGrid.Columns>
-
-            <DataGrid.RowDetailsTemplate>
-              <DataTemplate>
-                <ListView ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPackage}}" IsEnabled="True">
-                  <ListView.ItemTemplate>
-                    <DataTemplate>
-                      <WrapPanel>
-                        <Viewbox Width="16" Stretch="Uniform" >
-                          <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
-                        </Viewbox>
-                        <TextBlock/>
-                        <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>
-                      </WrapPanel>
-                    </DataTemplate>
-                  </ListView.ItemTemplate>
-                </ListView>
-              </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-          </DataGrid>
-        </Grid>
-      </GroupBox>-->
-    </StackPanel>
-
-    <StackPanel x:Name="stkTotdal" Grid.Row="3" Orientation="Horizontal">
-      <Border x:Name="stkTotal" Grid.Row="3" Margin="10,5,10,0" HorizontalAlignment="Left" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-        <StackPanel Orientation="Vertical">
-          <TextBlock Text="Totals" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
-          <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-              <TextBlock x:Name="txbMaxAuthGiftsCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
-              <TextBox x:Name="txtMaxAuthGifts" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-              <TextBlock x:Name="txbTotalCostInvitationCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost Invitation" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
-              <TextBlock x:Name="txbTotalCostCancelCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost To Cancel (-)" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
-              <TextBlock x:Name="txbTotalCostExchangeCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost Exchange (+)" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
-              <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-              <TextBox x:Name="txtTotalGiftsInvitation" HorizontalAlignment="Left" Height="23"  AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-              <TextBox x:Name="txtTotalGiftsCancel" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-              <TextBox x:Name="txtTotalGiftsExchange" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-              <TextBox x:Name="txtTotalCost" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-              <TextBlock x:Name="txbgrcxcGifts" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="CxC" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
-              <TextBlock x:Name="txbgrcxcAdj" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adjustment (+)" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
-              <TextBlock x:Name="txbTotalCxCCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total CxC" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="0,0,10,0">
-              <TextBox x:Name="txtgrcxcGifts" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-              <TextBox x:Name="txtgrcxcAdj" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-              <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
-            </StackPanel>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-      <!--#region Botones-->
-      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Border x:Name="btnSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSave_MouseLeftButtonDown" Background="White" Margin="18,20,10,10">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
-            <Viewbox Stretch="Uniform" Width="20">
-              <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
-            </Viewbox>
-            <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+              <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                  <ListView ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPackage}}" IsEnabled="True">
+                    <ListView.ItemTemplate>
+                      <DataTemplate>
+                        <WrapPanel>
+                          <Viewbox Width="16" Stretch="Uniform" >
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/BGiftPack.png"/>
+                          </Viewbox>
+                          <TextBlock/>
+                          <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>
+                        </WrapPanel>
+                      </DataTemplate>
+                    </ListView.ItemTemplate>
+                  </ListView>
+                </DataTemplate>
+              </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+            <!--#endregion-->
           </StackPanel>
         </Border>
-        <Border x:Name="btnClose" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnClose_MouseLeftButtonDown" Background="White" Margin="18,0,10,10">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
-            <Viewbox Stretch="Uniform" Width="20">
-              <Image Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
-            </Viewbox>
-            <TextBlock Text="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+      </StackPanel>
+
+      <StackPanel x:Name="stkTotdal" Grid.Row="3" Orientation="Horizontal">
+        <Border x:Name="stkTotal" Grid.Row="3" Margin="10,5,10,0" HorizontalAlignment="Left" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="Totals" TextAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal">
+              <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBlock x:Name="txbMaxAuthGiftsCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Center" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBox x:Name="txtMaxAuthGifts" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
+              </StackPanel>
+              <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <TextBlock x:Name="txbTotalCostInvitationCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost Invitation" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
+                <TextBlock x:Name="txbTotalCostCancelCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost To Cancel (-)" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
+                <TextBlock x:Name="txbTotalCostExchangeCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost Exchange (+)" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
+                <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Center" Background="#147F79" FontSize="12" Foreground="White" Margin="5"/>
+              </StackPanel>
+              <StackPanel Orientation="Vertical">
+                <TextBox x:Name="txtTotalGiftsInvitation" HorizontalAlignment="Left" Height="23"  AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtTotalGiftsCancel" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtTotalGiftsExchange" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtTotalCost" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+              </StackPanel>
+              <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <TextBlock x:Name="txbgrcxcGifts" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="CxC" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBlock x:Name="txbgrcxcAdj" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adjustment (+)" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
+                <TextBlock x:Name="txbTotalCxCCaption" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Total CxC" VerticalAlignment="Top" Margin="5" Background="#147F79" FontSize="12" Foreground="White"/>
+              </StackPanel>
+              <StackPanel Orientation="Vertical" Margin="0,0,10,0">
+                <TextBox x:Name="txtgrcxcGifts" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtgrcxcAdj" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True" Margin="0,0,0,2"/>
+              </StackPanel>
+            </StackPanel>
           </StackPanel>
         </Border>
-
-        <!--<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Margin="18,20,10,10"/>
-        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="75" Click="btnClose_Click" Margin="18,20,10,10"/>-->
+        <!--#region Botones-->
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <Border x:Name="btnSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnSave_MouseLeftButtonDown" Background="White" Margin="18,20,10,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
+              </Viewbox>
+              <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
+          <Border x:Name="btnClose" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="btnClose_MouseLeftButtonDown" Background="White" Margin="18,0,10,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="58">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
+              </Viewbox>
+              <TextBlock Text="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+        <!--#endregion-->
       </StackPanel>
-      <!--#endregion-->
-    </StackPanel>
-      <!--<GroupBox x:Name="grbTotals" Header="Totals" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="566" Margin="10,0,0,0">
-          <Grid>
-          </Grid>
-        </GroupBox>-->
-    <!--
-      </StackPanel>
-      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="158">
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Margin="50,30,20,30"/>
-        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnClose_Click" Margin="50,0,0,0"/>
-      </StackPanel>
-
-    </StackPanel>-->
-
-  </Grid>
+    </Grid>
+  </ScrollViewer>
 </Window>

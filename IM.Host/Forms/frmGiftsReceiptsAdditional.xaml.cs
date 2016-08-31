@@ -2,13 +2,11 @@
 using IM.Host.Classes;
 using IM.Model;
 using PalaceResorts.Common.PalaceTools;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
@@ -52,7 +50,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Mayo/2016 Created
     /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    private void btnCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       Close();
     }
@@ -100,12 +98,12 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Mayo/2016 Created
     /// </history>
-    private async void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       int lngReceiptID = 0;
       int lngGuestID = 0;
 
-      foreach (GetGiftsReceiptsAdditional currentRow in dgGuestsAdditional.Items)
+      foreach (GetGiftsReceiptsAdditional currentRow in dtgGuestsAdditional.Items)
       {
         // si se desea generar el recibo de regalos
         if (currentRow.Generate.Value)
@@ -152,8 +150,6 @@ namespace IM.Host.Forms
       Guest _Guest = await BRGuests.GetGuest(GuestID);
       string _FullName = Common.GetFullName(_Guest.guLastName1 ?? "", _Guest.guFirstName1 ?? "");
       string _FullName2 = Common.GetFullName(_Guest.guLastname2 ?? "", _Guest.guFirstName2 ?? "");
-      var hostess = _frmGiftsReceipt.cbogrHost.SelectedItem as PersonnelShort;
-      var offered = _frmGiftsReceipt.cbogrpe.SelectedItem as PersonnelShort;
 
       bool boolTemp = false;
 
@@ -167,13 +163,13 @@ namespace IM.Host.Forms
         grPax = _Guest.guPax,
         grHotel = _Guest.guHotel,
         grRoomNum = _Guest.guRoomNum,
-        grpe = offered.peID,
-        grlo = _frmGiftsReceipt.cbogrlo.SelectedValue.ToString(),
-        grls = _frmGiftsReceipt.cbogrlo.SelectedValue.ToString(),
-        grsr = _frmGiftsReceipt.cboSalesRoom.SelectedValue.ToString(),
-        grWh = _frmGiftsReceipt.cboSalesRoom.SelectedValue.ToString(),
+        grpe = (_frmGiftsReceipt.cmbgrpe.SelectedItem as PersonnelShort).peID,
+        grlo = _frmGiftsReceipt.cmbgrlo.SelectedValue.ToString(),
+        grls = _frmGiftsReceipt.cmbgrlo.SelectedValue.ToString(),
+        grsr = _frmGiftsReceipt.cmbSalesRoom.SelectedValue.ToString(),
+        grWh = _frmGiftsReceipt.cmbSalesRoom.SelectedValue.ToString(),
         grMemberNum = null,
-        grHost = hostess.peID,
+        grHost = (_frmGiftsReceipt.cmbgrHost.SelectedItem as PersonnelShort).peID,
         grComments = null,
         grDeposit = 0,
         grDepositTwisted = 0,
@@ -182,8 +178,8 @@ namespace IM.Host.Forms
         grcucxcPRDeposit = "US",
         grCxCClosed = false,
         grExchangeRate = 0,
-        grct = _frmGiftsReceipt.cbogrct.SelectedValue.ToString(),
-        grMaxAuthGifts = _frmGiftsReceipt.CalculateMaxAuthGifts(_frmGiftsReceipt.cbogrct.SelectedValue.ToString(), _Guest.guls, ref boolTemp),
+        grct = _frmGiftsReceipt.cmbgrct.SelectedValue.ToString(),
+        grMaxAuthGifts = _frmGiftsReceipt.CalculateMaxAuthGifts(_frmGiftsReceipt.cmbgrct.SelectedValue.ToString(), _Guest.guls, ref boolTemp),
         grcxcGifts = 0,
         grcxcAdj = 0,
         grcxcComments = null,
@@ -289,5 +285,6 @@ namespace IM.Host.Forms
       }
     }
     #endregion
+
   }
 }
