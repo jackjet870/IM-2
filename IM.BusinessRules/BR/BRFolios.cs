@@ -43,14 +43,14 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [lchairez] 29/03/2016 Created
     /// [aalcocer] 12/08/2016. Modified. Se agrega  TimeOut
+    /// [erosado] 31/08/2016  Modified. Ahora devuelve el mensaje de error.
     /// </history>
-    public static bool ValidateFolioInvitationOutside(int guestId, string serie, int numero)
+    public static string ValidateFolioInvitationOutside(int guestId, string serie, int numero)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_ValidateFolioInvitationOutside_Timeout;
-        var res = dbContext.USP_OR_ValidateFolioInvitationOutside(serie, numero, guestId).SingleOrDefault();
-        return string.IsNullOrEmpty(res);
+        return dbContext.USP_OR_ValidateFolioInvitationOutside(serie, numero, guestId).FirstOrDefault();
       }
     }
 

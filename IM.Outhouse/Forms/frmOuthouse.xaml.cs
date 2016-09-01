@@ -397,7 +397,7 @@ namespace IM.Outhouse.Forms
         }
         if (isInvit || login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
+          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, false) { Owner = this };
           invitacion.ShowDialog();
           UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
         }
@@ -677,7 +677,7 @@ namespace IM.Outhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData)
+        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData, allowReschedule:false)
         {
           Owner = this
         };

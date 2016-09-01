@@ -586,7 +586,7 @@
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
-                                                          SelectedValue="{Binding Guest.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
+                                                          SelectedValue="{Binding Guest.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -793,13 +793,13 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Button x:Name="btnSearchGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="btnSearchGuestAdditional_Click">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.ico" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" Width="15" Height="15" HorizontalAlignment="Left" />
                                                     <TextBlock Text="Search" HorizontalAlignment="Right" />
                                                 </StackPanel>
                                             </Button>
                                             <Button x:Name="btnAddGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="BtnAddGuestAdditional_OnClick">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Add.png" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png" Width="15" Height="15" HorizontalAlignment="Left" />
                                                     <TextBlock Text="Add" HorizontalAlignment="Right" />
                                                 </StackPanel>
                                             </Button>
