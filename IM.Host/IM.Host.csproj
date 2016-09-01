@@ -620,8 +620,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Template\emailShowTemplate.html" />
-    <Content Include="Template\html.html" />
+    <EmbeddedResource Include="Template\emailShowTemplate.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
