@@ -397,7 +397,7 @@ namespace IM.Outhouse.Forms
         }
         if (isInvit || login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, false) { Owner = this };
+          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, allowReschedule: false) { Owner = this };
           invitacion.ShowDialog();
           UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
         }
@@ -662,8 +662,6 @@ namespace IM.Outhouse.Forms
     /// </history>
     private async void btnNewInv_Click(object sender, RoutedEventArgs e)
     {
-      //TODO: Jorge revisar la instancia al nuevo formulario, 
-      //External Invitation
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
         switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
@@ -677,7 +675,7 @@ namespace IM.Outhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData, allowReschedule:false)
+        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData, allowReschedule: false)
         {
           Owner = this
         };
@@ -783,6 +781,19 @@ namespace IM.Outhouse.Forms
 
     #endregion btnDaysOff_Click
 
+    #region btnReport_Click
+    /// <summary>
+    /// Muestra el diseño del reporte
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 31/ago/2016
+    /// </history>
+    private void btnReport_Click(object sender, RoutedEventArgs e)
+    {
+      new frmReportsOutside(dtpDate.Value.Value) {  Owner = this  }.ShowDialog();
+    }
+    #endregion
+
     #region dgGuestPremanifest_SelectionChanged
 
     /// <summary>
@@ -800,5 +811,6 @@ namespace IM.Outhouse.Forms
     #endregion dgGuestPremanifest_SelectionChanged
 
     #endregion Eventos
+  
   }
 }

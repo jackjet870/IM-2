@@ -97,6 +97,12 @@
                                 <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                             </StackPanel>
                         </Button>
+                        <Button x:Name="btnReport" Grid.Column="7" Style="{StaticResource ResourceKey=btnOptions}" Click="btnReport_Click">
+                            <StackPanel>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                                <TextBlock Text="Reports" Style="{StaticResource ResourceKey=txtOptions}"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->

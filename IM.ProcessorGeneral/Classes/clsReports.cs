@@ -1832,8 +1832,8 @@ namespace IM.ProcessorGeneral.Classes
         c.gucu = currencies.First(cu => cu.cuID == c.gucu).cuN ?? "";
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
-
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      lstDepPr = lstDepPr.OrderBy(c => c.guID).ToList();
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters,strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -1861,7 +1861,7 @@ namespace IM.ProcessorGeneral.Classes
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 

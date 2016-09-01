@@ -42,6 +42,7 @@ namespace IM.Host.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 21/Jun/2016 Created
+    /// [jorcanche] 01/09/2016 modified se agrego validacion si no se selecciono un reporte
     /// </history>
     private async void lstHostReports_Select(object sender, RoutedEventArgs e)
     {
@@ -50,6 +51,11 @@ namespace IM.Host.Forms
       var daterange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
       var dateFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
       FileInfo fileinfo = null;
+      if (lstHostReports.SelectedItem == null)
+      {
+        UIHelper.ShowMessage("You must select a report");
+        return;
+      }
       switch ((lstHostReports.SelectedItem as ListBoxItem).Content.ToString())
       {
         case "Premanifest":

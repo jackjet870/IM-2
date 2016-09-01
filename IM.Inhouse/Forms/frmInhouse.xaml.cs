@@ -1,5 +1,4 @@
-﻿using IM.Base.Classes;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
@@ -822,16 +821,21 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Evento que ocurre cuando se selecciona alguna fila en la columna CheckIn del datagrid Arrival
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>[jorcanche] 09/01/2015</history>
+    /// <history>
+    /// [jorcanche] created 09/04/2016
+    /// </history>
     private async void ChkguCheckInArrival_Click(object sender, RoutedEventArgs e)
     {
-      //Se debe igualar el valor del check al valor que arroje las validaciones      
+      //Debido a que el evento Click invierte el valor del Check
+      //Lo solucionaremos invirtiendo el if sieguiente.
+      //Es decir cuando el valor sea False quiere decie que originalmente es True
+      //Y cuando el valor esta en True quiere decir que originalmente estaba en False
       var chk = sender as CheckBox;
-      chk.IsChecked = !chk.IsChecked.Value;
-      if (!chk.IsChecked.Value)
-        chk.IsChecked = await CheckIn(dgGuestArrival);      
+      //Es decir cuando es true entra en el metodo CheckIn por que en la interfaz mostraba que estaba deseleccionado
+      // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest 
+      //ya que un Guest con Check In ya no se le puede quitar 
+
+      chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;   
     }
 
     #endregion ChkguCheckInArrival_Click
@@ -1238,8 +1242,7 @@ namespace IM.Inhouse.Forms
     private async void ChkguCheckInPremanifest_Click(object sender, RoutedEventArgs e)
     {
       var chk = sender as CheckBox;
-      if (chk.IsChecked.Value)
-        chk.IsChecked = await CheckIn(dgGuestPremanifest);
+      chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestPremanifest) : true;
     }
 
     #endregion ChkguCheckInPremanifest_Click
@@ -1408,11 +1411,9 @@ namespace IM.Inhouse.Forms
     #region ChkguCheckInGetGuest_Click
 
     private async void ChkguCheckInGetGuest_Click(object sender, RoutedEventArgs e)
-    {
-      //Se debe igualar el valor del check al valor que arroje las validaciones
+    {      
       var chk = sender as CheckBox;
-      if (chk.IsChecked.Value)
-        chk.IsChecked = await CheckIn(guestSearchedDataGrid);
+      chk.IsChecked = chk.IsChecked.Value ? await CheckIn(guestSearchedDataGrid) : true;
     }
 
     #endregion ChkguCheckInGetGuest_Click
