@@ -22044,7 +22044,6 @@
         </ComplexType>
         <ComplexType Name="RptProductionByWave">
           <Property Type="String" Name="BookTime" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="SalesRoomID" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="Books" Nullable="true" />
           <Property Type="Int32" Name="InOuts" Nullable="true" />
           <Property Type="Int32" Name="GrossBooks" Nullable="true" />
@@ -30223,7 +30222,6 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByWave">
                 <ScalarProperty Name="BookTime" ColumnName="BookTime" />
-                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
                 <ScalarProperty Name="Books" ColumnName="Books" />
                 <ScalarProperty Name="InOuts" ColumnName="InOuts" />
                 <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />

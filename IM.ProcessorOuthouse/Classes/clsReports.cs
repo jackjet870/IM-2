@@ -1147,11 +1147,11 @@ namespace IM.ProcessorOuthouse.Classes
   /// </history>
   public static FileInfo ExportRptProductionByWave(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByWave> lstRptProductionByWave)
     {
-
+      DateTime dateTimeValue = new DateTime();
       var lstRptProductionByWaveAux = lstRptProductionByWave.Select(c => new
       {
-        BookTime = DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt"),
-        c.SalesRoomID,
+        
+        BookTime = DateTime.TryParse(c.BookTime.ToString(), out dateTimeValue) ? DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt") : c.BookTime,
         c.Books,
         c.InOuts,
         c.GrossBooks,
@@ -1192,10 +1192,10 @@ namespace IM.ProcessorOuthouse.Classes
     /// </history>
     public static FileInfo ExportRptProductionByWaveSalesRoom(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom)
     {
-
+      DateTime dateTimeValue = new DateTime();
       var lstRptProductionByWaveAux = lstRptProductionByWaveSalesRoom.Select(c => new
       {
-        BookTime = DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt"),
+        BookTime = DateTime.TryParse(c.BookTime.ToString(), out dateTimeValue) ? DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt") : c.BookTime,
         c.SalesRoomID,
         c.Books,
         c.InOuts,
@@ -1220,7 +1220,7 @@ namespace IM.ProcessorOuthouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByWaveAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByWave(), showRowGrandTotal: true, fileFullPath: fileFullPath);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByWaveSalesRoom(), showRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
