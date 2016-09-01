@@ -57,7 +57,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 20/04/2016 Modificated Metodo Movido de frmInhouse a EquityHelpers
     /// [ecanul] 06/07/2016 Modified. Agregue subreporte RptEquityMembershipsPrevious
     /// </history>
-    public static void EquityReport(string membershipNum, Decimal company, int clubAgency, int clubGuest)
+    public static void EquityReport(string membershipNum, Decimal company, int? clubAgency, int? clubGuest)
     {
       EnumClub club;
       // si tiene membrecia
@@ -67,13 +67,19 @@ namespace IM.Inhouse.Classes
         {
           // // // ShowReport
           // determinamos el club
-          if (clubAgency != 0)
+          if (clubAgency != null && clubAgency != 0)
           {
             club = (EnumClub)clubAgency;
           }
-          else
+          else if(clubGuest != null && clubGuest != 0)
           {
             club = (EnumClub)clubGuest;
+          }
+          else
+          {
+            //Si no se encuentra un club en la tabla de agencies o en la tabla del guest se manda un error diciendo esto y se sale del metodo
+            UIHelper.ShowMessage("Agency Not Found", MessageBoxImage.Error, "GetRptEquity");
+            return;
           }
 
           Services.ClubesService.RptEquity rptClubes = null;

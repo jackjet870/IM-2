@@ -411,28 +411,28 @@ namespace IM.Inhouse.Forms
           var itemGuestArrival = guest as GuestArrival;
           if (itemGuestArrival != null)
             EquityHelpers.EquityReport(itemGuestArrival.guMembershipNum, itemGuestArrival.guCompany,
-              (int)itemGuestArrival.agcl, (int)itemGuestArrival.gucl);
+              itemGuestArrival.agcl, itemGuestArrival.gucl);
           break;
 
         case 2:
           var itemGuestAvailable = guest as GuestAvailable;
           if (itemGuestAvailable != null)
             EquityHelpers.EquityReport(itemGuestAvailable.guMembershipNum, itemGuestAvailable.guCompany,
-              (int)itemGuestAvailable.agcl, (int)itemGuestAvailable.gucl);
+             itemGuestAvailable.agcl, itemGuestAvailable.gucl);
           break;
 
         case 3:
           var itemGuestPremanifest = guest as GuestPremanifest;
           if (itemGuestPremanifest != null)
             EquityHelpers.EquityReport(itemGuestPremanifest.guMembershipNum, itemGuestPremanifest.guCompany,
-              (int)itemGuestPremanifest.agcl, (int)itemGuestPremanifest.gucl);
+              itemGuestPremanifest.agcl, itemGuestPremanifest.gucl);
           break;
 
         case 4:
           var itemGuestSearched = guest as GuestSearched;
           if (itemGuestSearched != null)
             EquityHelpers.EquityReport(itemGuestSearched.guMembershipNum, itemGuestSearched.guCompany,
-              (int)itemGuestSearched.agcl, (int)itemGuestSearched.gucl);
+              itemGuestSearched.agcl, itemGuestSearched.gucl);
           break;
       }
       StaEnd();
