@@ -574,7 +574,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void UpdateTarget(Control control)
     {
-      List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(control);//Obtenemos la lista de controles del contenedor
+      List<Control> lstControls = GetChildParentCollection<Control>(control);//Obtenemos la lista de controles del contenedor
       lstControls.ForEach(cl =>
       {
         switch (cl.GetType().Name)

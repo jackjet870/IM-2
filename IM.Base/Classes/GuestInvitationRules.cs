@@ -531,7 +531,7 @@ namespace IM.Base.Classes
 
           case EnumModule.Host:
             guestObj.guDirect = true;
-            guestObj.gusr = user.SalesRoom.srN;
+            guestObj.gusr = user.SalesRoom.srID;
             break;
 
           default:
@@ -557,13 +557,13 @@ namespace IM.Base.Classes
             break;
 
           case EnumModule.OutHouse:
-            guestObj.guloInvit = user.SalesRoom.srN;
+            guestObj.guloInvit = user.SalesRoom.srID;
             guestObj.guag = "OUTSIDE";
             break;
 
           case EnumModule.Host:
             guestObj.guDirect = true;
-            guestObj.gusr = user.SalesRoom.srN;
+            guestObj.gusr = user.SalesRoom.srID;
             break;
 
           default:

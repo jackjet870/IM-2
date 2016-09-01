@@ -145,7 +145,6 @@ namespace IM.Base.Forms
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
         {
           isValid = false;
-          tabGeneral.TabIndex = 0;
         }
         //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
         if (isValid)
@@ -745,6 +744,10 @@ namespace IM.Base.Forms
 
       #endregion IsReadOnly
 
+      #region Mandatory Controls
+      cmbGuestStatus.Tag = "Guest Status";
+      #endregion
+
       //Si es una invitacion existente
       if (CatObj.InvitationMode != EnumMode.Add)
       {
@@ -790,6 +793,9 @@ namespace IM.Base.Forms
       txtguFirstNameOriginal.IsReadOnly = true;
 
       #endregion IsReadOnly
+
+      
+
 
       //Si OutHouse y es una invitacion existente
       if (_module == EnumModule.OutHouse && CatObj.InvitationMode != EnumMode.Add)

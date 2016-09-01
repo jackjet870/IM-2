@@ -183,10 +183,10 @@ namespace IM.Host.Forms
     private void Load_ComboBox()
     {
       // Ofrecido por
-      cbogrpe.ItemsSource = frmHost._lstPersonnel;
+      cmbgrpe.ItemsSource = frmHost._lstPersonnel;
 
       // Obtenemos Hostess de regalos
-      cbogrHost.ItemsSource = frmHost._lstPersonnelHOSTGIFTS;
+      cmbgrHost.ItemsSource = frmHost._lstPersonnelHOSTGIFTS;
 
       // Obtenemos los Charge To
       CollectionViewSource _dsChargeTo = ((CollectionViewSource)(this.FindResource("dsChargeTo")));
@@ -391,7 +391,7 @@ namespace IM.Host.Forms
 
       txtgrgu.IsReadOnly = false;
       dtpgrD.Value = frmHost.dtpServerDate;
-      cboSalesRoom.SelectedValue = App.User.SalesRoom.srID;
+      cmbSalesRoom.SelectedValue = App.User.SalesRoom.srID;
 
       // si no se esta buscando
       if (_guestID > 0)
@@ -417,7 +417,7 @@ namespace IM.Host.Forms
 
       txtDepositMN.Text = txtDepositUS.Text = "";
 
-      cbogrct.SelectedValue = "Marketing";
+      cmbgrct.SelectedValue = "Marketing";
 
       // restauramos el valor para corregir calculo de costo para cada nuevo recibo
       useCxCCost = false;
@@ -426,10 +426,10 @@ namespace IM.Host.Forms
       SetMaxAuthGifts();
 
       // Depositos
-      cbogrcu.SelectedValue = "US";
-      cbogrpt.SelectedValue = "CS";
-      cbogrcuCxCTaxiOut.SelectedValue = "US";
-      cbogrcuCxCPRDeposit.SelectedValue = "US";
+      cmbgrcu.SelectedValue = "US";
+      cmbgrpt.SelectedValue = "CS";
+      cmbgrcuCxCTaxiOut.SelectedValue = "US";
+      cmbgrcuCxCPRDeposit.SelectedValue = "US";
       txtDepositUS.Text = string.Format("{0:C2}", 0);
       txtDepositMN.Text = string.Format("{0:C2}", 0);
 
@@ -458,7 +458,7 @@ namespace IM.Host.Forms
       {
         newGiftReceipt.grpe = GiftsReceiptDetail.grpe;
         newGiftReceipt.grPax = 1;
-        cbogrHost.SelectedIndex = -1;
+        cmbgrHost.SelectedIndex = -1;
       }
 
       GiftsReceiptDetail = newGiftReceipt;
@@ -525,20 +525,20 @@ namespace IM.Host.Forms
       txtgrgu.IsEnabled = _Enable;
 
       // Si no tiene Guest ID, permitimos modificar la localizacion
-      cbogrlo.IsEnabled = _Enable && txtgrgu.Text == "";
+      cmbgrlo.IsEnabled = _Enable && txtgrgu.Text == "";
 
       // Hotel
-      cboHotel.IsEnabled = _Enable;
+      cmbHotel.IsEnabled = _Enable;
 
       // Offered by
-      cbogrpe.IsEnabled = _Enable;
+      cmbgrpe.IsEnabled = _Enable;
 
       // Gifts Hostess
-      cbogrHost.IsEnabled = _Enable;
+      cmbgrHost.IsEnabled = _Enable;
 
       // si no tiene Guest ID o si tiene permiso especial de recibos de regalos,
       // permitimos modificar la sala de ventas
-      cboSalesRoom.IsEnabled = _Enable && (txtgrgu.Text == "" || App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special));
+      cmbSalesRoom.IsEnabled = _Enable && (txtgrgu.Text == "" || App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special));
 
       // Grid de regalos
       dtgGifts.IsReadOnly = !_Enable;
@@ -585,15 +585,15 @@ namespace IM.Host.Forms
       dtpgrD.IsReadOnly = !_Enable;
 
       // charge To
-      cbogrct.IsEnabled = _Enable;
+      cmbgrct.IsEnabled = _Enable;
 
       // Comments
       txtgrComments.IsReadOnly = !_Enable;
 
       //Cxc
-      cbogrct.IsEnabled = _Enable;
-      cbogrcuCxCPRDeposit.IsEnabled = _Enable;
-      cbogrcuCxCTaxiOut.IsEnabled = _Enable;
+      cmbgrct.IsEnabled = _Enable;
+      cmbgrcuCxCPRDeposit.IsEnabled = _Enable;
+      cmbgrcuCxCTaxiOut.IsEnabled = _Enable;
 
       txtgrCxCAdj.IsReadOnly = !_Enable;
       txtgrCxCPRDeposit.IsReadOnly = !_Enable;
@@ -679,11 +679,11 @@ namespace IM.Host.Forms
       txtPwd.Password = "";
 
       //Cxc
-      cbogrct.IsEnabled = false;
-      cbogrcuCxCPRDeposit.IsEnabled = false;
-      cbogrcuCxCTaxiOut.IsEnabled = false;
-      cbogrcu.IsEnabled = false;
-      cbogrpt.IsEnabled = false;
+      cmbgrct.IsEnabled = false;
+      cmbgrcuCxCPRDeposit.IsEnabled = false;
+      cmbgrcuCxCTaxiOut.IsEnabled = false;
+      cmbgrcu.IsEnabled = false;
+      cmbgrpt.IsEnabled = false;
       txtgrRoomNum.IsReadOnly = true;
       txtgrPax.IsReadOnly = true;
       txtgrTaxiOut.IsReadOnly = true;
@@ -920,13 +920,13 @@ namespace IM.Host.Forms
     {
       chkgrCancel.IsEnabled = _chkgrCancel;
       chkgrExchange.IsEnabled = _chkgrExchange;
-      cbogrpe.IsEnabled = _Personnel;
-      cbogrHost.IsEnabled = _Host;
-      cboHotel.IsEnabled = _Hotel;
-      cboSalesRoom.IsEnabled = _SalesRooms;
-      cbogrcu.IsEnabled = _Currency;
-      cbogrpt.IsEnabled = _Payment;
-      cbogrlo.IsEnabled = _Location;
+      cmbgrpe.IsEnabled = _Personnel;
+      cmbgrHost.IsEnabled = _Host;
+      cmbHotel.IsEnabled = _Hotel;
+      cmbSalesRoom.IsEnabled = _SalesRooms;
+      cmbgrcu.IsEnabled = _Currency;
+      cmbgrpt.IsEnabled = _Payment;
+      cmbgrlo.IsEnabled = _Location;
     }
     #endregion
 
@@ -942,11 +942,11 @@ namespace IM.Host.Forms
       decimal curMaxAuthGifts;
       bool blnWithMaxAuthGifts = false;
 
-      ChargeTo _chargeTo = (ChargeTo)cbogrct.SelectedItem;
+      ChargeTo _chargeTo = cmbgrct.SelectedItem as ChargeTo;
 
       curMaxAuthGifts = CalculateMaxAuthGifts(_chargeTo.ctID, txtgrls.Text, ref blnWithMaxAuthGifts);
       txtgrMaxAuthGifts.Text = string.Format("${0}", curMaxAuthGifts);
-      lblgrMaxAuthGifts.Visibility = (blnWithMaxAuthGifts) ? Visibility.Visible : Visibility.Hidden;
+      txbgrMaxAuthGifts.Visibility = (blnWithMaxAuthGifts) ? Visibility.Visible : Visibility.Hidden;
       txtgrMaxAuthGifts.Visibility = (blnWithMaxAuthGifts) ? Visibility.Visible : Visibility.Hidden;
       _validateMaxAuthGifts = blnWithMaxAuthGifts;
     }
@@ -968,7 +968,7 @@ namespace IM.Host.Forms
       decimal curMaxAuthGifts = 0;
       withMaxAuthGifts = true;
 
-      ChargeTo _chargeTo = (ChargeTo)cbogrct.SelectedItem;
+      ChargeTo _chargeTo = cmbgrct.SelectedItem as ChargeTo;
 
       switch (_chargeTo.ctCalcType)
       {
@@ -1030,20 +1030,20 @@ namespace IM.Host.Forms
         txtgrRoomNum.Text = _guest.guRoomNum;
         txtgrTaxiOut.Text = $"{_guest.guTaxiOut}";
 
-        List<PersonnelShort> lstPersonnel = cbogrpe.ItemsSource as List<PersonnelShort>;
+        List<PersonnelShort> lstPersonnel = cmbgrpe.ItemsSource as List<PersonnelShort>;
         int index = lstPersonnel.FindIndex(x => x.peID.Equals(_guest.guPRInvit1));
         if (index != -1)
-          cbogrpe.SelectedIndex = index;
+          cmbgrpe.SelectedIndex = index;
         else
-          cbogrpe.SelectedItem = 1;
+          cmbgrpe.SelectedItem = 1;
 
         // Obtenemos el hotel del Guest
         //Guest _guest = BRGuests.GetGuestById(_guestShort.guID);
-        cboHotel.SelectedValue = _guest.guHotel;
+        cmbHotel.SelectedValue = _guest.guHotel;
         // Cargamos su Sales Room
-        cboSalesRoom.SelectedValue = _guest.gusr;
+        cmbSalesRoom.SelectedValue = _guest.gusr;
         // Cargamos su Location
-        cbogrlo.SelectedValue = _guest.guls;
+        cmbgrlo.SelectedValue = _guest.guls;
         // Cargamos su Lead Source
         txtgrls.Text = _guest.guls;
         // Cargamos el Guest 1
@@ -1120,8 +1120,7 @@ namespace IM.Host.Forms
       _lstExchangeRate = BRExchangeRate.GetExchangeRatesByDate(dtmReceipt);
 
       //Cargamos la moneda
-      SalesRoomShort _sr = (SalesRoomShort)cboSalesRoom.SelectedItem;
-      SalesRoom _salesRoom = BRSalesRooms.GetSalesRoomByID(_sr.srID);
+      SalesRoom _salesRoom = BRSalesRooms.GetSalesRoomByID((cmbSalesRoom.SelectedItem as SalesRoomShort).srID);
       _SRCurrency = _salesRoom.srcu;
     }
     #endregion
@@ -1140,11 +1139,9 @@ namespace IM.Host.Forms
       decimal curExchangeRateMN = 0;
 
       // Localizamos el tipo de cambio de ese dia de la moneda en que esta el deposito
-      Currency _currency = (Currency)cbogrcu.SelectedItem;
-
       if (_lstExchangeRate != null)
       {
-        ExchangeRateShort _exchangeRate = _lstExchangeRate.Where(x => x.excu == _currency.cuID).FirstOrDefault();
+        ExchangeRateShort _exchangeRate = _lstExchangeRate.Where(x => x.excu == (cmbgrcu.SelectedItem as Currency).cuID).FirstOrDefault();
 
         if (_exchangeRate != null)
           curExchangeRate = _exchangeRate.exExchRate;
@@ -1188,7 +1185,7 @@ namespace IM.Host.Forms
     {
       if (_chargeToChanged >= 1) // Esta validación se realiza para evitar el bug de doble changed del control
       {
-        ChargeTo _ChargeTo = (ChargeTo)cbogrct.SelectedItem;
+        ChargeTo _ChargeTo = cmbgrct.SelectedItem as ChargeTo;
 
         if (_ChargeTo != null)
         {
@@ -1237,7 +1234,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 12/Abril/2016 Created
     /// </history>
-    private async void btnSearch_Click(object sender, RoutedEventArgs e)
+    private async void btnSearch_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (ValidateCriteria())
       {
@@ -1499,9 +1496,7 @@ namespace IM.Host.Forms
     {
       if (txtgrID.Text != "")
       {
-        frmGiftsReceiptsLog frmLog = new frmGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text));
-        frmLog.ShowInTaskbar = false;
-        frmLog.Owner = this;
+        frmGiftsReceiptsLog frmLog = new frmGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text)) { Owner = this};
         frmLog.ShowDialog();
       }
       else
@@ -1568,8 +1563,6 @@ namespace IM.Host.Forms
       // Calculamos el cargo
       frmCancelExternalProducts _frmNull = null;
       CalculateCharge(ref _frmNull);
-      PersonnelShort host = cbogrHost.SelectedItem as PersonnelShort;
-      PersonnelShort offered = cbogrpe.SelectedItem as PersonnelShort;
       //// Verificamos si es un Gift Receipt nuevo!
       if (string.IsNullOrEmpty(txtgrID.Text))
       {
@@ -1673,39 +1666,39 @@ namespace IM.Host.Forms
     private async Task UpdateGuest()
     {
       bool Update = false;
-      Guest _guest = await BRGuests.GetGuest(_guestID);
+      Guest guest = await BRGuests.GetGuest(_guestID);
 
       //Actualizamos la clave del recibo de deposito
-      if (_guest.guDepositgr == null && Convert.ToDecimal(txtgrDeposit.Text) != 0)
+      if (guest.guDepositgr == null && Convert.ToDecimal(txtgrDeposit.Text) != 0)
       {
-        _guest.guDepositgr = Convert.ToInt32(txtgrID.Text);
+        guest.guDepositgr = Convert.ToInt32(txtgrID.Text);
         Update = true;
       }
 
       // Actualizamos la clave del recibo de servicio de taxi de llegada
-      if (_guest.guTaxiIngr == null)
+      if (guest.guTaxiIngr == null)
       {
-        _guest.guTaxiIngr = Convert.ToInt32(txtgrID.Text);
+        guest.guTaxiIngr = Convert.ToInt32(txtgrID.Text);
         Update = true;
       }
 
       // Actualizamos la clave del recibo de servicio de taxi de salida
-      if (_guest.guTaxiOutgr == null && Convert.ToDecimal(txtgrTaxiOut.Text) != 0)
+      if (guest.guTaxiOutgr == null && Convert.ToDecimal(txtgrTaxiOut.Text) != 0)
       {
-        _guest.guTaxiOutgr = Convert.ToInt32(txtgrID.Text);
+        guest.guTaxiOutgr = Convert.ToInt32(txtgrID.Text);
         Update = true;
       }
 
       // Indica que ya se recibieron los regalos
-      if (!_guest.guGiftsReceived)
+      if (!guest.guGiftsReceived)
       {
-        _guest.guGiftsReceived = true;
+        guest.guGiftsReceived = true;
         Update = true;
       }
 
       // Actualizamos en la base de datos
       if (Update)
-        await BREntities.OperationEntity(_guest, Model.Enums.EnumMode.Edit);
+        await BREntities.OperationEntity(guest, Model.Enums.EnumMode.Edit);
 
     }
     #endregion
@@ -1767,13 +1760,9 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateExist()
     {
-      var salesRoom = cboSalesRoom.SelectedItem as SalesRoomShort;
-      var hostess = cbogrHost.SelectedItem as PersonnelShort;
-      var offered = cbogrpe.SelectedItem as PersonnelShort;
-
-      ValidationData _validation = BRGiftsReceipts.ValidateGiftsReceipt(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), Convert.ToInt32(txtgrgu.Text),
-                                                                        cbogrlo.SelectedValue.ToString(), salesRoom.srID, hostess.peID, offered.peID);
-
+      ValidationData _validation = BRGiftsReceipts.ValidateGiftsReceipt(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), Convert.ToInt32(txtgrgu.Text), cmbgrlo.SelectedValue.ToString(),
+                                                                        (cmbSalesRoom.SelectedItem as SalesRoomShort).srID, (cmbgrHost.SelectedItem as PersonnelShort).peID, 
+                                                                        (cmbgrpe.SelectedItem as PersonnelShort).peID);
       // si hay un error
       if (_validation.Focus != "")
       {
@@ -1793,16 +1782,16 @@ namespace IM.Host.Forms
             txtgrgu.Focus();
             break;
           case "SalesRoom":
-            cboSalesRoom.Focus();
+            cmbSalesRoom.Focus();
             break;
           case "Location":
-            cbogrlo.Focus();
+            cmbgrlo.Focus();
             break;
           case "Personnel":
-            cbogrpe.Focus();
+            cmbgrpe.Focus();
             break;
           case "GiftsHost":
-            cbogrHost.Focus();
+            cmbgrHost.Focus();
             break;
         }
         return false;
@@ -1837,11 +1826,11 @@ namespace IM.Host.Forms
         return false;
       }
       // validamos quien ofrecio los regalos
-      else if (cbogrpe == null || cbogrpe.SelectedValue == null)
+      else if (cmbgrpe == null || cmbgrpe.SelectedValue == null)
       {
         UIHelper.ShowMessage("Who offered the gifts?", MessageBoxImage.Information);
         tbMain.SelectedIndex = 0;
-        cbogrpe.Focus();
+        cmbgrpe.Focus();
         return false;
       }
       // Validamos los regalos
@@ -1977,8 +1966,8 @@ namespace IM.Host.Forms
       // Depositos
       txtgrDeposit.IsEnabled = pblnEnable;
       txtgrDepositTwisted.IsEnabled = pblnEnable;
-      cbogrcu.IsEnabled = pblnEnable;
-      cbogrpt.IsEnabled = pblnEnable;
+      cmbgrcu.IsEnabled = pblnEnable;
+      cmbgrpt.IsEnabled = pblnEnable;
 
       //Taxis
       txtgrTaxiOut.IsEnabled = pblnEnable;
@@ -2108,8 +2097,6 @@ namespace IM.Host.Forms
     /// <summary>
     /// Actualiza los campos del guest
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 20/Abril/2016 Created
     /// </history>
@@ -2128,7 +2115,7 @@ namespace IM.Host.Forms
           }
           else
           {
-            cbogrlo.SelectedValue = _guest.guls;
+            cmbgrlo.SelectedValue = _guest.guls;
             txtgrls.Text = _guest.guls;
             txtgrGuest.Text = txtGuestName.Text;
             _guestID = Convert.ToInt32(txtgrgu.Text);
@@ -2261,6 +2248,9 @@ namespace IM.Host.Forms
             // agregamos el recibo de regalos exchange en el grid
             GiftsReceiptsShort _grs = new GiftsReceiptsShort() { grID = _frmCancelExternalProducts.ReceiptExchangeID, grNum = _frmCancelExternalProducts.txtgrNum.Text, grExchange = true };
             obsGiftsReceipt.Add(_grs);
+
+            //refrescamos los regalos del recibo
+            await Load_Gift_Of_GiftsReceipt(Convert.ToInt32(txtgrID.Text));
           }
         }
         // Si se debo cancelar el recibo
@@ -2321,7 +2311,6 @@ namespace IM.Host.Forms
         Convert.ToDecimal(txtgrCxCPRDeposit.Text) > 0 || Convert.ToDecimal(txtgrCxCTaxiOut.Text) > 0)
       {
         ReceiptsGifts.printReceiptGift(Convert.ToInt32(txtgrID.Text), true);
-
       }
 
     }
@@ -2415,8 +2404,6 @@ namespace IM.Host.Forms
       decimal curMaxAuthGifts = 0;
       bool blnTour = false;
 
-      ChargeTo _ChargeTo = (ChargeTo)cbogrct.SelectedItem;
-
       curTotalCost = txtTotalCost.Text != "" ? Convert.ToDecimal(txtTotalCost.Text.TrimStart(' ', '$')) : 0;
 
       curTotalCost = frm != null ? (frm.txtTotalCost.Text != "" ? Convert.ToDecimal(frm.txtTotalCost.Text.TrimStart(' ', '$')) : 0) :
@@ -2431,7 +2418,7 @@ namespace IM.Host.Forms
       if (!chkgrExchange.IsChecked.Value)
       {
         // Localizamos a quien se carga
-        switch (_ChargeTo.ctCalcType)
+        switch ((cmbgrct.SelectedItem as ChargeTo).ctCalcType)
         {
           // si el huesped tiene tour el cargo es por el total de regalos menos el monto maximo
           // autorizado. De lo contrario el cargo es por el total de regalos
@@ -2471,20 +2458,6 @@ namespace IM.Host.Forms
       else
         txtTotalCxC.Text = string.Format("{0:C2}", Convert.ToDecimal(txtgrCxCGifts.Text != "" ? txtgrCxCGifts.Text.TrimStart(' ', '$') : "0") + Convert.ToDecimal(txtgrCxCAdj.Text != "" ? txtgrCxCAdj.Text.TrimStart(' ', '$') : "0"));
 
-    }
-    #endregion
-
-    #region LoadGuest
-    /// <summary>
-    /// Carga el guest segun el Id
-    /// </summary>
-    /// <param name="guestId">Id del guest</param>
-    /// <history>
-    /// [jorcanche] created 06072016
-    /// </history>
-    private async Task LoadGuest(int guestId)
-    {
-      _guest = await BRGuests.GetGuest(guestId);
     }
     #endregion
 
@@ -2545,9 +2518,9 @@ namespace IM.Host.Forms
         // Si no tiene errores se hacen los calculos.
         if (!HasErrorValidate)
         {
-          ReceiptsGifts.AfterEdit(ref dtgGifts, _guest == null ? 0 : _guest.guID, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: (ChargeTo)cbogrct.SelectedItem,
+          ReceiptsGifts.AfterEdit(ref dtgGifts, _guest == null ? 0 : _guest.guID, ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: isExchange, pChargeTo: cmbgrct.SelectedItem as ChargeTo,
                                   pLeadSourceID: txtgrls.Text, pTxtTotalCost: txtTotalCost, pTxtTotalPrice: txtTotalPrice, pTxtTotalToPay: txtTotalToPay, pTxtgrCxCGifts: txtgrCxCGifts,
-                                  pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrCxCAdj, pTxtgrMaxAuthGifts: txtgrMaxAuthGifts, pLblgrMaxAuthGifts: lblgrMaxAuthGifts);
+                                  pTxtTotalCxC: txtTotalCxC, pTxtgrCxCAdj: txtgrCxCAdj, pTxtgrMaxAuthGifts: txtgrMaxAuthGifts, pLblgrMaxAuthGifts: txbgrMaxAuthGifts);
         }
         dtgGifts.CellEditEnding += grdGifts_CellEditEnding;
       }
@@ -2638,7 +2611,7 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region Cancel_Click
+    #region UpdateSale_Click
     /// <summary>
     /// Recalcula los costos cuando se pulsa un checkbox Sale
     /// </summary>
@@ -2652,7 +2625,6 @@ namespace IM.Host.Forms
       Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.ReceiptGifts, nameof(row.geQty), nameof(row.gegi), nameof(row.gePriceM), nameof(row.gePriceMinor), nameof(row.gePriceAdult), nameof(row.gePriceA), nameof(row.gePriceExtraAdult), txtTotalCost, txtTotalPrice, txtTotalToPay, saleField: nameof(row.geSale));
     }
     #endregion
-
 
   }
 }

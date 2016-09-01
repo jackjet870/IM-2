@@ -731,8 +731,8 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptGiftsSale = await BRReportsBySalesRoom.GetRptGiftsSale(filter.StartDate,
               filter.EndDate,
               (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms),
-              (filter.AllGifts) ? "ALL" : string.Join(",", filter.LstGifts),
               (filter.AllGiftsCate) ? "ALL" : string.Join(",", filter.LstGiftsCate),
+              (filter.AllGifts) ? "ALL" : string.Join(",", filter.LstGifts),
               (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
 
             if (lstRptGiftsSale.Any())

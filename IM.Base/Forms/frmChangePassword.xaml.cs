@@ -67,23 +67,25 @@ namespace IM.Base.Forms
         return;
       }
 
-      string _encryptPass = Helpers.EncryptHelper.Encrypt(txtNewPwd.Password);
+      // encriptamos la nueva contraseña
+      string encryptPass = EncryptHelper.Encrypt(txtNewPwd.Password);
+
       //Si la nueva contraseña es igual a la anterior.
-      if (userLogin.pePwd.Equals(_encryptPass))
+      if (userLogin.pePwd.Equals(encryptPass))
       {
         UIHelper.ShowMessage("The new password can not be the same as the previous password");
         return;
       }
 
       //Si ocurrio un error al cambiar el password.
-      if (!BRPersonnel.ChangePassword(userLogin.peID, _encryptPass, serverDate))
+      if (!BRPersonnel.ChangePassword(userLogin.peID, encryptPass, serverDate))
       {
         UIHelper.ShowMessage("Could not change password");
         return;
       }
 
       blnOk = true;
-      userLogin.pePwd = _encryptPass;
+      userLogin.pePwd = encryptPass;
       userLogin.pePwdD = serverDate.Date;
       UIHelper.ShowMessage("Your password was changed succesfully");
       Close();

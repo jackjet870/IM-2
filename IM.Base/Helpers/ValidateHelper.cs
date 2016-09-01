@@ -238,6 +238,7 @@ namespace IM.Base.Helpers
 
           case "ComboBox":
             var cmb = (ComboBox)control;
+
             if (cmb.SelectedIndex > -1) continue;
             if (cmb.Visibility == Visibility.Visible)
             {

@@ -1725,7 +1725,7 @@ namespace IM.Base.Helpers
               if (item.Length == 1)
               {
                 //Si no es un grupo.
-                if (!pair.Item2.First(c => c.PropertyName == item.First()).IsGroup && !pair.Item2.First(c => c.PropertyName == item.First()).IsVisible) continue;
+                if ((!pair.Item2.First(c => c.PropertyName == item.First()).IsGroup && !pair.Item2.First(c => c.PropertyName == item.First()).IsVisible) || !pair.Item2.First(c => c.PropertyName == item.First()).IsVisible) continue;
                 //Dibujamos el encabezado y aplicamos formato.
                 using (var range = wsData.Cells[rowNumber, columnNumber])
                 {
@@ -2129,6 +2129,8 @@ namespace IM.Base.Helpers
                 formatIndex = 1;
                 formatTableColumns.ForEach(format =>
                 {
+                  //Si es una columna No Visible continuamos el ciclo.
+                  if (!format.IsVisible) return;
                   using (var range = wsData.Cells[rowNumber - 1, initialColumn + formatIndex])
                   {
                     if (format.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(format.Formula)) { formatIndex++; return; }
@@ -2237,6 +2239,9 @@ namespace IM.Base.Helpers
                   var colN = (columnN.Length == 1) ? columnN[0] : columnN[columnN.Length - 1];
 
                   var formatCol = pair.Item2.First(ft => ft.PropertyName == colN);
+                  //Si es una columna No Visible continuamos el ciclo.
+                  if (!formatCol.IsVisible) return;
+                  if (formatCol.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(formatCol.Formula)) { columnIndex++; return; }
                   if (!formatCol.IsCalculated)
                   {
                     var subtotalFormat = formatCol.Format;
@@ -2275,7 +2280,7 @@ namespace IM.Base.Helpers
                     columnIndex++;
                   }
                 });
-                using (var range = wsData.Cells[rowNumber, initialColumn + 1, rowNumber, initialColumn + dtTableAux.Columns.Count])
+                using (var range = wsData.Cells[rowNumber, initialColumn + 1, rowNumber, initialColumn + formatTableColumns.Count(c => c.IsVisible)])
                 {
                   range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                   range.Style.Fill.BackgroundColor.SetColor(Color.Black);
@@ -2288,9 +2293,9 @@ namespace IM.Base.Helpers
               #endregion Agregando Datos
             }
 
-            AutoFitColumns(ref wsData, initialColumn + dtTableAux.Columns.Count, rowNumber);
+            AutoFitColumns(ref wsData, initialColumn + formatTableColumns.Count(c => c.IsVisible), rowNumber);
 
-            initialColumn = dtTableAux.Columns.Count + 1;
+            initialColumn = formatTableColumns.Count(c => c.IsVisible) + 1;
             columnNumber++;
           }         
         }
@@ -2604,6 +2609,8 @@ namespace IM.Base.Helpers
                     //Recorremos las columnas.
                     foreach (var format in formatTableColumns)
                     {
+                      //Si es una columna No Visible continuamos el ciclo.
+                      if (!format.IsVisible) continue;
                       using (var range = wsData.Cells[rowNumber, formatIndex])
                       {
                         if (format.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(format.Formula)) { formatIndex++; continue; }
@@ -2761,10 +2768,12 @@ namespace IM.Base.Helpers
               formatIndex = 1;
               formatTableColumns.ForEach(format =>
               {
+                //Si es una columna No Visible continuamos el ciclo.
+                if (!format.IsVisible) return;
+                if (format.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(format.Formula)) { formatIndex++; return; }
+
                 using (var range = wsData.Cells[rowNumber - 1, formatIndex])
                 {
-                  if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) return;
-
                   if (!format.IsCalculated)
                   {
                     switch (format.Function)
@@ -2776,7 +2785,7 @@ namespace IM.Base.Helpers
                         range.Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
                         break;
                       case DataFieldFunctions.Count:
-                        if (format.Format == EnumFormatTypeExcel.General)
+                        if (format.Format == EnumFormatTypeExcel.General || format.Format == EnumFormatTypeExcel.Boolean)
                           range.Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
                         break;
                     }
@@ -2785,6 +2794,7 @@ namespace IM.Base.Helpers
                     range.Formula = GetFormula(formatTableColumns, format.Formula, rowNumber - 1);
 
                   range.Style.Numberformat.Format = GetFormat(format.Format);
+                  formatIndex++;
                 }
               });
               using (var range = wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns])
@@ -2825,6 +2835,9 @@ namespace IM.Base.Helpers
               //Recorremos las columnas.
               formatTableColumns.ForEach(format =>
               {
+                //Si es una columna No Visible continuamos el ciclo.
+                if (!format.IsVisible) return;
+                if (format.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(format.Formula)) return;
                 var subtotalFormat = format.Format;
                 if (format.SubtotalWithCero)
                 {
@@ -4605,7 +4618,6 @@ namespace IM.Base.Helpers
       {
         var filteredRows = sourceTable.Select(filter);
         var objList = filteredRows.Select(x => x.Field<object>(format.PropertyName)).ToArray();
-
         switch (format.AggregateFunction)
         {
           case DataFieldFunctions.Average:
@@ -4681,7 +4693,7 @@ namespace IM.Base.Helpers
       foreach (var match in columns)
       {
         var formatCol = formatTable.First(c => c.PropertyName == match.ToString().Replace("[", "").Replace("]", ""));
-        var order = (newFormat) ? formatTable.FindIndex(c => c.PropertyName == formatCol.PropertyName) + 1 : formatCol.Order;
+        var order = (newFormat) ? formatTable.FindIndex(c => c.PropertyName == formatCol.PropertyName) + 1 - (formatTable.Count(c => c.IsGroup && !c.IsVisible)) : formatCol.Order;
         formula = formula.Replace(match.ToString(), GetExcelColumnName(initialCol + order) + rowNumber);
       }
       return formula;
@@ -4817,7 +4829,7 @@ namespace IM.Base.Helpers
     {
       var dt = new DataTable();
       //Obtenemos todos los campos que seran visibles en la tabla.
-      var rowFields = formatTable.Where(c => c.IsVisible && c.Axis != ePivotFieldAxis.Values && c.Axis != ePivotFieldAxis.Column).ToList();
+      var rowFields = formatTable.Where(c => ((c.IsGroup && !c.IsVisible) || c.IsVisible) && c.Axis != ePivotFieldAxis.Values && c.Axis != ePivotFieldAxis.Column).ToList();
 
       //Obtenemos los campos que seram columnas en el pivote.
       var columnFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Column).ToList();

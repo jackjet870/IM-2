@@ -724,7 +724,7 @@ new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", 
       lst.Add("Price US", "PriceUS", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price MX", "PriceMX", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price CAN", "PriceCAN", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, AggregateFormat: DataFieldFunctions.Sum);
       lst.Add("Total To Pay", "TotalToPay", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Payment Total", "PaymentTotal", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Difference", "Difference", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
@@ -1486,7 +1486,7 @@ new ExcelFormatTable() { Title = "C %", PropertyName = "CancelF", Format = EnumF
     public static ExcelFormatItemsList RptWeeklyMonthlyHostessByPr()
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
-      lst.Add("guls", "guls", isGroup: true);
+      lst.Add("LS", "guls", isGroup: true, isVisible: false);
       lst.Add("PR Name", "guPRInvitN", axis: ePivotFieldAxis.Row);
       lst.Add("PR", "guPRInvit", axis: ePivotFieldAxis.Row);
       lst.Add("D", "guDirect", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
@@ -1501,7 +1501,7 @@ new ExcelFormatTable() { Title = "C %", PropertyName = "CancelF", Format = EnumF
     public static ExcelFormatItemsList RptWeeklyMonthlyHostessByTourTime()
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
-      lst.Add("guls", "guls", isGroup: true, isVisible: false);
+      lst.Add("LS", "guls", isGroup: true, isVisible: false);
       lst.Add("Day", "guD", format: EnumFormatTypeExcel.Day, axis: ePivotFieldAxis.Row);
       lst.Add("B", "guBook", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
       lst.Add("Sh", "guShow", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, formula: "IF([guBook]=0,0,[guShow]/[guBook])");
