@@ -45,7 +45,6 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 29/Feb/2016 Created
     /// [wtorres]      06/Jul/2016 Modified. Ahora se despliega un mensaje de error cuando la contraseña nueva
     ///                            es igual a la anterior
-    /// [wtorres]      31/Ago/2016 Modified. Ahora se permite que la nueva contraseña sea igual a la contraseña anterior
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
@@ -70,7 +69,14 @@ namespace IM.Base.Forms
 
       // encriptamos la nueva contraseña
       string encryptPass = EncryptHelper.Encrypt(txtNewPwd.Password);
-      
+
+      //Si la nueva contraseña es igual a la anterior.
+      if (userLogin.pePwd.Equals(encryptPass))
+      {
+        UIHelper.ShowMessage("The new password can not be the same as the previous password");
+        return;
+      }
+
       //Si ocurrio un error al cambiar el password.
       if (!BRPersonnel.ChangePassword(userLogin.peID, encryptPass, serverDate))
       {
