@@ -560,7 +560,7 @@ namespace IM.ProcessorGeneral.Forms
           case "CxC By Type":
            var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCExcel.Any())
-              finfo = clsReports.ExportRptCxcByType(strReportName, fileFullPath, filters, lstRptCxCExcel);
+              finfo = await clsReports.ExportRptCxcByType(strReportName, fileFullPath, filters, lstRptCxCExcel);
             break;
           #endregion
           #region CxC Deposits
@@ -581,14 +581,14 @@ namespace IM.ProcessorGeneral.Forms
           case "CxC Not Authorized":
             var lstRptCxCNotAut = await BRReportsBySalesRoom.GetRptCxCNotAuthorized(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCNotAut.Any())
-              finfo = clsReports.ExportRptCxCNotAuthorized(strReportName, fileFullPath, filters, lstRptCxCNotAut);
+              finfo = await clsReports.ExportRptCxCNotAuthorized(strReportName, fileFullPath, filters, lstRptCxCNotAut);
             break;
           #endregion
           #region CxC Payments
           case "CxC Payments":
             var lstRptCxCPayments = await BRReportsBySalesRoom.GetRptCxCPayments(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCPayments.Any())
-              finfo = clsReports.ExportRptCxCPayments(strReportName, fileFullPath, filters, lstRptCxCPayments);
+              finfo = await clsReports.ExportRptCxCPayments(strReportName, fileFullPath, filters, lstRptCxCPayments);
             break;
           #endregion
 
@@ -755,7 +755,7 @@ namespace IM.ProcessorGeneral.Forms
                   : string.Join(",",
                     filter.LstLeadSources));
             if (lstRptGiftsSistur.Any())
-              finfo = clsReports.ExportRptGiftsUsedBySistur(strReportName, fileFullPath, filters, lstRptGiftsSistur);
+              finfo = await clsReports.ExportRptGiftsUsedBySistur(strReportName, fileFullPath, filters, lstRptGiftsSistur);
             break;
 
           #endregion
@@ -804,7 +804,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptInOut.Any())
-              finfo = clsReports.ExportRptInOut(strReportName, fileFullPath, filters, lstRptInOut);
+              finfo = await clsReports.ExportRptInOut(strReportName, fileFullPath, filters, lstRptInOut);
             break;
 
           #endregion
@@ -815,7 +815,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRange.Any())
-              finfo = clsReports.ExportRptManifestRange(strReportName, fileFullPath, filters, lstRptManifestRange);
+              finfo = await clsReports.ExportRptManifestRange(strReportName, fileFullPath, filters, lstRptManifestRange);
             break;
 
           #endregion
@@ -836,7 +836,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstGuestNoShows = await BRReportsBySalesRoom.GetRptGuestNoShows(filter.StartDate, filter.EndDate,
                 string.Join(",", filter.LstSalesRooms));
             if (lstGuestNoShows.Any())
-              finfo = clsReports.ExportRptGuestNoShows(strReportName, fileFullPath, filters, lstGuestNoShows);
+              finfo = await clsReports.ExportRptGuestNoShows(strReportName, fileFullPath, filters, lstGuestNoShows);
             break;
 
           #endregion
@@ -890,7 +890,7 @@ namespace IM.ProcessorGeneral.Forms
                 ? "ALL"
                 : string.Join(",", filter.LstSalesRooms));
             if (lstMemberships.Any())
-              finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
+              finfo = await clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
             break;
 
           #endregion
@@ -903,7 +903,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstSalesRooms));
             if (lstMembershipsAgencyM.Any())
-              finfo = clsReports.ExportRptMembershipsByAgencyMarket(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptMembershipsByAgencyMarket(strReportName, fileFullPath, filters,
                 lstMembershipsAgencyM);
             break;
 
@@ -916,7 +916,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstSalesRooms));
             if (lstMembershipsHost.Any())
-              finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
+              finfo = await clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
             break;
 
           #endregion
@@ -941,7 +941,7 @@ namespace IM.ProcessorGeneral.Forms
               if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
-              finfo = clsReports.ExportRptProductionBySalesRoom(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionBySalesRoom(strReportName, fileFullPath, filters,
                 lstProductionBySr);
             }
             break;
@@ -963,7 +963,7 @@ namespace IM.ProcessorGeneral.Forms
               if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
-              finfo = clsReports.ExportRptProductionBySalesRoomMarket(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionBySalesRoomMarket(strReportName, fileFullPath, filters,
                 lstProductionBySrm);
             }
             break;
@@ -985,7 +985,7 @@ namespace IM.ProcessorGeneral.Forms
               if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
-              finfo = clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReportName, fileFullPath, filters,
                 lstProductionBySrmSm);
             }
             break;
@@ -1007,7 +1007,7 @@ namespace IM.ProcessorGeneral.Forms
               if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
-              finfo = clsReports.ExportRptProductionByShowProgram(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByShowProgram(strReportName, fileFullPath, filters,
                 lstProductionByShowProgram);
             }
             break;
@@ -1029,7 +1029,7 @@ namespace IM.ProcessorGeneral.Forms
               if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
-              finfo = clsReports.ExportRptProductionByShowProgramProgram(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByShowProgramProgram(strReportName, fileFullPath, filters,
                 lstProductionByShowProgramPro);
             }
             break;
@@ -1046,7 +1046,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstCloserStatistics = await BRReportsBySalesRoom.GetRptCloserStatistics(filter.StartDate,
                 filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstCloserStatistics.Any())
-              finfo = clsReports.ExportRptCloserStatistics(strReportName, fileFullPath, filters, lstCloserStatistics);
+              finfo = await clsReports.ExportRptCloserStatistics(strReportName, fileFullPath, filters, lstCloserStatistics);
             break;
 
           #endregion
@@ -1271,7 +1271,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(filter.StartDate,
               filter.EndDate, leadSources: leadSources);
             if (lstMemberships.Any())
-              finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
+              finfo = await clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
             break;
 
           #endregion
@@ -1281,7 +1281,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(filter.StartDate, filter.EndDate,
                 leadSources: leadSources);
             if (lstMembershipsHost.Any())
-              finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
+              finfo = await clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
             break;
 
           #endregion

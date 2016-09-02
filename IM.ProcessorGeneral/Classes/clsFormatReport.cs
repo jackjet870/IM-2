@@ -115,38 +115,38 @@ new ExcelFormatTable() { Title = "Receipt Comments", Axis = ePivotFieldAxis.Row,
     /// <history>
     /// [edgrodriguez] 17/May/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCxcByType()
+    public static ExcelFormatItemsList RptCxcByType()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable { Title = "grpe", PropertyName = "grpe", IsGroup = true, Order = 1 },
-new ExcelFormatTable { Title = "Receipt Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Order = 1 },
-new ExcelFormatTable { Title = "Receipt ID", PropertyName = "grID", Order = 2 },
-new ExcelFormatTable { Title = "Folio", PropertyName = "grNum", Order = 3 },
-new ExcelFormatTable { Title = "SR", PropertyName = "grsr", Order = 4 },
-new ExcelFormatTable { Title = "Lead Source", PropertyName = "grls", Order = 5 },
-new ExcelFormatTable { Title = "PR", PropertyName = "peID", Order = 6 },
-new ExcelFormatTable { Title = "PR Name", PropertyName = "peN", Order = 7 },
-new ExcelFormatTable { Title = "Description", PropertyName = "Comments", Order = 8 },
-new ExcelFormatTable { Title = "CxC", PropertyName = "CxC", Format = EnumFormatTypeExcel.Currency, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Exchange Rate", PropertyName = "exExchRate", Format = EnumFormatTypeExcel.Currency, Order = 10 },
-new ExcelFormatTable { Title = "CxC Pesos", PropertyName = "CxCP", Format = EnumFormatTypeExcel.Currency, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Total CxC", PropertyName = "TotalCxC", Format = EnumFormatTypeExcel.Currency, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Amount to Pay (USD)", PropertyName = "ToPayUS", Format = EnumFormatTypeExcel.Currency, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Amount To Pay (MXN)", PropertyName = "ToPayMN", Format = EnumFormatTypeExcel.Currency, Order = 14, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Amount Paid (USD)", PropertyName = "PaidUS", Format = EnumFormatTypeExcel.Currency, Order = 15, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Amount Paid (MXN)", PropertyName = "PaidMN", Format = EnumFormatTypeExcel.Currency, Order = 16, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Balance (USD)", PropertyName = "BalanceUS", Format = EnumFormatTypeExcel.Currency, Order = 17, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "Balance (MXN)", PropertyName = "BalanceMN", Format = EnumFormatTypeExcel.Currency, Order = 18, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable { Title = "CxC Comments", PropertyName = "GiftComments", Order = 19 },
-new ExcelFormatTable { Title = "Guest ID", PropertyName = "guID", Order = 20 },
-new ExcelFormatTable { Title = "Reservation", PropertyName = "guHReservID", Order = 21 },
-new ExcelFormatTable { Title = "Out Invitation", PropertyName = "guOutInvitNum", Order = 22 },
-new ExcelFormatTable { Title = "Authorized", PropertyName = "AuthSts", Order = 23 },
-new ExcelFormatTable { Title = "Authorization Date", PropertyName = "grCxCAppD", Format = EnumFormatTypeExcel.Date, Order = 24 },
-new ExcelFormatTable { Title = "Authorized By", PropertyName = "grAuthorizedBy", Order = 25 },
-new ExcelFormatTable { Title = "Authorized Name", PropertyName = "AuthName", Order = 26 },
-new ExcelFormatTable { Title = "CxC Authorization Comments", PropertyName = "CxCComments", Order = 27 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("grpe", "grpe", isGroup: true, isVisible: false);
+      lst.Add("Receipt Date", "grD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Receipt ID", "grID");
+      lst.Add("Folio", "grNum");
+      lst.Add("SR", "grsr");
+      lst.Add("Lead Source", "grls");
+      lst.Add("PR", "peID");
+      lst.Add("PR Name", "peN");
+      lst.Add("Description", "Comments");
+      lst.Add("CxC", "CxC", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Exchange Rate", "exExchRate", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CxC Pesos", "CxCP", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Total CxC", "TotalCxC", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount to Pay (USD)", "ToPayUS", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount To Pay (MXN)", "ToPayMN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount Paid (USD)", "PaidUS", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Amount Paid (MXN)", "PaidMN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Balance (USD)", "BalanceUS", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Balance (MXN)", "BalanceMN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("CxC Comments", "GiftComments");
+      lst.Add("Guest ID", "guID");
+      lst.Add("Reservation", "guHReservID");
+      lst.Add("Out Invitation", "guOutInvitNum");
+      lst.Add("Authorized", "AuthSts");
+      lst.Add("Authorization Date", "grCxCAppD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Authorized By", "grAuthorizedBy");
+      lst.Add("Authorized Name", "AuthName");
+      lst.Add("CxC Authorization Comments", "CxCComments");
+      return lst;
     }
 
     #endregion
@@ -228,22 +228,22 @@ new ExcelFormatTable() {  Title="Comments"  ,PropertyName = "grCxCComments", Axi
     /// <history>
     /// [edgrodriguez] 01/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCxcNotAuthorized()
+    public static ExcelFormatItemsList RptCxcNotAuthorized()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Rcpt", PropertyName = "grID", Order = 1 },
-new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Order = 2 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Order = 3 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Order = 4 },
-new ExcelFormatTable() { Title = "Guest Name", PropertyName = "grGuest", Order = 5 },
-new ExcelFormatTable() { Title = "Rcpt Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Order = 6 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Order = 7 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Order = 8 },
-new ExcelFormatTable() { Title = "CxC Gifts", PropertyName = "grCxCGifts", Format = EnumFormatTypeExcel.Currency, Order = 9 },
-new ExcelFormatTable() { Title = "CxC Dep", PropertyName = "grCxCPRDeposit", Format = EnumFormatTypeExcel.Currency, Order = 10 },
-new ExcelFormatTable() { Title = "CxC Taxi", PropertyName = "grCxCTaxiOut", Format = EnumFormatTypeExcel.Currency, Order = 11 },
-new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumFormatTypeExcel.Currency, Order = 12 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Rcpt", "grID");
+      lst.Add("Chb PP", "grNum");
+      lst.Add("LS", "grls");
+      lst.Add("GUID", "grgu");
+      lst.Add("Guest Name", "grGuest");
+      lst.Add("Rcpt Date", "grD", format: EnumFormatTypeExcel.Date);
+      lst.Add("PR", "grpe");
+      lst.Add("PR Name", "peN");
+      lst.Add("CxC Gifts", "grCxCGifts", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CxC Dep", "grCxCPRDeposit", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CxC Taxi", "grCxCTaxiOut", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CxC", "CxC", format: EnumFormatTypeExcel.Currency);
+      return lst;
     }
 
     #endregion RptCxcNotAuthorized
@@ -256,29 +256,29 @@ new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumForma
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCxcPayments()
+    public static ExcelFormatItemsList RptCxcPayments()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Rcpt", PropertyName = "grID", Order = 1 },
-new ExcelFormatTable() { Title = "Rcpt D", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Order = 3 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Order = 4 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Order = 5 },
-new ExcelFormatTable() { Title = "Pay USD", PropertyName = "AmountToPayUSD", Format = EnumFormatTypeExcel.Currency, Order = 6 },
-new ExcelFormatTable() { Title = "Pay MXN", PropertyName = "AmountToPayMXN", Format = EnumFormatTypeExcel.Currency, Order = 7 },
-new ExcelFormatTable() { Title = "Paid USD", PropertyName = "AmountPaidUSD", Format = EnumFormatTypeExcel.Currency, Order = 8 },
-new ExcelFormatTable() { Title = "Paid MXN", PropertyName = "AmountPaidMXN", Format = EnumFormatTypeExcel.Currency, Order = 9 },
-new ExcelFormatTable() { Title = "Bal USD", PropertyName = "BalanceUSD", Format = EnumFormatTypeExcel.Currency, Order = 10 },
-new ExcelFormatTable() { Title = "Bal MXN", PropertyName = "BalanceMXN", Format = EnumFormatTypeExcel.Currency, Order = 11 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Order = 12 },
-new ExcelFormatTable() { Title = "Reserv", PropertyName = "guHReservID", Order = 13 },
-new ExcelFormatTable() { Title = "Out Inv", PropertyName = "guOutInvitNum", Order = 14 },
-new ExcelFormatTable() { Title = "Payment Date", PropertyName = "cxD", Format = EnumFormatTypeExcel.Date, Order = 15},
-new ExcelFormatTable() { Title = "Rec By", PropertyName = "cxReceivedBy", Format = EnumFormatTypeExcel.Number, Order = 16 },
-new ExcelFormatTable() { Title = "Rec Name", PropertyName = "ReceivedByName", Order = 17 },
-new ExcelFormatTable() { Title = "Amt USD", PropertyName = "AmountUSD", Format = EnumFormatTypeExcel.Currency, Order = 18 },
-new ExcelFormatTable() { Title = "Amt MXN", PropertyName = "AmountMXN", Format = EnumFormatTypeExcel.Currency, Order = 19 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Rcpt", "grID");
+      lst.Add("Rcpt D", "grD", format: EnumFormatTypeExcel.Date);
+      lst.Add("LS", "grls");
+      lst.Add("PR", "grpe");
+      lst.Add("PR Name", "peN");
+      lst.Add("Pay USD", "AmountToPayUSD", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Pay MXN", "AmountToPayMXN", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Paid USD", "AmountPaidUSD", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Paid MXN", "AmountPaidMXN", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Bal USD", "BalanceUSD", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Bal MXN", "BalanceMXN", format: EnumFormatTypeExcel.Currency);
+      lst.Add("GUID", "grgu");
+      lst.Add("Reserv", "guHReservID");
+      lst.Add("Out Inv", "guOutInvitNum");
+      lst.Add("Payment Date", "cxD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Rec By", "cxReceivedBy", format: EnumFormatTypeExcel.Number);
+      lst.Add("Rec Name", "ReceivedByName");
+      lst.Add("Amt USD", "AmountUSD", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Amt MXN", "AmountMXN", format: EnumFormatTypeExcel.Currency);
+      return lst;
     }
 
     #endregion RptCxcPayments
@@ -748,38 +748,38 @@ new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", 
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsUsedBySistur()
+    public static ExcelFormatItemsList RptGiftsUsedBySistur()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "srN", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Program", PropertyName = "pgN", Order = 2, IsGroup = true },
-new ExcelFormatTable() { Title = "Lead Source", PropertyName = "lsN",  Order = 3, IsGroup = true },
-new ExcelFormatTable() { Title = "Rcpt", PropertyName = "grID", Order = 1 },
-new ExcelFormatTable() { Title = "Rcpt Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "Cancel", PropertyName = "grCancel", Order = 3, SubTotalFunctions = eSubTotalFunctions.Count },
-new ExcelFormatTable() { Title = "Cancel Date", PropertyName = "grCancelD", Format = EnumFormatTypeExcel.Date, Order = 4 },
-new ExcelFormatTable() { Title = "Exch", PropertyName = "grExchange", Order = 5, SubTotalFunctions = eSubTotalFunctions.Count },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Order = 6 },
-new ExcelFormatTable() { Title = "Reserv #", PropertyName = "guHReservID", Order = 7 },
-new ExcelFormatTable() { Title = "Out Inv", PropertyName = "guOutInvitNum", Order = 8 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "guLastName1", Order = 9 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "guFirstName1", Order = 10 },
-new ExcelFormatTable() { Title = "Qty", PropertyName = "geQty", Format = EnumFormatTypeExcel.Number, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Unit", PropertyName = "giQty", Format = EnumFormatTypeExcel.Number, Order = 12 },
-new ExcelFormatTable() { Title = "Gift ID", PropertyName = "giID", Order = 13 },
-new ExcelFormatTable() { Title = "Gift Name", PropertyName = "giN", Order = 14 },
-new ExcelFormatTable() { Title = "Sistur Promotion", PropertyName = "Promotion", Order = 15 },
-new ExcelFormatTable() { Title = "Granted", PropertyName = "Granted", Format = EnumFormatTypeExcel.Number, Order = 16, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sistur Cancel", PropertyName = "geCancelPVPPromo", Order = 17, SubTotalFunctions = eSubTotalFunctions.Count },
-new ExcelFormatTable() { Title = "Used", PropertyName = "gspUsed", Format = EnumFormatTypeExcel.Number, Order = 18, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sistur Coupon", PropertyName = "gspCoupon", Order = 19 },
-new ExcelFormatTable() { Title = "Coupon Date", PropertyName = "gspD", Format = EnumFormatTypeExcel.Date, Order = 20 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "gspPax", Format = EnumFormatTypeExcel.Number, Order = 21 },
-new ExcelFormatTable() { Title = "Sistur Price", PropertyName = "gspAmount", Format = EnumFormatTypeExcel.DecimalNumber, Order = 22, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Cost", PropertyName = "Cost", Format = EnumFormatTypeExcel.DecimalNumber, Order = 23, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Difference", PropertyName = "Difference", Format = EnumFormatTypeExcel.DecimalNumber, Order = 24, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "CeCos", PropertyName = "Cecos", Order = 25 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Sales Room", "srN", isGroup: true);
+      lst.Add("Program", "pgN", isGroup: true);
+      lst.Add("Lead Source", "lsN", isGroup: true);
+      lst.Add("Rcpt", "grID");
+      lst.Add("Rcpt Date", "grD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Cancel", "grCancel", function: DataFieldFunctions.Count);
+      lst.Add("Cancel Date", "grCancelD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Exch", "grExchange", function: DataFieldFunctions.Count);
+      lst.Add("GUID", "guID");
+      lst.Add("Reserv #", "guHReservID");
+      lst.Add("Out Inv", "guOutInvitNum");
+      lst.Add("Last Name", "guLastName1");
+      lst.Add("First Name", "guFirstName1");
+      lst.Add("Qty", "geQty", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Unit", "giQty", format: EnumFormatTypeExcel.Number);
+      lst.Add("Gift ID", "giID");
+      lst.Add("Gift Name", "giN");
+      lst.Add("Sistur Promotion", "Promotion");
+      lst.Add("Granted", "Granted", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sistur Cancel", "geCancelPVPPromo", function: DataFieldFunctions.Count);
+      lst.Add("Used", "gspUsed", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sistur Coupon", "gspCoupon");
+      lst.Add("Coupon Date", "gspD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Pax", "gspPax", format: EnumFormatTypeExcel.Number);
+      lst.Add("Sistur Price", "gspAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Difference", "Difference", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("CeCos", "Cecos");
+      return lst;
     }
 
     #endregion RptGiftsUsedBySistur
@@ -866,39 +866,39 @@ new ExcelFormatTable() { Title = "Country", PropertyName = "CountryN", Axis = eP
     /// <history>
     /// [edgrodriguez] 09/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptInOut()
+    public static ExcelFormatItemsList RptInOut()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true  },
-new ExcelFormatTable() { Title = "Location", PropertyName = "Location", Axis = ePivotFieldAxis.Row, Order = 2, IsGroup = true  },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "GUID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "Hotel", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Room", PropertyName = "Room", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "LastName", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "FirstName", Axis = ePivotFieldAxis.Row, Order = 6},
-new ExcelFormatTable() { Title = "Agency ID", PropertyName = "Agency", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "AgencyN", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Country ID", PropertyName = "Country", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "Country", PropertyName = "CountryN", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "Show D", PropertyName = "ShowDate", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Time In", PropertyName = "TimeIn", Format = EnumFormatTypeExcel.Time, Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Time Out", PropertyName = "TimeOut", Format = EnumFormatTypeExcel.Time, Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() { Title = "Direct", PropertyName = "Direct", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 14 },
-new ExcelFormatTable() { Title = "Tour", PropertyName = "Tour", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Count, Order = 15 },
-new ExcelFormatTable() { Title = "In Out", PropertyName = "InOut", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Count, Order = 16 },
-new ExcelFormatTable() { Title = "Walk Out", PropertyName = "WalkOut", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Count, Order = 17 },
-new ExcelFormatTable() { Title = "Courtesy Tour", PropertyName = "CourtesyTour", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Count, Order = 18 },
-new ExcelFormatTable() { Title = "Save Program", PropertyName = "SaveProgram", Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Count, Order = 19 },
-new ExcelFormatTable() { Title = "PR 1", PropertyName = "PR1", Axis = ePivotFieldAxis.Row, Order = 20 },
-new ExcelFormatTable() { Title = "PR1 Name", PropertyName = "PR1N", Axis = ePivotFieldAxis.Row, Order = 21 },
-new ExcelFormatTable() { Title = "PR 2", PropertyName = "PR2", Axis = ePivotFieldAxis.Row, Order = 22 },
-new ExcelFormatTable() { Title = "PR2 Name", PropertyName = "PR2N", Axis = ePivotFieldAxis.Row, Order = 23 },
-new ExcelFormatTable() { Title = "PR 3", PropertyName = "PR3", Axis = ePivotFieldAxis.Row, Order = 24 },
-new ExcelFormatTable() { Title = "PR3 Name", PropertyName = "PR3N", Axis = ePivotFieldAxis.Row, Order = 25 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "Host", Axis = ePivotFieldAxis.Row, Order = 26 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = ePivotFieldAxis.Row, Order = 27 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Sales Room", "SalesRoom", isGroup: true, isVisible: false);
+      lst.Add("Location", "Location", isGroup: true, isVisible: false);
+      lst.Add("GUID", "GUID");
+      lst.Add("Hotel", "Hotel");
+      lst.Add("Room", "Room");
+      lst.Add("Pax", "Pax", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("Last Name", "LastName");
+      lst.Add("First Name", "FirstName");
+      lst.Add("Agency ID", "Agency");
+      lst.Add("Agency", "AgencyN");
+      lst.Add("Country ID", "Country");
+      lst.Add("Country", "CountryN");
+      lst.Add("Show D", "ShowDate", format: EnumFormatTypeExcel.Date);
+      lst.Add("Time In", "TimeIn", format: EnumFormatTypeExcel.Time);
+      lst.Add("Time Out", "TimeOut", format: EnumFormatTypeExcel.Time);
+      lst.Add("Direct", "Direct", function: DataFieldFunctions.Sum);
+      lst.Add("Tour", "Tour", function: DataFieldFunctions.Count);
+      lst.Add("In Out", "InOut", function: DataFieldFunctions.Count);
+      lst.Add("Walk Out", "WalkOut", function: DataFieldFunctions.Count);
+      lst.Add("Courtesy Tour", "CourtesyTour", function: DataFieldFunctions.Count);
+      lst.Add("Save Program", "SaveProgram", function: DataFieldFunctions.Count);
+      lst.Add("PR 1", "PR1");
+      lst.Add("PR1 Name", "PR1N");
+      lst.Add("PR 2", "PR2");
+      lst.Add("PR2 Name", "PR2N");
+      lst.Add("PR 3", "PR3");
+      lst.Add("PR3 Name", "PR3N");
+      lst.Add("Host", "Host");
+      lst.Add("Comments", "Comments");
+      return lst;
     }
 
     #endregion RptInOut
@@ -911,68 +911,69 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
     /// <history>
     /// [edgrodriguez] 06/Jun/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptManifestRange()
+    public static ExcelFormatItemsList RptManifestRange()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Date", PropertyName = "DateManifest", Format = EnumFormatTypeExcel.Date, Order = 1 },
-new ExcelFormatTable() { Title = "SaleType", PropertyName = "SaleType", IsVisible = false },
-new ExcelFormatTable() { Title = "SaleTypeN", PropertyName = "SaleTypeN", IsGroup = true, Order = 1 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Order = 2 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "SalesRoom", Order = 3 },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "Location", Order = 4 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "Hotel", Order = 5 },
-new ExcelFormatTable() { Title = "Room", PropertyName = "Room", Order = 6 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "Pax", Order = 7 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "LastName", Order = 8 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "FirstName", Order = 9 },
-new ExcelFormatTable() { Title = "Agency ID", PropertyName = "Agency", Order = 10 },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "AgencyN", Order = 11 },
-new ExcelFormatTable() { Title = "Country ID", PropertyName = "Country", Order = 12 },
-new ExcelFormatTable() { Title = "Country", PropertyName = "CountryN", Order = 13 },
-new ExcelFormatTable() { Title = "Show", PropertyName = "showD", Format = EnumFormatTypeExcel.Date, Order = 14 },
-new ExcelFormatTable() { Title = "T In", PropertyName = "TimeInT", Format = EnumFormatTypeExcel.Time, Order = 15 },
-new ExcelFormatTable() { Title = "T Out", PropertyName = "TimeOutT", Format = EnumFormatTypeExcel.Time, Order = 16 },
-new ExcelFormatTable() { Title = "Check In", PropertyName = "CheckIn", Format = EnumFormatTypeExcel.Date, Order = 17 },
-new ExcelFormatTable() { Title = "Check Out", PropertyName = "CheckOut", Format = EnumFormatTypeExcel.Date, Order = 18 },
-new ExcelFormatTable() { Title = "D", PropertyName = "Direct", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 19 },
-new ExcelFormatTable() { Title = "Tr", PropertyName = "Tour", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 20 },
-new ExcelFormatTable() { Title = "IO", PropertyName = "InOut", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 21 },
-new ExcelFormatTable() { Title = "WO", PropertyName = "WalkOut", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 22 },
-new ExcelFormatTable() { Title = "CT", PropertyName = "CTour", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 23 },
-new ExcelFormatTable() { Title = "Sve", PropertyName = "SaveTour", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 24 },
-new ExcelFormatTable() { Title = "PR 1", PropertyName = "PR1", Order = 25 },
-new ExcelFormatTable() { Title = "PR 1 Name", PropertyName = "PR1N", Order = 26 },
-new ExcelFormatTable() { Title = "PR 2", PropertyName = "PR2" , Order = 27 },
-new ExcelFormatTable() { Title = "PR 2 Name", PropertyName = "PR2N", Order = 28 },
-new ExcelFormatTable() { Title = "PR 3", PropertyName = "PR3", Order = 29 },
-new ExcelFormatTable() { Title = "PR 3 Name", PropertyName = "PR3N", Order = 30 },
-new ExcelFormatTable() { Title = "Liner 1", PropertyName = "Liner1", Order = 31 },
-new ExcelFormatTable() { Title = "Liner 1 Name", PropertyName = "Liner1N", Order = 32 },
-new ExcelFormatTable() { Title = "Liner 2", PropertyName = "Liner2", Order = 33 },
-new ExcelFormatTable() { Title = "Liner 2 Name", PropertyName = "Liner2N", Order = 34 },
-new ExcelFormatTable() { Title = "Closer 1", PropertyName = "Closer1", Order = 35 },
-new ExcelFormatTable() { Title = "Closer 1 Name", PropertyName = "Closer1N", Order = 36 },
-new ExcelFormatTable() { Title = "Closer 2", PropertyName = "Closer2", Order = 37 },
-new ExcelFormatTable() { Title = "Closer 2 Name", PropertyName = "Closer2N", Order = 38 },
-new ExcelFormatTable() { Title = "Closer 3", PropertyName = "Closer3", Order = 39 },
-new ExcelFormatTable() { Title = "Closer 3 Name", PropertyName = "Closer3N", Order = 40 },
-new ExcelFormatTable() { Title = "Exit 1", PropertyName = "Exit1", Order = 41 },
-new ExcelFormatTable() { Title = "Exit 1 Name", PropertyName = "Exit1N", Order = 42 },
-new ExcelFormatTable() { Title = "Exit 2", PropertyName = "Exit2", Order = 43 },
-new ExcelFormatTable() { Title = "Exit 2 Name", PropertyName = "Exit2N", Order = 44 },
-new ExcelFormatTable() { Title = "Hostess", PropertyName = "Hostess", Order = 45 },
-new ExcelFormatTable() { Title = "Proc Sales", PropertyName = "ProcSales",Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 46 },
-new ExcelFormatTable() { Title = "Proc Orig",  PropertyName = "ProcOriginal", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 47 },
-new ExcelFormatTable() { Title = "Proc New", PropertyName = "ProcNew", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 48 },
-new ExcelFormatTable() { Title = "Proc Gross", PropertyName = "ProcGross",  Format = EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 49 },
-new ExcelFormatTable() { Title = "Pend Sales", PropertyName = "PendSales", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 50 },
-new ExcelFormatTable() { Title = "Pend Original", PropertyName = "PendOriginal", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 51 },
-new ExcelFormatTable() { Title = "Pend New", PropertyName = "PendNew", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 52 },
-new ExcelFormatTable() { Title = "Pend Gross", PropertyName = "PendGross", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 53 },
-new ExcelFormatTable() { Title = "C Cost", PropertyName = "ClosingCost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 54 },
-new ExcelFormatTable() { Title = "Memb #", PropertyName = "MemberShip", Order = 55 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Order = 56 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Date", "DateManifest", format: EnumFormatTypeExcel.Date);
+      lst.Add("Group", "SaleTypeN", isGroup: true);
+      lst.Add("GUID", "guID");
+      lst.Add("SR", "SalesRoom");
+      lst.Add("Loc", "Location");
+      lst.Add("Hotel", "Hotel");
+      lst.Add("Room", "Room");
+      lst.Add("Pax", "Pax");
+      lst.Add("Last Name", "LastName");
+      lst.Add("First Name", "FirstName");
+      lst.Add("Agency ID", "Agency");
+      lst.Add("Agency", "AgencyN");
+      lst.Add("Country ID", "Country");
+      lst.Add("Country", "CountryN");
+      lst.Add("Show", "showD", format: EnumFormatTypeExcel.Date);
+      lst.Add("T In", "TimeInT", format: EnumFormatTypeExcel.Time);
+      lst.Add("T Out", "TimeOutT", format: EnumFormatTypeExcel.Time);
+      lst.Add("Check In", "CheckIn", format: EnumFormatTypeExcel.Date);
+      lst.Add("Check Out", "CheckOut", format: EnumFormatTypeExcel.Date);
+      lst.Add("D", "Direct", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Tr", "Tour", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("IO", "InOut", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("WO", "WalkOut", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("CT", "CTour", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sve", "SaveTour", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("PR 1", "PR1");
+      lst.Add("PR 1 Name", "PR1N");
+      lst.Add("PR 2", "PR2");
+      lst.Add("PR 2 Name", "PR2N");
+      lst.Add("PR 3", "PR3");
+      lst.Add("PR 3 Name", "PR3N");
+      lst.Add("Liner 1", "Liner1");
+      lst.Add("Liner 1 Name", "Liner1N");
+      lst.Add("Liner 2", "Liner2");
+      lst.Add("Liner 2 Name", "Liner2N");
+      lst.Add("Closer 1", "Closer1");
+      lst.Add("Closer 1 Name", "Closer1N");
+      lst.Add("Closer 2", "Closer2");
+      lst.Add("Closer 2 Name", "Closer2N");
+      lst.Add("Closer 3", "Closer3");
+      lst.Add("Closer 3 Name", "Closer3N");
+      lst.Add("Exit 1", "Exit1");
+      lst.Add("Exit 1 Name", "Exit1N");
+      lst.Add("Exit 2", "Exit2");
+      lst.Add("Exit 2 Name", "Exit2N");
+      lst.Add("Hostess", "Hostess");
+      lst.Add("Proc Sales", "ProcSales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Proc Orig", "ProcOriginal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Proc New", "ProcNew", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Proc Gross", "ProcGross", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Sales", "PendSales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Original", "PendOriginal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend New", "PendNew", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Gross", "PendGross", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("C Cost", "ClosingCost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Memb #", "MemberShip");
+      lst.Add("Comments", "Comments");
+      lst.Add("SaleType", "SaleType", isVisible: false);
+
+      return lst;
     }
 
     #endregion RptManifestRange      
@@ -985,25 +986,25 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Order = 
     /// <history>
     /// [edgrodriguez] 09/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGuestNoShow()
+    public static ExcelFormatItemsList RptGuestNoShow()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Order = 1  },
-new ExcelFormatTable() { Title = "Room", PropertyName = "guRoomNum", Order = 3 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "guHotel", IsVisible = false },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "guLastName1", Order = 4 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "guFirstName1", Order = 5 },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "guloInvit", Order = 2 },
-new ExcelFormatTable() { Title = "Agency ID", PropertyName = "guag", Order = 6 },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "agN", Order = 7},
-new ExcelFormatTable() { Title = "Country ID", PropertyName = "guco", Order = 8 },
-new ExcelFormatTable() { Title = "Country", PropertyName = "coN", Order = 9 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "gupax", IsVisible = false },
-new ExcelFormatTable() { Title = "Check-In Date", PropertyName = "guCheckInD", Format = EnumFormatTypeExcel.Date, Order = 10 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "guDeposit", Format = EnumFormatTypeExcel.Currency, Order = 13 },
-new ExcelFormatTable() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Order = 11 },
-new ExcelFormatTable() { Title = "Book Cancel", PropertyName = "guBookCanc", Order = 12 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("GUID", "guID");
+      lst.Add("Loc", "guloInvit");
+      lst.Add("Room", "guRoomNum");
+      lst.Add("Pax", "gupax");
+      lst.Add("Last Name", "guLastName1");
+      lst.Add("First Name", "guFirstName1");
+      lst.Add("Agency ID", "guag");
+      lst.Add("Agency", "agN");
+      lst.Add("Country ID", "guco");
+      lst.Add("Country", "coN");
+      lst.Add("Chk-In Date", "guCheckInD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Book Cancel", "guBookCanc");
+      lst.Add("Deposit", "guDeposit", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Hotel", "guHotel", isVisible: false);
+      return lst;
     }
 
     #endregion RptGuestNoShow
@@ -1131,42 +1132,42 @@ new ExcelFormatTable() { Title = "$ Total", PropertyName = "TotalAmount", Format
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptMemberships()
+    public static ExcelFormatItemsList RptMemberships()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sale ID", PropertyName = "saID", Order = 1  },
-new ExcelFormatTable() { Title = "Sale Date", PropertyName = "saD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "Proc Date", PropertyName = "saProcD", Format = EnumFormatTypeExcel.Date, Order = 3 },
-new ExcelFormatTable() { Title = "Canc Date", PropertyName = "saCancelD", Format = EnumFormatTypeExcel.Date, Order = 4 },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "salo", Order = 5 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "sasr", Order = 6 },
-new ExcelFormatTable() { Title = "Membership", PropertyName = "saMembershipNum", Order = 7  },
-new ExcelFormatTable() { Title = "MT", PropertyName = "samt", Order = 8 },
-new ExcelFormatTable() { Title = "ST", PropertyName = "sast", Order = 9 },
-new ExcelFormatTable() { Title = "Last Name 1", PropertyName = "saLastName1", Order = 10 },
-new ExcelFormatTable() { Title = "First Name 1", PropertyName = "saFirstName1", Order = 11 },
-new ExcelFormatTable() { Title = "Last Name 2", PropertyName = "saLastName2", Order = 12 },
-new ExcelFormatTable() { Title = "First Name 2", PropertyName = "saFirstName2", Order = 13  },
-new ExcelFormatTable() { Title = "Proc Vol", PropertyName = "ProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 14, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "OOP Vol", PropertyName = "OOPAmount", Format = EnumFormatTypeExcel.Currency, Order = 15, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Canc Vol", PropertyName = "CancAmount", Format = EnumFormatTypeExcel.Currency, Order = 16, Function = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "Pend Vol", PropertyName = "PendAmount", Format = EnumFormatTypeExcel.Currency, Order = 18, Function = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "PR1", PropertyName = "saPR1", Order = 19 },
-new ExcelFormatTable() { Title = "PR2", PropertyName = "saPR2", Order = 20  },
-new ExcelFormatTable() { Title = "PR3", PropertyName = "saPR3", Order = 21 },
-new ExcelFormatTable() { Title = "Liner1", PropertyName = "saLiner1", Order = 22 },
-new ExcelFormatTable() { Title = "Liner2", PropertyName = "saLiner2", Order = 23 },
-new ExcelFormatTable() { Title = "Closer1", PropertyName = "saCloser1", Order = 24 },
-new ExcelFormatTable() { Title = "Closer2", PropertyName = "saCloser2", Order = 25 },
-new ExcelFormatTable() { Title = "Closer3", PropertyName = "saCloser3", Order = 26  },
-new ExcelFormatTable() { Title = "Exit1", PropertyName = "saExit1", Order = 27 },
-new ExcelFormatTable() { Title = "Exit2", PropertyName = "saExit2", Order = 28 },
-new ExcelFormatTable() { Title = "VLO", PropertyName = "saVLO", Format = EnumFormatTypeExcel.Number, Order = 29 },
-new ExcelFormatTable() { Title = "Podium", PropertyName = "saPodium", Order = 30 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "sagu", IsVisible = false },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "saComments", Order = 31 },
-new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 17, Function = DataFieldFunctions.Sum  }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Sale ID", "saID");
+      lst.Add("Sale Date", "saD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Proc Date", "saProcD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Canc Date", "saCancelD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Loc", "salo");
+      lst.Add("SR", "sasr");
+      lst.Add("Membership", "saMembershipNum");
+      lst.Add("MT", "samt");
+      lst.Add("ST", "sast");
+      lst.Add("Last Name 1", "saLastName1");
+      lst.Add("First Name 1", "saFirstName1");
+      lst.Add("Last Name 2", "saLastName2");
+      lst.Add("First Name 2", "saFirstName2");
+      lst.Add("Proc Vol", "ProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("OOP Vol", "OOPAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Canc Vol", "CancAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Total Proc", "TotalProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Vol", "PendAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("PR1", "saPR1");
+      lst.Add("PR2", "saPR2");
+      lst.Add("PR3", "saPR3");
+      lst.Add("Liner1", "saLiner1");
+      lst.Add("Liner2", "saLiner2");
+      lst.Add("Closer1", "saCloser1");
+      lst.Add("Closer2", "saCloser2");
+      lst.Add("Closer3", "saCloser3");
+      lst.Add("Exit1", "saExit1");
+      lst.Add("Exit2", "saExit2");
+      lst.Add("VLO", "saVLO", format: EnumFormatTypeExcel.Number);
+      lst.Add("Podium", "saPodium");
+      lst.Add("Comments", "saComments");
+      lst.Add("GUID", "sagu", isVisible: false);
+      return lst;
     }
 
     #endregion RptMemberships
@@ -1179,31 +1180,31 @@ new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount",
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptMembershipsByAgencyMarket()
+    public static ExcelFormatItemsList RptMembershipsByAgencyMarket()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Market", PropertyName = "mkN", Order = 1, IsGroup = true  },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "agN", Order = 2, IsGroup = true },
-new ExcelFormatTable() { Title = "Sale ID", PropertyName = "saID", Order = 1  },
-new ExcelFormatTable() { Title = "Sale Date", PropertyName = "saProcD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "Lead Source", PropertyName = "lsN", Order = 3 },
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "srN", Order = 4 },
-new ExcelFormatTable() { Title = "Membership", PropertyName = "saMembershipNum", Order = 5  },
-new ExcelFormatTable() { Title = "Membership Type", PropertyName = "mtN", Order = 6 },
-new ExcelFormatTable() { Title = "ST", PropertyName = "sast", Order = 7 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "saLastName1", Order = 8 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "saFirstName1", Order = 9 },
-new ExcelFormatTable() { Title = "Proc Vol", PropertyName = "ProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "OOP Vol", PropertyName = "OOPAmount", Format = EnumFormatTypeExcel.Currency, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Canc Vol", PropertyName = "CancAmount", Format = EnumFormatTypeExcel.Currency, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "Pend Vol", PropertyName = "PendAmount", Format = EnumFormatTypeExcel.Currency, Order = 14, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "% DP", PropertyName = "saDownPaymentPercentage",IsCalculated = true, Formula = "IF([ProcAmount]=0,0,[saDownPayment]/[ProcAmount])" , Format = EnumFormatTypeExcel.Percent, Order = 15, SubTotalFunctions = eSubTotalFunctions.Avg },
-new ExcelFormatTable() { Title = "% EDP", PropertyName = "saDownPaymentPaidPercentage", IsCalculated = true, Formula = "IF([ProcAmount]=0,0,[saDownPaymentPaid]/[ProcAmount])", Format = EnumFormatTypeExcel.Percent, Order = 17, SubTotalFunctions = eSubTotalFunctions.Avg },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "saComments", Order = 19 },
-new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "$ DP", PropertyName = "saDownPayment", Format = EnumFormatTypeExcel.Currency, Order = 16, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "$ EDP", PropertyName = "saDownPaymentPaid", Format = EnumFormatTypeExcel.Currency, Order = 18, SubTotalFunctions = eSubTotalFunctions.Sum  }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Market", "mkN", isGroup: true, isVisible: false);
+      lst.Add("Agency", "agN", isGroup: true, isVisible: false);
+      lst.Add("Sale ID", "saID");
+      lst.Add("Sale Date", "saProcD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Lead Source", "lsN");
+      lst.Add("Sales Room", "srN");
+      lst.Add("Membership", "saMembershipNum");
+      lst.Add("Membership Type", "mtN");
+      lst.Add("ST", "sast");
+      lst.Add("Last Name", "saLastName1");
+      lst.Add("First Name", "saFirstName1");
+      lst.Add("Proc Vol", "ProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("OOP Vol", "OOPAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Canc Vol", "CancAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Total Proc", "TotalProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Vol", "PendAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcAmount]=0,0,[saDownPayment]/[ProcAmount])");
+      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcAmount]=0,0,[saDownPaymentPaid]/[ProcAmount])");
+      lst.Add("$ EDP", "saDownPaymentPaid", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Comments", "saComments");
+      return lst;
     }
 
     #endregion RptMembershipsByAgencyMarket
@@ -1216,28 +1217,28 @@ new ExcelFormatTable() { Title = "$ EDP", PropertyName = "saDownPaymentPaid", Fo
     /// <history>
     /// [edgrodriguez] 14/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptMembershipsByHost()
+    public static ExcelFormatItemsList RptMembershipsByHost()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Host", PropertyName = "guEntryHost", Order = 1, IsGroup = true  },
-new ExcelFormatTable() { Title = "Host Name", PropertyName = "guEntryHostN", IsVisible = false },
-new ExcelFormatTable() { Title = "Sale Type", PropertyName = "SaleType", Order = 2, IsGroup = true  },
-new ExcelFormatTable() { Title = "Sale ID", PropertyName = "saID", Order = 1 },
-new ExcelFormatTable() { Title = "Sale Date", PropertyName = "saD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "sals", Order = 3 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "sasr", Order = 4  },
-new ExcelFormatTable() { Title = "Membership", PropertyName = "saMembershipNum", Order = 5 },
-new ExcelFormatTable() { Title = "MT", PropertyName = "samt", Order = 6 },
-new ExcelFormatTable() { Title = "ST", PropertyName = "sast", Order = 7 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "saLastName1", Order = 8 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "saFirstName1", Order = 9 },
-new ExcelFormatTable() { Title = "Proc Vol", PropertyName = "ProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "OOP Vol", PropertyName = "OOPAmount", Format = EnumFormatTypeExcel.Currency, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "Canc Vol", PropertyName = "CancAmount", Format = EnumFormatTypeExcel.Currency, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "Pend Vol", PropertyName = "PendAmount", Format = EnumFormatTypeExcel.Currency, Order = 14, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "saComments", Order = 15 },
-new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum  }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Host", "guEntryHost", isGroup: true, isVisible: false);
+      lst.Add("Sale Type", "SaleType", isGroup: true, isVisible: false);
+      lst.Add("Sale ID", "saID");
+      lst.Add("Sale Date", "saD", format: EnumFormatTypeExcel.Date);
+      lst.Add("LS", "sals");
+      lst.Add("SR", "sasr");
+      lst.Add("Membership", "saMembershipNum");
+      lst.Add("MT", "samt");
+      lst.Add("ST", "sast");
+      lst.Add("Last Name", "saLastName1");
+      lst.Add("First Name", "saFirstName1");
+      lst.Add("Proc Vol", "ProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("OOP Vol", "OOPAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Canc Vol", "CancAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Total Proc", "TotalProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Pend Vol", "PendAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Comments", "saComments");
+      lst.Add("Host Name", "guEntryHostN", isVisible: false);
+      return lst;
     }
 
     #endregion RptMembershipsByHost
@@ -1254,22 +1255,22 @@ new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount",
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptProductionBySalesRoom()
+    public static ExcelFormatItemsList RptProductionBySalesRoom()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.Number, Order = 1 },
-new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Format = EnumFormatTypeExcel.Number, Order = 2, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Format = EnumFormatTypeExcel.Number, Order = 3, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Order = 4, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Format = EnumFormatTypeExcel.Number, Order = 5, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Order = 6, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Format = EnumFormatTypeExcel.Number, Order = 8, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Sales Room", "SalesRoom", format: EnumFormatTypeExcel.Number);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("Ci %", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
 
     #endregion RptProductionBySalesRoom
@@ -1282,23 +1283,23 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptProductionBySalesRoomMarket()
+    public static ExcelFormatItemsList RptProductionBySalesRoomMarket()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.Number, Order = 1 },
-new ExcelFormatTable() { Title = "Market", PropertyName = "Market", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Market", "Market", isGroup: true, isVisible: false);
+      lst.Add("Sales Room", "SalesRoom", format: EnumFormatTypeExcel.Number);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("Ci %", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
 
     #endregion RptProductionBySalesRoomMarket
@@ -1311,25 +1312,25 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptProductionBySalesRoomMarketSubMarket()
+    public static ExcelFormatItemsList RptProductionBySalesRoomMarketSubMarket()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.Number, Order = 1 },
-new ExcelFormatTable() { Title = "Program", PropertyName = "Program", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Market", PropertyName = "Market", Order = 2, IsGroup = true },
-new ExcelFormatTable() { Title = "Submarket", PropertyName = "Submarket", Order = 3, IsGroup = true },
-new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Format = EnumFormatTypeExcel.Number, Order = 2, Function = DataFieldFunctions.Sum, SubTotalFunctions= eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Format = EnumFormatTypeExcel.Number, Order = 3, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Order = 4, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Format = EnumFormatTypeExcel.Number, Order = 5, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Order = 6, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Format = EnumFormatTypeExcel.Number, Order = 8, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Program", "Program", isGroup: true, isVisible: false);
+      lst.Add("Market", "Market", isGroup: true, isVisible: false);
+      lst.Add("Submarket", "Submarket", isGroup: true, isVisible: false);
+      lst.Add("Sales Room", "SalesRoom", format: EnumFormatTypeExcel.Number);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("Ci %", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
 
     #endregion RptProductionBySalesRoomMarketSubMarket
@@ -1342,23 +1343,23 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptProductionByShowProgram()
+    public static ExcelFormatItemsList RptProductionByShowProgram()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Show Program Category", PropertyName = "ShowProgramCategory", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Show Program", PropertyName = "ShowProgram", Order = 1 },
-new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Show Program Category", "ShowProgramCategory", isGroup: true, isVisible: false);
+      lst.Add("Show Program", "ShowProgram");
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("Ci %", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
 
     #endregion RptProductionByShowProgram
@@ -1371,24 +1372,24 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptProductionByShowProgramProgram()
+    public static ExcelFormatItemsList RptProductionByShowProgramProgram()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Program", PropertyName = "Program", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Show Program Category", PropertyName = "ShowProgramCategory", Order = 2, IsGroup = true },
-new ExcelFormatTable() { Title = "Show Program", PropertyName = "ShowProgram", Order = 1 },
-new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Program", "Program", isGroup: true, isVisible: false);
+      lst.Add("Show Program Category", "ShowProgramCategory", isGroup: true, isVisible: false);
+      lst.Add("Show Program", "ShowProgram");
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("Ci %", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
 
     #endregion RptProductionByShowProgramProgram
@@ -1405,29 +1406,29 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
     /// <history>
     /// [edgrodriguez] 11/May/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCloserStatistic()
+    public static ExcelFormatItemsList RptCloserStatistic()
     {
-      return new List<ExcelFormatTable> {
-new ExcelFormatTable() { Title = "ID", PropertyName = "saCloser", Order = 1 },
-new ExcelFormatTable() { Title = "Closer Name", PropertyName = "saCloserN", Order = 2 },
-new ExcelFormatTable() { Title = "PS", PropertyName = "saCloserps", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Ups", PropertyName = "Shows", Format = EnumFormatTypeExcel.DecimalNumber, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Proc Sales", PropertyName = "ProcSales", Format = EnumFormatTypeExcel.DecimalNumber, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Processable", PropertyName = "ProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "OOP Sales", PropertyName = "OOPSales", Format = EnumFormatTypeExcel.DecimalNumber, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "OOP", PropertyName = "OOPAmount", Format = EnumFormatTypeExcel.Currency, Order = 7, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Cancel Sales", PropertyName = "CancelSales", Format = EnumFormatTypeExcel.DecimalNumber, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Cancelled", PropertyName = "CancelAmount", Format = EnumFormatTypeExcel.Currency, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "C %", PropertyName = "CancelF", Format = EnumFormatTypeExcel.Percent, Order = 10, IsCalculated = true, Formula = "IF([TotalProc]=0, 0, [CancelAmount]/[TotalProc])" },
-new ExcelFormatTable() { Title = "Subtotal", PropertyName = "TotalProc", Format = EnumFormatTypeExcel.Currency, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Sales", PropertyName = "TotalProcSales", Format = EnumFormatTypeExcel.DecimalNumber, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Total", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.Currency, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Order = 14, IsCalculated = true, Formula = "IF([Shows]=0, 0, [TotalProcAmount]/[Shows])" },
-new ExcelFormatTable() { Title = "CI %", PropertyName = "ClosingF", Format = EnumFormatTypeExcel.Percent, Order = 15, IsCalculated = true, Formula = "IF([Shows]=0, 0, [TotalProcSales]/[Shows])" },
-new ExcelFormatTable() { Title = "AvgSales", PropertyName = "AvgSales", Format = EnumFormatTypeExcel.Currency, Order = 16, IsCalculated = true, Formula = "IF([TotalProcSales]=0, 0, [TotalProcAmount]/[TotalProcSales])" },
-new ExcelFormatTable() { Title = "Pend Sales", PropertyName = "PendSales", Format = EnumFormatTypeExcel.DecimalNumber, Order = 17, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Pending", PropertyName = "PendAmount", Format = EnumFormatTypeExcel.Currency, Order = 18, SubTotalFunctions = eSubTotalFunctions.Sum }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("PS", "saCloserps", isGroup: true, isVisible: false);
+      lst.Add("ID", "saCloser");
+      lst.Add("Closer Name", "saCloserN");
+      lst.Add("Ups", "Shows", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Proc Sales", "ProcSales", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Processable", "ProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("OOP Sales", "OOPSales", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("OOP", "OOPAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Cancel Sales", "CancelSales", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Cancelled", "CancelAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("C %", "CancelF", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([TotalProc]=0, 0, [CancelAmount]/[TotalProc])");
+      lst.Add("Subtotal", "TotalProc", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "TotalProcSales", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Total", "TotalProcAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows]=0, 0, [TotalProcAmount]/[Shows])");
+      lst.Add("CI %", "ClosingF", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0, 0, [TotalProcSales]/[Shows])");
+      lst.Add("AvgSales", "AvgSales", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([TotalProcSales]=0, 0, [TotalProcAmount]/[TotalProcSales])");
+      lst.Add("Pend Sales", "PendSales", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Pending", "PendAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      return lst;
     }
 
     #endregion
