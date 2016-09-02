@@ -37,6 +37,7 @@ namespace IM.Host.Forms
     public bool _ValidateMaxAuthGifts, useCxCCost, _Exchange, _Cancelled, _isExchangeReceipt, _applicationAdj;
     public MessageBoxResult _Result = MessageBoxResult.Cancel; // Variable encargado de devolver la respuesta del usuario.
     public int ReceiptExchangeID = 0;
+    private decimal _MaxAuthGifts = 0, _CurAdjustment = 0, _TotalGifts = 0;
     public frmGiftsReceipts _FrmGiftsReceipt;
     public frmCancelExternalProducts _FrmCancelExternalProducts;
 
@@ -66,6 +67,7 @@ namespace IM.Host.Forms
     {
       _EnumExternalProduct = enumExternalProducts;
       _ReceiptID = ReceiptID;
+      _MaxAuthGifts = MaxAuthGifts;
       _GuestID = GuestID;
       _ValidateMaxAuthGifts = ValidateMaxAuthGifts;
       useCxCCost = pUseCxCCost;
@@ -75,6 +77,8 @@ namespace IM.Host.Forms
       _FrmGiftsReceipt = FrmGiftsReceipt;
       _FrmCancelExternalProducts = this;
       _giftsDataContext = pGiftsDataContext;
+      _CurAdjustment = CurAdjustment;
+      _TotalGifts = TotalGifts;
 
       InitializeComponent();
 
@@ -92,70 +96,6 @@ namespace IM.Host.Forms
         _CancelField = "geCancelPVPPromo";
         geCancelElectronicPurseColumn.Visibility = Visibility.Hidden;
       }
-
-      //Obtenemos los datos del Huesped.
-      _Guest = BRGuests.GetGuestShort(_GuestID);
-      txtReceipt.Text = $"{_ReceiptID}";
-      txtGuestID.Text = $"{ _GuestID}";
-      txtNameInvitation.Text = _Guest.Name;
-      cboSalesRoom.SelectedValue = _Guest.gusr;
-
-      // Si es Inhouse
-      if (_Guest.lspg.Equals("IH"))
-      {
-        // Si es una invitacion inhouse externa
-        if (string.IsNullOrEmpty(_Guest.guHReservID))
-          PropertyOpera = _Guest.lsPropertyOpera;
-      }
-      // Si es OutHouse
-      else
-        PropertyOpera = _Guest.srPropertyOpera;
-
-      cboProgram.SelectedValue = _Guest.lspg;
-      cboLeadSource.SelectedValue = _Guest.gulsOriginal;
-      txtReservation.Text = _Guest.guHReservID == "" ? null : _Guest.guHReservID;
-      dtpArrival.Value = _Guest.guCheckInD;
-      dtpDeparture.Value = _Guest.guCheckOutD;
-      txtQtyEPurses.Text = $"{_Guest.guQtyGiftsCard}";
-      txtAccountInvitation.Text = _Guest.guAccountGiftsCard == "" ? null : _Guest.guAccountGiftsCard;
-
-      // Monto maximo de reagalos
-      txtMaxAuthGifts.Text = string.Format("{0:C2}", MaxAuthGifts);
-
-      // Totales de regalos
-      txtTotalGiftsInvitation.Text = string.Format("{0:C2}", BRGiftsReceipts.CalculateTotalsGiftsInvitation(_GuestID));
-
-      // Si se genera un recibo Exchange
-      if (_Exchange)
-        txtTotalGiftsCancel.Text = string.Format("{0:C2}", 0.00);
-      // si se desea cancelar el recibo
-      else
-        txtTotalGiftsCancel.Text = string.Format("{0:C2}", TotalGifts);
-
-      txtTotalGiftsExchange.Text = string.Format("{0:C2}", 0.00);
-      CalculateTotalGifts();
-
-      // Totales del cargo
-      txtgrcxcAdj.Text = string.Format("{0:C2}", CurAdjustment);
-
-      // Activamos la bandera para saber si se ajustaran costos CxC
-      _applicationAdj = CurAdjustment > 0 ? true : false;
-
-      ReceiptsGifts.CalculateCharge(_GuestID, FrmGiftsReceipt.cmbgrct.SelectedItem as ChargeTo, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
-                                              ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
-                                              ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.txbgrMaxAuthGifts);
-
-      // Si se desea cancelar el recibo
-      if (!Exchange)
-      {
-        stkGiftsExchange.Visibility = Visibility.Collapsed;
-        WindowMain.Height = 424; // Ajustamos la ventana
-      }
-
-      // Impedimos modificar los datos si el sistema esta en modo de solo lectura
-      if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
-        btnSave.Visibility = Visibility.Hidden;
-
     }
     #endregion
 
@@ -188,6 +128,69 @@ namespace IM.Host.Forms
       List<GiftsReceiptDetailCancel> lstResultCancel = BRGiftsReceiptDetail.GetGiftsReceiptDetailCancel(_ReceiptID, _EnumExternalProduct);
       _obsGiftsCancel = new ObservableCollection<GiftsReceiptDetailCancel>(lstResultCancel);
       _dsGiftsReceiptDetailCancel.Source = _obsGiftsCancel;
+
+      //Obtenemos los datos del Huesped.
+      _Guest = await BRGuests.GetGuestShort(_GuestID);
+      txtReceipt.Text = $"{_ReceiptID}";
+      txtGuestID.Text = $"{ _GuestID}";
+      txtNameInvitation.Text = _Guest.Name;
+      cboSalesRoom.SelectedValue = _Guest.gusr;
+
+      // Si es Inhouse
+      if (_Guest.lspg.Equals("IH"))
+      {
+        // Si es una invitacion inhouse externa
+        if (string.IsNullOrEmpty(_Guest.guHReservID))
+          PropertyOpera = _Guest.lsPropertyOpera;
+      }
+      // Si es OutHouse
+      else
+        PropertyOpera = _Guest.srPropertyOpera;
+
+      cboProgram.SelectedValue = _Guest.lspg;
+      cboLeadSource.SelectedValue = _Guest.gulsOriginal;
+      txtReservation.Text = _Guest.guHReservID == "" ? null : _Guest.guHReservID;
+      dtpArrival.Value = _Guest.guCheckInD;
+      dtpDeparture.Value = _Guest.guCheckOutD;
+      txtQtyEPurses.Text = $"{_Guest.guQtyGiftsCard}";
+      txtAccountInvitation.Text = _Guest.guAccountGiftsCard == "" ? null : _Guest.guAccountGiftsCard;
+
+      // Monto maximo de reagalos
+      txtMaxAuthGifts.Text = string.Format("{0:C2}", _MaxAuthGifts);
+
+      // Totales de regalos
+      txtTotalGiftsInvitation.Text = string.Format("{0:C2}", BRGiftsReceipts.CalculateTotalsGiftsInvitation(_GuestID));
+
+      // Si se genera un recibo Exchange
+      if (_Exchange)
+        txtTotalGiftsCancel.Text = string.Format("{0:C2}", 0.00);
+      // si se desea cancelar el recibo
+      else
+        txtTotalGiftsCancel.Text = string.Format("{0:C2}", _TotalGifts);
+
+      txtTotalGiftsExchange.Text = string.Format("{0:C2}", 0.00);
+      CalculateTotalGifts();
+
+      // Totales del cargo
+      txtgrcxcAdj.Text = string.Format("{0:C2}", _CurAdjustment);
+
+      // Activamos la bandera para saber si se ajustaran costos CxC
+      _applicationAdj = _CurAdjustment > 0 ? true : false;
+
+      ReceiptsGifts.CalculateCharge(_GuestID, _FrmGiftsReceipt.cmbgrct.SelectedItem as ChargeTo, txtTotalCost, _isExchangeReceipt, ref txtgrcxcGifts,
+                                              ref txtTotalCxC, ref _FrmGiftsReceipt.txtgrCxCAdj, ref _FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
+                                              ref _FrmGiftsReceipt.txtgrMaxAuthGifts, ref _FrmGiftsReceipt.txbgrMaxAuthGifts);
+
+      // Si se desea cancelar el recibo
+      if (!_Exchange)
+      {
+        stkGiftsExchange.Visibility = Visibility.Collapsed;
+        WindowMain.Height = 424; // Ajustamos la ventana
+      }
+
+      // Impedimos modificar los datos si el sistema esta en modo de solo lectura
+      if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
+        btnSave.Visibility = Visibility.Hidden;
 
       // si se debe generar un recibo exchange
       if (_Exchange)

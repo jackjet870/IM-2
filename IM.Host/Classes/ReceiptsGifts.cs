@@ -183,8 +183,8 @@ namespace IM.Host.Classes
               }
               else
               {
-                pCancel = false;
                 cell.Column.IsReadOnly = false;
+                pCancel = false;
                 break;
               }
               break;

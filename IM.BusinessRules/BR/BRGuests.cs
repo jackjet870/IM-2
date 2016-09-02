@@ -250,13 +250,17 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 11/Abril/2016 Created
+    /// [vipacheco] 19/Sep/2016 Modified -> Se agrego asincronia
     /// </history>
-    public static GuestShort GetGuestShort(int guestId)
+    public async static Task<GuestShort> GetGuestShort(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestById(guestId).SingleOrDefault();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetGuestById(guestId).SingleOrDefault();
+        }
+      });
     }
 
     #endregion GetGuestShort

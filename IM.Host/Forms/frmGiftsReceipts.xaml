@@ -117,11 +117,10 @@
           </Grid.ColumnDefinitions>
 
           <!--#region Grid_Receipts-->
-          <DataGrid x:Name="grdReceipts" Grid.Column="0" Grid.Row="0" Margin="1,4,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsReceipts}}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
+          <DataGrid x:Name="dtgReceipts" Grid.Column="0" Grid.Row="0" Margin="1,4,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsReceipts}}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" PreviewKeyDown="dtgReceipts_PreviewKeyDown">
             <DataGrid.Resources>
               <Style TargetType="DataGridRow">
-                <EventSetter Event="MouseDoubleClick" Handler="grdReceipts_DoubleClick"/>
-                <EventSetter Event="KeyDown" Handler="grdReceipts_KeyDown"/>
+                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="dtgReceipts_PreviewMouseLeftButtonDown"/>
               </Style>
             </DataGrid.Resources>
 
@@ -219,7 +218,7 @@
                     <TextBox x:Name="txtTotalToPay" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" Margin="685,0,0,-3"/>
 
                     <DataGrid x:Name="dtgGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" 
-                              ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               IsSynchronizedWithCurrentItem="True" Margin="0,2,0,23" RowDetailsVisibilityMode="Collapsed"
                               CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" 
                               PreparingCellForEdit="grdGifts_PreparingCellForEdit" 
