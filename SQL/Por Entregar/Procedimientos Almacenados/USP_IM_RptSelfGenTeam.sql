@@ -1,3 +1,21 @@
+USE [OrigosVCPalace]
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_IM_RptSelfGenTeam]    Script Date: 09/05/2016 10:28:56 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[USP_IM_RptSelfGenTeam]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[USP_IM_RptSelfGenTeam]
+GO
+
+USE [OrigosVCPalace]
+GO
+
+/****** Object:  StoredProcedure [dbo].[USP_IM_RptSelfGenTeam]    Script Date: 09/05/2016 10:28:56 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -6,10 +24,11 @@
 **		1.- SelfGen 2.- SelfGen Team
 **
 ** [ecanul] 25/07/2016 Created
+** [ecanul] 05/09/2016 Modified corregifo error que agregaba un show a algunos vendedores
 **
 */
 
-CREATE PROCEDURE dbo.USP_IM_RptSelfGenTeam
+CREATE PROCEDURE [dbo].[USP_IM_RptSelfGenTeam]
 		@DateFrom Datetime,				--Fecha Inicio
 		@DateTo Datetime,				--Fecha Fin
 		@SalesRooms varchar(50),			-- SalesRooms
@@ -47,7 +66,6 @@ SELECT
 	0 SalesAmount,
 	dbo.UFN_IM_GetSelfGenType(G.guLiner1,G.guPRInvit1,G.guPRInvit2,G.guPRInvit3) SelfGenType
 FROM dbo.Guests G
-LEFT JOIN dbo.Sales S on S.sagu = G.guID
 LEFT JOIN dbo.Personnel P on P.peID = G.guLiner1
 WHERE 
 	--Fecha Show
@@ -77,7 +95,6 @@ SELECT
 	0 SalesAmount,
 	dbo.UFN_IM_GetSelfGenType(G.guLiner2,G.guPRInvit1,G.guPRInvit2,G.guPRInvit3) SelfGenType
 FROM dbo.Guests G
-LEFT JOIN dbo.Sales S on S.sagu = G.guID
 LEFT JOIN dbo.Personnel P on P.peID = G.guLiner2
 WHERE 
 	--Fecha Show
@@ -226,7 +243,7 @@ BEGIN
 	from @table T
 	LEFT JOIN dbo.Guests G ON G.guID = T.GUID
 	LEFT JOIN dbo.Sales S ON S.saID = T.saID
-	WHERE T.id = @count-- AND T.saID != @saID
+	WHERE T.id = @count
 	GROUP BY T.Liner, S.saID, S.saProcD, S.saD, G.guOverflow, G.guLiner1, S.saCancel, S.sast, T.saID,
 	G.guLiner2, S.saGrossAmount, S.saLiner1, S.saLiner2, T.SalesAmount, T.Show, T.Sale, T.SelfGenType
 	-- incrementa el contador
@@ -300,3 +317,6 @@ LEFT JOIN dbo.Personnel P ON P.peID = T.Liner
 DROP TABLE #Totals
 
 SELECT * FROM @Report ORDER BY SelfGenType, TVol DESC, TSales DESC, TUPS DESC
+GO
+
+
