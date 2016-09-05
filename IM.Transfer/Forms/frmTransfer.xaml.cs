@@ -4,16 +4,17 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using System.Windows.Input;
-using System.Windows.Forms;
+
+
 
 using IM.Base.Helpers;
+using IM.Base.Classes;
 using IM.BusinessRules.BR;
 using IM.Services.Helpers;
 using IM.Services.HotelService;
 using IM.Services.IntranetService;
 using PalaceResorts.Common.PalaceTools;
-using System.ComponentModel;
+
 using System.Linq;
 using IM.Model;
 using System.Diagnostics;
@@ -35,7 +36,7 @@ namespace IM.Transfer.Forms
     #region Atributos
 
     #region Parametros para trasnferencia de Reservaciones
-    
+
     DispatcherTimer dispathcerTransferReservations = new DispatcherTimer();//INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER PARA EL TEIMPO DE EJECUCION DE LAS ACTUALIZACIONES
     private static TimeSpan _startTimeReservations;//Hora inicial del proceso de transferencia de reservaciones
     private static TimeSpan _endTimeReservations;//Hora final del proceso de transferencia de reservaciones
@@ -44,11 +45,12 @@ namespace IM.Transfer.Forms
     private static int _daysAfterDAY;//Numero de dias posteriores al dia de hoy para obtener reservacione
     private DateTime _lastReservations;//Fecha de ultima transferencia de reservaciones
     private DateTime _nextReservations; // Fecha proxima que se ejecutara la transferencia de reservaciones
-    
+    public int iTotalRecordsAddTransfer = 0; // valor para determinar los registros agregados en la transferencia de reservaciones
+
     #endregion
 
     #region Parametros para trasnferencias de Exchange Rate
-    public static decimal _exchangeRateType; 
+
     private static TimeSpan _tranferExchangeRatesStartTime;//Hora inicial del proceso de actualización de tipos de cambio
     private static TimeSpan _tranferExchangeRatesEndTime;//Hora final del proceso de actualización de tipos de cambio
     private static TimeSpan _tranferExchangeRatesIntervalTime;//Intervalo de tiempo del proceso de actualización de tipos de cambio
@@ -59,8 +61,8 @@ namespace IM.Transfer.Forms
 
     #region _dtmServerDate
     //Datetime utilizado para la fecha del servidor.
-    public static DateTime _dtmServerDate = new DateTime();
-    public static string _currencyId;
+    public static DateTime _dtmServerDate;
+    
     //Datetime para la fecha actual.
     public static DateTime _dateToday;
     #endregion
@@ -74,19 +76,19 @@ namespace IM.Transfer.Forms
 
     #region Lista de registros
     // lista de transacciones de reservaciones
-    public static List<LogHelper.Transaction> listTransactionsExchangeReservations = new List<LogHelper.Transaction>();
+    public static List<Transaction> listTransactionsExchangeReservations = new List<Transaction>();
     CollectionViewSource reservationsCollectionViewSource;
     // lista de transacciones de exchange rate
-    public static List<LogHelper.Transaction> listTransactionsReservations = new List<LogHelper.Transaction>();
+    public static List<Transaction> listTransactionsReservations = new List<Transaction>();
     CollectionViewSource exchangeRateCollectionViewSource;
     #endregion
 
     #region timeWatch
     // Utilizado para calcular el tiempo que se tarda en llevar el proceso de obtencion de reservaciones
-    public static Stopwatch timeWatchReservations = new Stopwatch(); 
+    public static Stopwatch timeWatchReservations = new Stopwatch();
     public static TimeSpan timeGetReservations = TimeSpan.MinValue;
     // Utilizado para calcular el tiempo que se tarda en llevar el proceso de obtencion de exchange rate
-    public static Stopwatch timeWatchExchangeRate = new Stopwatch(); 
+    public static Stopwatch timeWatchExchangeRate = new Stopwatch();
     public static TimeSpan timeGetExchangeRate = TimeSpan.MinValue;
     #endregion
 
@@ -130,7 +132,7 @@ namespace IM.Transfer.Forms
       // inicializamos los viewsource
       exchangeRateCollectionViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("exchangeRateCollectionViewSource")));
       reservationsCollectionViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("reservationsCollectionViewSource")));
-     
+
     }
     #endregion
 
@@ -141,7 +143,8 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    private void InitializeValuesParameters() {
+    private void InitializeValuesParameters()
+    {
       //Se inicializan los valores de los parametros para la transferencia de reservaciones.
       _startTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("StartTimeReservations"));
       _endTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("EndTimeReservations"));
@@ -152,18 +155,18 @@ namespace IM.Transfer.Forms
       dispathcerTransferReservations.Interval = TimeSpan.FromSeconds(1); ;
 
       // fecha actual
-      _dateToday = DateTime.Now;
+      _dateToday = BRHelpers.GetServerDateTime();
 
       //se inicializan los parametros para ejecutar ExchangeRate
       _tranferExchangeRatesStartTime = TimeSpan.Parse(ConfigHelper.GetString("StartTimeExchangeRates"));
       _tranferExchangeRatesEndTime = TimeSpan.Parse(ConfigHelper.GetString("EndTimeExchangeRates"));
       _tranferExchangeRatesIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("IntervalTimeExchangeRates"));
-      
-      _lastExchangeRate = DateTime.Now;
-      _lastReservations = DateTime.Now;
+
+      _lastExchangeRate = BRHelpers.GetServerDateTime();
+      _lastReservations = BRHelpers.GetServerDateTime();
       //EL INTERVALO DEL TIMER CON LA CLASE DISPATCHERTIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO PARA EJECUTAR EL EXCHANGE RATE
       dispathcerExchangeRate.Interval = TimeSpan.FromSeconds(1); ;
-      
+
 
       // archivo para inicializar los valores booleanos de trasnferencia de reservaciones.
       string strArchivo = Path.Combine(AppContext.BaseDirectory, "Configuration.ini");
@@ -183,17 +186,18 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public void InitializeTransfersExchangeRate() {
+    public void InitializeTransfersExchangeRate()
+    {
       //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
       dispathcerExchangeRate.Tick += async (s, a) =>
       {
         dispathcerExchangeRate.Stop();
         //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
         // validamos que la hora actual este en el rango de fechas para realizar la actualizacion
-        if (DateHelper.IsRangeHours(DateTime.Now.TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime) && (!blnRunOrCancelExchangeRate))
+        if (DateHelper.IsRangeHours(BRHelpers.GetServerDateTime().TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime) && (!blnRunOrCancelExchangeRate))
         {
           // se ejecuta el proceso de actualizacion de exchange rate.
-          await StartExchangeRate(); 
+          await StartExchangeRate();
         }
         // asigmamos el interval time en caso de que sea la primera vez que se este iniciando
         if (dispathcerExchangeRate.Interval == TimeSpan.FromSeconds(1))
@@ -217,10 +221,10 @@ namespace IM.Transfer.Forms
       {
         dispathcerTransferReservations.Stop();
         //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
-       
+
         // validamos que la hora actual este en el rango de fechas para realizar la actualizacion
-        if (DateHelper.IsRangeHours(DateTime.Now.TimeOfDay, _startTimeReservations, _endTimeReservations) && !blnRunOrCancelReservations)
-        {          
+        if (DateHelper.IsRangeHours(BRHelpers.GetServerDateTime().TimeOfDay, _startTimeReservations, _endTimeReservations) && !blnRunOrCancelReservations)
+        {
           // se ejecuta el proceso de actualizacion de reservaciones
           await StartReservations();
         }
@@ -276,10 +280,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Finish", "Process Finished.");
         cancelTokenReservations.Dispose();
         cancelTokenReservations = null;
-        //dispathcerTransferReservations.Start();
       }
-      
-      
+
+
     }
     #endregion
 
@@ -294,13 +297,12 @@ namespace IM.Transfer.Forms
     {
       // Se valida el estatus del formulario
       StatusForm();
-
       //Se inicia el proceso para Exchange Rate
       blnRunOrCancelExchangeRate = true;
       UpdateButton(btnExchangeRate, "Cancel updating of Exchange Rate");
       OnOffBlinkExchangeRate();
       cancelTokenExchangeRate = new CancellationTokenSource();
-      
+
       try
       {
         await TransferExchangeRates();
@@ -322,7 +324,7 @@ namespace IM.Transfer.Forms
         cancelTokenExchangeRate.Dispose();
         cancelTokenExchangeRate = null;
       }
-      
+
     }
     #endregion
 
@@ -337,20 +339,19 @@ namespace IM.Transfer.Forms
     ///</history>
     private async Task LoadDataGRidExchangeRate()
     {
-      
-        DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
-        listTransactionsExchangeReservations = await LogHelper.LoadHistoryLog("ExchangeRate", DateTime.Now, dateTo);
-        if (listTransactionsExchangeReservations.Count > 0 && listTransactionsExchangeReservations != null)
+      DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
+      listTransactionsExchangeReservations = await LogHelper.LoadHistoryLog("ExchangeRate", BRHelpers.GetServerDateTime(), dateTo);
+      if (listTransactionsExchangeReservations.Count > 0 && listTransactionsExchangeReservations != null)
+      {
+        var last = listTransactionsExchangeReservations.LastOrDefault(level => level.LogLevel.ToUpper() == "FINISH");
+        if (last != null)
         {
-          var last = listTransactionsExchangeReservations.LastOrDefault(level => level.LogLevel.ToUpper() == "FINISH");
-          if (last != null)
-          {
-            _lastExchangeRate = last.Date;
-            _nextExchangeRate = last.Date;
-          }
-          UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
+          _lastExchangeRate = last.Date;
+          _nextExchangeRate = last.Date;
         }
-      
+        UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
+      }
+
     }
     #endregion
 
@@ -361,22 +362,19 @@ namespace IM.Transfer.Forms
     ///</history>
     private async Task LoadDataGRidReservations()
     {
-      
-        DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
-        listTransactionsReservations = await LogHelper.LoadHistoryLog("Reservations", DateTime.Now, dateTo);
-        if (listTransactionsExchangeReservations.Count > 0 && listTransactionsExchangeReservations != null)
-        {
-          var last = listTransactionsReservations.LastOrDefault(level => level.LogLevel.ToUpper() == "FINISH");
-          if (last != null)
-          {
-            _lastReservations = last.Date;
-            _nextReservations = last.Date;
-          }
-          UpdatingGrid(grdLogReservations, listTransactionsReservations, reservationsCollectionViewSource);
-        }
-      
-      
 
+      DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
+      listTransactionsReservations = await LogHelper.LoadHistoryLog("Reservations", BRHelpers.GetServerDateTime(), dateTo);
+      if (listTransactionsExchangeReservations.Count > 0 && listTransactionsExchangeReservations != null)
+      {
+        var last = listTransactionsReservations.LastOrDefault(level => level.LogLevel.ToUpper() == "FINISH");
+        if (last != null)
+        {
+          _lastReservations = last.Date;
+          _nextReservations = last.Date;
+        }
+        UpdatingGrid(grdLogReservations, listTransactionsReservations, reservationsCollectionViewSource);
+      }
     }
     #endregion
 
@@ -393,7 +391,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task DoTransfer()//object Sender, DoWorkEventArgs e
     {
-      
+
       // Transferencia iniciada
       UpdateLabelStatusReservations("PROCESSING");
       AddLogGridReservations("Start", "Transfer Started.");
@@ -403,21 +401,21 @@ namespace IM.Transfer.Forms
       if ((options != null) && (options.Count > 0))
       {
         //obtenemos los parametros de configuracion
-        var transferStartData  = options.FirstOrDefault();
+        var transferStartData = options.FirstOrDefault();
         if (transferStartData != null)
         {
           blnOneNight = transferStartData.ocOneNightV;
           blnTwoNight = transferStartData.ocTwoNightV;
         }
       }
-      
+
       UpdateLabelStatusReservations("STARTED");
-      
+
       // obtenemos las zonas de transferencia
       List<ZoneTransfer> zoneTransfer = await BRZones.GetZonesTransfer();
       // si hay al menos una zona
-      if (zoneTransfer.Count > 0 && zoneTransfer != null)
-      { 
+      if (zoneTransfer != null && zoneTransfer.Count > 0)
+      {
         // recorremos las zonas
         foreach (ZoneTransfer zone in zoneTransfer)
         {
@@ -425,6 +423,7 @@ namespace IM.Transfer.Forms
           // validamos que hayan hoteles para la zona     
           if (!(String.IsNullOrEmpty(zone.znID) && !String.IsNullOrWhiteSpace(zone.znID)) && (!String.IsNullOrEmpty(zone.znN) && !String.IsNullOrWhiteSpace(zone.znN)) && (!String.IsNullOrEmpty(zone.znZoneHotel) && !String.IsNullOrWhiteSpace(zone.znZoneHotel)))
           {
+            iTotalRecordsAddTransfer = 0; // inicializamos en cero el total de registros agregados
             //exportamos las reservaciones a la tabla de transferencia
             int itotalReservations = await ExportToTransfer(zone.znID, zone.znN, zone.znZoneHotel);
 
@@ -432,11 +431,12 @@ namespace IM.Transfer.Forms
             // exportamos los registros de la tabla de transferencia a la tabla de huespedes
             if (itotalReservations > 0) await ExportToGuests();
 
+            // si la actualización no fue cancelada mostramos el total de reservaciones actualizadas
+            AddLogGridReservations("Info", $"{ iTotalRecordsAddTransfer } Records Added to Zone {zone.znN}.");
+            
             //Total de registros agregados
             AddLogGridReservations("Info", "Transfer Completed.");
 
-            // si la actualización no fue cancelada mostramos el total de reservaciones actualizadas
-            AddLogGridReservations("Info", $"{ itotalReservations } Records Added.");
           }
           else
           {
@@ -495,11 +495,9 @@ namespace IM.Transfer.Forms
           // valida si se ha cancelado la operación.
           if (cancelTokenReservations.Token.IsCancellationRequested)
           { iCountReservations = 0; break; }
-           
+
           //exportamos las reservaciones a la tabla de transferencia
-          //cont = cont + 1;
           dPorcent = Porcent(cont++, iCountReservations);
-          //progressReservations.Report(dPorcent);
           AddValueProgressBarReservations(porcentBase: dPorcent);
           // desplegamos la reservacion que se esta transfiriendo
           strTransferingReservation = $"Transfering Reservation {reservationOrigos.Hotel} No. {reservationOrigos.Folio} \r\nCheck In Date: {reservationOrigos.Arrival:dd/MMM/yyyy}";
@@ -537,7 +535,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task AddTransfer(ReservationOrigosTransfer reservationOrigos)
     {
-      
+
       // localizamos la reservacion
       bool existReservation = await BRTransfer.ExistReservation(reservationOrigos.Hotel, reservationOrigos.Folio.ToString());
       if (!existReservation)
@@ -575,7 +573,7 @@ namespace IM.Transfer.Forms
       // inicializamos el rango de fecha para obtener las reservaciones
       DateTime dateFrom = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
       DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysAfterDAY);
-      
+
 
       // validamos si existe un archivo inicial
       string strArchivo = Path.Combine(AppContext.BaseDirectory, "Configuration.ini");
@@ -595,6 +593,8 @@ namespace IM.Transfer.Forms
         timeWatchReservations.Start();
         try
         {
+          // obtenemos las reservaciones e la zona
+          AddLogGridReservations("Info", $"Getting Reservations from Zone {zoneName} (Check In Date: {DateHelper.DateRange(dateFrom, dateTo)} , Hotels: {leadSourceID} ).");
           reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID);
         }
         catch (Exception ex)
@@ -602,9 +602,9 @@ namespace IM.Transfer.Forms
           AddLogGridReservations("Error", UIHelper.GetMessageError(ex));
         }
 
-        
+
         timeWatchReservations.Stop();
-        
+
 
         // valida si se obtubieron reservaciones
         if (reservations != null && reservations.Count > 0)
@@ -659,125 +659,129 @@ namespace IM.Transfer.Forms
     public async Task<Model.Transfer> Transfer(ReservationOrigosTransfer reservationOrigosTransfer)
     {
       Model.Transfer transfer = new Model.Transfer();
-      await Task.Run(() => {   
-      #region Transfer
+      await Task.Run(() =>
+      {
+        #region Transfer
 
-      //Hotel
-      transfer.tls = reservationOrigosTransfer.Hotel;
-      
-      //Folio
-      transfer.tHReservID = Convert.ToString(reservationOrigosTransfer.Folio);
-      
-      //Nombre
-      transfer.tFirstName = DeleteInvalidCharacters(reservationOrigosTransfer.FirstName);
-      
-      //Apellido
-      transfer.tLastName = DeleteInvalidCharacters(reservationOrigosTransfer.LastName);
-      
-      //Habitacion
-      transfer.tRoomNum = reservationOrigosTransfer.Room;
-      
-      //Tipo de habitacion
-      transfer.trt = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.RoomType);
-      transfer.trtN = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.RoomTypeN);
-      
-      //Pax
-      transfer.tPax = reservationOrigosTransfer.Pax;
-      
-      //Fecha de llegada
-      transfer.tCheckInD = reservationOrigosTransfer.Arrival;
-      
-      //Fecha de salida
-      transfer.tCheckOutD = reservationOrigosTransfer.Departure;
-      
-      //Correo electronico
-      transfer.tEmail = (ValidateHelper.IsValidEmail(reservationOrigosTransfer.Email)) ? reservationOrigosTransfer.Email : "";
-     
-      //Ciudad
-      transfer.tCity = Trim(reservationOrigosTransfer.City);
-      //Estado
-      transfer.tState = Trim(reservationOrigosTransfer.State);
-      //Pais
-      transfer.tcoID = SetIDName(reservationOrigosTransfer.Country);
-      transfer.tcoN = SetIDName(reservationOrigosTransfer.Country, reservationOrigosTransfer.CountryN);
-      
-      //Agencia
-      transfer.tagID = SetIDName(reservationOrigosTransfer.Agency);
-      transfer.tagN = SetIDName(reservationOrigosTransfer.Agency, reservationOrigosTransfer.AgencyN);
-      
-      //Pais de la agencia
-      transfer.tcoAID = SetIDName(reservationOrigosTransfer.CountryAgency);
-      transfer.tcoAN = SetIDName(reservationOrigosTransfer.CountryAgency, reservationOrigosTransfer.CountryAgencyN);
+        //Hotel
+        transfer.tls = reservationOrigosTransfer.Hotel;
 
-      //Club de la membresia
-      transfer.tcl = ConvertHelper.StringToIntOrNull(reservationOrigosTransfer.Club.ToString());
-      
-      //Compañia de la membresia
-      transfer.tCompany = reservationOrigosTransfer.Company;
+        //Folio
+        transfer.tHReservID = Convert.ToString(reservationOrigosTransfer.Folio);
 
-      //Numero de membresia
-      transfer.tMembershipNum = reservationOrigosTransfer.Membership;
-      //transfer.tMember = ConvertHelper.StringToBool(reservationOrigosTransfer.Membership.Trim());
+        //Nombre
+        transfer.tFirstName = DeleteInvalidCharacters(reservationOrigosTransfer.FirstName);
 
-      //Estatus
-      transfer.tGuestStatus = Trim(reservationOrigosTransfer.Status);
-      
-      //En grupo
-      transfer.tOnGroup = reservationOrigosTransfer.Group;
-      
-      //Cortesia
-      transfer.tComplim = reservationOrigosTransfer.Courtesy;
-      
-      //Contrato(Se usa el campo opcional 1)
-      transfer.tO1 = Trim(reservationOrigosTransfer.Contract);
-      transfer.tcnN = Trim(reservationOrigosTransfer.ContractN);
-     
-      //Tipo de huesped (Se usa el campo opcional 2)
-      transfer.tO2 = Trim(reservationOrigosTransfer.GuestType);
-      
-      //Tarjeta de credito
-      transfer.tCCType = Trim(reservationOrigosTransfer.CreditCard);
-      
-      //Reservaciones enlazadas - Consecutivo (0 no enlazada, 1 primera, 2 segunda, etc.)
-      transfer.tDivResConsec = Convert.ToByte(reservationOrigosTransfer.LinkedConsecutive);
-      
-      //Reservaciones enlazadas - Hotel anterior
-      transfer.tDivResLeadSource = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.LinkedHotelPrevious);
-      
-      //Reservaciones enlazadas - Folio de reservacion anterior
-      transfer.tDivResResNum = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.LinkedHotelPrevious);
-      //      Tipo de socio
-      // - G - Guest (Invitado)
-      // - M - Member (Socio))        
-      transfer.tGuestRef = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.MemberType);
-      
-      //Fechas de cumpleaños
-      transfer.tBirthDate1 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate);
-      transfer.tBirthDate2 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate2);
-      transfer.tBirthDate3 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate3);
-      transfer.tBirthDate4 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate4);
-      
-      //Edades
-      transfer.tAge1 = DateHelper.GetAge(reservationOrigosTransfer.BirthDate);
-      transfer.tAge2 = DateHelper.GetAge(reservationOrigosTransfer.BirthDate2);
-      
-      //Tipo de reservacion
-      transfer.tReservationType = reservationOrigosTransfer.Type;
-      //Hotel anterior
-      transfer.tHotelPrevious = reservationOrigosTransfer.HotelPrevious;
-      // Folio anterior
-      transfer.tFolioPrevious = reservationOrigosTransfer.FolioPrevious;
-      //Motivo de indisponibilidad (0 - AVAILABLE)
-      transfer.tum = 0;
-      //Disponibilidad (No disponible)
-      
-      transfer.tAvail = false;
-      //Idioma
-      //transfer.tla = ;
-      //Id del perfil de Opera
-      transfer.tIdProfileOpera = reservationOrigosTransfer.IdProfileOpera;
-      //Fecha y hora de modificacion
-      transfer.tEditDT = DateTime.Now;
+        //Apellido
+        transfer.tLastName = DeleteInvalidCharacters(reservationOrigosTransfer.LastName);
+
+        //Habitacion
+        transfer.tRoomNum = reservationOrigosTransfer.Room;
+
+        //Tipo de habitacion
+        transfer.trt = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.RoomType);
+        transfer.trtN = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.RoomTypeN);
+
+        //Pax
+        transfer.tPax = reservationOrigosTransfer.Pax;
+
+        //Fecha de llegada
+        transfer.tCheckInD = reservationOrigosTransfer.Arrival;
+
+        //Fecha de salida
+        transfer.tCheckOutD = reservationOrigosTransfer.Departure;
+
+        //Correo electronico
+        transfer.tEmail = (ValidateHelper.IsValidEmail(reservationOrigosTransfer.Email)) ? reservationOrigosTransfer.Email : "";
+
+        //Ciudad
+        transfer.tCity = Trim(reservationOrigosTransfer.City);
+        //Estado
+        transfer.tState = Trim(reservationOrigosTransfer.State);
+        //Pais
+        transfer.tcoID = SetIDName(reservationOrigosTransfer.Country);
+        transfer.tcoN = SetIDName(reservationOrigosTransfer.Country, reservationOrigosTransfer.CountryN);
+
+        //Agencia
+        transfer.tagID = SetIDName(reservationOrigosTransfer.Agency);
+        transfer.tagN = SetIDName(reservationOrigosTransfer.Agency, reservationOrigosTransfer.AgencyN);
+
+        //Pais de la agencia
+        transfer.tcoAID = SetIDName(reservationOrigosTransfer.CountryAgency);
+        transfer.tcoAN = SetIDName(reservationOrigosTransfer.CountryAgency, reservationOrigosTransfer.CountryAgencyN);
+
+        //Club de la membresia
+        if (reservationOrigosTransfer.Club != Services.HotelService.Club.None)
+        {
+          transfer.tcl = (int)reservationOrigosTransfer.Club;
+        }        
+
+        //Compañia de la membresia
+        transfer.tCompany = reservationOrigosTransfer.Company;
+
+        //Numero de membresia
+        transfer.tMembershipNum = reservationOrigosTransfer.Membership;
+        //transfer.tMember = ConvertHelper.StringToBool(reservationOrigosTransfer.Membership.Trim());
+
+        //Estatus
+        transfer.tGuestStatus = Trim(reservationOrigosTransfer.Status);
+
+        //En grupo
+        transfer.tOnGroup = reservationOrigosTransfer.Group;
+
+        //Cortesia
+        transfer.tComplim = reservationOrigosTransfer.Courtesy;
+
+        //Contrato(Se usa el campo opcional 1)
+        transfer.tO1 = Trim(reservationOrigosTransfer.Contract);
+        transfer.tcnN = Trim(reservationOrigosTransfer.ContractN);
+
+        //Tipo de huesped (Se usa el campo opcional 2)
+        transfer.tO2 = Trim(reservationOrigosTransfer.GuestType);
+
+        //Tarjeta de credito
+        transfer.tCCType = Trim(reservationOrigosTransfer.CreditCard);
+
+        //Reservaciones enlazadas - Consecutivo (0 no enlazada, 1 primera, 2 segunda, etc.)
+        transfer.tDivResConsec = Convert.ToByte(reservationOrigosTransfer.LinkedConsecutive);
+
+        //Reservaciones enlazadas - Hotel anterior
+        transfer.tDivResLeadSource = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.LinkedHotelPrevious);
+
+        //Reservaciones enlazadas - Folio de reservacion anterior
+        transfer.tDivResResNum = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.LinkedHotelPrevious);
+        //      Tipo de socio
+        // - G - Guest (Invitado)
+        // - M - Member (Socio))        
+        transfer.tGuestRef = ConvertHelper.StringEmptyToNull(reservationOrigosTransfer.MemberType);
+
+        //Fechas de cumpleaños
+        transfer.tBirthDate1 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate);
+        transfer.tBirthDate2 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate2);
+        transfer.tBirthDate3 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate3);
+        transfer.tBirthDate4 = DateHelper.IsDefaultDate(reservationOrigosTransfer.BirthDate4);
+
+        //Edades
+        transfer.tAge1 = DateHelper.GetAge(reservationOrigosTransfer.BirthDate);
+        transfer.tAge2 = DateHelper.GetAge(reservationOrigosTransfer.BirthDate2);
+
+        //Tipo de reservacion
+        transfer.tReservationType = reservationOrigosTransfer.Type;
+        //Hotel anterior
+        transfer.tHotelPrevious = reservationOrigosTransfer.HotelPrevious;
+        // Folio anterior
+        transfer.tFolioPrevious = reservationOrigosTransfer.FolioPrevious;
+        //Motivo de indisponibilidad (0 - AVAILABLE)
+        transfer.tum = 0;
+        //Disponibilidad (No disponible)
+
+        transfer.tAvail = false;
+        //Idioma
+        transfer.tla = "EN";
+        //Id del perfil de Opera
+        transfer.tIdProfileOpera = reservationOrigosTransfer.IdProfileOpera;
+        //Fecha y hora de modificacion
+        transfer.tEditDT = BRHelpers.GetServerDateTime();
         #endregion
       });
       return transfer;
@@ -830,7 +834,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task UpdateCountries()
     {
-      
+
       #region AddCountriesHotel
       try
       {
@@ -1053,7 +1057,7 @@ namespace IM.Transfer.Forms
       {
         AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+
     }
     #endregion
 
@@ -1607,16 +1611,19 @@ namespace IM.Transfer.Forms
       #endregion
 
       #region AddGuests
+      
       try
       {
         //agregando nuevos huespedes
         AddLogGridReservations("Insert", "Adding New Guests.");
-        await BRTransfer.AddGuests();
+        iTotalRecordsAddTransfer =  await BRTransfer.AddGuests();
       }
       catch (Exception exception)
       {
+        iTotalRecordsAddTransfer = 0;
         AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
+      
       #endregion
 
     }
@@ -1642,7 +1649,7 @@ namespace IM.Transfer.Forms
       {
         AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
       }
-      
+
     }
     #endregion
 
@@ -1681,11 +1688,11 @@ namespace IM.Transfer.Forms
     {
       string str = strString;
       char caracter = Convert.ToChar(146);
-      if(!String.IsNullOrEmpty(strString))
+      if (!String.IsNullOrEmpty(strString))
       {
         str.Replace("-", " ");
         str.Replace("'", " ");
-        str.Replace(""+caracter, " ");
+        str.Replace("" + caracter, " ");
         str.Trim();
         str.TrimEnd();
         str.TrimStart();
@@ -1715,7 +1722,7 @@ namespace IM.Transfer.Forms
       // si el strStringN es nullo o vacio retorna el valor de strString
       // de lo contrario asigna el valor de strTemp (strStringN)
       strTemp = ((!String.IsNullOrEmpty(strString) && !String.IsNullOrWhiteSpace(strString)) && (String.IsNullOrEmpty(strStringN) && String.IsNullOrWhiteSpace(strStringN))) ? strString : strTemp;
-      
+
       return strTemp;
     }
     #endregion
@@ -1733,7 +1740,7 @@ namespace IM.Transfer.Forms
     #endregion
 
     #endregion
-    
+
     #region efecto blink
 
     #region OnOffBlinkReservations
@@ -1746,7 +1753,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public void OnOffBlinkReservations(bool? blnStatus = true)
     {
-      lblStatusReservations.IsEnabled = blnStatus.Value;
+      textStatusReservations.IsEnabled = blnStatus.Value;
     }
     #endregion
 
@@ -1760,7 +1767,7 @@ namespace IM.Transfer.Forms
     /// </history>
     public void OnOffBlinkExchangeRate(bool? blnStatus = true)
     {
-      lblStatusExchangeRate.IsEnabled = blnStatus.Value;
+      textStatusExchangeRate.IsEnabled = blnStatus.Value;
     }
     #endregion
     #endregion
@@ -1805,26 +1812,26 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public void UpdatingGrid(System.Windows.Controls.DataGrid grdDataGrid, List<LogHelper.Transaction> listTransations, CollectionViewSource collectionView)
+    public void UpdatingGrid(System.Windows.Controls.DataGrid grdDataGrid, List<Transaction> listTransations, CollectionViewSource collectionView)
     {
-      
-        // valida si la lista tiene elementos
-        // validamos que ayan pasado un objeto datagrid
-        if (listTransations != null && grdDataGrid != null && collectionView != null && listTransations.Count > 0)
-        {
-          // se obtienen los primeros 500 registros.
-          var itemsSource = listTransations.Skip(Math.Max(0, listTransations.Count() - 499)).Take(499).ToList();
-          collectionView.Source = null;
-          // asignamos los registros al datagrid
-          collectionView.Source = itemsSource;
-          // refrescamos el datagrid con los nuevos elementos.
-          grdDataGrid.Items.Refresh();
-          // obtenemos el total de registros en el datagrid
-          int index = (grdDataGrid.Items.Count > 2) ? grdDataGrid.Items.Count - 1 : 0;
-          // seleccionamos el ultimo elementos en el datagrid.
-          GridHelper.SelectRow(grdDataGrid, index);
-        }
-      
+
+      // valida si la lista tiene elementos
+      // validamos que ayan pasado un objeto datagrid
+      if (listTransations != null && grdDataGrid != null && collectionView != null && listTransations.Count > 0)
+      {
+        // se obtienen los primeros 500 registros.
+        var itemsSource = listTransations.Skip(Math.Max(0, listTransations.Count() - 499)).Take(499).ToList();
+        collectionView.Source = null;
+        // asignamos los registros al datagrid
+        collectionView.Source = itemsSource;
+        // refrescamos el datagrid con los nuevos elementos.
+        grdDataGrid.Items.Refresh();
+        // obtenemos el total de registros en el datagrid
+        int index = (grdDataGrid.Items.Count > 2) ? grdDataGrid.Items.Count - 1 : 0;
+        // seleccionamos el ultimo elementos en el datagrid.
+        GridHelper.SelectRow(grdDataGrid, index);
+      }
+
     }
     #endregion
 
@@ -1843,7 +1850,7 @@ namespace IM.Transfer.Forms
       if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
       {
         // agregamos al log el registro
-        var logTransfer = LogHelper.AddTransaction("Reservations", DateTime.Now, strLogLevel, strLogMessage);
+        var logTransfer = LogHelper.AddTransaction("Reservations", BRHelpers.GetServerDateTime(), strLogLevel, strLogMessage);
         if (logTransfer != null)
         {
           // agregamos el log a la lista de logs
@@ -1866,18 +1873,18 @@ namespace IM.Transfer.Forms
     ///</history>
     public void AddLogGridExchangeRate(string strLogLevel, string strLogMessage)
     {
-      
-        // validamos que el tipo de log y el mensaje no esten vacios.
-        if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
+
+      // validamos que el tipo de log y el mensaje no esten vacios.
+      if ((!String.IsNullOrEmpty(strLogLevel) && !String.IsNullOrWhiteSpace(strLogLevel)) && (!String.IsNullOrEmpty(strLogMessage) && !String.IsNullOrWhiteSpace(strLogMessage)))
+      {
+        var logTransfer = LogHelper.AddTransaction("ExchangeRate", BRHelpers.GetServerDateTime(), strLogLevel, strLogMessage);
+        if (logTransfer != null)
         {
-          var logTransfer = LogHelper.AddTransaction("ExchangeRate", DateTime.Now, strLogLevel, strLogMessage);
-          if (logTransfer != null)
-          {
-            listTransactionsExchangeReservations.Add(logTransfer);
-            UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
-          }
+          listTransactionsExchangeReservations.Add(logTransfer);
+          UpdatingGrid(grdLogExchangeRate, listTransactionsExchangeReservations, exchangeRateCollectionViewSource);
         }
-      
+      }
+
     }
     #endregion
 
@@ -1896,7 +1903,7 @@ namespace IM.Transfer.Forms
       AddLogGridReservations("Info", "Canceling Transfer Reservations");
       UpdateLabelStatusReservations("CANCELING");
       UpdateButton(btnReservations, "Cancel updating of Reservations", false); // cambiamos el testo del boton para cancelar la transferemcia
-      if(cancelTokenReservations != null) cancelTokenReservations.Cancel();
+      if (cancelTokenReservations != null) cancelTokenReservations.Cancel();
     }
     #endregion
 
@@ -1911,7 +1918,7 @@ namespace IM.Transfer.Forms
       AddLogGridExchangeRate("Info", "Cancelling Exchange Rate");
       UpdateLabelStatusExchangeRate("CANCELING");
       UpdateButton(btnExchangeRate, "Cancel updating of Exchange Rate", false);
-      if(cancelTokenExchangeRate != null) cancelTokenExchangeRate.Cancel();
+      if (cancelTokenExchangeRate != null) cancelTokenExchangeRate.Cancel();
     }
     #endregion
 
@@ -1932,19 +1939,19 @@ namespace IM.Transfer.Forms
       blnRunOrCancelReservations = false;
       // reiniciamos a cero los valores del progresbar
       AddValueProgressBarReservations(porcentBase: 0);
-      lblPorcentProgresBarReservations.Content = string.Empty;
-      
+      textPorcentProgresBarReservations.Text = string.Empty;
+
       // cambiamos el label del boton de reservaciones
       UpdateButton(btnReservations, "Update Reservations");
       // borramos los registros del label de visor de reservaciones
-      lblTransferReservations.Content = string.Empty;
-      
+      textTransferReservations.Text = string.Empty;
+
       // actualizamos la hora y fecha de la ultima y proxima actualización.
-      _lastReservations = DateTime.Now;
+      _lastReservations = BRHelpers.GetServerDateTime();
       _nextReservations = DateHelper.AddTimeDate(_intervalTimeReservations);
-      lblLastTransferReservations.Content = lblTextLast + _lastReservations.ToString();
-      lblNextTransferReservations.Content = lblTextNext + _nextReservations.ToString();
-     
+      textLastTransferReservations.Text = lblTextLast + _lastReservations.ToString();
+      textNextTransferReservations.Text = lblTextNext + _nextReservations.ToString();
+
       // Detenemos el efecto blink
       OnOffBlinkReservations(false);
       // ponemos en stand by el label de estatus
@@ -1963,18 +1970,18 @@ namespace IM.Transfer.Forms
     public void ResetParametersExchangeRate()
     {
       // actualizamos la fecha y hora de la ultima altualización
-      _lastExchangeRate = DateTime.Now;
-      lblLastTransferExchangeRate.Content = lblTextLast + _lastExchangeRate.ToString();
-      
+      _lastExchangeRate = BRHelpers.GetServerDateTime();
+      textLastTransferExchangeRate.Text = lblTextLast + _lastExchangeRate.ToString();
+
       // actualizamos la fecha y hora de la siguiente actualización
       _nextExchangeRate = DateHelper.AddTimeDate(_tranferExchangeRatesIntervalTime);
       // actualizamos el label de estatus de la actualización
-      lblNextTransferExchangeRate.Content = lblTextNext + _nextExchangeRate.ToString();
-     
+      textNextTransferExchangeRate.Text = lblTextNext + _nextExchangeRate.ToString();
+
       // regresamos a cero el progressbar
       AddValueProgressBarExchangeRate(value: 0);
-      lblPorcentProgressExchangeRate.Content = string.Empty;
-     
+      textPorcentProgressExchangeRate.Text = string.Empty;
+
       // cambiamos el estatus de la bandera de actualización
       blnRunOrCancelExchangeRate = false;
       // actualizamos el label del button
@@ -1984,14 +1991,11 @@ namespace IM.Transfer.Forms
       OnOffBlinkExchangeRate(false);
       // Pone en stand by el label de estatus.
       UpdateLabelStatusExchangeRate("STAND BY");
-
-      
-
     }
     #endregion
-    
-    #endregion
 
+    #endregion
+        
     #region Actualiza Labels
 
     #region UpdateLabelTrasnferReservations
@@ -2002,7 +2006,7 @@ namespace IM.Transfer.Forms
     public void UpdateLabelTrasnferReservations(string stringContent)
     {
       // validamos que el conetenido no sea nullo o vacio.
-      lblTransferReservations.Content = (!String.IsNullOrEmpty(stringContent) && !String.IsNullOrWhiteSpace(stringContent)) ? stringContent : ""; ;
+      textTransferReservations.Text = (!String.IsNullOrEmpty(stringContent) && !String.IsNullOrWhiteSpace(stringContent)) ? stringContent : ""; ;
     }
     #endregion
 
@@ -2013,7 +2017,7 @@ namespace IM.Transfer.Forms
     /// <param name="stringContent">contenido del label status</param>
     public void UpdateLabelStatusExchangeRate(string stringContent)
     {
-      lblStatusExchangeRate.Content = stringContent;
+      textStatusExchangeRate.Text = stringContent;
     }
     #endregion
 
@@ -2024,7 +2028,7 @@ namespace IM.Transfer.Forms
     /// <param name="stringContent">contenido del label status</param>
     public void UpdateLabelStatusReservations(string stringContent)
     {
-      lblStatusReservations.Content = stringContent;
+      textStatusReservations.Text = stringContent;
     }
     #endregion
 
@@ -2040,18 +2044,18 @@ namespace IM.Transfer.Forms
     public void InitializerProgressBar()
     {
       //Configuración del ProgressBar de exchange rate
-      
+
       progresBarExchangeRate.Minimum = 0;//valor mínimo (inicio de la barra de carga)
       progresBarExchangeRate.Maximum = 100;//valor máximo(hasta donde se carga, como ejemplo 100)
       progresBarExchangeRate.Value = 0;//valor de inicio
-      lblPorcentProgressExchangeRate.Content = "";//String.Format("{0:0%}", 0);
+      textPorcentProgressExchangeRate.Text = "";//String.Format("{0:0%}", 0);
 
       //Configuración del ProgressBar de reservaciones
       progresBarReservations.Minimum = 0;//valor mínimo (inicio de la barra de carga)
       progresBarReservations.Maximum = 100;//valor máximo(hasta donde se carga, como ejemplo 100)
       progresBarReservations.Value = 0;//valor de inicio
-      
-      lblPorcentProgresBarReservations.Content = "";//String.Format("{0:0%}", 0);
+
+      textPorcentProgresBarReservations.Text = "";//String.Format("{0:0%}", 0);
 
 
     }
@@ -2063,8 +2067,9 @@ namespace IM.Transfer.Forms
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public void AddValueProgressBar(System.Windows.Controls.ProgressBar progressBar, System.Windows.Controls.Label lblProcent,  double? value = null, double? porcentBase = null)
+    public void AddValueProgressBar(System.Windows.Controls.ProgressBar progressBar, System.Windows.Controls.TextBlock textProcent, double? value = null, double? porcentBase = null)
     {
+      
       int valueIncrement = 0;
       double porcentValue = 0.00;
       if (porcentBase != null)
@@ -2087,12 +2092,12 @@ namespace IM.Transfer.Forms
           }
         }
       }
-      if ((valueIncrement >=0) && (porcentValue >=0) && (!valueIncrement.Equals(null)) && (!porcentValue.Equals(null)))
+      if ((valueIncrement >= 0) && (porcentValue >= 0) && (!valueIncrement.Equals(null)) && (!porcentValue.Equals(null)))
       {
         progressBar.Value = valueIncrement;
-        lblProcent.Content = String.Format("{0:0} %", porcentValue);
+        textProcent.Text = String.Format("{0:0} %", porcentValue);
       }
-      
+
 
     }
     #endregion
@@ -2127,7 +2132,7 @@ namespace IM.Transfer.Forms
     ///</history>
     public void AddValueProgressBarReservations(double porcentBase)
     {
-      AddValueProgressBar(progressBar: progresBarReservations, lblProcent: lblPorcentProgresBarReservations, porcentBase:porcentBase);
+      AddValueProgressBar(progressBar: progresBarReservations, textProcent: textPorcentProgresBarReservations, porcentBase: porcentBase);
     }
     #endregion
 
@@ -2139,7 +2144,7 @@ namespace IM.Transfer.Forms
     ///</history>
     public void AddValueProgressBarExchangeRate(double value)
     {
-      AddValueProgressBar(progressBar: progresBarExchangeRate, lblProcent: lblPorcentProgressExchangeRate, value:value);
+      AddValueProgressBar(progressBar: progresBarExchangeRate, textProcent: textPorcentProgressExchangeRate, value: value);
     }
     #endregion
 
@@ -2159,28 +2164,29 @@ namespace IM.Transfer.Forms
       _dtmServerDate = BRHelpers.GetServerDate();
       AddLogGridExchangeRate("Start", "Start Updating Exchange Rates");
       AddValueProgressBarExchangeRate(value: 1);
-      Thread.Sleep(100);
 
       //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
       UpdateLabelStatusExchangeRate("PROCESSING");
       await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
       AddValueProgressBarExchangeRate(value: 2);
       // actualizamos los tipos de cambio
-      await UpdateExchangeRatesFromIntranet();
+      await UpdateExchangeRateMexicanPesos();
       // actualizamos el tipo de cambio Canadience
-      await UpdateExchangeRatesFromHotel();
+      await UpdateExchangeRateCanadianDollars();
 
     }
     #endregion
 
-    #region UpdateExchangeRatesFromIntranet
-    public async Task UpdateExchangeRatesFromIntranet()
+    #region UpdateExchangeRateMexicanPesos
+    public async Task UpdateExchangeRateMexicanPesos()
     {
+      timeWatchExchangeRate.Start();
+      AddLogGridExchangeRate("Info", "Updating exchange rate (Mexican Pesos)...");
       //Se obtiene la fecha del servidor
       _dtmServerDate = BRHelpers.GetServerDateTime();
       //obtenemos el tipo de cambio de la Intranet
       AddValueProgressBarExchangeRate(value: 2);
-      AddLogGridExchangeRate("Info", "Getting Exchange Rate from Intranet Service");
+      AddLogGridExchangeRate("Info", "Getting exchange rate (Mexican Pesos) from Intranet Service...");
       TipoCambioTesoreria exchangeRate = null;
       try
       {
@@ -2188,13 +2194,14 @@ namespace IM.Transfer.Forms
       }
       catch (Exception ex)
       {
+        AddLogGridExchangeRate("Warning", "Error ocurred in updating exchange rate (Mexican Pesos).");
         AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
       }
-      
+
       if (exchangeRate != null)
       {
-        timeWatchExchangeRate.Start();
-        _exchangeRateType = Convert.ToDecimal(exchangeRate.TipoCambio);
+        
+        decimal _exchangeRateType = Convert.ToDecimal(exchangeRate.TipoCambio);
 
         AddValueProgressBarExchangeRate(value: 3);
         //comparamos si el cambio es positivo y mayor a cero
@@ -2202,86 +2209,108 @@ namespace IM.Transfer.Forms
         {
           cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
           AddValueProgressBarExchangeRate(value: 4);
-          _currencyId = "MX";
+         
           //Se realiza la actualizacion y se registra en el log la inicialización
-          AddLogGridExchangeRate("Info", $"Updating Exchange Rate { _currencyId } ({_exchangeRateType})");
+          AddLogGridExchangeRate("Info", $"Updating exchange rate (Mexican Pesos) ...");
           // actualizamos el exchange rate
-          await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, _currencyId, _exchangeRateType);
-          timeWatchExchangeRate.Stop();
+          decimal dblExchangeRate = 1 / _exchangeRateType;
+          await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, "MX", dblExchangeRate);
+          
+          AddLogGridExchangeRate("Info", $"1 US Dollar = { string.Format("{0:0.00000000}", exchangeRate.TipoCambio) }  Mexican Pesos");
+          AddLogGridExchangeRate("Info", $"1 Mexican Peso = { string.Format("{0:0.00000000}", dblExchangeRate) }  US Dollars");
 
-          TimeSpan tSpan = timeWatchReservations.Elapsed;
-          // Convertimos el tiempo de obtencion en string para pintar en el grid
-          string elapsedTime = StringTimeDifference(tSpan);
+          AddLogGridExchangeRate("Info", "Update  exchange rate (Mexican Pesos) completed...");
 
-          AddLogGridExchangeRate("Info", $"Updating Exchange Rate in {elapsedTime}");
-          AddLogGridExchangeRate("Success", "Exchange Rate finished");
         }
         else
         {
           // Registramos en el log el tipo de error que se encontro, en el tipo de cambio
-          AddLogGridExchangeRate("Error", $"Exchange rate must be positive { _currencyId } ({ _exchangeRateType})");
+          AddLogGridExchangeRate("Error", $"Exchange rate (Mexican Pesos) must be positive ({ _exchangeRateType})");
         }
       }
       else
       {
         // Registramos en el log que no existen cambios en la fecha especificada y el tipo de moneda
-        AddLogGridExchangeRate("Warning", "Exchange rate does not exists for day");
+        AddLogGridExchangeRate("Warning", "Exchange rate (Mexican Pesos) does not exists for day ");
       }
+
+      timeWatchExchangeRate.Stop();
+      TimeSpan tSpan = timeWatchReservations.Elapsed;
+      // Convertimos el tiempo de obtencion en string para pintar en el grid
+      string elapsedTime = StringTimeDifference(tSpan);
+
+      AddLogGridExchangeRate("Info", $"Updating Exchange Rate (Mexican Pesos) in {elapsedTime}");
+      AddLogGridExchangeRate("Success", "Exchange Rate (Mexican Pesos) finished...");
       AddValueProgressBarExchangeRate(value: 5);
     }
     #endregion
 
-    #region UpdateExchangeRatesFromHotel
+    #region UpdateExchangeRateCanadianDollars
     /// <summary>
-    /// Actualizamos el tipo de cambio de divisa canadiense
+    /// Actualizamos el tipo de cambio de la moneda "Canadian Dollars"
     /// </summary>
     /// <returns></returns>
-    public async Task UpdateExchangeRatesFromHotel()
+    public async Task UpdateExchangeRateCanadianDollars()
     {
+      timeWatchExchangeRate.Start();
+      AddLogGridExchangeRate("Info", "Updating exchange rate (Canadian Dollars)...");
       cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
       AddValueProgressBarExchangeRate(value: 6);
-      AddLogGridExchangeRate("Info", "Updating CurrencyChange...");
+      
       //Se obtiene la fecha del servidor
       _dtmServerDate = BRHelpers.GetServerDateTime();
       //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
       await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
       AddValueProgressBarExchangeRate(value: 7);
       // obtenemos el tipo de cambio de la Intranet
-      AddLogGridExchangeRate("Info", "Getting Currency Change from Intranet Service...");
-      Rmmoney currencyChange = null;
+      AddLogGridExchangeRate("Info", "Getting exchange rate (Canadian Dollars) from Hotel Service...");
+      Rmmoney exchangeRate = null;
       try
       {
-        currencyChange = await HotelServiceHelper.ObtenerFactoresConversion("CP");
+        exchangeRate = await HotelServiceHelper.ObtenerFactoresConversion("CP");
       }
       catch (Exception ex)
       {
+        AddLogGridExchangeRate("Warning", "Error ocurred in updating exchange rate (Canadian Dollars).");
         AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
       }
 
       // validamos que exista el tipo de cambio para el dia actual
-      if (currencyChange != null)
+      if (exchangeRate != null)
       {
         // validamos que el tipo de cambio sea positivo
-        if (currencyChange.factor > 0)
+        if (exchangeRate.factor > 0)
         {
           // actualizamos el tipo de cambio
           cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
           AddValueProgressBarExchangeRate(value: 8);
-          _currencyId = "CAN";
+          
           AddLogGridExchangeRate("Info", "Updating currencyChange...");
-          decimal factor = (1 / currencyChange.factor);
-          await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, _currencyId, factor);
-          AddLogGridExchangeRate("Info", "Update completed...");
+          var rsMEX = BRExchangeRate.GetExchangeRatesByDate(_dtmServerDate, "MEX");
+          decimal dblExchangeRate = exchangeRate.factor / (1 /rsMEX.FirstOrDefault().exExchRate);
+          await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, "CAN", dblExchangeRate);
+          AddLogGridExchangeRate("Info", $"1 Canadian Dollar = { string.Format("{0:0.00000000}", exchangeRate.factor) }  Mexican Pesos");
+          AddLogGridExchangeRate("Info", $"1 Canadian Dollar = { string.Format("{0:0.00000000}", dblExchangeRate) }  US Dollars");
+
+          AddLogGridExchangeRate("Info", "Update  exchange rate (Canadian Dollars) completed...");
         }
         else
         {
-          AddLogGridExchangeRate("Info", $"Canadian currency must be positive ({currencyChange.factor}).");
+          AddLogGridExchangeRate("Info", $"Exchange rate (Canadian Dollars) must be positive ({exchangeRate.factor}).");
         }
       }
       else
       {
-        AddLogGridExchangeRate("Info", $"Canadian Currency Change does not exists for day { _dtmServerDate:dd/MMM/yyyy}");
+        AddLogGridExchangeRate("Info", $"Exchange rate (Canadian Dollars) does not exists for day ");
       }
+      timeWatchExchangeRate.Stop();
+      TimeSpan tSpan = timeWatchReservations.Elapsed;
+      // Convertimos el tiempo de obtencion en string para pintar en el grid
+      string elapsedTime = StringTimeDifference(tSpan);
+
+      AddLogGridExchangeRate("Info", $"Updating Exchange Rate (Canadian Dollars) in {elapsedTime}");
+      AddLogGridExchangeRate("Success", "Exchange Rate (Canadian Dollars)) finished...");
+
       AddValueProgressBarExchangeRate(value: 10);
     }
     #endregion
@@ -2301,32 +2330,33 @@ namespace IM.Transfer.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      WindowsHelper.EventsKeys(window:this, blnNotifycon:false);
+      WindowsHelper.EventsKeys(window: this, blnNotifycon: false);
       // cargamos el contenido de los grid.
-      await LoadDataGRidExchangeRate();
       await LoadDataGRidReservations();
+      //await LoadDataGRidExchangeRate();
+      
       // inicializamos los valores default de los progres bar.
       InitializerProgressBar();
-        
+
       // obtenemos el titulo y version del transfer
       var thisApp = Assembly.GetExecutingAssembly();
       AssemblyName name = new AssemblyName(thisApp.FullName);
       this.Title = " Inteligence Marketing Transfer v" + name.Version;
 
       #region inicializamos la fecha actual en el form.
-      lblDate.Content = DateTime.Now.ToString("dd/MM/yyyy");
-      lblStatusExchangeRate.Content = "STAND BY";
-      lblStatusReservations.Content = "STAND BY";
-      lblTransferReservations.Content = "";
-      lblLastTransferReservations.Content = lblTextLast + _lastReservations.ToString();
-      lblNextTransferExchangeRate.Content = "";
-      lblLastTransferExchangeRate.Content = lblTextLast + _lastExchangeRate.ToString();
-      lblNextTransferReservations.Content = "";
+      textDate.Text = BRHelpers.GetServerDateTime().ToString("dd/MM/yyyy");
+      textStatusExchangeRate.Text = "STAND BY";
+      textStatusReservations.Text = "STAND BY";
+      textTransferReservations.Text = "";
+      textLastTransferReservations.Text = lblTextLast + _lastReservations.ToString();
+      textNextTransferExchangeRate.Text = "";
+      textLastTransferExchangeRate.Text = lblTextLast + _lastExchangeRate.ToString();
+      textNextTransferReservations.Text = "";
       #endregion
 
       #region inicializamos las transferencias
-      InitializeTransfersExchangeRate();
       InitializeTransfersReservations();
+      InitializeTransfersExchangeRate();
       #endregion
 
 
@@ -2353,8 +2383,8 @@ namespace IM.Transfer.Forms
           {
             System.Windows.Application.Current.MainWindow.WindowState = WindowState.Normal;
           }
-      
-      }
+
+        }
       ),
       DispatcherPriority.ContextIdle
     );
@@ -2383,7 +2413,7 @@ namespace IM.Transfer.Forms
         {
           // en caso de aceptar se invoca el metodo para cancelar las actualizaiones.
           CancelWorkerReservations();
-        } 
+        }
       }
       else
       {
@@ -2391,7 +2421,7 @@ namespace IM.Transfer.Forms
         if (!blnRunOrCancelReservations)
         {
           // se ejecuta metodo para iniciar las actualizaciones.
-          
+
           await StartReservations();
         }
         else
@@ -2438,15 +2468,15 @@ namespace IM.Transfer.Forms
         }
 
       }
-      
+
     }
     #endregion}
 
     #endregion
 
-    
+
 
   }
 
-  
+
 }

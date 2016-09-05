@@ -155,7 +155,7 @@ namespace IM.BusinessRules.BR
           {
             try
             {
-              dbContext.USP_OR_UpdateExchangeRate(date, currency, exchangeRate);
+              dbContext.USP_OR_UpdateExchangeRate(date.Value.Date, currency, exchangeRate);
             }
             catch
             {

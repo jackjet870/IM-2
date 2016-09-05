@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<TransferStartData>> Start()
     {
-      List < TransferStartData> listData = null;
+      List<TransferStartData> listData = null;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
@@ -56,19 +56,12 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferStop();  
-          }
-          catch
-          { 
-            throw;
-          }
+          response = dbContext.USP_OR_TransferStop();
         }
       });
       return response;
     }
-#endregion
+    #endregion
 
     #region StopZone
     /// <summary>
@@ -86,16 +79,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferStopZone(zone);
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferStopZone(zone);
         }
       });
       return response;
@@ -117,16 +101,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddCountries();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddCountries();
         }
       });
       return response;
@@ -147,14 +122,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddCountriesHotel(); 
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddCountriesHotel();
         }
       });
       return response;
@@ -175,16 +143,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateCountriesNames();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateCountriesNames();
         }
       });
       return response;
@@ -205,15 +164,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateCountriesHotelNames();
-          }
-          catch
-          {
-            throw;
-          }
-          
+          response = dbContext.USP_OR_TransferUpdateCountriesHotelNames();
         }
       });
       return response;
@@ -234,14 +185,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddAgencies();   
-          }
-          catch
-          {  
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddAgencies();
         }
       });
       return response;
@@ -262,16 +206,9 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddAgenciesHotel(); 
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddAgenciesHotel();
         }
-      }); 
+      });
       return response;
     }
     #endregion
@@ -290,16 +227,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateAgenciesNames();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateAgenciesNames();
         }
       });
       return response;
@@ -320,16 +248,8 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+
+          response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
         }
       });
       return response;
@@ -350,16 +270,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddRoomTypes();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddRoomTypes();
         }
       });
       return response;
@@ -380,14 +291,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
         }
       });
       return response;
@@ -408,19 +312,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          
-         
-            try
-            {
-              response = dbContext.USP_OR_TransferAddContracts();
-              
-            }
-            catch
-            {
-              
-              throw;
-            }
-         
+          response = dbContext.USP_OR_TransferAddContracts();
         }
       });
       return response;
@@ -441,14 +333,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateContractsNames();  
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateContractsNames();
         }
       });
       return response;
@@ -469,16 +354,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddGroups();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferAddGroups();
         }
       });
       return response;
@@ -495,24 +371,15 @@ namespace IM.BusinessRules.BR
     public async static Task<int> UpdateGroupsNames()
     {
       int response = 0;
-      
-        await Task.Run(() =>
+
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-          {
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateGroupsNames();
-                
-            }
-            catch
-            {
-                
-              throw;
-            }
-          }
-        });
-      
+          response = dbContext.USP_OR_TransferUpdateGroupsNames();
+        }
+      });
+
       return response;
     }
     #endregion
@@ -532,16 +399,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferCountries();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferCountries();
         }
       });
       return response;
@@ -563,16 +421,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferAgencies();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferAgencies();
         }
       });
       return response;
@@ -594,16 +443,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferLanguages();
-
-          }
-          catch
-          {
-
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferLanguages();
         }
       });
       return response;
@@ -625,16 +465,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferMarkets();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferMarkets();
         }
       });
       return response;
@@ -656,16 +487,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
         }
       });
       return response;
@@ -687,16 +509,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
         }
       });
       return response;
@@ -718,16 +531,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
         }
       });
       return response;
@@ -748,16 +552,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
         }
       });
       return response;
@@ -779,14 +574,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();  
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
         }
       });
       return response;
@@ -808,14 +596,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
-          }
-          catch
-          { 
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
         }
       });
       return response;
@@ -837,14 +618,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer(); 
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
         }
       });
       return response;
@@ -867,16 +641,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
-              
-            }
-            catch
-            {
-              
-              throw;
-            }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
         }
       });
       return response;
@@ -897,15 +662,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax(); 
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
         }
       });
       return response;
@@ -927,16 +684,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateTransferAvailability();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateTransferAvailability();
         }
       });
       return response;
@@ -959,15 +707,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
         }
       });
       return response;
@@ -989,16 +729,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
         }
       });
       return response;
@@ -1020,14 +751,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
         }
       });
       return response;
@@ -1050,14 +774,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
         }
       });
       return response;
@@ -1080,14 +797,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
-            }
-            catch
-            {
-              throw;
-            }
+          response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
         }
       });
       return response;
@@ -1103,21 +813,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCheckInDates()
+    public async static Task<int> UpdateGuestsCheckInDates()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
         }
       });
       return response;
@@ -1132,21 +835,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCheckIns()
+    public async static Task<int> UpdateGuestsCheckIns()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
         }
       });
       return response;
@@ -1163,21 +859,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCheckOutDates()
+    public async static Task<int> UpdateGuestsCheckOutDates()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
         }
       });
       return response;
@@ -1192,21 +881,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsEmails()
+    public async static Task<int> UpdateGuestsEmails()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsEmails();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsEmails();
         }
       });
       return response;
@@ -1221,21 +903,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCities()
+    public async static Task<int> UpdateGuestsCities()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCities();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCities();
         }
       });
       return response;
@@ -1250,26 +925,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsStates()
+    public async static Task<int> UpdateGuestsStates()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          
-          {
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateGuestsStates();
-              
-            }
-            catch
-            {
-              
-              throw;
-            }
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsStates();
         }
       });
       return response;
@@ -1284,21 +947,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCountries()
+    public async static Task<int> UpdateGuestsCountries()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCountries();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCountries();
         }
       });
       return response;
@@ -1313,21 +969,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsCheckOutsEarly()
+    public async static Task<int> UpdateGuestsCheckOutsEarly()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
         }
       });
       return response;
@@ -1342,21 +991,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsGuestTypes()
+    public async static Task<int> UpdateGuestsGuestTypes()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
         }
       });
       return response;
@@ -1371,21 +1013,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsContracts()
+    public async static Task<int> UpdateGuestsContracts()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsContracts();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsContracts();
         }
       });
       return response;
@@ -1400,21 +1035,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsBirthDates()
+    public async static Task<int> UpdateGuestsBirthDates()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
         }
       });
       return response;
@@ -1429,21 +1057,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsAges()
+    public async static Task<int> UpdateGuestsAges()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsAges();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsAges();
         }
       });
       return response;
@@ -1458,22 +1079,15 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsPax()
+    public async static Task<int> UpdateGuestsPax()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsPax();
-          }
-          catch
-          {
-            throw;
-          }
-        } 
+          response = dbContext.USP_OR_TransferUpdateGuestsPax();
+        }
       });
       return response;
     }
@@ -1487,21 +1101,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsReservationTypes()
+    public async static Task<int> UpdateGuestsReservationTypes()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
-          }
-          catch
-          { 
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
         }
       });
       return response;
@@ -1516,23 +1123,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsIdProfileOpera()
+    public async static Task<int> UpdateGuestsIdProfileOpera()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
         }
       });
       return response;
@@ -1547,23 +1145,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsAgencies()
+    public async static Task<int> UpdateGuestsAgencies()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
-              
-            }
-            catch
-            {
-              
-              throw;
-            }
+          response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
         }
       });
       return response;
@@ -1577,22 +1166,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsMarkets()
+    public async static Task<int> UpdateGuestsMarkets()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
-          }
-          catch
-          {
-            throw;
-          }
-
+          response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
         }
       });
       return response;
@@ -1608,21 +1189,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsAvailabilityUnavailableMotives()
+    public async static Task<int> UpdateGuestsAvailabilityUnavailableMotives()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
         }
       });
       return response;
@@ -1637,24 +1211,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsUnavailableMotives1NightRevert()
+    public async static Task<int> UpdateGuestsUnavailableMotives1NightRevert()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-
-            try
-            {
-              response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
-              
-            }
-            catch
-            {
-              
-              throw;
-            }
+          response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
         }
       });
       return response;
@@ -1671,23 +1235,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<int>  UpdateGuestsAvailables(DateTime? dateFrom, DateTime? dateTo)
+    public async static Task<int> UpdateGuestsAvailables(DateTime? dateFrom, DateTime? dateTo)
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom.Value, dateTo.Value);
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom.Value, dateTo.Value);
         }
       });
       return response;
@@ -1701,24 +1256,16 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-    public async static Task<List<int>> AddGuests()
+    public async static Task<int> AddGuests()
     {
-      List < int > response = null;
-      await Task.Run(() =>
+      //List<int> response = null;
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
-          }
-          catch
-          {
-            throw;
-          }
+          return dbContext.USP_OR_TransferAddGuests().FirstOrDefault() ?? 0;          
         }
       });
-      return response;
     }
     #endregion
 
@@ -1729,22 +1276,15 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-    public async static Task<int>  DeleteReservationsCancelled()
+    public async static Task<int> DeleteReservationsCancelled()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
-            response = dbContext.USP_OR_TransferDeleteReservationsCancelled();
-          }
-          catch
-          {
-            throw;
-          }
+          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
+          response = dbContext.USP_OR_TransferDeleteReservationsCancelled();
         }
       });
       return response;
@@ -1758,23 +1298,14 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 16/04/2016  created
     /// </hystory>
-    public async static Task<int>  DeleteTransfer()
+    public async static Task<int> DeleteTransfer()
     {
       int response = 0;
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferDeleteTransfer();
-              
-          }
-          catch
-          {
-              
-            throw;
-          }
+          response = dbContext.USP_OR_TransferDeleteTransfer();
         }
       });
       return response;
@@ -1795,14 +1326,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
-          {
-            response = dbContext.USP_OR_TransferGetTransfer().ToList();  
-          }
-          catch
-          {
-            throw;
-          }
+          response = dbContext.USP_OR_TransferGetTransfer().ToList();
         }
       });
       return response;
@@ -1815,10 +1339,11 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="transfer">Entidad transferencia</param>
     /// <returns>Retorna un entero si se realizo el guardado</returns>
-    public async static Task<int>  AddReservation(Transfer transfer)
+    public async static Task<int> AddReservation(Transfer transfer)
     {
       int response = 0;
-      await Task.Run(() => {
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           try
@@ -1846,14 +1371,15 @@ namespace IM.BusinessRules.BR
     public async static Task<bool> ExistReservation(string leadSource, string tHReservID)
     {
       bool status = true;
-      await Task.Run(() => { 
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var result = dbContext.Transfers.SingleOrDefault(transfer => transfer.tls == leadSource && transfer.tHReservID == tHReservID);
-          status = (result != null) ?true : false;
+          status = (result != null) ? true : false;
         }
       });
-      return  status;
+      return status;
     }
     #endregion
 
