@@ -22,9 +22,9 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private bool _isNew ;
+    private bool _isNew;
     private bool _isLoad = true;
-    
+
     CollectionViewSource assistanceViewSource;
     CollectionViewSource assistanceDataViewSource;
     CollectionViewSource assistanceStatusViewSource;
@@ -52,7 +52,7 @@ namespace IM.Base.Forms
         palaceId = userdata.SalesRoom.srID;
       cmbWeeks.SelectedIndex = 1;
       user = userdata;
-      
+
     }
 
     #endregion Constructores y destructores 
@@ -105,7 +105,7 @@ namespace IM.Base.Forms
     {
       DateTime dt;
       dt = GetFirstDayOfWeek(Date);
-      
+
       dtpStartt.Value = dt;
       dt = dt.Date.AddDays(6);
       dtpEndd.Value = dt;
@@ -195,7 +195,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        if (UIHelper.ShowMessage("There is no assistance for this week.\nWould you like to generate?",MessageBoxImage.Question) == MessageBoxResult.Yes)
+        if (UIHelper.ShowMessage("There is no assistance for this week.\nWould you like to generate?", MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
           lstPersonAssist.ForEach(c =>
@@ -256,7 +256,7 @@ namespace IM.Base.Forms
 
       _listAssistData.ForEach(c =>
       {
-        lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));        
+        lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));
       });
 
       nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.Add : EnumMode.Edit);
@@ -322,10 +322,10 @@ namespace IM.Base.Forms
           break;
       }
     }
-    
+
     private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      if(!_isLoad)
+      if (!_isLoad)
         ChangedtpDates(dtpStartt.Value.Value);
     }
 
@@ -362,7 +362,7 @@ namespace IM.Base.Forms
       LoadGrid();
     }
 
-    private void btnToExcel_Click(object sender, RoutedEventArgs e)
+    private async void btnToExcel_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Loading assistances Excel...");
       btnToExcel.IsEnabled = false;
@@ -381,22 +381,23 @@ namespace IM.Base.Forms
         string dateRange = DateHelper.DateRange(dtpStartt.Value.Value, dtpEndd.Value.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpStartt.Value.Value, dtpEndd.Value.Value);
 
-        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
-        format.Add(new ExcelFormatTable() { Title = "Palace Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Palace ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Date Start", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Date End", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Monday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Tuesday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Wednesday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Thursday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Friday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Saturday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Sunday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
+        ExcelFormatItemsList format = new ExcelFormatItemsList();
+        format.Add("Place Type", "asPlaceType");
+        format.Add("Place ID", "asPlaceID");
+        format.Add("Date Start", "asStartD", format: EnumFormatTypeExcel.Date);
+        format.Add("Date End", "asEndD", format: EnumFormatTypeExcel.Date);
+        format.Add("ID", "aspe");
+        format.Add("Name", "peN");
+        format.Add("Monday", "asMonday");
+        format.Add("Tuesday", "asTuesday");
+        format.Add("Wednesday", "asWednesday");
+        format.Add("Thursday", "asThursday");
+        format.Add("Friday", "asFriday");
+        format.Add("Saturday", "asSaturday");
+        format.Add("Sunday", "asSunday");
+        format.Add("#Assistence", "asNum");
+        //TODO: EZE por favor comenta el codigo, abre el reporte, y cambia MessageBox icono Informacion.
+        await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, format);
         UIHelper.ShowMessage("Generated Report", MessageBoxImage.Exclamation, "Generated");
       }
       else
@@ -432,6 +433,6 @@ namespace IM.Base.Forms
 
     #endregion Eventos del Formulario
 
-    
+
   }
 }
