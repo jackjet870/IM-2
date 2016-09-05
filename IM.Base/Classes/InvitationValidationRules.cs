@@ -12,6 +12,7 @@ using IM.Model.Classes;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace IM.Base.Classes
 {
@@ -51,6 +52,7 @@ namespace IM.Base.Classes
           //Si el folio de reservacion NO es valido hay que escoger otro
           if (!isValid)
           {
+            
             UIHelper.ShowMessage("The Reservation Folio was already used for Guest ID");
             tabItem.IsSelected = true;
             btnSearchReservation.Focus();
@@ -76,12 +78,11 @@ namespace IM.Base.Classes
           var validationResult = BRFolios.ValidateFolioInvitationOutside(guest.guID, serie, numero);
 
           //Si trae un mensaje quiere decir que falló
-          if (string.IsNullOrWhiteSpace(validationResult))
+          if (!string.IsNullOrWhiteSpace(validationResult))
           {
             UIHelper.ShowMessage(validationResult);
             isValid = false;
           }
-
         }
         if (!isValid)
         {
@@ -387,15 +388,8 @@ namespace IM.Base.Classes
     public static bool ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
     {
       string _res = string.Empty;
-
       //Validamos el folio de reservacion (InHouse & OutHouse)
-      if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral))
-      {
-        //form.tabGeneral.IsSelected = true;
-        //if (dbContext.Program == EnumProgram.Inhouse) { form.brdSearchButton.Focus(); }
-        //else { form.txtguOutInvitNum.Focus(); }
-        return false;
-      }
+      if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral))return false;
       //Si la fecha de un booking no este en fecha cerrada
       if (!ValidateBookingCloseDate(dbContext)) return false;
       //Validamos que el Numero de habitaciones este en el rango permitido
@@ -423,12 +417,16 @@ namespace IM.Base.Classes
     public static bool ValidateInformationGrids(frmInvitation form, GuestInvitation dbContext)
     {
       bool _isValid = true;
-      //Validamos el Status del invitado
-      if (string.IsNullOrWhiteSpace(dbContext.Guest.guGStatus))
+
+      if (dbContext.Program != EnumProgram.Outhouse)
       {
-        UIHelper.ShowMessage("Specify the Guest Status");
-        form.cmbGuestStatus.Focus();
-        _isValid = false;
+        //Validamos el Status del invitado
+        if (string.IsNullOrWhiteSpace(dbContext.Guest.guGStatus))
+        {
+          UIHelper.ShowMessage("Specify the Guest Status");
+          form.cmbGuestStatus.Focus();
+          _isValid = false;
+        }
       }
       //Validamos los regalos de la invitacion
       else if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;

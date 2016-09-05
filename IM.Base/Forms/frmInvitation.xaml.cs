@@ -136,6 +136,8 @@ namespace IM.Base.Forms
     {
       try
       {
+        //Ponemos el cursor en modo espera
+        Mouse.OverrideCursor = Cursors.Wait;
         bool isValid = true;
 
         //Asignamos el focus al boton
@@ -144,16 +146,19 @@ namespace IM.Base.Forms
         //Validamos controles comunes y validaciones basicas
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
         {
+          Mouse.OverrideCursor = null;
           isValid = false;
         }
         //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
         if (isValid)
         {
+          Mouse.OverrideCursor = null;
           isValid = InvitationValidationRules.ValidateInformationGrids(this, CatObj);
         }
         //Validamos que la informacion exista
         if (isValid)
         {
+          Mouse.OverrideCursor = null;
           //Validamos si existen los datos
           isValid = await ValidateExist();
         }
@@ -179,8 +184,12 @@ namespace IM.Base.Forms
       }
       catch (Exception ex)
       {
-        _busyIndicator.IsBusy = false;
         UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        _busyIndicator.IsBusy = false;
+        Mouse.OverrideCursor = null;
       }
     }
 
@@ -447,6 +456,36 @@ namespace IM.Base.Forms
     }
 
     #endregion cmbSalesRooms_SelectionChanged
+
+    #region cmbLocation_SelectionChanged
+    /// <summary>
+    /// Cuando cambia la seleccion del location se actualiza el guls del Guest
+    /// </summary>
+    /// [erosado] 02/09/2016  Created.
+    private void cmbLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (cmbLocation.SelectedValue != null)
+      {
+        var location = cmbLocation.SelectedItem as LocationByUser;
+        CatObj.Guest.guls = location.lols;
+      }
+    }
+    #endregion
+
+    #region cmbLocation_SelectionChanged
+    /// <summary>
+    /// Cuando cambia la seleccion de Agency se actualiza el campo Guest.guMK con el campo Agency.agMK
+    /// </summary>
+    /// [erosado] 03/09/2016  Created.
+    private async void cmbOtherInfoAgency_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (cmbOtherInfoAgency.SelectedValue != null)
+      {
+        var agency = await BRAgencies.GetAgenciesByIds(new List<string>() { cmbOtherInfoAgency?.SelectedValue?.ToString() });
+        CatObj.Guest.gumk = agency.FirstOrDefault().agmk;
+      }
+    }
+    #endregion
 
     #region dtpBookDate_ValueChanged
 
@@ -780,6 +819,8 @@ namespace IM.Base.Forms
       chkguInterval.IsEnabled = false;
       chkDirect.IsEnabled = false;
       btnChange.IsEnabled = false;
+      cmbLocation.IsEnabled = _module == EnumModule.Host;
+      cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
 
       #endregion Enable false
 
@@ -794,7 +835,7 @@ namespace IM.Base.Forms
 
       #endregion IsReadOnly
 
-      
+
 
 
       //Si OutHouse y es una invitacion existente
@@ -1479,7 +1520,7 @@ namespace IM.Base.Forms
           if (!InvitationValidationRules.ValidateEdit(ref invitationGift, ref _IGCurrentCell))
           {
 
-            InvitationValidationRules.AfterEdit(_guestId,dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, CatObj.Program);
+            InvitationValidationRules.AfterEdit(_guestId, dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, CatObj.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else
@@ -1565,8 +1606,8 @@ namespace IM.Base.Forms
       {
         _IGCurrentCell = dtgGuestAdditional.CurrentCell;
         e.Cancel = InvitationValidationRules.dtgGuestAdditional_StartEdit(ref _IGCurrentCell, dtgGuestAdditional, ref _hasError);
-      }       
       }
+    }
 
     #endregion BeginningEdit
 
@@ -1609,7 +1650,7 @@ namespace IM.Base.Forms
     /// </history>
     private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
-      if(e.EditAction == DataGridEditAction.Commit)
+      if (e.EditAction == DataGridEditAction.Commit)
       {
         if (_isCellCommitGuestAdditional && e.Row.GetIndex() == dtgGuestAdditional.ItemsSource.OfType<object>().ToList().Count)
         {
@@ -1811,7 +1852,7 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitDeposit && e.Row.GetIndex()==dtgBookingDeposits.ItemsSource.OfType<object>().ToList().Count)//Verificar si es un registro nuevo
+        if (_isCellCommitDeposit && e.Row.GetIndex() == dtgBookingDeposits.ItemsSource.OfType<object>().ToList().Count)//Verificar si es un registro nuevo
         {
           _isCellCommitDeposit = false;
           e.Cancel = true;
@@ -1878,7 +1919,7 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
-        if (_isCellCommitCC && e.Row.GetIndex()== dtgCCCompany.ItemsSource.OfType<object>().ToList().Count)
+        if (_isCellCommitCC && e.Row.GetIndex() == dtgCCCompany.ItemsSource.OfType<object>().ToList().Count)
         {
           _isCellCommitCC = false;
           e.Cancel = true;
@@ -1981,6 +2022,7 @@ namespace IM.Base.Forms
         }
       }
     }
+
     #endregion
 
     #endregion
