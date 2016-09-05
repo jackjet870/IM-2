@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
-
+using System.Linq.Dynamic;
 
 namespace IM.Model.Helpers
 {
-  public class ObjectHelper
+  public static class ObjectHelper
   {
     #region CopyProperties
     /// <summary>
@@ -80,7 +80,7 @@ namespace IM.Model.Helpers
     public static List<T> CopyProperties<T>(List<T> lstToClone) where T : class, new()
     {
       List<T> lstClone = new List<T>();
-      if (lstToClone != null && lstClone!=null)
+      if (lstToClone != null && lstClone != null)
       {
         lstToClone.ForEach(obj =>
         {
@@ -273,7 +273,7 @@ namespace IM.Model.Helpers
     /// <history>
     /// [erosado] 09/08/2016  Created.
     /// </history>
-    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName,bool blnWithAnd=false)
+    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName, bool blnWithAnd = false)
     {
       bool _isValid = false;
       string _message = string.Empty;
@@ -283,16 +283,16 @@ namespace IM.Model.Helpers
         {
           Type type = list.GetType();
           List<T> lstResults = new List<T>();
-          List<PropertyInfo> properties = type.GetProperties(BindingFlags.CreateInstance | BindingFlags.DeclaredOnly).Where(pi=>pi.GetMethod.IsVirtual && lstFieldName.Contains(pi.Name)).ToList();
+          List<PropertyInfo> properties = type.GetProperties(BindingFlags.CreateInstance | BindingFlags.DeclaredOnly).Where(pi => pi.GetMethod.IsVirtual && lstFieldName.Contains(pi.Name)).ToList();
           foreach (var pi in properties)//Recorremos la lista de 
           {
-            if(_isValid) { break; }//Romper el ciclo
+            if (_isValid) { break; }//Romper el ciclo
             var value = type.GetProperty(pi.Name).GetValue(pi);
             foreach (var item in list)
             {
               lstResults = list.Where(property => type.GetProperty(pi.Name).GetValue(property) == value ||
                                       (value != null && value.Equals(type.GetProperty(pi.Name).GetValue(property)))).ToList();
-              if(lstResults.Count>1)
+              if (lstResults.Count > 1)
               {
                 _isValid = true;
                 _message = $"We found a duplicate element on {pi.Name} column";
@@ -320,5 +320,11 @@ namespace IM.Model.Helpers
       return _message;
     }
     #endregion
+
+    public static List<T> orderListBy<T>(this List<T> lst, string Order)
+    {
+      lst = lst.OrderBy(Order).ToList();
+      return lst;
+    } 
   }
 }

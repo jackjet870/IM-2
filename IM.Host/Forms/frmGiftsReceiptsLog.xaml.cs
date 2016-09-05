@@ -175,19 +175,15 @@ namespace IM.Host.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 08/07/2016 Created
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       if (((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Any())
       {
-        #region format Excel
-        List<ExcelFormatTable> lstFormat = clsFormatReport.RptGiftReceiptsLog();
-        #endregion
-        EpplusHelper.OrderColumns(grdLog.Columns.ToList(), lstFormat);
-
-        var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source, true, true, true),
+        var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift Receipt ID", string.Join(",", ((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Select(c => c.goID).Distinct().ToList())) },
-          "Gift Receipts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), lstFormat);
+          "Gift Receipts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(grdLog.Columns.ToList(), clsFormatReport.RptGiftReceiptsLog()));
 
         if (fileinfo != null)
           Process.Start(fileinfo.FullName);

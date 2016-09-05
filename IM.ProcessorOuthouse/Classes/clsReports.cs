@@ -1316,7 +1316,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 07/May/2016 Created
     /// </history>
-    public static FileInfo ExportRptFoliosCXC(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosCXC> lstRptFoliosCXC)
+    public static async System.Threading.Tasks.Task<FileInfo> ExportRptFoliosCXC(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosCXC> lstRptFoliosCXC)
     {
       var lstRptFoliosCXCAux = lstRptFoliosCXC.Select(c => new
       {
@@ -1336,7 +1336,7 @@ namespace IM.ProcessorOuthouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCXCAux);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosCXC(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosCXC(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
   }

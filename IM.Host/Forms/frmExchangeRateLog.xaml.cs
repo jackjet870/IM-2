@@ -68,7 +68,7 @@ namespace IM.Host.Forms
         return;
       }
       StatusBarReg.Content = string.Format("{0}/{1}", getExchangeRateLogDataGrid.Items.IndexOf(getExchangeRateLogDataGrid.Items.CurrentItem) + 1, getExchangeRateLogDataGrid.Items.Count);
-    } 
+    }
     #endregion
 
     #region btnPrint_Click
@@ -77,19 +77,15 @@ namespace IM.Host.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 08/07/2016 Created
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       if (((List<ExchangeRateLogData>)_cvsExchangeRate.Source).Any())
       {
-        #region format Excel
-        List<ExcelFormatTable> lstFormat = clsFormatReport.RptExchangeRatesLog();
-        #endregion
-        EpplusHelper.OrderColumns(getExchangeRateLogDataGrid.Columns.ToList(), lstFormat);
-
-        var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<ExchangeRateLogData>)_cvsExchangeRate.Source, true, true, true),
-          new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift ID", string.Join(",", ((List<ExchangeRateLogData>)_cvsExchangeRate.Source).Select(c => c.elcu).Distinct().ToList())) },
-          "Exchange Rates Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), lstFormat);
+        var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<ExchangeRateLogData>)_cvsExchangeRate.Source, true, true, true),
+         new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift ID", string.Join(",", ((List<ExchangeRateLogData>)_cvsExchangeRate.Source).Select(c => c.elcu).Distinct().ToList())) },
+         "Exchange Rates Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(getExchangeRateLogDataGrid.Columns.ToList(), clsFormatReport.RptExchangeRatesLog()));
 
         if (fileinfo != null)
           Process.Start(fileinfo.FullName);

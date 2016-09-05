@@ -1649,7 +1649,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCloserStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCloserStatistics> lstRptCloserStatistic)
     {
       lstRptCloserStatistic=lstRptCloserStatistic.OrderBy(c => c.saCloserps).ThenByDescending(c => c.TotalProcAmount).ThenByDescending(c => c.Efficiency).ToList();
-      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration:true);
     }
     #endregion
 
@@ -1666,9 +1666,10 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 12/May/2016 Created
     /// </history>
-    public static FileInfo ExportRptLinerStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptLinerStatistics> lstRptCloserStatistic)
+    public static async Task<FileInfo> ExportRptLinerStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptLinerStatistics> lstRptCloserStatistic)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters,strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      lstRptCloserStatistic = lstRptCloserStatistic.OrderBy(c => c.saLinerps).ThenByDescending(c => c.TotalProcAmount).ThenByDescending(c => c.Efficiency).ToList();
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration:true);
     }
     #endregion
 
@@ -1735,9 +1736,9 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptTaxiIn(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisIn> lstRptTaxiIn)
+    public static async Task<FileInfo> ExportRptTaxiIn(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisIn> lstRptTaxiIn)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters,strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1753,9 +1754,9 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptTaxiOut(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisOut> lstRptTaxiOut)
+    public static async Task<FileInfo> ExportRptTaxiOut(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisOut> lstRptTaxiOut)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiOut, true, false), filters,strReport, string.Empty, clsFormatReport.RptTaxisOut(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptTaxiOut, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisOut(), blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1804,9 +1805,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptDepositRefunds(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDepositRefund> lstRptDepRef)
+    public static async Task<FileInfo> ExportRptDepositRefunds(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDepositRefund> lstRptDepRef)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptDepRef, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositRefunds(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDepRef, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositRefunds(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1878,14 +1879,15 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptInOutByPr(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptInOutByPR> lstRptInOutPr)
+    public static async Task<FileInfo> ExportRptInOutByPr(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptInOutByPR> lstRptInOutPr)
     {
-
-      lstRptInOutPr.ForEach(c => {
+      lstRptInOutPr = lstRptInOutPr.OrderBy(c => c.PR1).ToList();
+      lstRptInOutPr.ForEach(c =>
+      {
         c.PR1 = $"{c.PR1} {c.PR1N}";
       });
 
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters, strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters, strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1901,9 +1903,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptPersonnelAccess(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnelAccess> lstRptPersonnelAccess)
+    public static async Task<FileInfo> ExportRptPersonnelAccess(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnelAccess> lstRptPersonnelAccess)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true), filters,strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1922,7 +1924,7 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 25/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptSelfGen(string strReport, string fileFullPath, List<Tuple<string, string>> filters, Tuple<List<RptSelfGen>, List<Sale>, List<Personnel>> lstRptselfGenTuple, DateTime dtmStart, DateTime dtmEnd)
+    public static async Task<FileInfo> ExportRptSelfGen(string strReport, string fileFullPath, List<Tuple<string, string>> filters, Tuple<List<RptSelfGen>, List<Sale>, List<Personnel>> lstRptselfGenTuple, DateTime dtmStart, DateTime dtmEnd)
     {
       var lstRptSelfGen = (from pe in lstRptselfGenTuple.Item3
                            select new
@@ -1986,7 +1988,7 @@ namespace IM.ProcessorGeneral.Classes
         .ThenByDescending(c => c.TotalProcAmount).ToList();
 
 
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptSelfGen.Distinct().ToList(), true, false), filters,strReport, string.Empty, clsFormatReport.RptSelfGen(), blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptSelfGen.Distinct().ToList(), true, false), filters, strReport, string.Empty, clsFormatReport.RptSelfGen(), blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2098,9 +2100,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionReferral(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionReferral> lstRptProductionReferrals)
+    public static async Task<FileInfo> ExportRptProductionReferral(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionReferral> lstRptProductionReferrals)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionReferrals, true), filters,strReport, string.Empty, clsFormatReport.RptProductionReferral(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionReferrals, true), filters, strReport, string.Empty, clsFormatReport.RptProductionReferral(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 
@@ -2136,9 +2138,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 23/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptSalesByProgramLeadSourceMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptSalesByProgramLeadSourceMarket> lstRptSalesByProgramLeadSourceMarkets)
+    public static async Task<FileInfo> ExportRptSalesByProgramLeadSourceMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptSalesByProgramLeadSourceMarket> lstRptSalesByProgramLeadSourceMarkets)
     {
-      return EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true), filters,strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true), filters, strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
     #endregion
 

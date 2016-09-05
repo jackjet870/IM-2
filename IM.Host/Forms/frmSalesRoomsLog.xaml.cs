@@ -105,19 +105,15 @@ namespace IM.Host.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 08/07/2016 Created
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       if (((List<SalesRoomLogData>)_salesRoomLog.Source).Any())
       {
-        #region format Excel
-        List<ExcelFormatTable> lstFormat = clsFormatReport.RptCloseSalesRoomLog();
-        #endregion
-        EpplusHelper.OrderColumns(dtgSalesRoomLog.Columns.ToList(), lstFormat);
-
-        var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
+        var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Sales Room ID", App.User.SalesRoom.srID) },
-          "Sales Rooms Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), lstFormat);
+          "Sales Rooms Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dtgSalesRoomLog.Columns.ToList(), clsFormatReport.RptCloseSalesRoomLog()));
 
         if (fileinfo != null)
           Process.Start(fileinfo.FullName);

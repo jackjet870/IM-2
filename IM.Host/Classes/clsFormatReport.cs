@@ -51,11 +51,11 @@ namespace IM.Host.Classes
     {
       return new List<ExcelFormatTable>()
       {
-        new ExcelFormatTable() { Title = "By", PropertyName = "elChangedBy", Order = 1 },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN", Order = 2 },
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "elID", Format = EnumFormatTypeExcel.DateTime, Order= 3 },
-        new ExcelFormatTable() { Title = "Currency", PropertyName = "elcu", Order = 4 },
-        new ExcelFormatTable() { Title = "Exch. Rate", PropertyName = "elExchangeRate", Format = EnumFormatTypeExcel.DecimalNumber, Order = 5 }
+        new ExcelFormatTable() { Title = "By", PropertyName = "elChangedBy" },
+        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN"},
+        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "elID", Format = EnumFormatTypeExcel.DateTime },
+        new ExcelFormatTable() { Title = "Currency", PropertyName = "elcu" },
+        new ExcelFormatTable() { Title = "Exch. Rate", PropertyName = "elExchangeRate", Format = EnumFormatTypeExcel.DecimalNumber }
       };
     }
     #endregion
@@ -72,31 +72,31 @@ namespace IM.Host.Classes
     {
       return new List<ExcelFormatTable>()
       {
-        new ExcelFormatTable() { Title = "Sales man", PropertyName = "goChangedBy", Order = 1 },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN", Order = 2 },
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "goID", Format = EnumFormatTypeExcel.DateTime, Order = 3 },
-        new ExcelFormatTable() { Title = "Receipt D", PropertyName = "goD", Format = EnumFormatTypeExcel.Date, Order = 4 },
+        new ExcelFormatTable() { Title = "Sales man", PropertyName = "goChangedBy" },
+        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN" },
+        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "goID", Format = EnumFormatTypeExcel.DateTime },
+        new ExcelFormatTable() { Title = "Receipt D", PropertyName = "goD", Format = EnumFormatTypeExcel.Date },
         new ExcelFormatTable() { Title = "Offered By", PropertyName = "gope", Order = 5 },
-        new ExcelFormatTable() { Title = "Offered By Name", PropertyName = "OfferedByN", Order = 6 },
+        new ExcelFormatTable() { Title = "Offered By Name", PropertyName = "OfferedByN" },
         new ExcelFormatTable() { Title = "Host", PropertyName = "goHost", Order = 7 },
         new ExcelFormatTable() { Title = "Host Name", PropertyName = "HostN", Order = 8 },
-        new ExcelFormatTable() { Title = "Deposit", PropertyName = "goDeposit", Format = EnumFormatTypeExcel.Currency, Order = 9 },
-        new ExcelFormatTable() { Title = "Burned", PropertyName = "goBurned", Format = EnumFormatTypeExcel.Currency, Order = 10 },
-        new ExcelFormatTable() { Title = "Currency", PropertyName = "gocu", Order = 11 },
+        new ExcelFormatTable() { Title = "Deposit", PropertyName = "goDeposit", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Burned", PropertyName = "goBurned", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Currency", PropertyName = "gocu" },
         new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Order = 12 },
-        new ExcelFormatTable() { Title = "CxC PR Dep", PropertyName = "goCXCPRDeposit", Format = EnumFormatTypeExcel.Currency, Order = 13 },
-        new ExcelFormatTable() { Title = "Taxit Out", PropertyName = "goTaxiOut", Format = EnumFormatTypeExcel.Currency, Order = 14 },
-        new ExcelFormatTable() { Title = "Total Gifts", PropertyName = "goTotalGifts", Format = EnumFormatTypeExcel.DecimalNumber, Order = 15 },
-        new ExcelFormatTable() { Title = "Charge To", PropertyName = "goct", Order = 16 },
-        new ExcelFormatTable() { Title = "CxC Gifts", PropertyName = "goCXCGifts", Format = EnumFormatTypeExcel.Currency, Order = 17 },
-        new ExcelFormatTable() { Title = "CxC Adj.", PropertyName = "goCXCAdj", Format = EnumFormatTypeExcel.Currency, Order = 18 },
-        new ExcelFormatTable() { Title = "Re-Printed", PropertyName = "goReimpresion", Order = 19 },
-        new ExcelFormatTable() { Title = "Re-Printed Motive", PropertyName = "rmN", Order = 20 },
-        new ExcelFormatTable() { Title = "Authorized By", PropertyName = "goAuthorizedBy", Order = 21 },
-        new ExcelFormatTable() { Title = "Authorized By Name", PropertyName = "AuthorizedByN", Order = 22 },
-        new ExcelFormatTable() { Title = "Paid", PropertyName = "goAmountPaid", Format = EnumFormatTypeExcel.Currency, Order = 23 },
-        new ExcelFormatTable() { Title = "Under Pay Motive", PropertyName = "upN", Order = 24 },
-        new ExcelFormatTable() { Title = "Cancelled Date", PropertyName = "goCancelD", Format = EnumFormatTypeExcel.Date, Order = 25 },
+        new ExcelFormatTable() { Title = "CxC PR Dep", PropertyName = "goCXCPRDeposit", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Taxit Out", PropertyName = "goTaxiOut", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Total Gifts", PropertyName = "goTotalGifts", Format = EnumFormatTypeExcel.DecimalNumber },
+        new ExcelFormatTable() { Title = "Charge To", PropertyName = "goct" },
+        new ExcelFormatTable() { Title = "CxC Gifts", PropertyName = "goCXCGifts", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "CxC Adj.", PropertyName = "goCXCAdj", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Re-Printed", PropertyName = "goReimpresion" },
+        new ExcelFormatTable() { Title = "Re-Printed Motive", PropertyName = "rmN" },
+        new ExcelFormatTable() { Title = "Authorized By", PropertyName = "goAuthorizedBy" },
+        new ExcelFormatTable() { Title = "Authorized By Name", PropertyName = "AuthorizedByN" },
+        new ExcelFormatTable() { Title = "Paid", PropertyName = "goAmountPaid", Format = EnumFormatTypeExcel.Currency },
+        new ExcelFormatTable() { Title = "Under Pay Motive", PropertyName = "upN" },
+        new ExcelFormatTable() { Title = "Cancelled Date", PropertyName = "goCancelD", Format = EnumFormatTypeExcel.Date }
         };
     }
     #endregion
@@ -113,14 +113,14 @@ namespace IM.Host.Classes
     {
       return new List<ExcelFormatTable>()
       {
-        new ExcelFormatTable() { Title = "By", PropertyName = "sqChangedBy", Order = 1 },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN", Order = 2 },
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "sqID", Format = EnumFormatTypeExcel.DateTime, Order = 3 },
-        new ExcelFormatTable() { Title = "Shows Close D", PropertyName = "sqShowsCloseD", Format = EnumFormatTypeExcel.Date, Order = 4 },
-        new ExcelFormatTable() { Title = "Meal T Close D", PropertyName = "sqMealTicketsCloseD", Format = EnumFormatTypeExcel.Date, Order = 5 },
-        new ExcelFormatTable() { Title = "Sales Close D", PropertyName = "sqSalesCloseD", Format = EnumFormatTypeExcel.Date, Order = 6 },
-        new ExcelFormatTable() { Title = "Gifts Rcpt Close D", PropertyName = "sqGiftsRcptCloseD", Format = EnumFormatTypeExcel.Date, Order = 7 },
-        new ExcelFormatTable() { Title = "CxC Close D", PropertyName = "sqCxCCloseD", Format = EnumFormatTypeExcel.Date, Order = 8 }
+        new ExcelFormatTable() { Title = "By", PropertyName = "sqChangedBy" },
+        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN" },
+        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "sqID", Format = EnumFormatTypeExcel.DateTime },
+        new ExcelFormatTable() { Title = "Shows Close D", PropertyName = "sqShowsCloseD", Format = EnumFormatTypeExcel.Date },
+        new ExcelFormatTable() { Title = "Meal T Close D", PropertyName = "sqMealTicketsCloseD", Format = EnumFormatTypeExcel.Date },
+        new ExcelFormatTable() { Title = "Sales Close D", PropertyName = "sqSalesCloseD", Format = EnumFormatTypeExcel.Date },
+        new ExcelFormatTable() { Title = "Gifts Rcpt Close D", PropertyName = "sqGiftsRcptCloseD", Format = EnumFormatTypeExcel.Date },
+        new ExcelFormatTable() { Title = "CxC Close D", PropertyName = "sqCxCCloseD", Format = EnumFormatTypeExcel.Date }
         };
     }
     #endregion
