@@ -17,19 +17,17 @@ namespace IM.ProcessorInhouse.Classes
     /// <returns><list type="ExcelFormatTable"></list></returns>
     /// <history>
     /// [aalcocer] 11/04/2016 Created
+    /// [erosado] 02/09/2016  Modified. Se agregó el nuevo formato
     /// </history>
-    internal static List<ExcelFormatTable> GetRptCostByPRFormat()
+    internal static ExcelFormatItemsList GetRptCostByPRFormat()
     {
-      return new List<ExcelFormatTable>
-      {
-        new ExcelFormatTable {Title = "PR ID", Axis = ePivotFieldAxis.Row, Order = 0, Alignment = ExcelHorizontalAlignment.Right},
-        new ExcelFormatTable {Title = "PR Name", Axis = ePivotFieldAxis.Row, Order = 1},
-
-        new ExcelFormatTable {Title = "Shows", Axis = ePivotFieldAxis.Values, Order  = 0, Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
-        new ExcelFormatTable {Title = "Total Cost", Axis = ePivotFieldAxis.Values, Order  = 1, Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Right},
-
-        new ExcelFormatTable {Title = "Average Cost", Axis = ePivotFieldAxis.Values, Order  = 2, Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Right, Formula ="IF('Shows'=0,0,'Total Cost'/'Shows')" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("PR ID","PR",  aligment:ExcelHorizontalAlignment.Right);
+      lst.Add("PR Name", "PRN");
+      lst.Add("Shows","Shows",format: EnumFormatTypeExcel.Number, aligment:ExcelHorizontalAlignment.Right);
+      lst.Add("Total Cost", "TotalCost", format:EnumFormatTypeExcel.Currency, aligment:ExcelHorizontalAlignment.Right);
+      lst.Add("Average Cost", "AverageCost", format:EnumFormatTypeExcel.Currency, aligment: ExcelHorizontalAlignment.Right, isCalculated:true, formula: "IF([Shows]=0,0,[TotalCost]/[Shows])");
+      return lst;
     }
 
     #endregion GetRptCostByPRFormat

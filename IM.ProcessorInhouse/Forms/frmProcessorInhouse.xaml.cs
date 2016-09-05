@@ -665,7 +665,7 @@ namespace IM.ProcessorInhouse.Forms
             if (!Convert.ToBoolean(clsFilter.EnumDetailGifts))
             {
               list.AddRange(await BRReportsByLeadSource.GetRptCostByPR(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas));
-              if (list.Any()) finfo = clsReports.ExportRptCostByPR(reportname, fileFullPath, filters, list.Cast<RptCostByPR>().ToList());
+              if (list.Any()) finfo = await clsReports.ExportRptCostByPR(reportname, fileFullPath, filters, list.Cast<RptCostByPR>().ToList());
             }
             else
             {

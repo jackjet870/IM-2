@@ -3975,6 +3975,28 @@ namespace IM.Base.Helpers
             #endregion Agregando Datos
           }
 
+          #region CreateSuperHeader
+          // Se Agregan los superheaders
+          if (formatTableColumns.Any(c => !string.IsNullOrWhiteSpace(c.SuperHeader)) && !isPivot)
+          {//Selecciona las columnas que tengan SuperHeader
+            var superHeaders = formatTableColumns.Where(c => !string.IsNullOrWhiteSpace(c.SuperHeader)).Distinct().ToList();
+            superHeaders.ForEach(c =>
+            {
+              int beginHeader = initialCol + (formatTableColumns.FindIndex(h => h.SuperHeader == c.SuperHeader) + 1);
+              int endHeader = initialCol + (formatTableColumns.FindLastIndex(h => h.SuperHeader == c.SuperHeader) + 1);
+              using (var range = wsData.Cells[totalFilterRows, beginHeader, totalFilterRows, endHeader])
+              {
+                range.Value = c.SuperHeader;
+                range.Style.Font.Bold = true;
+                range.Merge = true;
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.Cyan);
+                range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
+              }
+            });
+          }
+          #endregion
           AutoFitColumns(ref wsData, wsData.Dimension.Columns, rowNumber);
 
           if (fileFullPath == null)

@@ -1086,6 +1086,9 @@ namespace IM.BusinessRules.BR
           //Establecemos el deposito
           SetDeposits(guestInvitation.BookingDepositList.ToList(), guestInvitation.Guest);
 
+          //Asignamos valor default guCreationDate
+          guestInvitation.Guest.guCreationD = dtServerNow;
+
           //Con Check In
           guestInvitation.Guest.guCheckIn = true;
 
@@ -1093,6 +1096,16 @@ namespace IM.BusinessRules.BR
           if (string.IsNullOrWhiteSpace(guestInvitation.Guest.guPRAvail))
           {
             guestInvitation.Guest.guAvail = true;
+          }
+          //Si esta vacio le asignamos el guls
+          if (string.IsNullOrWhiteSpace(guestInvitation.Guest.gulsOriginal))
+          {
+            guestInvitation.Guest.gulsOriginal = guestInvitation.Guest.guls;
+          }
+          //Si esta null o si tiene el valor 
+          if (guestInvitation.Guest.guCheckOutHotelD == null || guestInvitation.Guest.guCheckOutHotelD == DateTime.MinValue)
+          {
+            guestInvitation.Guest.guCheckOutHotelD = guestInvitation.Guest.guCheckOutD;
           }
 
           #region Seguimiento

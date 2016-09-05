@@ -43,6 +43,7 @@ namespace IM.Model.Classes
       string superHeader = "", bool outLine = false, bool compact = false, bool showAll = false,
       bool subTotalTop = false, bool insertBlankRow = false, EnumDataFieldShowDataAs dataFieldShowDataAs = EnumDataFieldShowDataAs.Normal, DataFieldFunctions AggregateFormat=DataFieldFunctions.None)
     {
+
       Add(new ExcelFormatTable()
       {
         //Commons Properties

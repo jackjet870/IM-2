@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace IM.ProcessorInhouse.Classes
 {
@@ -25,11 +26,11 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptCostByPR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
+    internal async static Task<FileInfo> ExportRptCostByPR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
     {
-      var listRptCostByPrsAux = listRptCostByPrs.Select(c => new { c.PR, c.PRN, c.Shows, c.TotalCost }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), true, fileFullPath: fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrs, replaceStringNullOrWhiteSpace: true);
+      return  await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal:true, fileFullPath: fileFullPath, addEnumeration:true);
+      //EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptCostByPR
