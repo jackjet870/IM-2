@@ -125,8 +125,9 @@ namespace IM.Inhouse.Classes
     /// <history>
     /// [ecanul] 19/04/2016 Created
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    public static void PremanifestToExcel(List<RptPremanifest> premanifest)
+    public static async void PremanifestToExcel(List<RptPremanifest> premanifest)
     {
 
       filters = new List<Tuple<string, string>>();
@@ -140,7 +141,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest ";
         int j = dt.Columns.Count;
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        OpenFile(EpplusHelper.CreateExcelCustom(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()));
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()));
       }
     }
 
@@ -156,7 +157,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 19/04/2016 Created
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
     /// </history>
-    public static void PremanifestWithGiftsToExcel(List<RptPremanifestWithGifts> withGifts)
+    public static async void PremanifestWithGiftsToExcel(List<RptPremanifestWithGifts> withGifts)
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
@@ -167,8 +168,8 @@ namespace IM.Inhouse.Classes
         dt = TableHelper.GetDataTableFromList(withGifts, true);
         rptName = "Premanifest with gifts";
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        
-        OpenFile(EpplusHelper.CreateExcelCustom( dt,filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()));
+
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()));
       }
     }
 

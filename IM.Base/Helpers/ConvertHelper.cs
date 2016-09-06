@@ -58,28 +58,5 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region StringToIntOrNull
-    /// <summary>
-    /// Convierte una cadena a un valor entero, su no encuentra elementos en la cadena retorna nullo
-    /// </summary>
-    /// <param name="strValue">Cadena a convertir nula si es vacilla</param>
-    /// <returns></returns>
-    public static int? StringToIntOrNull(string strValue)
-    {
-      
-     
-      int? stringInt = null;
-      if (!String.IsNullOrEmpty(strValue) || !String.IsNullOrWhiteSpace(strValue))
-      {
-        //Expresión que solo acepta números.
-        Regex reg = new Regex("[0-9]");
-        if (reg.IsMatch(strValue))//Valida que la cadena contenga solo numeros
-        {
-          stringInt = int.Parse(strValue);//convierte la cadena a entero
-        }
-      }
-      return stringInt;
-    }
-    #endregion
   }
 }

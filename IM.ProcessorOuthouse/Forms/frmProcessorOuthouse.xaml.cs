@@ -1530,7 +1530,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
               string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()));
             if (lstRptFoliosCXC.Any())
-              finfo = clsReports.ExportRptFoliosCXC(strReport, fileFullPath, filters, lstRptFoliosCXC);
+              finfo = await clsReports.ExportRptFoliosCXC(strReport, fileFullPath, filters, lstRptFoliosCXC);
             break;
             #endregion
         }

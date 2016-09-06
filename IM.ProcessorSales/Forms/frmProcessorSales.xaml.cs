@@ -225,7 +225,7 @@ namespace IM.ProcessorSales.Forms
             
             list.AddRange(await BRReportsBySalesRoom.GetRptManiest(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
-              file = Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break;
           #endregion
 
@@ -291,7 +291,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
             {
-              file = Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             }
             break;
           #endregion
@@ -346,7 +346,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), 
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen, groupByTeams:clsFilter.BlnGroupedByTeams));
             if (list.Any())
-              file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -363,7 +363,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptRoomSales.SelfGenAndSelfGenTeam:
             list.AddRange(await BRReportsBySalesRoom.GetRptSelfGenAndSelfGenTeam(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
-              file = Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break;
           #endregion
 
@@ -372,7 +372,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, groupByTeam: clsFilter.BlnGroupedByTeams, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -381,7 +381,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBLocations(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
               includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -390,7 +390,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBCategories(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
                includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -399,7 +399,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetRptEfficiencyWeekly(clsFilter.lstEfficiency.Select(x => x.efDateFrom), clsFilter.lstEfficiency.Select(x => x.efDateTo),
               clsFilter.LstSalesRooms.First().ToString()));
             if (list.Any())
-              file = Reports.RptEfficiencyWeekly(reporteName, fileFullPath, filters, list.Cast<RptEfficiencyWeekly>().ToList(), clsFilter);
+              file = await Reports.RptEfficiencyWeekly(reporteName, fileFullPath, filters, list.Cast<RptEfficiencyWeekly>().ToList(), clsFilter);
             break; 
             #endregion
         }
@@ -467,7 +467,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptSalesRoomAndSalesman.FtmInAndOutHouse:
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms, clsFilter.Salesman.peID));
             if (list.Count > 0)
-              file = Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break; 
           #endregion
           #region Manifest
@@ -478,21 +478,21 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetRptManiest(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,
               clsFilter.Salesman.peID, clsFilter.LstEnumRole));
             if (list.Any())
-              file = Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break;
           #endregion
           #region Self Gen & Self Gen Team
           case EnumRptSalesRoomAndSalesman.SelfGenAndSelfGenTeam:
             list.AddRange(await BRReportsBySalesRoom.GetRptSelfGenAndSelfGenTeam(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,clsFilter.Salesman.peID));
             if (list.Count > 0)
-              file = Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+              file = await Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
             break;
           #endregion
           #region Stats by Closer
           case EnumRptSalesRoomAndSalesman.StatsByCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, groupByTeams: clsFilter.BlnGroupedByTeams));
             if (list.Any())
-              file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
           #region Stats by Exit Closer
@@ -507,7 +507,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID,
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, groupByTeam: clsFilter.BlnGroupedByTeams, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnIncludeAllSalesmen);
+              file = await Reports.RptStatisticsByFTB(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTB>().ToList(), clsFilter.BlnIncludeAllSalesmen);
             break;
           #endregion
 
@@ -515,7 +515,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptSalesRoomAndSalesman.StatsByFtbAndLocations:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBLocations(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, clsFilter.BlnGroupedByTeams, clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByFTBByLocations(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBLocations>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -523,7 +523,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptSalesRoomAndSalesman.StatsByFtbAndLocationsCategories:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBCategories(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID, clsFilter.BlnGroupedByTeams, clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByFTBByCategories(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByFTBCategories>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
           #region Statistics by Segments

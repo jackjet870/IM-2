@@ -9,6 +9,7 @@ using IM.Model.Enums;
 using System.Text;
 using IM.BusinessRules.BR;
 using System.Threading.Tasks;
+using IM.Model.Helpers;
 
 namespace IM.ProcessorSales.Classes
 {
@@ -309,11 +310,11 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [ecanul] 07/06/2016 Created
     /// </history>
-    public static FileInfo RptManifest(string report, string fileFullPath, List<Tuple<string, string>> filters,
+    public static async Task<FileInfo> RptManifest(string report, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptManifest> lstReport, DateTime dtStartm, DateTime dtEnd)
     {
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -330,13 +331,13 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [ecanul] 02/07/2016 Created
     /// </history>
-    public static FileInfo RptFTMInOutHouse(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptFTMInOutHouse> lstReport,
+    public static async Task<FileInfo> RptFTMInOutHouse(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptFTMInOutHouse> lstReport,
        DateTime dtStartm, DateTime dtEnd)
     {
       var nlist = lstReport.Select(c =>
       new
       {
-       // GR = true,
+        // GR = true,
         c.Liner,
         c.peN,
         c.OOP,
@@ -371,8 +372,8 @@ namespace IM.ProcessorSales.Classes
         AVS = c.TTotal != 0 ? c.TSalesAmount / c.TTotal : 0
       }).ToList();
       var data = TableHelper.GetDataTableFromList(nlist, true, true);
-      return EpplusHelper.CreateExcelCustom(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(),  
-        blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(),
+        blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -440,11 +441,11 @@ namespace IM.ProcessorSales.Classes
     ///  [aalcocer] 13/07/2016 Created
     ///  [ecanul]   16/08/2016 Modified, Se ha cambiado el formato Pivote a Excel Custom
     /// </history>
-    internal static FileInfo RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
+    internal static async Task<FileInfo> RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstReport);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByCloser(groupedByTeams),
-        blnRowGrandTotal: true, blnShowSubtotal: groupedByTeams, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByCloser(groupedByTeams),
+        blnRowGrandTotal: true, blnShowSubtotal: groupedByTeams, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByCloser
 
@@ -521,7 +522,7 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 26/07/2016 Created
     /// </history>
-    public static FileInfo RptSelfGenAndSelfGenTeam(string report, string fileFullPath, List<Tuple<string,string>> filters, List<RptSelfGenTeam> lstReport, DateTime dtStart, DateTime dtEnd)
+    public static async Task<FileInfo> RptSelfGenAndSelfGenTeam(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptSelfGenTeam> lstReport, DateTime dtStart, DateTime dtEnd)
     {
       var data = lstReport.Select(c => new
       {
@@ -542,11 +543,11 @@ namespace IM.ProcessorSales.Classes
         c.TSales,
         c.SelfGenType,
         EFF = c.TUPS != 0 ? c.TVol / c.TUPS : 0,
-        CPer = c.TUPS != 0 ?  c.TSales / c.TUPS : 0,
+        CPer = c.TUPS != 0 ? c.TSales / c.TUPS : 0,
         AVS = c.TSales != 0 ? c.TVol / c.TSales : 0
       }).ToList();
       var dtData = TableHelper.GetDataTableFromList(data, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -563,12 +564,11 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [michan] 21/07/2016 Created
     /// </history>
-    internal static FileInfo RptStatisticsByFTB(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
+    internal static async Task<FileInfo> RptStatisticsByFTB(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTB> lstReport, bool groupedByTeams)
     {
-      //var listTemp = lstReport.ToList();
+      lstReport = lstReport.orderListBy("Team asc, SalesmanStatus asc,PostName asc,TSales desc,TClosingFactor desc,TEfficiency desc,TUPS desc,SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBGroupedByTeams() : FormatReport.RptStatisticsByFTB(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
-      
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTB(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTB
 
@@ -585,10 +585,11 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [michan] 22/07/2016 Created
     /// </history>
-    internal static FileInfo RptStatisticsByFTBByLocations(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTBLocations> lstReport, bool groupedByTeams)
+    internal static async Task<FileInfo> RptStatisticsByFTBByLocations(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTBLocations> lstReport, bool groupedByTeams)
     {
+      lstReport = lstReport.orderListBy("Team asc, Locations asc, Total desc, ClosingFactor desc, Efficiency desc, UPS desc, SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByLocationsGroupedByTeams() : FormatReport.RptStatisticsByFTBByLocations(), blnShowSubtotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByLocations(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTBByLocations
 
@@ -605,10 +606,11 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [michan] 22/07/2016 Created
     /// </history>
-    internal static FileInfo RptStatisticsByFTBByCategories(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTBCategories> lstReport, bool groupedByTeams)
+    internal static async Task<FileInfo> RptStatisticsByFTBByCategories(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByFTBCategories> lstReport, bool groupedByTeams)
     {
+      lstReport = lstReport.orderListBy("Team asc, Locations asc, Total desc, ClosingFactor desc, Efficiency desc, UPS desc, SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByFTBByCategoriesGroupedByTeams() : FormatReport.RptStatisticsByFTBByCategories(), blnShowSubtotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByCategories(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTB
 
@@ -623,13 +625,13 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 16/08/2016 Created
     /// </history>
-    public static FileInfo RptEfficiencyWeekly(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptEfficiencyWeekly> lstReport, ClsFilter filtros)
+    public static async Task<FileInfo> RptEfficiencyWeekly(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptEfficiencyWeekly> lstReport, ClsFilter filtros)
     {
       var nReport = lstReport.Where(x => x.EfficiencyType != "Undefined Assistance").ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(nReport);
       var unAssistance = lstReport.Where(x => x.EfficiencyType == "Undefined Assistance").ToList();
 
-      if(filtros.blnSaveEfficiency)
+      if (filtros.blnSaveEfficiency)
       {
         Task<int> i = BREfficiency.SaveEfficiencies(nReport, filtros.LstSalesRooms.First(), filtros.DtmStart, filtros.DtmEnd);
       }
@@ -644,9 +646,9 @@ namespace IM.ProcessorSales.Classes
         });
         UIHelper.ShowMessage(str.ToString(), System.Windows.MessageBoxImage.Exclamation, "Front To Backs without Assistance");
       }
-      
-      return EpplusHelper.CreateExcelCustom(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), fileFullPath: fileFullPath);
-    } 
+
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), fileFullPath: fileFullPath, addEnumeration: true);
+    }
     #endregion
 
     #endregion

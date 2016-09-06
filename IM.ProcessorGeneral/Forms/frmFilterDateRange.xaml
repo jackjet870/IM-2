@@ -264,11 +264,11 @@
                 <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
-                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus" Width="170" Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
+                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" LostFocus="date_LostFocus" Width="170" Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
                 </Grid>
                 <Label Grid.Row="2" VerticalAlignment="Center" Content="To" HorizontalContentAlignment="Right" ></Label>
                 <Grid Name="pnlDtmEnd"  Grid.Row="2" Grid.Column="1">
-                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" Format="LongDate" LostFocus="date_LostFocus" Width="170"  Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
+                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" LostFocus="date_LostFocus" Width="170"  Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
                 </Grid>
             </Grid>
             <!--#endregion-->

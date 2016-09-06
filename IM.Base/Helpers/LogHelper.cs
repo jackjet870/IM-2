@@ -1,31 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using IM.Base.Helpers;
-
+using IM.BusinessRules.BR;
+using IM.Base.Classes;
 
 namespace IM.Base.Helpers
 {
   public class LogHelper
   {
-    #region Class Transaction
-    ///<summary>Clase para creacion de archivos de log</summary>
-    ///<history>
-    ///[michan] 14/04/2016 Created
-    ///</history>
-    public class Transaction
-    {
-      public DateTime Date { get; set; }
-      public string LogLevel { get; set; }
-      public string Message { get; set; }
-
-    }
-    #endregion
+    
 
     #region GetPath
     ///<summary>Obtiene el path de la aplicasión.</summary>
@@ -34,9 +21,7 @@ namespace IM.Base.Helpers
     ///</history>
     public static string GetPath(string strLogName, DateTime? dtmDate = null)
     {
-      //string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
-      //string path = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
-      if (dtmDate == null) dtmDate = DateTime.Now;
+      if (dtmDate == null) dtmDate = BRHelpers.GetServerDateTime();
       string path = AppContext.BaseDirectory.ToString();
       string pathFile = Path.Combine(Path.Combine(Path.Combine(path, "Log"), $"Log{strLogName}({dtmDate.Value.ToString("yyyy")})"), $"Log{strLogName}({DateHelper.GetMonthName(dtmDate.Value.Month)})");
       return pathFile;

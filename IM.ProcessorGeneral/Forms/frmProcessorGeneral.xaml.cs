@@ -1056,7 +1056,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstLinerStatistics = await BRReportsBySalesRoom.GetRptLinerStatistics(filter.StartDate,
                 filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstLinerStatistics.Any())
-              finfo = clsReports.ExportRptLinerStatistics(strReportName, fileFullPath, filters, lstLinerStatistics);
+              finfo = await clsReports.ExportRptLinerStatistics(strReportName, fileFullPath, filters, lstLinerStatistics);
             break;
 
           #endregion
@@ -1082,7 +1082,7 @@ namespace IM.ProcessorGeneral.Forms
                 ? "ALL"
                 : string.Join(",", filter.LstSalesRooms));
             if (lstTaxisIn.Any())
-              finfo = clsReports.ExportRptTaxiIn(strReportName, fileFullPath, filters, lstTaxisIn);
+              finfo = await clsReports.ExportRptTaxiIn(strReportName, fileFullPath, filters, lstTaxisIn);
             break;
 
           #endregion
@@ -1095,7 +1095,7 @@ namespace IM.ProcessorGeneral.Forms
                 ? "ALL"
                 : string.Join(",", filter.LstSalesRooms));
             if (lstTaxisOut.Any())
-              finfo = clsReports.ExportRptTaxiOut(strReportName, fileFullPath, filters, lstTaxisOut);
+              finfo = await clsReports.ExportRptTaxiOut(strReportName, fileFullPath, filters, lstTaxisOut);
             break;
 
             #endregion
@@ -1228,7 +1228,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptDepRef = await BRReportsByLeadSource.GetRptDepositRefunds(filter.StartDate, filter.EndDate,
                 leadSources);
             if (lstRptDepRef.Any())
-              finfo = clsReports.ExportRptDepositRefunds(strReportName, fileFullPath, filters, lstRptDepRef);
+              finfo = await clsReports.ExportRptDepositRefunds(strReportName, fileFullPath, filters, lstRptDepRef);
             break;
 
           #endregion
@@ -1261,7 +1261,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstLeadSources));
             if (lstRptInOutPr.Any())
-              finfo = clsReports.ExportRptInOutByPr(strReportName, fileFullPath, filters, lstRptInOutPr);
+              finfo = await clsReports.ExportRptInOutByPr(strReportName, fileFullPath, filters, lstRptInOutPr);
             break;
 
           #endregion
@@ -1301,7 +1301,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstPersonnelAccess = await BRReportsByLeadSource.GetRptPersonnelAccess(string.Join(",",
                 filter.LstLeadSources));
             if (lstPersonnelAccess.Any())
-              finfo = clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters, lstPersonnelAccess);
+              finfo = await clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters, lstPersonnelAccess);
             break;
 
           #endregion
@@ -1312,7 +1312,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstLeadSources));
             if (lstRptSelfGen.Item1.Any())
-              finfo = clsReports.ExportRptSelfGen(strReportName, fileFullPath, filters, lstRptSelfGen,
+              finfo = await clsReports.ExportRptSelfGen(strReportName, fileFullPath, filters, lstRptSelfGen,
                 filter.StartDate, filter.EndDate);
             break;
 
@@ -1528,7 +1528,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Production Referral":
             var lstRptProductionReferral = await BRGeneralReports.GetRptProductionReferral(filter.StartDate, filter.EndDate);
             if (lstRptProductionReferral.Any())
-              finfo = clsReports.ExportRptProductionReferral(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionReferral(strReportName, fileFullPath, filters,
                 lstRptProductionReferral);
             break;
 
@@ -1548,7 +1548,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptSalesByProgramLeadSourceMarkets = await BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(filter.StartDate,
                 filter.EndDate);
             if (lstRptSalesByProgramLeadSourceMarkets.Any())
-              finfo = clsReports.ExportRptSalesByProgramLeadSourceMarket(strReportName, fileFullPath, filters, lstRptSalesByProgramLeadSourceMarkets);
+              finfo = await clsReports.ExportRptSalesByProgramLeadSourceMarket(strReportName, fileFullPath, filters, lstRptSalesByProgramLeadSourceMarkets);
             break;
 
           #endregion

@@ -1154,24 +1154,23 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 07/May/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> rptFoliosCXC()
+    public static ExcelFormatItemsList rptFoliosCXC()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable { Title = "Es Show", PropertyName = "EsShow",  Order = 1, IsGroup = true},
-        new ExcelFormatTable { Title = "Tipo", PropertyName = "Tipo",  Order = 2, IsGroup = true},
-        new ExcelFormatTable { Title = "Folio CXC", PropertyName = "bdFolioCXC", Order = 1 },
-        new ExcelFormatTable { Title = "PR ID", PropertyName = "PR", Order = 2 },
-        new ExcelFormatTable { Title = "PR Name", PropertyName = "PRN", Order = 3 },
-        new ExcelFormatTable { Title = "Out. Inv.", PropertyName = "guOutInvitNum", Order = 3  },
-        new ExcelFormatTable { Title = "Lead Source", PropertyName = "lsN", Order = 3 },
-        new ExcelFormatTable { Title = "Last Name", PropertyName = "guLastName1",  Order = 3 },
-        new ExcelFormatTable { Title = "First Name", PropertyName = "guFirstName1", Order = 3  },
-        new ExcelFormatTable { Title = "Book D", PropertyName = "guBookD",  Format = EnumFormatTypeExcel.Date, Order = 3 },
-        new ExcelFormatTable { Title = "CXC User", PropertyName = "bdUserCXC",  },
-        new ExcelFormatTable { Title = "CXC User Name", PropertyName = "peN", },
-        new ExcelFormatTable { Title = "Date CXC", PropertyName = "bdEntryDCXC",Format = EnumFormatTypeExcel.Date, Order = 3 },
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Es Show", "EsShow", isGroup: true, isVisible: false);
+      lst.Add("Tipo", "Tipo", isGroup: true, isVisible: false);
+      lst.Add("Folio CXC", "bdFolioCXC");
+      lst.Add("PR ID", "PR");
+      lst.Add("PR Name", "PRN");
+      lst.Add("Out. Inv.", "guOutInvitNum");
+      lst.Add("Lead Source", "lsN");
+      lst.Add("Last Name", "guLastName1");
+      lst.Add("First Name", "guFirstName1");
+      lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date);
+      lst.Add("CXC User", "bdUserCXC");
+      lst.Add("CXC User Name", "peN");
+      lst.Add("Date CXC", "bdEntryDCXC", format: EnumFormatTypeExcel.Date);
+      return lst;
     }
     #endregion
 

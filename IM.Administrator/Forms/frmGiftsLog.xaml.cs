@@ -100,16 +100,12 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 01/07/2016
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      #region format Excel
-      List<ExcelFormatTable> lstFormat = clsFormatReport.RptGiftLog();
-      #endregion
-      EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), lstFormat);    
-
-      var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true,true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID",idGift)},
-        "Gifts Log", DateHelper.DateRangeFileName(DateTime.Today,DateTime.Today), lstFormat);
+      var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true, true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID", idGift) },
+        "Gifts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
     }
     #endregion
 

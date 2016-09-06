@@ -31,7 +31,7 @@ namespace IM.Host.Forms
       DataContext = this;
       User = App.User.User;
       _date = selectedDate;
-    } 
+    }
     #endregion
 
     #region Métodos Privados
@@ -43,6 +43,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [edgrodriguez] 21/Jun/2016 Created
     /// [jorcanche] 01/09/2016 modified se agrego validacion si no se selecciono un reporte
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
     private async void lstHostReports_Select(object sender, RoutedEventArgs e)
     {
@@ -64,7 +65,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
-            fileinfo=EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
+            fileinfo= await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -75,7 +76,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
-            fileinfo=EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
+            fileinfo=await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");

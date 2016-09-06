@@ -72,19 +72,19 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [jorcanche]  created 07/07/2016
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private void btnPrintSaleLog_Click(object sender, RoutedEventArgs e)
+    private async void btnPrintSaleLog_Click(object sender, RoutedEventArgs e)
     {
       if (dgGuestLog.ItemsSource == null) return;
-        var lstFormat = clsFormatReports.RptGuestLog();
-      EpplusHelper.OrderColumns(dgGuestLog.Columns.ToList(),lstFormat);
-        EpplusHelper.CreateExcelCustom(
-          TableHelper.GetDataTableFromList((List<GuestLogData>)dgGuestLog.ItemsSource, true, true, true),
-          new List<Tuple<string, string>> { Tuple.Create("Guest Id", _idGuest.ToString()) },
-          "Guest Log", 
-          DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), 
-          lstFormat);
-    } 
-	#endregion
+
+      await EpplusHelper.CreateCustomExcel(
+        TableHelper.GetDataTableFromList((List<GuestLogData>)dgGuestLog.ItemsSource, true, true, true),
+        new List<Tuple<string, string>> { Tuple.Create("Guest Id", _idGuest.ToString()) },
+        "Guest Log",
+        DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
+        EpplusHelper.OrderColumns(dgGuestLog.Columns.ToList(), clsFormatReports.RptGuestLog()));
+    }
+    #endregion
   }
 }

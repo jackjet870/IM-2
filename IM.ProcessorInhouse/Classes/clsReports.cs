@@ -30,7 +30,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrs, replaceStringNullOrWhiteSpace: true);
       return  await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal:true, fileFullPath: fileFullPath, addEnumeration:true);
-      //EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), true, fileFullPath: fileFullPath);
+      
     }
 
     #endregion ExportRptCostByPR

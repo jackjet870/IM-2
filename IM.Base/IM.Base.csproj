@@ -116,6 +116,7 @@
     <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />
+    <Compile Include="Classes\Transaction.cs" />
     <Compile Include="Converters\ByteToBooleanConverter.cs" />
     <Compile Include="Converters\DateAndTimeConverter.cs" />
     <Compile Include="Converters\MathOperationConverter.cs" />

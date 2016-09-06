@@ -2453,8 +2453,6 @@ namespace IM.Host.Forms
           case "Z":
             curCharge = 0;
             break;
-          default:
-            break;
         }
       }
       // Calculamos el total del cargo
@@ -2631,7 +2629,7 @@ namespace IM.Host.Forms
     /// </history>
     private void UpdateSale_Click(object sender, RoutedEventArgs e)
     {
-      if (txtProgramCaption.Text.ToUpper().Equals("INHOUSE"))
+      if (txtProgramCaption.Text.ToUpper().Equals("INHOUSE") && !dtgGifts.IsReadOnly)
       {
         var row = dtgGifts.SelectedItem as GiftsReceiptDetail;
         row.geSale = Convert.ToBoolean((sender as CheckBox).IsChecked);
@@ -2639,31 +2637,24 @@ namespace IM.Host.Forms
       }
       else
       {
-        (sender as CheckBox).IsChecked = (dtgGifts.SelectedItem as GiftsReceiptDetail).geSale;
+        (sender as CheckBox).IsChecked = !(sender as CheckBox).IsChecked;
       }
     }
     #endregion
 
-    private async void dtgReceipts_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-      GiftsReceiptsShort selected = dtgReceipts.SelectedItem as GiftsReceiptsShort;
-
-      _busyIndicator.IsBusy = true;
-      _busyIndicator.BusyContent = "Loading Gift Receipt - " + selected.grID;
-
-      await Load_Record();
-      _busyIndicator.IsBusy = false;
-
-      DataGridRow row = ((sender as DataGrid).ItemContainerGenerator.ContainerFromIndex((sender as DataGrid).SelectedIndex)) as DataGridRow;
-      row.Focus();
-      //dtgReceipts_PreviewMouseLeftButtonDown(row, null);
-      //await dtgReceipts.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(delegate() { row.Focus(); Keyboard.Focus(row); }));
-      //row.BeginInit();
-    }
-
+    #region dtgReceipts_PreviewMouseLeftButtonDown
+    /// <summary>
+    /// Actualiza la informacion del recibo de regalo de acuerdo al Receipt Selecionado
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 29/Ago/2016 Created
+    /// </history>
     private async void dtgReceipts_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       DataGridRow row = sender as DataGridRow;
+
+      // Verificamos que no sea null la seleccion
+      if (row == null) return;
 
       // Verificamos que ses un row distinto al seleccionado actualmente
       if ((row.DataContext as GiftsReceiptsShort) != dtgReceipts.SelectedItem)
@@ -2678,7 +2669,8 @@ namespace IM.Host.Forms
         row.Focus();
       }
       row.Focus();
-    }
+    } 
+    #endregion
 
   }
 }
