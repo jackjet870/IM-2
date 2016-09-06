@@ -56,6 +56,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 07/04/2016 Modificated Agregado Validaciones y "show" del reporte
     /// [ecanul] 20/04/2016 Modificated Metodo Movido de frmInhouse a EquityHelpers
     /// [ecanul] 06/07/2016 Modified. Agregue subreporte RptEquityMembershipsPrevious
+    /// [ecanul] 08/09/2016 Modified. Agregado nombre del web service y Club en el titulo del mensaje que genero un error.
     /// </history>
     public static void EquityReport(string membershipNum, Decimal company, int? clubAgency, int? clubGuest)
     {
@@ -78,11 +79,14 @@ namespace IM.Inhouse.Classes
           else
           {
             //Si no se encuentra un club en la tabla de agencies o en la tabla del guest se manda un error diciendo esto y se sale del metodo
-            UIHelper.ShowMessage("Agency Not Found", MessageBoxImage.Error, "GetRptEquity");
+            UIHelper.ShowMessage("Agency Not Found", MessageBoxImage.Error, "Equity Report");
             return;
           }
 
           Services.ClubesService.RptEquity rptClubes = null;
+
+          var clubesError = $"Equity Report - Clubes - {EnumToListHelper.GetEnumDescription(club)}";
+          var callCenterError = $"Equity Report - Credito y Cobranza - {EnumToListHelper.GetEnumDescription(club)}";
           try
           {
             //obtenemos los datos del reporte del servicio de Clubes
@@ -90,7 +94,7 @@ namespace IM.Inhouse.Classes
           }
           catch (Exception ex)
           {
-            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "GetRptEquity");
+            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, clubesError);
             return;
           }
          
@@ -98,13 +102,13 @@ namespace IM.Inhouse.Classes
           //si no se pudo generenar el reporte en clubes y nos salimos
           if (rptClubes == null)
           {
-            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Clubes");
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, clubesError);
             return;
           }
           //si no encontramos la membrecia en clubles, nos salimos
           if (rptClubes.Membership == null)
           {
-            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, "Clubes");
+            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, clubesError);
             return;
           }
           Services.CallCenterService.RptEquity rptCallCenter = null;
@@ -115,24 +119,21 @@ namespace IM.Inhouse.Classes
           }
           catch (Exception ex)
           {
-            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "GetRptEquity");
+            UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, callCenterError);
             return;
-          }
-
-          
-          
+          }   
 
           // si no se pudo generar reporte en Call Center nos salimos 
           if (rptCallCenter == null)
           {
-            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, callCenterError);
             return;
           }
 
           // si no encontramos la membresia en Credito y Cobranza Reserva, nos salimos
           if (rptCallCenter.Membership == null)
           {
-            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
+            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, callCenterError);
             return;
           }
 
