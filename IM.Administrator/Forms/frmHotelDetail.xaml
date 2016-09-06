@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
         Title="Hotel Detail" Closing="Window_Closing">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
@@ -35,7 +35,7 @@
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="4"  VerticalAlignment="Center" IsChecked="{Binding hoA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Visibility="Hidden" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>
