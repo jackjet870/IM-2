@@ -117,7 +117,8 @@
           </Grid.ColumnDefinitions>
 
           <!--#region Grid_Receipts-->
-          <DataGrid x:Name="dtgReceipts" Grid.Column="0" Grid.Row="0" Margin="1,4,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsReceipts}}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" PreviewKeyDown="dtgReceipts_PreviewKeyDown">
+          <DataGrid x:Name="dtgReceipts" Grid.Column="0" Grid.Row="0" Margin="1,4,0,0" AutoGenerateColumns="False" EnableRowVirtualization="True"
+                    ItemsSource="{Binding Source={StaticResource dsReceipts}}" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
             <DataGrid.Resources>
               <Style TargetType="DataGridRow">
                 <EventSetter Event="PreviewMouseLeftButtonDown" Handler="dtgReceipts_PreviewMouseLeftButtonDown"/>
