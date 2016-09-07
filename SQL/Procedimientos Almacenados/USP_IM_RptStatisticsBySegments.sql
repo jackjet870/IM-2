@@ -15,6 +15,7 @@ GO
 
 **
 ** [aalcocer] 04/Jul/2016 Created
+** [aalcocer] 07/Sep/2016 Modified. Se corrige error de resultados cambiando variables tipo tabla a tablas temporales
 **
 */
 create procedure [dbo].[USP_IM_RptStatisticsBySegments]
@@ -29,6 +30,24 @@ as
 --SET FMTONLY OFF
 set nocount on
 
+--=================== TABLA StatsBySegment =============================
+--#region StatsBySegment Table
+CREATE TABLE #StatsBySegment (
+	SalemanID varchar(10),
+	SalemanName varchar(40),
+	SalemanType varchar(50),
+	SegmentN varchar(30),
+	TeamN varchar(30),
+	TeamLeaderN varchar(40),
+	[Status] VARCHAR(10) DEFAULT 'ACTIVE',
+	UPS money,
+	Sales money,
+	Amount money,
+	Efficiency money,
+	ClosingFactor money
+	);
+--#endregion
+
 DECLARE @DatesFromTable table(id int identity(1,1),DateFrom DateTime);
 DECLARE @DatesToTable table(id int identity(1,1),DateTo DateTime);
 DECLARE @SalesRoomsTable table(id int identity(1,1),SalesRoom varchar(10));
@@ -40,63 +59,18 @@ INSERT into @DatesFromTable(DateFrom) SELECT convert(datetime, item) from dbo.Sp
 INSERT into @DatesToTable(DateTo) SELECT convert(datetime, item) from dbo.Split(@DatesTo,',')
 INSERT into @SalesRoomsTable(SalesRoom) SELECT item from dbo.Split(@SalesRooms,',')
 
---#region ManifestTotalTable
-DECLARE @ManifestTotalTable table (
---campos de huespedes
-	id int identity(1,1),
-	guID int,	
-	guShow bit default 0,	
-	TeamSelfGen varchar(20),
-	guSelfGen bit,
-	Segment varchar(10),
-	SegmentN varchar(30),
-	salesmanDate DateTime,
-	-- Campos de la tabla de ventas	
-	saID int,
-	procSales int,	
-	saGrossAmount money default 0,
-	-- Vendedores
-	-- Liner 1
-	Liner1 varchar(10),
-	Liner1N varchar(40),
-	Liner1P varchar(10),
-	-- Liner 2
-	Liner2 varchar(10),
-	Liner2N varchar(40),
-	Liner2P varchar(10),
-	-- Closer 1
-	Closer1 varchar(10),
-	Closer1N varchar(40),
-	Closer1P varchar(10),
-	-- Closer 2
-	Closer2 varchar(10),
-	Closer2N varchar(40),
-	Closer2p varchar(10),
-	-- Closer 3
-	Closer3 varchar(10),
-	Closer3N varchar(40),
-	Closer3p varchar(10),
-	-- Exit 1
-	Exit1 varchar(10),
-	Exit1N varchar(40),
-	Exit1P varchar(10),
-	-- Exit 2
-	Exit2 varchar(10),
-	Exit2N varchar(40),
-	Exit2P varchar(10));	
---#endregion
-
 DECLARE @nSalesRoom int; --numero de salas
-SET @nSalesRoom = (SELECT COUNT(*) FROM @SalesRoomsTable sr
-INNER JOIN @DatesFromTable df on sr.id = df.id
-INNER Join @DatesToTable dt ON sr.id= dt.id
-);
+SELECT @nSalesRoom = COUNT(*) FROM @SalesRoomsTable sr
+	INNER JOIN @DatesFromTable df on sr.id = df.id
+	INNER Join @DatesToTable dt ON sr.id= dt.id
+
 WHILE @nSalesRoom <> 0 
 BEGIN
 
+
 --=================== TABLA MANIFEST =============================
 --#region ManifestTable
-DECLARE @Manifest table (
+CREATE TABLE #Manifest (
 --campos de huespedes
 	id int identity(1,1),
 	guID int,	
@@ -151,7 +125,7 @@ WHERE sr.id = @nSalesRoom
 --===================================================================
 --=======================   MANIFEST    =============================
 --===================================================================
-INSERT into @Manifest (guID, guShow, salesmanDate, guSelfGen, TeamSelfGen,
+INSERT into #Manifest (guID, guShow, salesmanDate, guSelfGen, TeamSelfGen,
 Segment,SegmentN, saID, procSales, Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, 
 Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 select DISTINCT
@@ -237,13 +211,13 @@ order by G.guID;
 --#region insertSales
 
 DECLARE @nReg int; -- numero de regitros
-SELECT @nReg = COUNT(*) FROM @Manifest
+SELECT @nReg = COUNT(*) FROM #Manifest
 DECLARE @cont int; -- almacena la cantidad de veces que se recorre el while
 SET @cont = 1;
 DECLARE @gu int; -- si tiene ventas
 WHILE @nReg >= @cont 
 BEGIN
-	SELECT @gu = guid FROM @Manifest WHERE id = @cont --obtiene el id del gest	
+	SELECT @gu = guid FROM #Manifest WHERE id = @cont --obtiene el id del gest	
 	DECLARE @sale int;
 	SELECT TOP 1 @sale = sagu FROM Sales WHERE sagu = @gu
 	--#region IF @sale
@@ -317,7 +291,7 @@ BEGIN
 			AND (S.saCancel = 0 OR NOT S.saCancelD BETWEEN @DateFrom AND @DateTo)
 			AND S.sasr = @SalesRoom	
 			AND (@Own = 0 OR dbo.UFN_IM_StringComparer(S.saLiner1,S.saLiner2,S.saCloser1,S.saCloser2,S.saCloser3,S.saExit1,S.saExit2) = 1)	
-		INSERT INTO @Manifest (guID,Segment,SegmentN, saID,salesmanDate,saGrossAmount,
+		INSERT INTO #Manifest (guID,Segment,SegmentN, saID,salesmanDate,saGrossAmount,
 		Liner1,Liner1N,Liner1P,Liner2,Liner2N,Liner2P,Closer1,Closer1N,Closer1P,Closer2,Closer2N,Closer2p,Closer3,Closer3N,Closer3p,
 		Exit1,Exit1N,Exit1P,Exit2,Exit2N,Exit2P,procSales)
 		SELECT * FROM #tbTemp;
@@ -332,7 +306,7 @@ END;
 --===================  DEPOSIT SALES    =============================
 --===================================================================
 --#region Deposit Sales
-INSERT into @Manifest (guID, salesmanDate, guSelfGen, TeamSelfGen, 
+INSERT into #Manifest (guID, salesmanDate, guSelfGen, TeamSelfGen, 
 Segment, SegmentN, procSales, Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, 
 Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 select 
@@ -420,7 +394,7 @@ order by G.guID;
 --======================  OTHER SALES    ============================
 --===================================================================
 --#region Other Sales
-INSERT into @Manifest (guID, guSelfGen, salesmanDate, Segment, SegmentN, saID, procSales, saGrossAmount, 
+INSERT into #Manifest (guID, guSelfGen, salesmanDate, Segment, SegmentN, saID, procSales, saGrossAmount, 
 Liner1, Liner1N, Liner1P, Liner2, Liner2N, Liner2P, Closer1, Closer1N, Closer1P, Closer2, Closer2N, 
 Closer2p, Closer3, Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P)
 SELECT 
@@ -506,22 +480,11 @@ WHERE
 ORDER BY S.sagu;
 --#endregion
 
-INSERT INTO @ManifestTotalTable(guID, guShow, TeamSelfGen, guSelfGen, Segment, SegmentN, salesmanDate, saID, procSales, saGrossAmount, Liner1, 
-Liner1N, Liner1P, Liner2, Liner2N, Liner2P, Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3,
-Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P) 
-SELECT guID, guShow, TeamSelfGen, guSelfGen, Segment, SegmentN, salesmanDate, saID, procSales, saGrossAmount, Liner1, 
-Liner1N, Liner1P, Liner2, Liner2N, Liner2P, Closer1, Closer1N, Closer1P, Closer2, Closer2N, Closer2p, Closer3,
-Closer3N, Closer3p, Exit1, Exit1N, Exit1P, Exit2, Exit2N, Exit2P FROM @Manifest
-
-SET @nSalesRoom = @nSalesRoom - 1;
-DELETE @Manifest;
-	
-END
 
 
 --=================== TABLA Salesman =============================
 --#region Salesman Table
-DECLARE @Salesman table (
+CREATE TABLE #Salesman (
 	id int,	
 	SalemanID varchar(10),
 	SalemanName varchar(40),
@@ -532,107 +495,88 @@ DECLARE @Salesman table (
 	SalemanType varchar(50)
 	);
 --#endregion
-	
 	--=================== Insert Salesman =============================
 	--#region Insert Salesman
 
 	--#region Liner1
-INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Liner1 ,Liner1N, 'Liner',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Liner1,Liner1P,'Liner',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default)
-	from @ManifestTotalTable WHERE Liner1 is NOT NULL
+	from #Manifest WHERE Liner1 is NOT NULL
 --#endregion
 	
 	--#region Liner2
-INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Liner2 ,Liner2N, 'Liner',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Liner2,Liner2P,'Liner',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default)
-	from @ManifestTotalTable m WHERE Liner2 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Liner2)
+	from #Manifest m WHERE Liner2 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Liner2)
 --#endregion
 	
 	--#region Closer1
-	INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+	INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer1 ,Closer1N, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Closer1,Closer1P,'Closer',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
-	from @ManifestTotalTable m WHERE Closer1 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer1);
+	from #Manifest m WHERE Closer1 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer1);
 	--#endregion
 	
 	--#region Closer2
-	INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+	INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer2 ,Closer2N, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Closer2,Closer2P,'Closer',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
-	from @ManifestTotalTable m WHERE Closer2 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer2)
+	from #Manifest m WHERE Closer2 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer2)
 	--#endregion
 	
 	--#region Closer3
-	INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+	INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer3 ,Closer3N, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Closer3,Closer3P,'Closer',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
-	from @ManifestTotalTable m WHERE Closer3 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer3)	
+	from #Manifest m WHERE Closer3 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Closer3)	
 	--#endregion
 	
 	--#region Exit1
-	INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+	INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Exit1 ,Exit1N,  'Exit',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Exit1,Exit1P,'Exit',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default)
-	from @ManifestTotalTable m WHERE Exit1 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Exit1)	
+	from #Manifest m WHERE Exit1 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Exit1)	
 	--#endregion
 	
 	--#region Exit2
-	INSERT into @Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
+	INSERT into #Salesman (id, SalemanID,SalemanName, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Exit2 ,Exit2N, 'Exit',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	dbo.UFN_IM_GetSalesmanTypeBySegments(Exit2,Exit2P,'Exit',guSelfGen),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default)
-	from @ManifestTotalTable m WHERE Exit2 is NOT NULL AND NOT EXISTS (SELECT * from @Salesman s WHERE s.id=m.id AND s.SalemanID =m.Exit2)	
---#endregion
-	
-	--=================== TABLA StatsBySegment =============================
---#region StatsBySegment Table
-DECLARE @StatsBySegment table (
-	SalemanID varchar(10),
-	SalemanName varchar(40),
-	SalemanType varchar(50),
-	SegmentN varchar(30),
-	TeamN varchar(30),
-	TeamLeaderN varchar(40),
-	[Status] VARCHAR(10) DEFAULT 'ACTIVE',
-	UPS money,
-	Sales money,
-	Amount money,
-	Efficiency money,
-	ClosingFactor money
-	);
+	from #Manifest m WHERE Exit2 is NOT NULL AND NOT EXISTS (SELECT * from #Salesman s WHERE s.id=m.id AND s.SalemanID =m.Exit2)	
 --#endregion
 
 
-	INSERT INTO @StatsBySegment
+	INSERT INTO #StatsBySegment
 	SELECT SalemanID, SalemanName, SalemanType, SegmentN , 
 	TeamN, TeamLeaderN, [Status],
 	sum(UPS) AS UPS ,SUM(Sales) AS Sales, sum(Amount) AS Amount,
 	dbo.UFN_OR_SecureDivision( sum(Amount),sum(UPS)) Efficiency,
 	dbo.UFN_OR_SecureDivision(SUM(Sales),sum(UPS)) ClosingFactor
 	FROM(
-		SELECT DISTINCT s.*,m.SegmentN,		
+		SELECT DISTINCT s.*,m.SegmentN,	
 		CASE WHEN t.SalesRoom = @SalesRoom AND ISNULL(CONVERT(varchar(1),tc.tsN),'') <> ISNULL(CONVERT(varchar(1),t.TeamN),'') THEN 'INACTIVE' ELSE 'ACTIVE'  END AS [Status],
 		CASE WHEN t.SalesRoom <> @SalesRoom THEN 'TEAMS OF OTHER SALES ROOMS' ELSE 
 			CASE WHEN t.TeamN IS NULL THEN --si no tiene equipo
@@ -642,19 +586,25 @@ DECLARE @StatsBySegment table (
 			ELSE t.TeamN END
 		END AS TeamN,
 		CASE WHEN t.SalesRoom <> @SalesRoom THEN '' ELSE ISNULL(CONVERT(varchar(40),t.TeamLeaderN),'') END AS TeamLeaderN
-		FROM @Salesman s	
-		INNER JOIN @ManifestTotalTable m ON m.id = s.id
+		FROM #Salesman s	
+		INNER JOIN #Manifest m ON m.id = s.id
 		INNER JOIN Personnel p on p.peID= s.SalemanID
 		left join TeamsSalesmen tc on peTeam = tsID	
 		cross apply  dbo.UFN_IM_GetPersonnelTeamSalesmenByDate(s.SalemanID,m.salesmanDate) t
 		) AS x
 		GROUP by SalemanID,SalemanName,SalemanType,SegmentN, TeamN, TeamLeaderN, [Status]
 
+SET @nSalesRoom = @nSalesRoom - 1
+DROP TABLE #Manifest
+DROP TABLE #Salesman
+	
+END
 
-IF @IncludeAllSalesmen=1 AND  (SELECT COUNT(*) from @StatsBySegment)>0
+
+IF @IncludeAllSalesmen=1 AND  (SELECT COUNT(*) from #StatsBySegment)>0
 BEGIN			
-	INSERT INTO @StatsBySegment(SalemanID, SalemanName, SalemanType, SegmentN, TeamN, TeamLeaderN)
-	select P.peID, P.peN as SalesmanN, poN , (SELECT top 1 SegmentN from @StatsBySegment), IsNull(tsN, 'NO TEAM'), IsNull(L.peN, '')
+	INSERT INTO #StatsBySegment(SalemanID, SalemanName, SalemanType, SegmentN, TeamN, TeamLeaderN)
+	select P.peID, P.peN as SalesmanN, poN , (SELECT top 1 SegmentN from #StatsBySegment), IsNull(tsN, 'NO TEAM'), IsNull(L.peN, '')
 	from Personnel P 
 	left join Posts on P.pepo = poID 
 	left join TeamsSalesmen on P.peTeamType = 'SA' and P.pePlaceID = tssr and P.peTeam = tsID 
@@ -667,13 +617,13 @@ BEGIN
 		-- Personal activo
 		and P.peA = 1
 		--si no se encuentra el vendedor
-		AND NOT EXISTS (SELECT * from @StatsBySegment  WHERE SalemanID = p.peID)
+		AND NOT EXISTS (SELECT * from #StatsBySegment  WHERE SalemanID = p.peID)
 END	
 		
 --===================================================================
 --===================  SELECT  ===========================
 --===================================================================
-SELECT * from @StatsBySegment;
+SELECT * from #StatsBySegment
 		
 
 GO
