@@ -45,5 +45,7 @@ namespace IM.Model
         public Nullable<decimal> Cl_Factor { get; set; }
         public Nullable<decimal> Ca_Factor { get; set; }
         public Nullable<decimal> Avg_Sale { get; set; }
+        public string P_Status { get; set; }
+        public Nullable<decimal> T_Books { get; set; }
     }
 }
