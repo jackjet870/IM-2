@@ -192,20 +192,20 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     public void SaveFrmFilterValues()
     {
-      if (!chkAllLeadSources.IsChecked.Value)
-        frmPO._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList();
-      if (!chkAllLeadSourcesPaymentComm.IsChecked.Value)
-        frmPO._lstLeadSourcesPaymentComm = grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => grdLeadSourcesPaymentComm.Items.IndexOf(c)).ToList();
-      if (!chkAllPaymentTypes.IsChecked.Value)
-        frmPO._lstPaymentTypes = grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => grdPaymentTypes.Items.IndexOf(c)).ToList();
-      if (!chkAllPR.IsChecked.Value)
-        frmPO._lstPRs = grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => grdPR.Items.IndexOf(c)).ToList();
-      if (!chkAllChargeTo.IsChecked.Value)
-        frmPO._lstChargeTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
-      if (!chkAllGifts.IsChecked.Value)
-        frmPO._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
-      if (!chkAllGiftsProdGift.IsChecked.Value)
-        frmPO._lstGiftsProdGift = grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => grdGiftsProdGift.Items.IndexOf(c)).ToList();
+      //if (!chkAllLeadSources.IsChecked.Value)
+        frmPO._clsFilter._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList();
+      //if (!chkAllLeadSourcesPaymentComm.IsChecked.Value)
+        frmPO._clsFilter._lstLeadSourcesPaymentComm = grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList();
+      //if (!chkAllPaymentTypes.IsChecked.Value)
+        frmPO._clsFilter._lstPaymentTypes = grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList();
+      //if (!chkAllPR.IsChecked.Value)
+        frmPO._clsFilter._lstPRs = grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList();
+      //if (!chkAllChargeTo.IsChecked.Value)
+        frmPO._clsFilter._lstChargeTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
+      //if (!chkAllGifts.IsChecked.Value)
+        frmPO._clsFilter._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+      //if (!chkAllGiftsProdGift.IsChecked.Value)
+        frmPO._clsFilter._lstGiftsProdGift = grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
       frmPO._cboDateSelected = (EnumPredefinedDate)cboDate.SelectedValue;
       frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
       frmPO._dtmStart = dtmStart.Value.Value;
@@ -219,6 +219,14 @@ namespace IM.ProcessorOuthouse.Forms
       frmPO._folTo = (txtFolTo.Text!=null) ? txtFolTo.Text : "0";
       frmPO._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmPO._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+
+      frmPO._clsFilter.AllLeadSources = chkAllLeadSources.IsChecked.Value;
+      frmPO._clsFilter.AllLeadSourcesPaymentComm = chkAllLeadSourcesPaymentComm.IsChecked.Value;
+      frmPO._clsFilter.AllPaymentTypes = chkAllPaymentTypes.IsChecked.Value;
+      frmPO._clsFilter.AllPRs = chkAllPR.IsChecked.Value;
+      frmPO._clsFilter.AllChargeTo = chkAllChargeTo.IsChecked.Value;
+      frmPO._clsFilter.AllGift = chkAllGifts.IsChecked.Value;
+      frmPO._clsFilter.AllGiftsProdGift = chkAllGiftsProdGift.IsChecked.Value;
     }
 
     #endregion SaveFrmFilterValues
@@ -332,13 +340,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllLeadSources.IsChecked = blnAllLeadSources;
       chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdLeadSources.ItemsSource != null && chkAllLeadSources.IsChecked != null && (!chkAllLeadSources.IsChecked.Value && chkAllLeadSources.IsEnabled))
+      if (!frmPO._clsFilter._lstLeadSources.Any()) return;
+
+      chkAllLeadSources.IsChecked = (grdLeadSources.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllLeadSources;
+
+      if (grdLeadSources.ItemsSource != null && !frmPO._clsFilter.AllLeadSources && !blnOnlyOneRegister)
       {
-        frmPO._lstLeadSources.ForEach(c =>
+        grdLeadSources.SelectedItem = null;
+        frmPO._clsFilter._lstLeadSources.ForEach(c =>
         {
-          grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c));
+          grdLeadSources.SelectedItems.Add(_lstLeadSources.FirstOrDefault(l => l.lsID == c));
         });
       }
+      else
+        grdLeadSources.SelectedItem = _lstLeadSources.FirstOrDefault(c => c.lsID ==frmPO._clsFilter._lstLeadSources[0]);
     }
     #endregion
 
@@ -365,13 +380,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllLeadSourcesPaymentComm.IsChecked = blnAllLeadSourcesPaymentComm;
       chkAllLeadSourcesPaymentComm.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdLeadSourcesPaymentComm.ItemsSource != null && chkAllLeadSourcesPaymentComm.IsChecked != null && (!chkAllLeadSourcesPaymentComm.IsChecked.Value && chkAllLeadSourcesPaymentComm.IsEnabled))
+      if (!frmPO._clsFilter._lstLeadSourcesPaymentComm.Any()) return;
+
+      chkAllLeadSourcesPaymentComm.IsChecked = (grdLeadSourcesPaymentComm.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllLeadSourcesPaymentComm;
+
+      if (grdLeadSourcesPaymentComm.ItemsSource != null && !frmPO._clsFilter.AllLeadSourcesPaymentComm && !blnOnlyOneRegister)
       {
-        frmPO._lstLeadSourcesPaymentComm.ForEach(c =>
+        grdLeadSourcesPaymentComm.SelectedItem = null;
+        frmPO._clsFilter._lstLeadSourcesPaymentComm.ForEach(c =>
         {
-          grdLeadSourcesPaymentComm.SelectedItems.Add(grdLeadSourcesPaymentComm.Items.GetItemAt(c));
+          grdLeadSourcesPaymentComm.SelectedItems.Add(_lstLeadSourcesPaymentComm.FirstOrDefault(l => l.lsID == c));
         });
       }
+      else
+        grdLeadSourcesPaymentComm.SelectedItem = _lstLeadSourcesPaymentComm.FirstOrDefault(c => c.lsID == frmPO._clsFilter._lstLeadSourcesPaymentComm[0]);
     }
     #endregion
 
@@ -397,13 +419,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllPaymentTypes.IsChecked = blnAllPaymentTypes;
       chkAllPaymentTypes.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdPaymentTypes.ItemsSource != null && chkAllPaymentTypes.IsChecked != null && (!chkAllPaymentTypes.IsChecked.Value && chkAllPaymentTypes.IsEnabled))
+      if (!frmPO._clsFilter._lstPaymentTypes.Any()) return;
+
+      chkAllPaymentTypes.IsChecked = (grdPaymentTypes.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllPaymentTypes;
+
+      if (grdPaymentTypes.ItemsSource != null && !frmPO._clsFilter.AllPaymentTypes && !blnOnlyOneRegister)
       {
-        frmPO._lstPaymentTypes.ForEach(c =>
+        grdPaymentTypes.SelectedItem = null;
+        frmPO._clsFilter._lstPaymentTypes.ForEach(c =>
         {
-          grdPaymentTypes.SelectedItems.Add(grdPaymentTypes.Items.GetItemAt(c));
+          grdPaymentTypes.SelectedItems.Add(_lstPaymentType.FirstOrDefault(pt => pt.ptID == c));
         });
       }
+      else
+        grdPaymentTypes.SelectedItem = _lstPaymentType.FirstOrDefault(c => c.ptID == frmPO._clsFilter._lstPaymentTypes[0]);
     }
     #endregion
 
@@ -430,13 +459,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllPR.IsChecked = blnAllPRs;
       chkAllPR.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdPR.ItemsSource != null && chkAllPR.IsChecked != null && (!chkAllPR.IsChecked.Value && chkAllPR.IsEnabled))
+      if (!frmPO._clsFilter._lstPRs.Any()) return;
+
+      chkAllPR.IsChecked = (grdPR.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllPRs;
+
+      if (grdPR.ItemsSource != null && !frmPO._clsFilter.AllPRs && !blnOnlyOneRegister)
       {
-        frmPO._lstPRs.ForEach(c =>
+        grdPR.SelectedItem = null;
+        frmPO._clsFilter._lstPRs.ForEach(c =>
         {
-          grdPR.SelectedItems.Add(grdPR.Items.GetItemAt(c));
+          grdPR.SelectedItems.Add(_lstPRs.FirstOrDefault(pr => pr.peID == c));
         });
       }
+      else
+        grdPR.SelectedItem = _lstPRs.FirstOrDefault(c => c.peID == frmPO._clsFilter._lstPRs[0]);
     }
     #endregion
 
@@ -462,13 +498,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllChargeTo.IsChecked = blnAllChargeTo;
       chkAllChargeTo.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdChargeTo.ItemsSource != null && chkAllChargeTo.IsChecked != null && (!chkAllChargeTo.IsChecked.Value && chkAllChargeTo.IsEnabled))
+      if (!frmPO._clsFilter._lstChargeTo.Any()) return;
+
+      chkAllChargeTo.IsChecked = (grdChargeTo.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllChargeTo;
+
+      if (grdChargeTo.ItemsSource != null && !frmPO._clsFilter.AllChargeTo && !blnOnlyOneRegister)
       {
-        frmPO._lstChargeTo.ForEach(c =>
+        grdChargeTo.SelectedItem = null;
+        frmPO._clsFilter._lstChargeTo.ForEach(c =>
         {
-          grdChargeTo.SelectedItems.Add(grdChargeTo.Items.GetItemAt(c));
+          grdChargeTo.SelectedItems.Add(_lstChargeTo.FirstOrDefault(ct => ct.ctID == c));
         });
       }
+      else
+        grdChargeTo.SelectedItem = _lstChargeTo.FirstOrDefault(c => c.ctID == frmPO._clsFilter._lstChargeTo[0]);
     }
     #endregion
 
@@ -494,13 +537,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllGifts.IsChecked = blnAllGifts;
       chkAllGifts.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdGifts.ItemsSource != null && chkAllGifts.IsChecked != null && (!chkAllGifts.IsChecked.Value && chkAllGifts.IsEnabled))
+      if (!frmPO._clsFilter._lstGifts.Any()) return;
+
+      chkAllGifts.IsChecked = (grdGifts.SelectionMode == DataGridSelectionMode.Extended) &&  frmPO._clsFilter.AllGift;
+
+      if (grdGifts.ItemsSource != null && !frmPO._clsFilter.AllGift && !blnOnlyOneRegister)
       {
-        frmPO._lstGifts.ForEach(c =>
+        grdGifts.SelectedItem = null;
+        frmPO._clsFilter._lstGifts.ForEach(c =>
         {
-          grdGifts.SelectedItems.Add(grdGifts.Items.GetItemAt(c));
+          grdGifts.SelectedItems.Add(_lstGifts.FirstOrDefault(g => g.giID == c));
         });
       }
+      else
+        grdGifts.SelectedItem = _lstGifts.FirstOrDefault(c => c.giID == frmPO._clsFilter._lstGifts[0]);
     }
     #endregion
 
@@ -527,13 +577,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllGiftsProdGift.IsChecked = blnAllGiftsProdGift;
       chkAllGiftsProdGift.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdGiftsProdGift.ItemsSource != null && chkAllGiftsProdGift.IsChecked != null && (!chkAllGiftsProdGift.IsChecked.Value && chkAllGiftsProdGift.IsEnabled))
+      if (!frmPO._clsFilter._lstGiftsProdGift.Any()) return;
+
+      chkAllGiftsProdGift.IsChecked = (grdGiftsProdGift.SelectionMode == DataGridSelectionMode.Extended) && frmPO._clsFilter.AllGiftsProdGift;
+
+      if (grdGiftsProdGift.ItemsSource != null && !frmPO._clsFilter.AllGiftsProdGift && !blnOnlyOneRegister)
       {
-        frmPO._lstGiftsProdGift.ForEach(c =>
+        grdGiftsProdGift.SelectedItem = null;
+        frmPO._clsFilter._lstGiftsProdGift.ForEach(c =>
         {
-          grdGiftsProdGift.SelectedItems.Add(grdGiftsProdGift.Items.GetItemAt(c));
+          grdGiftsProdGift.SelectedItems.Add(_lstGiftsProdGift.FirstOrDefault(g => g.giID == c));
         });
       }
+      else
+        grdGiftsProdGift.SelectedItem = _lstGiftsProdGift.FirstOrDefault(c => c.giID == frmPO._clsFilter._lstGiftsProdGift[0]);
     }
     #endregion
 
