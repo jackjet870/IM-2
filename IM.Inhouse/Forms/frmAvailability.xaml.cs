@@ -18,41 +18,25 @@ namespace IM.Inhouse
   {
     #region Atributos
 
-    private int _guestID;
+    private readonly int _guestId;
     private UserData _user;
     private Guest _guest;
     private bool _searchUmByTxt;
-    public bool _wasSaved = false;
-    public byte guum
-    {
-      get
-      {
-        return txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
-      }
-    }
-    public string guPRAvail
-    {
-      get
-      {
-        return txtguPRAvail.Text;
-      }
-    }
-    public bool Avail
-    {
-      get
-      {
-        return chkguAvail.IsChecked.Value;
-      }
-    }
+    public bool WasSaved;
+    public byte Guum => txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
+
+    public string GuPrAvail => cboguPRAvail.SelectedValue.ToString();
+
+    public bool Avail => chkguAvail.IsChecked != null && chkguAvail.IsChecked.Value;
 
     #endregion
 
     #region Constructores y destructores
 
-    public frmAvailability(int guestID)
+    public frmAvailability(int guestId)
     {
       InitializeComponent();
-      _guestID = guestID;
+      _guestId = guestId;
       lblUserName.Content = App.User.User.peN;
     }
 
@@ -61,19 +45,15 @@ namespace IM.Inhouse
     #region Metodos
 
     #region LoadControls
+
     private async void LoadControls()
-    {
-      _guest = await BRGuests.GetGuest(_guestID);
-      cboguum.ItemsSource =await BRUnavailableMotives.GetUnavailableMotives(1);
+    {        
+      _guest = await BRGuests.GetGuest(_guestId);
+      cboguum.ItemsSource = await BRUnavailableMotives.GetUnavailableMotives(1);
+      cboguPRAvail.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
       if (_guest.guPRAvail != null)
       {
-        txtguPRAvail.Text = _guest.guPRAvail;
-        //Obtiene el Nombre del PR Ingresando su ID.
-        Personnel prAvailability = BRPersonnel.GetPersonnelById(_guest.guPRAvail);
-        if (prAvailability != null)
-        {
-          txtguPRAvailName.Text = prAvailability.peN;
-        }
+        cboguPRAvail.SelectedValue = _guest.guPRAvail;
       }
       if (_guest.guum != 0)
       {
@@ -83,8 +63,9 @@ namespace IM.Inhouse
       chkguOriginAvail.IsChecked = _guest.guOriginAvail;
       chkguAvail.IsChecked = _guest.guAvail;
       chkguAvailBySystem.IsChecked = _guest.guAvailBySystem;
-
-      btnCancel.IsEnabled = btnSave.IsEnabled = chkguOriginAvail.IsEnabled = chkguAvail.IsEnabled = txtguum.IsEnabled = cboguum.IsEnabled =false;      
+      txtguum.IsEnabled = cboguum.IsEnabled = cboguPRAvail.IsEnabled = btnCancel.IsEnabled =
+       btnSave.IsEnabled =
+         chkguOriginAvail.IsEnabled = chkguAvail.IsEnabled = txtguum.IsEnabled = cboguum.IsEnabled = false;
       btnEdit.IsEnabled = true;
     }
 
@@ -270,15 +251,13 @@ namespace IM.Inhouse
     {
       try
       {
-
         if (Validate())
-        {
-          
+        {         
           //guardamos la informacion de disponibilidad
           _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
           _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
           _guest.guAvail = chkguAvail.IsChecked.Value;
-          _guest.guPRAvail = txtguPRAvail.Text;
+          _guest.guPRAvail = cboguPRAvail.SelectedValue.ToString();
 
           //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
           //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
@@ -286,7 +265,7 @@ namespace IM.Inhouse
           //_wasSaved que es el que indica que se guardo el Avail.
           if (await BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
           {
-            _wasSaved = true;
+            WasSaved = true;
           }
           else
           {
@@ -307,7 +286,7 @@ namespace IM.Inhouse
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      var frmGuestLog = new frmGuestLog(_guestID) {Owner = this};
+      var frmGuestLog = new frmGuestLog(_guestId) {Owner = this};
       frmGuestLog.ShowDialog();
     }
     #endregion
@@ -326,8 +305,7 @@ namespace IM.Inhouse
         if (log.UserData.HasPermission(EnumPermission.Available, EnumPermisionLevel.ReadOnly))
         {
           _user = log.UserData;
-          txtguPRAvail.Text = _user.User.peID;
-          txtguPRAvailName.Text = _user.User.peN;
+          cboguPRAvail.SelectedValue = _user.User.peID;          
 
           btnCancel.IsEnabled = btnSave.IsEnabled  = chkguAvail.IsEnabled  = true;
           btnEdit.IsEnabled = false;

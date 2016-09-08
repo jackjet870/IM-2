@@ -1,11 +1,13 @@
 ﻿<Window x:Class="IM.Inhouse.frmFollowUp"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-         Title="Follow Up" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Background="Beige">
+        Title="Follow Up" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -14,26 +16,32 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Background="Bisque" Margin="27,12,27,0">
+        <Border Grid.Row="0"  BorderThickness="2" Margin="27,12,27,0" Style="{StaticResource brd-Catalogs}" >
             <Label x:Name="lblUserName" Content="Nombre de Usuario" FontSize="20" HorizontalAlignment="Center" />
         </Border>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label x:Name="lblguFollowD" Margin="15,30,0,0" Content="Date:" FontSize="17"/>
-            <TextBox x:Name="txtguFollowD" Margin="15,30,0,0" FontSize="16" Height="30" Width="90" IsReadOnly="True"/>
+            <xctk:DateTimePicker x:Name="txtguFollowD" DefaultValue="{x:Static sys:DateTime.Now}" 
+                                 Style="{StaticResource dtp-DateRange-TK}"  Height="30"   Margin="27,30,0,0" VerticalAlignment="Bottom" IsReadOnly="True" />
         </StackPanel>
-
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label x:Name="lblguPRFollow" Margin="15,12,0,0" Content="PR:" FontSize="17" />
-            <TextBox x:Name="txtguPRFollow" Margin="31,13,0,1" FontSize="16" Height="30" Width="110" LostFocus="txtguPRFollow_LostFocus"/>
-            <ComboBox x:Name="cboguPRFollow" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" VerticalAlignment="Top" Width="205" Height="29" SelectionChanged="cboguPRFollow_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN" />
+            <ComboBox x:Name="cboguPRFollow"  Margin="42,12,0,0" Width="320" FontSize="16" Height="30" Tag="Personnel" IsEnabled="False"
+                      IsReadOnly="True" 
+                      SelectedValuePath="peID" 
+                      SelectedValue="{Binding guPRNoBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"
+                      TextSearch.TextPath="peID">
+            </ComboBox>
         </StackPanel>
-
         <StackPanel Grid.Row="3" >
             <CheckBox x:Name="chkguFollow" FontSize="19" Content="Follow Up" IsEnabled="False"  Margin="15,12,0,22"/>
         </StackPanel>
 
-        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="2" Background="Bisque"  Margin="27,10,27,12">
+        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="2" Margin="27,10,27,12" Style="{StaticResource brd-Catalogs}" >
             <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
                 <Button x:Name="btnEdit" Content="Edit" FontSize="17" Width="80" Margin="9" Click="btnEdit_Click" IsEnabled="True"/>
                 <Button x:Name="btnSave" Content="Save" FontSize="17" Width="80" Margin="9" IsEnabled = "False" Click="btnSave_Click"/>
