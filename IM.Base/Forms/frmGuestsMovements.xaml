@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d" 
-        x:Class="IM.Base.Forms.frmGuestsMovements" Background="Beige"
+        x:Class="IM.Base.Forms.frmGuestsMovements" 
         Title="frmGuestsMovements" ShowInTaskbar="False"  Height="297.736" Width="700" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid x:Name="guestMovementsDataGrid" CanUserAddRows="False" Background="Bisque" CanUserResizeColumns="True" IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="7" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False">
+        <DataGrid x:Name="guestMovementsDataGrid" CanUserAddRows="False" CanUserResizeColumns="True" IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="7" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" BorderThickness="2" BorderBrush="#147F79">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="gmpeColumn" Width="auto" Header="By" Binding="{Binding gmpe}"/>
                 <DataGridTextColumn x:Name="peNColumn" Width="*" Header="Name" Binding="{Binding peN}"/>

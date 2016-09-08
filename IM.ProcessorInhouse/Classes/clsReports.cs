@@ -891,7 +891,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 22/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptGiftsReceivedBySR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
+    internal static async Task<FileInfo> ExportRptGiftsReceivedBySR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
       var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
       var currencies = lstRptGiftsReceivedBySR.Currencies;
@@ -929,7 +929,7 @@ namespace IM.ProcessorInhouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptGiftsReceivedBySR
@@ -1252,7 +1252,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 1305/2016 Created
     /// </history>
-    internal static FileInfo ExportProductionByAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencyInhouseData productionByAgencyInhouseData)
+    internal static async Task<FileInfo> ExportProductionByAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencyInhouseData productionByAgencyInhouseData)
     {
       var productionByAgencyInhousesTotal = productionByAgencyInhouseData.ProductionByAgencyInhouses.Select(x =>
       new
@@ -1283,16 +1283,16 @@ namespace IM.ProcessorInhouse.Classes
           c.prodByAgencyIh.AgencyN,
           c.prodByAgencyIh.Arrivals,
           c.prodByAgencyIh.Contacts,
-          ContactsFactor = 0m,
+          c.prodByAgencyIh.ContactsFactor,
           c.prodByAgencyIh.Availables,
-          AvailablesFactor = 0m,
+         c.prodByAgencyIh.AvailablesFactor,
           c.prodByAgencyIh.GrossBooks,
           c.prodByAgencyIh.Directs,
           c.prodByAgencyIh.Books,
-          BooksFactor = 0m,
+          c.prodByAgencyIh.BooksFactor,
           c.prodByAgencyIh.GrossShows,
           c.prodByAgencyIh.Shows,
-          ShowsFactor = 0m,
+          c.prodByAgencyIh.ShowsFactor,
           c.prodByAgencyIh.InOuts,
           c.prodByAgencyIh.WalkOuts,
           c.prodByAgencyIh.Tours,
@@ -1302,16 +1302,16 @@ namespace IM.ProcessorInhouse.Classes
           c.prodByAgencyIh.UPS,
           c.prodByAgencyIh.Sales,
           c.prodByAgencyIh.SalesAmount,
-          Efficiency = 0m,
-          ClosingFactor = 0m,
-          AverageSale = 0m,
+          c.prodByAgencyIh.Efficiency,
+          c.prodByAgencyIh.ClosingFactor,
+          c.prodByAgencyIh.AverageSale,
           c.mtN,
           c.PartialSales,
           c.PartialSalesAmount
         }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(productionByAgencyInhouses);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), true, true, true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportProductionByAgencyInhouses
@@ -1363,7 +1363,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 16/05/2016 Created
     /// </history>
-    internal static FileInfo ExportRptScoreByPrs(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ScoreByPRData scoreByPRData)
+    internal static async Task<FileInfo> ExportRptScoreByPrs(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ScoreByPRData scoreByPRData)
     {
       var scoreByPRAux = (from sbpr in scoreByPRData.ScoreByPR
                           join srd in scoreByPRData.ScoreRuleDetail on sbpr.ScoreRule equals srd.sisu.ToString()
@@ -1384,7 +1384,7 @@ namespace IM.ProcessorInhouse.Classes
                           }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(scoreByPRAux);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, fileFullPath:fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptScoreByPrs

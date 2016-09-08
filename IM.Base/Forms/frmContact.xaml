@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Base.Forms"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-     Title="Contact" Height="315" Width="459.623" Loaded="Window_Loaded" Background="Beige">
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+     Title="Contact" Height="315" Width="459.623" Loaded="Window_Loaded" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -13,22 +16,30 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Background="Bisque" Margin="27,12,27,0">
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Margin="27,12,27,0"  Style="{StaticResource brd-Catalogs}">
             <Label x:Name="lblUserName" HorizontalAlignment="Center"   Content="usuario" FontSize="20"  />
         </Border>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label x:Name="lblguInfoD" Margin="15,30,0,0" Content="Date:" FontSize="17"/>
-            <TextBox x:Name="txtguInfoD" Margin="15,30,0,0" FontSize="16"  Height="30" Width="90" IsReadOnly="True"/>
+            <xctk:DateTimePicker x:Name="txtguInfoD" DefaultValue="{x:Static sys:DateTime.Now}" 
+                                 Style="{StaticResource dtp-DateRange-TK}"  Height="30" Margin="16,30,0,0" VerticalAlignment="Bottom" IsReadOnly="True" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label x:Name="lblguPRInfo" Margin="15,12,0,0" Content="PR:" FontSize="17"/>
-            <TextBox x:Name="txtguPRInfo" Margin="31,12,0,0" FontSize="16" Height="30" Width="131" Text="{Binding guPRInfo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" LostFocus="txtguPRInfo_LostFocus"/>
-            <ComboBox x:Name="cboguPRInfo" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" Width="205" Height="29" SelectionChanged="cboguPRInfo_SelectionChanged" Text="{Binding guPRInfo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
+            <ComboBox x:Name="cboguPRInfo"  Margin="30,12,0,0" Width="320" FontSize="16" Height="30" Tag="Personnel" IsEnabled="false"
+                      IsReadOnly="True" 
+                      SelectedValuePath="peID" 
+                      SelectedValue="{Binding guPRNoBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"
+                      TextSearch.TextPath="peID">
+            </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="3" >
             <CheckBox x:Name="chkguInfo" Margin="15,12,0,22" FontSize="19" Content="Contact" IsEnabled="False"/>
         </StackPanel>
-        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="2" Background="Bisque"  Margin="27,0,27,0">
+        <Border Grid.Row="4" BorderThickness="2"  Margin="27,0,27,0" Style="{StaticResource brd-Catalogs}">
             <StackPanel  Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
                 <Button x:Name="btnEdit" Content="Edit" FontSize="17" Width="80" Margin="9" Click="btnEdit_Click" IsEnabled="True"/>
                 <Button x:Name="btnSave" Content="Save" FontSize="17" Width="80" Margin="9" IsEnabled = "False" Click="btnSave_Click"/>

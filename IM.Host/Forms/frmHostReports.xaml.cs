@@ -100,7 +100,7 @@ namespace IM.Host.Forms
                 });
             });
 
-            fileinfo=EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList());
+            fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -136,15 +136,15 @@ namespace IM.Host.Forms
               });
             });
 
-            fileinfo=EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList());
+            fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
-
-          if (fileinfo != null)
-            Process.Start(fileinfo.FullName);
           break;         
       }
+
+      if (fileinfo != null)
+        Process.Start(fileinfo.FullName);
     }
     #endregion 
     #endregion

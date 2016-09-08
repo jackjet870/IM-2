@@ -1199,9 +1199,25 @@ namespace IM.BusinessRules.BR
             try
             {
               int nSave = 0;
-
+              
               //Guest
-              dbContext.Entry(guestInvitation.Guest).State = (guestInvitation.Guest.guID > 0) ? EntityState.Modified : EntityState.Added;
+              if(guestInvitation.Guest.guID>0)
+              {
+                var guestSave = dbContext.Guests.Where(gu => gu.guID == guestInvitation.Guest.guID).FirstOrDefault();
+                if (guestSave != null)
+                {
+                  ObjectHelper.CopyProperties(guestSave, guestInvitation.Guest);
+                  guestInvitation.Guest = guestSave;
+                }
+                else
+                {
+                  dbContext.Guests.Add(guestInvitation.Guest);
+                }
+              }
+              else
+              {
+                dbContext.Guests.Add(guestInvitation.Guest);
+              }              
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
 
               //Recargamos el codigo contable

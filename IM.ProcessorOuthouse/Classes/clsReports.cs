@@ -86,7 +86,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 11/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsReceivedBySR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
+    public static async System.Threading.Tasks.Task<FileInfo> ExportRptGiftsReceivedBySR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
       var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
       var currencies = lstRptGiftsReceivedBySR.Currencies;
@@ -124,7 +124,7 @@ namespace IM.ProcessorOuthouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion ExportRptGiftsReceivedBySR
 
@@ -296,7 +296,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 15/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAgencyOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
+    public static async System.Threading.Tasks.Task<FileInfo> ExportRptProductionByAgencyOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
       DataTable dtData = null;
       var lstProductionByAgency = lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse;
@@ -370,7 +370,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
-        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), true, true, true, fileFullPath: fileFullPath);
+        return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
       }
     }
     #endregion ExportRptProductionByAgencyOuthouse
@@ -387,7 +387,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 20/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
+    public static async System.Threading.Tasks.Task<FileInfo> ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
       DataTable dtData = null;
       var lstProductionByAgency = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse;
@@ -451,10 +451,10 @@ namespace IM.ProcessorOuthouse.Classes
                                                              mt.mtN,
                                                              prodByAgencyMemshipType.Sales,
                                                              prodByAgencyMemshipType.SalesAmount,
-                                                             SalesCancel = prodbyAgency.Sales_CANCEL,
-                                                             SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
-                                                             SalesTotal = prodbyAgency.Sales_TOTAL,
-                                                             SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
+                                                             //SalesCancel = prodbyAgency.Sales_CANCEL,
+                                                             //SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
+                                                             //SalesTotal = prodbyAgency.Sales_TOTAL,
+                                                             //SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
                                                              prodbyAgency.ShowsFactor,
                                                              prodbyAgency.CancelFactor,
                                                              prodbyAgency.Efficiency,
@@ -463,7 +463,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
-        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+        return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
       }
     }
 

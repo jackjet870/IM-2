@@ -41,7 +41,7 @@ namespace IM.Model.Classes
       bool showSubTotalWithCero = false, ePivotFieldAxis axis = ePivotFieldAxis.None, bool isVisible = true, bool isGroup = false,
       DataFieldFunctions function = DataFieldFunctions.None, bool isCalculated = false, string formula = "", eSortType sort = eSortType.None,
       string superHeader = "", bool outLine = false, bool compact = false, bool showAll = false,
-      bool subTotalTop = false, bool insertBlankRow = false, EnumDataFieldShowDataAs dataFieldShowDataAs = EnumDataFieldShowDataAs.Normal, DataFieldFunctions AggregateFormat=DataFieldFunctions.None)
+      bool subTotalTop = false, bool insertBlankRow = false, EnumDataFieldShowDataAs dataFieldShowDataAs = EnumDataFieldShowDataAs.Normal, DataFieldFunctions aggregateFunction=DataFieldFunctions.None)
     {
 
       Add(new ExcelFormatTable()
@@ -69,7 +69,7 @@ namespace IM.Model.Classes
         SubtotalTop = subTotalTop,
         InsertBlankRow = insertBlankRow,
         DataFieldShowDataAs = dataFieldShowDataAs,
-        AggregateFunction = AggregateFormat
+        AggregateFunction = aggregateFunction
       });
     }
   }

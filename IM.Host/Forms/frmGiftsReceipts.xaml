@@ -209,18 +209,13 @@
                 <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="292,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding GiftsReceiptDetail.grComments, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
                 <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="812" Height="177" Grid.ColumnSpan="3">
                   <Grid>
-                    <TextBlock x:Name="txbgrMaxAuthGifts" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Bottom" Margin="66,0,0,2"/>
-                    <TextBox x:Name="txtgrMaxAuthGifts" HorizontalAlignment="Left" Height="23"  AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" Text="{Binding GiftsReceiptDetail.grMaxAuthGifts, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:$0.00}}" IsReadOnly="True" Margin="144,0,0,-3"/>
-                    <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Top" Margin="259,143,0,0"/>
-                    <TextBox x:Name="txtTotalCost" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="101" IsReadOnly="True" Text="$0.00" Margin="313,0,0,-3"/>
-                    <TextBlock x:Name="txbTotalPriceCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Price" VerticalAlignment="Bottom" Margin="437,0,0,3"/>
-                    <TextBox x:Name="txtTotalPrice" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" Margin="494,0,0,-3"/>
-                    <TextBlock x:Name="txbTotalToPayCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Bottom" Margin="617,0,0,2"/>
-                    <TextBox x:Name="txtTotalToPay" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" Margin="685,0,0,-3"/>
-
-                    <DataGrid x:Name="dtgGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="*" />
+                      <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="dtgGifts" AutoGenerateColumns="False" EnableRowVirtualization="True" Grid.Row="0"
                               ItemsSource="{Binding Source={StaticResource dsGiftsDetail}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              IsSynchronizedWithCurrentItem="True" Margin="0,2,0,23" RowDetailsVisibilityMode="Collapsed"
+                              IsSynchronizedWithCurrentItem="True" Margin="0,2,0,4" RowDetailsVisibilityMode="Collapsed"
                               CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" 
                               PreparingCellForEdit="grdGifts_PreparingCellForEdit" 
                               CellEditEnding="grdGifts_CellEditEnding"
@@ -398,7 +393,7 @@
                           <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                               <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center">
-                                <CheckBox IsChecked="{Binding Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="UpdateSale_Click" />
+                                <CheckBox IsChecked="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="UpdateSale_Click" />
                               </ContentControl>
                             </DataTemplate>
                           </DataGridTemplateColumn.CellTemplate>
@@ -458,6 +453,16 @@
                         </DataTemplate>
                       </DataGrid.RowDetailsTemplate>
                     </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+                      <TextBlock x:Name="txbgrMaxAuthGifts" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                      <TextBox x:Name="txtgrMaxAuthGifts" HorizontalAlignment="Left" Height="23"  AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" Text="{Binding GiftsReceiptDetail.grMaxAuthGifts, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:$0.00}}" IsReadOnly="True" />
+                      <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                      <TextBox x:Name="txtTotalCost" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="101" IsReadOnly="True" Text="$0.00"/>
+                      <TextBlock x:Name="txbTotalPriceCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Price" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                      <TextBox x:Name="txtTotalPrice" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" />
+                      <TextBlock x:Name="txbTotalToPayCaption" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                      <TextBox x:Name="txtTotalToPay" HorizontalAlignment="Right" Height="23" AcceptsReturn="False" VerticalAlignment="Bottom" Width="100" IsReadOnly="True" Text="$0.00" />
+                    </StackPanel>
                   </Grid>
                 </GroupBox>
                 <GroupBox x:Name="grbPayments" Header="Payments" HorizontalAlignment="Left" Margin="10,345,0,0" VerticalAlignment="Top" Width="812" Height="113" Grid.ColumnSpan="3">

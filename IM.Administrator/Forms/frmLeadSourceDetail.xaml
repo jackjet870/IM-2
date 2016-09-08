@@ -148,6 +148,11 @@
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="Locations" x:Name="cmbLocations" Width="100*" SelectedValuePath="loID" DisplayMemberPath="loN" SelectedValueBinding="{Binding loID}"/>
                         </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridRow">                                
+                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                            </Style>
+                        </DataGrid.Resources>
                     </DataGrid>
                     <!--#endregion-->
                 </Grid>

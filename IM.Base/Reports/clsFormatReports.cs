@@ -123,31 +123,31 @@ namespace IM.Base.Reports
     /// </history>
     public static ExcelFormatItemsList RptPremanifest()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList() { 
-      new ExcelFormatTable() { Title = "SR", PropertyName = "srN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, IsGroup = true },
-        new ExcelFormatTable() { Title = "LS", PropertyName = "loN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, IsGroup = true },
-        new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Hotel", PropertyName = "guHotel", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Room", PropertyName = "guRoomNum", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "LastName", PropertyName = "guLastName1", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Pax", PropertyName = "guPax", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Check-In", PropertyName = "guCheckInD", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Check-Out", PropertyName = "guCheckOutD", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Country ID", PropertyName = "guco", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Country", PropertyName = "coN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Agency ID", PropertyName = "guag", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Agency", PropertyName = "agN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Invit D", PropertyName = "guInvitD", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Invit T", PropertyName = "guInvitT", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Book T", PropertyName = "guBookT", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "PR B", PropertyName = "guPRInvit1", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Clxd", PropertyName = "guBookCanc", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Rsc", PropertyName = "guResch", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Sh", PropertyName = "guShow", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Sale", PropertyName = "guSale", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "InvitType", PropertyName = "InvitType", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable() { Title = "Deposits_Comments", PropertyName = "guComments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("SR", "srN", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left, isGroup: true, isVisible: false);
+      lst.Add("LS", "loN", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left, isGroup: true, isVisible: false);
+      lst.Add("GUID", "guID", format: EnumFormatTypeExcel.Id, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Hotel", "guHotel", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Room", "guRoomNum", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("LastName", "guLastName1", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Pax", "guPax", format: EnumFormatTypeExcel.DecimalNumber, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Check-In", "guCheckInD", format: EnumFormatTypeExcel.Date, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Check-Out", "guCheckOutD", format: EnumFormatTypeExcel.Date, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Country ID", "guco", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Country", "coN", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Agency ID", "guag", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Agency", "agN", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Invit D", "guInvitD", format: EnumFormatTypeExcel.Date, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Invit T", "guInvitT", format: EnumFormatTypeExcel.Time, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Book T", "guBookT", format: EnumFormatTypeExcel.Time, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR B", "guPRInvit1", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Clxd", "guBookCanc", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Rsc", "guResch", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sh", "guShow", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sale", "guSale", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("InvitType", "InvitType", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Deposits_Comments", "guComments", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left);
+
       return lst;
     }
     #endregion
@@ -200,67 +200,66 @@ namespace IM.Base.Reports
     /// <history>
     /// [jorcanche]  created 07072016 
     /// </history>    
-    public static List<ExcelFormatTable> RptGuestLog()
+    public static ExcelFormatItemsList RptGuestLog()
     {
-      return new List<ExcelFormatTable>
-      {    
-        new ExcelFormatTable { PropertyName = "glChangedBy",  Title = "By", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "ChangedByN",  Title = "Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glID",  Title = "Update Date/Time", Alignment = ExcelHorizontalAlignment.Left, Format = EnumFormatTypeExcel.DateTime},
-        new ExcelFormatTable { PropertyName = "glsr",  Title = "S R", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glLastName1",  Title = "Last Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glFirstName1",  Title = "First Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glLastName2",  Title = "Last Name 2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glFirstName2",  Title = "First Name 2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glHReservID",  Title = "Reserv. #", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glAvailBySystem",  Title = "Avl Sys", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glOriginAvail",  Title = "Orig Avl", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glAvail",  Title = "Avl", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "umN",  Title = "Unavailable Motive", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glPRAvail",  Title = "PR Avail", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PRAvailN",  Title = "PR Avail Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glInfoD",  Title = "Info D", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable { PropertyName = "glPRInfo",  Title = "PR Info", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PRInfoN",  Title = "PR Info Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glFollowD",  Title = "Follow D", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Date },
-        new ExcelFormatTable { PropertyName = "glPRFollow",  Title = "PR Follow", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PRFollowN",  Title = "PR Follow Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glBookD",  Title = "Book D", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable { PropertyName = "glBookT",  Title = "Book T", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Time},
-        new ExcelFormatTable { PropertyName = "glReschD",  Title = "Resch D", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable { PropertyName = "glReschT",  Title = "Resch T", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Time},
-        new ExcelFormatTable { PropertyName = "glPRInvit1",  Title = "PR B", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PRInvit1N",  Title = "PR Booking Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glPRInvit2",  Title = "PR B 2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PRInvit2N",  Title = "PR Booking 2 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glBookCanc",  Title = "C.Bk", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glLiner1",  Title = "Liner 1", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Liner1N",  Title = "Liner 1 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glLiner2",  Title = "Liner 2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Liner2N",  Title = "Liner 2 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glCloser1",  Title = "Closer 1", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Closer1N",  Title = "Closer 1 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glCloser2",  Title = "Closer 2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Closer2N",  Title = "Closer 2 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glCloser3",  Title = "Closer 3'", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Closer3N",  Title = "Closer 3 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glExit1",  Title = "Exit1", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Exit1N",  Title = "Exit 1 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glExit2",  Title = "Exit2", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "Exit2N",  Title = "Exit 2 Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glPodium",  Title = "Podium", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "PodiumN",  Title = "Podium Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glVLO",  Title = "VLO", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "VLON",  Title = "VLO Name", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glShow",  Title = "Sh", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glShowD",  Title = "Show D", Alignment = ExcelHorizontalAlignment.Left, Format=EnumFormatTypeExcel.Date },
-        new ExcelFormatTable { PropertyName = "glQ",  Title = "Q", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glInOut",  Title = "IO", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glWalkOut",  Title = "WO", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glCTour",  Title = "CT", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "glReimpresion",  Title = "Re-Printed", Alignment = ExcelHorizontalAlignment.Left },
-        new ExcelFormatTable { PropertyName = "rmN",  Title = "Re-Print Motive", Alignment = ExcelHorizontalAlignment.Left }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("By", "glChangedBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Update Date/Time", "glID", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.DateTime);
+      lst.Add("SR", "glsr", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Last Name", "glLastName1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("First Name", "glFirstName1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Last Name 2", "glLastName2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("First Name 2", "glFirstName2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Reserv. #", "glHReservID", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Avl Sys", "glAvailBySystem", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Orig Avl", "glOriginAvail", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Avl", "glAvail", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Unavailable Motive", "umN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Avail", "glPRAvail", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Avail Name", "PRAvailN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Info D", "glInfoD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("PR Info", "glPRInfo", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Info Name", "PRInfoN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Follow D", "glFollowD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("PR Follow", "glPRFollow", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Follow Name", "PRFollowN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Book D", "glBookD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Book T", "glBookT", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Time);
+      lst.Add("Resch D", "glReschD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Resch T", "glReschT", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Time);
+      lst.Add("PR B", "glPRInvit1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Booking Name", "PRInvit1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR B 2", "glPRInvit2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Booking 2 Name", "PRInvit2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("C.Bk", "glBookCanc", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 1", "glLiner1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 1 Name", "Liner1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 2", "glLiner2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 2 Name", "Liner2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 1", "glCloser1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 1 Name", "Closer1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 2", "glCloser2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 2 Name", "Closer2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 3'", "glCloser3", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 3 Name", "Closer3N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit1", "glExit1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 1 Name", "Exit1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit2", "glExit2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 2 Name", "Exit2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Podium", "glPodium", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Podium Name", "PodiumN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("VLO", "glVLO", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("VLO Name", "VLON", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sh", "glShow", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Show D", "glShowD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Q", "glQ", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("IO", "glInOut", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("WO", "glWalkOut", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("CT", "glCTour", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Re-Printed", "glReimpresion", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Re-Print Motive", "rmN", aligment: ExcelHorizontalAlignment.Left);
+      return lst;
     }
     #endregion
 
@@ -272,26 +271,27 @@ namespace IM.Base.Reports
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// [jorcanche] 19/ago/2016 modified se cambio de lugar de IM.ProcessorGeneral.Classes a IM.Base.Reports
+    /// [edgrodriguez] 05/Sep/2016 Modified. Se cambio el formato.
     /// </history>
-    public static List<ExcelFormatTable> RptDepositByPr()
+    public static ExcelFormatItemsList RptDepositByPr()
     {
-      return new List<ExcelFormatTable>(){
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "guInvitD", PropertyName = "guInvitD" },
-new ExcelFormatTable() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Guest", PropertyName = "Guest", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "guHotel", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "guls", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "gusr", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "guPRInvit1", Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
-new ExcelFormatTable() { Title = "Out Invit", PropertyName = "guOutInvitNum", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN" },
-new ExcelFormatTable() { Title = "Currrency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Descending},
-new ExcelFormatTable() { Title = "Deposited", PropertyName = "guDeposit", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Received", PropertyName = "guDepositReceived", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("PR", "guPRInvit1", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("GUID", "guID", axis: ePivotFieldAxis.Row);
+      lst.Add("Out Invit", "guOutInvitNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "guHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("LS", "guls", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "gusr", axis: ePivotFieldAxis.Row);
+      lst.Add("Book Date", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Deposited", "guDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
+      lst.Add("Received", "guDepositReceived", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
+      lst.Add("Burned", "guDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
+      lst.Add("Currency", "gucu", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type", "gupt", axis: ePivotFieldAxis.Column, sort: eSortType.Descending);
+      lst.Add("guInvitD", "guInvitD", isVisible: false);
+      lst.Add("PR Name", "peN", isVisible: false);
+      return lst;
     }
 
     #endregion RptDepositByPr

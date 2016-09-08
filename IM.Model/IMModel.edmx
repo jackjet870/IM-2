@@ -18649,6 +18649,8 @@
           <Property Type="Decimal" Name="Cl_Factor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Ca_Factor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Avg_Sale" Nullable="true" Precision="19" />
+          <Property Type="String" Name="P_Status" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="T_Books" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ExchangeRateLogData">
           <Property Type="String" Name="elChangedBy" Nullable="false" MaxLength="10" />
@@ -25890,6 +25892,8 @@
                 <ScalarProperty Name="Cl_Factor" ColumnName="Cl_Factor" />
                 <ScalarProperty Name="Ca_Factor" ColumnName="Ca_Factor" />
                 <ScalarProperty Name="Avg_Sale" ColumnName="Avg_Sale" />
+                <ScalarProperty Name="P_Status" ColumnName="P_Status" />
+                <ScalarProperty Name="T_Books" ColumnName="T_Books" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
