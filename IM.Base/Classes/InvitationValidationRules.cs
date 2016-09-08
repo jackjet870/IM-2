@@ -761,6 +761,7 @@ namespace IM.Base.Classes
         case "bdcc":
         case "bdCardNum":
         case "bdExpD":
+        case "bdAuth":
           {
             if (bookingDeposit != null && (string.IsNullOrWhiteSpace(bookingDeposit.bdpt) || bookingDeposit.bdpt != "CC"))
             {
@@ -809,7 +810,7 @@ namespace IM.Base.Classes
 
         case "bdAmount":
           {
-            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
+            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);            
           }
 
         #endregion Amount
@@ -822,9 +823,12 @@ namespace IM.Base.Classes
             {
               if (bookingDeposit.bdReceived > bookingDeposit.bdAmount)
               {
-                UIHelper.ShowMessage("Received can not be greater than Deposit.");
-                bookingDeposit.bdReceived = bookingDeposit.bdAmount;
+                UIHelper.ShowMessage("Received can not be greater than Deposit.");                
                 return false;
+              }
+              else if (bookingDeposit.bdReceived == bookingDeposit.bdAmount)
+              {
+                bookingDeposit.bdFolioCXC = null;
               }
             }
             else
@@ -1012,7 +1016,7 @@ namespace IM.Base.Classes
               }
               else if (bookingDeposit.bdID > 0)//Verificamos si el booking deposit se está actualizando
               {
-                if (lstBookingDeposits != null && lstBookingDeposits.Where(bd => bd.bdID == bookingDeposit.bdID && bd.bdFolioCXC == bookingDeposit.bdFolioCXC).ToList().Count > 0)
+                if (lstBookingDeposits != null && lstBookingDeposits.Where(bd => bd.bdID == bookingDeposit.bdID && bd.bdFolioCXC != bookingDeposit.bdFolioCXC).ToList().Count > 0)
                 {
                   string folio = BRFoliosCXC.FolioValidateCXC(Convert.ToInt32(bookingDeposit.bdFolioCXC), guestID, true, 1);
                   if (folio != "VALIDO")
