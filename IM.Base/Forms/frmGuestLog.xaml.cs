@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.Model;
+using System.Windows.Input;
 
 namespace IM.Base.Forms
 {
@@ -43,9 +44,11 @@ namespace IM.Base.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;    
       dgGuestLog.DataContext = await BRGuestsLogs.GetGuestLog(_idGuest);
       var leadSourceguest = await BRLeadSources.GetLeadSourceByGuestId(_idGuest);
-      Title = $"IM guest Log - Guest ID {_idGuest} / Lead Source {leadSourceguest}";
+      Title = $"Guest Log - Guest ID {_idGuest} / Lead Source {leadSourceguest}";
+      Mouse.OverrideCursor = null;
     }
    
     #endregion

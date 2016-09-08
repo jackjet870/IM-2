@@ -451,7 +451,7 @@ namespace IM.Inhouse.Forms
       var chkguInfo = sender as CheckBox;
       chkguInfo.IsChecked = !chkguInfo.IsChecked.Value;
 
-      if (ValidateContact(guCheckIn, guInfo, guCheckOutD))
+      if (ValidateContact(guCheckIn, !guInfo, guCheckOutD))
       {
         StaStart("Loading Contact´s Info...");
         frmContact frmCont = new frmContact(guID, App.User);
@@ -499,7 +499,7 @@ namespace IM.Inhouse.Forms
         };
         StaEnd();
         frmAvail.ShowDialog();
-        if (frmAvail._wasSaved)
+        if (frmAvail.WasSaved)
         {
           StaStart("Save Information´s Availability...");
           // Actualiza los datos del grid despues de guardar la informacion de disponibilidad PR de Disponibilidad y si se marco como no disponible
@@ -510,8 +510,8 @@ namespace IM.Inhouse.Forms
           var t = item.GetType();
           if (t.Name != "ObjGuestPremanifest")
           {
-            t.GetProperty("guPRAvail").SetValue(item, frmAvail.guPRAvail);
-            t.GetProperty("guum").SetValue(item, frmAvail.guum);
+            t.GetProperty("guPRAvail").SetValue(item, frmAvail.GuPrAvail);
+            t.GetProperty("guum").SetValue(item, frmAvail.Guum);
           }
           t.GetProperty("guAvail").SetValue(item, frmAvail.Avail);
           dg.Items.Refresh();
@@ -531,7 +531,7 @@ namespace IM.Inhouse.Forms
     {
       var chkkFollow = sender as CheckBox;
       chkkFollow.IsChecked = !chkkFollow.IsChecked.Value;
-      if (ValidateFollowUp(guCheckIn, guFollow, guAvail, guInfo, guInvit, guCheckOutD))
+      if (ValidateFollowUp(guCheckIn, !guFollow, guAvail, guInfo, guInvit, guCheckOutD))
       {
         StaStart("Loading Follow Up screen...");
         frmFollowUp frmFoll = new frmFollowUp(guID);
@@ -2213,7 +2213,7 @@ namespace IM.Inhouse.Forms
       //validamos que el huesped este contactado
       if (!guInfo) return false;
       //validamos que el huesped no este invitado
-      if (!guInvit) return false;
+      if (guInvit) return false;
       //validamos que el huesped haya hecho Check Out
       if (guCheckOutD > _serverDate) return false;
       return true;

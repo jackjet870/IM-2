@@ -1,5 +1,6 @@
 ﻿using IM.BusinessRules.BR;
 using System.Windows;
+using System.Windows.Input;
 
 namespace IM.Base.Forms
 {
@@ -27,9 +28,11 @@ namespace IM.Base.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       Title = $"IM Guest Movements - Guest ID {_guestID}";
       var movement = await BRGuests.GetGuestMovement(_guestID);
       guestMovementsDataGrid.ItemsSource = movement;
+      Mouse.OverrideCursor = null;
     } 
     #endregion
   }
