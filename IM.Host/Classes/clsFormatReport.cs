@@ -47,16 +47,15 @@ namespace IM.Host.Classes
     /// <history>
     /// [edgrodriguez] 08/Jul/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptExchangeRatesLog()
+    public static ExcelFormatItemsList RptExchangeRatesLog()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "By", PropertyName = "elChangedBy" },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN"},
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "elID", Format = EnumFormatTypeExcel.DateTime },
-        new ExcelFormatTable() { Title = "Currency", PropertyName = "elcu" },
-        new ExcelFormatTable() { Title = "Exch. Rate", PropertyName = "elExchangeRate", Format = EnumFormatTypeExcel.DecimalNumber }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+        lst.Add("By", "elChangedBy" );
+        lst.Add("Name", "ChangedByN");
+        lst.Add("Update Date/Time", "elID", format: EnumFormatTypeExcel.DateTime );
+        lst.Add("Currency", "elcu" );
+        lst.Add("Exch. Rate", "elExchangeRate", format: EnumFormatTypeExcel.DecimalNumber );
+      return lst;
     }
     #endregion
 
@@ -68,36 +67,35 @@ namespace IM.Host.Classes
     /// <history>
     /// [edgrodriguez] 08/Jun/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftReceiptsLog()
+    public static ExcelFormatItemsList RptGiftReceiptsLog()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "Sales man", PropertyName = "goChangedBy" },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN" },
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "goID", Format = EnumFormatTypeExcel.DateTime },
-        new ExcelFormatTable() { Title = "Receipt D", PropertyName = "goD", Format = EnumFormatTypeExcel.Date },
-        new ExcelFormatTable() { Title = "Offered By", PropertyName = "gope", Order = 5 },
-        new ExcelFormatTable() { Title = "Offered By Name", PropertyName = "OfferedByN" },
-        new ExcelFormatTable() { Title = "Host", PropertyName = "goHost", Order = 7 },
-        new ExcelFormatTable() { Title = "Host Name", PropertyName = "HostN", Order = 8 },
-        new ExcelFormatTable() { Title = "Deposit", PropertyName = "goDeposit", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Burned", PropertyName = "goBurned", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Currency", PropertyName = "gocu" },
-        new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Order = 12 },
-        new ExcelFormatTable() { Title = "CxC PR Dep", PropertyName = "goCXCPRDeposit", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Taxit Out", PropertyName = "goTaxiOut", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Total Gifts", PropertyName = "goTotalGifts", Format = EnumFormatTypeExcel.DecimalNumber },
-        new ExcelFormatTable() { Title = "Charge To", PropertyName = "goct" },
-        new ExcelFormatTable() { Title = "CxC Gifts", PropertyName = "goCXCGifts", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "CxC Adj.", PropertyName = "goCXCAdj", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Re-Printed", PropertyName = "goReimpresion" },
-        new ExcelFormatTable() { Title = "Re-Printed Motive", PropertyName = "rmN" },
-        new ExcelFormatTable() { Title = "Authorized By", PropertyName = "goAuthorizedBy" },
-        new ExcelFormatTable() { Title = "Authorized By Name", PropertyName = "AuthorizedByN" },
-        new ExcelFormatTable() { Title = "Paid", PropertyName = "goAmountPaid", Format = EnumFormatTypeExcel.Currency },
-        new ExcelFormatTable() { Title = "Under Pay Motive", PropertyName = "upN" },
-        new ExcelFormatTable() { Title = "Cancelled Date", PropertyName = "goCancelD", Format = EnumFormatTypeExcel.Date }
-        };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Sales man", "goChangedBy");
+      lst.Add("Name", "ChangedByN");
+      lst.Add("Update Date/Time", "goID", format: EnumFormatTypeExcel.DateTime);
+      lst.Add("Receipt D", "goD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Offered By", "gope");
+      lst.Add("Offered By Name", "OfferedByN");
+      lst.Add("Host", "goHost");
+      lst.Add("Host Name", "HostN");
+      lst.Add("Deposit", "goDeposit", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Burned", "goBurned", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Currency", "gocu");
+      lst.Add("Payment Type", "ptN");
+      lst.Add("CxC PR Dep", "goCXCPRDeposit", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Taxit Out", "goTaxiOut", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Total Gifts", "goTotalGifts", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("Charge To", "goct");
+      lst.Add("CxC Gifts", "goCXCGifts", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CxC Adj.", "goCXCAdj", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Re-Printed", "goReimpresion");
+      lst.Add("Re-Printed Motive", "rmN");
+      lst.Add("Authorized By", "goAuthorizedBy");
+      lst.Add("Authorized By Name", "AuthorizedByN");
+      lst.Add("Paid", "goAmountPaid", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Under Pay Motive", "upN");
+      lst.Add("Cancelled Date", "goCancelD", format: EnumFormatTypeExcel.Date);
+      return lst;
     }
     #endregion
 
@@ -109,19 +107,18 @@ namespace IM.Host.Classes
     /// <history>
     /// [edgrodriguez] 08/Jun/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCloseSalesRoomLog()
+    public static ExcelFormatItemsList RptCloseSalesRoomLog()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "By", PropertyName = "sqChangedBy" },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "ChangedByN" },
-        new ExcelFormatTable() { Title = "Update Date/Time", PropertyName = "sqID", Format = EnumFormatTypeExcel.DateTime },
-        new ExcelFormatTable() { Title = "Shows Close D", PropertyName = "sqShowsCloseD", Format = EnumFormatTypeExcel.Date },
-        new ExcelFormatTable() { Title = "Meal T Close D", PropertyName = "sqMealTicketsCloseD", Format = EnumFormatTypeExcel.Date },
-        new ExcelFormatTable() { Title = "Sales Close D", PropertyName = "sqSalesCloseD", Format = EnumFormatTypeExcel.Date },
-        new ExcelFormatTable() { Title = "Gifts Rcpt Close D", PropertyName = "sqGiftsRcptCloseD", Format = EnumFormatTypeExcel.Date },
-        new ExcelFormatTable() { Title = "CxC Close D", PropertyName = "sqCxCCloseD", Format = EnumFormatTypeExcel.Date }
-        };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("By", "sqChangedBy");
+      lst.Add("Name", "ChangedByN");
+      lst.Add("Update Date/Time", "sqID", format: EnumFormatTypeExcel.DateTime);
+      lst.Add("Shows Close D", "sqShowsCloseD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Meal T Close D", "sqMealTicketsCloseD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Sales Close D", "sqSalesCloseD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Gifts Rcpt Close D", "sqGiftsRcptCloseD", format: EnumFormatTypeExcel.Date);
+      lst.Add("CxC Close D", "sqCxCCloseD", format: EnumFormatTypeExcel.Date);
+      return lst;
     }
     #endregion
 
@@ -132,70 +129,69 @@ namespace IM.Host.Classes
     /// <history>
     /// [jorcanche]  created  07072016
     /// </history>    
-    public static List<ExcelFormatTable> RptSaleLog()
+    public static ExcelFormatItemsList RptSaleLog()
     {
-      return new List<ExcelFormatTable>
-      {
-        new ExcelFormatTable {PropertyName = "slChangedBy", Title = "By", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "ChangedByN", Title = "Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slID", Title = "Update Date/Time", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.DateTime},
-        new ExcelFormatTable {PropertyName = "slgu", Title = "GUID", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "GuestName", Title = "Guest Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slD", Title = "Sale D", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable {PropertyName = "slProcD", Title = "Proc D", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable {PropertyName = "slCancelD", Title = "Cancel D", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Date},
-        new ExcelFormatTable {PropertyName = "slMembershipNum", Title = "Member #", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "stN", Title = "Sale Type", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slReference", Title = "Reference", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "mtN", Title = "M Type', 'Membership Type", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slOriginalAmount", Title = "O Amount", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Currency},
-        new ExcelFormatTable {PropertyName = "slNewAmount", Title = "N Amount", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Currency},
-        new ExcelFormatTable {PropertyName = "slGrossAmount", Title = "G Amount", Alignment = ExcelHorizontalAlignment.Left,Format=EnumFormatTypeExcel.Currency},
-        new ExcelFormatTable {PropertyName = "sllo", Title = "Loc", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slls", Title = "LS", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slsr", Title = "SR", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slSelfGen", Title = "SG", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPR1", Title = "PR 1", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PR1N", Title = "PR Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPR2", Title = "PR 2", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PR2N", Title = "PR 2 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPR3", Title = "PR 3", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PR3N", Title = "PR 3 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slLiner1Type", Title = "Liner1 T", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slLiner1", Title = "Liner 1", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Liner1N", Title = "Liner 1 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slLiner2", Title = "Liner 2", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Liner2N", Title = "Liner 2 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser1", Title = "Closer 1", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Closer1N", Title = "Closer 1 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser2", Title = "Closer 2", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Closer2N", Title = "Closer 2 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser3", Title = "Closer 3", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Closer3N", Title = "Closer 3 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slExit1", Title = "Exit 1", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Exit1N", Title = "Exit 1 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slExit2", Title = "Exit 2", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "Exit2N", Title = "Exit 2 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPodium", Title = "Podium", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PodiumN", Title = "Podium Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slVLO", Title = "VLO", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "VLON", Title = "VLO Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPRCaptain1", Title = "PR Cptn", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PR1CaptainN", Title = "PR Captain Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slPRCaptain2", Title = "PR Cptn 2", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "PR2CaptainN", Title = "PR Captain 2 Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slLinerCaptain1", Title = "Liner Cptn", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "LinerCaptainN", Title = "Liner Captain Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloserCaptain1", Title = "Closer  Cptn", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "CloserCaptainN", Title = "Closer Captain Name", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser1P", Title = "CL1 %", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser2P", Title = "CL2 %", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slCloser3P", Title = "CL3 %", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slExit1P", Title = "Exit1 %", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slExit2P", Title = "Exit2 %", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slClosingCost", Title = "C. Cost", Alignment = ExcelHorizontalAlignment.Left},
-        new ExcelFormatTable {PropertyName = "slOverPack", Title = "O. Pack", Alignment = ExcelHorizontalAlignment.Left}
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("By", "slChangedBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Update Date/Time", "slID", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.DateTime);
+      lst.Add("GUID", "slgu", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Guest Name", "GuestName", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sale D", "slD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Proc D", "slProcD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Cancel D", "slCancelD", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Date);
+      lst.Add("Member #", "slMembershipNum", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sale Type", "stN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Reference", "slReference", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("M Type', 'Membership Type", "mtN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("O Amount", "slOriginalAmount", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Currency);
+      lst.Add("N Amount", "slNewAmount", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Currency);
+      lst.Add("G Amount", "slGrossAmount", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.Currency);
+      lst.Add("Loc", "sllo", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("LS", "slls", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("SR", "slsr", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("SG", "slSelfGen", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR 1", "slPR1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Name", "PR1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR 2", "slPR2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR 2 Name", "PR2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR 3", "slPR3", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR 3 Name", "PR3N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner1 T", "slLiner1Type", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 1", "slLiner1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 1 Name", "Liner1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 2", "slLiner2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner 2 Name", "Liner2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 1", "slCloser1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 1 Name", "Closer1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 2", "slCloser2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 2 Name", "Closer2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 3", "slCloser3", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer 3 Name", "Closer3N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 1", "slExit1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 1 Name", "Exit1N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 2", "slExit2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit 2 Name", "Exit2N", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Podium", "slPodium", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Podium Name", "PodiumN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("VLO", "slVLO", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("VLO Name", "VLON", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Cptn", "slPRCaptain1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Captain Name", "PR1CaptainN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Cptn 2", "slPRCaptain2", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("PR Captain 2 Name", "PR2CaptainN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner Cptn", "slLinerCaptain1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Liner Captain Name", "LinerCaptainN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer  Cptn", "slCloserCaptain1", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Closer Captain Name", "CloserCaptainN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("CL1 %", "slCloser1P", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("CL2 %", "slCloser2P", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("CL3 %", "slCloser3P", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit1 %", "slExit1P", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Exit2 %", "slExit2P", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("C. Cost", "slClosingCost", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("O. Pack", "slOverPack", aligment: ExcelHorizontalAlignment.Left);
+      return lst;
     }
     #endregion
   }
