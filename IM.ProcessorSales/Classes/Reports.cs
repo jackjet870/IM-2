@@ -462,9 +462,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///  [aalcocer] 18/07/2016 Created
     /// </history>
-    internal static FileInfo RptStatisticsByExitCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByExitCloser> lstReport, bool groupedByTeams)
+    internal static async Task<FileInfo> RptStatisticsByExitCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByExitCloser> lstReport, bool groupedByTeams)
     {
-      var lstReportAux = new List<dynamic>(); 
+      var lstReportAux = new List<dynamic>();
       if (groupedByTeams)
       {
         lstReportAux.AddRange(lstReport.Select(c => new
@@ -505,7 +505,7 @@ namespace IM.ProcessorSales.Classes
       }
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByExitCloserGroupedByTeams() : FormatReport.RptStatisticsByExitCloser(),blnShowSubtotal:true, blnRowGrandTotal:true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByExitCloserGroupedByTeams() : FormatReport.RptStatisticsByExitCloser(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion RptStatisticsByExitCloser
 

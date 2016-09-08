@@ -355,7 +355,7 @@ namespace IM.ProcessorSales.Forms
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByExitCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
-              file = Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
 
@@ -499,7 +499,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptSalesRoomAndSalesman.StatsByExitCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByExitCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
             if (list.Any())
-              file = Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+              file = await Reports.RptStatisticsByExitCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByExitCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
           #endregion
           #region Stats by F.T.B

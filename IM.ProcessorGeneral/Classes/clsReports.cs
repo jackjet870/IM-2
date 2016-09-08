@@ -155,7 +155,7 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptCxCGift(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptCxCGift)
+    public static async Task<FileInfo> ExportRptCxCGift(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptCxCGift)
     {
       //Lista de RecibosConRegalos.
       var lstReceipts = lstRptCxCGift[0] as List<RptCxCGifts>;
@@ -195,7 +195,7 @@ namespace IM.ProcessorGeneral.Classes
                               })
                               .ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters,strReport, string.Empty, clsFormatReport.RptCxcGifts(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters, strReport, string.Empty, clsFormatReport.RptCxcGifts(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -315,7 +315,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptBurnedDeposits(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart, DateTime dtmEnd)
+    public static async Task<FileInfo> ExportRptBurnedDeposits(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart, DateTime dtmEnd)
     {
       //Recibos de Regalo
       var lstGiftReceipts = lstRptBurnedDeposits[0] as List<RptDepositsBurned>;
@@ -355,7 +355,7 @@ namespace IM.ProcessorGeneral.Classes
                         ).OrderBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters,strReport, string.Empty, clsFormatReport.RptBurnedDeposits(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDeposits(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion 
 
@@ -374,7 +374,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptBurnedDepositsByResorts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart, DateTime dtmEnd)
+    public static async Task<FileInfo> ExportRptBurnedDepositsByResorts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart, DateTime dtmEnd)
     {
       //Recibos de Regalo
       var lstGiftReceipts = lstRptBurnedDeposits[0] as List<RptDepositsBurnedByResort>;
@@ -415,11 +415,12 @@ namespace IM.ProcessorGeneral.Classes
                           procAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => s.Item2.saProc && (s.Item2.saProcD >= dtmStart && s.Item2.saProcD <= dtmEnd)).Sum(s => s.Item2.saGrossAmount) : 0) : 0),
                           pendAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => !s.Item2.saProc || (s.Item2.saProc && !(s.Item2.saProcD >= dtmStart && s.Item2.saProcD <= dtmEnd))).Sum(s => s.Item2.saGrossAmount) : 0) : 0)
                         }
-                        ).OrderBy(c => c.grD)
+                        ).OrderBy(c=> c.guHotelB)
+                        .ThenBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters,strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot:true, addEnumeration: true);
     }
     #endregion
 
@@ -437,7 +438,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptPaidDeposits(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptPaidDeposits, bool byPr = false)
+    public static async Task<FileInfo> ExportRptPaidDeposits(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptPaidDeposits, bool byPr = false)
     {
       //Recibos de Regalo
       var lstGiftReceipts = lstRptPaidDeposits[0] as List<RptDepositsPaid>;
@@ -468,11 +469,13 @@ namespace IM.ProcessorGeneral.Classes
                           gRcpt.grDeposit,
                           gRcpt.grDepositTwisted
                         }
-                        ).OrderBy(c => c.grD)
+                        )
+                        .OrderBy(c=>c.grpe)
+                        .ThenBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
 
     }
     #endregion
@@ -494,14 +497,15 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 06/Jun/2016 Created
     /// </history>
-    public static FileInfo ExportRptCancelledGiftsManifest(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptCancelledGifts)
+    public static async Task<FileInfo> ExportRptCancelledGiftsManifest(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptCancelledGifts)
     {
       var cancelledGifts = lstRptCancelledGifts[0] as List<RptGiftsManifestCancel>;
       var gifts = lstRptCancelledGifts[1] as List<RptGiftsManifestCancel_Gifts>;
 
       if (cancelledGifts != null && cancelledGifts.Any(c => c.grDeposit > 0 || c.grDepositTwisted > 0 || c.grTaxiOut > 0))
       {
-        cancelledGifts.ForEach(c => {
+        cancelledGifts.ForEach(c =>
+        {
           c.grcu = (lstRptCancelledGifts[2] as List<CurrencyShort>).FirstOrDefault(cu => cu.cuID == c.grcu)?.cuN;
           c.grpt = (lstRptCancelledGifts[3] as List<PaymentTypeShort>).FirstOrDefault(pt => pt.ptID == c.grpt)?.ptN;
         });
@@ -526,7 +530,7 @@ namespace IM.ProcessorGeneral.Classes
                                 gr.grTaxiOut,
                                 gr.geQty,
                                 gr.geFolios,
-                                Cost= (gm!=null) ? gr.gePriceA+ gr.gePriceM : 0,
+                                Cost = (gm != null) ? gr.gePriceA + gr.gePriceM : 0,
                                 gr.grComments,
                                 Gift = gm?.giID,
                                 GiftN = gm?.giN,
@@ -536,7 +540,7 @@ namespace IM.ProcessorGeneral.Classes
       var dt = TableHelper.GetDataTableFromList(rptGiftsManifest, true, false);
       //Obtenemos el formato del reporte.
       var format = clsFormatReport.RptCancelledGiftsManifest();
-      var pivot1 = new List<string> {"grDeposited", "grDepositTwisted", "grTaxiOut", "grcu", "grpt"};
+      var pivot1 = new List<string> { "grDeposit", "grDepositTwisted", "grTaxiOut", "grcu", "grpt" };
       var pivot2 = new List<string>();
       //Asignamos el tipo de eje que tendran algunas columnas.
       format.ForEach(c =>
@@ -561,13 +565,13 @@ namespace IM.ProcessorGeneral.Classes
         else if ((cancelledGifts.Any(g => g.grDeposit > 0) || cancelledGifts.Any(g => g.grDepositTwisted > 0)) && c.PropertyName == "grcu")
         {
           c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-          c.Order = 1;
+          //c.Order = 1;
           pivot2.Add("grcu");
         }
         else if ((cancelledGifts.Any(g => g.grDeposit > 0) || cancelledGifts.Any(g => g.grDepositTwisted > 0)) && c.PropertyName == "grpt")
         {
           c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-          c.Order = 2;
+          //c.Order = 2;
           pivot2.Add("grpt");
         }
         else
@@ -577,34 +581,24 @@ namespace IM.ProcessorGeneral.Classes
       });
 
       var firstPivotdt = new DataTable();
-      var formatPivot2 = new List<Model.Classes.ExcelFormatTable>();
+      var formatPivot2 = new ExcelFormatItemsList();
       if (cancelledGifts.Any(g => g.grDeposit > 0) || cancelledGifts.Any(g => g.grDepositTwisted > 0))
       {
         //Obtenemos el primer pivot.
         firstPivotdt = EpplusHelper.GetPivotTable(format, dt);
 
-        var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => c.Order);
+        var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => format.IndexOf(c));
 
         //Obtenemos la nueva lista excluyendo las columnas que ya sirvieron como pivote.
-        formatPivot2 = format.Where(c => !pivot2.Contains(c.PropertyName)).ToList();
-        var afterPivot = format.Where(c => c.Order > order).OrderBy(c => c.Order).ToList();
+        formatPivot2.AddRange(format.Where(c => !pivot2.Contains(c.PropertyName)).ToList());
+        //var afterPivot = format.Where(c => format.IndexOf(c) > order).ToList();
         //Obtenemos las columnas que ya se les aplico el pivot.Y las agregamos a la lista de formatos.
         firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
         {
           if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-          formatPivot2.Add(new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName, Order = order });
+          formatPivot2.Insert(order, new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName });
           order++;
-        });
-
-        afterPivot.ForEach(c =>
-        {
-          formatPivot2.ForEach(f =>
-          {
-            if (f.PropertyName != c.PropertyName) return;
-            f.Order = order;
-            order++;
-          });
-        });
+        });       
       }
       else
       {
@@ -623,18 +617,18 @@ namespace IM.ProcessorGeneral.Classes
             break;
           case "Gift":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 1;
+            //c.Order = 1;
             break;
           case "GiftN":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 2;
+            //c.Order = 2;
             break;
         }
       });
 
       //Obtenemos el segudo pivot.
-      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2.OrderBy(c => c.Order).ToList(), firstPivotdt);
-      return EpplusHelper.CreateExcelCustomPivot(null, filters,strReport, string.Empty, clsFormatReport.RptCancelledGiftsManifest(), blnRowGrandTotal: true, pivotedTable: secondPivotdt, fileFullPath: fileFullPath);
+      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2, firstPivotdt);
+      return await EpplusHelper.CreateCustomExcel(null, filters, strReport, string.Empty, clsFormatReport.RptCancelledGiftsManifest(), blnRowGrandTotal: true, pivotedTable: secondPivotdt, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -670,7 +664,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsByCategory(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsByCategory> lstRptGiftsByCat)
+    public static async Task<FileInfo> ExportRptGiftsByCategory(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsByCategory> lstRptGiftsByCat)
     {
       var lstGifts = lstRptGiftsByCat.Select(c => new
       {
@@ -685,7 +679,7 @@ namespace IM.ProcessorGeneral.Classes
 
 
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstGifts, true, false), filters,strReport, string.Empty, clsFormatReport.RptGiftsByCategory(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategory(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -702,23 +696,21 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsByCategoryProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsByCategoryProgram> lstRptGiftsByCatP)
+    public static async Task<FileInfo> ExportRptGiftsByCategoryProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsByCategoryProgram> lstRptGiftsByCatP)
     {
       var lstGifts = lstRptGiftsByCatP.Select(c => new
       {
         Gift = c.gegi,
-        TotalQty = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi).Sum(g => g.Quantity),
+        TotalQty = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi && g.Program==c.Program).Sum(g => g.Quantity),
         c.UnitCost,
-        TotalCost = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi).Sum(g => g.TotalCost),
+        TotalCost = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi && g.Program == c.Program).Sum(g => g.TotalCost),
         c.Quantity,
         c.Day,
         Category = c.gcN,
         c.Program
       }).ToList();
 
-
-
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstGifts, true, false), filters,strReport, string.Empty, clsFormatReport.RptGiftsByCategoryProgram(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategoryProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -735,7 +727,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsCertificates(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptGiftsCerts)
+    public static async Task<FileInfo> ExportRptGiftsCertificates(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptGiftsCerts)
     {
       var lstGifts = lstRptGiftsCerts[0] as List<RptGiftsCertificates>;
       var currencies = lstRptGiftsCerts[1] as List<Currency>;
@@ -763,7 +755,7 @@ namespace IM.ProcessorGeneral.Classes
         c.Refund,
         c.Comments
       }).ToList();
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(certificates, true, false), filters,strReport, string.Empty, clsFormatReport.RptGiftsCertificates(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(certificates, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsCertificates(), blnShowSubtotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -780,12 +772,13 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 10/May/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsManifest(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsManifest)
+    public static async Task<FileInfo> ExportRptGiftsManifest(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsManifest)
     {
-     var lstGiftManifest=lstRptGiftsManifest[0] as List<RptGiftsManifest>;
+      var lstGiftManifest = lstRptGiftsManifest[0] as List<RptGiftsManifest>;
       var lstGifts = lstRptGiftsManifest[1] as List<GiftForReceipts>;
 
-      lstGiftManifest.ForEach(c => {
+      lstGiftManifest.ForEach(c =>
+      {
         c.Currency = (lstRptGiftsManifest[2] as List<CurrencyShort>).First(cu => cu.cuID == c.Currency).cuN;
         c.PaymentType = (lstRptGiftsManifest[3] as List<PaymentTypeShort>).First(pt => pt.ptID == c.PaymentType).ptN;
       });
@@ -819,8 +812,8 @@ namespace IM.ProcessorGeneral.Classes
                                 gr.PaymentType,
                                 gr.TaxiOut,
                                 gr.TaxiOutDiff,
-                                Gift= gm?.giID,
-                                GiftN= gm?.giN,
+                                Gift = gm?.giID,
+                                GiftN = gm?.giN,
                                 Quantity = (gm != null && gm.giWPax) ? (gr.Adults + gr.Minors) : gr.Quantity,
                                 gr.Adults,
                                 gr.Minors,
@@ -836,7 +829,7 @@ namespace IM.ProcessorGeneral.Classes
       var format = clsFormatReport.RptGiftsManifest();
       //Asignamos el tipo de eje que tendran algunas columnas.
       format.ForEach(c =>
-      { 
+      {
         switch (c.PropertyName)
         {
           case "Deposited":
@@ -844,42 +837,34 @@ namespace IM.ProcessorGeneral.Classes
             break;
           case "Currency":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 1;
+            //c.Order = 1;
             break;
           case "PaymentType":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 2;
+            //c.Order = 2;
             break;
         }
       });
-      
+
       //Obtenemos el primer pivot.
       var firstPivotdt = EpplusHelper.GetPivotTable(format, dt);
-      var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => c.Order);
+      var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => format.IndexOf(c));
 
       //Creamos la lista de columnas que se excluiran.
       var pivot2 = new List<string>() { "Deposited", "Currency", "PaymentType" };
-      
+
       //Obtenemos la nueva lista excluyendo las columnas que ya sirvieron como pivote.
-      var formatPivot2 = format.Where(c => !pivot2.Contains(c.PropertyName)).ToList();
-      var afterPivot = format.Where(c => c.Order > order).OrderBy(c=>c.Order).ToList();
+      var formatPivot2 = new ExcelFormatItemsList();
+      formatPivot2.AddRange(format.Where(c => !pivot2.Contains(c.PropertyName)));
+      //var afterPivot = format.Where(c => c.Order > order).OrderBy(c=>c.Order).ToList();
       //Obtenemos las columnas que ya se les aplico el pivot.Y las agregamos a la lista de formatos.
       firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
       {
         if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-        formatPivot2.Add(new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName, Order = order });
+        formatPivot2.Insert(order, (new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName }));
         order++;
       });
 
-      afterPivot.ForEach(c => {
-        formatPivot2.ForEach(f =>
-        {
-          if (f.PropertyName != c.PropertyName) return;
-          f.Order = order;
-          order++;
-        });
-      });
-      
       //Cambiamos las propiedades de las columnas para el nuevo pivote.
       formatPivot2.ForEach(c =>
       {
@@ -892,19 +877,19 @@ namespace IM.ProcessorGeneral.Classes
             break;
           case "Gift":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 1;
+            //c.Order = 1;
             break;
           case "GiftN":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 2;
+            //c.Order = 2;
             break;
         }
-      });           
+      });
 
       //Obtenemos el segudo pivot.
-      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2.OrderBy(c=>c.Order).ToList(), firstPivotdt);
+      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2, firstPivotdt);
 
-      return EpplusHelper.CreateExcelCustomPivot(null, filters,strReport, string.Empty, format, pivotedTable: secondPivotdt, blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(null, filters, strReport, string.Empty, format, pivotedTable: secondPivotdt, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -921,12 +906,13 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 11/May/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsReceipts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsReceipts)
+    public static async Task<FileInfo> ExportRptGiftsReceipts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptGiftsReceipts)
     {
       var lstGiftReceipt = lstRptGiftsReceipts[0] as List<RptGiftsReceipts>;
       var lstGifts = lstRptGiftsReceipts[1] as List<GiftForReceipts>;
 
-      lstGiftReceipt.ForEach(c => {
+      lstGiftReceipt.ForEach(c =>
+      {
         c.Currency = (lstRptGiftsReceipts[2] as List<CurrencyShort>).First(cu => cu.cuID == c.Currency).cuN;
         c.PaymentType = (lstRptGiftsReceipts[3] as List<PaymentTypeShort>).First(pt => pt.ptID == c.PaymentType).ptN;
       });
@@ -964,12 +950,12 @@ namespace IM.ProcessorGeneral.Classes
                                 GiftN = gm?.giN,
                                 Quantity = (gm != null && gm.giWPax) ? (gr.Adults + gr.Minors) : gr.Quantity,
                                 Cost = (gm != null) ? (gr.PriceAdults + gr.PriceMinors) : 0,
-                                TotalCost = lstGiftReceipt.Where(c=>c.ReceiptID==gr.ReceiptID).Sum( c=> c.PriceAdults + c.PriceMinors), 
+                                TotalCost = lstGiftReceipt.Where(c => c.ReceiptID == gr.ReceiptID).Sum(c => c.PriceAdults + c.PriceMinors),
                                 gr.WithCost,
                                 gr.PublicPrice,
                                 gr.Adults,
                                 gr.Minors,
-                                gr.Folios,                                
+                                gr.Folios,
                                 gr.Comments
                               }).ToList();
       //Convertimos la lista a datatable.
@@ -987,11 +973,11 @@ namespace IM.ProcessorGeneral.Classes
             break;
           case "Currency":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 1;
+            //c.Order = 1;
             break;
           case "PaymentType":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 2;
+            //c.Order = 2;
             break;
         }
       });
@@ -999,32 +985,24 @@ namespace IM.ProcessorGeneral.Classes
       //Obtenemos el primer pivot.
       var firstPivotdt = EpplusHelper.GetPivotTable(format, dt);
 
-      var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => c.Order);
-      
+      var order = format.Where(c => c.Axis == OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Values).Min(c => format.IndexOf(c));
+
       //Creamos la lista de columnas que se excluiran.
       var pivot2 = new List<string>() { "Deposited", "Burned", "Currency", "PaymentType" };
 
       //Obtenemos la nueva lista excluyendo las columnas que ya sirvieron como pivote.
-      var formatPivot2 = format.Where(c => !pivot2.Contains(c.PropertyName)).ToList();
+      var formatPivot2 = new ExcelFormatItemsList();
+      formatPivot2.AddRange(format.Where(c => !pivot2.Contains(c.PropertyName)));
 
       var afterPivot = format.Where(c => c.Order > order).OrderBy(c => c.Order).ToList();
       //Obtenemos las columnas que ya se les aplico el pivot.Y las agregamos a la lista de formatos.
       firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
       {
         if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-        formatPivot2.Add(new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName, Order = order });
+        formatPivot2.Insert(order, (new Model.Classes.ExcelFormatTable { PropertyName = col.ColumnName, Order = order }));
         order++;
-      });
 
-      afterPivot.ForEach(c => {
-        formatPivot2.ForEach(f =>
-        {
-          if (f.PropertyName != c.PropertyName) return;
-          f.Order = order;
-          order++;
-        });
       });
-
       //Cambiamos las propiedades de las columnas para el nuevo pivote.
       formatPivot2.ForEach(c =>
       {
@@ -1039,18 +1017,18 @@ namespace IM.ProcessorGeneral.Classes
             break;
           case "Gift":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 1;
+            //c.Order = 1;
             break;
           case "GiftN":
             c.Axis = OfficeOpenXml.Table.PivotTable.ePivotFieldAxis.Column;
-            c.Order = 2;
+            //c.Order = 2;
             break;
         }
       });
 
       //Obtenemos el segudo pivot.
-      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2.OrderBy(c => c.Order).ToList(), firstPivotdt);
-      return EpplusHelper.CreateExcelCustomPivot(null, filters,strReport, string.Empty, format, blnRowGrandTotal: true, pivotedTable: secondPivotdt, fileFullPath: fileFullPath);
+      var secondPivotdt = EpplusHelper.GetPivotTable(formatPivot2, firstPivotdt);
+      return await EpplusHelper.CreateCustomExcel(null, filters, strReport, string.Empty, format, blnRowGrandTotal: true, pivotedTable: secondPivotdt, fileFullPath: fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -1067,7 +1045,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsReceiptsPayments(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptGiftsRcptPaym)
+    public static async Task<FileInfo> ExportRptGiftsReceiptsPayments(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptGiftsRcptPaym)
     {
       var lstGiftsR = lstRptGiftsRcptPaym[0] as List<RptGiftsReceiptsPayments>;
       var source = lstRptGiftsRcptPaym[1] as List<SourcePayment>;
@@ -1085,7 +1063,7 @@ namespace IM.ProcessorGeneral.Classes
         GroupSource2 = (c.Source == "MK") ? "MARKETING" : (c.Source == "CXC") ? "CXC" : "SUBTOTAL INCOME"
       }).ToList();
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(receipts, true, false), filters,strReport, string.Empty, clsFormatReport.RptGiftsReceiptsPayments(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(receipts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsReceiptsPayments(), blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1778,18 +1756,19 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptBurnedDepositsGuests(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDepGuest)
+    public static async Task<FileInfo> ExportRptBurnedDepositsGuests(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptBurnedDepGuest)
     {
       var lstGiftsR = lstRptBurnedDepGuest[0] as List<RptDepositsBurnedGuests>;
       var currencies = lstRptBurnedDepGuest[1] as List<Currency>;
       var payType = lstRptBurnedDepGuest[2] as List<PaymentType>;
 
-      lstGiftsR.ForEach(c => {
+      lstGiftsR.ForEach(c =>
+      {
         c.gucu = currencies.First(cu => cu.cuID == c.gucu).cuN ?? "";
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstGiftsR, true, false), filters,strReport, string.Empty, clsFormatReport.RptDepositsBurnedGuests(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGiftsR, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsBurnedGuests(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1823,19 +1802,21 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptDepositByPr(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptDepPr)
+    public static async Task<FileInfo> ExportRptDepositByPr(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptDepPr)
     {
       var lstDepPr = lstRptDepPr[0] as List<RptDepositsByPR>;
       var currencies = lstRptDepPr[1] as List<Currency>;
       var payType = lstRptDepPr[2] as List<PaymentType>;
 
-      lstDepPr.ForEach(c => {
+      lstDepPr.ForEach(c =>
+      {
         c.guPRInvit1 = $"{c.guPRInvit1} {c.peN}";
         c.gucu = currencies.First(cu => cu.cuID == c.gucu).cuN ?? "";
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
-      lstDepPr = lstDepPr.OrderBy(c => c.guID).ToList();
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters,strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+
+      lstDepPr = lstDepPr.OrderBy(c=>c.guPRInvit1).ThenBy(c => c.guID).ToList();
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1851,19 +1832,22 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptDepositsNoShow(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptDepNoShow)
+    public static async Task<FileInfo> ExportRptDepositsNoShow(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<object> lstRptDepNoShow)
     {
       var lstDepPrNoShow = lstRptDepNoShow[0] as List<RptDepositsNoShow>;
       var currencies = lstRptDepNoShow[1] as List<Currency>;
       var payType = lstRptDepNoShow[2] as List<PaymentType>;
 
-      lstDepPrNoShow.ForEach(c => {
+      lstDepPrNoShow.ForEach(c =>
+      {
         c.guPRInvit1 = $"{c.guPRInvit1} {c.peN}";
         c.gucu = currencies.First(cu => cu.cuID == c.gucu).cuN ?? "";
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, fileFullPath: fileFullPath);
+      lstDepPrNoShow = lstDepPrNoShow.OrderBy(c => c.guPRInvit1).ThenBy(c => c.guID).ToList();
+
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -2062,9 +2046,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 07/Jun/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsKardex(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsKardex> lstRptGiftsKardex)
+    public static async Task<FileInfo> ExportRptGiftsKardex(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsKardex> lstRptGiftsKardex)
     {
-      return EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstRptGiftsKardex, true), filters,strReport, string.Empty, clsFormatReport.RptGiftsKardex(), blnRowGrandTotal: true, fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGiftsKardex, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsKardex(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true);
     }
     #endregion
 

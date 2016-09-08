@@ -455,7 +455,7 @@ namespace IM.ProcessorOuthouse.Forms
             filter.AllChargeTo ? "ALL" : string.Join(",", filter._lstChargeTo),
             filter.AllGift ? "ALL" : string.Join(",", filter._lstGifts));
             if (lstRptGiftsReceivedBySR.GiftsReceivedBySR.Any())
-              finfo = clsReports.ExportRptGiftsReceivedBySR(strReport, fileFullPath, filters, lstRptGiftsReceivedBySR);
+              finfo = await clsReports.ExportRptGiftsReceivedBySR(strReport, fileFullPath, filters, lstRptGiftsReceivedBySR);
             break;
 
           #endregion Gifts Received by Sales Room
@@ -540,7 +540,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
             if (lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
+              finfo = await clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
             break;
 
           #endregion Production by Agency
@@ -558,7 +558,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
             if (lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencySalesRoomOuthouse, _enumSalesByMemberShipType);
+              finfo = await clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencySalesRoomOuthouse, _enumSalesByMemberShipType);
             break;
 
           #endregion Production by Agency & Sales Room
@@ -1118,7 +1118,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
             if (lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
+              finfo = await clsReports.ExportRptProductionByAgencyOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencyOuthouse, _enumSalesByMemberShipType);
             break;
 
           #endregion Production by Agency
@@ -1136,7 +1136,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumSalesByMemberShipType);
             if (lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencySalesRoomOuthouse, _enumSalesByMemberShipType);
+              finfo = await clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, fileFullPath, filters, lstRptProductionByAgencySalesRoomOuthouse, _enumSalesByMemberShipType);
             break;
 
           #endregion Production by Agency & Sales Room
