@@ -574,7 +574,7 @@ namespace IM.ProcessorGeneral.Forms
           case "CxC Gifts":
             var lstRptCxCGifts = await BRReportsBySalesRoom.GetRptCxCGifts(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCGifts.Any())
-              finfo = clsReports.ExportRptCxCGift(strReportName, fileFullPath, filters, lstRptCxCGifts);
+              finfo = await clsReports.ExportRptCxCGift(strReportName, fileFullPath, filters, lstRptCxCGifts);
             break;
           #endregion
           #region CxC Not Authorized
@@ -607,21 +607,21 @@ namespace IM.ProcessorGeneral.Forms
           case "Burned Deposits":
             var lstRptBurnedDeposits = await BRReportsBySalesRoom.GetRptDepositsBurned(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptBurnedDeposits.Any())
-              finfo = clsReports.ExportRptBurnedDeposits(strReportName, fileFullPath, filters, lstRptBurnedDeposits, filter.StartDate.Date, filter.EndDate.Date);
+              finfo = await clsReports.ExportRptBurnedDeposits(strReportName, fileFullPath, filters, lstRptBurnedDeposits, filter.StartDate.Date, filter.EndDate.Date);
             break;
           #endregion
           #region Burned Deposits by Resorts
           case "Burned Deposits by Resort":
             var lstRptBurnedDepositsResort = await BRReportsBySalesRoom.GetRptDepositsBurnedByResort(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptBurnedDepositsResort.Any())
-              finfo = clsReports.ExportRptBurnedDepositsByResorts(strReportName, fileFullPath, filters, lstRptBurnedDepositsResort, filter.StartDate.Date, filter.EndDate.Date);
+              finfo = await clsReports.ExportRptBurnedDepositsByResorts(strReportName, fileFullPath, filters, lstRptBurnedDepositsResort, filter.StartDate.Date, filter.EndDate.Date);
             break;
           #endregion
           #region Paid Deposits
           case "Paid Deposits":
             var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(filter.StartDate, filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptPaidDeposits.Any())
-              finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits);
+              finfo = await clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits);
             break;
           #endregion
 
@@ -635,7 +635,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstSalesRooms));
             if (lstRptCancelledGift.Any())
-              finfo = clsReports.ExportRptCancelledGiftsManifest(strReportName, fileFullPath, filters, lstRptCancelledGift);
+              finfo = await clsReports.ExportRptCancelledGiftsManifest(strReportName, fileFullPath, filters, lstRptCancelledGift);
             break;
           #endregion
           #region Daily Gifts (Simple)
@@ -654,7 +654,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Gifts By Category":
             var lstRptGiftByCat = await BRReportsBySalesRoom.GetRptGiftsByCategory(filter.StartDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptGiftByCat.Any())
-              finfo = clsReports.ExportRptGiftsByCategory(strReportName, fileFullPath, filters, lstRptGiftByCat);
+              finfo = await clsReports.ExportRptGiftsByCategory(strReportName, fileFullPath, filters, lstRptGiftByCat);
             break;
 
           #endregion
@@ -663,7 +663,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Gifts By Category & Program":
             var lstRptGiftByCatP = await BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(filter.StartDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptGiftByCatP.Any())
-              finfo = clsReports.ExportRptGiftsByCategoryProgram(strReportName, fileFullPath, filters, lstRptGiftByCatP);
+              finfo = await clsReports.ExportRptGiftsByCategoryProgram(strReportName, fileFullPath, filters, lstRptGiftByCatP);
             break;
 
           #endregion
@@ -680,7 +680,7 @@ namespace IM.ProcessorGeneral.Forms
                 : string.Join(",", filter.LstGifts));
 
             if (lstRptGifsCerts.Any())
-              finfo = clsReports.ExportRptGiftsCertificates(strReportName, fileFullPath, filters, lstRptGifsCerts);
+              finfo = await clsReports.ExportRptGiftsCertificates(strReportName, fileFullPath, filters, lstRptGifsCerts);
             break;
 
           #endregion
@@ -694,7 +694,7 @@ namespace IM.ProcessorGeneral.Forms
               (EnumStatus)_frmFilter.cboStatus.SelectedValue);
 
             if (lstRptGiftsManifest.Any())
-              finfo = clsReports.ExportRptGiftsManifest(strReportName, fileFullPath, filters, lstRptGiftsManifest);
+              finfo = await clsReports.ExportRptGiftsManifest(strReportName, fileFullPath, filters, lstRptGiftsManifest);
             break;
 
           #endregion
@@ -709,7 +709,7 @@ namespace IM.ProcessorGeneral.Forms
               (_frmFilter.txtGuestID.Text == string.Empty) ? 0 : Convert.ToInt32(_frmFilter.txtGuestID.Text));
 
             if (lstRptGiftsReceipts.Any())
-              finfo = clsReports.ExportRptGiftsReceipts(strReportName, fileFullPath, filters, lstRptGiftsReceipts);
+              finfo = await clsReports.ExportRptGiftsReceipts(strReportName, fileFullPath, filters, lstRptGiftsReceipts);
             break;
 
           #endregion
@@ -720,7 +720,7 @@ namespace IM.ProcessorGeneral.Forms
                 string.Join(",", filter.LstSalesRooms));
 
             if (lstRptGifsReceiptsPay.Any())
-              finfo = clsReports.ExportRptGiftsReceiptsPayments(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptGiftsReceiptsPayments(strReportName, fileFullPath, filters,
                 lstRptGifsReceiptsPay);
             break;
 
@@ -1217,7 +1217,7 @@ namespace IM.ProcessorGeneral.Forms
                 filter.EndDate,
                 string.Join(",", filter.LstLeadSources));
             if (lstRptBurnedDepsGuest.Any())
-              finfo = clsReports.ExportRptBurnedDepositsGuests(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptBurnedDepositsGuests(strReportName, fileFullPath, filters,
                 lstRptBurnedDepsGuest);
             break;
 
@@ -1239,7 +1239,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstLeadSources));
             if (lstRptDepPr.Any())
-              finfo = clsReports.ExportRptDepositByPr(strReportName, fileFullPath, filters, lstRptDepPr);
+              finfo = await clsReports.ExportRptDepositByPr(strReportName, fileFullPath, filters, lstRptDepPr);
             break;
 
           #endregion
@@ -1250,7 +1250,7 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstLeadSources));
             if (lstRptDepNoShow.Any())
-              finfo = clsReports.ExportRptDepositsNoShow(strReportName, fileFullPath, filters, lstRptDepNoShow);
+              finfo = await clsReports.ExportRptDepositsNoShow(strReportName, fileFullPath, filters, lstRptDepNoShow);
             break;
 
           #endregion
@@ -1291,7 +1291,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(filter.StartDate,
               filter.EndDate, leadSources: leadSources);
             if (lstRptPaidDeposits.Any())
-              finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits, true);
+              finfo = await clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits, true);
             break;
 
           #endregion
@@ -1486,7 +1486,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Gifts Kardex":
             var lstRptGiftKardex = await BRGeneralReports.GetRptGiftsKardex(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
             if (lstRptGiftKardex.Any())
-              finfo = clsReports.ExportRptGiftsKardex(strReportName, fileFullPath, filters, lstRptGiftKardex);
+              finfo = await clsReports.ExportRptGiftsKardex(strReportName, fileFullPath, filters, lstRptGiftKardex);
             break;
 
           #endregion

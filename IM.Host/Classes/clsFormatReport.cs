@@ -19,23 +19,23 @@ namespace IM.Host.Classes
     /// <returns> List of ExcelFormatTable</returns>
     /// <history>
     /// [edgrodriguez] 21/Jun/2016 Created
+    /// [edgrodriguez] 05/09/2016 Modified. Se cambio el formato.
     /// </history>
-    public static List<ExcelFormatTable> RptUpList()
+    public static ExcelFormatItemsList RptUpList()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "Sales man", PropertyName = "Salesman", Axis = ePivotFieldAxis.Row, Order = 1 },
-        new ExcelFormatTable() { Title = "Name", PropertyName = "SalesmanN", Axis = ePivotFieldAxis.Row, Order = 2 },
-        new ExcelFormatTable() { Title = "Post", PropertyName = "SalesmanPost", IsVisible = false },
-        new ExcelFormatTable() { Title = "Post Name", PropertyName = "SalesmanPostN", IsGroup =  true, Order = 1 },
-        new ExcelFormatTable() { Title = "Day Off", PropertyName = "DayOffList", Axis = ePivotFieldAxis.Row, Order = 3 },
-        new ExcelFormatTable() { Title = "Language", PropertyName = "Language", Axis= ePivotFieldAxis.Values, Order = 4 },
-        new ExcelFormatTable() { Title = "Location", PropertyName = "Location", Axis = ePivotFieldAxis.Values, Order = 5},
-        new ExcelFormatTable() { Title = "Time", PropertyName = "Time", Format = EnumFormatTypeExcel.Time, Axis = ePivotFieldAxis.Values, Order = 6 },
-        new ExcelFormatTable() { Title = "TimeN", PropertyName = "TimeN", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Column, Sort = eSortType.Ascending, Order = 1 },
-        new ExcelFormatTable() { Title = "Amount Ytd", PropertyName = "AmountYtd", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 7 },
-        new ExcelFormatTable() { Title = "Amount M", PropertyName = "AmountM", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 8 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Post Name", "SalesmanPostN", isGroup: true, isVisible:false);
+      lst.Add("ID", "Salesman", axis: ePivotFieldAxis.Row);
+      lst.Add("Salesman Name", "SalesmanN", axis: ePivotFieldAxis.Row);
+      lst.Add("Off", "DayOffList", axis: ePivotFieldAxis.Row);
+      lst.Add("Lang", "Language", axis: ePivotFieldAxis.Values);
+      lst.Add("Location", "Location", axis: ePivotFieldAxis.Values);
+      lst.Add("Time", "Time", format: EnumFormatTypeExcel.Time, axis: ePivotFieldAxis.Values);
+      lst.Add("TimeN", "TimeN", format: EnumFormatTypeExcel.General, axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Vol Ytd", "AmountYtd", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row);
+      lst.Add("Vol Month", "AmountM", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row);
+      lst.Add("Post", "SalesmanPost", isVisible: false);
+      return lst;
     }
     #endregion
 

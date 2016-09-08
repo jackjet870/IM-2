@@ -122,17 +122,17 @@ namespace IM.Outhouse.Forms
               c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
             });
 
-            fileinfo = EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstDepPr, true, false), 
-              filters, "Deposits by PR", dateFileName, clsFormatReports.RptDepositByPr(),blnShowSubtotal: true);
+            fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false),
+              filters, "Deposits by PR", dateFileName, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isPivot: true, addEnumeration: true);
           }
           else
-            UIHelper.ShowMessage("There is no data for make a report");
-
-          if (fileinfo != null)
-            Process.Start(fileinfo.FullName);
+            UIHelper.ShowMessage("There is no data for make a report");          
           break;
 
       }
+
+      if (fileinfo != null)
+        Process.Start(fileinfo.FullName);
     } 
     #endregion
   }

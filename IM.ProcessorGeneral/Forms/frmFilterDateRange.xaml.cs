@@ -347,6 +347,8 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void Window_Closing(object sender, CancelEventArgs e)
     {
+      var frm = sender as frmFilterDateRange;
+      if (!IsLoaded) return;
       SaveFrmFilterValues();
     }
 

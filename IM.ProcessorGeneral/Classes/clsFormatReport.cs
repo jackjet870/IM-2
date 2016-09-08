@@ -190,32 +190,33 @@ new ExcelFormatTable() { Title = "Currency", Axis = ePivotFieldAxis.Column, Orde
     /// <history>
     /// [edgrodriguez] 29/Mar/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCxcGifts()
+    public static ExcelFormatItemsList RptCxcGifts()
     {
-      return new List<ExcelFormatTable>{
-new ExcelFormatTable() {  Title="CHB", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() {  Title="Chb PP",PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() {  Title="PR",PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() {  Title="PR Name",PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() {  Title="Location",PropertyName = "grlo", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() {  Title="Host",PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() {  Title="Host Name" ,PropertyName = "HostN", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() {  Title="GUID" ,PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() {  Title="Guest Name" ,PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() {  Title="Gift",PropertyName = "Gift", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() {  Title="Gift Name",PropertyName = "giN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() {  Title="Quantity" ,PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 10 },
-new ExcelFormatTable() {  Title="Adults" ,PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() {  Title="Minors" ,PropertyName = "Minors", Format=EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 14 },
-new ExcelFormatTable() {  Title="Folios" ,PropertyName = "Folios", Axis = ePivotFieldAxis.Values, Order = 12 },
-new ExcelFormatTable() {  Title="Cost" ,PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency,Function= DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 11 },
-new ExcelFormatTable() {  Title="Rcpt Date" ,PropertyName = "grD", Format=EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 15},
-new ExcelFormatTable() {  Title="USD" ,PropertyName = "CostUS", Format = EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 16 },
-new ExcelFormatTable() {  Title="Exch. Rate" ,PropertyName = "exExchRate", Axis = ePivotFieldAxis.Row, Order = 17 },
-new ExcelFormatTable() {  Title="MX" ,PropertyName = "CostMX", Format=EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 18 },
-new ExcelFormatTable() {  Title="Member #" ,PropertyName = "grMemberNum", Axis = ePivotFieldAxis.Row, Order = 19 },
-new ExcelFormatTable() {  Title="Comments"  ,PropertyName = "grCxCComments", Axis = ePivotFieldAxis.Row, Order = 20 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("CHB", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row);
+      lst.Add("Location", "grlo", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Host Name", "HostN", axis: ePivotFieldAxis.Row);
+      lst.Add("GUID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, axis: ePivotFieldAxis.Values);
+      lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, axis: ePivotFieldAxis.Values);
+      lst.Add("Folios", "Folios", axis: ePivotFieldAxis.Values);
+      lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row);
+      lst.Add("Minors", "Minors", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row);
+      lst.Add("Rcpt Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("USD", "CostUS", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, axis: ePivotFieldAxis.Row);
+      lst.Add("Exch. Rate", "exExchRate", axis: ePivotFieldAxis.Row);
+      lst.Add("MX", "CostMX", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, axis: ePivotFieldAxis.Row);
+      lst.Add("Member #", "grMemberNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Comments", "grCxCComments", axis: ePivotFieldAxis.Row);
+      lst.Add("Gift", "Gift", axis: ePivotFieldAxis.Column);
+      lst.Add("Gift Name", "giN", axis: ePivotFieldAxis.Column);
+
+      return lst;
     }
 
     #endregion RptCxcGifts
@@ -330,28 +331,28 @@ new ExcelFormatTable() { Title = "CxC", Format = EnumFormatTypeExcel.Currency, A
     /// <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptBurnedDeposits()
+    public static ExcelFormatItemsList RptBurnedDeposits()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "grHotel", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "grlo", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "grComments", Axis = ePivotFieldAxis.Row, Order = 16 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 15, Function = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 13, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 14, Function = DataFieldFunctions.Sum  }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest ID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Last Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "grHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("Loc", "grlo", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Member #", "memberNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Processable", "procAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Pending", "pendAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
+      lst.Add("Comments", "grComments", axis: ePivotFieldAxis.Row);
+      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column);
+      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column);
+      return lst;
     }
 
     #endregion RptBurnedDeposits
@@ -364,28 +365,28 @@ new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format 
     /// <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptBurnedDepositsByResorts()
+    public static ExcelFormatItemsList RptBurnedDepositsByResorts()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "grHotel", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Resort", PropertyName = "guHotelB", Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "grlo", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 15, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 13, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 14, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum  }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Resort", "guHotelB", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest ID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Last Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "grHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("Loc", "grlo", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Member #", "memberNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Processable", "procAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Pending", "pendAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column);
+      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column);
+      return lst;
     }
 
     #endregion RptBurnedDepositsByResorts
@@ -398,26 +399,26 @@ new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format 
     /// <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptPaidDeposits()
+    public static ExcelFormatItemsList RptPaidDeposits()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Book D", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Guest Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "grHotel", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 13, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 14, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest ID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "grHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("LS", "grls", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Deposit", "grDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
+      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
+      lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row, isVisible: false);
+      return lst;
     }
 
     #endregion RptPaidDeposits
@@ -434,30 +435,29 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Fo
     /// <history>
     /// [edgrodriguez] 06/Jun/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptCancelledGiftsManifest()
+    public static ExcelFormatItemsList RptCancelledGiftsManifest()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Guest Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Loc", PropertyName = "grlo", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Host Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Chb", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.Date, Order = 8 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 9 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumberWithCero, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order =  10 },
-new ExcelFormatTable() { Title = "grcu", PropertyName = "grcu"},
-new ExcelFormatTable() { Title = "grpt", PropertyName = "grpt"},
-new ExcelFormatTable() { Title = "Taxi", PropertyName = "grTaxiOut", Format = EnumFormatTypeExcel.DecimalNumberWithCero, Order = 11 },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "geQty", Format = EnumFormatTypeExcel.Number, Order = 12 },
-new ExcelFormatTable() { Title = "Folios", PropertyName = "geFolios", Order = 14},
-new ExcelFormatTable() { Title = "Cost", PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, Order = 13 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "grComments", Axis = ePivotFieldAxis.Row, Order = 15 },
-new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift" },
-new ExcelFormatTable() { Title = "GiftN", PropertyName = "GiftN" }
-//TODO: Agregar Columna Total
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("GUID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("Loc", "grlo", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Host Name", "peN", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "grD", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Date);
+      lst.Add("Deposit", "grDeposit", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Taxi", "grTaxiOut", format: EnumFormatTypeExcel.DecimalNumberWithCero);
+      lst.Add("Quantity", "geQty", format: EnumFormatTypeExcel.Number);
+      lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Folios", "geFolios");
+      lst.Add("Comments", "grComments", axis: ePivotFieldAxis.Row);
+      lst.Add("Gift", "Gift");
+      lst.Add("GiftN", "GiftN");
+      lst.Add("grcu", "grcu");
+      lst.Add("grpt", "grpt");
+      return lst;
     }
 
     #endregion RptDailyGiftSimple
@@ -492,17 +492,17 @@ new ExcelFormatTable() { Title = "Location", PropertyName = "grlo", Axis = ePivo
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsByCategory()
+    public static ExcelFormatItemsList RptGiftsByCategory()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Total Quantity", PropertyName = "TotalQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Unit Cost", PropertyName = "UnitCost", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Total Cost", PropertyName = "TotalCost",Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 5 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Gift", "Gift", axis: ePivotFieldAxis.Row);
+      lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Total Qty", "TotalQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Unit Cost", "UnitCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row);
+      lst.Add("Total Cost", "TotalCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Day", "Day", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
+      lst.Add("Category", "Category", axis: ePivotFieldAxis.Row, isVisible: false);
+      return lst;
     }
 
     #endregion RptGiftsByCategory
@@ -515,18 +515,18 @@ new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = eP
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsByCategoryProgram()
+    public static ExcelFormatItemsList RptGiftsByCategoryProgram()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Total Quantity", PropertyName = "TotalQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Unit Cost", PropertyName = "UnitCost", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Total Cost", PropertyName = "TotalCost",Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
-new ExcelFormatTable() { Title = "Program", PropertyName = "Program",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
-new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 2 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("Gift", "Gift", axis: ePivotFieldAxis.Row);
+      lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Total Qty", "TotalQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Unit Cost", "UnitCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row);
+      lst.Add("Total Cost", "TotalCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Day", "Day", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Category", "Category", isVisible: false);
+      return lst;
     }
 
     #endregion RptGiftsByCategoryProgram
@@ -539,29 +539,29 @@ new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = eP
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsCertificates()
+    public static ExcelFormatItemsList RptGiftsCertificates()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Gift ID", PropertyName = "GiftID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Gift Name", PropertyName = "GiftN", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Receipt", PropertyName = "Receipt", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Status", PropertyName = "Status", Order = 1, IsGroup = true },
-new ExcelFormatTable() { Title = "Folios", PropertyName = "Folios", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "Date", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "Host", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Guest", PropertyName = "Guest", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Location", PropertyName = "Location", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Extra Adults", PropertyName = "ExtraAdults", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "PaymentType", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Paid", PropertyName = "Paid", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 14, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Refund", PropertyName = "Refund", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 15, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = ePivotFieldAxis.Row, Order = 16 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Status", "Status", isGroup: true, isVisible: false);
+      lst.Add("Gift ID", "GiftID", axis: ePivotFieldAxis.Row);
+      lst.Add("Gift Name", "GiftN", axis: ePivotFieldAxis.Row);
+      lst.Add("Receipt", "Receipt", axis: ePivotFieldAxis.Row);
+      lst.Add("Folios", "Folios", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "Host", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
+      lst.Add("Location", "Location", axis: ePivotFieldAxis.Row);
+      lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Minors", "Minors", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Extra Adults", "ExtraAdults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Pax", "Pax", format: EnumFormatTypeExcel.DecimalNumber, axis: ePivotFieldAxis.Row);
+      lst.Add("CxC", "CxC", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Paid", "Paid", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Refund", "Refund", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Comments", "Comments", axis: ePivotFieldAxis.Row);
+      lst.Add("Currency", "Currency", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type", "PaymentType", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      return lst;
     }
 
     #endregion RptGiftsCertificates
@@ -574,44 +574,43 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
     /// <history>
     /// [edgrodriguez] 09/May/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsManifest()
+    public static ExcelFormatItemsList RptGiftsManifest()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "GuestID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Reserv ID", PropertyName = "ReservID", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "Date", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Guest", PropertyName = "Guest", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Guest 2", PropertyName = "Guest2", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 6, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "Agency", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Membership", PropertyName = "Membership", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Location", PropertyName = "Location", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "PR", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "PRN", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "Host", Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Host Name", PropertyName = "HostN", Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() { Title = "Receipt ID", PropertyName = "ReceiptID", Axis = ePivotFieldAxis.Row, Order = 14 },
-new ExcelFormatTable() { Title = "Show", PropertyName = "Show", Axis = ePivotFieldAxis.Row, Order = 15 },
-new ExcelFormatTable() { Title = "Hotel Burned", PropertyName = "HotelBurned", Axis = ePivotFieldAxis.Row, Order = 16 },
-new ExcelFormatTable() { Title = "Cancel", PropertyName = "Cancel", Axis = ePivotFieldAxis.Row, Order = 17 },
-new ExcelFormatTable() { Title = "Cancel Date", PropertyName = "CancelledDate", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 18 },
-
-new ExcelFormatTable() { Title = "Deposited", PropertyName = "Deposited", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, Order = 19 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "Burned", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, IsVisible = false },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency"  },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "PaymentType" },
-new ExcelFormatTable() { Title = "Taxi Out", PropertyName = "TaxiOut", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, Order = 20 },
-new ExcelFormatTable() { Title = "Taxi Out Diff", PropertyName = "TaxiOutDiff", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, Order = 21 },
-new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift" },
-new ExcelFormatTable() { Title = "GiftN", PropertyName = "GiftN" },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, Order = 22 },
-new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, IsVisible = false },
-new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, IsVisible = false },
-new ExcelFormatTable() { Title = "Folios", PropertyName = "Folios", Order = 24 },
-new ExcelFormatTable() { Title = "Cost", PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, Order = 23 },
-new ExcelFormatTable() { Title = "Total", PropertyName = "TotalCost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, Order = 25 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = ePivotFieldAxis.Row, Order = 26 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Guest ID", "GuestID", axis: ePivotFieldAxis.Row);
+      lst.Add("Reserv ID", "ReservID", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest 2", "Guest2", axis: ePivotFieldAxis.Row);
+      lst.Add("Pax", "Pax", format: EnumFormatTypeExcel.DecimalNumber, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Agency", "Agency", axis: ePivotFieldAxis.Row);
+      lst.Add("Membership", "Membership", axis: ePivotFieldAxis.Row);
+      lst.Add("Location", "Location", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "PR", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "PRN", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "Host", axis: ePivotFieldAxis.Row);
+      lst.Add("Host Name", "HostN", axis: ePivotFieldAxis.Row);
+      lst.Add("Receipt ID", "ReceiptID", axis: ePivotFieldAxis.Row);
+      lst.Add("Show", "Show", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel Burned", "HotelBurned", axis: ePivotFieldAxis.Row);
+      lst.Add("Cancel", "Cancel", axis: ePivotFieldAxis.Row);
+      lst.Add("Cancel Date", "CancelledDate", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Deposited", "Deposited", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Taxi Out", "TaxiOut", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Taxi Out Diff", "TaxiOutDiff", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Folios", "Folios");
+      lst.Add("Total", "TotalCost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Comments", "Comments", axis: ePivotFieldAxis.Row);
+      lst.Add("Burned", "Burned", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum, isVisible: false);
+      lst.Add("Currency", "Currency");
+      lst.Add("Payment Type", "PaymentType");
+      lst.Add("Gift", "Gift");
+      lst.Add("GiftN", "GiftN");
+      lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.DecimalNumber, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum, isVisible: false);
+      lst.Add("Minors", "Minors", format: EnumFormatTypeExcel.DecimalNumber, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum, isVisible: false);
+      return lst;
     }
 
     #endregion
@@ -624,46 +623,46 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
     /// <history>
     /// [edgrodriguez] 11/May/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsReceipts()
+    public static ExcelFormatItemsList RptGiftsReceipts()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "GuestID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Reserv ID", PropertyName = "ReservID", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "Date", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Guest", PropertyName = "Guest", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Guest 2", PropertyName = "Guest2", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Pax", PropertyName = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 6, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Agency", PropertyName = "Agency", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Membership", PropertyName = "Membership", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Location", PropertyName = "Location", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "PR", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "PRN", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Host", PropertyName = "Host", Axis = ePivotFieldAxis.Row, Order = 12 },
-new ExcelFormatTable() { Title = "Host Name", PropertyName = "HostN", Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() { Title = "Receipt ID", PropertyName = "ReceiptID", Axis = ePivotFieldAxis.Row, Order = 14 },
-new ExcelFormatTable() { Title = "Show", PropertyName = "Show", Axis = ePivotFieldAxis.Row, Order = 15 },
-new ExcelFormatTable() { Title = "Hotel Burned", PropertyName = "HotelBurned", Axis = ePivotFieldAxis.Row, Order = 16 },
-new ExcelFormatTable() { Title = "Cancel", PropertyName = "Cancel", Axis = ePivotFieldAxis.Row, Order = 17 },
-new ExcelFormatTable() { Title = "Cancel Date", PropertyName = "CancelledDate", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 18 },
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Guest ID", "GuestID", axis: ePivotFieldAxis.Row);
+      lst.Add("Reserv ID", "ReservID", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest 2", "Guest2", axis: ePivotFieldAxis.Row);
+      lst.Add("Pax", "Pax", format: EnumFormatTypeExcel.DecimalNumber, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Agency", "Agency", axis: ePivotFieldAxis.Row);
+      lst.Add("Membership", "Membership", axis: ePivotFieldAxis.Row);
+      lst.Add("Location", "Location", axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "PR", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "PRN", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "Host", axis: ePivotFieldAxis.Row);
+      lst.Add("Host Name", "HostN", axis: ePivotFieldAxis.Row);
+      lst.Add("Receipt ID", "ReceiptID", axis: ePivotFieldAxis.Row);
+      lst.Add("Show", "Show", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel Burned", "HotelBurned", axis: ePivotFieldAxis.Row);
+      lst.Add("Cancel", "Cancel", axis: ePivotFieldAxis.Row);
+      lst.Add("Cancel Date", "CancelledDate", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Deposited", "Deposited", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Burned", "Burned", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Taxi Out", "TaxiOut", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Taxi Out Diff", "TaxiOutDiff", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("With Cost", "WithCost", format: EnumFormatTypeExcel.Boolean);
+      lst.Add("Public Price", "PublicPrice", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Folios", "Folios");
+      lst.Add("Total", "TotalCost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Comments", "Comments", axis: ePivotFieldAxis.Row);
 
-new ExcelFormatTable() { Title = "With Cost", PropertyName = "WithCost", Format = EnumFormatTypeExcel.Boolean, Order = 25 },
-new ExcelFormatTable() { Title = "Public Price", PropertyName = "PublicPrice", Format = EnumFormatTypeExcel.Currency, Order = 26 },
-new ExcelFormatTable() { Title = "Deposited", PropertyName = "Deposited", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, Order = 19 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "Burned", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, Order = 20 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency"  },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "PaymentType" },
-new ExcelFormatTable() { Title = "Taxi Out", PropertyName = "TaxiOut", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, Order = 21, },
-new ExcelFormatTable() { Title = "Taxi Out Diff", PropertyName = "TaxiOutDiff", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Function = DataFieldFunctions.Sum, Order = 22 },
-new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift" },
-new ExcelFormatTable() { Title = "GiftN", PropertyName = "GiftN" },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum, Order = 23 },
-new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", IsVisible = false },
-new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors", IsVisible = false },
-new ExcelFormatTable() { Title = "Folios", PropertyName = "Folios", Order = 27 },
-new ExcelFormatTable() { Title = "Cost", PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, Order = 24 },
-new ExcelFormatTable() { Title = "Total", PropertyName = "TotalCost", Format = EnumFormatTypeExcel.Currency, Function = DataFieldFunctions.Sum, Order = 28 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = ePivotFieldAxis.Row, Order = 29 }
-      };
+      lst.Add("Currency", "Currency");
+      lst.Add("Payment Type", "PaymentType");
+      lst.Add("Gift", "Gift");
+      lst.Add("GiftN", "GiftN");
+      lst.Add("Adults", "Adults", isVisible: false);
+      lst.Add("Minors", "Minors", isVisible: false);
+      return lst;
     }
 
     #endregion
@@ -676,17 +675,17 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsReceiptsPayments()
+    public static ExcelFormatItemsList RptGiftsReceiptsPayments()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Source", PropertyName = "Source", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Amount", PropertyName = "Amount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Amount US", PropertyName = "AmountUS", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "PaymentType", PropertyName = "PaymentType", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
-new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending},
-new ExcelFormatTable() { Title = "GroupSource1", PropertyName = "GroupSource1", Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
-new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 2 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("GroupSource1", "GroupSource1", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("GroupSource2", "GroupSource2", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("Source", "Source", axis: ePivotFieldAxis.Row);
+      lst.Add("Amount", "Amount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Amount US", "AmountUS", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+      lst.Add("PaymentType", "PaymentType", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Currency", "Currency", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      return lst;
     }
 
     #endregion RptGiftsReceiptsPayments
@@ -724,7 +723,7 @@ new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", 
       lst.Add("Price US", "PriceUS", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price MX", "PriceMX", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Price CAN", "PriceCAN", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, AggregateFormat: DataFieldFunctions.Sum);
+      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Total To Pay", "TotalToPay", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Payment Total", "PaymentTotal", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Difference", "Difference", axis: ePivotFieldAxis.Row, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
@@ -1588,23 +1587,23 @@ new ExcelFormatTable() { Title = "$ Total", PropertyName = "TotalAmount", Format
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptDepositsBurnedGuests()
+    public static ExcelFormatItemsList RptDepositsBurnedGuests()
     {
-      return new List<ExcelFormatTable>(){
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "Out Invit D", PropertyName = "guInvitD", Format = EnumFormatTypeExcel.Date },
-new ExcelFormatTable() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Guest", PropertyName = "Guest", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "guHotel", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "guls", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "gusr", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "guPRInvit1", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "Out Invit", PropertyName = "guOutInvitNum", Axis = ePivotFieldAxis.Row, Order = 2},
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1,Sort =eSortType.Ascending },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2, Sort =eSortType.Descending },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 10, AggregateFunction = DataFieldFunctions.Sum, Function = DataFieldFunctions.Sum }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("GUID", "guID", axis: ePivotFieldAxis.Row);
+      lst.Add("Out Invit", "guOutInvitNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "guHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("LS", "guls", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "gusr", axis: ePivotFieldAxis.Row);
+      lst.Add("Book Date", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("PR", "guPRInvit1", axis: ePivotFieldAxis.Row);
+      lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row);
+      lst.Add("Burned", "guDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Currency", "gucu", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type", "gupt", axis: ePivotFieldAxis.Column, sort: eSortType.Descending);
+      lst.Add("Out Invit D", "guInvitD", format: EnumFormatTypeExcel.Date, isVisible: false);
+      return lst;
     }
 
     #endregion rptDepositsBurnedGuests
@@ -1725,26 +1724,26 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Fo
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptPaidDepositsByPr()
+    public static ExcelFormatItemsList RptPaidDepositsByPr()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Guest ID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Book D", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Guest Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Hotel", PropertyName = "grHotel", Axis = ePivotFieldAxis.Row, Order = 8 },
-new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true},
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN"},
-new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-        new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
+      lst.Add("Ch B",  "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP",  "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Date",  "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest ID",  "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Book D",  "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest Name",  "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel",  "grHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("LS",  "grls", axis: ePivotFieldAxis.Row);
+      lst.Add("SR",  "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("Host",  "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Deposit",  "grDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Burned",  "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Currency",  "cuN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type",  "ptN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("PR Name", "peN", isVisible: false);
+      return lst;
     }
 
     #endregion RptPaidDepositsByPR
@@ -1889,16 +1888,16 @@ new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean,
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGiftsKardex()
+    public static ExcelFormatItemsList RptGiftsKardex()
     {
-      return new List<ExcelFormatTable>(){
-new ExcelFormatTable() { Title = "Date", PropertyName = "MovD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 1 },
-new ExcelFormatTable() { Title = "MovGi", PropertyName = "MovGi", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "MovGiN", PropertyName = "MovGiN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "In", PropertyName = "InQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Out", PropertyName = "OutQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 2, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Stock.", PropertyName = "InvQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 3 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Date", "MovD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("In", "InQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Out", "OutQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Stock.", "InvQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values);
+      lst.Add("MovGi", "MovGi", axis: ePivotFieldAxis.Column);
+      lst.Add("MovGiN", "MovGiN", axis: ePivotFieldAxis.Column);
+      return lst;
     }
 
     #endregion RptGiftsKardex
