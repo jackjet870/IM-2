@@ -71,10 +71,13 @@ namespace IM.Host.Classes
                 }
                 // validamos la moneda
                 // solo se permite tarjeta de credito en dolares americanos o pesos mexicanos
-                else if ((string)type.GetProperty("gypt").GetValue(Current, null) == "CC" && ((string)type.GetProperty("gycu").GetValue(Current, null) != "US" || (string)type.GetProperty("gycu").GetValue(Current, null) != "MEX"))
+                else if ((string)type.GetProperty("gypt").GetValue(Current, null) == "CC" )
                 {
-                  UIHelper.ShowMessage("Currency invalid for source ", MessageBoxImage.Information);
-                  return false;
+                  if (((string)type.GetProperty("gycu").GetValue(Current, null) != "US" && (string)type.GetProperty("gycu").GetValue(Current, null) != "MEX"))
+                  {
+                    UIHelper.ShowMessage("Currency invalid for source ", MessageBoxImage.Information);
+                    return false;
+                  }
                 }
                 break;
               case "CXC":
