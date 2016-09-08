@@ -2629,7 +2629,7 @@ namespace IM.Host.Forms
     /// </history>
     private void UpdateSale_Click(object sender, RoutedEventArgs e)
     {
-      if (txtProgramCaption.Text.ToUpper().Equals("INHOUSE") && !dtgGifts.IsReadOnly)
+      if (!dtgGifts.IsReadOnly)
       {
         var row = dtgGifts.SelectedItem as GiftsReceiptDetail;
         row.geSale = Convert.ToBoolean((sender as CheckBox).IsChecked);

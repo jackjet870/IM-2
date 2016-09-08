@@ -398,7 +398,7 @@
                           <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                               <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center">
-                                <CheckBox IsChecked="{Binding Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="UpdateSale_Click" />
+                                <CheckBox IsChecked="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="UpdateSale_Click" />
                               </ContentControl>
                             </DataTemplate>
                           </DataGridTemplateColumn.CellTemplate>
