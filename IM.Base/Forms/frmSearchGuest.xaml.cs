@@ -39,11 +39,23 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="userdata"> Informacion del Usuario </param>
     /// <param name="program"> Enumerado que identifica el tipo de programa origen</param>
-    public frmSearchGuest(UserData userdata, EnumProgram program)
+    public frmSearchGuest(UserData userdata, EnumProgram program, DateTime? dateTimeCurrent = null)
     {
       InitializeComponent();
       user = userdata;
       _program = program;
+
+      // Cargamos la fecha de busqueda
+      DateTime? dateCurrent = dateTimeCurrent ?? BRHelpers.GetServerDate();
+      dtpTo.Value = dateCurrent;
+      dtpFrom.Value = dateCurrent.Value.AddDays(-7);
+
+      // Ocultamos los criterios de busqueda no necesarios para el caso
+      if (_program == EnumProgram.Inhouse)
+        stkSalesRoom.Visibility = stkPR.Visibility = Visibility.Collapsed;
+      else
+        stkReservation.Visibility = btnCancel.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;
+      
     }
     #endregion
 
@@ -129,11 +141,8 @@ namespace IM.Base.Forms
           // Cargamos el combo de LeadSource
           cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(user.User.peID, EnumProgram.Inhouse);
           cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
-          // Ocultamos los criterios de busqueda no necesarios para el caso
-          stkSalesRoom.Visibility = stkPR.Visibility = Visibility.Collapsed;
           break;
         case EnumProgram.Outhouse:
-          stkReservation.Visibility = btnCancel.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;
           btnOK.Content = "Transfer";
           guBookD.Visibility = stkSalesRoom.Visibility = Visibility.Visible;
           txbDateFrom.Text = "Book D. From";
@@ -153,10 +162,6 @@ namespace IM.Base.Forms
           cmbSalesRoom.SelectedIndex = -1;
           break;
       }
-
-      DateTime serverDate = BRHelpers.GetServerDate();
-      dtpTo.Value = serverDate;
-      dtpFrom.Value = serverDate.AddDays(-7);
       StatusBarReg.Content = "0 Guests";
 
       // Activamos los metodos encargado de verificar los bloq

@@ -413,9 +413,10 @@ namespace IM.BusinessRules.BR
     /// [jorcanche] 04/05/2016 Simplificado
     /// [vipacheco] 08/Agosto/2016 Modified -> Se le agrego timeout a la consulta.
     /// [vipacheco] 11/Agosto/2016 Modified -> Se agrego asincronia
+    /// [vipacheco] 06/Sep/2016 Modified -> Se agrego dentro del where la busqueda por el rango de fechas para disminuir el tiempo de consulta.
     /// </history>
     public async static Task<List<Guest>> GetSearchGuestByLS(string leadsource, string salesRoom, string name,
-      string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
+      string room, string reservation, int guid, DateTime dateFrom, DateTime dateTo, EnumProgram program, string PR)
     {
       return await Task.Run(() =>
       {
@@ -429,7 +430,9 @@ namespace IM.BusinessRules.BR
                       join ls in dbContext.LeadSources
                         on gu.guls equals ls.lsID
                       //busqueda por program
-                      where ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)
+                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)) &&
+                             ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) >= dateFrom) && 
+                             ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) <= dateTo)
                       select gu;
           //Busqueda por clave de huesped
           if (guid != 0)
@@ -470,11 +473,6 @@ namespace IM.BusinessRules.BR
             {
               query = query.Where(gu => gu.guPRInvit1 == PR);
             }
-            //Busqueda por fecha de llegada
-
-            query = query.Where(gu =>
-              (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) >= from &&
-              (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) <= to);
           }
           //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con
           //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se
