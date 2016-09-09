@@ -473,14 +473,14 @@ DECLARE @Salesman table (
 	);
 --#endregion
 	
-	--=================== Insert Salesman =============================
+--=================== Insert Salesman =============================
 	--#region Insert Salesman
 
 	--#region Liner1
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Liner1 ,Liner1N, Liner1P, 'Liner',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Liner',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Liner1,'Liner',sold,Liner2, 'Liner', Liner2P, Closer1,'Closer',Closer1P, Closer2, 'Closer',Closer2p, Closer3, 'Closer',Closer3p, Exit1, 'Exit',Exit1P, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default)
 	from @Manifest WHERE Liner1 is NOT NULL
@@ -490,7 +490,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Liner2 ,Liner2N, Liner2P, 'Liner',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Liner',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Liner2,'Liner',sold,Liner1, 'Liner', Liner1P, Closer1,'Closer',Closer1P, Closer2, 'Closer',Closer2p, Closer3, 'Closer',Closer3p, Exit1, 'Exit',Exit1P, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Liner1,Liner2,default,default,default)
 	from @Manifest WHERE Liner2 is NOT NULL 
@@ -501,7 +501,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer1 ,Closer1N, Closer1P, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Closer',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Closer1,'Closer',sold,Liner1, 'Liner', Liner1P, Liner2,'Liner',Liner2P, Closer2, 'Closer',Closer2p, Closer3, 'Closer',Closer3p, Exit1, 'Exit',Exit1P, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
 	from @Manifest WHERE Closer1 is NOT NULL AND Closer1P IN ('LINER','FTB') 
@@ -512,7 +512,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer2 ,Closer2N, Closer2P, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Closer',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Closer2,'Closer',sold,Liner1, 'Liner', Liner1P, Liner2,'Liner',Liner2P, Closer2, 'Closer',Closer1p, Closer3, 'Closer',Closer3p, Exit1, 'Exit',Exit1P, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
 	from @Manifest WHERE Closer2 is NOT NULL AND Closer2P IN ('LINER','FTB') 
@@ -523,7 +523,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Closer3 ,Closer3N, Closer3P, 'Closer',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Closer',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Closer3,'Closer',sold,Liner1, 'Liner', Liner1P, Liner2,'Liner',Liner2P, Closer1, 'Closer',Closer1p, Closer2, 'Closer',Closer2p, Exit1, 'Exit',Exit1P, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Closer1,Closer2,Closer3,default,default)
 	from @Manifest WHERE Closer3 is NOT NULL AND Closer3P IN ('LINER','FTB') 
@@ -534,7 +534,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Exit1 ,Exit1N, Exit1P, 'Exit',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Exit',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Exit1,'Exit',sold,Liner1, 'Liner', Liner1P, Liner2,'Liner',Liner2P, Closer1, 'Closer',Closer1p, Closer2, 'Closer',Closer2p, Closer3, 'Closer',Closer3p, Exit2, 'Exit',Exit2P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default)
 	from @Manifest WHERE Exit1 is NOT NULL AND Exit1P IN ('LINER','FTB') 
@@ -545,7 +545,7 @@ DECLARE @Salesman table (
 	INSERT into @Salesman (id, SalemanID,SalemanName, PostID, Role, UPS, SalemanType, Sales, Amount)
 	SELECT DISTINCT id, Exit2 ,Exit2N, Exit2P, 'Exit',
 	guShow * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
-	dbo.UFN_IM_GetSalesmanTypesFTB('Exit',sold,own),
+	dbo.UFN_IM_GetSalesmanTypesFTB(Exit2,'Exit',sold,Liner1, 'Liner', Liner1P, Liner2,'Liner',Liner2P, Closer1, 'Closer',Closer1p, Closer2, 'Closer',Closer2p, Closer3, 'Closer',Closer3p, Exit1, 'Exit',Exit1P),
 	procSales * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default),
 	saGrossAmount * dbo.UFN_OR_GetPercentageSalesman(Exit1,Exit2,DEFAULT,default,default)
 	from @Manifest WHERE Exit2 is NOT NULL AND Exit2P IN ('LINER','FTB') 
