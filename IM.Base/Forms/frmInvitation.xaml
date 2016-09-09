@@ -221,8 +221,8 @@
                                                                   ItemsSource="{Binding Languages}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Languages-Concat}"
                                                                   ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="guID"
-                                                                  SelectedValue="{Binding Guest.gula, Mode=OneWayToSource}"/>
+                                                                  SelectedValuePath="laID"
+                                                                  SelectedValue="{Binding Guest.gula,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
