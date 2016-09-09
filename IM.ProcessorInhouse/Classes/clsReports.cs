@@ -858,7 +858,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptRepsPaymentSummaries(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptRepsPaymentSummaries(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptRepsPaymentSummary> listRptRepsPaymentSummaries)
     {
       var listRptRepsPaymentSummariesAux = listRptRepsPaymentSummaries.Select(c => new
@@ -873,7 +873,9 @@ namespace IM.ProcessorInhouse.Classes
         c.TotalPay
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentSummariesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), fileFullPath: fileFullPath);
+
+
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), fileFullPath: fileFullPath, addEnumeration: true, blnRowGrandTotal:true);
     }
 
     #endregion ExportRptRepsPaymentSummaries

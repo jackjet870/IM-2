@@ -1992,9 +1992,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 20/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptAgencies(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAgencies> lstRptAgencies)
+    public async static Task<FileInfo> ExportRptAgencies(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAgencies> lstRptAgencies)
     {
-      return EpplusHelper.CreateGeneralRptExcel(filters, TableHelper.GetDataTableFromList(lstRptAgencies, true),strReport, string.Empty, clsFormatReport.RptAgencies(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptAgencies, true),filters, strReport,string.Empty, clsFormatReport.RptAgencies(), fileFullPath: fileFullPath, addEnumeration:true);
     }
     #endregion
 
@@ -2010,9 +2010,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 20/Mar/2016 Created
     /// </history>
-    public static FileInfo ExportRptPersonnel(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnel> lstRptPersonnel)
+    public async static Task<FileInfo> ExportRptPersonnel(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnel> lstRptPersonnel)
     {
-      return EpplusHelper.CreateGeneralRptExcel(filters, TableHelper.GetDataTableFromList(lstRptPersonnel, true),strReport, string.Empty, clsFormatReport.RptPersonnel(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptPersonnel, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnel(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2028,9 +2028,10 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static FileInfo ExportRptGifts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGifts> lstRptGifts)
+    public async static Task<FileInfo> ExportRptGifts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGifts> lstRptGifts)
     {
-      return EpplusHelper.CreateGeneralRptExcel(filters, TableHelper.GetDataTableFromList(lstRptGifts, true),strReport, string.Empty, clsFormatReport.RptGifts(), fileFullPath: fileFullPath);
+      
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGifts, true), filters, strReport, string.Empty, clsFormatReport.RptGifts(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2103,9 +2104,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 23/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptReps(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<Rep> lstRptReps)
+    public async static Task<FileInfo> ExportRptReps(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<Rep> lstRptReps)
     {
-      return EpplusHelper.CreateGeneralRptExcel( filters, TableHelper.GetDataTableFromList(lstRptReps, true),strReport, string.Empty, clsFormatReport.RptReps(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptReps, true), filters, strReport, string.Empty, clsFormatReport.RptReps(), fileFullPath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2141,9 +2142,10 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 23/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptWarehouseMovements(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWarehouseMovements> lstRptWarehouseMovements)
+    public async static Task<FileInfo> ExportRptWarehouseMovements(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWarehouseMovements> lstRptWarehouseMovements)
     {
-      return EpplusHelper.CreateGeneralRptExcel( filters, TableHelper.GetDataTableFromList(lstRptWarehouseMovements),strReport, string.Empty, clsFormatReport.RptWarehouseMovements(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptWarehouseMovements), filters, strReport, string.Empty, clsFormatReport.RptWarehouseMovements(), fileFullPath: fileFullPath, addEnumeration: true);
+      
     }
     #endregion
 

@@ -79,7 +79,7 @@ namespace IM.SalesPR.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var listaSaleByPr = dtgr.DataContext as List<SaleByPR>;
       if (listaSaleByPr != null)
@@ -92,7 +92,7 @@ namespace IM.SalesPR.Forms
           //Obtenemos el dataTable con la lista formateada 
           var dt = TableHelper.GetDataTableFromList(listaSaleByPr, true);
           //Creamos el reporte
-          var fi = EpplusHelper.CreateGeneralRptExcel(_filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
+          var fi = await EpplusHelper.CreateCustomExcel(dt, _filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true, blnRowGrandTotal:true);
 
           if (fi != null)
           {

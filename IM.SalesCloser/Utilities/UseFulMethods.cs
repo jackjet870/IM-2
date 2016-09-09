@@ -15,30 +15,30 @@ namespace IM.SalesCloser.Utilities
     /// <history>
     /// [erosado] 23/Mar/2016  Created
     /// </history>
-    public static List<ExcelFormatTable> getExcelFormatTable()
+    public static ExcelFormatItemsList getExcelFormatTable()
     {
-      List<ExcelFormatTable> formatColumns = new List<ExcelFormatTable>();
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sale ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "SR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Member. #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sale Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer 2", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer 2 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer 3", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Closer 3 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Exit", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Exit Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Exit 2", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Exit 2 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Amount", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });//Currency
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cxld", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });//Boolean
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cancel D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
+      ExcelFormatItemsList formatColumns = new ExcelFormatItemsList();
+      formatColumns.Add("Sale ID", "saID");
+      formatColumns.Add("LS", "sals");
+      formatColumns.Add("SR", "sasr");
+      formatColumns.Add("Member. #", "saMembershipNum");
+      formatColumns.Add("Sale Type", "stN");
+      formatColumns.Add("Date", "saD", format: EnumFormatTypeExcel.Date);//Date
+      formatColumns.Add("Proc Date", "saProcD", format: EnumFormatTypeExcel.Date);//Date
+      formatColumns.Add("Last Name", "saLastName1");
+      formatColumns.Add("Closer", "saCloser1");
+      formatColumns.Add("Closer Name", "Closer1N");
+      formatColumns.Add("Closer 2", "saCloser2");
+      formatColumns.Add("Closer 2 Name", "Closer2N");
+      formatColumns.Add("Closer 3", "saCloser3");
+      formatColumns.Add("Closer 3 Name", "Closer3N");
+      formatColumns.Add("Exit", "saExit1");
+      formatColumns.Add("Exit Name", "Exit1N");
+      formatColumns.Add("Exit 2", "saExit2");
+      formatColumns.Add("Exit 2 Name", "Exit2N");
+      formatColumns.Add("Amount", "saGrossAmount", format: EnumFormatTypeExcel.Currency);//Currency
+      formatColumns.Add("Cxld", "saCancel", format: EnumFormatTypeExcel.Boolean);//Boolean
+      formatColumns.Add("Cancel D", "saCancelD", format: EnumFormatTypeExcel.Date);//Date
       return formatColumns;
     }
   }

@@ -1094,7 +1094,7 @@ namespace IM.ProcessorInhouse.Forms
             filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
 
             list.AddRange(await BRReportsByLeadSource.GetRptRepsPaymentSummaries(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources));
-            if (list.Any()) finfo = clsReports.ExportRptRepsPaymentSummaries(reportname, fileFullPath, filters, list.Cast<RptRepsPaymentSummary>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptRepsPaymentSummaries(reportname, fileFullPath, filters, list.Cast<RptRepsPaymentSummary>().ToList());
             break;
 
           #endregion Reps Payment Summary

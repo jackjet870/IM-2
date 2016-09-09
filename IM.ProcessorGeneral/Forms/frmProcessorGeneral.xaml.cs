@@ -1468,7 +1468,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Agencies":
             var lstRptAgencies = await BRGeneralReports.GetRptAgencies();
             if (lstRptAgencies.Any())
-              finfo = clsReports.ExportRptAgencies(strReportName, fileFullPath, filters, lstRptAgencies);
+              finfo = await clsReports.ExportRptAgencies(strReportName, fileFullPath, filters, lstRptAgencies);
             break;
 
           #endregion
@@ -1477,7 +1477,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Gifts":
             var lstRptGift = await BRGeneralReports.GetRptGifts();
             if (lstRptGift.Any())
-              finfo = clsReports.ExportRptGifts(strReportName, fileFullPath, filters, lstRptGift);
+              finfo = await clsReports.ExportRptGifts(strReportName, fileFullPath, filters, lstRptGift);
             break;
 
           #endregion
@@ -1503,7 +1503,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Personnel":
             var lstRptPersonnel = await BRGeneralReports.GetRptPersonnel();
             if (lstRptPersonnel.Any())
-              finfo = clsReports.ExportRptPersonnel(strReportName, fileFullPath, filters, lstRptPersonnel);
+              finfo = await clsReports.ExportRptPersonnel(strReportName, fileFullPath, filters, lstRptPersonnel);
             break;
 
           #endregion
@@ -1538,7 +1538,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Reps":
             var lstRptReps = await BRGeneralReports.GetRptReps();
             if (lstRptReps.Any())
-              finfo = clsReports.ExportRptReps(strReportName, fileFullPath, filters, lstRptReps);
+              finfo = await clsReports.ExportRptReps(strReportName, fileFullPath, filters, lstRptReps);
             break;
 
           #endregion
@@ -1557,7 +1557,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Warehouse Movements":
             var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
             if (lstRptWarehouseMovements.Any())
-              finfo = clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
+              finfo = await clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
                 lstRptWarehouseMovements);
             break;
 

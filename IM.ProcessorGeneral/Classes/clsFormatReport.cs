@@ -1834,18 +1834,20 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Fo
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptAgencies()
+    public static ExcelFormatItemsList RptAgencies()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Agency" },
-new ExcelFormatTable() { Title = "Agency Name" },
-new ExcelFormatTable() { Title = "Unavailable Motive" },
-new ExcelFormatTable() { Title = "Market" },
-new ExcelFormatTable() { Title = "Show Pay" },
-new ExcelFormatTable() { Title = "Sale Pay" },
-new ExcelFormatTable() { Title = "Rep",  },
-new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center }
-      };
+
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Agency", "agID");
+      lst.Add("Agency Name", "agN");
+      lst.Add("Unavailable Motive", "umN");
+      lst.Add("Market", "agmk");
+      lst.Add("Show Pay", "agShowPay");
+      lst.Add("Sale Pay", "agSalePay");
+      lst.Add("Rep", "agrp");
+      lst.Add("Active", "agA", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+
+      return lst;
     }
 
     #endregion rptAgencies
@@ -1858,24 +1860,24 @@ new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean,
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGifts()
+    public static ExcelFormatItemsList RptGifts()
     {
-      return new List<ExcelFormatTable>(){
-new ExcelFormatTable() { Title = "Gift ID" },
-new ExcelFormatTable() { Title = "Gift Name" },
-new ExcelFormatTable() { Title = "Short N." },
-new ExcelFormatTable() { Title = "Order", Format = EnumFormatTypeExcel.Number },
-new ExcelFormatTable() { Title = "Price", Format = EnumFormatTypeExcel.Currency },
-new ExcelFormatTable() { Title = "Price Min.", Format = EnumFormatTypeExcel.Currency },
-new ExcelFormatTable() { Title = "CXC", Format = EnumFormatTypeExcel.Currency },
-new ExcelFormatTable() { Title = "CXC Min.", Format = EnumFormatTypeExcel.Currency },
-new ExcelFormatTable() { Title = "Package", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center },
-new ExcelFormatTable() { Title = "Category" },
-new ExcelFormatTable() { Title = "Inv.", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center },
-new ExcelFormatTable() { Title = "Folio", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center },
-new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center },
-new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Gift ID", "giID");
+      lst.Add("Gift Name", "giN");
+      lst.Add("Short N.", "giShortN");
+      lst.Add("Order", "giO", format: EnumFormatTypeExcel.Number);
+      lst.Add("Price", "giPrice1", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Price Min.", "giPrice2", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CXC", "giPrice3", format: EnumFormatTypeExcel.Currency);
+      lst.Add("CXC Min.", "giPrice4", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Package", "giPack", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Category", "gcN");
+      lst.Add("Inv.", "giInven", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Folio", "giWFolio", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Pax", "giWPax", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Active", "giA", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      return lst;
     }
 
     #endregion rptGifts
@@ -1910,15 +1912,15 @@ new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean,
     /// <history>
     /// [edgrodriguez] 27/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptLoginsLog()
+    public static ExcelFormatItemsList RptLoginsLog()
     {
-      return new List<ExcelFormatTable>(){
-new ExcelFormatTable() { Title = "Date Time", Format = EnumFormatTypeExcel.Date },
-new ExcelFormatTable() { Title = "Location" },
-new ExcelFormatTable() { Title = "Code" },
-new ExcelFormatTable() { Title = "Name" },
-new ExcelFormatTable() { Title = "PC" }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Date Time", "Date_Time", format:EnumFormatTypeExcel.Date);
+      lst.Add("Location", "Location");
+      lst.Add("Code", "Code");
+      lst.Add("Name", "Name");
+      lst.Add("PC", "PC");
+      return lst;
     }
 
     #endregion RptLoginsLog
@@ -1931,35 +1933,36 @@ new ExcelFormatTable() { Title = "PC" }
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptPersonnel()
+    public static ExcelFormatItemsList RptPersonnel()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Status", Order = 1 },
-new ExcelFormatTable() { Title = "Dept", Order = 2 },
-new ExcelFormatTable() { Title = "Post", Order = 3 },
-new ExcelFormatTable() { Title = "Place", Order = 4 },
-new ExcelFormatTable() { Title = "ID", Order = 5 },
-new ExcelFormatTable() { Title = "Name", Order = 6 },
-new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 7 },
-new ExcelFormatTable() { Title = "Collaborator", Format = EnumFormatTypeExcel.Number, Order = 8 },
-new ExcelFormatTable() { Title = "Captain", Order = 9 },
-new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 10 },
-new ExcelFormatTable() { Title = "PR Mem", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 11 },
-new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 12 },
-new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 13 },
-new ExcelFormatTable() { Title = "Exit", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 14 },
-new ExcelFormatTable() { Title = "Podium", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 15 },
-new ExcelFormatTable() { Title = "PR Capt", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 16 },
-new ExcelFormatTable() { Title = "PR Sup", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 17 },
-new ExcelFormatTable() { Title = "Ln Capt", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 18 },
-new ExcelFormatTable() { Title = "Clo Capt", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 19 },
-new ExcelFormatTable() { Title = "Entry H", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 20 },
-new ExcelFormatTable() { Title = "Gift H", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 21 },
-new ExcelFormatTable() { Title = "Exit H", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 22 },
-new ExcelFormatTable() { Title = "VLO", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 23 },
-new ExcelFormatTable() { Title = "Manager", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 24 },
-new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 25 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Status", "peps", isGroup: true, isVisible: false);
+      lst.Add("Dept", "deN", isGroup: true, isVisible: false);
+      lst.Add("Post", "poN", isGroup: true, isVisible: false);
+      lst.Add("Place", "Place", isGroup: true, isVisible: false);
+      lst.Add("ID", "peID");
+      lst.Add("Name", "peN");
+      lst.Add("Active", "peA", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Collaborator", "peCollaboratorID", format: EnumFormatTypeExcel.Number);
+      lst.Add("Captain", "peCaptain");
+      lst.Add("PR", "PR", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("PR Mem", "PRMembers", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Liner", "Liner", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Closer", "Closer", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Exit", "Exit", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Podium", "Podium", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("PR Capt", "PRCaptain", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("PR Sup", "PRSupervisor", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Ln Capt", "LinerCaptain", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Clo Capt", "CloserCaptain", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Entry H", "EntryHost", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Gift H", "GiftsHost", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Exit H", "ExitHost", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("VLO", "VLO", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Manager", "Manager", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      lst.Add("Admin", "Administrator", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+
+      return lst;
     }
 
     #endregion rptPersonnel
@@ -1999,7 +2002,7 @@ new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, 
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("IO", "InOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("WO", "WalkOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("RT","Tours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("RT", "Tours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("CT", "CourtesyTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Save", "SaveTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Tours", "TotalTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -2023,7 +2026,7 @@ new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, 
     public static ExcelFormatItemsList RptProductionReferral()
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
-      lst.Add("Year", "Year", isGroup: true, isVisible:false);
+      lst.Add("Year", "Year", isGroup: true, isVisible: false);
       lst.Add("Month", "MonthN");
       lst.Add("Arrivals", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -2038,7 +2041,7 @@ new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, 
     }
 
     #endregion rptProductionReferral
-    
+
     #region RptReps
 
     /// <summary>
@@ -2047,13 +2050,12 @@ new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, 
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptReps()
+    public static ExcelFormatItemsList RptReps()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() {Title = "Rep ID", PropertyName = "rpID", Axis = ePivotFieldAxis.Row, Order = 1 },
-        new ExcelFormatTable() {Title = "Active", PropertyName = "rpA", Format = EnumFormatTypeExcel.Boolean, Axis = ePivotFieldAxis.Row, Order = 2 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Rep ID", "rpID");
+      lst.Add("Active", "rpA", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
+      return lst;
     }
 
     #endregion RptReps
@@ -2094,17 +2096,18 @@ new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, 
     /// <history>
     /// [edgrodriguez] 26/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptWarehouseMovements()
+    public static ExcelFormatItemsList RptWarehouseMovements()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() {Title = "Date", PropertyName = "wmD", Axis = ePivotFieldAxis.Row, Order = 1 },
-        new ExcelFormatTable() {Title = "Qty", PropertyName = "wmQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 2 },
-        new ExcelFormatTable() {Title = "Gift", PropertyName = "giN", Axis = ePivotFieldAxis.Row, Order = 3 },
-        new ExcelFormatTable() {Title = "Code", PropertyName = "wmpe", Axis = ePivotFieldAxis.Row, Order = 4 },
-        new ExcelFormatTable() {Title = "User", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 5 },
-        new ExcelFormatTable() {Title = "Comments", PropertyName = "wmComments", Axis = ePivotFieldAxis.Row, Order = 6 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+
+      lst.Add("Date", "wmD");
+      lst.Add("Qty", "wmQty", format: EnumFormatTypeExcel.Number);
+      lst.Add("Gift", "giN");
+      lst.Add("Code", "wmpe");
+      lst.Add("User", "peN");
+      lst.Add("Comments", "wmComments");
+
+      return lst;
     }
 
     #endregion RptWarehouseMovements

@@ -89,20 +89,20 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 05/Abr/2016 created
     /// </history>
-    public static List<ExcelFormatTable> rptGuestsShowNoPresentedInvitation()
+    public static ExcelFormatItemsList rptGuestsShowNoPresentedInvitation()
     {
-      return new List<ExcelFormatTable>() {
-      new ExcelFormatTable() { Title = "Guest ID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Lead Source", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Out Invit", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Last Name", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Show Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Deposit", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Received", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Currency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
-      new ExcelFormatTable() { Title = "Payment Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Guest ID", "GuestID", format: EnumFormatTypeExcel.Id);
+      lst.Add("Lead Source", "LeadSource");
+      lst.Add("Out Invit", "OutInvit");
+      lst.Add("Last Name", "LastName", format: EnumFormatTypeExcel.General);
+      lst.Add("First Name", "FirstName");
+      lst.Add("Show Date", "ShowDate", format: EnumFormatTypeExcel.Date);
+      lst.Add("Deposit", "Deposit", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Received", "Received", format: EnumFormatTypeExcel.Currency);
+      lst.Add("Currency", "Currency");
+      lst.Add("Payment Type", "PaymentType");
+      return lst;
     }
 
     #endregion rptGuestsShowNoPresentedInvitation
@@ -760,7 +760,7 @@ namespace IM.ProcessorOuthouse.Classes
       {
       new ExcelFormatTable() { Title = "Hotel Group", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 0,  Outline = true,SubTotalFunctions = eSubTotalFunctions.Default  },
       new ExcelFormatTable() { Title = "Hotel", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1 },
-      
+
       new ExcelFormatTable() { Title = "Books", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 0,  Function = DataFieldFunctions.Sum},
       new ExcelFormatTable() { Title = "IO", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, Function = DataFieldFunctions.Sum },
       new ExcelFormatTable() { Title = "T Bk", Format=EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 2, Function = DataFieldFunctions.Sum },
@@ -1072,23 +1072,22 @@ namespace IM.ProcessorOuthouse.Classes
     #endregion
 
     #region rptFoliosInvitationByDateFolio
-      /// <summary>
-      ///  Formato para el reporte FoliosInvitationByDateFolio
-      /// </summary>
-      /// <history>
-      ///   [vku] 03/May/2016 Created
-      /// </history>
-    public static List<ExcelFormatTable> rptFoliosInvitationByDateFolio()
+    /// <summary>
+    ///  Formato para el reporte FoliosInvitationByDateFolio
+    /// </summary>
+    /// <history>
+    ///   [vku] 03/May/2016 Created
+    /// </history>
+    public static ExcelFormatItemsList rptFoliosInvitationByDateFolio()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "Out. Inv.", Axis = ePivotFieldAxis.Row },
-        new ExcelFormatTable() { Title = "PR ID", Axis = ePivotFieldAxis.Row },
-        new ExcelFormatTable() { Title = "PR Name", Axis = ePivotFieldAxis.Row },
-        new ExcelFormatTable() { Title = "Last Name", Axis = ePivotFieldAxis.Row },
-        new ExcelFormatTable() { Title = "Book D", Axis = ePivotFieldAxis.Row },
-        new ExcelFormatTable() { Title = "Lead Source", Axis = ePivotFieldAxis.Row },
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Out. Inv.", "guOutInvitNum");
+      lst.Add("PR ID", "PR");
+      lst.Add("PR Name", "PRN");
+      lst.Add("Last Name", "guLastName1");
+      lst.Add("Book D", "guBookD");
+      lst.Add("Lead Source", "lsN");
+      return lst;
     }
 
     #endregion rptFoliosInvitationByDateFolio
