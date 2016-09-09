@@ -99,16 +99,17 @@ namespace IM.ProcessorOuthouse.Classes
                                    giftRecBySR.SalesRoom,
                                    giftRecBySR.Gift,
                                    giftRecBySR.GiftN,
-                                   giftRecBySR.Quantity,
-                                   giftRecBySR.Couples,
-                                   giftRecBySR.Adults,
-                                   giftRecBySR.Minors,
+                                   Quantity = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Quantity),
+                                   Couples = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Couples),
+                                   Adults = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Adults),
+                                   Minors = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Minors),
                                    cuID = "A" + cu.cuID,
                                    cu.cuN,
                                    giftRecBySR.Amount,
-                                 }).ToList();
+                                 }).OrderBy(c => c.GiftN).ToList();
 
-      var lstGifRecBySRWithCuTotal = lstGiftsReceivedBySR.Select(giftRecBySR => new
+
+      var lstGifRecBySRWithCuTotal = lstGifRecBySRWithCu.Select(giftRecBySR => new
       {
         giftRecBySR.SalesRoom,
         giftRecBySR.Gift,
@@ -119,12 +120,12 @@ namespace IM.ProcessorOuthouse.Classes
         giftRecBySR.Minors,
         cuID = "B",
         cuN = "Total",
-        Amount = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Amount)
+        Amount = lstGifRecBySRWithCu.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Amount)
       }).Distinct().ToList();
 
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu.OrderBy(c => c.SalesRoom).ThenBy(c => c.GiftN).ToList());
       return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion ExportRptGiftsReceivedBySR
