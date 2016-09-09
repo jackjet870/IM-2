@@ -156,7 +156,7 @@ namespace IM.Administrator.Forms
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Segment By Lead Source",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Segment By Lead Source", blnDatagrids: true);
           if (strMsj == "")
           {
             List<LeadSource> lstAdd = lstLeadSources.Where(ls => !_lstOldLeadSources.Any(lss => lss.lsID == ls.lsID)).ToList();

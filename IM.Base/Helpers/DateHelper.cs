@@ -162,42 +162,6 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region IsRangeTime
-    ///<summary>Metodo que valida que dos horas sean iguales</summary>
-    ///<param name="currentTime">dia que contiene la hora actual</param>
-    ///<param name="compareTime">Dia y hora con que se va comparar</param>
-    ///<history>
-    ///[michan] 14/04/2016 Created
-    ///</history>
-    public static bool IsRangeTime(DateTime currentTime, DateTime compareTime)
-    {
-      bool _response = false;
-      if ((currentTime.Hour == compareTime.Hour) && (currentTime.Minute == compareTime.Minute))
-      {
-        _response = true;
-      }
-      return _response;
-    }
-    #endregion
-
-    #region isDateEquals
-    ///<summary>Metodo que valida dos fechas sean iguales</summary>
-    ///<param name="dateToday">Fecha que se desea comparar</param>
-    ///<param name="dateCompare">Fecha con que se va comparar</param>
-    ///<history>
-    ///[michan] 14/04/2016 Created
-    ///</history>
-    public static bool isDateEquals(DateTime dateToday, DateTime dateCompare)
-    {
-      bool status = false;
-      if (dateToday.ToString("d") == dateCompare.ToString("d"))
-      {
-        status = true;
-      }
-      return status;
-    }
-    #endregion
-
     #region AddTimeDate
     ///<summary>Metodo que agrega tiempo a hora actual</summary>
     ///<param name="addTime">Horas que se desean aumentar al dia</param>
@@ -209,19 +173,6 @@ namespace IM.Base.Helpers
       DateTime dateAfter = DateTime.Now.AddHours(addTime.Hours).AddMinutes(addTime.Minutes).AddSeconds(addTime.Seconds);
       return dateAfter;
 
-    }
-    #endregion
-
-    #region timeDuration
-    ///<summary>Metodo que retorna el tiempo transcurrido entre dos Datetime</summary>
-    ///<param name="dateFirst">Tiempo de inicio</param>
-    ///<param name="dateEnd">Tiempo donde termina</param>
-    ///<history>
-    ///[michan] 14/04/2016 Created
-    ///</history>
-    public static TimeSpan timeDuration(DateTime dateFirst, DateTime dateEnd)
-    {
-      return dateEnd.Subtract(dateFirst).Duration();
     }
     #endregion
 

@@ -299,32 +299,34 @@ namespace IM.Administrator.Forms
 
             if (nRes > 0)
             {
-              if (nRes == 1)
+              if (lstPersonnelsDel.Count == 1)
               {
                 UIHelper.ShowMessage("Person was Deleted.");
               }
               else
               {
-                UIHelper.ShowMessage("Person Log were Deleted.");
+                UIHelper.ShowMessage("Person were Deleted.");
               }
 
               List<PersonnelShort> lstPersonnel = (List<PersonnelShort>)dgrPersonnels.ItemsSource;
               lstPersonnel.RemoveAll(pe => lstPersonnelsDel.Contains(pe));
               dgrPersonnels.Items.Refresh();
             }
-          }
-          status.Visibility = Visibility.Collapsed;
+          }         
 
         }
         else
         {
           UIHelper.ShowMessage("Please select a Person.");
-        }
-        Cursor = Cursors.Arrow;
+        }        
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex);
+        UIHelper.ShowMessage(ex);        
+      }
+      finally
+      {
+        status.Visibility = Visibility.Collapsed;
         Cursor = Cursors.Arrow;
       }
     }

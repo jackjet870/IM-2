@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
-using System.Linq;
 using System.Data;
 using System.Windows.Input;
 using IM.Model;
@@ -10,8 +9,9 @@ using IM.Model.Enums;
 using IM.Model.Classes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using OfficeOpenXml.Style;
 using IM.Base.Classes;
+using System.IO;
+using System.Diagnostics;
 
 namespace IM.Base.Forms
 {
@@ -22,9 +22,9 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private bool _isNew ;
+    private bool _isNew;
     private bool _isLoad = true;
-    
+
     CollectionViewSource assistanceViewSource;
     CollectionViewSource assistanceDataViewSource;
     CollectionViewSource assistanceStatusViewSource;
@@ -52,13 +52,14 @@ namespace IM.Base.Forms
         palaceId = userdata.SalesRoom.srID;
       cmbWeeks.SelectedIndex = 1;
       user = userdata;
-      
+
     }
 
     #endregion Constructores y destructores 
 
     #region Metodos 
 
+    #region EnableDateTimes
     /// <summary>
     /// Cambia de dispocicion los controles DateTimePicker 
     /// </summary>
@@ -77,7 +78,9 @@ namespace IM.Base.Forms
         dtpEndd.IsEnabled = false;
       }
     }
+    #endregion
 
+    #region GetFirstDayOfWeek
     /// <summary>
     /// Selecciona Por defectlo la El primer dia de la semana de la fecha seleccionada
     /// </summary>
@@ -96,7 +99,9 @@ namespace IM.Base.Forms
       //De la fecha actual se restan los dias coorespondientes
       return currentDate.Subtract(new TimeSpan(dias[Convert.ToInt32(dayOfWeek)], 0, 0, 0));
     }
+    #endregion
 
+    #region ChangedtpDates
     /// <summary>
     /// Cambia las fechas seleccionadas en los DateTimePicker para que siempre se seleecione el lunes en dtpStart y domingo en dtpEnd
     /// </summary>
@@ -105,12 +110,14 @@ namespace IM.Base.Forms
     {
       DateTime dt;
       dt = GetFirstDayOfWeek(Date);
-      
+
       dtpStartt.Value = dt;
       dt = dt.Date.AddDays(6);
       dtpEndd.Value = dt;
     }
+    #endregion
 
+    #region ChangeWeek
     /// <summary>
     /// Cambia las fechas de los dtp retrocediendo en semanas, segun la semana especificada
     /// </summary>
@@ -136,7 +143,9 @@ namespace IM.Base.Forms
       }
       ChangedtpDates(dt);
     }
+    #endregion
 
+    #region ChangeUseMode
     /// <summary>
     /// Habilita o Inabilita los controles del formulario segun sea el caso
     /// </summary>
@@ -173,7 +182,9 @@ namespace IM.Base.Forms
         btnCancel.IsEnabled = false;
       }
     }
+    #endregion
 
+    #region LoadGrid
     /// <summary>
     /// Carga El grid Con la lista de asistencia con las fechas seleccionadas
     /// </summary>
@@ -195,7 +206,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        if (System.Windows.MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        if (UIHelper.ShowMessage("There is no assistance for this week.\nWould you like to generate?", MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
           lstPersonAssist.ForEach(c =>
@@ -212,41 +223,16 @@ namespace IM.Base.Forms
       }
       StaEnd();
     }
+    #endregion
 
-    /// <summary>
-    /// Suma el numero de asistencias para actualizar el grid
-    /// </summary>
-    /// <returns>total de asistencias</returns>
-    /// <history>[ECANUL] 22-03-2016 CREATED</history>
-    int ChangeCountAssistanceDays()
-    {
-      int numAssist = 0;
-      List<AssistanceData> assist = assistanceDataDataGrid.SelectedItems.OfType<AssistanceData>().ToList();
-      if (assist[0].asMonday == "A" || assist[0].asMonday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asTuesday == "A" || assist[0].asTuesday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asWednesday == "A" || assist[0].asWednesday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asThursday == "A" || assist[0].asThursday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asFriday == "A" || assist[0].asFriday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asSaturday == "A" || assist[0].asSaturday == "L")
-        numAssist = numAssist + 1;
-      if (assist[0].asSunday == "A" || assist[0].asSunday == "L")
-        numAssist = numAssist + 1;
-      //assistanceDataDataGrid.SelectedItems.Add(numAssist);
-      return numAssist;
-    }
-
+    #region SaveAssistances
     /// <summary>
     /// Guarda las Asistencias de un periodo de fechas del personal del lugar
     /// </summary>
     /// <history>
     /// [ecanul] 22/03/2016 Created
     /// [ecanul] 04/05/2016 Modificated Ahora indica si es Nuevo o Modificacion antes de guardar, Usa el BR BREntities
-    /// [jorcanche] 26062016 se agrego asincronia
+    /// [jorcanche] 26/06/2016 se agrego asincronia
     /// </history>
     async void SaveAssistances()
     {
@@ -256,7 +242,7 @@ namespace IM.Base.Forms
 
       _listAssistData.ForEach(c =>
       {
-        lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));        
+        lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));
       });
 
       nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.Add : EnumMode.Edit);
@@ -265,7 +251,9 @@ namespace IM.Base.Forms
       LoadGrid();
       StaEnd();
     }
+    #endregion
 
+    #region StaStart
     /// <summary>
     /// Indica en la barra de estado que se inicio un proceso
     /// </summary>
@@ -277,7 +265,9 @@ namespace IM.Base.Forms
       imgStatusBarMessage.Visibility = Visibility.Visible;
       this.Cursor = Cursors.Wait;
     }
+    #endregion
 
+    #region StaEnd
     /// <summary>
     /// Indica en la barra de estado que se finalizo un proceso
     /// </summary>
@@ -288,10 +278,21 @@ namespace IM.Base.Forms
       imgStatusBarMessage.Visibility = Visibility.Hidden;
       this.Cursor = null;
     }
+    #endregion
 
     #endregion Metodos
 
     #region Eventos del Formulario
+
+    #region cmbWeeks_SelectionChanged
+    /// <summary>
+    /// Cambia las fechas para el listado de asistencias
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history>
     private void cmbWeeks_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
       int cmbSelected = cmbWeeks.SelectedIndex;
@@ -322,13 +323,29 @@ namespace IM.Base.Forms
           break;
       }
     }
-    
+    #endregion
+
+    #region dateTime_ValueChanged
+    /// <summary>
+    /// Cambia el listado al cambiar la fecha
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    ///  [ecanul] 15/03/2016 Created
     private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      if(!_isLoad)
+      if (!_isLoad)
         ChangedtpDates(dtpStartt.Value.Value);
     }
+    #endregion
 
+    #region Window_Loaded
+    /// <summary>
+    /// Carga los datos iniciales
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    ///  [ecanul] 15/03/2016 Created
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _isLoad = false;
@@ -340,29 +357,79 @@ namespace IM.Base.Forms
       //_isLoad = false;
       StaEnd();
     }
+    #endregion
 
+    #region btnSave_Click
+    /// <summary>
+    /// Invoca el guardado de la asistencia
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       SaveAssistances();
     }
+    #endregion
 
+    #region btnEdit_Clic
+    /// <summary>
+    /// Cambia el modo de Edicion
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       ChangeUseMode(true);
     }
+    #endregion
 
+    #region btnCancel_Click
+    /// <summary>
+    /// Cancela la Edicion 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       ChangeUseMode(false);
       LoadGrid();
     }
+    #endregion
 
+    #region btnShow_Click
+    /// <summary>
+    /// Muestra el listado de asistencia
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void btnShow_Click(object sender, RoutedEventArgs e)
     {
       LoadGrid();
-    }
+    } 
+    #endregion
 
-    private void btnToExcel_Click(object sender, RoutedEventArgs e)
+    #region btnToExcel_Click
+    /// <summary>
+    /// Genera el excel y lo guarda
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
+    private async void btnToExcel_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Loading assistances Excel...");
       btnToExcel.IsEnabled = false;
@@ -381,23 +448,25 @@ namespace IM.Base.Forms
         string dateRange = DateHelper.DateRange(dtpStartt.Value.Value, dtpEndd.Value.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpStartt.Value.Value, dtpEndd.Value.Value);
 
-        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
-        format.Add(new ExcelFormatTable() { Title = "Palace Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Palace ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Date Start", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Date End", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Monday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Tuesday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Wednesday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Thursday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Friday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Saturday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Sunday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
-        UIHelper.ShowMessage("Generated Report", MessageBoxImage.Exclamation, "Generated");
+        ExcelFormatItemsList format = new ExcelFormatItemsList();
+        format.Add("Place Type", "asPlaceType");
+        format.Add("Place ID", "asPlaceID");
+        format.Add("Date Start", "asStartD", format: EnumFormatTypeExcel.Date);
+        format.Add("Date End", "asEndD", format: EnumFormatTypeExcel.Date);
+        format.Add("ID", "aspe");
+        format.Add("Name", "peN");
+        format.Add("Monday", "asMonday");
+        format.Add("Tuesday", "asTuesday");
+        format.Add("Wednesday", "asWednesday");
+        format.Add("Thursday", "asThursday");
+        format.Add("Friday", "asFriday");
+        format.Add("Saturday", "asSaturday");
+        format.Add("Sunday", "asSunday");
+        format.Add("#Assistence", "asNum");
+        //TODO: EZE por favor comenta el codigo, abre el reporte, y cambia MessageBox icono Informacion.
+        FileInfo file =  await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, format);
+        if (file != null)
+          Process.Start(file.FullName);
       }
       else
       {
@@ -406,7 +475,17 @@ namespace IM.Base.Forms
       StaEnd();
       btnToExcel.IsEnabled = true;
     }
+    #endregion
 
+    #region Windows_KeyDown
+    /// <summary>
+    /// Al oprimir una tecla
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
       switch (e.Key)
@@ -422,16 +501,25 @@ namespace IM.Base.Forms
           break;
       }
     }
+    #endregion
 
+    #region Window_IsKeyboardFocusedChanged
+    /// <summary>
+    /// KeyboardFocusedChanged
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [ecanul] 15/03/2016 Created
+    /// </history> 
     private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-    }
+    } 
+    #endregion
 
     #endregion Eventos del Formulario
-
-    
   }
 }

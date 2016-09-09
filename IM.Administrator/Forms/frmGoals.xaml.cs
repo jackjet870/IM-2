@@ -144,8 +144,8 @@ namespace IM.Administrator.Forms
           });
           cmbPlace.SelectedValue = _goal.gopy;
           cmbPeriod.SelectedValue = (_goal.gopd == "M") ? EnumPeriod.Monthly : EnumPeriod.Weekly;
-          dtpFrom.SelectedDate = _goal.goDateFrom;
-          dtpTo.SelectedDate = _goal.goDateTo;
+          dtpFrom.Value = _goal.goDateFrom;
+          dtpTo.Value = _goal.goDateTo;
         }
       }
       else
@@ -199,45 +199,27 @@ namespace IM.Administrator.Forms
         EnumPredefinedDate enumPeriod = ((EnumPredefinedDate)cmbRangeDate.SelectedValue);
         Tuple<DateTime, DateTime> dateRange = DateHelper.GetDateRange(enumPeriod);
 
-        dtpFrom.SelectedDate = dateRange.Item1;
-        dtpTo.SelectedDate = dateRange.Item2;
+        dtpFrom.Value = dateRange.Item1;
+        dtpTo.Value = dateRange.Item2;
         lblDates.Content = dateRange.Item1.ToString("MMMM", CultureInfo.InvariantCulture) + " " + dateRange.Item1.Day + " - " + dateRange.Item2.Day + ", "+ dateRange.Item1.Year;
         if(enumPeriod==EnumPredefinedDate.DatesSpecified)
         {
           dtpFrom.IsEnabled = true;
           dtpTo.IsEnabled = true;
-          dtpFrom.SelectedDateChanged += dtp_SelectedDateChanged;
-          dtpTo.SelectedDateChanged += dtp_SelectedDateChanged;
+          dtpFrom.ValueChanged += dtp_valueDateChanged;
+          dtpTo.ValueChanged += dtp_valueDateChanged;
         }
         else
         {
           dtpFrom.IsEnabled = false;
           dtpTo.IsEnabled = false;
-          dtpFrom.SelectedDateChanged -= dtp_SelectedDateChanged;
-          dtpTo.SelectedDateChanged -= dtp_SelectedDateChanged;
+          dtpFrom.ValueChanged -= dtp_valueDateChanged;
+          dtpTo.ValueChanged -= dtp_valueDateChanged;
         }        
 
       }
     }
-    #endregion
-
-    #region dtp_SelectedDateChanged
-    /// <summary>
-    /// Cambia el texto del label de rango de fechas
-    /// segun lo seleccionado
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 11/05/2016 created
-    /// </history>
-    private void dtp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {      
-      DateTime dtFrom = Convert.ToDateTime(dtpFrom.SelectedDate);
-      DateTime dtTo = Convert.ToDateTime(dtpTo.SelectedDate);
-      lblDates.Content = dtFrom.ToString("MMMM", CultureInfo.InvariantCulture) + " " + dtFrom.Day + " - " + dtTo.Day + ", " + dtFrom.Year;
-    }
-    #endregion
+    #endregion    
 
     #region TextBox_PreviewTextInput
     /// <summary>
@@ -255,6 +237,24 @@ namespace IM.Administrator.Forms
       {
         e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
       }
+    }
+    #endregion
+
+    #region dtp_valueDateChanged
+    /// <summary>
+    /// Cambia el texto del label de rango de fechas
+    /// segun lo seleccionado
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 11/05/2016 created
+    /// </history>
+    private void dtp_valueDateChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      DateTime dtFrom = Convert.ToDateTime(dtpFrom.Value);
+      DateTime dtTo = Convert.ToDateTime(dtpFrom.Value);
+      lblDates.Content = dtFrom.ToString("MMMM", CultureInfo.InvariantCulture) + " " + dtFrom.Day + " - " + dtTo.Day + ", " + dtFrom.Year;
     }
     #endregion
     #endregion
@@ -400,8 +400,8 @@ namespace IM.Administrator.Forms
         EnumPeriod period = ((EnumPeriod)cmbPeriod.SelectedValue);
         _goal.gopy = cmbPlace.SelectedValue.ToString();
         _goal.gopd = (period == EnumPeriod.Monthly) ? "M" : "W";
-        _goal.goDateFrom = Convert.ToDateTime(dtpFrom.SelectedDate);
-        _goal.goDateTo = Convert.ToDateTime(dtpTo.SelectedDate);
+        _goal.goDateFrom = Convert.ToDateTime(dtpFrom.Value);
+        _goal.goDateTo = Convert.ToDateTime(dtpTo.Value);
 
         #region DataGridCombobox
         switch (_goal.gopy)
@@ -626,7 +626,7 @@ namespace IM.Administrator.Forms
           }
         }
       }
-    } 
+    }
     #endregion
   }
 }

@@ -222,6 +222,7 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion
+
     #region getRptGiftsReceipt
     /// <summary>
     /// Obtiene la informacion para el repote GiftReceipt del Modulo Host.
@@ -258,5 +259,6 @@ namespace IM.BusinessRules.BR
       });
     }
     #endregion
+
   }
 }

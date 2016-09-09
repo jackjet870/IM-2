@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         x:Class="IM.Base.Forms.frmGuestLog"
-        mc:Ignorable="d" Background="Beige"  ResizeMode="NoResize"
+        mc:Ignorable="d" ResizeMode="CanResize"
         Title="Guest Log" ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <CollectionViewSource x:Key="GuestLogViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestLogData}, CreateList=True}"/>
@@ -17,8 +17,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="aUTO"/>
             </Grid.RowDefinitions>
-            
-            <DataGrid x:Name="dgGuestLog" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}"  RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
+
+            <DataGrid x:Name="dgGuestLog" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}"  RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" BorderThickness="2" BorderBrush="#147F79" >
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="glChangedByColumn" Binding="{Binding glChangedBy}" Header="By" Width="auto"/>
                     <DataGridTextColumn x:Name="changedByNColumn" Binding="{Binding ChangedByN}" Header="Name" Width="auto"  />

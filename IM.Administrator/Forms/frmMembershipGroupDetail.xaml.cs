@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Membership Group",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Membership Group", blnDatagrids: true);
           if (strMsj == "")
           {
             List<MembershipType> lstAdd = lstMembershipGroup.Where(mt => !_oldLstmembershipTypes.Any(mtt => mtt.mtID == mt.mtID)).ToList();

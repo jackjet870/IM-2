@@ -35,7 +35,7 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 26/Mayo/2016 Created
     /// </history>
-    public static PromocionesControllerService Current(EnumPromotionsSystem enumPromotionsSystems = EnumPromotionsSystem.Sistur)
+    public static PromocionesControllerService Current()
     {
       if (ServiceSistur == null)
       {
@@ -62,7 +62,7 @@ namespace IM.Services.Helpers
     /// [vipacheco] 26/Mayo/2016 Created
     /// [vipacheco] 25/Julio/2016 Modified --> se agrego asyncronia
     /// </history>
-    public async static Task<bool> CancelPromotionSistur(string pGift, string Promotion, string Program, string LeadSource, string PropertyOpera, int ReceiptID, TextBox txtReservation, EnumPromotionsSystem enumPromotionsSystem, List<string> pGiftsCancelled)
+    public async static Task<bool> CancelPromotionSistur(string pGift, string Promotion, string Program, string LeadSource, string PropertyOpera, int ReceiptID, TextBox txtReservation, List<string> pGiftsCancelled)
     {
       try
       {
@@ -73,7 +73,7 @@ namespace IM.Services.Helpers
         if (Program == "IH")
         {
           // si es una invitacion inhouse
-          if (txtReservation.Text != null)
+          if (!string.IsNullOrEmpty(txtReservation.Text))
           {
             Hotel = LeadSource;
             Reservation = txtReservation.Text;
@@ -93,15 +93,13 @@ namespace IM.Services.Helpers
         }
 
         // Si se puede cancelar la promocion de sistur
-        if (await AllowCancelPromotionSistur(Hotel, Reservation, Promotion, pGift, enumPromotionsSystem))
+        if (await AllowCancelPromotionSistur(Hotel, Reservation, Promotion, pGift))
         {
-
           // Se da de baja la promocion en el sistema de promociones
-          Response = await ActualizaEstatusPromoForzadaFolio(Hotel, Reservation, Promotion, enumPromotionsSystem);
+          Response = await ActualizaEstatusPromoForzadaFolio(Hotel, Reservation, Promotion);
           //Si ocurrio un error 
           if (Response.hasErrors)
             throw new Exception(Response.errorInfo);
-
 
           // cancelamos el regalo en Origos
           await BRGiftsReceiptDetail.UpdateGiftsPromotionSisturCancel(ReceiptID, pGift);
@@ -110,9 +108,7 @@ namespace IM.Services.Helpers
           pGiftsCancelled.Add(pGift);
 
           return true;
-
         }
-
         return false;
       }
       catch (Exception)
@@ -130,12 +126,11 @@ namespace IM.Services.Helpers
     /// <param name="hotel"></param>
     /// <param name="folio"></param>
     /// <param name="promotion"></param>
-    /// <param name="enumPromotionsSystem"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private async static Task<ActualizaEstatusPromoForzadaResponse> ActualizaEstatusPromoForzadaFolio(string hotel, string folio, string promotion, EnumPromotionsSystem enumPromotionsSystem)
+    private async static Task<ActualizaEstatusPromoForzadaResponse> ActualizaEstatusPromoForzadaFolio(string hotel, string folio, string promotion)
     {
       return await Task.Run(() =>
       {
@@ -150,7 +145,7 @@ namespace IM.Services.Helpers
           Request.estatus = "BAJA";
 
           // Invocamos al servicio web
-          Response = Current(enumPromotionsSystem).ActualizaEstatusPromoForzadaFolio(Request);
+          Response = Current().ActualizaEstatusPromoForzadaFolio(Request);
 
           // si ocurrio un error
           if (Response.hasErrors)
@@ -161,10 +156,7 @@ namespace IM.Services.Helpers
         {
           throw;
         }
-
-
       });
-
     }
     #endregion
 
@@ -181,7 +173,7 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private async static Task<bool> AllowCancelPromotionSistur(string Hotel, string Reservation, string Promotion, string Gift, EnumPromotionsSystem enumPromotionsSystem)
+    private async static Task<bool> AllowCancelPromotionSistur(string Hotel, string Reservation, string Promotion, string Gift)
     {
 
       OstdtpromosResponse[] Details;
@@ -189,7 +181,7 @@ namespace IM.Services.Helpers
       OstpromosResponse Header = null;
       float Used = 0;
 
-      Details = await ObtenerDetalleEstadoCuenta(Hotel, Reservation, Promotion, enumPromotionsSystem);
+      Details = await ObtenerDetalleEstadoCuenta(Hotel, Reservation, Promotion);
 
       // si no tiene detalle
       if (Details == null)
@@ -199,7 +191,7 @@ namespace IM.Services.Helpers
       // si tiene detalle
       else
       {
-        Header = ObtenerCabeceraEstadoCuenta(Hotel, Convert.ToInt32(Reservation), Promotion, enumPromotionsSystem);
+        Header = ObtenerCabeceraEstadoCuenta(Hotel, Convert.ToInt32(Reservation), Promotion);
         // si ocurrio un error al consultar el detalle del estado de cuenta
         //  calculamos el monto usado del detalle
         foreach (OstdtpromosResponse Detail in Details)
@@ -227,13 +219,12 @@ namespace IM.Services.Helpers
     /// <param name="folio"></param>
     /// <param name="promotion"></param>
     /// <param name="error"></param>
-    /// <param name="enumPromotionsSystem"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 26/Mayo/2016 Created
     /// [vipacheco] 25/Julio/2016 Modified --> Se agreggo asyncronia
     /// </history>
-    public async static Task<OstdtpromosResponse[]> ObtenerDetalleEstadoCuenta(string hotel, string folio, string promotion, EnumPromotionsSystem enumPromotionsSystem)
+    public async static Task<OstdtpromosResponse[]> ObtenerDetalleEstadoCuenta(string hotel, string folio, string promotion)
     {
       return await Task.Run(() =>
       {
@@ -246,7 +237,7 @@ namespace IM.Services.Helpers
         Request.idpromo = promotion;
 
         // Invocamos al servicio web
-        Response = Current(enumPromotionsSystem).ObtenerDetalleEstadoCuenta(Request);
+        Response = Current().ObtenerDetalleEstadoCuenta(Request);
         return Response;
       });
     }
@@ -260,12 +251,11 @@ namespace IM.Services.Helpers
     /// <param name="folio"></param>
     /// <param name="promotion"></param>
     /// <param name="error"></param>
-    /// <param name="enumPromotionsSystem"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private static OstpromosResponse ObtenerCabeceraEstadoCuenta(string hotel, int folio, string promotion, EnumPromotionsSystem enumPromotionsSystem)
+    private static OstpromosResponse ObtenerCabeceraEstadoCuenta(string hotel, int folio, string promotion)
     {
       BeneficiosxFolioRequest Request = new BeneficiosxFolioRequest();
       OstpromosResponse[] Response = null;
@@ -276,7 +266,7 @@ namespace IM.Services.Helpers
       Request.idpromo = promotion;
 
       // invocamos al servicio web
-      Response = Current(enumPromotionsSystem).ObtenerCabeceraEstadoCuenta(Request);
+      Response = Current().ObtenerCabeceraEstadoCuenta(Request);
 
       if (Response != null)
       {
@@ -298,53 +288,51 @@ namespace IM.Services.Helpers
     /// </history>
     public async static Task<string> SavePromotionsSistur(int ReceiptID, string UserID, string ChangeBy = "")
     {
-
-      List<GiftType> aGifts = new List<GiftType>();
-      EnumPromotionsSystem System = EnumPromotionsSystem.Sistur;
-      GuardaPromocionForzadaRequest[] aPromotions = null;
-      GuardaPromocionForzadaRequest Request = null;
-      GuardaPromocionForzadaResponse Response = null;
-      string GiftsSaved = "", GiftsNoSaved = "";
-
-      // obtenemos los regalos de promociones de Sistur
-      aPromotions = await GetGiftsPromotionsSistur(ReceiptID, ChangeBy, UserID, aGifts, System);
-
-      // si algun regalo tiene promociones de Sistur
-      if (aPromotions != null)
+      return await Task.Run(async () =>
       {
-        if (aPromotions.Length > 0)
+        List<GiftType> aGifts = new List<GiftType>();
+        List<GuardaPromocionForzadaRequest> aPromotions = new List<GuardaPromocionForzadaRequest>();
+        GuardaPromocionForzadaRequest Request = null;
+        GuardaPromocionForzadaResponse Response = null;
+        string GiftsSaved = string.Empty;
+        string GiftsNoSaved = string.Empty;
+
+        // obtenemos los regalos de promociones de Sistur
+        aPromotions = await GetGiftsPromotionsSistur(ReceiptID, ChangeBy, UserID, aGifts);
+
+        // si algun regalo tiene promociones de Sistur
+        if (aPromotions != null)
         {
-          for (int i = 0; i <= aPromotions.Length - 1; i++)
+          if (aPromotions.Count > 0)
           {
-            Request = aPromotions[i];
-
-            // Invocamos al servicio web para insertar cada regalo que se pretende asignar
-            Response = await GuardarPromocionForzada(Request, System);
-
-            // si se guardo exitosamente en Sistur
-            if (!Response.hasErrors)
+            for (int i = 0; i <= aPromotions.Count - 1; i++)
             {
-              // actualizamos los regalos para identificarlos como que se guardaron en Sistur
-              BRGiftsReceiptDetail.UpdateGiftPromotionSistur(aGifts[i].Receipt, aGifts[i].ID, aGifts[i].Promotion);
-              GiftsSaved += aGifts[i].Descripcion + "\r\n";
+              Request = aPromotions[i];
+
+              // Invocamos al servicio web para insertar cada regalo que se pretende asignar
+              Response = await GuardarPromocionForzada(Request);
+
+              // si se guardo exitosamente en Sistur
+              if (!Response.hasErrors)
+              {
+                // actualizamos los regalos para identificarlos como que se guardaron en Sistur
+                BRGiftsReceiptDetail.UpdateGiftPromotionSistur(aGifts[i].Receipt, aGifts[i].ID, aGifts[i].Promotion);
+                GiftsSaved += aGifts[i].Descripcion + "\r\n";
+              }
+              else
+                GiftsNoSaved += aGifts[i].Descripcion + "\r\n";
             }
-            else
-              GiftsNoSaved += aGifts[i].Descripcion + "\r\n";
+            // si se pudo guardar todas las promociones
+            if (string.IsNullOrEmpty(GiftsNoSaved)) { return "Gifts were successfully saved in Sistur as Promotion"; }
+            // si no se pudo guardar ninguna promocion
+            else if (string.IsNullOrEmpty(GiftsSaved)) { return "None gift was saved in Sistur as Promotion"; }
+            // si no se pudo guardar alguna promocion
+            else { return "The following gifts were saved in Sistur as Promotion:\r\n" + GiftsSaved + "\r\n\r\n" + "But the following gifts were not saved: \r\n" + GiftsNoSaved; }
           }
-
-          // si se pudo guardar todas las promociones
-          if (string.IsNullOrEmpty(GiftsSaved) || GiftsSaved == "")
-            return "Gifts were successfully saved in Sistur as Promotion";
-          // si no se pudo guardar ninguna promocion
-          else if (string.IsNullOrEmpty(GiftsNoSaved) || GiftsNoSaved == "")
-            return "None gift was saved in Sistur as Promotion";
-          // si no se pudo guardar alguna promocion
-          else
-            return "The following gifts were saved in Sistur as Promotion:\r\n" + GiftsSaved + "\r\n\r\n" + "But the following gifts were not saved: \r\n" + GiftsNoSaved;
-
         }
+        return string.Empty;
       }
-      return string.Empty;
+      );
     }
     #endregion
 
@@ -354,21 +342,18 @@ namespace IM.Services.Helpers
     /// </summary>
     /// <param name="Request"></param>
     /// <param name="Error"></param>
-    /// <param name="enumPromotionsSystem"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private async static Task<GuardaPromocionForzadaResponse> GuardarPromocionForzada(GuardaPromocionForzadaRequest Request, EnumPromotionsSystem enumPromotionsSystem)
+    private async static Task<GuardaPromocionForzadaResponse> GuardarPromocionForzada(GuardaPromocionForzadaRequest Request)
     {
       return await Task.Run(() =>
       {
-
-        GuardaPromocionForzadaResponse Response = null;
+        GuardaPromocionForzadaResponse Response = new GuardaPromocionForzadaResponse();
 
         // invocamos al servicio web
-        Response = Current(enumPromotionsSystem).GuardarPromocionForzada(Request);
-
+        Response = Current().GuardarPromocionForzada(Request);
         // Si ocurrio un error
         if (Response.hasErrors)
         {
@@ -377,7 +362,6 @@ namespace IM.Services.Helpers
 
         return Response;
       });
-
     }
     #endregion
 
@@ -395,9 +379,9 @@ namespace IM.Services.Helpers
     /// [vipacheco] 27/Mayo/2016 Created
     /// [vipacheco] 25/Julio/2016 Modified --> Se agreggo asyncronia
     /// </history>
-    public async static Task<GuardaPromocionForzadaRequest[]> GetGiftsPromotionsSistur(int ReceiptID, string ChangeBy, string UserID, List<GiftType> aGifts, EnumPromotionsSystem enumPromotionsSystem)
+    public async static Task<List<GuardaPromocionForzadaRequest>> GetGiftsPromotionsSistur(int ReceiptID, string ChangeBy, string UserID, List<GiftType> aGifts)
     {
-      GuardaPromocionForzadaRequest[] aPromotions = null;
+      List<GuardaPromocionForzadaRequest> aPromotions = new List<GuardaPromocionForzadaRequest>();
       string Hotel = string.Empty;
       string Folio = string.Empty;
       //int Company = 0;
@@ -408,7 +392,7 @@ namespace IM.Services.Helpers
       List<GiftsReceiptDetailPromotionsSistur> Result = await BRGiftsReceiptDetail.GetGiftsReceiptDetailPromotionsPVP(ReceiptID);
 
       // por default se van a guardar al sistema de Promociones de Sistur
-      enumPromotionsSystem = EnumPromotionsSystem.Sistur;
+      EnumPromotionsSystem enumPromotionsSystem = EnumPromotionsSystem.Sistur;
 
       if (Result.Count > 0)
       {
@@ -452,7 +436,7 @@ namespace IM.Services.Helpers
         }
       }
 
-      for (int i = 1; i < Result.Count - 1; i++)
+      for (int i = 0; i < Result.Count; i++)
       {
         GiftsReceiptDetailPromotionsSistur _Detail = Result[i];
 
@@ -490,34 +474,27 @@ namespace IM.Services.Helpers
     /// <param name="enumPromotionsSystem"></param>
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
+    /// [vipacheco] 23/Agosto/2016 Modified -> se cambio el tipo del parametro Promotions
     /// </history>
-    public static void AddPromotion(ref GuardaPromocionForzadaRequest[] Promotions, string Hotel, string Folio, string Promotion, string GiftID, int ReceiptID, string User, EnumPromotionsSystem enumPromotionsSystem)
+    public static void AddPromotion(ref List<GuardaPromocionForzadaRequest> Promotions, string Hotel, string Folio, string Promotion, string GiftID, int ReceiptID, string User, EnumPromotionsSystem enumPromotionsSystem)
     {
-      int iLength = -1;
-      iLength = Promotions.Length;
-      iLength++;
+      GuardaPromocionForzadaRequest request = new GuardaPromocionForzadaRequest()
+      {
+        hotel = Hotel,
+        folio = Folio,
+        adicional = (enumPromotionsSystem == EnumPromotionsSystem.PVP) ? "1" : "0",
+        idpromo = Promotion,
+        GiftID = GiftID,
+        GiftsReceiptID = $"{ReceiptID}",
+        usralta = User,
+        fechaalta = BRHelpers.GetServerDate(),
+        idtipoasignacion = "CONT",
+        status = "A",
+        tipomov = "",
+        usrmodif = ""
+      };
 
-      Array.Resize(ref Promotions, iLength);
-      Promotions[iLength] = new GuardaPromocionForzadaRequest();
-      Promotions[Promotions.Length].hotel = Hotel;
-      Promotions[Promotions.Length].folio = Folio;
-
-      if (enumPromotionsSystem == EnumPromotionsSystem.PVP)
-        Promotions[Promotions.Length].adicional = "1";
-      else
-        Promotions[Promotions.Length].adicional = "0";
-
-      Promotions[Promotions.Length].idpromo = Promotion;
-      Promotions[Promotions.Length].GiftID = GiftID;
-      Promotions[Promotions.Length].GiftsReceiptID = $"{ReceiptID}";
-      Promotions[Promotions.Length].usralta = User;
-      Promotions[Promotions.Length].fechaalta = BRHelpers.GetServerDate();
-      Promotions[Promotions.Length].idtipoasignacion = "CONT";
-      Promotions[Promotions.Length].status = "A";
-      Promotions[Promotions.Length].tipomov = "";
-      //// verificar hotelnew --->
-      //// verificar folionew --->
-      Promotions[Promotions.Length].usrmodif = "";
+      Promotions.Add(request);
     }
     #endregion
 
@@ -538,7 +515,7 @@ namespace IM.Services.Helpers
         request.tipoPromo = tipoPromo;
         request.estatus = status;
 
-        response = Current(EnumPromotionsSystem.Sistur).ObtenerPromocionesTipo(request);
+        response = Current().ObtenerPromocionesTipo(request);
 
         if (response != null)
         {

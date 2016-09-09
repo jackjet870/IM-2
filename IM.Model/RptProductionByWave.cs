@@ -14,7 +14,6 @@ namespace IM.Model
     public partial class RptProductionByWave
     {
         public string BookTime { get; set; }
-        public string SalesRoomID { get; set; }
         public Nullable<int> Books { get; set; }
         public Nullable<int> InOuts { get; set; }
         public Nullable<int> GrossBooks { get; set; }

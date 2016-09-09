@@ -67,6 +67,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.5840.25917, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -132,6 +136,7 @@
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
     <Compile Include="Classes\EntityBase.cs" />
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
+    <Compile Include="Classes\ExcelFormatItemsList.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
     <Compile Include="Classes\GiftType.cs" />
@@ -213,9 +218,6 @@
     <Compile Include="Desk.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DisputeStatus.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Efficiency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -270,7 +272,7 @@
     <Compile Include="Enums\EnumRptGeneral.cs" />
     <Compile Include="Enums\EnumRptLeadSource.cs" />
     <Compile Include="Enums\EnumRptPR.cs" />
-    <Compile Include="Enums\EnumRptRoomSales.cs" />
+    <Compile Include="Enums\EnumRptSalesRoom.cs" />
     <Compile Include="Enums\EnumRptSalesRoomAndSalesman.cs" />
     <Compile Include="Enums\EnumPredefinedDate.cs" />
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
@@ -838,12 +840,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptEfficiencyWeekly.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RptFoliosCXC.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RptFoliosCxCByPR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptFoliosInvitationByDateFolio.cs">

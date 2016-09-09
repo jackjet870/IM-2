@@ -180,7 +180,6 @@ namespace IM.Model
         public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
-        public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
         public virtual DbSet<RefundTypeFolio> RefundTypesFolios { get; set; }
     
         public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
@@ -4279,72 +4278,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_AddAccessAdministrator", placeTypeParameter);
         }
     
-        public virtual ObjectResult<RptFoliosCXC> USP_OR_RptFoliosCXC(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> folioFrom, Nullable<int> folioTo, Nullable<int> folioALL, string leadSources, string pRs)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var folioFromParameter = folioFrom.HasValue ?
-                new ObjectParameter("FolioFrom", folioFrom) :
-                new ObjectParameter("FolioFrom", typeof(int));
-    
-            var folioToParameter = folioTo.HasValue ?
-                new ObjectParameter("FolioTo", folioTo) :
-                new ObjectParameter("FolioTo", typeof(int));
-    
-            var folioALLParameter = folioALL.HasValue ?
-                new ObjectParameter("FolioALL", folioALL) :
-                new ObjectParameter("FolioALL", typeof(int));
-    
-            var leadSourcesParameter = leadSources != null ?
-                new ObjectParameter("LeadSources", leadSources) :
-                new ObjectParameter("LeadSources", typeof(string));
-    
-            var pRsParameter = pRs != null ?
-                new ObjectParameter("PRs", pRs) :
-                new ObjectParameter("PRs", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosCXC>("USP_OR_RptFoliosCXC", dateFromParameter, dateToParameter, folioFromParameter, folioToParameter, folioALLParameter, leadSourcesParameter, pRsParameter);
-        }
-    
-        public virtual ObjectResult<RptFoliosCxCByPR> USP_OR_RptFoliosCxCByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<bool> allFolios, Nullable<int> folioFrom, Nullable<int> folioTo, string leadSource, string promotors)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var allFoliosParameter = allFolios.HasValue ?
-                new ObjectParameter("allFolios", allFolios) :
-                new ObjectParameter("allFolios", typeof(bool));
-    
-            var folioFromParameter = folioFrom.HasValue ?
-                new ObjectParameter("FolioFrom", folioFrom) :
-                new ObjectParameter("FolioFrom", typeof(int));
-    
-            var folioToParameter = folioTo.HasValue ?
-                new ObjectParameter("FolioTo", folioTo) :
-                new ObjectParameter("FolioTo", typeof(int));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var promotorsParameter = promotors != null ?
-                new ObjectParameter("Promotors", promotors) :
-                new ObjectParameter("Promotors", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosCxCByPR>("USP_OR_RptFoliosCxCByPR", dateFromParameter, dateToParameter, allFoliosParameter, folioFromParameter, folioToParameter, leadSourceParameter, promotorsParameter);
-        }
-    
         public virtual ObjectResult<RptFoliosInvitationByDateFolio> USP_OR_RptFoliosInvitationByDateFolio(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string serie, Nullable<int> folioFrom, Nullable<int> folioTo, string leadSources, string pRs)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -4376,39 +4309,6 @@ namespace IM.Model
                 new ObjectParameter("PRs", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosInvitationByDateFolio>("USP_OR_RptFoliosInvitationByDateFolio", dateFromParameter, dateToParameter, serieParameter, folioFromParameter, folioToParameter, leadSourcesParameter, pRsParameter);
-        }
-    
-        public virtual ObjectResult<RptFoliosInvitationsOuthouseByPR> USP_OR_RptFoliosInvitationsOuthouseByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string serie, Nullable<int> folioFrom, Nullable<int> folioTo, string leadSource, string promotors)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var serieParameter = serie != null ?
-                new ObjectParameter("Serie", serie) :
-                new ObjectParameter("Serie", typeof(string));
-    
-            var folioFromParameter = folioFrom.HasValue ?
-                new ObjectParameter("FolioFrom", folioFrom) :
-                new ObjectParameter("FolioFrom", typeof(int));
-    
-            var folioToParameter = folioTo.HasValue ?
-                new ObjectParameter("FolioTo", folioTo) :
-                new ObjectParameter("FolioTo", typeof(int));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var promotorsParameter = promotors != null ?
-                new ObjectParameter("Promotors", promotors) :
-                new ObjectParameter("Promotors", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosInvitationsOuthouseByPR>("USP_OR_RptFoliosInvitationsOuthouseByPR", dateFromParameter, dateToParameter, serieParameter, folioFromParameter, folioToParameter, leadSourceParameter, promotorsParameter);
         }
     
         public virtual ObjectResult<RptProductionByPRContactOuthouse> USP_OR_RptProductionByPRContactOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit)

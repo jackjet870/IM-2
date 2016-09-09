@@ -66,7 +66,7 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 17/Mar/2016 Created
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var listaGuestByPR = dtgr.DataContext as List<GuestByPR>;
       if (listaGuestByPR != null)
@@ -77,8 +77,7 @@ namespace IM.GuestsPR.Forms
         //Obtenemos el dataTable con la lista formateada
         var dt = TableHelper.GetDataTableFromList(listaGuestByPR, true);
         //Creamos el reporte
-        var fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable());
-
+        var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
         if (fi != null)
         {
           Process.Start(fi.FullName);

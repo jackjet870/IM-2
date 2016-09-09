@@ -11,6 +11,17 @@ namespace IM.Base.Converters
 {
   public class DateAndTimeConverter : IValueConverter
   {
+    /// <summary>
+    /// Convierte un string a una hora o fecha valida
+    /// </summary>
+    /// <param name="value">valor a convertir</param>
+    /// <param name="targetType">tipo de dato del control</param>
+    /// <param name="parameter">ConverterParameter</param>
+    /// <param name="culture">CultureInfo</param>
+    /// <return>información valida para el control</returns>
+    /// <history>
+    /// [erosado] 26/08/2016  Created.
+    /// </history>
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
       DateTime dateTimeValue = new DateTime();
@@ -35,7 +46,14 @@ namespace IM.Base.Converters
       }
       return "";
     }
-
+    /// <summary>
+    /// Convierte la informacion del Target al tipo de dato del objeto
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="targetType"></param>
+    /// <param name="parameter"></param>
+    /// <param name="culture"></param>
+    /// <returns></returns>
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
       DateTime dateTimeValue = new DateTime();

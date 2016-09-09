@@ -112,13 +112,6 @@ namespace IM.Model.Classes
       set { SetField(ref _locations, value); }
     }
 
-    private List<DisputeStatus> _disputeStatus;
-    public List<DisputeStatus> DisputeStatus
-    {
-      get { return _disputeStatus; }
-      set { SetField(ref _disputeStatus, value); }
-    }
-
     private DateTime? _closeDate;
     public DateTime? CloseDate
     {

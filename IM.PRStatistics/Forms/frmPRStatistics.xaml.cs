@@ -15,6 +15,7 @@ using System.Linq;
 using IM.Base.Forms;
 using IM.Base.Helpers;
 using Xceed.Wpf.Toolkit;
+using IM.Model.Helpers;
 
 namespace IM.PRStatistics.Forms
 {
@@ -96,7 +97,7 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       List<RptPRStats> lstRptStats = dtgr.DataContext as List<RptPRStats>;
       if (lstRptStats != null)
@@ -105,7 +106,11 @@ namespace IM.PRStatistics.Forms
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = TableHelper.GetDataTableFromList(lstRptStats);
         string nombreReporte = "PR Statistics";
-        FileInfo finfo = EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable());
+
+
+
+
+        FileInfo finfo = await EpplusHelper.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal:true, blnRowGrandTotal:true);
 
         if (finfo != null)
         {
@@ -411,6 +416,7 @@ namespace IM.PRStatistics.Forms
       }
       catch (Exception ex)
       {
+        imgButtonOk.IsEnabled = true;
         StaEnd();
         UIHelper.ShowMessage(ex);
       }

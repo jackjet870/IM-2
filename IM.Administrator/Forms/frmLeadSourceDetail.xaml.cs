@@ -148,7 +148,7 @@ namespace IM.Administrator.Forms
           txtStatus.Text = "Saving Data...";
           skpStatus.Visibility = Visibility.Visible;
           btnAccept.Visibility = Visibility.Collapsed;
-          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source",blnDatagrids:true);
+          string strMsj = ValidateHelper.ValidateForm(this, "Lead Source", blnDatagrids: true);
           if (strMsj=="")
           {
             #region Locations
@@ -266,6 +266,28 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
+    /// <summary>
+    /// Valida que solo las locaciones que estan siendo agregadas se puedan eliminar
+    /// </summary>
+    /// <history>
+    /// [emoguel] 09/06/2016 created
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete)
+      {
+        var item = dgrLocations.SelectedItem;
+        if (item.GetType().Name == "Location")
+        {
+          Location location = dgrLocations.SelectedItem as Location;
+          if (!string.IsNullOrWhiteSpace(location.lols))
+          {
+            e.Handled = true;
+          }
+        }
+      }
+    }
     #endregion
 
     #region Methods

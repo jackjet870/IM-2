@@ -26,6 +26,7 @@ namespace IM.Base.Forms
     private readonly int _guestId;
     private bool _isReadOnly;
     private EnumModule _module;
+    private EnumProgram _program;
 
     //private bool _isInvitation;
 
@@ -48,13 +49,14 @@ namespace IM.Base.Forms
 
     #region Constructores y destructores
 
-    public frmGuest(UserData user, int guestId, EnumModule module, bool isReadOnly = false)
+    public frmGuest(UserData user, int guestId, EnumModule module,EnumProgram program, bool isReadOnly = false)
     {
       WindowStartupLocation = WindowStartupLocation.CenterScreen;
       _user = user;
       _guestId = guestId;
       _isReadOnly = isReadOnly;
       _module = module;
+      _program = program;
       InitializeComponent();
     }
 
@@ -121,6 +123,7 @@ namespace IM.Base.Forms
       //Obtenemos el GuestStatusType del combobox cmbGuestStatus
       var guStatusType = cmbGuestStatus.SelectedItem as GuestStatusType;
 
+      
       txtGiftMaxAuth.Text = $"{guStatusType?.gsMaxAuthGifts ?? 0:C2}";
 
       //TODO: GUESTSTATUSTYPES Revizar el caso cuando se traigan los regalos de la Base de datos
@@ -254,7 +257,7 @@ namespace IM.Base.Forms
             //TODO: Revisar el program Edgar
             //var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
 
-            InvitationValidationRules.AfterEdit(dtgGifts, ref invitationGift, _igCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _catObj.Program);
+            InvitationValidationRules.AfterEdit(_guestId,dtgGifts, ref invitationGift, _igCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _catObj.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else
@@ -324,7 +327,7 @@ namespace IM.Base.Forms
               grbGuestStatus.IsEnabled = !_isReadOnly;
 
       dtpArrival.IsEnabled =
-        dtpDeparture.IsEnabled =(_module==EnumModule.InHouse);
+        dtpDeparture.IsEnabled = !(_program == EnumProgram.Inhouse);
     }
 
     #endregion Configuración de controles
@@ -365,64 +368,6 @@ namespace IM.Base.Forms
 
     #endregion Cargar datos del invitado
 
-    #region Métodos para calcular los costos de los regalos
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="onlyCancellled"></param>
-    /// <param name="cancel"></param>
-    private void CalculateTotalGifts(bool onlyCancellled = false, string cancel = "")
-    {
-      //decimal cost, price, totalCost = 0, totalPrice = 0;
-
-      //foreach (var row in _lstObjInvitGift)
-      //{
-      //  // calculamos el costo del regalo
-      //  cost = row.igPriceA + row.igPriceA;
-
-      //  //calculamos el precio del regalo
-      //  price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
-
-      //  //si se desean todos los regalos
-      //  if (!onlyCancellled)
-      //  {
-      //    totalCost += cost;
-      //    totalPrice += price;
-      //  }
-
-      //}
-      //txtTotalCost.Text = totalCost.ToString("$#,##0.00;$(#,##0.00)");
-      //txtTotalPrice.Text = totalPrice.ToString("$#,##0.00;$(#,##0.00)");
-    }
-
-    /// <summary>
-    /// Calcula el monto maximo de regalos
-    /// </summary>
-    /// <history>
-    /// [emoguel] modified se volvió async
-    /// </history>
-    private void CalculateMaxAuthGifts()
-    {
-      //decimal maxAuthGifts = 0;
-
-      //foreach (var row in _catObj.InvitationGiftList.OfType<InvitationGift>())
-      //{
-      //  if (row.gtgs == null || row.igQty <= 0) continue;
-      //  var guestStatusType = await BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs });
-      //  var guestStaType = guestStatusType.FirstOrDefault();
-      //  maxAuthGifts += row.igQty * guestStaType.gsMaxAuthGifts;
-      //}
-
-      //txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
-    }
-
-    #endregion Métodos para calcular los costos de los regalos
-
-    #region Métodos para guardar la información del invitado
-
-    #endregion Métodos para guardar la información del invitado
-
     #region Métodos para Válidar la información
 
     private bool Validate()
@@ -447,26 +392,18 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify an agency");
         cmbOtherInfoAgency.Focus();
       }
-      else if (string.IsNullOrEmpty(txtguLastName1.Text)) //validamos el apellido
+      else if (string.IsNullOrWhiteSpace(txtguLastName1.Text)) //validamos el apellido
       {
         res = false;
         UIHelper.ShowMessage("Input the guest last name");
         txtguLastName1.Focus();
       }
-      else if (string.IsNullOrEmpty(txtguFirstName1.Text)) //validamos el nombre
+      else if (string.IsNullOrWhiteSpace(txtguFirstName1.Text)) //validamos el nombre
       {
         res = false;
         UIHelper.ShowMessage("Input the guest first name");
         txtguFirstName1.Focus();
       }
-      else if (!ValidateGifts()) //validamos los regalos
-      {
-        res = false;
-      }
-      //else if (!ValidateGuestStatus()) //validamos los estatus de invitados
-      //{
-      //  res = false;
-      //}
       else if (!ValidateChangedBy()) //validamos quien hizo el cambio y su contraseña
       {
         res = false;
@@ -480,53 +417,6 @@ namespace IM.Base.Forms
     }
 
     /// <summary>
-    /// Validamos la información de los nuevos regalos
-    /// </summary>
-    /// <returns>Boolean</returns>
-    private bool ValidateGifts()
-    {
-      bool res = true;
-      //string title = "Gifts Section";
-      ////Revisamos que todos los regalos tengan una cantidad
-      //if (_lstObjInvitGift.Where(g => g.igQty == 0).Any())
-      //{
-      //  res = false;
-      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity", title: title);
-      //}
-      //else if (_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
-      //{
-      //  res = false;
-      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift", title: title);
-      //}
-      //else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
-      //{
-      //  res = false;
-      //  Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults", title: title);
-      //}
-
-      //if (res)
-      //{
-      //  foreach (var row in _lstObjInvitGift)
-      //  {
-      //    var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
-      //    if (row.igQty > gift.giMaxQty)
-      //    {
-      //      string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-      //      Helpers.UIHelper.ShowMessage(error, title: title);
-      //      res = false;
-      //      break;
-      //    }
-      //  }
-      //}
-
-      //if (!res)
-      //{
-      //  dtgGifts.Focus();
-      //}
-      return res;
-    }
-
-    /// <summary>
     /// Validamos la información de quien realiza los cambios
     /// </summary>
     /// <returns></returns>
@@ -534,13 +424,13 @@ namespace IM.Base.Forms
     {
       bool res = true;
 
-      if (string.IsNullOrEmpty(txtUser.Text))
+      if (string.IsNullOrWhiteSpace(txtUser.Text))
       {
         res = false;
         UIHelper.ShowMessage("Specify who is making the change.");
         txtUser.Focus();
       }
-      else if (string.IsNullOrEmpty(txtPassword.Password))
+      else if (string.IsNullOrWhiteSpace(txtPassword.Password))
       {
         res = false;
         UIHelper.ShowMessage("Specify who is making the change.");
@@ -554,11 +444,9 @@ namespace IM.Base.Forms
     {
       var pass = EncryptHelper.Encrypt(txtPassword.Password);
 
-      var valid = BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
-
-      if (valid.Focus == string.Empty) return true;
-
-      var res = false;
+      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text, pass, _catObj.Guest.guls).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
+       
+      if (string.IsNullOrWhiteSpace(valid?.Focus)) return true;
 
       //desplegamos el mensaje de error
       UIHelper.ShowMessage(valid.Message);
@@ -575,7 +463,7 @@ namespace IM.Base.Forms
           txtPassword.Focus();
           break;
       }
-      return res;
+      return false;
     }
 
     #endregion Métodos para Válidar la información

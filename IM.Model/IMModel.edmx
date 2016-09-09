@@ -96,11 +96,6 @@
           <Property Name="bdAuth" Type="varchar" MaxLength="7" />
           <Property Name="bdRefund" Type="bit" />
           <Property Name="bddr" Type="int" />
-          <Property Name="bdFolioCXC" Type="int" />
-          <Property Name="bdUserCXC" Type="varchar" MaxLength="10" />
-          <Property Name="bdEntryDCXC" Type="datetime" />
-          <Property Name="bdD" Type="datetime" />
-          <Property Name="bdds" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ChargeCalculationTypes">
           <Key>
@@ -238,14 +233,6 @@
           <Property Name="dkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="dkN" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="dkA" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="DisputeStatus">
-          <Key>
-            <PropertyRef Name="dsID" />
-          </Key>
-          <Property Name="dsID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="dsN" Type="varchar" MaxLength="60" Nullable="false" />
-          <Property Name="dsA" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Efficiency">
           <Key>
@@ -2326,18 +2313,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BookingDeposits_bdds">
-          <End Role="DisputeStatus" Type="Self.DisputeStatus" Multiplicity="0..1" />
-          <End Role="BookingDeposits" Type="Self.BookingDeposits" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DisputeStatus">
-              <PropertyRef Name="dsID" />
-            </Principal>
-            <Dependent Role="BookingDeposits">
-              <PropertyRef Name="bdds" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_BookingDeposits_PaymentPlaces">
           <End Role="PaymentPlaces" Type="Self.PaymentPlaces" Multiplicity="1" />
           <End Role="BookingDeposits" Type="Self.BookingDeposits" Multiplicity="*" />
@@ -2359,18 +2334,6 @@
             </Principal>
             <Dependent Role="BookingDeposits">
               <PropertyRef Name="bdpt" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BookingDeposits_Personnel_CxC">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="BookingDeposits" Type="Self.BookingDeposits" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="BookingDeposits">
-              <PropertyRef Name="bdUserCXC" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6741,24 +6704,6 @@
           <Parameter Name="PaymentTypes" Type="varchar(max)" Mode="In" />
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
-        <Function Name="USP_OR_RptFoliosCXC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="FolioFrom" Type="int" Mode="In" />
-          <Parameter Name="FolioTo" Type="int" Mode="In" />
-          <Parameter Name="FolioALL" Type="int" Mode="In" />
-          <Parameter Name="LeadSources" Type="varchar(max)" Mode="In" />
-          <Parameter Name="PRs" Type="varchar(max)" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_RptFoliosCxCByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="allFolios" Type="bit" Mode="In" />
-          <Parameter Name="FolioFrom" Type="int" Mode="In" />
-          <Parameter Name="FolioTo" Type="int" Mode="In" />
-          <Parameter Name="LeadSource" Type="varchar(max)" Mode="In" />
-          <Parameter Name="Promotors" Type="varchar(max)" Mode="In" />
-        </Function>
         <Function Name="USP_OR_RptFoliosInvitationByDateFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6767,15 +6712,6 @@
           <Parameter Name="FolioTo" Type="int" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar(max)" Mode="In" />
           <Parameter Name="PRs" Type="varchar(max)" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_RptFoliosInvitationsOuthouseByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="Serie" Type="varchar" Mode="In" />
-          <Parameter Name="FolioFrom" Type="int" Mode="In" />
-          <Parameter Name="FolioTo" Type="int" Mode="In" />
-          <Parameter Name="LeadSource" Type="varchar(max)" Mode="In" />
-          <Parameter Name="Promotors" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptFollowUpByAgency" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -7732,7 +7668,6 @@
           <EntitySet Name="DepositsRefund" EntityType="Self.DepositsRefund" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Depts" EntityType="Self.Depts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Desks" EntityType="Self.Desks" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DisputeStatus" EntityType="Self.DisputeStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Efficiency" EntityType="Self.Efficiency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EfficiencySalesmen" EntityType="Self.EfficiencySalesmen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EfficiencyTypes" EntityType="Self.EfficiencyTypes" Schema="dbo" store:Type="Tables" />
@@ -7907,20 +7842,12 @@
             <End Role="CreditCardTypes" EntitySet="CreditCardTypes" />
             <End Role="BookingDeposits" EntitySet="BookingDeposits" />
           </AssociationSet>
-          <AssociationSet Name="FK_BookingDeposits_bdds" Association="Self.FK_BookingDeposits_bdds">
-            <End Role="DisputeStatus" EntitySet="DisputeStatus" />
-            <End Role="BookingDeposits" EntitySet="BookingDeposits" />
-          </AssociationSet>
           <AssociationSet Name="FK_BookingDeposits_PaymentPlaces" Association="Self.FK_BookingDeposits_PaymentPlaces">
             <End Role="PaymentPlaces" EntitySet="PaymentPlaces" />
             <End Role="BookingDeposits" EntitySet="BookingDeposits" />
           </AssociationSet>
           <AssociationSet Name="FK_BookingDeposits_PaymentTypes" Association="Self.FK_BookingDeposits_PaymentTypes">
             <End Role="PaymentTypes" EntitySet="PaymentTypes" />
-            <End Role="BookingDeposits" EntitySet="BookingDeposits" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BookingDeposits_Personnel_CxC" Association="Self.FK_BookingDeposits_Personnel_CxC">
-            <End Role="Personnel" EntitySet="Personnel" />
             <End Role="BookingDeposits" EntitySet="BookingDeposits" />
           </AssociationSet>
           <AssociationSet Name="FK_ChargeTo_ChargeCalculationTypes" Association="Self.FK_ChargeTo_ChargeCalculationTypes">
@@ -9200,18 +9127,11 @@
           <Property Name="bdAuth" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="true"/>
           <Property Name="bdRefund" Type="Boolean" />
           <Property Name="bddr" Type="Int32" />
-          <Property Name="bdFolioCXC" Type="Int32" />
-          <Property Name="bdUserCXC" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="bdEntryDCXC" Type="DateTime" Precision="3" />
           <Property Name="bdExpD" Type="String" MaxLength="5" FixedLength="false" Unicode="false" DefaultValue="" />
           <NavigationProperty Name="CreditCardType" Relationship="Self.fk_bookingdeposit_credittype" FromRole="BookingDeposits" ToRole="CreditCardTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentPlace" Relationship="Self.FK_BookingDeposits_PaymentPlaces" FromRole="BookingDeposits" ToRole="PaymentPlaces" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentType" Relationship="Self.FK_BookingDeposits_PaymentTypes" FromRole="BookingDeposits" ToRole="PaymentTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="DepositsRefund" Relationship="Self.FK_DepositsRefund_drID" FromRole="BookingDeposits" ToRole="DepositsRefund" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="BookingDeposit" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="bdds" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="bdD" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="DisputeStatus" Relationship="IMModel.FK_BookingDeposits_bdds" FromRole="BookingDeposit" ToRole="DisputeStatu" />
         </EntityType>
         <EntityType Name="ChargeCalculationType">
           <Key>
@@ -10887,7 +10807,6 @@
           <NavigationProperty Name="WarehouseMovements" Relationship="Self.FK_WhsMovs_Personnel" FromRole="Personnel" ToRole="WhsMovs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.EfficiencySalesmen" FromRole="Personnel" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Roles" Relationship="Self.PersonnelRoles" FromRole="Personnel" ToRole="Roles" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="Personnel" ToRole="BookingDeposit" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guests_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Guest" />
           <NavigationProperty Name="Guests_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Guest" />
           <NavigationProperty Name="Sales_FTB1" Relationship="IMModel.FK_Sales_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Sale" />
@@ -17339,10 +17258,6 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
-          <AssociationSet Name="FK_BookingDeposits_Personnel_CxC" Association="IMModel.FK_BookingDeposits_Personnel_CxC">
-            <End Role="Personnel" EntitySet="Personnels" />
-            <End Role="BookingDeposit" EntitySet="BookingDeposits" />
-          </AssociationSet>
           <FunctionImport Name="USP_OR_RptProductionByAgencySalesRoomOutside">
             <ReturnType Type="Collection(IMModel.RptProductionByAgencySalesRoomOuthouse)"/>
             <ReturnType Type="Collection(IMModel.MembershipTypeShort)"/>
@@ -17465,24 +17380,6 @@
           <FunctionImport Name="USP_OR_AddAccessAdministrator">
           <Parameter Name="PlaceType" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_RptFoliosCXC" ReturnType="Collection(IMModel.RptFoliosCXC)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="FolioFrom" Mode="In" Type="Int32" />
-            <Parameter Name="FolioTo" Mode="In" Type="Int32" />
-            <Parameter Name="FolioALL" Mode="In" Type="Int32" />
-            <Parameter Name="LeadSources" Mode="In" Type="String" />
-            <Parameter Name="PRs" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="USP_OR_RptFoliosCxCByPR" ReturnType="Collection(IMModel.RptFoliosCxCByPR)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="allFolios" Mode="In" Type="Boolean" />
-            <Parameter Name="FolioFrom" Mode="In" Type="Int32" />
-            <Parameter Name="FolioTo" Mode="In" Type="Int32" />
-            <Parameter Name="LeadSource" Mode="In" Type="String" />
-            <Parameter Name="Promotors" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="USP_OR_RptFoliosInvitationByDateFolio" ReturnType="Collection(IMModel.RptFoliosInvitationByDateFolio)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17491,15 +17388,6 @@
             <Parameter Name="FolioTo" Mode="In" Type="Int32" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="PRs" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="USP_OR_RptFoliosInvitationsOuthouseByPR" ReturnType="Collection(IMModel.RptFoliosInvitationsOuthouseByPR)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="Serie" Mode="In" Type="String" />
-            <Parameter Name="FolioFrom" Mode="In" Type="Int32" />
-            <Parameter Name="FolioTo" Mode="In" Type="Int32" />
-            <Parameter Name="LeadSource" Mode="In" Type="String" />
-            <Parameter Name="Promotors" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByPRContactOutside" ReturnType="Collection(IMModel.RptProductionByPRContactOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -17949,11 +17837,6 @@
           <FunctionImport Name="USP_OR_GetSaleLog" ReturnType="Collection(IMModel.SaleLogData)">
           <Parameter Name="Sale" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="DisputeStatusList" EntityType="IMModel.DisputeStatus" />
-          <AssociationSet Name="FK_BookingDeposits_bdds" Association="IMModel.FK_BookingDeposits_bdds">
-            <End Role="DisputeStatu" EntitySet="DisputeStatusList" />
-            <End Role="BookingDeposit" EntitySet="BookingDeposits" />
-          </AssociationSet>
           <FunctionImport Name="USP_OR_GetSalesmenChanges" ReturnType="Collection(IMModel.SalesmenChanges)">
           <Parameter Name="Sale" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -18289,7 +18172,6 @@
           <Property Type="Boolean" Name="guQuinella" Nullable="false" />
           <Property Type="Int32" Name="gagu" Nullable="true" />
           <Property Type="Boolean" Name="guGroup" Nullable="false" />
-          <Property Type="String" Name="GroupN" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Equity" Nullable="false" MaxLength="1" />
           <Property Type="Int32" Name="gucl" Nullable="true" />
           <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
@@ -18623,6 +18505,8 @@
           <Property Type="Decimal" Name="Cl_Factor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Ca_Factor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Avg_Sale" Nullable="true" Precision="19" />
+          <Property Type="String" Name="P_Status" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="T_Books" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ExchangeRateLogData">
           <Property Type="String" Name="elChangedBy" Nullable="false" MaxLength="10" />
@@ -21002,18 +20886,6 @@
           <Property Type="Decimal" Name="guDepositReceived" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="guDepositTwisted" Nullable="true" Precision="19" />
         </ComplexType>
-        <Association Name="FK_BookingDeposits_Personnel_CxC">
-          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
-          <End Type="IMModel.BookingDeposit" Role="BookingDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="BookingDeposit">
-              <PropertyRef Name="bdUserCXC" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="RptProductionByAgencySalesRoomOuthouse">
           <Property Type="String" Name="Agency" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="AgencyN" Nullable="false" MaxLength="100" />
@@ -21345,38 +21217,6 @@
           <Property Type="Int32" Name="UPS" Nullable="true" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="RptFoliosCXC">
-          <Property Type="Int32" Name="bdFolioCXC" Nullable="true" />
-          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
-          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
-          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="bdUserCXC" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
-          <Property Type="DateTime" Name="bdEntryDCXC" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guStatus" Nullable="true" MaxLength="1" />
-          <Property Type="Boolean" Name="guShow" Nullable="false" />
-          <Property Type="String" Name="EsShow" Nullable="false" MaxLength="8" />
-          <Property Type="Decimal" Name="GrossBooks" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="GrossShows" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
-          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="9" />
-        </ComplexType>
-        <ComplexType Name="RptFoliosCxCByPR">
-          <Property Type="String" Name="lsID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="guFrom" Nullable="true" />
-          <Property Type="Int32" Name="guTo" Nullable="true" />
-          <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="60" />
-          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="49" />
-          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guStatus" Nullable="false" MaxLength="9" />
-        </ComplexType>
         <ComplexType Name="RptFoliosInvitationByDateFolio">
           <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
@@ -21384,19 +21224,6 @@
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
           <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
           <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="RptFoliosInvitationsOuthouseByPR">
-          <Property Type="String" Name="lsID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="guSerie" Nullable="true" MaxLength="5" />
-          <Property Type="Int32" Name="guFrom" Nullable="true" />
-          <Property Type="Int32" Name="guTo" Nullable="true" />
-          <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="60" />
-          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="49" />
-          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guStatus" Nullable="false" MaxLength="9" />
         </ComplexType>
         <ComplexType Name="RptProductionByPRContactOuthouse">
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
@@ -22018,7 +21845,6 @@
         </ComplexType>
         <ComplexType Name="RptProductionByWave">
           <Property Type="String" Name="BookTime" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="SalesRoomID" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="Books" Nullable="true" />
           <Property Type="Int32" Name="InOuts" Nullable="true" />
           <Property Type="Int32" Name="GrossBooks" Nullable="true" />
@@ -22498,27 +22324,6 @@
           <Property Type="Decimal" Name="slClosingCost" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="slOverPack" Nullable="true" Precision="19" />
         </ComplexType>
-        <EntityType Name="DisputeStatus">
-          <Key>
-            <PropertyRef Name="dsID" />
-          </Key>
-          <Property Name="dsID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="dsN" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="dsA" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_bdds" FromRole="DisputeStatu" ToRole="BookingDeposit" />
-        </EntityType>
-        <Association Name="FK_BookingDeposits_bdds">
-          <End Type="IMModel.DisputeStatus" Role="DisputeStatu" Multiplicity="0..1" />
-          <End Type="IMModel.BookingDeposit" Role="BookingDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DisputeStatu">
-              <PropertyRef Name="dsID" />
-            </Principal>
-            <Dependent Role="BookingDeposit">
-              <PropertyRef Name="bdds" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="SalesmenChanges">
           <Property Type="DateTime" Name="schDT" Nullable="false" Precision="23" />
           <Property Type="String" Name="schAuthorizedBy" Nullable="false" MaxLength="10" />
@@ -23263,8 +23068,6 @@
           <EntitySetMapping Name="BookingDeposits">
             <EntityTypeMapping TypeName="IMModel.BookingDeposit">
               <MappingFragment StoreEntitySet="BookingDeposits">
-                <ScalarProperty Name="bdD" ColumnName="bdD" />
-                <ScalarProperty Name="bdds" ColumnName="bdds" />
                 <ScalarProperty Name="bdID" ColumnName="bdID" />
                 <ScalarProperty Name="bdgu" ColumnName="bdgu" />
                 <ScalarProperty Name="bdcu" ColumnName="bdcu" />
@@ -23277,9 +23080,6 @@
                 <ScalarProperty Name="bdAuth" ColumnName="bdAuth" />
                 <ScalarProperty Name="bdRefund" ColumnName="bdRefund" />
                 <ScalarProperty Name="bddr" ColumnName="bddr" />
-                <ScalarProperty Name="bdFolioCXC" ColumnName="bdFolioCXC" />
-                <ScalarProperty Name="bdUserCXC" ColumnName="bdUserCXC" />
-                <ScalarProperty Name="bdEntryDCXC" ColumnName="bdEntryDCXC" />
                 <ScalarProperty Name="bdExpD" ColumnName="bdExpD" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -25436,7 +25236,6 @@
                 <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
                 <ScalarProperty Name="gagu" ColumnName="gagu" />
                 <ScalarProperty Name="guGroup" ColumnName="guGroup" />
-                <ScalarProperty Name="GroupN" ColumnName="GroupN" />
                 <ScalarProperty Name="Equity" ColumnName="Equity" />
                 <ScalarProperty Name="gucl" ColumnName="gucl" />
                 <ScalarProperty Name="clN" ColumnName="clN" />
@@ -25851,6 +25650,8 @@
                 <ScalarProperty Name="Cl_Factor" ColumnName="Cl_Factor" />
                 <ScalarProperty Name="Ca_Factor" ColumnName="Ca_Factor" />
                 <ScalarProperty Name="Avg_Sale" ColumnName="Avg_Sale" />
+                <ScalarProperty Name="P_Status" ColumnName="P_Status" />
+                <ScalarProperty Name="T_Books" ColumnName="T_Books" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -29328,46 +29129,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_AddAccessAdministrator" FunctionName="IMModel.Store.USP_OR_AddAccessAdministrator" />
-          <FunctionImportMapping FunctionImportName="USP_OR_RptFoliosCXC" FunctionName="IMModel.Store.USP_OR_RptFoliosCXC">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptFoliosCXC">
-                <ScalarProperty Name="bdFolioCXC" ColumnName="bdFolioCXC" />
-                <ScalarProperty Name="PR" ColumnName="PR" />
-                <ScalarProperty Name="PRN" ColumnName="PRN" />
-                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
-                <ScalarProperty Name="lsN" ColumnName="lsN" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="bdUserCXC" ColumnName="bdUserCXC" />
-                <ScalarProperty Name="peN" ColumnName="peN" />
-                <ScalarProperty Name="bdEntryDCXC" ColumnName="bdEntryDCXC" />
-                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
-                <ScalarProperty Name="guShow" ColumnName="guShow" />
-                <ScalarProperty Name="EsShow" ColumnName="EsShow" />
-                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
-                <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
-                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
-                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_RptFoliosCxCByPR" FunctionName="IMModel.Store.USP_OR_RptFoliosCxCByPR">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptFoliosCxCByPR">
-                <ScalarProperty Name="lsID" ColumnName="lsID" />
-                <ScalarProperty Name="lsN" ColumnName="lsN" />
-                <ScalarProperty Name="guFrom" ColumnName="guFrom" />
-                <ScalarProperty Name="guTo" ColumnName="guTo" />
-                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
-                <ScalarProperty Name="peN" ColumnName="peN" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptFoliosInvitationByDateFolio" FunctionName="IMModel.Store.USP_OR_RptFoliosInvitationByDateFolio">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptFoliosInvitationByDateFolio">
@@ -29377,23 +29138,6 @@
                 <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
                 <ScalarProperty Name="guBookD" ColumnName="guBookD" />
                 <ScalarProperty Name="lsN" ColumnName="lsN" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_RptFoliosInvitationsOuthouseByPR" FunctionName="IMModel.Store.USP_OR_RptFoliosInvitationsOuthouseByPR">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptFoliosInvitationsOuthouseByPR">
-                <ScalarProperty Name="lsID" ColumnName="lsID" />
-                <ScalarProperty Name="lsN" ColumnName="lsN" />
-                <ScalarProperty Name="guSerie" ColumnName="guSerie" />
-                <ScalarProperty Name="guFrom" ColumnName="guFrom" />
-                <ScalarProperty Name="guTo" ColumnName="guTo" />
-                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
-                <ScalarProperty Name="peN" ColumnName="peN" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -30183,7 +29927,6 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByWave">
                 <ScalarProperty Name="BookTime" ColumnName="BookTime" />
-                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
                 <ScalarProperty Name="Books" ColumnName="Books" />
                 <ScalarProperty Name="InOuts" ColumnName="InOuts" />
                 <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
@@ -30718,15 +30461,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="DisputeStatusList">
-            <EntityTypeMapping TypeName="IMModel.DisputeStatus">
-              <MappingFragment StoreEntitySet="DisputeStatus">
-                <ScalarProperty Name="dsA" ColumnName="dsA" />
-                <ScalarProperty Name="dsN" ColumnName="dsN" />
-                <ScalarProperty Name="dsID" ColumnName="dsID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetSalesmenChanges" FunctionName="IMModel.Store.USP_OR_GetSalesmenChanges">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.SalesmenChanges">

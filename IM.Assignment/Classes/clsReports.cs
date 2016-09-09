@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.Assignment.Classes
 {
@@ -21,7 +22,7 @@ namespace IM.Assignment.Classes
     /// <history>
     ///   [vku] 20/Jul/2016 Created
     /// </history>
-    public static FileInfo ExportRptAssignmentByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignmentByPR> lstRptAssignmentByPR)
+    public async static Task<FileInfo> ExportRptAssignmentByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignmentByPR> lstRptAssignmentByPR)
     {
       var lstRptAssignmentByPRAux = lstRptAssignmentByPR.Select(c => new
       {
@@ -45,7 +46,8 @@ namespace IM.Assignment.Classes
         sunday = "",
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignmentByPRAux);
-      return  EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR(), addEnumeration: true);
+      
     }
     #endregion
 
@@ -60,10 +62,11 @@ namespace IM.Assignment.Classes
     /// <history>
     ///   [vku] 20/Jul/2016 Created
     /// </history>
-    public static FileInfo ExportRptGeneralAssignment(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignment> lstRptAssignment)
+    public async static Task<FileInfo> ExportRptGeneralAssignment(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignment> lstRptAssignment)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignment, true);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
+      
     }
     #endregion
 
@@ -78,10 +81,11 @@ namespace IM.Assignment.Classes
     /// <history>
     ///   [vku] 20/Jul/2016 Created
     /// </history>
-    public static FileInfo ExportRptAssignmentArrivals(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignmentArrivals> lstRptAssignmentArrivals)
+    public async static Task<FileInfo> ExportRptAssignmentArrivals(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignmentArrivals> lstRptAssignmentArrivals)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignmentArrivals, true);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
+      
     }
     #endregion
   }

@@ -54,7 +54,6 @@ namespace IM.Model
         public bool guQuinella { get; set; }
         public Nullable<int> gagu { get; set; }
         public bool guGroup { get; set; }
-        public string GroupN { get; set; }
         public string Equity { get; set; }
         public Nullable<int> gucl { get; set; }
         public string clN { get; set; }

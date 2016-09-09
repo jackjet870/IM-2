@@ -6,6 +6,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Base.Helpers;
+using System.Windows.Input;
 
 namespace IM.Base.Forms
 {
@@ -19,14 +20,13 @@ namespace IM.Base.Forms
     private int _guestID;
     private Guest _guest;
     private UserData _userLoguedo, _userPrimero;
-    private bool _searchPRByTxt;
     public bool _wasSave;
 
     public string PRInfo
     {
       get
       {
-        return txtguPRInfo.Text;
+        return cboguPRInfo.Text;
       }
     }
     public DateTime InfoD
@@ -64,13 +64,13 @@ namespace IM.Base.Forms
     public bool Validate()
     {
       // validamos el PR
-      if (!ValidateHelper.ValidateRequired(txtguPRInfo, "Unavailable PR", condition: true)) return false;
+      if (!ValidateHelper.ValidateRequired(cboguPRInfo, "Unavailable PR", condition: true)) return false;
 
       // validamos que el motivo de indisponibilidad exista      
-      Personnel pr = BRPersonnel.GetPersonnelById(txtguPRInfo.Text);
+      Personnel pr = BRPersonnel.GetPersonnelById(cboguPRInfo.SelectedValue.ToString());
       if (pr != null) return true;
       UIHelper.ShowMessage("The PR not exist");
-      txtguPRInfo.Focus();
+      cboguPRInfo.Focus();
       return false;
     }
 
@@ -104,7 +104,7 @@ namespace IM.Base.Forms
           {
             _userLoguedo = log.UserData;
             txtguInfoD.Text = BRHelpers.GetServerDate().ToString("dd-MM-yyyy");
-            btnCancel.IsEnabled =  btnSave.IsEnabled = txtguPRInfo.IsEnabled = cboguPRInfo.IsEnabled = true;
+            btnCancel.IsEnabled =  btnSave.IsEnabled = cboguPRInfo.IsEnabled = true;
             btnEdit.IsEnabled =  false;            
             lblUserName.Content = log.UserData.User.peN;
           }
@@ -118,62 +118,6 @@ namespace IM.Base.Forms
           UIHelper.ShowMessage("You do not have sufficient permissions to modify the contact's information", MessageBoxImage.Asterisk, "Permissions");
         }
       }
-    }
-    #endregion
-
-    #region cboguPRInfo_SelectionChanged
-    /// <summary>
-    /// Abre login para modificar cintactación
-    /// </summary>
-    /// <historyy>
-    /// [jorcanche] 24/04/2016
-    /// </historyy>
-    private void cboguPRInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      if (cboguPRInfo.SelectedIndex != -1 || txtguPRInfo.Text == string.Empty)
-      {
-        if (cboguPRInfo.SelectedValue != null)
-        {
-          if (!_searchPRByTxt)
-          {
-            txtguPRInfo.Text = ((PersonnelShort)cboguPRInfo.SelectedItem).peID;
-          }
-        }
-        else
-        {
-          txtguPRInfo.Text = string.Empty;
-        }
-      }
-    }
-
-
-    #endregion
-
-    #region txtguPRInfo_LostFocus
-    private void txtguPRInfo_LostFocus(object sender, RoutedEventArgs e)
-    {
-      _searchPRByTxt = true;
-      if (txtguPRInfo.Text != string.Empty)
-      {
-        // validamos que el motivo de indisponibilidad exista en los activos
-        Personnel PR = BRPersonnel.GetPersonnelById(txtguPRInfo.Text);
-        if (PR == null)
-        {
-          UIHelper.ShowMessage("The PR not exist");
-          txtguPRInfo.Text = string.Empty;
-          txtguPRInfo.Focus();
-        }
-        else
-        {
-           cboguPRInfo.SelectedValue = PR.peID;
-          txtguPRInfo.Text = PR.peID;
-        }
-      }
-      else
-      {
-        cboguPRInfo.SelectedIndex = -1;
-      }
-      _searchPRByTxt = false;
     }
     #endregion
 
@@ -215,30 +159,29 @@ namespace IM.Base.Forms
       if (guest.guInfoD.HasValue)
       {
         txtguInfoD.Text = guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
-      }
-
+      }    
       if (guest.guPRInfo != string.Empty)
       {
         cboguPRInfo.SelectedValue = guest.guPRInfo;
-        txtguPRInfo.Text = guest.guPRInfo;
       }
       chkguInfo.IsChecked = guest.guInfo;
 
       btnEdit.IsEnabled = true; btnSave.IsEnabled = btnCancel.IsEnabled = false;      
-      cboguPRInfo.IsEnabled = txtguPRInfo.IsEnabled = false;
+      cboguPRInfo.IsEnabled = false;
     }
     #endregion
 
     #region btnSave_Click
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;     
       try
       {
         if (Validate())
         {
           //guardamos la informacion de contacto
           _guest.guloInfo = _userLoguedo.User.peID;
-          _guest.guPRInfo = txtguPRInfo.Text;
+          _guest.guPRInfo = cboguPRInfo.SelectedValue.ToString();
           _guest.guInfoD = Convert.ToDateTime(txtguInfoD.Text).Date;
           _guest.guInfo = true;
 
@@ -264,8 +207,8 @@ namespace IM.Base.Forms
       catch (Exception ex)
       {
         UIHelper.ShowMessage(ex);
-      } 
-         
+      }
+      Mouse.OverrideCursor = null;
     }
     #endregion
 

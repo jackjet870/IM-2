@@ -100,7 +100,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule",blnDatagrids:true);
+        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule", blnDatagrids: true);
         if (strMsj == "")
         {
           skpStatus.Visibility = Visibility.Visible;

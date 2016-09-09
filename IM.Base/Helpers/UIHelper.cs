@@ -21,7 +21,6 @@ namespace IM.Base.Helpers
   /// </summary>
   /// <history>
   ///   [wtorres]  01/03/2016 Created
-  ///   
   ///   [ecanul] 17/05/2016 Modified Agregado metodo GetErrorMessage
   /// </history>
   public class UIHelper
@@ -575,7 +574,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void UpdateTarget(Control control)
     {
-      List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(control);//Obtenemos la lista de controles del contenedor
+      List<Control> lstControls = GetChildParentCollection<Control>(control);//Obtenemos la lista de controles del contenedor
       lstControls.ForEach(cl =>
       {
         switch (cl.GetType().Name)

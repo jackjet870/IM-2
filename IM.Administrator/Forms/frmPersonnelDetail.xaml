@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Personnel Detail" Height="480" Width="490">
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True">        
         <Grid Height="40" DockPanel.Dock="Bottom" Background="Transparent">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
                 <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
@@ -58,21 +59,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" HorizontalAlignment="Left">Password</TextBlock>
                         <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0">Date</TextBlock>
-                        <PasswordBox PasswordChar="*" Tag="password" Name="psbpePwd" MaxLength="10" Grid.Column="0" VerticalAlignment="Top" Password="pePwd" Margin="69,0,0,0"/>                        
-                        <DatePicker Name="dpppDT" Tag="Date" Grid.Column="1" Height="27" VerticalAlignment="Top" SelectedDate="{Binding pePwdD}" Margin="69,0,0,0">
-                            <DatePicker.Resources>
-                                <Style TargetType="{x:Type DatePickerTextBox}">
-                                    <Setter Property="Control.Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <TextBox x:Name="PART_TextBox" 
-                                    Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat={}{0:MM/dd/yyyy}}" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </DatePicker.Resources>
-                        </DatePicker>
+                        <PasswordBox PasswordChar="*" Tag="password" Name="psbpePwd" MaxLength="10" Grid.Column="0" VerticalAlignment="Top" Password="pePwd" Margin="69,0,0,0"/>
+                        <wpftk:DateTimePicker Name="dpppDT" Tag="Date" Grid.Column="1" Style="{StaticResource dtp-DateRange-TK}" Width="auto" Height="27" Value="{Binding pePwdD}" VerticalAlignment="Top"  Margin="69 0 0 0"/>                        
                     </Grid>
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>

@@ -84,7 +84,7 @@ namespace IM.SalesCloser.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       List<SaleByCloser> listaSaleByCloser = dtgr.DataContext as List<SaleByCloser>;
       if (listaSaleByCloser != null)
@@ -97,7 +97,8 @@ namespace IM.SalesCloser.Forms
         //Obtenemos el dataTable con la lista formateada
         DataTable dt = TableHelper.GetDataTableFromList(listaSaleByCloser, true);
         //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
+        FileInfo fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
+
 
         if (fi != null)
         {

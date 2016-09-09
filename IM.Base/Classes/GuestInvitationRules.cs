@@ -55,20 +55,18 @@ namespace IM.Base.Classes
       if (_fromFrmGuest)
       {
         await Task.WhenAll(
-          //Cargamos la invitacion
-          DefaultValueInvitation(_user, _guID),
           LoadAgencies(),
           LoadMaritalStatus(),
           LoadGuestStatusType(),
           LoadGifts(_user),
-          LoadAdditionalGuest(_guID)
+          LoadAdditionalGuest(_guID),
+           //Cargamos la invitacion
+           DefaultValueInvitation(_user, _guID)
           );
       }
       else
       {
         await Task.WhenAll(
-          //Cargamos la invitacion
-          DefaultValueInvitation(_user, _guID),
           //Cargamos los catalogos comunes
           LoadAgencies(),
           LoadLenguages(),
@@ -83,10 +81,11 @@ namespace IM.Base.Classes
           LoadCreditCardTypes(),
           LoadSalesRooms(),
           LoadLocations(_user, _module),
-          LoadDisputeStatus(),
           LoadGifts(_user),
           LoadProgram(_module, _invitationType, _guID),
-          LoadAdditionalGuest(_guID)
+          LoadAdditionalGuest(_guID),
+           //Cargamos la invitacion
+          DefaultValueInvitation(_user, _guID)
           );
       }
 
@@ -378,16 +377,6 @@ namespace IM.Base.Classes
 
     #endregion Locations
 
-    #region DisputeStatus
-
-    private async Task LoadDisputeStatus()
-    {
-      var result = await BRDisputeStatus.GetDisputeStatus();
-      DisputeStatus = result;
-    }
-
-    #endregion DisputeStatus
-
     #region LoadProgram
 
     /// <summary>
@@ -465,7 +454,7 @@ namespace IM.Base.Classes
 
     #region Load Guest
 
-    private async Task LoadGuest(UserData user, int guID)
+    public async Task LoadGuest(UserData user, int guID)
     {
       Guest guestObj = new Guest();
 
@@ -520,7 +509,7 @@ namespace IM.Base.Classes
 
           case EnumModule.Host:
             guestObj.guDirect = true;
-            guestObj.gusr = user.SalesRoom.srN;
+            guestObj.gusr = user.SalesRoom.srID;
             break;
 
           default:
@@ -546,13 +535,13 @@ namespace IM.Base.Classes
             break;
 
           case EnumModule.OutHouse:
-            guestObj.guloInvit = user.SalesRoom.srN;
+            guestObj.guloInvit = user.SalesRoom.srID;
             guestObj.guag = "OUTSIDE";
             break;
 
           case EnumModule.Host:
             guestObj.guDirect = true;
-            guestObj.gusr = user.SalesRoom.srN;
+            guestObj.gusr = user.SalesRoom.srID;
             break;
 
           default:
@@ -676,5 +665,5 @@ namespace IM.Base.Classes
     }
     #endregion
 
-    }
+  }
 }

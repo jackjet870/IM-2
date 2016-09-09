@@ -665,7 +665,7 @@ namespace IM.ProcessorInhouse.Forms
             if (!Convert.ToBoolean(clsFilter.EnumDetailGifts))
             {
               list.AddRange(await BRReportsByLeadSource.GetRptCostByPR(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas));
-              if (list.Any()) finfo = clsReports.ExportRptCostByPR(reportname, fileFullPath, filters, list.Cast<RptCostByPR>().ToList());
+              if (list.Any()) finfo = await clsReports.ExportRptCostByPR(reportname, fileFullPath, filters, list.Cast<RptCostByPR>().ToList());
             }
             else
             {
@@ -714,7 +714,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.Add(await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(clsFilter.DtmStart, clsFilter.DtmEnd, string.Join(",", clsFilter.LstLeadSources),
               string.Join(",", clsFilter.LstChargeTo), clsFilter.BlnAllGifts ? GetSettings.StrAll : string.Join(",", clsFilter.LstGifts)));
-            if (list.Cast<GiftsReceivedBySRData>().First().GiftsReceivedBySR.Any()) finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, fileFullPath, filters, list.First());
+            if (list.Cast<GiftsReceivedBySRData>().First().GiftsReceivedBySR.Any()) finfo = await clsReports.ExportRptGiftsReceivedBySR(reportname, fileFullPath, filters, list.First());
             break;
 
           #endregion Gifts Received by Sales Room
@@ -809,7 +809,7 @@ namespace IM.ProcessorInhouse.Forms
             list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
               clsFilter.EnumQuinellas, salesByMembershipType: clsFilter.EnumSalesByMemberShipType, basedOnArrival: clsFilter.EnumBasedOnArrival,
               external: clsFilter.EnumExternalInvitation));
-            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
+            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = await clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
             break;
 
           #endregion Production by Agency
@@ -827,7 +827,7 @@ namespace IM.ProcessorInhouse.Forms
             list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
               clsFilter.EnumQuinellas, true, clsFilter.IntStartN, clsFilter.IntEndN, clsFilter.EnumSalesByMemberShipType,
               basedOnArrival: clsFilter.EnumBasedOnArrival, external: clsFilter.EnumExternalInvitation));
-            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
+            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = await clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
             break;
 
           #endregion Production by Agency (Nights)
@@ -845,7 +845,7 @@ namespace IM.ProcessorInhouse.Forms
             list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
               clsFilter.EnumQuinellas, salesByMembershipType: clsFilter.EnumSalesByMemberShipType, basedOnArrival: clsFilter.EnumBasedOnArrival,
               external: clsFilter.EnumExternalInvitation, onlyQuinellas: true));
-            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
+            if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) finfo = await clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
             break;
 
           #endregion Production by Agency (Only Quinellas)
@@ -1094,7 +1094,7 @@ namespace IM.ProcessorInhouse.Forms
             filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
 
             list.AddRange(await BRReportsByLeadSource.GetRptRepsPaymentSummaries(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources));
-            if (list.Any()) finfo = clsReports.ExportRptRepsPaymentSummaries(reportname, fileFullPath, filters, list.Cast<RptRepsPaymentSummary>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptRepsPaymentSummaries(reportname, fileFullPath, filters, list.Cast<RptRepsPaymentSummary>().ToList());
             break;
 
           #endregion Reps Payment Summary
@@ -1106,7 +1106,7 @@ namespace IM.ProcessorInhouse.Forms
             if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
             list.Add(await BRReportsByLeadSource.GetRptScoreByPrs(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas));
-            if (list.Cast<ScoreByPRData>().First().ScoreByPR.Any()) finfo = clsReports.ExportRptScoreByPrs(reportname, fileFullPath, filters, list.First());
+            if (list.Cast<ScoreByPRData>().First().ScoreByPR.Any()) finfo = await clsReports.ExportRptScoreByPrs(reportname, fileFullPath, filters, list.First());
             break;
 
           #endregion Score by PR

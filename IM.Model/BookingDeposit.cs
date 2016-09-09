@@ -36,18 +36,12 @@ namespace IM.Model
         public string bdAuth { get; set; }
         public Nullable<bool> bdRefund { get; set; }
         public Nullable<int> bddr { get; set; }
-        public Nullable<int> bdFolioCXC { get; set; }
-        public string bdUserCXC { get; set; }
-        public Nullable<System.DateTime> bdEntryDCXC { get; set; }
         public string bdExpD { get; set; }
-        public string bdds { get; set; }
-        public Nullable<System.DateTime> bdD { get; set; }
     
         public virtual CreditCardType CreditCardType { internal get; set; }
         public virtual PaymentPlace PaymentPlace { internal get; set; }
         public virtual PaymentType PaymentType { internal get; set; }
         public virtual DepositRefund DepositsRefund { internal get; set; }
         public virtual Personnel Personnel { internal get; set; }
-        public virtual DisputeStatus DisputeStatus { get; set; }
     }
 }

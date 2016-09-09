@@ -154,6 +154,7 @@ namespace IM.Launcher.Forms
     {
       var lstMenu = new ItemsList();
 
+      lstMenu.Add(EnumMenu.Inhouse);
       lstMenu.Add(EnumMenu.Assignment);
       lstMenu.Add(EnumMenu.MailOuts);
       lstMenu.Add(EnumMenu.InventoryMovs);

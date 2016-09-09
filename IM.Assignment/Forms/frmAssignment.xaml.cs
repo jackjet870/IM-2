@@ -385,7 +385,7 @@ namespace IM.Assignment
         if (lstAssignmentByPR.Count > 0)
         {       
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-          finfo = clsReports.ExportRptAssignmentByPR("Assignment by PR", dateRangeFileName, filters, lstAssignmentByPR);
+          finfo = await clsReports.ExportRptAssignmentByPR("Assignment by PR", dateRangeFileName, filters, lstAssignmentByPR);
         }
         else
         {
@@ -414,7 +414,7 @@ namespace IM.Assignment
       if (lstAssignment.Count > 0)
       {
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = clsReports.ExportRptGeneralAssignment("General Assignment", dateRangeFileName, filters, lstAssignment);
+        finfo = await clsReports.ExportRptGeneralAssignment("General Assignment", dateRangeFileName, filters, lstAssignment);
       }
       else
       {
@@ -443,7 +443,7 @@ namespace IM.Assignment
       if (lstAssignmentArrivals.Count > 0)
       {
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = clsReports.ExportRptAssignmentArrivals("Assignment Arrivals", dateRangeFileName, filters, lstAssignmentArrivals);
+        finfo = await clsReports.ExportRptAssignmentArrivals("Assignment Arrivals", dateRangeFileName, filters, lstAssignmentArrivals);
       }
       else
       {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Windows;
 
 namespace IM.Services.Helpers
 {
@@ -106,26 +107,29 @@ namespace IM.Services.Helpers
     /// </history>
     public static long Origos_reservas_ficticias_Guardar(string hotel, int folio, string FirstName, string LastName)
     {
-
-      origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest();
       IntegerResponse Response = null;
-      long Data = 0;
 
       // Configuramos el Request
-      Request.data.hotel = hotel;
-      Request.data.folio = folio;
-      Request.data.FirstName = FirstName;
-      Request.data.LastName = LastName;
+      origos_reservas_ficticiasRequest Request = new origos_reservas_ficticiasRequest()
+      {
+        data = new origos_reservas_ficticias
+        {
+          hotel = hotel,
+          folio = folio,
+          FirstName = FirstName,
+          LastName = LastName
+        }
+      };
 
       // Invocamos al servicio web
       Response = Current.Origos_reservas_ficticias_Guardar(Request);
 
       // Si ocurrio un error
       if (Response.HasErrors)
-        throw new Exception(Response.ExceptionInfo.Message);
-     
+        MessageBox.Show(Response.ExceptionInfo.Message, "Origos_reservas_ficticias_Guardar");
 
-      return Data;
+
+      return Response.Numero;
     }
     #endregion
 
@@ -139,22 +143,19 @@ namespace IM.Services.Helpers
     /// </history>
     public static string SaveRoomChargesOpera(int ReceiptID, string ChargeTo)
     {
-
       CargoHabitacionTRNRequest Request = new CargoHabitacionTRNRequest();
       RmmsttrnRowResponse Response = null;
-      CargoHabitacionRequest[] aRoomCharges = new CargoHabitacionRequest[] { };
+      List<CargoHabitacionRequest> aRoomCharges = new List<CargoHabitacionRequest>();
       List<GiftType> aGifts = new List<GiftType>();
 
       // obtenemos los regalos con cargo a habitacion
       aRoomCharges = GetGiftsRoomCharges(ReceiptID, ref aGifts, ref Request, ChargeTo);
 
       // Si algun regalo tiene cargo a habitacion
-      if (aRoomCharges.Length > 0)
+      if (aRoomCharges.Count > 0)
       {
         // invocamos al servicio web para insertar cada regalo que se pretende asignar
         Response = InsertarCargoHabitacionTRN(Request);
-
-        // si se guardo exitosamente en Opera
 
         // actualizamos el consecutivo de cargos a habitacion
         BRRoomCharges.UpdateRoomChargeConsecutive(Request.Hotel, $"{Request.Folio}");
@@ -209,9 +210,9 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 01/Junio/2016 Created
     /// </history>
-    public static CargoHabitacionRequest[] GetGiftsRoomCharges(int ReceiptID, ref List<GiftType> aGifts, ref CargoHabitacionTRNRequest Request, string ChargeTo)
+    public static List<CargoHabitacionRequest> GetGiftsRoomCharges(int ReceiptID, ref List<GiftType> aGifts, ref CargoHabitacionTRNRequest Request, string ChargeTo)
     {
-      CargoHabitacionRequest[] aRoomCharges = new CargoHabitacionRequest[] { };
+      List<CargoHabitacionRequest> aRoomCharges = new List<CargoHabitacionRequest>();
 
       // obtenemos los cargos a habitacion de Opera que no se han dado
       List<GiftsReceiptDetailRoomChargesOpera> lstResult = BRGiftsReceiptDetail.GetGiftsReceiptDetailRoomChargesOpera(ReceiptID);
@@ -244,7 +245,7 @@ namespace IM.Services.Helpers
           aGifts.Add(_Gift);
         }
 
-        Request.CargosHabitacion = aRoomCharges;
+        Request.CargosHabitacion = aRoomCharges.ToArray();
       }
 
       return aRoomCharges;
@@ -266,27 +267,25 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 01/Junio/2016 Created
     /// </history>
-    public static void AddRoomCharge(ref CargoHabitacionRequest[] RoomCharges, string Hotel, int Folio, string User, int Receipt, string Gift, decimal Amount, string TransactionType)
+    public static void AddRoomCharge(ref List<CargoHabitacionRequest> RoomCharges, string Hotel, int Folio, string User, int Receipt, string Gift, decimal Amount, string TransactionType)
     {
-      int iLength = -1;
-
-      iLength = RoomCharges.Length;
-      iLength = iLength + 1;
-      Array.Resize(ref RoomCharges, iLength);
-
-      RoomCharges[iLength].Hotel = Hotel;
-      RoomCharges[iLength].Folio = Folio;
-      RoomCharges[iLength].Type = TransactionType;
-      RoomCharges[iLength].Cashier = User;
-      RoomCharges[iLength].Ent_oper = User;
-      RoomCharges[iLength].Note = "Gifts Receipt " + Receipt + ". Gift '" + Gift + "'. Room charge from Origos.";
-      RoomCharges[iLength].Currency = "USD";
-      RoomCharges[iLength].Auth = "0";
-      RoomCharges[iLength].Loc = "Origos";
-      RoomCharges[iLength].Inv_chk = "0";
-      RoomCharges[iLength].Bill_to = "F";
-      RoomCharges[iLength].PostDate = BRHelpers.GetServerDate();
-      RoomCharges[iLength].Entry_amt = Amount;
+      CargoHabitacionRequest newItem = new CargoHabitacionRequest()
+      {
+        Hotel = Hotel,
+        Folio = Folio,
+        Type = TransactionType,
+        Cashier = User,
+        Ent_oper = User,
+        Note = "Gifts Receipt " + Receipt + ". Gift '" + Gift + "'. Room charge from Origos.",
+        Currency = "USD",
+        Auth = "0",
+        Loc = "Origos",
+        Inv_chk = "0",
+        Bill_to = "F",
+        PostDate = BRHelpers.GetServerDate(),
+        Entry_amt = Amount
+      };
+      RoomCharges.Add(newItem);
     }
     #endregion
 

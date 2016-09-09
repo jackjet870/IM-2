@@ -8,6 +8,8 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using System.Linq;
 using IM.Model.Helpers;
+using System.Windows.Data;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Administrator.Forms
 {
@@ -43,26 +45,30 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(postLog, oldPostLog);
       LoadPersonnel();
       LoadPosts();      
-      if(enumMode!=EnumMode.ReadOnly)
+      if (enumMode!=EnumMode.ReadOnly)
       {        
         cmbpppe.IsEnabled = true;        
-        btnAccept.Visibility = Visibility.Visible;
-        txtppDT.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;              
         cmbpppo.IsEnabled = true;
         UIHelper.SetUpControls(postLog, this);
-        if(enumMode==EnumMode.Search)
+        dpppDT.IsReadOnly = false;
+        if (enumMode==EnumMode.Search)
         {
+          DataContext = postLog;
           txtppID.Visibility = Visibility.Collapsed;
           lblppID.Visibility = Visibility.Collapsed;
           cmbpppo.Visibility = Visibility.Collapsed;          
-          lblpppo.Visibility = Visibility.Collapsed;
-          txtppDT.Visibility = Visibility.Collapsed;
-          dpppDT.Visibility = Visibility.Visible;
-          cmbppChangedBy.IsEnabled = true;        
-          if(blnDate)
+          lblpppo.Visibility = Visibility.Collapsed;                    
+          cmbppChangedBy.IsEnabled = true;
+          BindingOperations.ClearBinding(dpppDT, DateTimePicker.ValueProperty);
+          dpppDT.KeyDown += dpppDT_KeyDown;
+          dpppDT.AllowTextInput = true;
+          dpppDT.FormatString = "ddd d MMM yyyy";
+          dpppDT.TimePickerVisibility = Visibility.Collapsed;
+          if (blnDate)
           {
-            dpppDT.SelectedDate = postLog.ppDT;
-          }  
+            dpppDT.Value = postLog.ppDT;
+          }
         }
         else
         {          
@@ -70,8 +76,8 @@ namespace IM.Administrator.Forms
           if (enumMode == EnumMode.Add)
           {
             postLog.ppDT = DateTime.Now;
-          }
-        }
+          }          
+        }     
       }
       DataContext = postLog;
     } 
@@ -113,10 +119,10 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode == EnumMode.Search)
         {
-          if (dpppDT.SelectedDate != null)
+          if (dpppDT.Value != null)
           {
             blnDate = true;
-            postLog.ppDT = Convert.ToDateTime(dpppDT.SelectedDate);
+            postLog.ppDT = Convert.ToDateTime(dpppDT.Value);
           }
           else
           {
@@ -209,6 +215,27 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
+    #region dpppDT_KeyDown
+    /// <summary>
+    /// Deja vacio el valor del dateTimePicker
+    /// </summary>
+    /// <history>
+    /// [emoguel] 29/08/2016 created
+    /// </history>
+    private void dpppDT_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete || e.Key == Key.Back)
+      {
+        e.Handled = true;
+        dpppDT.Value = null;
+      }
+      else if(!(e.Key==Key.Escape))
+      {
+        e.Handled = true;
+      }
+    }
+    #endregion
     #endregion
 
     #region Methods
@@ -262,6 +289,5 @@ namespace IM.Administrator.Forms
     #endregion
 
     #endregion
-    
   }
 }

@@ -2,6 +2,7 @@
 using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
+using OfficeOpenXml.Table.PivotTable;
 using System.Collections.Generic;
 
 namespace IM.SalesPR.Utilities
@@ -15,30 +16,30 @@ namespace IM.SalesPR.Utilities
     /// <history>
     /// [erosado] 23/Mar/2016  Created
     /// </history>
-    public static List<ExcelFormatTable> getExcelFormatTable()
+    public static ExcelFormatItemsList getExcelFormatTable()
     {
-      List<ExcelFormatTable> formatColumns = new List<ExcelFormatTable>();
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sale ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "SR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Member. #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sale Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Chk-Out D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }); 
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR2", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR2 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }); 
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR3", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR3 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Q", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });//Boolean
-      formatColumns.Add(new ExcelFormatTable() { Title = "Amount", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });//Currency
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cxld", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });//Boolean
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cancel D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
+      ExcelFormatItemsList  formatColumns = new ExcelFormatItemsList();
+      formatColumns.Add("Sale ID", "saID");
+      formatColumns.Add("LS", "sals");
+      formatColumns.Add("SR", "sasr");
+      formatColumns.Add("Member. #", "saMembershipNum");
+      formatColumns.Add("Sale Type", "stN");
+      formatColumns.Add("Date", "saD", format:  EnumFormatTypeExcel.Date);//Date
+      formatColumns.Add("Proc Date", "saProcD", format:  EnumFormatTypeExcel.Date);//Date
+      formatColumns.Add("Last Name", "saLastName1");
+      formatColumns.Add("Chk-Out D", "guCheckOutD", format:  EnumFormatTypeExcel.Date);//Date
+      formatColumns.Add("Agency ID", "guag");
+      formatColumns.Add("Agency", "agN");
+      formatColumns.Add("PR", "saPR1");
+      formatColumns.Add("PR Name", "PR1N"); 
+      formatColumns.Add("PR2", "saPR2");
+      formatColumns.Add("PR2 Name", "PR2N"); 
+      formatColumns.Add("PR3", "saPR3");
+      formatColumns.Add("PR3 Name", "PR3N");
+      formatColumns.Add("Q", "guQ", format:  EnumFormatTypeExcel.Boolean);//Boolean
+      formatColumns.Add("Amount", "saGrossAmount", format:  EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);//Currency
+      formatColumns.Add("Cxld", "saCancel", format:  EnumFormatTypeExcel.Boolean);//Boolean
+      formatColumns.Add("Cancel D", "saCancelD", format:  EnumFormatTypeExcel.Date);//Date
       return formatColumns;
     }
   }

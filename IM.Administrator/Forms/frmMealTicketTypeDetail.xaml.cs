@@ -97,7 +97,7 @@ namespace IM.Administrator.Forms
           }
           else
           {
-            MessageBox.Show(strMsj);
+            UIHelper.ShowMessage(strMsj);
           }
         }
       }

@@ -32,6 +32,8 @@ namespace IM.Base.Forms
     #endregion
 
     #region metodos de funcion
+
+    #region LoadGrid
     /// <summary>
     /// Carga el Grid con los datos de BD
     /// </summary>
@@ -44,12 +46,17 @@ namespace IM.Base.Forms
         cvsPersonnelDaysOff.Source = BRPersonnelDayOff.GetPersonnelDaysOff(placeID, teamType);
       }
       StaEnd();
-    }
+    } 
+    #endregion
 
+    #region EnableControls
     /// <summary>
     /// Habilita o deshabilita los controles del formulario
     /// </summary>
     /// <param name="stats">0-Deshabilita Edicion, 1-Habilita Edicion</param>
+    /// <history>
+    /// [ecanul] 19/03/2016 Created
+    /// </history> 
     void EnableControls(int stats)
     {
       if (stats == 0) //Modo Solo vista
@@ -73,8 +80,10 @@ namespace IM.Base.Forms
         dtgpersonnelDayOff.IsEnabled = false;
 
       }
-    }
+    } 
+    #endregion
 
+    #region CleanControls
     /// <summary>
     /// Limpia los controles del Formulario
     /// <history>[ECANUL] 09-03-2016 Created</history>
@@ -90,8 +99,10 @@ namespace IM.Base.Forms
       chkFriday.IsChecked = false;
       chkSaturday.IsChecked = false;
       chkSunday.IsChecked = false;
-    }
+    } 
+    #endregion
 
+    #region LoadPersonnelInfo
     /// <summary>
     /// Llena el formulario con datos del Personal Seleccionado
     /// <history>[ECANUL] 09-03-2016 Created</history>
@@ -125,10 +136,12 @@ namespace IM.Base.Forms
       }
       else
       {
-        MessageBox.Show("No salesman has been selected", "Days Off");
+        UIHelper.ShowMessage("No salesman has been selected");
       }
-    }
+    } 
+    #endregion
 
+    #region CountNumDays
     /// <summary>
     /// Revisa si un Chek esta activo e incrementa un contador
     /// </summary>
@@ -141,12 +154,17 @@ namespace IM.Base.Forms
       if (chk.IsChecked == true)
         numDays = numDays + 1;
       return numDays;
-    }
+    } 
+    #endregion
 
+    #region CheksValidate
     /// <summary>
     /// Valida que los Chesk cumplan con las reglas antes de fuardar
     /// </summary>
     /// <returns></returns>
+    /// <history>
+    /// [ecanul] 19/03/2016 Created
+    /// </history> 
     bool CheksValidate()
     {
       int numDays = 0;
@@ -161,18 +179,20 @@ namespace IM.Base.Forms
       //Valida que al menos haya un dia libre
       if (numDays == 0)
       {
-        MessageBox.Show("Specify at least one day off", "Specify a day", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Specify at least one day off");
         return false;
       }
       //Valida que no tenga mas de 2 dias libres
       if (numDays > 2)
       {
-        MessageBox.Show("The Personnel should not take more than 2 days off", "Maximum 2 days", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("The Personnel should not take more than 2 days off");
         return false;
       }
       return true;
-    }
+    } 
+    #endregion
 
+    #region StaStart
     /// <summary>
     /// Indica en la barra de estado que se inicio un proceso
     /// </summary>
@@ -184,7 +204,9 @@ namespace IM.Base.Forms
       imgStatusBarMessage.Visibility = Visibility.Visible;
       this.Cursor = Cursors.Wait;
     }
+    #endregion
 
+    #region StaEnd
     /// <summary>
     /// Indica en la barra de estado que se finalizo un proceso
     /// </summary>
@@ -194,7 +216,8 @@ namespace IM.Base.Forms
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
       this.Cursor = null;
-    }
+    } 
+    #endregion
 
     #endregion
 

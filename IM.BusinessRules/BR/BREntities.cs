@@ -19,6 +19,11 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <typeparam name="T">Tipo de entidad</typeparam>
     /// <param name="entitySave">objeto a guardar</param>
+    /// <param name="enumMode">
+    /// Add. Agrega
+    /// Edit. Actualiza
+    /// Delete. Elimina
+    /// </param>
     /// <returns>0. No se guardó | 1. Se guardó | -1 Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 25/04/2016

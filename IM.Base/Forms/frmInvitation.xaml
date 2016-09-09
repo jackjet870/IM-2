@@ -221,8 +221,8 @@
                                                                   ItemsSource="{Binding Languages}" Style="{StaticResource cbx-General}"
                                                                   ItemTemplate="{StaticResource cbx-Languages-Concat}"
                                                                   ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
-                                                                  SelectedValuePath="guID"
-                                                                  SelectedValue="{Binding Guest.gula, Mode=OneWayToSource}"/>
+                                                                  SelectedValuePath="laID"
+                                                                  SelectedValue="{Binding Guest.gula,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -418,7 +418,7 @@
                                                                   ItemTemplate="{StaticResource cbx-Location-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="loID"
-                                                                  SelectedValue="{Binding Guest.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location">
+                                                                  SelectedValue="{Binding Guest.guloInvit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Location" SelectionChanged="cmbLocation_SelectionChanged">
                                                             </ComboBox>
                                                         </StackPanel>
                                                     </StackPanel>
@@ -518,7 +518,8 @@
                                                                   ItemTemplate="{StaticResource cbx-Agency-img}"
                                                                   ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="agID"
-                                                                  SelectedValue="{Binding Guest.guag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Agency"/>
+                                                                  SelectedValue="{Binding Guest.guag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Agency"
+                                                                      SelectionChanged="cmbOtherInfoAgency_SelectionChanged"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -541,7 +542,7 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <StackPanel HorizontalAlignment="Left">
                                                             <TextBlock Text="Pax" Margin="0,5"/>
-                                                            <TextBox Name="txtguPax" Width="50" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBox Name="txtguPax" Width="50" Validation.ErrorTemplate="{x:Null}" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N1}}"/>
                                                         </StackPanel>
                                                         <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                             <TextBlock Text="Arrival*" Margin="0,5"/>
@@ -586,7 +587,7 @@
                                                           ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="gsID"
-                                                          SelectedValue="{Binding Guest.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged" Tag="Guest Status"/>
+                                                          SelectedValue="{Binding Guest.guGStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cmbGuestStatus_SelectionChanged"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Viewbox>
@@ -793,13 +794,13 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Button x:Name="btnSearchGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="btnSearchGuestAdditional_Click">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Search.ico" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" Width="15" Height="15" HorizontalAlignment="Left" />
                                                     <TextBlock Text="Search" HorizontalAlignment="Right" />
                                                 </StackPanel>
                                             </Button>
                                             <Button x:Name="btnAddGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="BtnAddGuestAdditional_OnClick">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/Add.png" Width="15" Height="15" HorizontalAlignment="Left" />
+                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png" Width="15" Height="15" HorizontalAlignment="Left" />
                                                     <TextBlock Text="Add" HorizontalAlignment="Right" />
                                                 </StackPanel>
                                             </Button>
