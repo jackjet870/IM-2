@@ -86,7 +86,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 11/Abr/2016 Created
     /// </history>
-    public static async System.Threading.Tasks.Task<FileInfo> ExportRptGiftsReceivedBySR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
+    internal static async System.Threading.Tasks.Task<FileInfo> ExportRptGiftsReceivedBySR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
       var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
       var currencies = lstRptGiftsReceivedBySR.Currencies;

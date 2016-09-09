@@ -451,7 +451,7 @@ namespace IM.ProcessorOuthouse.Forms
 
             GiftsReceivedBySRData lstRptGiftsReceivedBySR = await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(
             _dtmStart, _dtmEnd,
-            string.Join(",", filter.AllLeadSources),
+            string.Join(",", filter._lstLeadSources),
             filter.AllChargeTo ? "ALL" : string.Join(",", filter._lstChargeTo),
             filter.AllGift ? "ALL" : string.Join(",", filter._lstGifts));
             if (lstRptGiftsReceivedBySR.GiftsReceivedBySR.Any())
