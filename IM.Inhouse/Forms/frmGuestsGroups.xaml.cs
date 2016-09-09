@@ -310,7 +310,7 @@ namespace IM.Inhouse.Forms
     /// </history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(App.User, EnumProgram.Inhouse);
+      frmSearchGuest frmSGuest = new frmSearchGuest(App.User, EnumProgram.Inhouse, _date);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
       frmSGuest.lstGuestAdd = new List<Guest>();
