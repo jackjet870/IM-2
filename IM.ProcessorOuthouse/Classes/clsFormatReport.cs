@@ -298,20 +298,18 @@ namespace IM.ProcessorOuthouse.Classes
       lst.Add("T Tours", "TotalTours", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
       lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
 
-      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
-      lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales_PROC", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount_PROC", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
 
 
-      lst.Add("Sales Total", "SalesTotal", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
-      lst.Add("Amount Total", "SalesAmountTotal", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales Total", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount Total", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
 
       lst.Add("Ca%", "CancelFactor", format: EnumFormatTypeExcel.Percent);//, formula: "IF(([SalesAmountTotal]) =0,0,[SalesAmountCancel]/([SalesAmountTotal]+[SalesAmountCancel]))");
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmountTotal]/[Shows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[SalesTotal]/[Shows])");
-      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([SalesTotal] =0,0,[SalesAmountTotal]/[SalesTotal])");
-      lst.Add("mtN", "mtN", axis: ePivotFieldAxis.Column);
-      lst.Add("Sales Cancelled", "SalesCancel", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "CANCELLED", isVisible: false);
-      lst.Add("Amount Cancelled ", "SalesAmountCancel", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "CANCELLED", isVisible: false);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] =0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      lst.Add("mtN", "mtN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
       return lst;
     }
 
@@ -374,6 +372,7 @@ namespace IM.ProcessorOuthouse.Classes
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
 
+      lst.Add("Sales Room", "SalesRoomN", format: EnumFormatTypeExcel.General, axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Agency ID", "Agency", format: EnumFormatTypeExcel.General, axis: ePivotFieldAxis.Row);
       lst.Add("Agency", "AgencyN", format: EnumFormatTypeExcel.General, axis: ePivotFieldAxis.Row);
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
@@ -387,18 +386,19 @@ namespace IM.ProcessorOuthouse.Classes
       lst.Add("Save", "SaveTours", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
       lst.Add("T Tours", "TotalTours", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
       lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
-      lst.Add("Sales Total", "SalesTotal", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
-      lst.Add("Amount Total", "SalesAmountTotal", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
+
+      lst.Add("Sales", "Sales_PROC", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Amount", "SalesAmount_PROC", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+
+      lst.Add("Sales Total", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount Total", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+
       lst.Add("Ca%", "CancelFactor", format: EnumFormatTypeExcel.Percent);//, isCalculated: true, formula: "IF(([SalesAmountTotal]+[SalesAmountCancel]) =0,0,[SalesAmountCancel]/([SalesAmountTotal]+[SalesAmountCancel]))");
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmountTotal]/[Shows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[SalesTotal]/[Shows])");
-      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([SalesTotal] =0,0,[SalesAmountTotal]/[SalesTotal])");
-      lst.Add("mtN", "mtN", axis: ePivotFieldAxis.Column);
-      //lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, Order = 14, function: DataFieldFunctions.Sum);
-      //lst.Add("Amount", "SalesAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, Order = 15, function: DataFieldFunctions.Sum);
-      //lst.Add("Sales Cancelled", "SalesCancel", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, Order = 16, function: DataFieldFunctions.Sum);
-      //lst.Add("Amount Cancelled ", "SalesAmountCancel", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, Order = 17, function: DataFieldFunctions.Sum);
-      lst.Add("Sales Room", "SalesRoomN", format: EnumFormatTypeExcel.General, aligment: ExcelHorizontalAlignment.Left, axis: ePivotFieldAxis.Row, isVisible: false);
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] =0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      lst.Add("mtN", "mtN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+
       return lst;
     }
 

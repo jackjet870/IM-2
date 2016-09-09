@@ -337,10 +337,9 @@ namespace IM.ProcessorOuthouse.Classes
       {
         var lstProductionByAgencySalesMembershipType = lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse_SalesByMembershipType;
         var lstMembershipType = lstRptProductionByAgencyOuthouse.MembershipTypes;
+        lstProductionByAgencySalesMembershipType.ForEach(c => { c.MembershipType = lstMembershipType.FirstOrDefault(m => m.mtID == c.MembershipType)?.mtN ?? "";  });
 
-        var lstProductionByAgencySalesMembershipTypeAux = (from prodbyAgency in lstProductionByAgency
-                                                           join prodByAgencyMemshipType in lstProductionByAgencySalesMembershipType on prodbyAgency.Agency equals prodByAgencyMemshipType.Agency
-                                                           join mt in lstMembershipType on prodByAgencyMemshipType.MembershipType equals mt.mtID
+        var lstProductionByAgencySalesMembershipTypeAux = (from prodbyAgency in lstProductionByAgency                                     
                                                            select new
                                                            {
                                                              prodbyAgency.Agency,
@@ -355,13 +354,11 @@ namespace IM.ProcessorOuthouse.Classes
                                                              prodbyAgency.SaveTours,
                                                              prodbyAgency.TotalTours,
                                                              prodbyAgency.UPS,
-                                                             mt.mtN,
-                                                             prodByAgencyMemshipType.Sales,
-                                                             prodByAgencyMemshipType.SalesAmount,
-                                                             SalesCancel = prodbyAgency.Sales_CANCEL,
-                                                             SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
-                                                             SalesTotal = prodbyAgency.Sales_TOTAL,
-                                                             SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
+                                                             mtN = lstProductionByAgencySalesMembershipType.FirstOrDefault(c=> c.Agency == prodbyAgency.Agency)?.MembershipType ?? "",//submt == null ? string.Empty : submt.mtN,
+                                                             prodbyAgency.Sales_PROC,
+                                                             prodbyAgency.SalesAmount_PROC,//Sales = subProdByAgencyMemberShipType == null ? 0 : subProdByAgencyMemberShipType.Sales,
+                                                             prodbyAgency.Sales_TOTAL,
+                                                             prodbyAgency.SalesAmount_TOTAL,
                                                              prodbyAgency.ShowsFactor,
                                                              prodbyAgency.CancelFactor,
                                                              prodbyAgency.Efficiency,
@@ -369,7 +366,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                              prodbyAgency.AverageSale
                                                            }).ToList();
 
-        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
+        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: false);
         return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
       }
     }
@@ -429,10 +426,9 @@ namespace IM.ProcessorOuthouse.Classes
       {
         var lstProductionByAgencySalesMembershipType = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse_SalesByMembershipType;
         var lstMembershipType = lstRptProductionByAgencySalesRoomOuthouse.MembershipTypes;
+        lstProductionByAgencySalesMembershipType.ForEach(c => { c.MembershipType = lstMembershipType.FirstOrDefault(m => m.mtID == c.MembershipType)?.mtN ?? ""; });
 
         var lstProductionByAgencySalesMembershipTypeAux = (from prodbyAgency in lstProductionByAgency
-                                                           join prodByAgencyMemshipType in lstProductionByAgencySalesMembershipType on prodbyAgency.Agency equals prodByAgencyMemshipType.Agency
-                                                           join mt in lstMembershipType on prodByAgencyMemshipType.MembershipType equals mt.mtID
                                                            select new
                                                            {
                                                              prodbyAgency.SalesRoomN,
@@ -448,13 +444,11 @@ namespace IM.ProcessorOuthouse.Classes
                                                              prodbyAgency.SaveTours,
                                                              prodbyAgency.TotalTours,
                                                              prodbyAgency.UPS,
-                                                             mt.mtN,
-                                                             prodByAgencyMemshipType.Sales,
-                                                             prodByAgencyMemshipType.SalesAmount,
-                                                             //SalesCancel = prodbyAgency.Sales_CANCEL,
-                                                             //SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
-                                                             //SalesTotal = prodbyAgency.Sales_TOTAL,
-                                                             //SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
+                                                             mtN = lstProductionByAgencySalesMembershipType.FirstOrDefault(c => c.Agency == prodbyAgency.Agency)?.MembershipType ?? "",//submt == null ? string.Empty : submt.mtN,
+                                                             prodbyAgency.Sales_PROC,
+                                                             prodbyAgency.SalesAmount_PROC,//Sales = subProdByAgencyMemberShipType == null ? 0 : subProdByAgencyMemberShipType.Sales,
+                                                             prodbyAgency.Sales_TOTAL,
+                                                             prodbyAgency.SalesAmount_TOTAL,
                                                              prodbyAgency.ShowsFactor,
                                                              prodbyAgency.CancelFactor,
                                                              prodbyAgency.Efficiency,
@@ -462,8 +456,8 @@ namespace IM.ProcessorOuthouse.Classes
                                                              prodbyAgency.AverageSale
                                                            }).ToList();
 
-        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
-        return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true, fileFullPath: fileFullPath);
+        dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: false);
+        return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
       }
     }
 
