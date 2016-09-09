@@ -22,11 +22,11 @@ namespace IM.ProcessorInhouse.Classes
     internal static ExcelFormatItemsList GetRptCostByPRFormat()
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
-      lst.Add("PR ID","PR",  aligment:ExcelHorizontalAlignment.Right);
+      lst.Add("PR ID", "PR", aligment: ExcelHorizontalAlignment.Right);
       lst.Add("PR Name", "PRN");
-      lst.Add("Shows","Shows",format: EnumFormatTypeExcel.Number, aligment:ExcelHorizontalAlignment.Right);
-      lst.Add("Total Cost", "TotalCost", format:EnumFormatTypeExcel.Currency, aligment:ExcelHorizontalAlignment.Right);
-      lst.Add("Average Cost", "AverageCost", format:EnumFormatTypeExcel.Currency, aligment: ExcelHorizontalAlignment.Right, isCalculated:true, formula: "IF([Shows]=0,0,[TotalCost]/[Shows])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, aligment: ExcelHorizontalAlignment.Right);
+      lst.Add("Total Cost", "TotalCost", format: EnumFormatTypeExcel.Currency, aligment: ExcelHorizontalAlignment.Right);
+      lst.Add("Average Cost", "AverageCost", format: EnumFormatTypeExcel.Currency, aligment: ExcelHorizontalAlignment.Right, isCalculated: true, formula: "IF([Shows]=0,0,[TotalCost]/[Shows])");
       return lst;
     }
 
@@ -748,20 +748,19 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ExcelFormatTable> GetRptRepsPaymentSummaryFormat()
+    internal static ExcelFormatItemsList GetRptRepsPaymentSummaryFormat()
     {
-      return new List<ExcelFormatTable>
-      {
-        new ExcelFormatTable{Title = "Rep",Order = 0, Axis = ePivotFieldAxis.Row},
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
 
-        new ExcelFormatTable {Title = "#", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number,Alignment = ExcelHorizontalAlignment.Center,Formula = "SUBTOTAL(109,['#])"},
-        new ExcelFormatTable {Title = "Shows Payment", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency, TotalsRowFunction = RowFunctions.Sum},
-        new ExcelFormatTable {Title = "Sub Total", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency, TotalsRowFunction = RowFunctions.Sum},
-        new ExcelFormatTable {Title = "# ", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Center,Formula = "SUBTOTAL(109,['# ])"},
-        new ExcelFormatTable {Title = "Sales Payment", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency, TotalsRowFunction = RowFunctions.Sum},
-        new ExcelFormatTable {Title = "Sub Total ", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency,TotalsRowFunction = RowFunctions.Sum},
-        new ExcelFormatTable {Title = "Total", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency, TotalsRowFunction = RowFunctions.Sum}
-      };
+      lst.Add("Rep", "agrp");
+      lst.Add("#", "TotalShow",  format: EnumFormatTypeExcel.Number, aligment: ExcelHorizontalAlignment.Center,superHeader:"Show", function: DataFieldFunctions.Sum);
+      lst.Add("Shows Payment", "agShowPay",  format: EnumFormatTypeExcel.Currency,  function: DataFieldFunctions.Sum, superHeader: "Show");
+      lst.Add("Sub Total", "SumagShowPay",  format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "Show");
+      lst.Add("# ", "TotalSales",  format: EnumFormatTypeExcel.Number, aligment: ExcelHorizontalAlignment.Center, function: DataFieldFunctions.Sum, superHeader: "Sales");
+      lst.Add("Sales Payment", "agSalePay",  format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "Sales");
+      lst.Add("Sub Total ", "SumSalesPay",  format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "Sales");
+      lst.Add("Total", "TotalPay",  format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      return lst;
     }
 
     #endregion GetRptRepsPaymentSummaryFormat

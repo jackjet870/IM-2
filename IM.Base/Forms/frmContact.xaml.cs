@@ -20,7 +20,6 @@ namespace IM.Base.Forms
     private int _guestID;
     private Guest _guest;
     private UserData _userLoguedo, _userPrimero;
-    private bool _searchPRByTxt;
     public bool _wasSave;
 
     public string PRInfo

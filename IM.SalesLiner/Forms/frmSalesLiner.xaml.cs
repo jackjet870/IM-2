@@ -79,7 +79,7 @@ namespace IM.SalesLiner.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var listaSaleByLiner = dtgr.DataContext as List<SaleByLiner>;
       if (listaSaleByLiner != null)
@@ -90,7 +90,7 @@ namespace IM.SalesLiner.Forms
         //Obtenemos el dataTable con la lista formateada
         var dt = TableHelper.GetDataTableFromList(listaSaleByLiner, true);
         //Creamos el reporte
-        var fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
+        var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
 
         if (fi != null)
         {

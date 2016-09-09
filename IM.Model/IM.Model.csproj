@@ -266,7 +266,7 @@
     <Compile Include="Enums\EnumRptGeneral.cs" />
     <Compile Include="Enums\EnumRptLeadSource.cs" />
     <Compile Include="Enums\EnumRptPR.cs" />
-    <Compile Include="Enums\EnumRptRoomSales.cs" />
+    <Compile Include="Enums\EnumRptSalesRoom.cs" />
     <Compile Include="Enums\EnumRptSalesRoomAndSalesman.cs" />
     <Compile Include="Enums\EnumPredefinedDate.cs" />
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />

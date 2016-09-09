@@ -124,7 +124,7 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 28/Abr/2016 Created
     /// </history>
-    private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
+    private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
     {
       if (dgvLoginsLog.Items.Count <= 0) return;
 
@@ -148,7 +148,8 @@ namespace IM.ProcessorGeneral.Forms
       frmReportQ.AddReport(fileFullPath, strReportName);
       try
       {
-        var finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtRptLoginsLog, strReportName, "", clsFormatReport.RptLoginsLog(), fileFullPath: fileFullPath);
+        
+        var finfo = await EpplusHelper.CreateCustomExcel(dtRptLoginsLog, filters, strReportName, string.Empty, clsFormatReport.RptLoginsLog(), fileFullPath: fileFullPath, addEnumeration: true);
 
         if (finfo == null)
         {

@@ -419,7 +419,8 @@ namespace IM.ProcessorOuthouse.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
-      try {
+      try
+      {
         switch (strReport)
         {
           #region Deposits Payment By PR
@@ -470,7 +471,7 @@ namespace IM.ProcessorOuthouse.Forms
               _dtmStart, _dtmEnd,
               string.Join(",", filter._lstLeadSources));
             if (lstRptGuestsShowNoPresentedInvitation.Any())
-              finfo = clsReports.ExportRptGuestsShowNoPresentedInvitation(strReport, fileFullPath, filters, lstRptGuestsShowNoPresentedInvitation);
+              finfo = await clsReports.ExportRptGuestsShowNoPresentedInvitation(strReport, fileFullPath, filters, lstRptGuestsShowNoPresentedInvitation);
             break;
 
           #endregion Guests Show No Presented Invitation
@@ -978,7 +979,7 @@ namespace IM.ProcessorOuthouse.Forms
         }
         _frmReportQueue.SetFileInfo(fileFullPath, finfo);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         _frmReportQueue.SetFileInfoError(fileFullPath);
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
@@ -1070,7 +1071,8 @@ namespace IM.ProcessorOuthouse.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
-      try {
+      try
+      {
         switch (strReport)
         {
           #region Production by Age
@@ -1392,11 +1394,11 @@ namespace IM.ProcessorOuthouse.Forms
         }
         _frmReportQueue.SetFileInfo(fileFullPath, finfo);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         _frmReportQueue.SetFileInfoError(fileFullPath);
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
-      } 
+      }
     }
 
     #endregion ShowByPRReport
@@ -1462,7 +1464,8 @@ namespace IM.ProcessorOuthouse.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
-      try {
+      try
+      {
         switch (strReport)
         {
           #region Folios Invitations Outhouse
@@ -1478,7 +1481,7 @@ namespace IM.ProcessorOuthouse.Forms
               string.Join(",", filter._lstPRs)
               );
             if (lstRptFoliosInvitationByDateFolio.Any())
-              finfo = clsReports.ExportRptFoliosInvitationByDateFolio(strReport, fileFullPath, filters, lstRptFoliosInvitationByDateFolio);
+              finfo = await clsReports.ExportRptFoliosInvitationByDateFolio(strReport, fileFullPath, filters, lstRptFoliosInvitationByDateFolio);
             break;
           #endregion
 
@@ -1577,7 +1580,8 @@ namespace IM.ProcessorOuthouse.Forms
       _isConfigured = false;
       MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
       if (result != MessageBoxResult.Yes) _isConfigured = false;
-      else {
+      else
+      {
         _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
         if (_systemConfig.ShowDialog() == true)
         {

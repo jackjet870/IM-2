@@ -35,7 +35,7 @@ namespace IM.Base.Classes
     /// [aalcocer] 11/08/2016 Modified.  Se hizo generico
     /// [erosado] 31/08/2016  Modfied. Ahora el Store te devuelve el mensaje de error.
     /// </history>
-    public static bool ValidateFolio(Guest guest, EnumProgram enumProgram, Control txtFolio, FrameworkElement btnSearchReservation, TabItem tabItem)
+    public static bool ValidateFolio(Guest guest, EnumProgram enumProgram, Control txtFolio, FrameworkElement btnSearchReservation, TabItem tabItem, Guest cloneGuest = null)
     {
       bool isValid = true;
       string serie = string.Empty;
@@ -52,7 +52,6 @@ namespace IM.Base.Classes
           //Si el folio de reservacion NO es valido hay que escoger otro
           if (!isValid)
           {
-            
             UIHelper.ShowMessage("The Reservation Folio was already used for Guest ID");
             tabItem.IsSelected = true;
             btnSearchReservation.Focus();
@@ -74,15 +73,20 @@ namespace IM.Base.Classes
         }
         else
         {
-          //validamos que el folio exista en el catalogo de folios de invitacion y que no haya sido utilizado por otra invitacion
-          var validationResult = BRFolios.ValidateFolioInvitationOutside(guest.guID, serie, numero);
-
-          //Si trae un mensaje quiere decir que falló
-          if (!string.IsNullOrWhiteSpace(validationResult))
+          //Si el folio de invitacion es diferente (Nuevo, o Modificado) entonces se valida, de lo contrario no se valida.
+          if (guest.guOutInvitNum != cloneGuest?.guOutInvitNum)
           {
-            UIHelper.ShowMessage(validationResult);
-            isValid = false;
+            //validamos que el folio exista en el catalogo de folios de invitacion y que no haya sido utilizado por otra invitacion
+            var validationResult = BRFolios.ValidateFolioInvitationOutside(guest.guID, serie, numero);
+
+            //Si trae un mensaje quiere decir que falló
+            if (!string.IsNullOrWhiteSpace(validationResult))
+            {
+              UIHelper.ShowMessage(validationResult);
+              isValid = false;
+            }
           }
+
         }
         if (!isValid)
         {
@@ -91,6 +95,8 @@ namespace IM.Base.Classes
         }
 
       }
+
+
       return isValid;
     }
 
@@ -313,13 +319,17 @@ namespace IM.Base.Classes
             //Validamos la cantidad maxima que podemos regalar de el regalo en específico.
             Gifts.ValidateMaxQuantity(gift, invitationGift.igQty, false, ref invitationGift, nameof(invitationGift.igQty));
 
-            //Si es OutHouse y ya selecciono guestStatusType
-            if (program == EnumProgram.Outhouse && guestStatusType != null && guestId != 0)
+            //Si es InHouse y ya selecciono guestStatusType
+            if (program == EnumProgram.Inhouse && guestStatusType != null && guestId != 0)
             {
               //Obtenemos el GuestStatusInfo
               var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(guestId, 0);
-              //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
-              Gifts.ValidateGiftsGuestStatus(dtg, guestStatusInfo, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
+
+              if (guestStatusInfo != null)
+              {
+                //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
+                Gifts.ValidateGiftsGuestStatus(dtg, guestStatusInfo, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
+              }
             }
 
             //Calculamos los costos y los precios
@@ -389,7 +399,7 @@ namespace IM.Base.Classes
     {
       string _res = string.Empty;
       //Validamos el folio de reservacion (InHouse & OutHouse)
-      if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral))return false;
+      if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral, dbContext.CloneGuest)) return false;
       //Si la fecha de un booking no este en fecha cerrada
       if (!ValidateBookingCloseDate(dbContext)) return false;
       //Validamos que el Numero de habitaciones este en el rango permitido
@@ -428,16 +438,16 @@ namespace IM.Base.Classes
           _isValid = false;
         }
       }
+
       //Validamos los regalos de la invitacion
-      else if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
+      if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
       //Validamos las Tarjetas de credito
       else if (!ValidateGuestCreditCard(dbContext.GuestCreditCardList.ToList())) _isValid = false;
-
       //Burned Hotel
       else if (string.IsNullOrEmpty(dbContext.Guest.guHotelB) && dbContext.Guest.guDepositTwisted > 0)
       {
         UIHelper.ShowMessage("Specify the Resorts");
-        form.cmbGuestStatus.Focus();
+        form.cmbResorts.Focus();
         _isValid = false;
       }
 
@@ -810,7 +820,7 @@ namespace IM.Base.Classes
 
         case "bdAmount":
           {
-            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);            
+            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
           }
 
         #endregion Amount
@@ -823,7 +833,7 @@ namespace IM.Base.Classes
             {
               if (bookingDeposit.bdReceived > bookingDeposit.bdAmount)
               {
-                UIHelper.ShowMessage("Received can not be greater than Deposit.");                
+                UIHelper.ShowMessage("Received can not be greater than Deposit.");
                 return false;
               }
               else if (bookingDeposit.bdReceived == bookingDeposit.bdAmount)

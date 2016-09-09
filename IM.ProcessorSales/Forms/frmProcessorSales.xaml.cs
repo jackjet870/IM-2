@@ -37,7 +37,7 @@ namespace IM.ProcessorSales.Forms
     //Detalles de los filtros
     private bool _multiDate, _onlyOnRegister, _allSalesRoom;
     //Listado de reportes
-    private EnumRptRoomSales _rptRoomSales;
+    private EnumRptSalesRoom _rptRoomSales;
     private EnumRptSalesRoomAndSalesman _rptSalesman;
 
     #endregion
@@ -67,7 +67,7 @@ namespace IM.ProcessorSales.Forms
     private void LoadGrids()
     {
       //Reportes por Sales Room
-      dtgSalesRoom.ItemsSource = EnumToListHelper.GetList<EnumRptRoomSales>().OrderBy(x => x.Value);
+      dtgSalesRoom.ItemsSource = EnumToListHelper.GetList<EnumRptSalesRoom>().OrderBy(x => x.Value);
 
       //Reportes por Sales Room y Salesman
       dtgSalesman.ItemsSource = EnumToListHelper.GetList<EnumRptSalesRoomAndSalesman>().OrderBy(x => x.Value);
@@ -176,7 +176,7 @@ namespace IM.ProcessorSales.Forms
     /// <history>
     /// [ecanul] 05/05/2016 Created
     /// </history>
-    private async void ShowReportBySalesRoom(EnumRptRoomSales rptRoomSales, ClsFilter clsFilter)
+    private async void ShowReportBySalesRoom(EnumRptSalesRoom rptRoomSales, ClsFilter clsFilter)
     {
       FileInfo file = null;
       //Deberia validarse con 
@@ -196,7 +196,7 @@ namespace IM.ProcessorSales.Forms
         new Tuple<string, string>("Date Range", dateRange)
       };
       //Si es cualquier reporte menos Concentrate Daily Sales o Multidate (porque sus grids son diferentes) se agrega de manera comun
-      if (rptRoomSales != EnumRptRoomSales.ConcerntrateDailySales && rptRoomSales != EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges)
+      if (rptRoomSales != EnumRptSalesRoom.ConcerntrateDailySales && rptRoomSales != EnumRptSalesRoom.StatsBySegmentsCategoriesMultiDatesRanges)
       {
         //Si es de solo un registro El sales Room es unico, si no Se toma por Todos o por los seleccionados
         if (_onlyOnRegister)
@@ -205,7 +205,7 @@ namespace IM.ProcessorSales.Forms
           filters.Add(new Tuple<string, string>("Sales Room",
             _frmFilter.dtgSalesRoom.Items.Count == clsFilter.LstSalesRooms.Count ? "All" : string.Join(",", clsFilter.LstSalesRooms)));
       }
-      if (rptRoomSales == EnumRptRoomSales.StatsByCloser || rptRoomSales == EnumRptRoomSales.StatsByExitCloser || rptRoomSales == EnumRptRoomSales.StatsByFtb)
+      if (rptRoomSales == EnumRptSalesRoom.StatsByCloser || rptRoomSales == EnumRptSalesRoom.StatsByExitCloser || rptRoomSales == EnumRptSalesRoom.StatsByFtb)
       {
         filters.Add(Tuple.Create("Programs", EnumToListHelper.GetEnumDescription(clsFilter.EnumProgram)));
         filters.Add(Tuple.Create("Segments", clsFilter.BlnAllSegments ? "ALL" : string.Join(",", clsFilter.LstSegments)));
@@ -221,7 +221,7 @@ namespace IM.ProcessorSales.Forms
         switch (rptRoomSales)
         {
           #region Manifest
-          case EnumRptRoomSales.Manifest:
+          case EnumRptSalesRoom.Manifest:
             
             list.AddRange(await BRReportsBySalesRoom.GetRptManiest(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
@@ -230,7 +230,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region StatsByLocation
-          case EnumRptRoomSales.StatsByLocation:
+          case EnumRptSalesRoom.StatsByLocation:
             list.AddRange(await BRReportsBySalesRoom.GetRptStatisticsByLocation(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = Reports.RptStatisticsByLocation(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByLocation>().ToList());
@@ -238,7 +238,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region StatsByLocationMonthly
-          case EnumRptRoomSales.StatsByLocationMonthly:
+          case EnumRptSalesRoom.StatsByLocationMonthly:
             list.AddRange(await BRReportsBySalesRoom.GetRptStaticsByLocationMonthly(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = Reports.RptStaticsByLocationMonthly(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByLocationMonthly>().ToList());
@@ -246,7 +246,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region SalesByLocationMonthly
-          case EnumRptRoomSales.SalesByLocationMonthly:
+          case EnumRptSalesRoom.SalesByLocationMonthly:
             list.AddRange(await BRReportsBySalesRoom.GetRptSalesByLocationMonthly(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = Reports.RptSalesByLocationMonthly(reporteName, fileFullPath, filters, list.Cast<RptSalesByLocationMonthly>().ToList());
@@ -254,7 +254,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region StatsByLocationAndSalesRoom
-          case EnumRptRoomSales.StatsByLocationAndSalesRoom:
+          case EnumRptSalesRoom.StatsByLocationAndSalesRoom:
             list.AddRange(await BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = Reports.RptStatisticsBySalesRoomLocation(reporteName, fileFullPath, filters, list.Cast<RptStatisticsBySalesRoomLocation>().ToList());
@@ -262,7 +262,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region ConcerntrateDailySales
-          case EnumRptRoomSales.ConcerntrateDailySales:
+          case EnumRptSalesRoom.ConcerntrateDailySales:
             #region FiltroSalesRoomConcentrate
             clsFilter.LstSalesRooms.AddRange(clsFilter.LstGoals.Select(c => c.SalesRoomByUser.srID));
             filters.Add(new Tuple<string, string>("Sales Room", string.Join("/", clsFilter.LstGoals.Select(c => c.SalesRoomByUser.srID).ToList())));
@@ -277,7 +277,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region DailySales
-          case EnumRptRoomSales.DailySales:
+          case EnumRptSalesRoom.DailySales:
             list.AddRange(await BRReportsBySalesRoom.GetRptDailySalesDetail(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             List<RptDailySalesHeader> lstHeader = await BRReportsBySalesRoom.GetRptDailySalesHeader(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms);
             if (list.Count > 0 && lstHeader.Count > 0)
@@ -287,7 +287,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region FTM In & Out House
-          case EnumRptRoomSales.FtmInAndOutHouse:
+          case EnumRptSalesRoom.FtmInAndOutHouse:
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
             {
@@ -298,7 +298,7 @@ namespace IM.ProcessorSales.Forms
 
           #region Stats by Segments
 
-          case EnumRptRoomSales.StatsBySegments:
+          case EnumRptSalesRoom.StatsBySegments:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsBySegments(new[] { clsFilter.DtmStart }, new[] { clsFilter.DtmEnd }, clsFilter.LstSalesRooms, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
               file = Reports.RptStatisticsBySegments(reporteName, fileFullPath, filters, list.Cast<RptStatisticsBySegments>().ToList(), clsFilter.BlnGroupedByTeams);
@@ -306,7 +306,7 @@ namespace IM.ProcessorSales.Forms
           #endregion Stats by Segments
 
           #region Stats by Segments (OWN)
-          case EnumRptRoomSales.StatsBySegmentsOwn:
+          case EnumRptSalesRoom.StatsBySegmentsOwn:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsBySegments(new[] { clsFilter.DtmStart }, new[] { clsFilter.DtmEnd }, clsFilter.LstSalesRooms, own: true, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
 
             if (list.Any())
@@ -315,7 +315,7 @@ namespace IM.ProcessorSales.Forms
           #endregion Stats by Segments (OWN)          
 
           #region Stats by Segments Categories
-          case EnumRptRoomSales.StatsBySegmentsCategories:
+          case EnumRptSalesRoom.StatsBySegmentsCategories:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsBySegments(new[] { clsFilter.DtmStart }, new[] { clsFilter.DtmEnd }, clsFilter.LstSalesRooms, bySegmentsCategories: true,
               includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -324,7 +324,7 @@ namespace IM.ProcessorSales.Forms
           #endregion Stats by Segments Categories
 
           #region Stats by Segments Categories (OWN)
-          case EnumRptRoomSales.StatsBySegmentsCategoriesOwn:
+          case EnumRptSalesRoom.StatsBySegmentsCategoriesOwn:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsBySegments(new[] { clsFilter.DtmStart }, new[] { clsFilter.DtmEnd }, clsFilter.LstSalesRooms, bySegmentsCategories: true,
               own: true, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -333,7 +333,7 @@ namespace IM.ProcessorSales.Forms
           #endregion Stats by Segments Categories (OWN)
 
           #region Stats by Segments Categories (Multi Date Ranges)
-          case EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges:
+          case EnumRptSalesRoom.StatsBySegmentsCategoriesMultiDatesRanges:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsBySegments(clsFilter.LstMultiDate.Select(x => x.DtStart), clsFilter.LstMultiDate.Select(x => x.DtEnd),
               clsFilter.LstMultiDate.Select(x => x.SalesRoom), bySegmentsCategories: true, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -342,7 +342,7 @@ namespace IM.ProcessorSales.Forms
           #endregion Stats by Segments Categories (Multi Date Ranges)
 
           #region Stats by Closer
-          case EnumRptRoomSales.StatsByCloser:
+          case EnumRptSalesRoom.StatsByCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), 
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen, groupByTeams:clsFilter.BlnGroupedByTeams));
             if (list.Any())
@@ -351,7 +351,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Stats by Exit Closer
-          case EnumRptRoomSales.StatsByExitCloser:
+          case EnumRptSalesRoom.StatsByExitCloser:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByExitCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -360,7 +360,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Self Gen & Self Gen Team
-          case EnumRptRoomSales.SelfGenAndSelfGenTeam:
+          case EnumRptSalesRoom.SelfGenAndSelfGenTeam:
             list.AddRange(await BRReportsBySalesRoom.GetRptSelfGenAndSelfGenTeam(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = await Reports.RptSelfGenAndSelfGenTeam(reporteName, fileFullPath, filters, list.Cast<RptSelfGenTeam>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
@@ -368,7 +368,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Stats by F.T.B
-          case EnumRptRoomSales.StatsByFtb:
+          case EnumRptSalesRoom.StatsByFtb:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTB(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(),
               program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, groupByTeam: clsFilter.BlnGroupedByTeams, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -377,7 +377,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Stats by F.T.B. & Locations
-          case EnumRptRoomSales.StatsByFtbAndLocatios:
+          case EnumRptSalesRoom.StatsByFtbAndLocatios:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBLocations(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
               includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -386,7 +386,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Stats by F.T.B. & Locations Categories
-          case EnumRptRoomSales.StatsByFtbAndLocatiosCategories:
+          case EnumRptSalesRoom.StatsByFtbAndLocatiosCategories:
             list.AddRange(await BRReportsBySalesRoom.GetStatisticsByFTBCategories(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), groupByTeam: clsFilter.BlnGroupedByTeams,
                includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
             if (list.Any())
@@ -395,7 +395,7 @@ namespace IM.ProcessorSales.Forms
           #endregion
 
           #region Efficiency Weekly
-          case EnumRptRoomSales.EfficiencyWeekly:
+          case EnumRptSalesRoom.EfficiencyWeekly:
             list.AddRange(await BRReportsBySalesRoom.GetRptEfficiencyWeekly(clsFilter.lstEfficiency.Select(x => x.efDateFrom), clsFilter.lstEfficiency.Select(x => x.efDateTo),
               clsFilter.LstSalesRooms.First().ToString()));
             if (list.Any())
@@ -580,43 +580,43 @@ namespace IM.ProcessorSales.Forms
       StaStart("Loading Date Range Window...");
       switch (_rptRoomSales)
       {
-        case EnumRptRoomSales.StatsBySegments:
-        case EnumRptRoomSales.StatsBySegmentsCategories:
-        case EnumRptRoomSales.StatsBySegmentsOwn:
-        case EnumRptRoomSales.StatsBySegmentsCategoriesOwn:
-        case EnumRptRoomSales.StatsByFtbAndLocatios:
-        case EnumRptRoomSales.StatsByFtbAndLocatiosCategories:
+        case EnumRptSalesRoom.StatsBySegments:
+        case EnumRptSalesRoom.StatsBySegmentsCategories:
+        case EnumRptSalesRoom.StatsBySegmentsOwn:
+        case EnumRptSalesRoom.StatsBySegmentsCategoriesOwn:
+        case EnumRptSalesRoom.StatsByFtbAndLocatios:
+        case EnumRptSalesRoom.StatsByFtbAndLocatiosCategories:
           _frmFilter.ConfigurarFomulario(_salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
-        case EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges:
+        case EnumRptSalesRoom.StatsBySegmentsCategoriesMultiDatesRanges:
           //Se usa para indicar que no se mostrara el filtro de datos y que las fechas se usaran las que tenga el grid
           _multiDate = true;
           _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, groupByTeams: _clsFilter.BlnGroupedByTeams, shGroupsByTeams: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, shAllSalesmen: true, blnSalesRoom: false, shMultiDateRanges: true);
           break;
-        case EnumRptRoomSales.StatsByFtb:
-        case EnumRptRoomSales.StatsByCloser:
-        case EnumRptRoomSales.StatsByExitCloser:
+        case EnumRptSalesRoom.StatsByFtb:
+        case EnumRptSalesRoom.StatsByCloser:
+        case EnumRptSalesRoom.StatsByExitCloser:
           _frmFilter.ConfigurarFomulario(_salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnSegments: true, blnAllSegments: true, blnPrograms: true);
           break;
-        case EnumRptRoomSales.DailySales:
+        case EnumRptSalesRoom.DailySales:
           _onlyOnRegister = false;
           _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, isGoal: true);
           break;
-        case EnumRptRoomSales.ConcerntrateDailySales:
+        case EnumRptSalesRoom.ConcerntrateDailySales:
           _frmFilter.ConfigurarFomulario(_salesRoom, blnSalesRoom: false, shConcentrate: true);
           break;
-        case EnumRptRoomSales.EfficiencyWeekly:
+        case EnumRptSalesRoom.EfficiencyWeekly:
           _frmFilter.ConfigurarFomulario(_salesRoom, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Weekly, shWeeks: true, onePeriod: true);
           break;
-        case EnumRptRoomSales.StatsByLocation:
-        case EnumRptRoomSales.StatsByLocationAndSalesRoom:
+        case EnumRptSalesRoom.StatsByLocation:
+        case EnumRptSalesRoom.StatsByLocationAndSalesRoom:
           _onlyOnRegister = false;
           _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
-        case EnumRptRoomSales.StatsByLocationMonthly:
+        case EnumRptSalesRoom.StatsByLocationMonthly:
           _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly, onePeriod: true); //queda pendiente blnoneperiod Obliga a que siempre sea de mes en mes
           break;
-        case EnumRptRoomSales.SalesByLocationMonthly:
+        case EnumRptSalesRoom.SalesByLocationMonthly:
           _frmFilter.ConfigurarFomulario(_salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, period: EnumPeriod.Monthly);
           break;
         default:
@@ -675,7 +675,7 @@ namespace IM.ProcessorSales.Forms
       if (dtgSalesRoom.SelectedIndex < 0) return;
       StaStart("Loading Date Range Window...");
       //obtener el nombre del reporte
-      _rptRoomSales = ((KeyValuePair<EnumRptRoomSales, string>)dtgSalesRoom.SelectedItem).Key;
+      _rptRoomSales = ((KeyValuePair<EnumRptSalesRoom, string>)dtgSalesRoom.SelectedItem).Key;
       //Reportes que solo necesitan una fecha 
       _multiDate = false;
       //Reportes que solo deben permitir seleccionar un registro 

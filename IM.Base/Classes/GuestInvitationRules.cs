@@ -55,20 +55,18 @@ namespace IM.Base.Classes
       if (_fromFrmGuest)
       {
         await Task.WhenAll(
-          //Cargamos la invitacion
-          DefaultValueInvitation(_user, _guID),
           LoadAgencies(),
           LoadMaritalStatus(),
           LoadGuestStatusType(),
           LoadGifts(_user),
-          LoadAdditionalGuest(_guID)
+          LoadAdditionalGuest(_guID),
+           //Cargamos la invitacion
+           DefaultValueInvitation(_user, _guID)
           );
       }
       else
       {
         await Task.WhenAll(
-          //Cargamos la invitacion
-          DefaultValueInvitation(_user, _guID),
           //Cargamos los catalogos comunes
           LoadAgencies(),
           LoadLenguages(),
@@ -87,7 +85,9 @@ namespace IM.Base.Classes
           LoadGifts(_user),
           LoadCloseDate(),
           LoadProgram(_module, _invitationType, _guID),
-          LoadAdditionalGuest(_guID)
+          LoadAdditionalGuest(_guID),
+           //Cargamos la invitacion
+          DefaultValueInvitation(_user, _guID)
           );
       }
 
@@ -476,7 +476,7 @@ namespace IM.Base.Classes
 
     #region Load Guest
 
-    private async Task LoadGuest(UserData user, int guID)
+    public async Task LoadGuest(UserData user, int guID)
     {
       Guest guestObj = new Guest();
 
@@ -687,5 +687,5 @@ namespace IM.Base.Classes
     }
     #endregion
 
-    }
+  }
 }

@@ -227,7 +227,7 @@ namespace IM.Base.Classes
       if (decimal.TryParse(totalCostGifts.TrimStart('$'), out totalCost) && decimal.TryParse(maxAuthGifts.TrimStart('$'), out maxAuth))
       {
 
-      // si se rebasa el monto maximo de regalos
+        // si se rebasa el monto maximo de regalos
         if (totalCost > maxAuth)
         {
           decimal curCharge = totalCost - totalCost;
@@ -240,12 +240,6 @@ namespace IM.Base.Classes
         }
 
       }
-
-
-
-
-
-
       return true;
     }
     #endregion
@@ -421,7 +415,7 @@ namespace IM.Base.Classes
       string strMsg = "";
 
       // Asignamos los valores del GuestStatus para validar
-      iMaxTours = (int)guestStatus.gsMaxQtyTours;
+      iMaxTours = guestStatus.gsMaxQtyTours ?? 0;
       iToursUsed = guestStatus.TourUsed;
       blnDisc = guestStatus.gsAllowTourDisc;
       iDiscsUsed = guestStatus.DiscUsed;

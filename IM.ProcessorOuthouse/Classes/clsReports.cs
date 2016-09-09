@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.ProcessorOuthouse.Classes
 {
@@ -140,10 +141,11 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 05/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGuestsShowNoPresentedInvitation(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation)
+    public static async Task<FileInfo> ExportRptGuestsShowNoPresentedInvitation(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptGuestsShowNoPresentedInvitation);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, string.Empty, clsFormatReport.rptGuestsShowNoPresentedInvitation(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptGuestsShowNoPresentedInvitation(), fileFullPath: fileFullPath, addEnumeration: true);
+
     }
 
     #endregion ExportRptGuestsShowNoPresentedInvitation
@@ -1230,10 +1232,10 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 03/May/2016 Created
     /// </history>
-    public static FileInfo ExportRptFoliosInvitationByDateFolio(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio)
+    public static async Task<FileInfo> ExportRptFoliosInvitationByDateFolio(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationByDateFolio);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, string.Empty, clsFormatReport.rptFoliosInvitationByDateFolio(), fileFullPath: fileFullPath);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosInvitationByDateFolio(), fileFullPath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptFoliosInvitationByDateFolio

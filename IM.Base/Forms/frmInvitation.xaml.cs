@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace IM.Base.Forms
@@ -99,22 +100,8 @@ namespace IM.Base.Forms
     {
       try
       {
-        //Iniciamos el BusyIndicator
-        _busyIndicator.IsBusy = true;
-        _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
-        //Cargamos la informacion
-        await CatObj.LoadAll();
-
-        Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
-
-        //Cargamos la UI dependiendo del tipo de Invitacion
-        ControlsConfiguration();
-        //Configuramos los controles (Maxlength, caracteres etc.)
-        UIHelper.SetUpControls(new Guest(), this);
-        //Detenemos el BusyIndicator
-        _busyIndicator.IsBusy = false;
-
-        GridHelper.SetUpGrid(dtgBookingDeposits, new BookingDeposit());
+        //Cargamos la informacion 
+        await LoadInvitationForm();
       }
       catch (Exception ex)
       {
@@ -122,7 +109,6 @@ namespace IM.Base.Forms
         _busyIndicator.IsBusy = false;
       }
     }
-
     #endregion Window_Loaded
 
     #region imgButtonSave_MouseLeftButtonDown
@@ -146,19 +132,16 @@ namespace IM.Base.Forms
         //Validamos controles comunes y validaciones basicas
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
         {
-          Mouse.OverrideCursor = null;
           isValid = false;
         }
         //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
         if (isValid)
         {
-          Mouse.OverrideCursor = null;
           isValid = InvitationValidationRules.ValidateInformationGrids(this, CatObj);
         }
         //Validamos que la informacion exista
         if (isValid)
         {
-          Mouse.OverrideCursor = null;
           //Validamos si existen los datos
           isValid = await ValidateExist();
         }
@@ -178,8 +161,25 @@ namespace IM.Base.Forms
           _busyIndicator.IsBusy = false;
 
           UIHelper.ShowMessage("The data was saved successfully");
-          SaveGuestInvitation = true;
-          Close();
+
+          //Si es del modulo OutHouse y el tipo de invitacion es NewOutHouse, NO cerramos la ventana, solo la reiniciamos
+          if (_module == EnumModule.OutHouse && _invitationType == EnumInvitationType.newOutHouse)
+          {
+            //Volvemos a cargar la invitacion
+            _busyIndicator.IsBusy = true;
+            _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
+            DataContext = null;
+            UpdateLayout();
+            CatObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
+            DataContext = CatObj;
+            await CatObj.LoadAll();
+            _busyIndicator.IsBusy = false;
+          }
+          else
+          {
+            SaveGuestInvitation = true;
+            Close();
+          }
         }
       }
       catch (Exception ex)
@@ -263,9 +263,10 @@ namespace IM.Base.Forms
 
         //Volvemos a cargar la invitacion
         DataContext = null;
+        UpdateLayout();
         CatObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
-        await CatObj.LoadAll();
         DataContext = CatObj;
+        await CatObj.LoadAll();
         SetReadOnly();
 
         //Habilitamos los botones editar e imprimir
@@ -472,7 +473,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region cmbLocation_SelectionChanged
+    #region cmbOtherInfoAgency_SelectionChanged
     /// <summary>
     /// Cuando cambia la seleccion de Agency se actualiza el campo Guest.guMK con el campo Agency.agMK
     /// </summary>
@@ -483,6 +484,7 @@ namespace IM.Base.Forms
       {
         var agency = await BRAgencies.GetAgenciesByIds(new List<string>() { cmbOtherInfoAgency?.SelectedValue?.ToString() });
         CatObj.Guest.gumk = agency.FirstOrDefault().agmk;
+
       }
     }
     #endregion
@@ -818,7 +820,7 @@ namespace IM.Base.Forms
       chkguShow.IsEnabled = false;
       chkguInterval.IsEnabled = false;
       chkDirect.IsEnabled = false;
-      btnChange.IsEnabled = false;
+      btnChange.IsEnabled = CatObj.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
 
@@ -834,9 +836,6 @@ namespace IM.Base.Forms
       txtguFirstNameOriginal.IsReadOnly = true;
 
       #endregion IsReadOnly
-
-
-
 
       //Si OutHouse y es una invitacion existente
       if (_module == EnumModule.OutHouse && CatObj.InvitationMode != EnumMode.Add)
@@ -1013,6 +1012,34 @@ namespace IM.Base.Forms
     #endregion ControlBehavior
 
     #region Metodos Complementarios
+    #region Load Invitation Form
+    /// <summary>
+    /// Sirve para preparar la ventana de invitacion, con la informacion pasada en el constructor.
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/09/2016  Created.
+    /// </history>
+    private async Task LoadInvitationForm()
+    {
+      //Iniciamos el BusyIndicator
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
+      //Cargamos la informacion
+      await CatObj.LoadAll();
+      //Calculamos el valor de las cajes de texto que acompañan los calculos del grid de Gift
+      Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+      //Cargamos la UI dependiendo del tipo de Invitacion
+      ControlsConfiguration();
+      //Configuramos los controles (Maxlength, caracteres etc.)
+      UIHelper.SetUpControls(new Guest(), this);
+      //Detenemos el BusyIndicator
+      _busyIndicator.IsBusy = false;
+      //Agregamos la configuracion de los grids
+      GridHelper.SetUpGrid(dtgBookingDeposits, new BookingDeposit());
+      //Seleccionamos el tab General 
+      tabGeneral.IsSelected = true;
+    }
+    #endregion
 
     #region SetupChangeRescheduleRebook
 
@@ -1101,7 +1128,7 @@ namespace IM.Base.Forms
           btnRebook.IsEnabled = true;
         }
         //si NO se permite hacer reschedule de invitaciones
-        if (!_allowReschedule)
+        if (!_allowReschedule && CatObj.InvitationMode != EnumMode.Add)
         {
           //Ocultamos los controles de reschedule y rebook
           btnReschedule.Visibility = Visibility.Collapsed;

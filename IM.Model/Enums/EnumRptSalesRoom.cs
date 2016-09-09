@@ -2,7 +2,15 @@
 
 namespace IM.Model.Enums
 {
-  public enum EnumRptRoomSales
+  /// <summary>
+  /// Enumerado de los reportes por Sala de ventas de Processor Saldes
+  /// </summary>
+  /// <history>
+  /// [ecanul] 03/05/2016 Created
+  /// [ecanul] 05/08/2016 Modified. Corregida descripcion del enumerado ConcentrateDailySales
+  /// [ecanul] 09/09/2016 Modified. Renombrado Enumerado de EnumRptRoomSales a EnumRptSalesRoom
+  /// </history>
+  public enum EnumRptSalesRoom
   {
     [Description("Stats by Segments")]
     StatsBySegments,

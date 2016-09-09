@@ -5,6 +5,7 @@ using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
+using OfficeOpenXml.Table.PivotTable;
 
 namespace IM.PRStatistics.Utilities
 {
@@ -151,43 +152,43 @@ namespace IM.PRStatistics.Utilities
     /// <history>
     /// [erosado] 14/Mar/2016  Created
     /// </history>
-    public static List<ExcelFormatTable> getExcelFormatTable()
+    public static ExcelFormatItemsList getExcelFormatTable()
     {
-      List<ExcelFormatTable> formatColumns = new List<ExcelFormatTable>();
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR Id", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Assign", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Conts", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "C%", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Avails", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "A%", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Bk", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Bk%", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Deep", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Dir", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sh", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "IO", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Sh%", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "T Sh", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "SG", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc #", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Processable", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Out Pending #", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Out Pending", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "C #", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cancelled", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Total #", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Total", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc PR #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc PR", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc SG #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Proc SG", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Eff", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Cl %", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Ca %", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Avg Sale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });
-      
-
+      ExcelFormatItemsList formatColumns = new ExcelFormatItemsList();
+      formatColumns.Add("PR Id", "PR_ID");
+      formatColumns.Add("PR Name", "PR_NAME");
+      formatColumns.Add("PR Status", "P_Status",isGroup:true, isVisible:false);
+      formatColumns.Add("Assign", "Assign", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Conts", "Conts", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("C%", "C_Factor", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([Assign]=0,0,[Conts]/[Assign])");
+      formatColumns.Add("Avails", "Avails",format:EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("A%", "A_Factor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Conts]=0,0,[Avails]/[Conts])");
+      formatColumns.Add("Bk", "Bk", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Bk%", "Bk_Factor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Avails]=0,0,[T_Books]/[Avails])");
+      formatColumns.Add("TBooks", "T_Books", format: EnumFormatTypeExcel.DecimalNumber, function:DataFieldFunctions.Sum);
+      formatColumns.Add("Dep", "Dep", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Dir", "Dir", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Sh", "Sh", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("IO", "IO", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Sh%", "Sh_Factor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Bk]=0,0,[TSh]/[Bk])");
+      formatColumns.Add("T Sh", "TSh", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("SG", "SG", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Proc #", "Proc_Number", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Processable", "Processable", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "[Total] - [Out_Pending]");
+      formatColumns.Add("Out Pending #", "OutP_Number", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Out Pending", "Out_Pending", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      formatColumns.Add("C #", "C_Number", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Cancelled", "Cancelled", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Total #", "Total_Number", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Total", "Total", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Proc PR #", "Proc_PR_Number", isCalculated: true, formula: "[Proc_Number]-[Proc_SG_Number]");
+      formatColumns.Add("Proc PR", "Proc_PR", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "[Total]-[Proc_SG]");
+      formatColumns.Add("Proc SG #", "Proc_SG_Number", function: DataFieldFunctions.Sum);
+      formatColumns.Add("Proc SG", "Proc_SG", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      formatColumns.Add("Eff", "Eff", format: EnumFormatTypeExcel.DecimalNumber, isCalculated: true, formula: "IF([TSh]=0,0,[Total]/[TSh])");
+      formatColumns.Add("Cl %", "Cl_Factor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([TSh]=0,0,[Proc_Number]/[TSh])");
+      formatColumns.Add("Ca %", "Ca_Factor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Total]=0,0,[Cancelled]/[Total])");
+      formatColumns.Add("Avg Sale", "Avg_Sale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Proc_Number]=0,0,[Total]/[Proc_Number])");
       return formatColumns;
     }
 
