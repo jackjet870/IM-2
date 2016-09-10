@@ -19,8 +19,8 @@ namespace IM.Model
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public Nullable<System.DateTime> ShowDate { get; set; }
-        public decimal Deposit { get; set; }
-        public decimal Received { get; set; }
+        public Nullable<decimal> Deposit { get; set; }
+        public Nullable<decimal> Received { get; set; }
         public string Currency { get; set; }
         public string PaymentType { get; set; }
     }

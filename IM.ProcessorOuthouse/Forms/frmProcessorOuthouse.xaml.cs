@@ -299,15 +299,6 @@ namespace IM.ProcessorOuthouse.Forms
       strReport = ((dynamic)grdOtherRpts.SelectedItem).rptName;
       _blnOneDate = false;
       _blnOnlyOneRegister = false;
-
-      switch (strReport)
-      {
-        case "Folios Invitations Outhouse":
-        case "Folios Invitations Outhouse by PR":
-        case "Folios CXC by PR":
-        case "Folios CXC":
-          break;
-      }
       OpenFilterDateRangeOtherReport(strReport);
     }
 
@@ -983,7 +974,7 @@ namespace IM.ProcessorOuthouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1400,7 +1391,7 @@ namespace IM.ProcessorOuthouse.Forms
       }
       catch (Exception ex)
       {        
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1546,7 +1537,7 @@ namespace IM.ProcessorOuthouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 

@@ -1115,7 +1115,7 @@ namespace IM.ProcessorGeneral.Forms
       catch (Exception ex)
       {
         
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1332,7 +1332,7 @@ namespace IM.ProcessorGeneral.Forms
       }
       catch (Exception ex)
       {        
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1578,7 +1578,7 @@ namespace IM.ProcessorGeneral.Forms
       }
       catch (Exception ex)
       {        
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
