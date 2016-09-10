@@ -1160,7 +1160,7 @@ namespace IM.ProcessorInhouse.Forms
       catch (Exception ex)
       {
         _frmReportQueue.SetFileInfoError(fileFullPath);
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1247,7 +1247,7 @@ namespace IM.ProcessorInhouse.Forms
       catch (Exception ex)
       {
         _frmReportQueue.SetFileInfoError(fileFullPath);
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -1320,7 +1320,7 @@ namespace IM.ProcessorInhouse.Forms
       catch (Exception ex)
       {
         _frmReportQueue.SetFileInfoError(fileFullPath);
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 

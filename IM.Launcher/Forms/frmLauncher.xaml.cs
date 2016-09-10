@@ -159,6 +159,7 @@ namespace IM.Launcher.Forms
       lstMenu.Add(EnumMenu.MailOuts);
       lstMenu.Add(EnumMenu.InventoryMovs);
       lstMenu.Add(EnumMenu.ProcessorINH);
+      lstMenu.Add(EnumMenu.ProcessorOUT);
       lstMenu.Add(EnumMenu.PRStatistics);
       lstMenu.Add(EnumMenu.Graph);
       lstMenu.Add(EnumMenu.GuestsByPR);

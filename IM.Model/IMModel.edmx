@@ -19441,10 +19441,10 @@
           <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
           <Property Type="DateTime" Name="ShowDate" Nullable="true" Precision="23" />
-          <Property Type="Decimal" Name="Deposit" Nullable="false" Precision="19" />
-          <Property Type="Decimal" Name="Received" Nullable="false" Precision="19" />
-          <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="PaymentType" Nullable="false" MaxLength="30" />
+          <Property Type="Decimal" Name="Deposit" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Received" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="PaymentType" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="GiftsReceiptPaymentShort">
           <Property Type="Int32" Name="gygr" Nullable="false" />

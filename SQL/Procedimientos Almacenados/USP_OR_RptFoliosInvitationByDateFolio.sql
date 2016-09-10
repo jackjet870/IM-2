@@ -1,9 +1,7 @@
-USE [OrigosVCPalace];
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptFoliosInvitationByDateFolio]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptFoliosInvitationByDateFolio]
 GO
-SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -12,7 +10,8 @@ GO
 **
 ** [lormartinez]	28/Ago/2014 Created
 ** [wtorres]		08/May/2015 Modified. Agregue la fecha de booking
-** [LorMartinez]  8/Ene/2015 Modified.
+** [lormartinez]	08/Ene/2015 Modified.Agregue los parametros @LeadSources y @PRs
+**
 */
 CREATE procedure [dbo].[USP_OR_RptFoliosInvitationByDateFolio]
 	@DateFrom datetime = null,	-- Fecha desde
@@ -20,8 +19,8 @@ CREATE procedure [dbo].[USP_OR_RptFoliosInvitationByDateFolio]
 	@Serie varchar(5) = 'ALL',	-- Serie
 	@FolioFrom integer = 0,		-- Folio desde
 	@FolioTo integer = 0,		-- Folio hasta,
-  @LeadSources varchar(MAX) ='ALL', --Lista de LeadSources
-  @PRs varchar(MAX) ='ALL' --Lista de PRs
+	@LeadSources varchar(MAX) ='ALL', --Lista de LeadSources
+	@PRs varchar(MAX) ='ALL' --Lista de PRs
 as
 set nocount on
  
@@ -31,11 +30,11 @@ select
 	P.peN as PRN, 
 	G.guLastName1,
 	G.guBookD,
-  L.lsN  
+	L.lsN
 from Guests G
-left join LeadSources L on G.guls = L.lsID
-left join Personnel P on G.guPRInvit1 = P.peID
-outer apply (select Substring(G.guOutInvitNum, CharIndex('-', G.guOutInvitNum) + 1, Len(G.guOutInvitNum) - CharIndex('-', G.guOutInvitNum)) as Folio ) F
+	left join LeadSources L on G.guls = L.lsID
+	left join Personnel P on G.guPRInvit1 = P.peID
+	outer apply (select Substring(G.guOutInvitNum, CharIndex('-', G.guOutInvitNum) + 1, Len(G.guOutInvitNum) - CharIndex('-', G.guOutInvitNum)) as Folio ) F
 where
 	-- Programa Outhouse
 	L.lspg = 'OUT'
@@ -49,10 +48,8 @@ where
 	))
 	-- Fecha de booking
 	and(@DateFrom is null or G.guBookD Between @DateFrom and @DateTo)
-  --Lead Sources
-  AND (@LeadSources = 'ALL' OR (@LeadSources <> 'ALL' AND L.lsID IN (select item from dbo.split(@LeadSources,','))))
-  --PRs
-  AND (@PRs ='ALL' OR (@PRs <> 'ALL' AND P.peID IN (select item from dbo.split(@PRs,','))))
-    
+	-- Lead Sources
+	AND (@LeadSources = 'ALL' OR L.lsID IN (select item from split(@LeadSources, ',')))
+	--PRs
+	AND (@PRs ='ALL' OR P.peID IN (select item from split(@PRs, ',')))
 order by G.guOutInvitNum
-GO
