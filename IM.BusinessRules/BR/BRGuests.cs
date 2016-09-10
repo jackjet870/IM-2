@@ -558,6 +558,7 @@ namespace IM.BusinessRules.BR
             {
               //guardamos la informacion de contacto
               dbContext.Entry(guest).State = EntityState.Modified;
+              var respuesta = dbContext.SaveChanges();
 
               //guardamos el Log del huesped
               dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
@@ -565,7 +566,7 @@ namespace IM.BusinessRules.BR
               //guardamos el movimiento de contactacion del huesped
               dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-              var respuesta = dbContext.SaveChanges();
+             
               transaction.Commit();
               return respuesta;
             }

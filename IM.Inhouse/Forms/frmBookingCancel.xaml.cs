@@ -31,6 +31,7 @@ namespace IM.Inhouse.Forms
       _user = user;
       _guestId = guestId;
       lblUserName.Text = user.peN;
+      Title = $"Booking Cancellation - Guest ID: {guestId}";
     }
     #endregion
 
@@ -72,12 +73,12 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
-      ValidateSave();
+      ValidateSave();  
     }
     #endregion
 
     #region ValidateSave
-   
+
     /// <summary>
     /// Guarda los cambios
     /// </summary>

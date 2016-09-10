@@ -138,6 +138,8 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void LoadOuthouse()
     {
+      StaStart("Loading OutHouse...");
+
       //Cargamos las variables del usuario
       txtUser.Text = App.User.User.peN;
       txtLocation.Text = App.User.Location.loN;
@@ -171,6 +173,7 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void StaStart(string message)
     {
+      if (lblStatusBarMessage == null) return;
       lblStatusBarMessage.Text = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
       this.Cursor = Cursors.Wait;
@@ -230,6 +233,7 @@ namespace IM.Outhouse.Forms
     {
       var rb = sender as RadioButton;
       if (rb != null) _bookInvit = Convert.ToBoolean(rb.TabIndex);
+      StaStart("Loading OutHouse...");
       LoadGrid();
     }
 
@@ -245,6 +249,7 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
+      StaStart("Loading OutHouse...");
       LoadGrid();
     }
 

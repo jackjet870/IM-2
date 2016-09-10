@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         mc:Ignorable="d" Loaded="FrmNotBookingMotive_OnLoaded"
-        Title="Not Booking Motive" Height="300" Width="459.623"  >
+        Title="Not Booking Motive" Height="300" Width="459.623"  ShowInTaskbar="False">
 
     <Grid Name="grdNotBookingMotive" >
         <Grid.RowDefinitions>

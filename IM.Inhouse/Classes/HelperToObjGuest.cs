@@ -62,9 +62,10 @@ namespace IM.Inhouse.Classes
     /// <summary>
     /// Retorna el color segun el estatus en el que se encuentra el Guest
     /// </summary>
-    /// <param name="status"></param>
-    /// <returns></returns>
-    /// 
+    /// <param name="status">Status en el que se encuentra el Guest</param>
+    /// <history>
+    /// [jorcanche]  created 30/03/2016
+    /// </history>
     public static string ColorStatus(int status)
     {
       Color _color = new Color();

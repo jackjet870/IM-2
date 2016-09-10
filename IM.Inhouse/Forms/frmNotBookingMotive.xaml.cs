@@ -36,6 +36,7 @@ namespace IM.Inhouse.Forms
     {
       InitializeComponent();
       _guestId = guesId;
+      Title = $"Not Booking Motive - Guest ID: {guesId}";
     } 
     #endregion
 

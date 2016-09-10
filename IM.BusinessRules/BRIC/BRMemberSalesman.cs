@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BRIC
     /// <history>
     /// [jorcanche]  created 08/07/2016
     /// </history>        
-    public static async Task<MemberSalesmen> SaveMemberSalesman(decimal? reccum ,MemberSalesmen memberSalesmen, string user)
+    public static async Task<MemberSalesmen> SaveMemberSalesman(decimal? reccum, MemberSalesmen memberSalesmen, string user)
     {
       return await Task.Run(() =>
       {
@@ -137,96 +137,119 @@ namespace IM.BusinessRules.BRIC
     /// <history>
     /// [jorcanche]  created 04/ago/2016
     /// </history>
-    public static async Task<List<string>> SaveMemberSalesmenClubes(Sale saleNew, string user)
+    public static async Task<List<string>> SaveMemberSalesmenClubes(Sale saleNew, string user, List<MemberSalesmanClubles> lstMemberSalesmenClubes, List<Personnel> lstPersonels)
     {
       return await Task.Run(() =>
       {
         using (var dbContextIC = new ICEntities(ConnectionHelper.ConnectionString(EnumDatabase.IntelligenceContracts)))
         {
-          using (var dbContextIM = new IMEntities(ConnectionHelper.ConnectionString()))
+          using (var transaction = dbContextIC.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            using (var transaction = dbContextIC.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            try
             {
-              try
+              string sPRs = string.Empty, sLiners = string.Empty, sClosers = string.Empty, sExits = string.Empty;
+
+              var mensaje = new List<string>();
+
+              //Obtenemos los vendedores de Intelligence Contracts 
+              List<MemberSalesmen> lstMemberSalesmens = dbContextIC.USP_CL_GetMemberSalesmen(saleNew.saMembershipNum, "ALL", "ALL", "OPC,LINER,CLOSER,EXIT").ToList();
+
+              // Guarda un vendedor por rol en Intelligence Contracts
+              foreach (var mbc in lstMemberSalesmenClubes)
               {
-                string sPRs = string.Empty, sLiners = string.Empty, sClosers = string.Empty, sExits = string.Empty;
-
-                var mensaje = new List<string>();
-
-                //Obtenemos los vendedores de Intelligence Contracts 
-                List<MemberSalesmen> lstMemberSalesmens = dbContextIC.USP_CL_GetMemberSalesmen(saleNew.saMembershipNum, "ALL", "ALL", "OPC,LINER,CLOSER,EXIT").ToList();
-
-                //Agregamos  
-                List<MemberSalesmanClubles> lstMemberSalesmenClubes = new List<MemberSalesmanClubles>();
-                //PR's
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = saleNew.saPR1 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = saleNew.saPR2 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = saleNew.saPR3 });
-                //Liners
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Job = "LIN", Id = saleNew.saLiner1 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Job = "LIN", Id = saleNew.saLiner2 });
-                //Closers
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = saleNew.saCloser1 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = saleNew.saCloser2 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = saleNew.saCloser3 });
-                //Exit Closers
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Job = "JR", Id = saleNew.saExit1 });
-                lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Job = "JR", Id = saleNew.saExit1 });
-
-                // Guarda un vendedor por rol en Intelligence Contracts
-                foreach (var mbc in lstMemberSalesmenClubes)
+                //si tiene una clave de vendedor de origos
+                if (!string.IsNullOrEmpty(mbc.Id))
                 {
-                  //si tiene una clave de vendedor de origos
-                  if (!string.IsNullOrEmpty(mbc.Id))
+                  //agregamos la clave de vendedor en IM
+                  switch (mbc.Role)
                   {
-                    //agregamos la clave de vendedor en IM
-                    switch (mbc.Role)
-                    {
-                      case "OPC":
-                        sPRs = sPRs + mbc.Id + " ";
-                        break;
-                      case "LINER":
-                        sLiners = sLiners + mbc.Id + " ";
-                        break;
-                      case "CLOSER":
-                        sClosers = sClosers + mbc.Id + " ";
-                        break;
-                      case "EXIT":
-                        sExits = sExits + mbc.Id + " ";
-                        break;
-                    }
-
-                    //obtenemos la clave del vendedor de Intelligence Contracts relaionando al vendedor de IM
-                    var personnel = dbContextIM.Personnels.FirstOrDefault(p => p.peID == mbc.Id);
-                    if (personnel == null)
-                    {
-                      mensaje.Add($"The personnel {mbc.Id} is not associated with a Intelligence Contract's salesman.");
+                    case "OPC":
+                      sPRs = sPRs + mbc.Id + " ";
                       break;
-                    }
-
-                    //Validamos si el vendedor de origos tiene relacionada una clave de Intelligence Contracts
-                    var salemanId = personnel.peSalesmanID;
-                    if (string.IsNullOrEmpty(salemanId))
-                    {
-                      mensaje.Add($"The personnel {mbc.Id} is not associated with a Intelligence Contract's salesman.");
+                    case "LINER":
+                      sLiners = sLiners + mbc.Id + " ";
                       break;
-                    }
-
-                    //Validamos si existe la clave de intelligence Contracts
-                    var zone = saleNew.sasr;
-                    if (!(dbContextIC.USP_CL_ExistsSalesman(zone, salemanId).FirstOrDefault() == 1))
-                    {
-                      mensaje.Add($"The salesman  {salemanId} from zone {zone} does not exists on Intelligence Contracts");
+                    case "CLOSER":
+                      sClosers = sClosers + mbc.Id + " ";
                       break;
-                    }
+                    case "EXIT":
+                      sExits = sExits + mbc.Id + " ";
+                      break;
+                  }
 
-                    //Localizamos el vendedor de Intelligence contracts
-                    var member = lstMemberSalesmens.FirstOrDefault(sa => sa.OPC == salemanId && sa.CLAOPC_ID == mbc.Job);
+                  //obtenemos la clave del vendedor de Intelligence Contracts relaionando al vendedor de IM
+                  Personnel personnel = new Personnel(); //lstPersonels.FirstOrDefault(p => p.peID == mbc.Id);
+                  if (personnel == null)
+                  {
+                    mensaje.Add($"The personnel {mbc.Id} is not associated with a Intelligence Contract's salesman.");
+                    break;
+                  }
 
-                    //si no se localizo 
-                    if (member == null)
+                  //Validamos si el vendedor de origos tiene relacionada una clave de Intelligence Contracts
+                  var salemanId = personnel.peSalesmanID;
+                  if (string.IsNullOrEmpty(salemanId))
+                  {
+                    mensaje.Add($"The personnel {mbc.Id} is not associated with a Intelligence Contract's salesman.");
+                    break;
+                  }
+
+                  //Validamos si existe la clave de intelligence Contracts
+                  var zone = saleNew.sasr;
+                  if (!(dbContextIC.USP_CL_ExistsSalesman(zone, salemanId).FirstOrDefault() == 1))
+                  {
+                    mensaje.Add($"The salesman  {salemanId} from zone {zone} does not exists on Intelligence Contracts");
+                    break;
+                  }
+
+                  //Localizamos el vendedor de Intelligence contracts
+                  var member = lstMemberSalesmens.FirstOrDefault(sa => sa.OPC == salemanId && sa.CLAOPC_ID == mbc.Job);
+
+                  //si no se localizo 
+                  if (member == null)
+                  {
+                    //lo agregamos en Intelligence contracts
+                    var memberSalesmen = new MemberSalesmen
                     {
-                      //lo agregamos en Intelligence contracts
+                      CLMEMOPC_ID = 0,
+                      APPLICATION = saleNew.saMembershipNum,
+                      CLAOPC_ID = mbc.Job,
+                      OPC1 = string.Empty,
+                      OPC_PCT = 0,
+                      OPC_PCT2 = 0,
+                      OPC_CPT3 = 0,
+                      OPC_PCT4 = 0,
+                      STATUS = "A",
+                      ZONA = zone,
+                      OPC = salemanId
+                    };
+                    lstMemberSalesmens.Add(memberSalesmen);
+
+                    //Guarda un vendedor de una afiliacion en Intelligence Contracts                   
+                    dbContextIC.USP_CL_SaveMemberSalesman(0, memberSalesmen.CLMEMOPC_ID, memberSalesmen.APPLICATION,
+                    memberSalesmen.CLAOPC_ID, memberSalesmen.OPC1, memberSalesmen.OPC_PCT, memberSalesmen.OPC_PCT2,
+                    memberSalesmen.OPC_CPT3, memberSalesmen.OPC_PCT4, memberSalesmen.STATUS, memberSalesmen.ZONA,
+                    memberSalesmen.OPC, user);
+
+                  }
+                  else
+                  {
+                    // si tiene el rol solicitado
+                    if (member.Role == mbc.Role)
+                    {
+                      member.CLAOPC_ID = mbc.Job;
+                      member.STATUS = "A";
+                      member.ZONA = saleNew.sasr;
+
+                      //Actualizamos el vendedor en Intelligence Contracts                        
+                      dbContextIC.USP_CL_SaveMemberSalesman(
+                      member.RECNUM, member.CLMEMOPC_ID, member.APPLICATION, member.CLAOPC_ID, member.OPC1,
+                      member.OPC_PCT, member.OPC_PCT2, member.OPC_CPT3, member.OPC_PCT4, member.STATUS,
+                      member.ZONA, member.OPC, user);
+
+                    }
+                    else //Si no tiene el rol solicitad o
+                    {
+                      //Agregamos en Intelligence contracts
                       var memberSalesmen = new MemberSalesmen
                       {
                         CLMEMOPC_ID = 0,
@@ -243,97 +266,54 @@ namespace IM.BusinessRules.BRIC
                       };
                       lstMemberSalesmens.Add(memberSalesmen);
 
-                      //Guarda un vendedor de una afiliacion en Intelligence Contracts                   
-                     dbContextIC.USP_CL_SaveMemberSalesman(0, memberSalesmen.CLMEMOPC_ID, memberSalesmen.APPLICATION,
-                     memberSalesmen.CLAOPC_ID, memberSalesmen.OPC1, memberSalesmen.OPC_PCT, memberSalesmen.OPC_PCT2,
-                     memberSalesmen.OPC_CPT3, memberSalesmen.OPC_PCT4, memberSalesmen.STATUS, memberSalesmen.ZONA,
-                     memberSalesmen.OPC, user);
-                      
-                    }
-                    else
-                    {
-                      // si tiene el rol solicitado
-                      if (member.Role == mbc.Role)
-                      {
-                        member.CLAOPC_ID = mbc.Job;
-                        member.STATUS = "A";
-                        member.ZONA = saleNew.sasr;
-
-                        //Actualizamos el vendedor en Intelligence Contracts                        
-                        dbContextIC.USP_CL_SaveMemberSalesman(
-                        member.RECNUM, member.CLMEMOPC_ID, member.APPLICATION, member.CLAOPC_ID, member.OPC1,
-                        member.OPC_PCT, member.OPC_PCT2, member.OPC_CPT3, member.OPC_PCT4, member.STATUS,
-                        member.ZONA, member.OPC, user);
-
-                      }
-                      else //Si no tiene el rol solicitad o
-                      {
-                        //Agregamos en Intelligence contracts
-                        var memberSalesmen = new MemberSalesmen
-                        {
-                          CLMEMOPC_ID = 0,
-                          APPLICATION = saleNew.saMembershipNum,
-                          CLAOPC_ID = mbc.Job,
-                          OPC1 = string.Empty,
-                          OPC_PCT = 0,
-                          OPC_PCT2 = 0,
-                          OPC_CPT3 = 0,
-                          OPC_PCT4 = 0,
-                          STATUS = "A",
-                          ZONA = zone,
-                          OPC = salemanId
-                        };
-                        lstMemberSalesmens.Add(memberSalesmen);
-
-                        //Agregamos el vendedor en intelligence Contracts                      
-                        dbContextIC.USP_CL_SaveMemberSalesman(0, memberSalesmen.CLMEMOPC_ID, memberSalesmen.APPLICATION,
-                        memberSalesmen.CLAOPC_ID, memberSalesmen.OPC1, memberSalesmen.OPC_PCT, memberSalesmen.OPC_PCT2,
-                        memberSalesmen.OPC_CPT3, memberSalesmen.OPC_PCT4, memberSalesmen.STATUS, memberSalesmen.ZONA, 
-                        memberSalesmen.OPC, user);
-                      }
+                      //Agregamos el vendedor en intelligence Contracts                      
+                      dbContextIC.USP_CL_SaveMemberSalesman(0, memberSalesmen.CLMEMOPC_ID, memberSalesmen.APPLICATION,
+                      memberSalesmen.CLAOPC_ID, memberSalesmen.OPC1, memberSalesmen.OPC_PCT, memberSalesmen.OPC_PCT2,
+                      memberSalesmen.OPC_CPT3, memberSalesmen.OPC_PCT4, memberSalesmen.STATUS, memberSalesmen.ZONA,
+                      memberSalesmen.OPC, user);
                     }
                   }
                 }
-
-                //Elimina los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence marketing
-                List<MemberSalesmanClubles> lstDeleteSalesmenClubes = new List<MemberSalesmanClubles>();
-                lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Salesmen = sPRs });
-                lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Salesmen = sLiners });
-                lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Salesmen = sClosers });
-                lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Salesmen = sExits });
-
-                //Eliminamos los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence Marketing
-                foreach (var item in lstDeleteSalesmenClubes)
-                {
-                  //Obtenemos vendedores actuales de Intelligence Contracts                
-                  var memberSalesmens = dbContextIC.USP_CL_GetMemberSalesmen(saleNew.saMembershipNum, "ALL", "ALL", item.Role).ToList();
-                  if (memberSalesmens.Any())
-                  {
-                    //Si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
-                    memberSalesmens.ForEach(ms =>
-                   {
-                     if (!item.Salesmen.Contains(ms.OPC))
-                     {
-                       dbContextIC.USP_CL_DeleteMemberSalesman(ms.CLMEMOPC_ID);
-                     }
-                   });
-                  }
-                }
-
-                dbContextIC.SaveChanges();
-                transaction.Commit();
-                return mensaje;
               }
-              catch (System.Exception)
+
+              //Elimina los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence marketing
+              List<MemberSalesmanClubles> lstDeleteSalesmenClubes = new List<MemberSalesmanClubles>();
+              lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Salesmen = sPRs });
+              lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Salesmen = sLiners });
+              lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Salesmen = sClosers });
+              lstDeleteSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Salesmen = sExits });
+
+              //Eliminamos los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence Marketing
+              foreach (var item in lstDeleteSalesmenClubes)
               {
-                transaction.Rollback();
-                throw;
+                //Obtenemos vendedores actuales de Intelligence Contracts                
+                var memberSalesmens = dbContextIC.USP_CL_GetMemberSalesmen(saleNew.saMembershipNum, "ALL", "ALL", item.Role).ToList();
+                if (memberSalesmens.Any())
+                {
+                  //Si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
+                  memberSalesmens.ForEach(ms =>
+                 {
+                   if (!item.Salesmen.Contains(ms.OPC))
+                   {
+                     dbContextIC.USP_CL_DeleteMemberSalesman(ms.CLMEMOPC_ID);
+                   }
+                 });
+                }
               }
+
+              dbContextIC.SaveChanges();
+              transaction.Commit();
+              return mensaje;
+            }
+            catch (System.Exception)
+            {
+              transaction.Rollback();
+              throw;
             }
           }
         }
       });
-    } 
+    }
     #endregion
   }
 }

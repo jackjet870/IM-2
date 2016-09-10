@@ -45,7 +45,7 @@
                     <DataGridTextColumn x:Name="glBookT" Binding="{Binding glBookT,  StringFormat=t}" Header="Book T" Width="auto"/>
                     <DataGridTextColumn x:Name="glReschD" Binding="{Binding glReschD, StringFormat={}{0:dd/MM/yyyy}}" Header="Resch D" Width="auto"/>
                     <DataGridTextColumn x:Name="glReschT" Binding="{Binding glReschT, StringFormat=t}" Header="Resch T" Width="auto"/>
-                    <DataGridTextColumn x:Name="glPRInvit1Column" Binding="{Binding glPRInvit1}" Header="PR N" Width="auto"/>
+                    <DataGridTextColumn x:Name="glPRInvit1Column" Binding="{Binding glPRInvit1}" Header="PR B" Width="auto"/>
                     <DataGridTextColumn x:Name="pRInvit1NColumn" Binding="{Binding PRInvit1N}" Header="PR Booking Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glPRInvit2Column" Binding="{Binding glPRInvit2}" Header="PR B 2" Width="auto"/>
                     <DataGridTextColumn x:Name="pRInvit2NColumn" Binding="{Binding PRInvit2N}" Header="PR Booking 2 Name" Width="auto"/>

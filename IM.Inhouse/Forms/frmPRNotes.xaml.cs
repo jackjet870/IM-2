@@ -30,7 +30,7 @@ namespace IM.Inhouse.Forms
     //si se esta creando la nota 
     private bool _creatingNote;
     public bool SaveNote;
-
+ 
     #endregion
 
     #region Contructores y destructores

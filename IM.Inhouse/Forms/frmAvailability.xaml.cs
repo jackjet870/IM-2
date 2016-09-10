@@ -38,6 +38,7 @@ namespace IM.Inhouse
       InitializeComponent();
       _guestId = guestId;
       lblUserName.Content = App.User.User.peN;
+      Title = $"Availability - Guest ID: {guestId}";
     }
 
     #endregion

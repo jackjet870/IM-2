@@ -6,6 +6,7 @@ using IM.Base.Forms;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using System;
+using System.Windows.Input;
 
 namespace IM.Inhouse
 {
@@ -34,6 +35,7 @@ namespace IM.Inhouse
       InitializeComponent();
       _guestID = guestID;
       lblUserName.Content = App.User.User.peN;
+      Title = $"Follow Up - Guest ID: {guestID}";
     }
     #endregion
 
@@ -153,6 +155,7 @@ namespace IM.Inhouse
     #region btnSave_Click
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;     
       try
       {
         if (Validate())
@@ -176,14 +179,14 @@ namespace IM.Inhouse
             UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
               MessageBoxImage.Error, "Information can not keep");
           }
-          this.Close();
+          Close();
         }     
       }
       catch (Exception ex)
       {
         UIHelper.ShowMessage(ex);
       }
-     
+      Mouse.OverrideCursor = null;
     }
 
     #endregion

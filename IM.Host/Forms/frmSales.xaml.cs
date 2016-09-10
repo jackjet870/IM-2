@@ -13,6 +13,7 @@ using System.Windows.Input;
 using IM.Model.Helpers;
 using IM.BusinessRules.BRIC;
 using Xceed.Wpf.Toolkit;
+using IM.Model.Classes;
 
 namespace IM.Host.Forms
 {
@@ -1283,6 +1284,7 @@ namespace IM.Host.Forms
     ///</history>
     private async void btnUndo_Click(object sender, RoutedEventArgs e)
     {
+      BusyIndicator.IsBusy = true;
       //si no hay ventas
       if (dtgSale.Items.Count == 0)
       {
@@ -1299,6 +1301,8 @@ namespace IM.Host.Forms
 
       //Establecemos el mode de solo lectura
       SetMode(EnumMode.ReadOnly);
+
+      BusyIndicator.IsBusy = false;
     }
 
     #endregion
@@ -1352,50 +1356,79 @@ namespace IM.Host.Forms
     /// </history>
     private async void Save(IEnumerable<SalesmenChanges> salesmenChanges, string authorizedBy)
     {
+      BusyIndicator.IsBusy = true;
       try
       {
-        //Procesable     
-        if (_saleNew.saProcD == null) _saleNew.saProc = false;
-        //Cancelada
-        if (_saleNew.saCancelD == null) _saleNew.saCancel = false;
-
-        //Establecemos los procentajes de volumen de venta de los vendedores
-        SetVolumenPercentage();
-        IsSaleUpdate();
-        //Establecemos la fecha de procesable de referencia
-        if (!_isSaleUpdate && _saleNew.saProcRD != _saleNew.saProcD)
+        if (_saleNew != _saleOld)
         {
-          _saleNew.saProcRD = _saleNew.saProcD;
+          //Procesable     
+          if (_saleNew.saProcD == null) _saleNew.saProc = false;
+          //Cancelada
+          if (_saleNew.saCancelD == null) _saleNew.saCancel = false;
+
+          //Establecemos los procentajes de volumen de venta de los vendedores
+          SetVolumenPercentage();
+          IsSaleUpdate();
+          //Establecemos la fecha de procesable de referencia
+          if (!_isSaleUpdate && _saleNew.saProcRD != _saleNew.saProcD)
+          {
+            _saleNew.saProcRD = _saleNew.saProcD;
+          }
+          if (_isSaleUpdate && _saleNew.saProcRD != null)
+          {
+            _saleNew.saProcRD = _saleNew.saProcD;
+          }
+
+          //Guardamos todos los movimientos que estan relacionados con Sale
+          var saleAmounts = GetSaleAmount();
+          var res = await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
+                                             txtChangedBy.Text, saleAmounts < 0 ? -saleAmounts : saleAmounts, _saleMen, _saleAmountOriginal,
+                                             ComputerHelper.GetIpMachine(), salesmenChanges, authorizedBy);
+
+          //Si no ocurrio un problema al momento de guardar, mostramos el mensaje
+          //de los contrario se iria al catch y alli nos mostraria el mensaje en especifico
+          if (res != 0) UIHelper.ShowMessageResult("Sale", res);
+
+          //Recargamos la información
+          await LoadRecord();
         }
-        if (_isSaleUpdate && _saleNew.saProcRD != null)
-        {
-          _saleNew.saProcRD = _saleNew.saProcD;
-        }
-
-        //Guardamos todos los movimientos que estan relacionados con Sale
-        var saleAmounts = GetSaleAmount();
-       var res = await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
-                                          txtChangedBy.Text, saleAmounts < 0 ? -saleAmounts : saleAmounts, _saleMen, _saleAmountOriginal,
-                                          ComputerHelper.GetIpMachine(), salesmenChanges, authorizedBy);
-
-        //Si no ocurrio un problema al momento de guardar, mostramos el mensaje
-        //de los contrario se iria al catch y alli nos mostraria el mensaje en especifico
-        UIHelper.ShowMessageResult("Sale", res);
-
-        //Recargamos la información
-        await LoadRecord();
 
         //Validamos si existe el MemberShipNum en Intelligence Contracts
         if (await BRMemberSalesman.ExistsMembershipNum(_saleNew.saMembershipNum))
         {
           //Actualizamos vendedores en Intelligence Contracts
-          List<string> mensajes = await BRMemberSalesman.SaveMemberSalesmenClubes(_saleNew, txtChangedBy.Text);
+
+          //Agregamos  
+          List<MemberSalesmanClubles> lstMemberSalesmenClubes = new List<MemberSalesmanClubles>();
+          List<Personnel> lstPersonels = new List<Personnel>();
+          //PR's
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = _saleNew.saPR1 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = _saleNew.saPR2 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "OPC", Job = "OPC", Id = _saleNew.saPR3 });
+          //Liners
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Job = "LIN", Id = _saleNew.saLiner1 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "LINER", Job = "LIN", Id = _saleNew.saLiner2 });
+          //Closers
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = _saleNew.saCloser1 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = _saleNew.saCloser2 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "CLOSER", Job = "CLOS", Id = _saleNew.saCloser3 });
+          //Exit Closers
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Job = "JR", Id = _saleNew.saExit1 });
+          lstMemberSalesmenClubes.Add(new MemberSalesmanClubles { Role = "EXIT", Job = "JR", Id = _saleNew.saExit1 });
+
+          foreach (var mbc in lstMemberSalesmenClubes)
+          {
+            if (!string.IsNullOrEmpty(mbc.Id))
+            {
+              lstPersonels.Add(BRPersonnel.GetPersonnelById(mbc.Id));
+            }
+          }
+
+          List<string> mensajes = await BRMemberSalesman.SaveMemberSalesmenClubes(_saleNew, txtChangedBy.Text, lstMemberSalesmenClubes, lstPersonels);
           foreach (var item in mensajes)
           {
             UIHelper.ShowMessage(item);
           }
-          //await SaveMemberSalesmenClubes();
-          
         }
         else
         {
@@ -1404,7 +1437,7 @@ namespace IM.Host.Forms
         }
         //Establecemos el modos de solo lectura
         SetMode(EnumMode.ReadOnly);
-
+        BusyIndicator.IsBusy = false;
       }
       catch (Exception ex)
       {
@@ -1958,9 +1991,6 @@ namespace IM.Host.Forms
       }
     }
 
-    #endregion
-
-   
-   
+    #endregion    
   }
 }

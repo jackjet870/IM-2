@@ -47,6 +47,7 @@ namespace IM.Base.Forms
       _guestID = guestId;
       lblUserName.Content = userData.User.peN;
       _userPrimero = userData;
+      Title = $"Contact - Guest ID: {guestId}";
     }
 
     #endregion
@@ -124,6 +125,7 @@ namespace IM.Base.Forms
     #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       LoadContact();
     }
     #endregion
@@ -148,12 +150,14 @@ namespace IM.Base.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       _guest = await BRGuests.GetGuest(_guestID);
       LoadContact();
     }
 
     private async void LoadContact()
     {
+       
       cboguPRInfo.ItemsSource = await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
       var guest = await BRGuests.GetGuest(_guestID);      
       if (guest.guInfoD.HasValue)
@@ -168,6 +172,7 @@ namespace IM.Base.Forms
 
       btnEdit.IsEnabled = true; btnSave.IsEnabled = btnCancel.IsEnabled = false;      
       cboguPRInfo.IsEnabled = false;
+      Mouse.OverrideCursor = null;
     }
     #endregion
 
