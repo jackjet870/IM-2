@@ -55,11 +55,15 @@
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PalaceResorts4.Common.Notifications.WinForm">
       <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Notifications.WinForm\PalaceResorts4.Common.Notifications.WinForm.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
     <Reference Include="SAPBusinessObjects.WPF.Viewer, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="SAPBusinessObjects.WPF.ViewerShared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -121,6 +125,9 @@
     <Compile Include="Converters\DateAndTimeConverter.cs" />
     <Compile Include="Converters\MathOperationConverter.cs" />
     <Compile Include="Converters\SubstringOperationConverter.cs" />
+    <Compile Include="Forms\frmDocumentViewer.xaml.cs">
+      <DependentUpon>frmDocumentViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmGuestsMovements.xaml.cs">
       <DependentUpon>frmGuestsMovements.xaml</DependentUpon>
     </Compile>
@@ -185,6 +192,7 @@
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />
+    <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
@@ -254,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmDaysOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmDocumentViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

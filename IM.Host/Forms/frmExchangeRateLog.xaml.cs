@@ -11,6 +11,8 @@ using IM.Host.Classes;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media;
+using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -78,6 +80,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [edgrodriguez] 08/07/2016 Created
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
+    /// [emoguel] 08/09/2016 modified. Ahora abre el visor de reportes
     /// </history>
     private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
@@ -88,7 +91,10 @@ namespace IM.Host.Forms
          "Exchange Rates Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(getExchangeRateLogDataGrid.Columns.ToList(), clsFormatReport.RptExchangeRatesLog()));
 
         if (fileinfo != null)
-          Process.Start(fileinfo.FullName);
+        {
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
+        }         
       }
       else
         UIHelper.ShowMessage("There is no info to make a report");

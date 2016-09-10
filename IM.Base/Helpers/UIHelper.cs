@@ -13,6 +13,7 @@ using IM.BusinessRules.BR;
 using IM.Styles.Classes;
 using IM.Styles.Enums;
 using PalaceResorts.Common.Notifications.WinForm;
+using IM.Model.Classes;
 
 namespace IM.Base.Helpers
 {
@@ -211,11 +212,11 @@ namespace IM.Base.Helpers
           //Buscamos la descripción de la columna
           var columnDefinition = lstColumnsDefinitions.FirstOrDefault(cd => cd.column == pi.Name);
           #region tooltip
-          //var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
-          //if(controlTooltip!=null && columnDefinition!=null && !string.IsNullOrWhiteSpace(columnDefinition.description))
-          //{
-          //  controlTooltip.ToolTip = columnDefinition.description;
-          //}
+          var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
+          if (controlTooltip != null && columnDefinition != null && !string.IsNullOrWhiteSpace(columnDefinition.description))
+          {
+            controlTooltip.ToolTip = columnDefinition.description;
+          }
           #endregion
 
           if (control != null && columnDefinition != null)//Verifcamos que tengamos un control
@@ -610,6 +611,47 @@ namespace IM.Base.Helpers
         }
       });
     }
+    #endregion
+
+    #region OpenWindow
+    /// <summary>
+    /// Verifica si una ventana ya está abierta
+    /// </summary>
+    ///<param name="activate">True. Activa la ventana en caso de que exista | False. no activa la ventana</param> 
+    ///<param name="name">Nombre de la ventana</param>
+    ///<param name="withName">Busca el la ventana por la propiedad Name</param>
+    ///<history>
+    ///[emoguel]
+    /// </history>
+    public static bool IsOpenWindow(string name, bool activate=false,bool withUid=true)
+    {
+      try
+      {
+        Window wd = null;
+        if (withUid)
+        {
+          wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == name).FirstOrDefault();//buscamos una ventana con el mismo Nombre          
+        }
+        else
+        {
+          wd = Application.Current.Windows.OfType<Window>().Where(x => x.GetType().Name == name).FirstOrDefault();//buscamos una ventana con el mismo Nombre
+        }        
+
+        if (wd == null)//Se crea la ventana
+        {
+          return false;
+        }
+        else//Se pone el foco en la ventana
+        {
+          if (activate) { wd.Activate(); }
+          return true;
+        }        
+      }
+      catch
+      {
+        throw;
+      }
+    } 
     #endregion
 
     #endregion Metodos

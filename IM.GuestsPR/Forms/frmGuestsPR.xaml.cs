@@ -79,8 +79,9 @@ namespace IM.GuestsPR.Forms
         //Creamos el reporte
         var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
         if (fi != null)
-        {
-          Process.Start(fi.FullName);
+        {          
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fi, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else

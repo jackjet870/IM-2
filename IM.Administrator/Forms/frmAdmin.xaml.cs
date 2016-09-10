@@ -6,6 +6,7 @@ using System.Windows.Input;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model.Classes;
+using System.Reflection;
 
 namespace IM.Administrator.Forms
 {
@@ -272,14 +273,11 @@ namespace IM.Administrator.Forms
     private void OpenWindow()
     {
       Item item = (Item)lstMenuAdm.SelectedItem;//Obtenemos el seleccionado de la lista
-      string strNombreForm = $"IM.Administrator.Forms.{item.Id}";//Obtenemos el nombre del formulario
-
-      //Verificar si la ventana está abierta
-      Window wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == item.Id).FirstOrDefault();
-
-      if (wd == null)//Se crea la ventana
+            
+      if(!UIHelper.IsOpenWindow(item.Id,true,false))//Verificar si la ventana está abierta
       {
-        Type type = System.Reflection.Assembly.GetExecutingAssembly().GetType(strNombreForm);
+        string strNombreForm = $"IM.Administrator.Forms.{item.Id}";//Obtenemos el nombre del formulario
+        Type type = Assembly.GetExecutingAssembly().GetType(strNombreForm);
         if (type != null)//Verificar si la ventana existe
         {
           System.Runtime.Remoting.ObjectHandle handle = Activator.CreateInstance(null, strNombreForm);
@@ -292,10 +290,6 @@ namespace IM.Administrator.Forms
           string sNombre = item.Name;
           UIHelper.ShowMessage("could not show the window " + sNombre);
         }
-      }
-      else//Se pone el foco en la ventana
-      {
-        wd.Activate();
       }
     }
     #endregion

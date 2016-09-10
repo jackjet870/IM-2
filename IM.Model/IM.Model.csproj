@@ -233,6 +233,7 @@
     <Compile Include="Enums\EnumEntities.cs" />
     <Compile Include="Enums\EnumExternalProduct.cs" />
     <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
+    <Compile Include="Enums\EnumFileFormat.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
     <Compile Include="Enums\EnumFormatFolio.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />

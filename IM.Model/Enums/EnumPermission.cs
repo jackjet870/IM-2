@@ -77,6 +77,8 @@ namespace IM.Model.Enums
     [Description("MTREPRINT")]
     MealTicketReprint,
     [Description("WHOLESALER")]
-    WholeSalers
+    WholeSalers,
+    [Description("RPTEXCEL")]
+    RptExcel
   }
 }

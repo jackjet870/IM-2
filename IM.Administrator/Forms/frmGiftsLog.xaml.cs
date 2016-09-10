@@ -7,8 +7,9 @@ using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Model.Classes;
 using IM.Administrator.Classes;
+using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -105,7 +106,9 @@ namespace IM.Administrator.Forms
     private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true, true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID", idGift) },
-        "Gifts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
+        $"Gift Logs - {idGift}", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
+        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        documentViewver.ShowDialog();
     }
     #endregion
 
@@ -148,7 +151,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    
     #endregion
   }
 }

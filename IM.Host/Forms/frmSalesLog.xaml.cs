@@ -7,6 +7,9 @@ using System.Windows.Data;
 using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.Model;
+using System.IO;
+using IM.Model.Enums;
+using IM.Base.Forms;
 
 namespace IM.Host.Forms
 {
@@ -63,14 +66,26 @@ namespace IM.Host.Forms
     /// </history>
     private async void btnPrintGuestLog_Click(object sender, RoutedEventArgs e)
     {
-      if (saleLogDataDataGrid.ItemsSource == null) return;
+      try
+      {
+        if (saleLogDataDataGrid.ItemsSource == null) return;
 
-      await EpplusHelper.CreateCustomExcel(
-        TableHelper.GetDataTableFromList((List<SaleLogData>)saleLogDataDataGrid.ItemsSource, true, true, true),
-        new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
-        "Sale Log",
-        DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
-        EpplusHelper.OrderColumns(saleLogDataDataGrid.Columns.ToList(), Classes.clsFormatReport.RptSaleLog()));
+        FileInfo fileInfo = await EpplusHelper.CreateCustomExcel(
+          TableHelper.GetDataTableFromList((List<SaleLogData>)saleLogDataDataGrid.ItemsSource, true, true, true),
+          new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
+          "Sale Log",
+          DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
+          EpplusHelper.OrderColumns(saleLogDataDataGrid.Columns.ToList(), Classes.clsFormatReport.RptSaleLog()));
+        if(fileInfo!=null)
+        {
+          frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewver.ShowDialog();
+        }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
     }
   }
 }

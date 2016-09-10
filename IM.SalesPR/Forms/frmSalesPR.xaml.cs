@@ -78,6 +78,7 @@ namespace IM.SalesPR.Forms
     /// </summary>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
+    /// [emoguel] 09/09/2016 Modified. Ahora se abre al visor de reportes
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -96,7 +97,8 @@ namespace IM.SalesPR.Forms
 
           if (fi != null)
           {
-            Process.Start(fi.FullName);
+            frmDocumentViewer documentViewer = new frmDocumentViewer(fi, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+            documentViewer.ShowDialog();
           }
         }
       }

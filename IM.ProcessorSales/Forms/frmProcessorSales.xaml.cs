@@ -405,13 +405,15 @@ namespace IM.ProcessorSales.Forms
         }
         if (file == null)
         {
-          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);
+          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, file);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(file.FullName, file);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
-      {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -553,13 +555,15 @@ namespace IM.ProcessorSales.Forms
         }
         if (file == null)
         {
-          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);
+          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, file);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(file.FullName, file);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
-      {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -842,7 +846,7 @@ namespace IM.ProcessorSales.Forms
       LoadGrids();
       SetupParameters();
       lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue();
+      _frmReportQueue = new frmReportQueue(App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
       KeyboardHelper.CkeckKeysPress(statusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(statusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(statusBarNum, Key.NumLock);

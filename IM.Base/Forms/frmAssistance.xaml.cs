@@ -11,7 +11,6 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Classes;
 using System.IO;
-using System.Diagnostics;
 
 namespace IM.Base.Forms
 {
@@ -463,10 +462,13 @@ namespace IM.Base.Forms
         format.Add("Saturday", "asSaturday");
         format.Add("Sunday", "asSunday");
         format.Add("#Assistence", "asNum");
-        //TODO: EZE por favor comenta el codigo, abre el reporte, y cambia MessageBox icono Informacion.
+        
         FileInfo file =  await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, format);
         if (file != null)
-          Process.Start(file.FullName);
+        {
+          frmDocumentViewer documentViewver = new frmDocumentViewer(file, user.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+          documentViewver.ShowDialog();
+        }          
       }
       else
       {

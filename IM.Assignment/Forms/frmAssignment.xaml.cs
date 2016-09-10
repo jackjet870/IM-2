@@ -12,6 +12,8 @@ using System.IO;
 using IM.Assignment.Classes;
 using System.Diagnostics;
 using System.Windows.Input;
+using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.Assignment
 {
@@ -246,11 +248,19 @@ namespace IM.Assignment
     #endregion
 
     #region OpenReport
+    /// <summary>
+    /// Muestra el reporte en un report viewver
+    /// </summary>
+    /// <param name="finfo">File a mostrat</param>
+    /// <history>
+    /// [emoguel] 07/09/2016 modified---> ahora ya no habre el archivo de excel
+    /// </history>
     private void OpenReport(FileInfo finfo)
     {
       if (finfo != null)
-      {
-        Process.Start(finfo.FullName);
+      {        
+        frmDocumentViewer documentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly), false);
+        documentViewver.ShowDialog();
       }
     }
     #endregion

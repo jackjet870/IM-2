@@ -54,7 +54,7 @@ namespace IM.ProcessorGeneral.Forms
       ConfigurarGrids();
       SetupParameters();
       lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue();
+      _frmReportQueue = new frmReportQueue(App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
     }
     #endregion
 
@@ -335,7 +335,7 @@ namespace IM.ProcessorGeneral.Forms
       if (!ConfigRegistryHelper.ExistReportsPath())
       {
         if (!ShowSystemCfg()) return;
-      }
+      }      
       _frmReportQueue.Show();
       if (_frmReportQueue.WindowState == WindowState.Minimized)
         _frmReportQueue.WindowState = WindowState.Normal;
@@ -1105,14 +1105,16 @@ namespace IM.ProcessorGeneral.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
       }
       catch (Exception ex)
       {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -1321,14 +1323,15 @@ namespace IM.ProcessorGeneral.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
       }
       catch (Exception ex)
-      {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -1566,14 +1569,15 @@ namespace IM.ProcessorGeneral.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
       }
       catch (Exception ex)
-      {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }

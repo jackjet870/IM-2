@@ -4,16 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Title="Agencies" Height="407" Width="440">
-    <!--<Window.Resources>
-        --><!--<ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>--><!--
-    </Window.Resources>-->
-
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Height="24" >
@@ -52,7 +44,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Agencies-->
-        <DataGrid x:Name="dgrAgencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAgencies}" IsReadOnly="True"
+        <DataGrid x:Name="dtgAgencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAgencies}" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">

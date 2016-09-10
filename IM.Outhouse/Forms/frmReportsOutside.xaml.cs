@@ -4,12 +4,13 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.Outhouse.Forms
 {
@@ -90,6 +91,7 @@ namespace IM.Outhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] 31/ago/2016 Created
+    /// [emoguel] 08/09/2016 Ahora abre el visor de reportes
     /// </history>
     private async void lstReports_Select(object sender, RoutedEventArgs e)
     {
@@ -132,7 +134,10 @@ namespace IM.Outhouse.Forms
       }
 
       if (fileinfo != null)
-        Process.Start(fileinfo.FullName);
+      {
+        frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+        documentViewer.ShowDialog();
+      }
     } 
     #endregion
   }

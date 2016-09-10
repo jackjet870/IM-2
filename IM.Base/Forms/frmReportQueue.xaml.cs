@@ -1,8 +1,9 @@
 ﻿using IM.Base.Classes;
 using IM.Base.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -17,18 +18,20 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private ObservableCollection<objReportQueue> ObjReportQueues { get; } = new ObservableCollection<objReportQueue>();
+    private ObservableCollection<objReportQueue> ObjReportQueues { get; set; } = new ObservableCollection<objReportQueue>();
+    bool _exportExcel = true;
 
     #endregion Atributos
 
     #region Constructores y destructores
 
-    public frmReportQueue()
+    public frmReportQueue(bool exportExcel)
     {
       InitializeComponent();
       var objReportQueueViewSource = (CollectionViewSource)(FindResource("ObjReportQueueViewSource"));
       objReportQueueViewSource.Source = ObjReportQueues;
       ObjReportQueues.CollectionChanged += OnCollectionChanged;
+      _exportExcel = exportExcel;
     }
 
     #endregion Constructores y destructores
@@ -44,7 +47,7 @@ namespace IM.Base.Forms
     /// [aalcocer] 06/06/2016 Created
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
+    {      
       e.Cancel = true;
       Hide();
     }
@@ -73,6 +76,7 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 06/06/2016 Created
+    /// [emoguel] 10/09/2016 Modified. Ahora se abre el visor de reportes
     /// </history>
     private void BtnOpenReport_OnClick(object sender, RoutedEventArgs e)
     {
@@ -80,11 +84,16 @@ namespace IM.Base.Forms
       if (objReportQueue != null)
         ObjReportQueues.Where(x => x.Id == objReportQueue.Id).ToList().ForEach(x =>
         {
-          x.FileInfo.Refresh();
-          x.Exists = x.FileInfo.Exists;
-
-          if (x.Exists)
-            Process.Start(x.FileInfo.FullName);
+          FileInfo file = new FileInfo(x.Id);
+          if (file.Exists)//Verificamos que el archivo exista
+          {
+            if (!UIHelper.IsOpenWindow(file.Name.Replace(file.Extension,string.Empty), true))//Verificamos si la ventana ya está abierta
+            {
+              //Abrimos el visor de reportes
+              frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file,_exportExcel);
+              frmDocumentViewver.Show();
+            }            
+          }
           else
             UIHelper.ShowMessage("The file does not exist", MessageBoxImage.Warning);
         });
@@ -101,36 +110,25 @@ namespace IM.Base.Forms
     /// [aalcocer] 06/06/2016 Created
     /// </history>
     private void BtnClearCompleted_OnClick(object sender, RoutedEventArgs e)
-    {
-      ObjReportQueues.Where(x => x.FileInfo != null).ToList().ForEach(x => ObjReportQueues.Remove(x));
+    {      
+      //Eliminamos los archivos temporales que fueron creados
+      DeleteReports();
     }
 
     #endregion BtnClearCompleted_OnClick
 
-    #region BtnOpenFolder_OnClick
-
+    #region Window_Closed
     /// <summary>
-    /// Abre la carpeta donde estan los archivos
+    /// Elimina los archivos temporales que fueron creados
     /// </summary>
     /// <history>
-    /// [aalcocer] 06/06/2016 Created
-    /// [aalcocer] 13/06/2016 Modified. La ruta por default se obtiene en la configuracion
+    /// [emoguel] created 10/09/2016
     /// </history>
-    private void BtnOpenFolder_OnClick(object sender, RoutedEventArgs e)
+    private void Window_Closed(object sender, EventArgs e)
     {
-      if (ConfigRegistryHelper.ExistReportsPath())
-      {
-        string outputDir = ConfigRegistryHelper.GetReportsPath();
-        Process.Start(outputDir);
-      }
-      else
-      {
-        UIHelper.ShowMessage("It is not configured path.", MessageBoxImage.Warning, Title);
-        Hide();
-      }
+      DeleteReports();
     }
-
-    #endregion BtnOpenFolder_OnClick
+    #endregion
 
     #endregion Eventos del formulario
 
@@ -153,7 +151,7 @@ namespace IM.Base.Forms
         ObjReportQueues.Where(x => x.Id == id).ToList().ForEach(x =>
         {
           x.ReportName = reportname;
-          x.FileInfo = null;
+          
         });
       }
       else
@@ -168,7 +166,7 @@ namespace IM.Base.Forms
 
     #endregion AddReport
 
-    #region SetFileInfo
+    #region SetExist
 
     /// <summary>
     /// Le agrega un archivo al reporte
@@ -176,40 +174,68 @@ namespace IM.Base.Forms
     /// <param name="id">id del reporte</param>
     /// <param name="fileInfo">Archivo</param>
     /// <history>
-    /// [aalcocer] 06/06/2016 Created
+    /// [emoguel] 09/06/2016 created
     /// </history>
-    public void SetFileInfo(string id, FileInfo fileInfo)
+    public void SetExist(string id, FileInfo fileInfo)
     {
       ObjReportQueues.Where(x => x.Id == id).ToList().ForEach(x =>
       {
-        fileInfo.Refresh();
-        x.FileInfo = fileInfo;
         x.Exists = fileInfo.Exists;
+        x.FileName = fileInfo.Name.Replace(fileInfo.Extension,string.Empty);
       });
     }
+    #endregion
 
-    #endregion SetFileInfo
-
-    #region SetFileInfoError
-
+    #region DeleteReports
     /// <summary>
-    ///Le actualiza el archivo del reporte cuando ocurre un error
+    /// Elimina los archivos temporales y cierra las ventanas abiertas
     /// </summary>
-    /// <param name="id">id del reporte</param>
     /// <history>
-    /// [aalcocer] 13/06/2016 Created
+    /// [emoguel]  05/09/2016 Created
     /// </history>
-    public void SetFileInfoError(string id)
+    private void DeleteReports()
     {
-      ObjReportQueues.Where(x => x.Id == id).ToList().ForEach(x =>
+      try
       {
-        x.FileInfo = new FileInfo(id);
-        x.FileInfo.Delete();
-        x.Exists = false;
-      });
-    }
+        List<string> lstName = ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList().Select(x => x.FileName).ToList();//Buscamos el nombre de los reportes
+        CloseWindows(lstName);//Cerramos las ventanas de reportes abiertos
 
-    #endregion SetFileInfoError
+        //Borrar archivos con fecha diferente a la de hoy
+        DirectoryInfo directoryInfo = new DirectoryInfo(SettingsHelper.GetReportsPath());
+        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles().Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
+        lstFiles.ForEach(fi => fi.Delete());//Eliminamos los archivos
+
+        //Borrar archivos con el mismo nombre
+        ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList()
+          .ForEach(x =>
+          {            
+            lstFiles = directoryInfo.GetFiles($"{x.FileName}*").ToList();
+            lstFiles.ForEach(f => f.Delete());            
+          });      
+        
+
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+    }
+    #endregion
+
+    #region CloseWIndows
+    /// <summary>
+    /// Cierra todos los reportes abiertos
+    /// </summary>
+    /// <param name="lstNames">Lista del nombre de la ventana</param>
+    /// <history>
+    /// [emoguel] 09/09/2016 Created.
+    /// </history>
+    private void CloseWindows(List<string> lstNames)
+    {      
+      List<Window> lstWindows = Application.Current.Windows.OfType<Window>().Where(x => lstNames.Contains(x.Uid)).ToList();//buscamos una ventana con el mismo Nombre
+      lstWindows.ForEach(wd => wd.Close());//Cerramos las ventanas
+    }
+    #endregion
 
     #endregion Métodos Públicos
   }

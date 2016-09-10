@@ -94,7 +94,8 @@ namespace IM.SalesLiner.Forms
 
         if (fi != null)
         {
-          Process.Start(fi.FullName);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fi, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else

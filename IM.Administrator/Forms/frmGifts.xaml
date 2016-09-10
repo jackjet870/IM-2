@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" KeyDown="Window_KeyDown"
-        Title="Gifts" Height="407" Width="490" Uid="frmGifts">
+        Title="Gifts" Height="407" Width="490">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Height="24" >

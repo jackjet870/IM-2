@@ -619,10 +619,10 @@ namespace IM.Inhouse.Forms
           }
           break;
       }
-      if (hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
-        UIHelper.ShowMessage("Generated Report", MessageBoxImage.Information, "Inhouse");
-      else //Si el Grid esta vacio
+      if (!hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
+      {
         UIHelper.ShowMessage("There is no data.");
+      }
     }
 
     #endregion CreateExcelReport

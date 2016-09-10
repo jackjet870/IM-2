@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmPersonnel" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="Personnel" Height="407" Width="490">    
     <DockPanel LastChildFill="True">

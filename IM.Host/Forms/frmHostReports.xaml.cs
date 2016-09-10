@@ -10,7 +10,8 @@ using IM.BusinessRules.BR;
 using IM.Base.Reports;
 using IM.Host.Classes;
 using System.IO;
-using System.Diagnostics;
+using IM.Model.Enums;
+using IM.Base.Forms;
 
 namespace IM.Host.Forms
 {
@@ -44,6 +45,7 @@ namespace IM.Host.Forms
     /// [edgrodriguez] 21/Jun/2016 Created
     /// [jorcanche] 01/09/2016 modified se agrego validacion si no se selecciono un reporte
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
+    /// [emoguel] 08/09/2016 Modified. Ahora abre el visor de reportes
     /// </history>
     private async void lstHostReports_Select(object sender, RoutedEventArgs e)
     {
@@ -144,7 +146,10 @@ namespace IM.Host.Forms
       }
 
       if (fileinfo != null)
-        Process.Start(fileinfo.FullName);
+      {
+        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+        documentViewver.ShowDialog();
+      }
     }
     #endregion 
     #endregion

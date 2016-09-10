@@ -18,6 +18,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.ProcessorGeneral.Classes;
 using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -155,11 +156,12 @@ namespace IM.ProcessorGeneral.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
-        frmReportQ.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        frmReportQ.SetExist(finfo.FullName, finfo);
       }
       catch (Exception ex)
-      {
-        frmReportQ.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }

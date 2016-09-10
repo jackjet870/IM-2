@@ -7,8 +7,8 @@ using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
+using IM.Base.Forms;
 
 namespace IM.Inhouse.Classes
 {
@@ -179,12 +179,14 @@ namespace IM.Inhouse.Classes
     /// </summary>
     /// <history>
     /// [jorcanche] 07/05/2016 created
+    /// [emoguel] 08/09/2016 Modified. Ahora abre el visor de reportes
     /// </history>
     private static void OpenFile(FileInfo file)
     {
       if (file != null)
       {
-        Process.Start(file.FullName);
+        frmDocumentViewer documentViewer = new frmDocumentViewer(file,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        documentViewer.ShowDialog();
       }
     }
   }

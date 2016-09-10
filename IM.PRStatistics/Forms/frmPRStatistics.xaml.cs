@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,13 +8,13 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.PRStatistics.Utilities;
 using System.IO;
-using System.Diagnostics;
 using System.Data;
 using System.Linq;
 using IM.Base.Forms;
 using IM.Base.Helpers;
 using Xceed.Wpf.Toolkit;
 using IM.Model.Helpers;
+using IM.Model.Enums;
 
 namespace IM.PRStatistics.Forms
 {
@@ -96,6 +95,7 @@ namespace IM.PRStatistics.Forms
     /// </summary>
     /// <history>
     /// [erosado] 08/Mar/2016 Created
+    /// [emoguel] 09/09/2016 Modified. Ahora abre el visor de reportes
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -114,7 +114,8 @@ namespace IM.PRStatistics.Forms
 
         if (finfo != null)
         {
-          Process.Start(finfo.FullName);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else

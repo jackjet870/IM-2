@@ -1913,7 +1913,7 @@ namespace IM.Base.Helpers
     {
       var suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
 
-      string outputDir = ConfigRegistryHelper.GetReportsPath();
+      string outputDir = SettingsHelper.GetReportsPath();
       int count = 1;
 
       string fullPath = $@"{outputDir}\{suggestedName}.xlsx";
@@ -3033,19 +3033,15 @@ namespace IM.Base.Helpers
     /// <history>
     /// [erosado] 11/03/2016  Created
     /// [erosado] 02/04/2016  Cambiamos el metodo a privado
+    /// [emoguel] 09/06/2016 Ya no se muestra el FileDialog ahora se guarda en la ruta temporal
     /// </history>
     private static FileInfo SaveExcel(ExcelPackage pk, string suggestedName)
     {
-      var saveFileDialog = new SaveFileDialog();
-      saveFileDialog.Filter = "Excel files(*.xlsx or *.xls) | *.xlsx; *.xls;";
-      saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-      saveFileDialog.DefaultExt = ".xlsx";
-      saveFileDialog.FileName = suggestedName;
-      if (saveFileDialog.ShowDialog() == true)
-      {
-        var name = new FileInfo(saveFileDialog.FileName);
+      var name = new FileInfo($@"{SettingsHelper.GetReportsPath()}\{suggestedName}.xlsx");//(saveFileDialog.FileName);
         try
-        { pk.SaveAs(name); }
+        {
+          pk.SaveAs(name);
+        }        
         catch (Exception e)
         {
           var message = UIHelper.GetMessageError(e);
@@ -3053,11 +3049,6 @@ namespace IM.Base.Helpers
           return null;
         }
         return name;
-      }
-      else
-      {
-        return null;
-      }
     }
 
     #endregion SaveExcel

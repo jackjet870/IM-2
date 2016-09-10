@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmZones" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="Zones" Height="407" Width="440">
     <DockPanel LastChildFill="True">

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
         mc:Ignorable="d" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        Uid="frmAssistancesStatus" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="Assistances Status" Height="407" Width="470" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->

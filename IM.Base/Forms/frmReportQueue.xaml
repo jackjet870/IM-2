@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Classes="clr-namespace:IM.Base.Classes"
         x:Class="IM.Base.Forms.frmReportQueue"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Closed="Window_Closed"
         Title="Report Queue" Height="300" Width="800" Closing="Window_Closing">
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -29,7 +29,6 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Name="btnClearCompleted" Content="Clear Completed" VerticalAlignment="Center" Width="100"  Margin="10,5,10,5" Click="BtnClearCompleted_OnClick"/>
-            <Button Name="btnOpenFolder" Content="Open Containing Folder" VerticalAlignment="Center" Width="130" Margin="50,5,10,5" Click="BtnOpenFolder_OnClick" />
         </StackPanel>
         <DataGrid IsReadOnly="True" ItemsSource="{Binding}" DataContext="{StaticResource ObjReportQueueViewSource}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <DataGrid.CellStyle>
@@ -58,7 +57,7 @@
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=FileInfo}" Value="{x:Null}">
+                                                <DataTrigger Binding="{Binding Exists}" Value="False">
                                                     <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -67,13 +66,13 @@
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="12" Height="12" />
                                     <TextBlock Text="Loading report..." Margin="5,0,0,0"/>
                                 </StackPanel>
-                                <TextBlock Text="{Binding FileInfo.Name}">
+                                <TextBlock Text="{Binding FileName}">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Visibility" Value="Visible" />
-                                            <Setter Property="ToolTip" Value="{Binding FileInfo.Name}"/>
+                                            <Setter Property="ToolTip" Value="{Binding FileName}"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding FileInfo}" Value="{x:Null}">
+                                                <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -93,9 +92,9 @@
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Setter Property="IsEnabled" Value="True" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding FileInfo}" Value="{x:Null}">
+                                            <!--<DataTrigger Binding="{Binding FileInfo}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Hidden" />
-                                            </DataTrigger>
+                                            </DataTrigger>-->
                                             <DataTrigger Binding="{Binding Exists}" Value="False">
                                                 <Setter Property="IsEnabled" Value="False" />
                                             </DataTrigger>

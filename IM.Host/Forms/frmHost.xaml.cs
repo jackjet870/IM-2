@@ -623,7 +623,11 @@ namespace IM.Host
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
 
         if (fileinfo != null)
-          Process.Start(fileinfo.FullName);
+        {
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
+        }
+          
       }
       _busyIndicator.IsBusy = false;
     }

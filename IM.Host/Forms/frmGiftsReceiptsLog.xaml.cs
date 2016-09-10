@@ -2,21 +2,16 @@
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
 using IM.Model;
-using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using IM.Base.Forms;
+using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -176,6 +171,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [edgrodriguez] 08/07/2016 Created
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
+    /// [emoguel] 08/09/2016 Modified. Ahora se habre el visor de reportes
     /// </history>
     private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
@@ -186,7 +182,10 @@ namespace IM.Host.Forms
           "Gift Receipts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(grdLog.Columns.ToList(), clsFormatReport.RptGiftReceiptsLog()));
 
         if (fileinfo != null)
-          Process.Start(fileinfo.FullName);
+        {
+          frmDocumentViewer documentViewver=new frmDocumentViewer(fileinfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+          documentViewver.ShowDialog();
+        }          
       }
       else
         UIHelper.ShowMessage("There is no info to make a report");
