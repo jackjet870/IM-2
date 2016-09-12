@@ -1665,7 +1665,7 @@ namespace IM.Inhouse.Forms
       if (App.User.AutoSign)
       {
         log.UserData = App.User;
-      }
+      } 
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
@@ -1987,7 +1987,9 @@ namespace IM.Inhouse.Forms
 
           await login.getAllPlaces();
           login.ShowDialog();
-        }        
+        }
+        if (!App.User.AutoSign  && !login.IsAuthenticated) return;          
+
         if (isInvit || login.IsAuthenticated)
         {
           var invitacion = new frmInvitation

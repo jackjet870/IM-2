@@ -400,6 +400,17 @@ namespace IM.Outhouse.Forms
           await login.getAllPlaces();
           login.ShowDialog();
         }
+        else if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !App.User.AutoSign)
+        {
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+            invitationMode: true, invitationPlaceId: App.User.Location.loID);
+
+          await login.getAllPlaces();
+          login.ShowDialog();
+        }
+        if (!App.User.AutoSign && !login.IsAuthenticated) return;
+
         if (isInvit || login.IsAuthenticated)
         {
           var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, allowReschedule: false) { Owner = this };
