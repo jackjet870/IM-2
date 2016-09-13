@@ -71,10 +71,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptSalesRooms_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareReportBySalesRoom();
     }
     #endregion
@@ -89,11 +85,6 @@ namespace IM.ProcessorGeneral.Forms
     private void grdrptSalesRooms_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareReportBySalesRoom();
     }
 
@@ -115,10 +106,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptLeadSource_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareReportByLeadSource();
     }
 
@@ -135,11 +122,7 @@ namespace IM.ProcessorGeneral.Forms
     private void grdrptLeadSources_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
+      
       if (grdrptLeadSources.SelectedIndex >= 0)
       {
         PrepareReportByLeadSource();
@@ -163,10 +146,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptGeneral_dblClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareGeneralReport();
     }
 
@@ -182,11 +161,7 @@ namespace IM.ProcessorGeneral.Forms
     private void grdrptGeneral_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
+      
       if (grdrptGeneral.SelectedIndex >= 0)
       {
         PrepareGeneralReport();
@@ -261,10 +236,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintSR_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareReportBySalesRoom();
     }
     #endregion
@@ -280,10 +251,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintLS_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareReportByLeadSource();
     }
 
@@ -300,10 +267,6 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintGral_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       PrepareGeneralReport();
     }
 
@@ -331,11 +294,7 @@ namespace IM.ProcessorGeneral.Forms
     ///   [edgrodriguez] 17/Jun/2016 Created
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
-    {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }      
+    {    
       _frmReportQueue.Show();
       if (_frmReportQueue.WindowState == WindowState.Minimized)
         _frmReportQueue.WindowState = WindowState.Normal;
@@ -1779,30 +1738,6 @@ namespace IM.ProcessorGeneral.Forms
     }
 
     #endregion SetupParameters
-
-    #region ShowSystemCfg
-    /// <summary>
-    /// Muestra la ventana de configuracion
-    /// </summary>
-    /// <history>
-    ///   [edgrodriguez] 17/Jun/2016 Created
-    /// </history>
-    private bool ShowSystemCfg()
-    {
-      _isConfigured = false;
-      MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) _isConfigured = false;
-      else
-      {
-        _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
-        if (_systemConfig.ShowDialog() == true)
-        {
-          _isConfigured = true;
-        }
-      }
-      return _isConfigured;
-    }
-    #endregion
 
     #endregion
   }

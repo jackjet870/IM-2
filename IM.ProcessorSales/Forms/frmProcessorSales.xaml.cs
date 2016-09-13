@@ -723,8 +723,6 @@ namespace IM.ProcessorSales.Forms
     /// <param name="type">0 grid | 1 boton</param>
     private void LoadFilter(object obj, int type)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
-
       if (type == 0) //de Grid
       {
         var dataGridRow = (DataGridRow)obj;
@@ -775,29 +773,6 @@ namespace IM.ProcessorSales.Forms
     }
 
     #endregion
-
-    #region ShowSystemCfg
-
-    /// <summary>
-    ///Muestra la ventana  para configurar opciones de sistema
-    /// </summary>
-    /// <history>
-    ///   [aalcocer] 07/07/2016 Created
-    /// </history>
-    private bool ShowSystemCfg()
-    {
-      bool _isConfigured = false;
-      MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) return false;
-      _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
-      if (_systemConfig.ShowDialog() == true)
-      {
-        _isConfigured = true;
-      }
-      return _isConfigured;
-    }
-
-    #endregion ShowSystemCfg
 
     #endregion
 
@@ -911,8 +886,6 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath() && !ShowSystemCfg()) return;
-
       _frmReportQueue.Show();
       if (_frmReportQueue.WindowState == WindowState.Minimized) _frmReportQueue.WindowState = WindowState.Normal;
       _frmReportQueue.Activate();

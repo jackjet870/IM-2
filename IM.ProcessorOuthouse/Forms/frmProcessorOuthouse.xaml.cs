@@ -1561,31 +1561,6 @@ namespace IM.ProcessorOuthouse.Forms
 
     #endregion WaitMessage
 
-    #region ShowSystemCfg
-    /// <summary>
-    ///   Abre la ventana para configurar opciones de sistema
-    /// </summary>
-    /// <history>
-    ///   [vku] 16/Jun/2016 Created
-    ///   [vku] 17/Jun/2016 Modified. Ahora verfica si se configuro la ruta. Devuelve true or false
-    /// </history>
-    private bool ShowSystemCfg()
-    {
-      _isConfigured = false;
-      MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) _isConfigured = false;
-      else
-      {
-        _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
-        if (_systemConfig.ShowDialog() == true)
-        {
-          _isConfigured = true;
-        }
-      }
-      return _isConfigured;
-    }
-    #endregion
-
     #endregion Metodos
 
     #region eventos
@@ -1658,10 +1633,6 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       if (sender.Equals(btnPrintRptByLeadSource)) PrepareReportByLeadSource();
       else if (sender.Equals(btnPrintRptByPR)) PrepareReportByPR();
       else if (sender.Equals(btnPrintOtherRpts)) PrepareOtherReports();
@@ -1712,10 +1683,6 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
@@ -1733,10 +1700,6 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-      else if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();

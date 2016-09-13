@@ -396,7 +396,7 @@ namespace IM.Base.Classes
     /// <param name="program">Program</param>
     /// <returns>True is valid | False No</returns>
     public static bool ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
-    {
+    {      
       string _res = string.Empty;
       //Validamos el folio de reservacion (InHouse & OutHouse)
       if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral, dbContext.CloneGuest)) return false;
@@ -405,7 +405,7 @@ namespace IM.Base.Classes
       //Validamos que el Numero de habitaciones este en el rango permitido
       if (!ValidateHelper.ValidateNumber(dbContext.Guest.guRoomsQty, 1, 5, "Rooms Quantity")) return false;
       //Validamos que se ingresen datos en los campos obligatorios
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(form, "Invitation", blnDatagrids: true, showMessage: true))) return false;
+      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(form, "Invitation", showMessage: true))) return false;
       //Validamos el Booking y el Reschedule
       if (!ValidateBookReschedule(ref form, dbContext)) return false;
       //Validamos Pax
@@ -441,6 +441,7 @@ namespace IM.Base.Classes
 
       //Validamos los regalos de la invitacion
       if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
+      else if (!ValidateBookingDeposits(form)) _isValid = false;
       //Validamos las Tarjetas de credito
       else if (!ValidateGuestCreditCard(dbContext.GuestCreditCardList.ToList())) _isValid = false;
       //Burned Hotel
@@ -857,11 +858,11 @@ namespace IM.Base.Classes
           {
             if (bookingDeposit.bdpt == "CC")//Sólo si es tipo Credit Card hace las validaciones
             {
-              if (bookingDeposit.bdCardNum == null || bookingDeposit.ToString().Length > 4)
+              if (bookingDeposit.bdCardNum == null || bookingDeposit.bdCardNum.ToString().Length > 4 || bookingDeposit.bdCardNum.ToString().Length < 4)
               {
                 UIHelper.ShowMessage("Specify the last four numbers of credit card.");
+                return false;
               }
-
               //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
               if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
               {
@@ -930,11 +931,11 @@ namespace IM.Base.Classes
 
         case "bdcu":
         case "bdcc":
-          {
+          {            
             //Si es tarjeta de credito verificar que tenga el tipo de tarjeta
             if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
             {
-              UIHelper.ShowMessage("Specify a credit card type");
+              UIHelper.ShowMessage("Specify a credit card");
               return false;
             }
 
@@ -1153,7 +1154,42 @@ namespace IM.Base.Classes
     }
     #endregion
 
-    #endregion   
+    #region ValidateBookingDeposits
+    /// <summary>
+    /// Valida el grid de deposits antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <param name="form">Formulario de invitación</param>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [emoguel] 10/09/2016 created
+    /// </history>
+    private static bool ValidateBookingDeposits(frmInvitation form)
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(form.dtgBookingDeposits);
+      if (row != null)
+      {
+        int columnIndex = 0;
+        bool gridvalid = EndingEditBookingDeposits(row.Item as BookingDeposit, form.dtgBookingDeposits, form.CatObj.CloneBookingDepositList, form.CatObj.Guest.guID, ref columnIndex);
+        if (gridvalid)
+        {
+          form.dtgBookingDeposits.RowEditEnding -= form.dtgBookingDeposits_RowEditEnding;
+          form.dtgBookingDeposits.CommitEdit();
+          form.dtgBookingDeposits.RowEditEnding += form.dtgBookingDeposits_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          GridHelper.SelectRow(form.dtgBookingDeposits, row.GetIndex(), columnIndex, true);
+        }
+      }
+      return isValid;
+    } 
+    #endregion
+
+    #endregion
 
     #region Validate Guest Additional
 

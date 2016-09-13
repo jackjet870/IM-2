@@ -687,7 +687,8 @@
                                                                             SelectedValueBinding="{Binding bdcu,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="cuN"
                                                                             SelectedValuePath="cuID"
-                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" />
+                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" >               
+                                                        </DataGridComboBoxColumn>
                                                         <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
                                                                             SelectedValueBinding="{Binding bdpt,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="ptN"

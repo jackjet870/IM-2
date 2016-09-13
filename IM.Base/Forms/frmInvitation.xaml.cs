@@ -127,7 +127,7 @@ namespace IM.Base.Forms
         bool isValid = true;
 
         //Asignamos el focus al boton
-        imgButtonSave.Focus();
+        imgButtonSave.Focus();        
 
         //Validamos controles comunes y validaciones basicas
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
@@ -139,6 +139,7 @@ namespace IM.Base.Forms
         {
           isValid = InvitationValidationRules.ValidateInformationGrids(this, CatObj);
         }
+        
         //Validamos que la informacion exista
         if (isValid)
         {
@@ -1875,7 +1876,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel] 17/08/2016 created
     /// </history>
-    private void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    public void dtgBookingDeposits_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {

@@ -112,7 +112,7 @@ namespace IM.Base.Forms
     private void BtnClearCompleted_OnClick(object sender, RoutedEventArgs e)
     {      
       //Eliminamos los archivos temporales que fueron creados
-      DeleteReports();
+      DeleteReports(true);
     }
 
     #endregion BtnClearCompleted_OnClick
@@ -193,7 +193,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel]  05/09/2016 Created
     /// </history>
-    private void DeleteReports()
+    private void DeleteReports(bool btnClear=false)
     {
       try
       {
@@ -208,7 +208,11 @@ namespace IM.Base.Forms
         //Borrar archivos con el mismo nombre
         ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList()
           .ForEach(x =>
-          {            
+          {     
+            if(btnClear)
+            {
+              ObjReportQueues.Remove(x);
+            }   
             lstFiles = directoryInfo.GetFiles($"{x.FileName}*").ToList();
             lstFiles.ForEach(f => f.Delete());            
           });      

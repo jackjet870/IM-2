@@ -190,8 +190,11 @@ namespace IM.Base.Forms
             CreateFile(EnumFileFormat.Xps);
           });
           }
-          xps = new XpsDocument($"{_fullPathAndName}.xps", FileAccess.Read);//Cargamos el xps
-          documentViewer.Document = xps.GetFixedDocumentSequence();
+          if (File.Exists($"{_fullPathAndName}.xps"))
+          {
+            xps = new XpsDocument($"{_fullPathAndName}.xps", FileAccess.Read);//Cargamos el xps
+            documentViewer.Document = xps.GetFixedDocumentSequence();
+          }
         }
       }
       catch (Exception ex)
@@ -261,20 +264,22 @@ namespace IM.Base.Forms
       {
         if (_excelFile.Exists)
         {
+
           excel = new Microsoft.Office.Interop.Excel.Application();
           excel.Visible = false;
           excel.ScreenUpdating = false;
           excel.DisplayAlerts = false;
+          
+          wb = excel.Workbooks.Open(_excelFile.FullName, 0, false, Missing.Value, Missing.Value, Missing.Value, true, XlPlatform.xlWindows, Missing.Value, false, false, Missing.Value, false, true, false);//Cargamos el excel                              
+          _Worksheet ws = ((_Worksheet)wb.ActiveSheet);          
 
-          wb = excel.Workbooks.Open(_excelFile.FullName, 0, true, Missing.Value, Missing.Value, Missing.Value, true, XlPlatform.xlWindows, Missing.Value, false, false, Missing.Value, false, true, false);//Cargamos el excel                              
-          _Worksheet ws = ((_Worksheet)wb.ActiveSheet);
-         
-          ws.PageSetup.Orientation = XlPageOrientation.xlLandscape;
-          ws.PageSetup.PaperSize = XlPaperSize.xlPaperLetter;//Tamaño carta
+          ws.PageSetup.PaperSize = XlPaperSize.xlPaperLetter;//Tamaño carta          
           ws.PageSetup.LeftMargin=0.64;
           ws.PageSetup.RightMargin = 0.64;
           ws.PageSetup.TopMargin = 1.91;
           ws.PageSetup.BottomMargin = 1.91;
+          ws.PageSetup.Orientation = XlPageOrientation.xlLandscape;
+          ws.PageSetup.Order = XlOrder.xlOverThenDown;
           
           switch (enumFileFormat)
           {
@@ -293,7 +298,7 @@ namespace IM.Base.Forms
       }
       catch (Exception ex)
       {
-        Helpers.UIHelper.ShowMessage(ex);
+        UIHelper.ShowMessage(ex);        
       }
       finally
       {
@@ -302,7 +307,7 @@ namespace IM.Base.Forms
           wb.Close();
         }
         if (excel != null)
-        {
+        {          
           excel.Quit();
         }
       }

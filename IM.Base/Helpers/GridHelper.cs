@@ -798,6 +798,28 @@ namespace IM.Base.Helpers
     public static void dtg_Sorting(object sender, DataGridSortingEventArgs e)
     {
       e.Handled = IsInEditMode(sender as DataGrid, false);
+    }
+    #endregion
+
+    #region GetRowEditing
+    /// <summary>
+    /// Obtiene la fila que se está editando
+    /// </summary>
+    /// <param name="dtgGrid">Datagrid del cual se desea obtener la fila en edición</param>
+    /// <returns>
+    /// [emoguel] 10/09/2016 Created
+    /// </returns>
+    public static DataGridRow GetRowEditing(DataGrid dtgGrid)
+    {
+      DataGridRow row = null;
+      List<object> lstObject = dtgGrid.ItemsSource.OfType<object>().ToList();
+      var lstRows = dtgGrid.ItemsSource.OfType<object>().Select(obj => dtgGrid.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+      var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
+      if (rowEdit != null)
+      {
+        return rowEdit;
+      }
+      return row;
     } 
     #endregion
   }
