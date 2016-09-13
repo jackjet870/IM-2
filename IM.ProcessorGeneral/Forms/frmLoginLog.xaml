@@ -5,53 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Logins Log" Height="500" Width="550" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ContentRendered="FrmLoginLog_OnContentRendered">
     <Window.Resources>
         <CollectionViewSource x:Key="lstRptLoginsLog" d:DesignSource="{d:DesignInstance {x:Type Model:RptLoginLog}, CreateList=True}"/>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Margin="5">
+    <xctk:BusyIndicator Name="biWait">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="28"/>
-                <RowDefinition Height="28"/>
-                <RowDefinition Height="28"/>
-                <RowDefinition Height="28"/>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="190"/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="190"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="From" HorizontalContentAlignment="Right"></Label>
-            <DatePicker Name="dtmStart" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Today}" ></DatePicker>
-            <Label Content="To" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right"></Label>
-            <DatePicker Name="dtmEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Today}" ></DatePicker>
-            <Label Content="Location" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right"></Label>
-            <ComboBox Name="cbLocation" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" DisplayMemberPath="loN" SelectedValuePath="loID" IsEditable="True"></ComboBox>
-            <Label Content="PC Name" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Right"></Label>
-            <ComboBox Name="cbPcName" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" IsEditable="True"></ComboBox>
-            <Label Content="Personnel" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right"></Label>
-            <TextBox Name="txtPeId" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" LostFocus="TxtPeId_OnLostFocus" CharacterCasing="Upper"></TextBox>
-            <ComboBox Name="cbPersonnel" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10 1 1 1" SelectedValuePath="peID" DisplayMemberPath="peN" SelectionChanged="CbPersonnel_OnSelectionChanged" IsEditable="True"></ComboBox>
-            <StackPanel Grid.Column="3" Grid.Row="3" Orientation="Horizontal">
-            <Button Name="btnApplyFilter" VerticalAlignment="Center" Content="Apply Filter" Width="80" HorizontalAlignment="Left" Margin="1 1 10 1" Click="BtnApplyFilter_OnClick"></Button>
-            <Button Name="btnPrint" VerticalAlignment="Center" Content="Print" Width="80" HorizontalAlignment="Right" Margin="1" Click="BtnPrint_OnClick"></Button>
-            </StackPanel>
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="28"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="190"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="190"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="From" HorizontalContentAlignment="Right"></Label>
+                <!--<DatePicker Name="dtmStart" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Today}" ></DatePicker>-->
+                <xctk:DateTimePicker Name="dtmStart" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="170" DefaultValue="{x:Static sys:DateTime.Today}" Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
+                <Label Content="To" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right"></Label>
+                <!--<DatePicker Name="dtmEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" SelectedDate="{x:Static sys:DateTime.Today}" ></DatePicker>-->
+                <xctk:DateTimePicker Name="dtmEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" DefaultValue="{x:Static sys:DateTime.Today}" Width="170"  Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
+                <Label Content="Location" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right"></Label>
+                <ComboBox Name="cbLocation" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" DisplayMemberPath="loN" SelectedValuePath="loID" TextSearch.TextPath="loN"></ComboBox>
+                <Label Content="PC Name" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Right"></Label>
+                <ComboBox Name="cbPcName" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" IsTextSearchEnabled="true"></ComboBox>
+                <Label Content="Personnel" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right"></Label>
+                <ComboBox x:Name="cbPersonnel" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" SelectedValuePath="peID" IsEnabled="true"
+                                            TextSearch.TextPath="peID"
+                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="255" Height="25" />
+                <!--<TextBox Name="txtPeId" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" LostFocus="TxtPeId_OnLostFocus" CharacterCasing="Upper"></TextBox>-->
+                <!--<ComboBox Name="cbPersonnel" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10 1 1 1" SelectedValuePath="peID" DisplayMemberPath="peN" SelectionChanged="CbPersonnel_OnSelectionChanged" IsEditable="True"></ComboBox>-->
+                <StackPanel Grid.Column="3" Grid.Row="3" Orientation="Horizontal">
+                    <Button Name="btnApplyFilter" VerticalAlignment="Center" Content="Apply Filter" Width="80" HorizontalAlignment="Left" Margin="1 1 10 1" Click="BtnApplyFilter_OnClick"></Button>
+                    <Button Name="btnPrint" VerticalAlignment="Center" Content="Print" Width="80" HorizontalAlignment="Right" Margin="1" Click="BtnPrint_OnClick"></Button>
+                </StackPanel>
+            </Grid>
+
+            <DataGrid Name="dgvLoginsLog" Grid.Row="1" Margin="5" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding Source={StaticResource lstRptLoginsLog}}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Date_Time,StringFormat=\{0:dd/MM/yy hh:mm:ss tt\}}" Header="DateTime"/>
+                    <DataGridTextColumn Binding="{Binding Location}" Header="Location" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding Code}" Header="Code" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding PC}" Header="PC" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
-        <DataGrid Name="dgvLoginsLog" Grid.Row="1" Margin="5" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding Source={StaticResource lstRptLoginsLog}}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Date_Time,StringFormat=\{0:dd/MM/yy hh:mm:ss tt\}}" Header="DateTime"/>
-                <DataGridTextColumn Binding="{Binding Location}" Header="Location" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Code}" Header="Code" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                <DataGridTextColumn Binding="{Binding PC}" Header="PC" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+    </xctk:BusyIndicator>
 </Window>

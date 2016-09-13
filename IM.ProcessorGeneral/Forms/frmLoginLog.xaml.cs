@@ -56,50 +56,7 @@ namespace IM.ProcessorGeneral.Forms
       LoadPcNames();
       LoadLocations();
     }
-    #endregion
-
-    #region TxtPeId_OnLostFocus
-    /// <summary>
-    /// Asigna un valor al combobox Personnel seleccionando el usuario
-    /// con el ID que se haya capturado en el textbox.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 27/Abr/2016 Created
-    /// </history>
-    private void TxtPeId_OnLostFocus(object sender, RoutedEventArgs e)
-    {
-      if (txtPeId.Text == "")
-      {
-        cbPersonnel.SelectedIndex = -1;
-        return;
-      }
-
-      if (_personnels.Exists(c => c.peID == txtPeId.Text))
-        cbPersonnel.SelectedValue = txtPeId.Text;
-      else
-      {
-        UIHelper.ShowMessage("User ID does not exists.");
-        txtPeId.Text = "";
-        cbPersonnel.SelectedIndex = -1;
-      }
-    }
-    #endregion
-
-    #region CbPersonnel_OnSelectionChanged
-    /// <summary>
-    /// Asigna el ID del personal a la caja de texto.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 27/Abr/2016 Created
-    /// </history>
-    private void CbPersonnel_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      if (cbPersonnel.SelectedIndex > 0)
-      {
-        txtPeId.Text = cbPersonnel.SelectedValue.ToString();
-      }
-    }
-    #endregion
+    #endregion      
 
     #region BtnApplyFilter_OnClick
     /// <summary>
@@ -111,14 +68,17 @@ namespace IM.ProcessorGeneral.Forms
     private async void BtnApplyFilter_OnClick(object sender, RoutedEventArgs e)
     {
       lstLoginsLog = ((CollectionViewSource)(FindResource("lstRptLoginsLog")));
-      lstLoginsLog.Source = await BRGeneralReports.GetRptLoginsLog(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value,
-        (cbLocation.Text != "") ? cbLocation.SelectedValue.ToString() : "ALL",
-        (cbPcName.Text != "") ? cbPcName.SelectedValue.ToString() : "ALL",
-        (cbPersonnel.Text != "") ? cbPersonnel.SelectedValue.ToString() : "ALL");
+      biWait.IsBusy = true;
+      biWait.BusyContent = "Loading data...";
+      lstLoginsLog.Source = await BRGeneralReports.GetRptLoginsLog(dtmStart.Value.Value, dtmEnd.Value.Value,
+        cbLocation.SelectedValue.ToString(),
+        cbPcName.SelectedValue.ToString(),
+       cbPersonnel.SelectedValue.ToString());
+      biWait.IsBusy = false;
     }
     #endregion
 
-    #region BtnPrin_OnClick
+    #region BtnPrint_OnClick
     /// <summary>
     /// Exporta los datos a un documento de Excel.
     /// </summary>
@@ -127,6 +87,8 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
     {
+      biWait.IsBusy = true;
+      biWait.BusyContent = "Loading Report...";
       if (dgvLoginsLog.Items.Count <= 0) return;
 
       string message = ValidateFields();
@@ -139,11 +101,11 @@ namespace IM.ProcessorGeneral.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>
       {
         Tuple.Create("Date Range",
-          DateHelper.DateRange(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value))
+          DateHelper.DateRange(dtmStart.Value.Value, dtmEnd.Value.Value))
       };
 
       string strReportName = "Logins Log";
-      string dateFileName = DateHelper.DateRangeFileName(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value);
+      string dateFileName = DateHelper.DateRangeFileName(dtmStart.Value.Value, dtmEnd.Value.Value);
 
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateFileName);
       frmReportQ.AddReport(fileFullPath, strReportName);
@@ -159,16 +121,20 @@ namespace IM.ProcessorGeneral.Forms
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         frmReportQ.SetExist(finfo.FullName, finfo);
+
       }
       catch (Exception ex)
       {        
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        biWait.IsBusy = false;
       }
+      biWait.IsBusy = false;
     }
     #endregion 
     #endregion
 
     #region Métodos Privados
+
     #region LoadLocations
     /// <summary>
     /// Carga y configuracion de Locations.
@@ -179,8 +145,9 @@ namespace IM.ProcessorGeneral.Forms
     private async void LoadLocations()
     {
       _locations = await BRLocations.GetLocationsbyProgram("IH");
-      _locations.Insert(0, new Location { loID = "" });
+      _locations.Insert(0, new Location { loID = "ALL", loN = "ALL" });
       cbLocation.ItemsSource = _locations;
+      cbLocation.SelectedIndex = 0;
     }
     #endregion
 
@@ -194,8 +161,10 @@ namespace IM.ProcessorGeneral.Forms
     private async void LoadPcNames()
     {
       _pcNames = await BRLoginLogs.GetLoginsLogPCName();
-      _pcNames.Insert(0, "");
+      _pcNames.Insert(0, "ALL");
+      _pcNames.Remove("");
       cbPcName.ItemsSource = _pcNames;
+      cbPcName.SelectedIndex = 0;
     }
     #endregion
 
@@ -209,7 +178,9 @@ namespace IM.ProcessorGeneral.Forms
     private async void LoadPersonnel()
     {
       _personnels = await BRPersonnel.GetPersonnelAccess();
+      _personnels.Insert(0, new Personnel { peID = "ALL", peN = "ALL" });
       cbPersonnel.ItemsSource = _personnels;
+      cbPersonnel.SelectedIndex = 0;
     }
     #endregion
 
@@ -224,13 +195,14 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private string ValidateFields()
     {
-      if (dtmEnd.SelectedDate < dtmStart.SelectedDate)
+      if (dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
       else
         return "";
     }
 
     #endregion ValidateFields 
+
     #endregion
   }
 }

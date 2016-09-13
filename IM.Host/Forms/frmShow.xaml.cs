@@ -40,7 +40,7 @@ namespace IM.Host.Forms
     private DateTime _dateCurrent;
     private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
     private bool _blnLoading;
-   
+    private EnumMode guestFormMode = EnumMode.Edit;
 
     //Vendedores
     private List<ShowSalesman> _showSalesmanList;
@@ -145,14 +145,18 @@ namespace IM.Host.Forms
           brdOtherInfo.IsEnabled =
             brdGuest1.IsEnabled =
               brdGuest2.IsEnabled =
-                brdAdditionalGuest.IsEnabled =
+              btnAddGuestAdditional.IsEnabled =
+                    btnSearchGuestAdditional.IsEnabled =
                   txtocWelcomeCopies.IsEnabled = blnEnable;
+
+      dtgGuestAdditional.IsReadOnly = !blnEnable;
+      guestFormMode = EnumMode.ReadOnly;
 
       // Pestaña Gifts, CC, Status & Comments
       brdGifts.IsEnabled =
-        brdCreditCards.IsEnabled =
-          brdGuestStatus.IsEnabled =
-            brdComments.IsEnabled = blnEnable;
+              brdCreditCards.IsEnabled =
+                brdGuestStatus.IsEnabled =
+                  brdComments.IsEnabled = blnEnable;
 
       // Pestaña Deposits & Salesmen
       brdBookingDeposits.IsEnabled =
@@ -1164,13 +1168,15 @@ namespace IM.Host.Forms
           !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
       {
         imgButtonSave.IsEnabled = imgButtonPrint.IsEnabled = false;
-        btnSearchGuestAdditional.IsEnabled = btnAddGuestAdditional.IsEnabled = false;
-        dtgGuestAdditional.IsReadOnly = true;
       }
 
       //Si de la BD el campo guNotifiedEmailShowNotInvited es null, lo ponemos en unChecked el control
       if (GuestShow.Guest.guNotifiedEmailShowNotInvited == null)
         chkguNotifiedEmailShowNotInvited.IsChecked = false;
+
+      //Si es el program es Inhouse, el grid quedara en modo Lectura, y no se podran agregar nuevos guest.
+     btnAddGuestAdditional.IsEnabled = !(_enumProgram == EnumProgram.Inhouse);
+      guestFormMode = (dtgGuestAdditional.IsReadOnly) ? EnumMode.ReadOnly : EnumMode.Edit;
     }
 
     #endregion Window_Loaded
@@ -1946,6 +1952,11 @@ namespace IM.Host.Forms
     /// </history>
     private async void btnSearchGuestAdditional_Click(object sender, RoutedEventArgs e)
     {
+      if (GuestShow != null && !GuestShow.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
       frmSearchGuest frmSrchGu = new frmSearchGuest(_user, EnumProgram.Outhouse)
       {
         Owner = this
@@ -1999,7 +2010,16 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, dtgGuestAdditional.IsReadOnly) { Owner = this };
+      if (GuestShow != null && !GuestShow.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
+
+      if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
+        guestFormMode = EnumMode.ReadOnly;
+
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, guestFormMode,false) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -2025,18 +2045,31 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
+      if (GuestShow != null && !GuestShow.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
 
-      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, _enumProgram, dtgGuestAdditional.IsReadOnly) { GuestParent = GuestShow?.Guest, Owner = this };
+      if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
+        guestFormMode = EnumMode.ReadOnly;
+      else
+       guestFormMode=EnumMode.Add;
+
+      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, _enumProgram, guestFormMode,false) { GuestParent = GuestShow?.Guest, Owner = this };
       frmGuest.ShowDialog();
-      //Validacion del nuevo guest.
-      //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
-      var guestAdditional = frmGuest.NewGuest ?? new Guest();
-      if (guestAdditional.guID == 0) return;
-      //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
-      //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
-      var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow?.Guest, guestAdditional, true);
-      if (validate.Item1)
-        GuestShow?.AdditionalGuestList.Add(guestAdditional);
+      if (frmGuest.DialogResult.Value)
+      {
+        //Validacion del nuevo guest.
+        //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
+        var guestAdditional = frmGuest.NewGuest ?? new Guest();
+        if (guestAdditional.guID == 0) return;
+        //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
+        //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
+        var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow?.Guest, guestAdditional, true);
+        if (validate.Item1)
+          GuestShow?.AdditionalGuestList.Add(guestAdditional);
+      }
     }
 
     #endregion btnAddGuestAdditional_OnClick

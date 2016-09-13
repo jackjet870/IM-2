@@ -402,7 +402,7 @@ namespace IM.ProcessorGeneral.Forms
         case "CxC Deposits":
         case "Gifts Receipts Payments":
         case "CxC Payments":
-        case "Guest CECO":
+        case "Accounting Codes":
           _frmFilter.ConfigurarFomulario(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnSalesRoom: true);
           break;
         case "Gifts Manifest":
@@ -639,7 +639,11 @@ namespace IM.ProcessorGeneral.Forms
                 : string.Join(",", filter.LstGifts));
 
             if (lstRptGifsCerts.Any())
+            {
+              filters.Add(Tuple.Create("Categories", (filter.AllGiftsCate ? "ALL" : string.Join(",", filter.LstGiftsCate))));
+              filters.Add(Tuple.Create("Gifts", (filter.AllGifts ? "ALL" : string.Join(",", filter.LstGifts))));
               finfo = await clsReports.ExportRptGiftsCertificates(strReportName, fileFullPath, filters, lstRptGifsCerts);
+            }
             break;
 
           #endregion
@@ -653,8 +657,12 @@ namespace IM.ProcessorGeneral.Forms
               (EnumStatus)_frmFilter.cboStatus.SelectedValue);
 
             if (lstRptGiftsManifest.Any())
+            {
+              filters.Add(Tuple.Create("Categories", (filter.AllGiftsCate ? "ALL" : string.Join(",", filter.LstGiftsCate))));
+              filters.Add(Tuple.Create("Gifts", (filter.AllGifts ? "ALL" : string.Join(",", filter.LstGifts))));
+              filters.Add(Tuple.Create("Status", (EnumToListHelper.GetEnumDescription(filter.Status))));
               finfo = await clsReports.ExportRptGiftsManifest(strReportName, fileFullPath, filters, lstRptGiftsManifest);
-            break;
+            } break;
 
           #endregion
           #region Gifts Receipts
@@ -668,7 +676,15 @@ namespace IM.ProcessorGeneral.Forms
               (_frmFilter.txtGuestID.Text == string.Empty) ? 0 : Convert.ToInt32(_frmFilter.txtGuestID.Text));
 
             if (lstRptGiftsReceipts.Any())
+            {
+              filters.Add(Tuple.Create("Categories", (filter.AllGiftsCate ? "ALL" : string.Join(",", filter.LstGiftsCate))));
+              filters.Add(Tuple.Create("Gifts", (filter.AllGifts ? "ALL" : string.Join(",", filter.LstGifts))));
+              filters.Add(Tuple.Create("Status", (EnumToListHelper.GetEnumDescription(filter.Status))));
+              filters.Add(Tuple.Create("Types", (EnumToListHelper.GetEnumDescription(filter.GiftsReceiptType))));
+              filters.Add(Tuple.Create("Guest ID", (filter.GuestId == "0" || string.IsNullOrWhiteSpace(filter.GuestId) ? "ALL" : filter.GuestId)));
+
               finfo = await clsReports.ExportRptGiftsReceipts(strReportName, fileFullPath, filters, lstRptGiftsReceipts);
+            }
             break;
 
           #endregion
@@ -695,7 +711,13 @@ namespace IM.ProcessorGeneral.Forms
               (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
 
             if (lstRptGiftsSale.Any())
+            {
+              filters.Add(Tuple.Create("Categories", (filter.AllGiftsCate ? "ALL" : string.Join(",", filter.LstGiftsCate))));
+              filters.Add(Tuple.Create("Gifts", (filter.AllGifts ? "ALL" : string.Join(",", filter.LstGifts))));
+              filters.Add(Tuple.Create("Gift Sale", (EnumToListHelper.GetEnumDescription(filter.GiftSale))));
+
               finfo = await clsReports.ExportRptGiftsSale(strReportName, fileFullPath, filters, lstRptGiftsSale);
+            }
             break;
 
           #endregion
@@ -714,7 +736,12 @@ namespace IM.ProcessorGeneral.Forms
                   : string.Join(",",
                     filter.LstLeadSources));
             if (lstRptGiftsSistur.Any())
+            {
+              filters.Add(Tuple.Create("Program", (filter.AllPrograms ? "ALL" : string.Join(",", filter.LstPrograms))));
+              filters.Add(Tuple.Create("Lead Source", (filter.AllLeadSources ? "ALL" : string.Join(",", filter.LstLeadSources))));
+
               finfo = await clsReports.ExportRptGiftsUsedBySistur(strReportName, fileFullPath, filters, lstRptGiftsSistur);
+            }
             break;
 
           #endregion
@@ -735,9 +762,9 @@ namespace IM.ProcessorGeneral.Forms
 
           #region Reportes Guest
 
-          #region Guest CECO
+          #region Accounting Codes
 
-          case "Guest CECO":
+          case "Accounting Codes":
             var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptGuestCeco(filter.StartDate,
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
@@ -774,7 +801,11 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRange.Any())
+            {
+              filters.Add(Tuple.Create("Program", (filter.AllPrograms ? "ALL" : string.Join(",", filter.LstPrograms))));
+
               finfo = await clsReports.ExportRptManifestRange(strReportName, fileFullPath, filters, lstRptManifestRange);
+            }
             break;
 
           #endregion
@@ -785,7 +816,11 @@ namespace IM.ProcessorGeneral.Forms
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRangeByLs.Any())
+            {
+              filters.Add(Tuple.Create("Program", (filter.AllPrograms ? "ALL" : string.Join(",", filter.LstPrograms))));
+
               finfo = await clsReports.ExportRptManifestRangeByLs(strReportName, fileFullPath, filters, lstRptManifestRangeByLs);
+            }
             break;
 
           #endregion
@@ -817,8 +852,12 @@ namespace IM.ProcessorGeneral.Forms
                 ? "ALL"
                 : string.Join(",", filter.LstRateTypes));
             if (lstMealTickets.Any())
+            {
+              filters.Add(Tuple.Create("Rate Type", (filter.AllRateTypes ? "ALL" : string.Join(",", filter.LstRateTypes))));
+
               finfo = clsReports.ExportRptMealTickets(strReportName, fileFullPath, filters, lstMealTickets,
                 (strReportName == "Meal Tickets by Host"));
+            }
             break;
 
           #endregion
@@ -831,7 +870,11 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstRateTypes));
             if (lstMealTicketsCost.Any())
+            {
+              filters.Add(Tuple.Create("Rate Type", (filter.AllRateTypes ? "ALL" : string.Join(",", filter.LstRateTypes))));
+
               finfo = clsReports.ExportRptMealTicketsCost(strReportName, fileFullPath, filters, lstMealTicketsCost);
+            }
             break;
 
           #endregion
@@ -1028,6 +1071,7 @@ namespace IM.ProcessorGeneral.Forms
             break;
 
           #endregion
+
           #endregion
 
           #region Reportes Taxis
@@ -1480,8 +1524,16 @@ namespace IM.ProcessorGeneral.Forms
                   ? EnumBasedOnArrival.BasedOnArrival
                   : EnumBasedOnArrival.NoBasedOnArrival);
             if (lstRptProductionByLsMarketMonthly.Any())
+            {
+              if (Convert.ToBoolean(filter.BasedOnArrival))
+                filters.Add(Tuple.Create("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(filter.Quinellas))
+                filters.Add(Tuple.Create("*Considering Quinellas", ""));
+              filters.Add(Tuple.Create("External Invitation", (EnumToListHelper.GetEnumDescription(filter.ExternalInvitation))));
+
               finfo = await clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReportName, fileFullPath, filters,
                 lstRptProductionByLsMarketMonthly);
+            }
             break;
 
           #endregion
@@ -1518,9 +1570,13 @@ namespace IM.ProcessorGeneral.Forms
 
           case "Warehouse Movements":
             var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
-            if (lstRptWarehouseMovements.Any())
+            if (lstRptWarehouseMovements.Any())             
+            {
+              filters.Add(Tuple.Create("Warehouse", (filter.AllWarehouses ? "ALL" : string.Join(",", filter.LstWarehouses))));
+
               finfo = await clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
                 lstRptWarehouseMovements);
+            }
             break;
 
             #endregion
@@ -1593,7 +1649,7 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "No Shows", rptGroup = "Guests"},
           new {rptNombre = "Guests No Buyers", rptGroup = "Guests"},
           new {rptNombre = "In & Out", rptGroup = "Guests"},
-          new {rptNombre = "Guest CECO", rptGroup = "Guests"},
+          //new {rptNombre = "Accounting Codes", rptGroup = "Guests"},
 
           new {rptNombre = "Meal Tickets", rptGroup = "Meal Tickets"},
           new {rptNombre = "Meal Tickets by Host", rptGroup = "Meal Tickets"},

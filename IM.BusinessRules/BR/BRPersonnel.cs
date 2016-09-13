@@ -208,20 +208,23 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Personnel>> GetPersonnelAccess()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var query = (from pe in dbContext.Personnels
-                     join pa in (from pa in dbContext.PersonnelAccessList
-                                 join ls in dbContext.LeadSources on pa.plLSSRID equals ls.lsID
-                                 where pa.plLSSR == "LS" && ls.lspg == "IH" && ls.lsA
-                                 select pa)
-                       on pe.peID equals pa.plpe
-                     where pe.peA
-                     select pe
-          ).Distinct().OrderBy(c => c.peN);
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var query = (from pe in dbContext.Personnels
+                       join pa in (from pa in dbContext.PersonnelAccessList
+                                   join ls in dbContext.LeadSources on pa.plLSSRID equals ls.lsID
+                                   where pa.plLSSR == "LS" && ls.lspg == "IH" && ls.lsA
+                                   select pa)
+                         on pe.peID equals pa.plpe
+                       where pe.peA
+                       select pe
+            ).Distinct().OrderBy(c => c.peN);
 
-        return await query.ToListAsync();
-      }
+          return query.ToList();
+        }
+      });
     }
 
     #endregion

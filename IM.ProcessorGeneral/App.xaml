@@ -7,6 +7,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
+
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

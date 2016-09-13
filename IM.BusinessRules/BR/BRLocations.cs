@@ -110,15 +110,18 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Location>> GetLocationsbyProgram(string program = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var Locs = (from loc in dbContext.Locations
-                    join ls in dbContext.LeadSources on loc.lols equals ls.lsID
-                    where loc.loA && (program == "ALL" || ls.lspg == program)
-                    select loc).OrderBy(c => c.loN);
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var Locs = (from loc in dbContext.Locations
+                      join ls in dbContext.LeadSources on loc.lols equals ls.lsID
+                      where loc.loA && (program == "ALL" || ls.lspg == program)
+                      select loc).OrderBy(c => c.loN);
 
-        return await Locs.ToListAsync();
-      }
+          return Locs.ToList();
+        }
+      });
     }
     #endregion
 

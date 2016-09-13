@@ -1032,7 +1032,7 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Guest Additional
-              dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", guestShow.AdditionalGuestList.Select(c => c.guID).ToList()));
+              dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", guestShow.AdditionalGuestList.Where(c=>c.guID > 0).Select(c => c.guID).ToList()));
               #endregion
 
               #region Proceso Guest Movements
@@ -1353,7 +1353,7 @@ namespace IM.BusinessRules.BR
               #region Proceso Guest Additional
               if (guestInvitation.AdditionalGuestList.Any())
               {
-                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Select(c => c.guID).ToList()));
+                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Where(c => c.guID > 0).Select(c => c.guID).ToList()));
                 if (enumProgram == EnumProgram.Inhouse)
                 {
                   //Actualizamos los datos de los huespedes adicionales.

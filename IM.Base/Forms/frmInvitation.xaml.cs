@@ -39,6 +39,7 @@ namespace IM.Base.Forms
     private bool _isCellCommitDeposit;//Valida si el commit se hace desde la celda de Deposits
     private bool _isCellCommitCC;//Valida si el commit se hace desde la celda de credit cards
     private bool _isCellCommitGuestAdditional;//Valida si el commit se hace desde la celda de GuestAdditional
+    private EnumMode guestFormMode = EnumMode.Edit;
     public GuestInvitationRules CatObj { get; set; }
     public bool SaveGuestInvitation { get; set; }
 
@@ -824,6 +825,8 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = CatObj.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
+      btnAddGuestAdditional.IsEnabled = (CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType==EnumInvitationType.newExternal);
+      btnSearchGuestAdditional.IsEnabled = (CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
 
       #endregion Enable false
 
@@ -835,7 +838,7 @@ namespace IM.Base.Forms
       txtguIdProfileOpera.IsReadOnly = true;
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
-
+      dtgGuestAdditional.IsReadOnly = CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal;
       #endregion IsReadOnly
 
       //Si OutHouse y es una invitacion existente
@@ -904,7 +907,17 @@ namespace IM.Base.Forms
         if (CatObj.CloneGuest.guBookD < serverDate)
         {
           dtgGuestAdditional.IsReadOnly = true;
+          guestFormMode = EnumMode.ReadOnly;
+          btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
+          btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
         }
+      }
+      else if(_module==EnumModule.OutHouse)
+      {
+        dtgGuestAdditional.IsReadOnly = false;
+        guestFormMode = EnumMode.Edit;
+        btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
+        btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
       }
 
       //Other Info
@@ -968,7 +981,8 @@ namespace IM.Base.Forms
       brdCreditCard.IsEnabled = false;
       //Additional Guest
       dtgGuestAdditional.IsReadOnly = true;
-
+      btnAddGuestAdditional.IsEnabled = false;
+      btnSearchGuestAdditional.IsEnabled = false;
       brdRoomsQtyAndElectronicPurse.IsEnabled = false;
     }
 
@@ -1717,6 +1731,11 @@ namespace IM.Base.Forms
     /// </history>
     private async void btnSearchGuestAdditional_Click(object sender, RoutedEventArgs e)
     {
+      if (CatObj != null && !CatObj.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
       frmSearchGuest frmSrchGu = new frmSearchGuest(_user, _module == EnumModule.InHouse ? EnumProgram.Inhouse : EnumProgram.Outhouse)
       {
         Owner = this
@@ -1770,7 +1789,15 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, CatObj?.InvitationMode == EnumMode.ReadOnly) { Owner = this };
+      if (CatObj != null && !CatObj.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
+      if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription((_module == EnumModule.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations)) && c.pppl <= 0))
+        guestFormMode = EnumMode.ReadOnly;
+
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, guestFormMode,true) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1796,18 +1823,30 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Sales Room", title: "Intelligence Marketing");
         return;
       }
+      if (CatObj != null && !CatObj.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        return;
+      }
+      if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription((_module == EnumModule.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations)) && c.pppl == 0))
+        guestFormMode = EnumMode.ReadOnly;
+      else
+        guestFormMode = EnumMode.Add;
 
-      frmGuest frmGuest = new frmGuest(_user, 0, _module, CatObj.Program, dtgGuestAdditional.IsReadOnly) { GuestParent = CatObj?.Guest, Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, 0, _module, CatObj.Program, CatObj.InvitationMode,true) { GuestParent = CatObj?.Guest, Owner = this };
       frmGuest.ShowDialog();
-      //Validacion del nuevo guest.
-      //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
-      var guestAdditional = frmGuest.NewGuest ?? new Guest();
-
-      //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
-      //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
-      var validate = await InvitationValidationRules.ValidateAdditionalGuest(CatObj?.Guest, guestAdditional, true);
-      if (validate.Item1)
-        CatObj?.AdditionalGuestList.Add(guestAdditional);
+      if (frmGuest.DialogResult.Value)
+      {
+        //Validacion del nuevo guest.
+        //Recuperar lista de guests e insertarlas en la lista de GuestAdditionals.
+        var guestAdditional = frmGuest.NewGuest ?? new Guest();
+        if (guestAdditional.guID == 0) return;
+        //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
+        //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
+        var validate = await InvitationValidationRules.ValidateAdditionalGuest(CatObj?.Guest, guestAdditional, true);
+        if (validate.Item1)
+          CatObj?.AdditionalGuestList.Add(guestAdditional);
+      }
     }
 
     #endregion btnAddGuestAdditional_OnClick

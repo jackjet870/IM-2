@@ -319,12 +319,7 @@ namespace IM.Base.Helpers
 
       return pathFinalFile;
     }
-
-    public static Task<FileInfo> CreateCustomExcel(DataTable dtData, List<Tuple<string, string>> filters, string strReport, string empty, List<ExcelFormatTable> list, bool v1, bool v2, bool v3, string fileFullPath)
-    {
-      throw new NotImplementedException();
-    }
-
+    
     #endregion CreatePivotRptExcel        
 
     #region ExportRptWeeklyMonthlyHostess
@@ -2114,6 +2109,19 @@ namespace IM.Base.Helpers
           //Obtenemos la cantidad maxima de superheaders.
           var iniValue = new int[dtTableAux.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split(separator).Length - 1)];
           var columnNumber = 1;
+          if (addEnumeration)
+          {
+            using (var range = wsData.Cells[rowNumber, 1])
+            {
+              range.Value = "#";
+              range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+              range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+              range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
+              range.Style.Font.Bold = true;
+              range.Style.Font.Color.SetColor(Color.White);
+              range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+            }
+          }
           //Recorremos los encabezados.
           foreach (var item in lstHeaders)
           {
@@ -2368,7 +2376,7 @@ namespace IM.Base.Helpers
                   using (var range = wsData.Cells[rowInitial, initialCol])
                   {
                     range.Value = enumerationCont;
-                    range.AutoFitColumns();
+                    range.Style.Numberformat.Format = GetFormat(EnumFormatTypeExcel.Id);                 
                   }
                 }
               }
@@ -2610,7 +2618,7 @@ namespace IM.Base.Helpers
                 using (var range = wsData.Cells[rowInitial, initialCol])
                 {
                   range.Value = enumerationCont;
-                  range.AutoFitColumns();
+                  range.Style.Numberformat.Format = GetFormat(EnumFormatTypeExcel.Id);
                 }
               }
             }
@@ -2709,7 +2717,9 @@ namespace IM.Base.Helpers
             });
           }
           #endregion
-          AutoFitColumns(ref wsData, wsData.Dimension.Columns, rowNumber);
+
+          AutoFitColumns(ref wsData, wsData.Dimension.Columns, rowNumber, withEnumeration: addEnumeration);
+         
 
           if (fileFullPath == null)
           {
@@ -2882,18 +2892,19 @@ namespace IM.Base.Helpers
       #region Titulo del reporte
 
       //Agregamos el Nombre de la Aplicacion en las columnas combinadas A:C en la fila 1
-      ws.Cells[1, initialCol + 1, 1, initialCol + 3].Merge = true;
-      ws.Cells[1, initialCol + 1, 1, initialCol + 3].Value = "Intelligence Marketing";
-      ws.Cells[1, initialCol + 1, 1, initialCol + 3].Style.Font.Bold = true;
-      ws.Cells[1, initialCol + 1, 1, initialCol + 3].Style.Font.Size = 14;
+      ws.Cells[1, initialCol + 1, 1, initialCol + 2].Merge = true;
+      ws.Cells[1, initialCol + 1, 1, initialCol + 2].Value = "Intelligence Marketing";
+      ws.Cells[1, initialCol + 1, 1, initialCol + 2].Style.Font.Bold = true;
+      ws.Cells[1, initialCol + 1, 1, initialCol + 2].Style.Font.Size = 14;
       //Agregamos el Nombre del Reporte en las columnas combinadas D:J en la fila 1
-      ws.Cells[1, initialCol + 4, 1, initialCol + 15].Merge = true;
-      ws.Cells[1, initialCol + 4, 1, initialCol + 15].Value = reportName;
-      ws.Cells[1, initialCol + 4, 1, initialCol + 15].Style.Font.Bold = true;
-      ws.Cells[1, initialCol + 4, 1, initialCol + 15].Style.Font.Size = 14;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].Merge = true;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].Value = reportName;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].Style.Font.Bold = true;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].Style.Font.Size = 14;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].Style.WrapText = true;
+      ws.Cells[1, initialCol + 3, 1, initialCol + 10].AutoFitColumns();
       //Agregamos la linea Doble bajo los nombres de la aplicacion y del reporte
-      ws.Cells[1, initialCol + 1, 1, initialCol + 15].Style.Border.Bottom.Style = ExcelBorderStyle.Double; //Doble Linea
-
+      ws.Cells[1, initialCol + 1, 1, initialCol + 10].Style.Border.Bottom.Style = ExcelBorderStyle.Double; //Doble Linea
       #endregion Titulo del reporte
 
       #region Filtros
@@ -3435,21 +3446,30 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 30/06/2016  Created.
     /// </history>
-    private static void AutoFitColumns(ref ExcelWorksheet ws, int cols, int rows, bool isDynamicPivot = false)
+    private static void AutoFitColumns(ref ExcelWorksheet ws, int cols, int rows, bool isDynamicPivot = false, bool withEnumeration=false)
     {
-      using (var range = ws.Cells[1, 1, (isDynamicPivot)? ws.Cells.End.Row : ws.Dimension.Rows, (isDynamicPivot) ? ws.Cells.End.Column:ws.Dimension.Columns])
+      if (!isDynamicPivot)
       {
-        range.AutoFitColumns();
-        if (isDynamicPivot) return;
+        ws.Cells.AutoFitColumns();
         for (int i = 1; i <= cols; i++)
         {
           var column = ws.Column(i);
+          if (i == 1 && withEnumeration)
+          {
+            column.Width = 6d;
+            continue;
+          }
           column.Style.WrapText = column.Width > ColumnMaxWidth;
           column.Width = column.Width > ColumnMaxWidth ? ColumnMaxWidth : column.Width;
         }
       }
-    }
+      else
+        ws.Cells.AutoFitColumns();
 
+      ws.PrinterSettings.PageOrder = ePageOrder.OverThenDown;
+      
+    }
+    
     #endregion
 
     #region ReorderColumns

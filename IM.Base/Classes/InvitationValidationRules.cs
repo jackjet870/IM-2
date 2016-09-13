@@ -1263,8 +1263,7 @@ namespace IM.Base.Classes
     {
       bool IsValid = true;
       string msg = "";
-      if (parent.guQuinella)
-      {
+
         if (additional == null || (additional != null && additional.guID == 0))
         {
           msg = "Guest ID doesn't exists.";
@@ -1296,13 +1295,7 @@ namespace IM.Base.Classes
         {
           msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
           IsValid = false;
-        }
-      }
-      else
-      {
-        msg = $"Invitations that are not Quinellas can not have additional guests.";
-        IsValid = false;
-      }
+        }     
 
       if (showMsg && !string.IsNullOrWhiteSpace(msg))
       {
