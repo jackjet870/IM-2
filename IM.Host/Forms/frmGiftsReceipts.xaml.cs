@@ -1841,7 +1841,7 @@ namespace IM.Host.Forms
         return false;
       }
       // Validamos los regalos
-      else if (!ReceiptsGifts.Validate(obsGifts, _validateMaxAuthGifts, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, dtgGifts))
+      else if (!ReceiptsGifts.Validate(_validateMaxAuthGifts, _guesStatusInfo, txtTotalCost.Text, txtgrMaxAuthGifts.Text, dtgGifts))
       {
         return false;
       }
