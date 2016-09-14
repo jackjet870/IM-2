@@ -200,6 +200,7 @@
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MessageBoxCustomHelper.cs" />
     <Compile Include="Helpers\TextBoxHelper.cs" />
+    <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">
