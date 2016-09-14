@@ -314,7 +314,7 @@ namespace IM.InvitConfig.Forms
       guest.guls = cmbLeadSource.SelectedValue.ToString();
       guest.gula = cmbLanguage.SelectedValue.ToString();
       await BREntities.OperationEntity(guest, EnumMode.Edit);
-      RptInvitationHelper.RptInvitation();
+      RptInvitationHelper.RptInvitation(window: this);
       StaEnd();
     }
 

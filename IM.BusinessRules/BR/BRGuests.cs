@@ -566,7 +566,7 @@ namespace IM.BusinessRules.BR
               //guardamos el movimiento de contactacion del huesped
               dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-             
+
               transaction.Commit();
               return respuesta;
             }
@@ -647,46 +647,53 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          return (from g in dbContext.Guests
-                  join co in dbContext.Countries on g.guco equals co.coID
-                  join ag in dbContext.Agencies on g.guag equals ag.agID
-                  where (bookinvit ? g.guBookD : g.guInvitD) == date
-                  where g.guls == leadSource
-                  orderby g.guBookT, g.guLastName1
-                  select new GuestPremanifestOuthouse
-                  {
-                    guStatus = g.guStatus,
-                    guID = g.guID,
-                    guCheckIn = g.guCheckIn,
-                    guRoomNum = g.guRoomNum,
-                    guLastName1 = g.guLastName1,
-                    guFirstName1 = g.guFirstName1,
-                    guCheckInD = g.guCheckInD,
-                    guCheckOutD = g.guCheckOutD,
-                    guco = g.guco,
-                    coN = co.coN,
-                    guag = g.guag,
-                    agN = ag.agN,
-                    guAvail = g.guAvail,
-                    guInfo = g.guInfo,
-                    guPRInfo = g.guPRInfo,
-                    guInfoD = g.guInfoD,
-                    guInvit = g.guInvit,
-                    guInvitD = g.guInvitD,
-                    guBookD = g.guBookD,
-                    guBookT = g.guBookT,
-                    guPRInvit1 = g.guPRInvit1,
-                    guMembershipNum = g.guMembershipNum,
-                    guBookCanc = g.guBookCanc,
-                    guShow = g.guShow,
-                    guSale = g.guSale,
-                    guComments = g.guComments,
-                    guPax = g.guPax
-                  }).ToList();
+          try
+          {
+            return (from g in dbContext.Guests
+                    join co in dbContext.Countries on g.guco equals co.coID
+                    join ag in dbContext.Agencies on g.guag equals ag.agID
+                    where (bookinvit ? g.guBookD : g.guInvitD) == date
+                    where g.guls == leadSource
+                    orderby g.guBookT, g.guLastName1
+                    select new GuestPremanifestOuthouse
+                    {
+                      guStatus = g.guStatus,
+                      guID = g.guID,
+                      guCheckIn = g.guCheckIn,
+                      guRoomNum = g.guRoomNum,
+                      guLastName1 = g.guLastName1,
+                      guFirstName1 = g.guFirstName1,
+                      guCheckInD = g.guCheckInD,
+                      guCheckOutD = g.guCheckOutD,
+                      guco = g.guco,
+                      coN = co.coN,
+                      guag = g.guag,
+                      agN = ag.agN,
+                      guAvail = g.guAvail,
+                      guInfo = g.guInfo,
+                      guPRInfo = g.guPRInfo,
+                      guInfoD = g.guInfoD,
+                      guInvit = g.guInvit,
+                      guInvitD = g.guInvitD,
+                      guBookD = g.guBookD,
+                      guBookT = g.guBookT,
+                      guPRInvit1 = g.guPRInvit1,
+                      guMembershipNum = g.guMembershipNum,
+                      guBookCanc = g.guBookCanc,
+                      guShow = g.guShow,
+                      guSale = g.guSale,
+                      guComments = g.guComments,
+                      guPax = g.guPax
+                    }).ToList();
+          }
+          catch (Exception)
+          {           
+            throw;
+          }
         }
       });
     }
-
+        
     #endregion GetGuestPremanifestOuthouse
 
     #region DeleteGuest

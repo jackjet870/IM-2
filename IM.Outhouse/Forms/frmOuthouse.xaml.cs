@@ -119,11 +119,19 @@ namespace IM.Outhouse.Forms
     private async void LoadGrid()
     {
       if (_outPremanifestViewSource == null) return;
-      //BusyIndicator.IsBusy = true;
-      _outPremanifestViewSource.Source =
+      try
+      {        
+        _outPremanifestViewSource.Source =
         await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
-      StaEnd();
-      // BusyIndicator.IsBusy = false;
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        StaEnd();
+      }
     }
 
     #endregion LoadGrid
@@ -388,34 +396,43 @@ namespace IM.Outhouse.Forms
     {
       if (ValidateInvitation(guCheckIn))
       {
-        frmLogin login = null;
+        frmLogin login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+            invitationMode: true, invitationPlaceId: App.User.Location.loID);
         if (!isInvit)
         {
-          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
-
-          if (App.User.AutoSign)
-          {
-            login.UserData = App.User;
-          }
+          if (App.User.AutoSign) login.UserData = App.User;
           await login.getAllPlaces();
           login.ShowDialog();
+
+          if (!login.IsAuthenticated) return;
         }
         else if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !App.User.AutoSign)
         {
-          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
-            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: true,
             invitationMode: true, invitationPlaceId: App.User.Location.loID);
-
           await login.getAllPlaces();
           login.ShowDialog();
+
+          if (!login.IsAuthenticated) return;
         }
-        if (!App.User.AutoSign && !login.IsAuthenticated) return;
+        else
+        {
+          login.UserData = App.User;
+        }              
 
         if (isInvit || login.IsAuthenticated)
         {
-          var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, allowReschedule: false) { Owner = this };
+          var invitacion = new frmInvitation
+            (EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, allowReschedule: false) { Owner = this };
           invitacion.ShowDialog();
-          UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
+          if (invitacion.SaveGuestInvitation)
+          {
+            //actualizamos los datos del grid            
+            UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
+          }
+          
         }
       }
     }

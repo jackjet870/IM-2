@@ -27,7 +27,7 @@ namespace IM.Base.Helpers
     /// [jorcanche] 16/04/2016 created
     /// [jorcanche] 12/05/2016 Se cambio de frmInvitaciona RptinvitationHelper
     /// </history>
-    public static async void RptInvitation(int guest = 0, string peID = "USER")
+    public static async void RptInvitation(int guest = 0, string peID = "USER", Window window = null)
     {
       //Traemos la informacion del store y la almacenamos en un procedimiento
       InvitationData invitationData = await BRInvitation.RptInvitationData(guest);
@@ -62,7 +62,7 @@ namespace IM.Base.Helpers
       rptInvi.SetParameterValue("lblChangedBy", peID);
 
       //Cargamos el Viewer
-      var frmViewer = new frmViewer(rptInvi) ;
+      var frmViewer = new frmViewer(rptInvi) { Owner = window};
       frmViewer.ShowDialog();   
     }
     #endregion

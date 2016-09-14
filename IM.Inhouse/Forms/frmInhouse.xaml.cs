@@ -1963,34 +1963,44 @@ namespace IM.Inhouse.Forms
     /// </history>
     private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit, DataGrid dg)
     {
+      //Validamos, Si la persona logeada en el modulo tiene permisos redonly de PRInvitation pordra entrar 
       if (ValidateInvitation(guCheckIn, gagu))
       {
-        frmLogin login = null;
+        //Incializamos el Login
+        frmLogin login = login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+            invitationMode: true, invitationPlaceId: App.User.Location.loID);
+        //Si no esta invitado mostramos el login 
         if (!isInvit)
         {
-          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, 
-            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, 
-            invitationMode: true, invitationPlaceId: App.User.Location.loID);
-
           if (App.User.AutoSign)
-          {
-            login.UserData = App.User;
+            login.UserData = App.User;           
+          else
+          { 
+            await login.getAllPlaces();
+            login.ShowDialog();
+            if (!login.IsAuthenticated) return;
           }
-          await login.getAllPlaces();
-          login.ShowDialog();
+      
         }
         else if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !App.User.AutoSign)
         {
           login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
-            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: true,
             invitationMode: true, invitationPlaceId: App.User.Location.loID);
 
           await login.getAllPlaces();
           login.ShowDialog();
-        }
-        if (!App.User.AutoSign  && !login.IsAuthenticated) return;          
 
-        if (isInvit || login.IsAuthenticated)
+          if (!login.IsAuthenticated) return;
+        }
+        else
+        {
+          login.UserData = App.User;
+        }
+      
+
+        if (isInvit || login.IsAuthenticated || App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
         {
           var invitacion = new frmInvitation
             (EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
@@ -1998,8 +2008,7 @@ namespace IM.Inhouse.Forms
           //Si se guardó la información
           if (invitacion.SaveGuestInvitation)
           {
-            //actualizamos los datos del grid
-            //TODO:Revisar este metodo JORGE CANCHE
+            //actualizamos los datos del grid            
             UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);
           }
         }
@@ -2134,12 +2143,12 @@ namespace IM.Inhouse.Forms
         UIHelper.ShowMessage("Guest has not made Check-In.");
         return false;
       }
-      //Validamos que no sea un huesped adicional
-      if (gagu != null)
-      {
-        UIHelper.ShowMessage("An additional guest can not have invitation.");
-        return false;
-      }
+      ////Validamos que no sea un huesped adicional
+      //if (gagu != null)
+      //{
+      //  UIHelper.ShowMessage("An additional guest can not have invitation.");
+      //  return false;
+      //}
 
       //Validamos que tenga permiso de lectura de invitaciones
       if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
