@@ -1343,30 +1343,7 @@ namespace IM.Host.Classes
                                 string pTotalCost, string pMaxAuthGifts, DataGrid dtg)
     {
       bool blnvalid = true;
-      //int i = 0;
-      //foreach (var item in pRows)
-      //{
-      //  int j = 0;
-      //  foreach (var itemTemp in pRows)
-      //  {
-      //    if (i != j)
-      //    {
-      //      // si se ingreso un regalo y es el mismo regalo
-      //      if (item.gegi == itemTemp.gegi && item.gegi != null)
-      //      {
-      //        string giftsRepeated = frmHost._lstGifts.Where(x => x.giID == item.gegi).Select(s => s.giN).First();
-      //        UIHelper.ShowMessage("Gifts must not be repeated.\r\nGift repetead is '" + giftsRepeated + "'.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-      //        blnvalid = false;
-      //        break;
-      //      }
-      //    }
-      //    j++;
-      //  }
-      //  i++;
-      //  // Si no es valido
-      //  if (!blnvalid)
-      //    break;
-      //}
+
       // Verificamos que los Gifts no esten repetidos
       blnvalid = GridHelper.Validate(dtg, false, 1, "Gifts", "Gift", new List<string> { "gegi" }, dtg.ItemsSource.OfType<GiftsReceiptDetail>().ToList());
 
