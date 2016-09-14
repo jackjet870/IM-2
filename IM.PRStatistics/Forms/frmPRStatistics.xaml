@@ -100,7 +100,7 @@
             <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
                     <TextBlock Text="Lead Sources" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                    <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                    <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="lsN" SelectedValuePath="lsID"
                              TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
                         <ListBox.Resources>
@@ -123,7 +123,7 @@
             <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
                     <TextBlock Text="Sales Rooms" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                    <ListBox x:Name="lsbxSalesRooms" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                    <ListBox x:Name="lsbxSalesRooms" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="srN" SelectedValuePath="srID"
                              TextSearch.TextPath="srN" SelectionChanged="lsbxSalesRooms_SelectionChanged">
                         <ListBox.Resources>
@@ -144,7 +144,7 @@
             <Border Style="{StaticResource brd-Catalogs}" Canvas.Left="300" Canvas.Top="60" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
                     <TextBlock Text="Countries" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                    <ListBox x:Name="lsbxCountries" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                    <ListBox x:Name="lsbxCountries" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="coN" SelectedValuePath="coID"
                              TextSearch.TextPath="coN" Loaded="chbx_Checked" SelectionChanged="lsbxCountries_SelectionChanged">
                         <ListBox.Resources>
@@ -166,7 +166,7 @@
             <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
                     <TextBlock Text="Agencies" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                    <ListBox x:Name="lsbxAgencies" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                    <ListBox x:Name="lsbxAgencies" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="agN" SelectedValuePath="agID"
                              TextSearch.TextPath="agN" Loaded="chbx_Checked" SelectionChanged="lsbxAgencies_SelectionChanged">
                         <ListBox.Resources>
@@ -187,7 +187,7 @@
             <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel >
                     <TextBlock Text="Markets" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                    <ListBox x:Name="lsbxMarkets" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                    <ListBox x:Name="lsbxMarkets" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="mkN" SelectedValuePath="mkID"
                              TextSearch.TextPath="mkN" Loaded="chbx_Checked" SelectionChanged="lsbxMarkets_SelectionChanged">
                         <ListBox.Resources>

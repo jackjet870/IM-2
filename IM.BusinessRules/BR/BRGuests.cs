@@ -1101,17 +1101,23 @@ namespace IM.BusinessRules.BR
           {
             guestInvitation.Guest.gulsOriginal = guestInvitation.Guest.guls;
           }
-          //Si esta null o si tiene el valor 
+          //Si esta null o si tiene el valor Minimo
           if (guestInvitation.Guest.guCheckOutHotelD == null || guestInvitation.Guest.guCheckOutHotelD == DateTime.MinValue)
           {
             guestInvitation.Guest.guCheckOutHotelD = guestInvitation.Guest.guCheckOutD;
+          }
+
+          //Si No tiene Show el Numero de Shows es igual al Numero de habitaciones
+          if (!guestInvitation.Guest.guShow)
+          {
+            guestInvitation.Guest.guShowsQty =(byte)guestInvitation.Guest.guRoomsQty;
           }
 
           #region Seguimiento
           if (enumProgram == EnumProgram.Inhouse)
           {
             //Si estaba contactado y no invitado
-            if (guestInvitation.Guest.guInfo == true && guestInvitation.Guest.guInvit)
+            if (guestInvitation.Guest.guInfo && !guestInvitation.Guest.guInvit)
             {
               //Con seguimiento
               guestInvitation.Guest.guFollow = true;
@@ -1130,7 +1136,7 @@ namespace IM.BusinessRules.BR
           }
           #endregion
 
-          #region Contratacion
+          #region Contactacion
           //contactado
           guestInvitation.Guest.guInfo = true;
 
@@ -1167,9 +1173,6 @@ namespace IM.BusinessRules.BR
 
           //invitation no cancelada
           guestInvitation.Guest.guBookCanc = false;
-
-          //PR de invitation
-          guestInvitation.Guest.guPRInvit1 = guestInvitation.Guest.guPRInvit1.Trim();
 
           //Captain de PR
           if (enumModule == EnumModule.Host || enumModule == EnumModule.OutHouse)
