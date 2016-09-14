@@ -27,7 +27,7 @@ namespace IM.Host.Classes
     public static bool Validate(DataGrid Grid)
     {
       // validamos los datos del grid
-      if (!GridHelper.Validate(Grid, false, 1, "Payments", "Payment", new List<string>() { "gycu", "gypt", "gysb" }))
+      if (!GridHelper.Validate(Grid, false, 1, "Payments", "Payment", new List<string>() { "gycu", "gypt", "gysb" }, Grid.ItemsSource.OfType<GiftsReceiptPaymentShort>().ToList()))
       {
         return false;
       }

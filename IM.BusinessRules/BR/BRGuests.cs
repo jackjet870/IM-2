@@ -427,13 +427,9 @@ namespace IM.BusinessRules.BR
           dbContext.Database.CommandTimeout = 180;
 
           var query = from gu in dbContext.Guests
-                      join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                      //busqueda por program
-                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)) &&
-                             ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) >= dateFrom) && 
-                             ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) <= dateTo)
-                      select gu;
+                      join ls in dbContext.LeadSources on gu.guls equals ls.lsID
+                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))     
+                      select gu; 
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -473,6 +469,10 @@ namespace IM.BusinessRules.BR
             {
               query = query.Where(gu => gu.guPRInvit1 == PR);
             }
+            // Busqueda por rango de fechas 
+            query = query.Where(gu => ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) >= dateFrom) &&
+                                      ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) <= dateTo));
+
           }
           //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con
           //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se

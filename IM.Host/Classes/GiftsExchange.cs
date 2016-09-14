@@ -26,7 +26,7 @@ namespace IM.Host.Classes
     /// <returns></returns>
     public static bool Validate(DataGrid Grid)
     {
-      return GridHelper.Validate(Grid, false, 1, "Gifts", "Gift", new List<string> { "gegi" });
+      return GridHelper.Validate(Grid, false, 1, "Gifts", "Gift", new List<string> { "gegi" }, Grid.ItemsSource.OfType<GiftsReceiptDetail>().ToList());
     } 
     #endregion
 
