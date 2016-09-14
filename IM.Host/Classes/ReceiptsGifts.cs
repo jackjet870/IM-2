@@ -1334,13 +1334,17 @@ namespace IM.Host.Classes
     /// <summary>
     /// Valida los regalos de recibos de regalos
     /// </summary>
-    /// <param name="pRows"></param>
+    /// <param name="validateMaxAuthGifts"> bandera para validar el maximo autorizado de Gifts </param>
+    /// <param name="guestStatus"> Objeto que contiene el GuestStatus </param>
+    /// <param name="totalCost"> Costo total de los gifts </param>
+    /// <param name="maxAuthGifts"> Maximo autorizado de Gifts </param>
+    /// <param name="dtg"> DataGrid a validar </param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 12/Julio/2016 Created
+    /// [vipacheco] 14/Sep/2016 Modified -> Se optimizo el metodo validate
     /// </history>
-    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, GuestStatusValidateData pGuestStatus,
-                                string pTotalCost, string pMaxAuthGifts, DataGrid dtg)
+    public static bool Validate(bool validateMaxAuthGifts, GuestStatusValidateData guestStatus, string totalCost, string maxAuthGifts, DataGrid dtg)
     {
       bool blnvalid = true;
 
@@ -1348,16 +1352,16 @@ namespace IM.Host.Classes
       blnvalid = GridHelper.Validate(dtg, false, 1, "Gifts", "Gift", new List<string> { "gegi" }, dtg.ItemsSource.OfType<GiftsReceiptDetail>().ToList());
 
       // Si se debe validar el monto maximo de regalos
-      if (pValidateMaxAuthGifts && blnvalid)
+      if (validateMaxAuthGifts && blnvalid)
       {
         // validamos el monto maximo de regalos
-        blnvalid = Gifts.ValidateMaxAuthGifts(pTotalCost, pMaxAuthGifts);
+        blnvalid = Gifts.ValidateMaxAuthGifts(totalCost, maxAuthGifts);
       }
 
       // Si hay GuestStatus o se debe validar
-      if (pGuestStatus != null && pGuestStatus.gsMaxQtyTours > 0 && blnvalid)
+      if (guestStatus != null && guestStatus.gsMaxQtyTours > 0 && blnvalid)
       {
-        blnvalid = Gifts.ValidateGiftsGuestStatus(dtg, pGuestStatus, "geQty", "gegi");
+        blnvalid = Gifts.ValidateGiftsGuestStatus(dtg, guestStatus, "geQty", "gegi");
       }
 
       return blnvalid;
