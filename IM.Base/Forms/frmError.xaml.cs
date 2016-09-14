@@ -1,4 +1,5 @@
-﻿using PalaceResorts.Common.Notifications.WinForm;
+﻿using IM.Base.Helpers;
+using IM.Model.Classes;
 using System;
 using System.Windows;
 
@@ -28,8 +29,9 @@ namespace IM.Base.Forms
     ///  [lchairez] 11/Feb/2016 Created
     ///  [wtorres]  11/Mar/2016 Modified. Ahora despliega el Stack Trace y la excepcion anidada
     ///  [wtorres]  13/Ago/2016 Modified. Ahora envia un correo electronico con la excepcion
+    ///  [wtorres]  14/Sep/2016 Modified. Ahora enviar los datos del usuario
     /// </history>
-    public frmError(Exception exception)
+    public frmError(Exception exception, UserData user)
     {
       InitializeComponent();
 
@@ -40,7 +42,7 @@ namespace IM.Base.Forms
         btnInnerException.Visibility = Visibility.Hidden;
 
       // notificamos la excepcion por correo electronico
-      Notifier.AsyncSendException(exception);
+      NotificationHelper.SendException(exception, user);
     }
 
     #endregion

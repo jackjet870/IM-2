@@ -76,7 +76,7 @@ namespace IM.Administrator
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception);
+      var frm = new frmError(e.Exception, User);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {

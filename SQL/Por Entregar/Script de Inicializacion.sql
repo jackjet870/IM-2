@@ -31,8 +31,17 @@ GO
 INSERT INTO PersonnelPermissions (pppe, pppm, pppl)
 SELECT peID, 'RPTEXCEL', 1
 FROM Personnel
--- CONTR	Contraloria
--- SOPORTE	Soporte Tecnico
--- PROG		Programacion
-WHERE pede IN ('CONTR', 'SOPORTE', 'PROG') AND peA = 1
+WHERE
+	-- CONTR	Contraloria
+	-- SEC		Secretarias De Vents
+	-- SOPORTE	Soporte Tecnico
+	-- PROG		Programacion
+	pede IN ('CONTR', 'SOPORTE', 'PROG', 'SEC')
+	-- Activos
+	AND peA = 1
+	-- 0	No Registrado
+	-- PVP	Usuarios Pvp
+	-- RIFA	Rifa
+	-- TEST	Usuario De Prueba
+	AND peID NOT IN ('0', 'PVP', 'RIFA', 'TEST')
 GO
