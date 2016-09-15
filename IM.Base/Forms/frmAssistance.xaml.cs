@@ -441,7 +441,7 @@ namespace IM.Base.Forms
       _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
       if (_listAssistData.Count > 0)
       {
-        FileInfo file = await ExportReports.RptAssitance(_listAssistData, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value, filters);
+        FileInfo file = await ExportReports.RptAssitance(_listAssistData, dtpStartt.Value.Value, dtpEndd.Value.Value, filters);
         if (file != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(file, user.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);

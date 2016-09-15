@@ -67,7 +67,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [ecanul] 14/09/2016 Created
     /// </history>
-    public static async Task<FileInfo> RptAssitance(List<AssistanceData> list, string palaceId, DateTime dtmStart, DateTime dtmEnd, List<Tuple<string, string>> filters)
+    public static async Task<FileInfo> RptAssitance(List<AssistanceData> list, DateTime dtmStart, DateTime dtmEnd, List<Tuple<string, string>> filters)
     {
       DataTable dt = new DataTable();
       string rptName;
@@ -93,7 +93,7 @@ namespace IM.Base.Classes
       }).ToList();
 
       dt = TableHelper.GetDataTableFromList(nList, true);
-      rptName = "Assistance " + palaceId;
+      rptName = "Assistance";
 
       string dateRange = DateHelper.DateRange(dtmStart, dtmEnd);
       string dateRangeFileName = DateHelper.DateRangeFileName(dtmStart, dtmEnd);
