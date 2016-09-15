@@ -834,7 +834,6 @@ namespace IM.Inhouse.Forms
       //Es decir cuando es true entra en el metodo CheckIn por que en la interfaz mostraba que estaba deseleccionado
       // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest 
       //ya que un Guest con Check In ya no se le puede quitar 
-
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;   
     }
 
@@ -958,6 +957,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+      
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestArrival itema =
         dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
@@ -1164,6 +1166,9 @@ namespace IM.Inhouse.Forms
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
 
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
+
       GuestAvailable itema =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
 
@@ -1333,6 +1338,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestPremanifest itema =
         dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as
@@ -1504,8 +1512,6 @@ namespace IM.Inhouse.Forms
 
     #endregion GetGuestEquity_MouseLeftButtonUp
 
-    #endregion 4.- GetGuest
-
     #region chkGuestsGroupsSearched
 
     private async void chkGuestsGroupsGuestSearched_Click(object sender, RoutedEventArgs e)
@@ -1517,6 +1523,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestSearched itema = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
       action = EnumAction.None;
@@ -1574,6 +1583,8 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion chkGuestsGroupsSearched
+
+    #endregion 4.- GetGuest
 
     #region dg_SelectionChanged
 

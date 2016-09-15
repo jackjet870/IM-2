@@ -364,7 +364,7 @@
                         <DataGridTemplateColumn x:Name="guGroupColumn" IsReadOnly="False" Header="Grp" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox Name="CheckBoxGuestGrups"  IsChecked="{Binding guGroup}" Click="chkGuestsGroupsArrivals_Click" HorizontalAlignment="Center" />
+                                    <CheckBox Name="CheckBoxGuestGrups"  IsChecked="{Binding guGroup}" Click="chkGuestsGroupsArrivals_Click" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

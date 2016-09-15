@@ -441,29 +441,7 @@ namespace IM.Base.Forms
       _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value);
       if (_listAssistData.Count > 0)
       {
-        dt = TableHelper.GetDataTableFromList(_listAssistData, true);
-        rptName = "Assistance " + palaceId;
-
-        string dateRange = DateHelper.DateRange(dtpStartt.Value.Value, dtpEndd.Value.Value);
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpStartt.Value.Value, dtpEndd.Value.Value);
-
-        ExcelFormatItemsList format = new ExcelFormatItemsList();
-        format.Add("Place Type", "asPlaceType");
-        format.Add("Place ID", "asPlaceID");
-        format.Add("Date Start", "asStartD", format: EnumFormatTypeExcel.Date);
-        format.Add("Date End", "asEndD", format: EnumFormatTypeExcel.Date);
-        format.Add("ID", "aspe");
-        format.Add("Name", "peN");
-        format.Add("Monday", "asMonday");
-        format.Add("Tuesday", "asTuesday");
-        format.Add("Wednesday", "asWednesday");
-        format.Add("Thursday", "asThursday");
-        format.Add("Friday", "asFriday");
-        format.Add("Saturday", "asSaturday");
-        format.Add("Sunday", "asSunday");
-        format.Add("#Assistence", "asNum");
-        
-        FileInfo file =  await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, format);
+        FileInfo file = await ExportReports.RptAssitance(_listAssistData, palaceId, dtpStartt.Value.Value, dtpEndd.Value.Value, filters);
         if (file != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(file, user.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);

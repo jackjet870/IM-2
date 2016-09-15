@@ -222,6 +222,9 @@ namespace IM.Inhouse.Forms
     /// Habilita o Inhabilita controles segun sea el caso
     /// </summary>
     /// <param name="function">0 Search/Default | 1 Add | 2 Edit | 3 Vista(Cuando se selecciona un Huesped con grupo)</param>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     void EnableControls(int function)
     {
       switch (function)
@@ -402,6 +405,7 @@ namespace IM.Inhouse.Forms
       _enumAction = EnumAct;
     }
 
+    #region Window_Closing
     /// <summary>
     /// Valida Que no este en modo edicion de datos antes de cerrar
     /// </summary>
@@ -417,29 +421,62 @@ namespace IM.Inhouse.Forms
           e.Cancel = true;
       }
     }
+    #endregion
 
     #endregion
 
     #region Metodos del Formulario
 
+    #region dtgGuestsGroup_SelectionChanged
+    /// <summary>
+    /// Carga la informacion del grupo seleccionado
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void dtgGuestsGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       LoadGuestsGroupsInfo();
     }
+    #endregion
 
+    #region btnSearch_Click
+    /// <summary>
+    /// Busca un grupo segun los parametros dados
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// [ecanul] 21/06/2016 Modified. Implementada asincronia
+    /// </history>
     private async void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       if (DateHelper.ValidateValueDate(dtpGuestStart, dtpGuestEnd))
         await LoadGrdGuestsGroups();
     }
+    #endregion
 
+    #region btnAdd_click
+    /// <summary>
+    /// habilita los controles para agregar un nuevo grupo
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       ClearControls();
       EnableControls(1);
       _mode = false;
     }
+    #endregion
 
+    #region btnCancel_Click
+    /// <summary>
+    /// Cancela la edicion y restaura los datos 
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       //Limpiar Controles 
@@ -453,8 +490,16 @@ namespace IM.Inhouse.Forms
 
       if (_enumAction == EnumAction.Add)
         Close();
-    }
+    } 
+    #endregion
 
+    #region btnEdit_Click
+    /// <summary>
+    /// Permite la edicion de un grupo
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       if (dtgGuestGroupIntegrants.Items.Count != 0)
@@ -469,30 +514,51 @@ namespace IM.Inhouse.Forms
         EnableControls(2);
       }
       else
-        UIHelper.ShowMessage("Select a Guests Group",MessageBoxImage.Exclamation, "Can''t Edit");
+        UIHelper.ShowMessage("Select a Guests Group", MessageBoxImage.Exclamation, "Can''t Edit");
       _mode = true;
     }
+    #endregion
 
+    #region btnAddGuest_Click
+    /// <summary>
+    /// Abre el formulario para agregar un nuevo guest 
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void btnAddGuest_Click(object sender, RoutedEventArgs e)
     {
       AddGuests();
     }
+    #endregion
 
+    #region btnShow_Click
+    /// <summary>
+    /// Carga la informacion del Grupo seleccionado
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void btnShow_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateGroupSelected())
         LoadGuestsGroupsInfo();
-    }
+    } 
+    #endregion
 
+    #region btnSave_Clic
+    /// <summary>
+    /// Guarda un grupo y sus integrantes
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// [ecanul] 21/06/2016 Modified. Agregada Asincronia.
+    /// [ecanul] 09/09/2016 Modified. Ahora se actualiza el formulario despues de guardar 
+    /// </history>
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        if(dtgGuestGroupIntegrants.Items.Count <= 1)
-        {
-          UIHelper.ShowMessage("Specify at least 2 integrants", MessageBoxImage.Error);
-          return;
-        }
         List<Guest> lstGuests = (List<Guest>)dtgGuestGroupIntegrants.ItemsSource;
         _guestsGroup = new GuestsGroup();
         //Si no ha especificado un nombre de grupo
@@ -512,7 +578,7 @@ namespace IM.Inhouse.Forms
         {//Obtiene el registro existente en base de datos
           _guestsGroup.gxID = Convert.ToInt32(txtID.Text.Trim());
           _guestsGroup = await BRGuestsGroups.GetGuestsGroup(_guestsGroup.gxID);
-          _oldListGuests = _guestsGroup.Guests.ToList();       
+          _oldListGuests = _guestsGroup.Guests.ToList();
         }
         _guestsGroup.gxN = txtDescription.Text.Trim();
         //Guests a agregar
@@ -521,30 +587,54 @@ namespace IM.Inhouse.Forms
         List<Guest> lstDel = _oldListGuests.Where(gu => !lstGuests.Any(gui => gui.guID == gu.guID)).ToList();
         //Guarda los datos
         int res = await BRGuestsGroups.SaveGuestGroup(_guestsGroup, _mode, lstAdd, lstDel);
-        
-        dtgGuestGroupIntegrants.ItemsSource = null;
-        dtgGuestGroupIntegrants.ItemsSource = lstGuests;
-        lblIntegrants.Content = "Integrants: " + lstGuests.Count;
-        
+
         EnableControls(0);
-        CaseLoad();
+
+        txtgxID.Text = res.ToString();
+        await LoadGrdGuestsGroups();
+        var gg = new GuestsGroup { gxID = res };
+        LoadGridGuestsGroupsIntegrants(gg);
+        txtgxID.Text = string.Empty;
+        txtID.Text = res.ToString();
       }
       catch (Exception ex)
       {
         UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Inhouse");
       }
-    }
+    } 
+    #endregion
 
+    #region DateTimePiker Changed
+    /// <summary>
+    /// Cambia los datos del datetime piker Start
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void dtpGuestStart_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       DateHelper.ValidateValueDate((DateTimePicker)sender);
     }
-
+    /// <summary>
+    /// Cambia los datos del datetime piker End
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void dtpGuestEnd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       DateHelper.ValidateValueDate((DateTimePicker)sender);
-    }
+    } 
+    #endregion
 
+    #region Window_Loaded
+    /// <summary>
+    /// Carga los datos iniciales del formulario 
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// [ecanul] 09/09/2016 Modified. Ahora no carga el listado al iniciar el formulario
+    /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
 
@@ -556,9 +646,9 @@ namespace IM.Inhouse.Forms
       UIHelper.SetUpControls(new GuestsGroup(), grdGroupInfo, blnCharacters: true);
       UIHelper.SetUpControls(new Guest(), grdGuestInfo, blnCharacters: true);
       grdGroupInfo.DataContext = _guestsGroup;
-      grdGuestInfo.DataContext = _guest; 
+      grdGuestInfo.DataContext = _guest;
       #endregion
-
+      var loadList = (_enumAction == EnumAction.None);
       if (_enumAction == EnumAction.None)
       {
         txtgxID.Text = _groupID.ToString();
@@ -597,10 +687,19 @@ namespace IM.Inhouse.Forms
         btnEdit.IsEnabled = false;
         btnDelete.IsEnabled = false;
       }
-      CaseLoad();
+      if (loadList)
+        CaseLoad();
       txtgxID.Text = "";
     }
+    #endregion
 
+    #region Window_KeyDown
+    /// <summary>
+    /// Revisa que tecla es precionada y no muestra en la barra de estado de ser necesario
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/04/2016 Created;
+    /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Capital)
@@ -615,7 +714,8 @@ namespace IM.Inhouse.Forms
       {
         KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       }
-    }
+    } 
+    #endregion
 
     #endregion
 
