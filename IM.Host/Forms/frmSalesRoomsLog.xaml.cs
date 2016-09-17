@@ -1,16 +1,17 @@
-﻿using System.Windows;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Host.Classes;
+using IM.Model;
+using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using System.Collections.Generic;
-using IM.Host.Classes;
-using System.Linq;
-using IM.Model;
-using System;
-using IM.Base.Forms;
-using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -29,7 +30,7 @@ namespace IM.Host.Forms
     {
 
       _salesRoomLog = ((CollectionViewSource)(this.FindResource("dsSalesRoomLog")));
-      _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(App.User.SalesRoom.srID);
+      _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(Context.User.SalesRoom.srID);
 
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);
@@ -113,12 +114,12 @@ namespace IM.Host.Forms
       if (((List<SalesRoomLogData>)_salesRoomLog.Source).Any())
       {
         var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
-          new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Sales Room ID", App.User.SalesRoom.srID) },
+          new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Sales Room ID", Context.User.SalesRoom.srID) },
           "Sales Rooms Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dtgSalesRoomLog.Columns.ToList(), clsFormatReport.RptCloseSalesRoomLog()));
 
         if (fileinfo != null)
         {
-          frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewver.ShowDialog();
         }
       }

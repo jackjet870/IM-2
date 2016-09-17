@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
-using IM.Model;
-using IM.BusinessRules.BR;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
 using IM.Model.Enums;
-using System.Linq;
 using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.Administrator.Forms
@@ -72,7 +73,7 @@ namespace IM.Administrator.Forms
         }
         else
         {          
-          postLog.ppChangedBy= App.User.User.peID;
+          postLog.ppChangedBy= Context.User.User.peID;
           if (enumMode == EnumMode.Add)
           {
             postLog.ppDT = DateTime.Now;

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
 
 namespace IM.Host.Forms
 {
@@ -67,7 +68,7 @@ namespace IM.Host.Forms
       _dsMealTicketType.Source = frmHost._lstMealTicketType;
 
       // Verificamos si es usuario tiene la opcion de Reimpresion
-      chkPrinted.IsEnabled = App.User.HasPermission(EnumPermission.MealTicketReprint, EnumPermisionLevel.Standard) ? true : false;
+      chkPrinted.IsEnabled = Context.User.HasPermission(EnumPermission.MealTicketReprint, EnumPermisionLevel.Standard) ? true : false;
 
       #region switch
       switch (_openBy)
@@ -444,12 +445,12 @@ namespace IM.Host.Forms
         if (_modeOpen == EnumMode.Add)
         {
           // Obtenemos el folio a asignar
-          int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType == null ? 1 : _rateType.raID);
+          int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(Context.User.SalesRoom.srID, _mealType.myID, _rateType == null ? 1 : _rateType.raID);
 
           _mealTicketCurrency = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
 
           //Actualizamos el folio!
-          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType == null ? 1 : _rateType.raID, $"{folioNew}");
+          BRMealTicketFolios.UpdateMealTicketFolio(Context.User.SalesRoom.srID, _mealType.myID, _rateType == null ? 1 : _rateType.raID, $"{folioNew}");
 
           //Guardamos el Meal Ticket Creado
           BRMealTickets.InsertNewMealTicket(_mealTicketCurrency);
@@ -470,17 +471,17 @@ namespace IM.Host.Forms
           _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
           _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
           _mealTicketCurrency.meComments = txtComments.Text;
-          _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
+          _mealTicketCurrency.mesr = Context.User.SalesRoom.srID;
           _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
           _mealTicketCurrency.mera = frmMealTickets._guestID > 0 ? 1 : _rateType.raID;
           _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
           _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
           _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
           _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
-          _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+          _mealTicketCurrency.meAuthorizedBy = Context.User.User.peID;
 
           //Actualizamos el folio!
-          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, _mealTicketCurrency.meFolios);
+          BRMealTicketFolios.UpdateMealTicketFolio(Context.User.SalesRoom.srID, _mealType.myID, _rateType.raID, _mealTicketCurrency.meFolios);
 
           // Insertamos el nuevo Meal Ticket con el folio asignado
           BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
@@ -523,14 +524,14 @@ namespace IM.Host.Forms
         meTAdults = Convert.ToDecimal(_meTAdultsString),
         meTMinors = Convert.ToDecimal(_meTMinorsString),
         meComments = txtComments.Text,
-        mesr = App.User.SalesRoom.srID,
+        mesr = Context.User.SalesRoom.srID,
         meCanc = chkCancel.IsChecked.Value,
         mera = cboRateType.IsVisible ? _rateType.raID : 1,
         mepe = cboCollaborator.IsVisible ? _personnel.peID : null,
         mePrinted = chkPrinted.IsChecked.Value,
         meag = cboAgency.IsVisible ? _agency.agID : null,
         merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null,
-        meAuthorizedBy = App.User.User.peID
+        meAuthorizedBy = Context.User.User.peID
       };
     }
     #endregion

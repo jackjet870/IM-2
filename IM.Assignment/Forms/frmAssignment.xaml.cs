@@ -7,13 +7,12 @@ using System.Globalization;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Data;
 using System.IO;
 using IM.Assignment.Classes;
-using System.Diagnostics;
 using System.Windows.Input;
 using IM.Base.Forms;
 using IM.Model.Enums;
+using IM.Base.Classes;
 
 namespace IM.Assignment
 {
@@ -24,7 +23,7 @@ namespace IM.Assignment
   /// <history>
   ///   [vku] 08/Mar/2016 Created
   /// </history>
-  public partial class frmAssignment: Window
+  public partial class frmAssignment : Window
   {
 
     #region Atributos
@@ -64,7 +63,7 @@ namespace IM.Assignment
     ///   [vku] 08/Mar/2016 Created
     /// </history>
     private async void LoadListMarkets()
-    {  
+    {
       lstMarkets = await BRMarkets.GetMarkets(1);
       dtgListMarkets.ItemsSource = lstMarkets;
       dtgListMarkets.SelectAll();
@@ -103,7 +102,7 @@ namespace IM.Assignment
       status.Visibility = Visibility.Visible;
       _pRAssignedViewSource.Source = await BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
       status.Visibility = Visibility.Collapsed;
-      LoadListGuestsAssigned();   
+      LoadListGuestsAssigned();
     }
     #endregion
 
@@ -172,12 +171,12 @@ namespace IM.Assignment
       ///valida que haya al menos un huesped seleccionado
       if (dtgGuestUnassigned.SelectedItems.Count == 0)
       {
-        UIHelper.ShowMessage("Select at least one guest.",MessageBoxImage.Warning);
+        UIHelper.ShowMessage("Select at least one guest.", MessageBoxImage.Warning);
         blnValid = false;
       }
       else
       {
-       ///valida que haya un PR seleccionado
+        ///valida que haya un PR seleccionado
         if (ValidatePR() == false)
         {
           blnValid = false;
@@ -202,7 +201,7 @@ namespace IM.Assignment
 
       if (dtgGuestAssigned.SelectedItems.Count == 0)
       {
-        UIHelper.ShowMessage("Select at leas one guest",MessageBoxImage.Warning);
+        UIHelper.ShowMessage("Select at leas one guest", MessageBoxImage.Warning);
         blnValid = false;
       }
       else
@@ -258,8 +257,8 @@ namespace IM.Assignment
     private void OpenReport(FileInfo finfo)
     {
       if (finfo != null)
-      {        
-        frmDocumentViewer documentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly), false);
+      {
+        frmDocumentViewer documentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
         documentViewver.ShowDialog();
       }
     }
@@ -274,7 +273,7 @@ namespace IM.Assignment
     {
       System.Windows.Data.CollectionViewSource marketShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("marketShortViewSource")));
       ///Inicializamos los filtros
-      _LeadSource = App.User.Location.loID;
+      _LeadSource = Context.User.Location.loID;
       mdtmDate = DateHelper.GetStartWeek(DateTime.Today.Date);
 
       ///Obtiene numero de la semana a partir de una fecha
@@ -344,14 +343,14 @@ namespace IM.Assignment
     ///   [vku] 08/Mar/2016 Created
     /// </history>
     private void chkMemberPRs_Click(object sender, RoutedEventArgs e)
+    {
+      ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
+      if (chkGuestsPRs.IsChecked == false & chkMemberPRs.IsChecked == false)
       {
-        ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
-        if (chkGuestsPRs.IsChecked == false & chkMemberPRs.IsChecked == false)
-        {
-          chkGuestsPRs.IsChecked = true;
-        }
-        FilterRecords();
+        chkGuestsPRs.IsChecked = true;
       }
+      FilterRecords();
+    }
     #endregion
 
     #region chkGuestsPRs_Click
@@ -362,14 +361,14 @@ namespace IM.Assignment
     ///   [vku] 08/Mar/2016 Created
     /// </history>
     private void chkGuestsPRs_Click(object sender, RoutedEventArgs e)
-   {
-     ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
-     if (chkGuestsPRs.IsChecked.Value == false & chkMemberPRs.IsChecked.Value == false)
-     {
-       chkMemberPRs.IsChecked = true;
-     }
-     FilterRecords();
-   }
+    {
+      ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
+      if (chkGuestsPRs.IsChecked.Value == false & chkMemberPRs.IsChecked.Value == false)
+      {
+        chkMemberPRs.IsChecked = true;
+      }
+      FilterRecords();
+    }
     #endregion
 
     #region btnAssignmentByPR_Click
@@ -387,22 +386,23 @@ namespace IM.Assignment
       filters.Clear();
       finfo = null;
       ///validamos el PR
-      if (ValidatePR()) {
+      if (ValidatePR())
+      {
         filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
         filters.Add(Tuple.Create("PR", _strgPRs + " - " + _strgNamePR));
         List<RptAssignmentByPR> lstAssignmentByPR = await BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
         if (lstAssignmentByPR.Count > 0)
-        {       
+        {
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
           finfo = await clsReports.ExportRptAssignmentByPR("Assignment by PR", dateRangeFileName, filters, lstAssignmentByPR);
         }
         else
         {
-          UIHelper.ShowMessage("There is no data",MessageBoxImage.Warning);
+          UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning);
         }
         OpenReport(finfo);
-      }  
+      }
     }
     #endregion
 
@@ -420,7 +420,7 @@ namespace IM.Assignment
       filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
       finfo = null;
-      List<RptAssignment> lstAssignment = await BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
+      List<RptAssignment> lstAssignment = await BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
       if (lstAssignment.Count > 0)
       {
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
@@ -503,7 +503,7 @@ namespace IM.Assignment
         res = await BRAssignment.SaveGuestUnassign(_strgGuestAssigned, _strgPRs);
         FilterRecords();
         UIHelper.ShowMessageResult("Remove Assignment", res);
-        
+
       }
     }
     #endregion
@@ -528,7 +528,7 @@ namespace IM.Assignment
           _markets = _markets + ",";
         }
       }
-     LoadListGuestsUnassigned();
+      LoadListGuestsUnassigned();
     }
     #endregion
 

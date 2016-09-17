@@ -267,7 +267,7 @@ namespace IM.Host.Forms
             GiftsExchange.Save(ReceiptExchangeID, dtgExchange);
 
             // Guardamos las promociones en Sistur
-            string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
+            string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", Context.User.User.peID);
             if (!string.IsNullOrEmpty(msjSavePromotionsSistur))
               UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save promotions in sistur");
           }
@@ -346,7 +346,7 @@ namespace IM.Host.Forms
       ReceiptExchangeID = await BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
 
       // Guardamos el historico del recibo
-      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptExchangeID, App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptExchangeID, Context.User.User.peID);
     }
     #endregion
 

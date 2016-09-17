@@ -99,7 +99,7 @@ namespace IM.Host.Forms
       // Asignamos el ID del guest
       _guestID = guestID;
       // Obtenemos la fecha de cierre de los recibos de regalos de la sala
-      _dtpClose = BRSalesRooms.GetCloseSalesRoom(EnumEntities.GiftsReceipts, App.User.SalesRoom.srID);
+      _dtpClose = BRSalesRooms.GetCloseSalesRoom(EnumEntities.GiftsReceipts, Context.User.SalesRoom.srID);
 
       InitializeComponent();
       //UIHelper.SetUpControls(new GiftsReceiptDetail(), tbMain);
@@ -258,7 +258,7 @@ namespace IM.Host.Forms
       if (pGuestID == 0)
       {
         guest = txtCgrgu.Text != "" ? Convert.ToInt32(txtCgrgu.Text) : guest;
-        salesRoom = App.User.SalesRoom.srID;
+        salesRoom = Context.User.SalesRoom.srID;
         receipt = txtCgrID.Text != "" ? Convert.ToInt32(txtCgrID.Text) : receipt;
         folio = txtCgrNum.Text != "" ? txtCgrNum.Text : folio;
         dateFrom = dtpCgrDFrom.Value.Value.Date;
@@ -300,7 +300,7 @@ namespace IM.Host.Forms
 
       dtgReceipts.Focus();
       // si es un supervisor, puede modificar la fecha del recibo
-      dtpgrD.IsReadOnly = !App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special);
+      dtpgrD.IsReadOnly = !Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special);
     }
     #endregion
 
@@ -393,7 +393,7 @@ namespace IM.Host.Forms
 
       txtgrgu.IsReadOnly = false;
       dtpgrD.Value = frmHost.dtpServerDate;
-      cmbSalesRoom.SelectedValue = App.User.SalesRoom.srID;
+      cmbSalesRoom.SelectedValue = Context.User.SalesRoom.srID;
 
       // si no se esta buscando
       if (_guestID > 0)
@@ -455,7 +455,7 @@ namespace IM.Host.Forms
     {
       LoadExchangeRates();
       // Bindiamos la entidad vacia!
-      var newGiftReceipt = new GiftsReceipt() { grct = "Marketing", grcu = "US", grWh = App.User.SalesRoom.srID, grpt = "CS", grExchangeRate = Math.Round(_lstExchangeRate.Where(w => w.excu == "MEX").Select(s => s.exExchRate).Single(), 4), grcucxcPRDeposit = "US", grcucxcTaxiOut = "US" };
+      var newGiftReceipt = new GiftsReceipt() { grct = "Marketing", grcu = "US", grWh = Context.User.SalesRoom.srID, grpt = "CS", grExchangeRate = Math.Round(_lstExchangeRate.Where(w => w.excu == "MEX").Select(s => s.exExchRate).Single(), 4), grcucxcPRDeposit = "US", grcucxcTaxiOut = "US" };
       if (_guestID > 0)
       {
         newGiftReceipt.grpe = GiftsReceiptDetail.grpe;
@@ -514,10 +514,10 @@ namespace IM.Host.Forms
       btnCancelSisturPromotions.IsEnabled = false;
 
       // Autentificacion automatica
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        txtChangedBy.Text = App.User.User.peID;
-        txtPwd.Password = App.User.User.pePwd;
+        txtChangedBy.Text = Context.User.User.peID;
+        txtPwd.Password = Context.User.User.pePwd;
       }
 
       //Determinamos si se puede modificar el recibo
@@ -540,7 +540,7 @@ namespace IM.Host.Forms
 
       // si no tiene Guest ID o si tiene permiso especial de recibos de regalos,
       // permitimos modificar la sala de ventas
-      cmbSalesRoom.IsEnabled = _Enable && (txtgrgu.Text == "" || App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special));
+      cmbSalesRoom.IsEnabled = _Enable && (txtgrgu.Text == "" || Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special));
 
       // Grid de regalos
       dtgGifts.IsReadOnly = !_Enable;
@@ -668,7 +668,7 @@ namespace IM.Host.Forms
       }
 
       // si tiene permiso de solo lectura para recibos de regalos
-      if (!App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
+      if (!Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
       {
         btnNew.IsEnabled = false;
         btnExchange.IsEnabled = false;
@@ -1384,7 +1384,7 @@ namespace IM.Host.Forms
       BRGiftsReceipts.CancelGiftsReceipt(ReceiptID, frmHost.dtpServerDate);
 
       // Guardamos el historico del recibos de regalos
-      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptID, App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptID, Context.User.User.peID);
 
       // Actualizamos los datos en pantalla
       chkgrCancel.IsChecked = true;
@@ -1471,7 +1471,7 @@ namespace IM.Host.Forms
       }
 
       // validamos si tiene permiso especial de recibos de regalos
-      if (!App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special))
+      if (!Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special))
       {
         UIHelper.ShowMessage("Access denied", MessageBoxImage.Exclamation);
         return false;
@@ -1568,7 +1568,7 @@ namespace IM.Host.Forms
       if (string.IsNullOrEmpty(txtgrID.Text))
       {
         // Guardamos el GiftReceipt en la BD
-        GiftsReceiptDetail.grWh = App.User.SalesRoom.srID;
+        GiftsReceiptDetail.grWh = Context.User.SalesRoom.srID;
         GiftsReceiptDetail.grExchangeRate = Math.Round(_lstExchangeRate.Where(w => w.excu == "MEX").Select(s => s.exExchRate).Single(), 4);
         receiptID = await BRGiftsReceipts.SaveGiftReceipt(GiftsReceiptDetail);
         // Asignamos el ID al campo.
@@ -1581,7 +1581,7 @@ namespace IM.Host.Forms
         // Cargamos los datos del huesped
         Guest guest = await BRGuests.GetGuest(Convert.ToInt32(txtgrgu.Text), true);
 
-        if (guest.guQuinella && !guest.guGiftsReceived && App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
+        if (guest.guQuinella && !guest.guGiftsReceived && Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
         {
           // esplegamos el formulario de generacion de recibos de regalos
           frmGiftsReceiptsAdditional _frmGifsAdditional = new frmGiftsReceiptsAdditional(this, Convert.ToInt32(txtgrgu.Text)) { Owner = this };
@@ -1622,7 +1622,7 @@ namespace IM.Host.Forms
       if (ConfigHelper.GetString("UseSisturPromotions").ToUpper().Equals("TRUE"))
       {
         // Guardamos las promociones de Sistur
-        string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(receiptID, txtChangedBy.Text, App.User.User.peID);
+        string msjSavePromotionsSistur = await SisturHelper.SavePromotionsSistur(receiptID, txtChangedBy.Text, Context.User.User.peID);
         if (!string.IsNullOrWhiteSpace(msjSavePromotionsSistur))
           UIHelper.ShowMessage(msjSavePromotionsSistur, MessageBoxImage.Information, "Save Promotions Sistur");
       }
@@ -1747,7 +1747,7 @@ namespace IM.Host.Forms
         return false;
 
       // Se consulta con la informacion ingresada.
-      ValidationData _validate = BRHelpers.ValidateChangedByExist(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), App.User.SalesRoom.srID).Single();
+      ValidationData _validate = BRHelpers.ValidateChangedByExist(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), Context.User.SalesRoom.srID).Single();
 
       // Se verifica si se encontro algun resultado.
       if (_validate.Focus != "" && _validate.Message != "")
@@ -2006,7 +2006,7 @@ namespace IM.Host.Forms
         else
         {
           // si el recibo no es de hoy y no tiene permiso especial de recibos de regalos
-          if (dtpgrD.Value.Value.Date != frmHost.dtpServerDate && !App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special))//  
+          if (dtpgrD.Value.Value.Date != frmHost.dtpServerDate && !Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Special))//  
             return false;
         }
       }
@@ -2141,7 +2141,7 @@ namespace IM.Host.Forms
     /// </history>
     private void dgGiftsReceiptPaymentShort_AddingNewItem(object sender, AddingNewItemEventArgs e)
     {
-      e.NewItem = new GiftsReceiptPaymentShort { gycu = "US", gypt = "CS", gyAmount = 1, gysb = "CL", gype = App.User.User.peID, UserName = App.User.User.peN };
+      e.NewItem = new GiftsReceiptPaymentShort { gycu = "US", gypt = "CS", gyAmount = 1, gysb = "CL", gype = Context.User.User.peID, UserName = Context.User.User.peN };
     }
     #endregion
 
@@ -2316,7 +2316,7 @@ namespace IM.Host.Forms
       }
 
       // guardamos el historico del recibos de regalos
-      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), Context.User.User.peID);
 
       if ((Convert.ToDecimal(txtgrCxCGifts.Text) + Convert.ToDecimal(txtgrCxCAdj.Text)) != 0 ||
         Convert.ToDecimal(txtgrCxCPRDeposit.Text) > 0 || Convert.ToDecimal(txtgrCxCTaxiOut.Text) > 0)
@@ -2391,7 +2391,7 @@ namespace IM.Host.Forms
         else
         {
           // si el recibo no es de hoy y no tiene permiso especial de recibos de regalos
-          if (dtpgrD.Value.Value.Date != frmHost.dtpServerDate && !App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
+          if (dtpgrD.Value.Value.Date != frmHost.dtpServerDate && !Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard))
             return false;
         }
       }

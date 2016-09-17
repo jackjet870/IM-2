@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using IM.Model.Enums;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
 using IM.Model.Classes;
+using IM.Model.Enums;
+using System;
+using System.Linq;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Input;
 
 namespace IM.Administrator.Forms
 {
@@ -37,11 +37,11 @@ namespace IM.Administrator.Forms
     protected void CreateMenu()
     {      
       status.Visibility = Visibility.Visible;
-      lblUser.Content = App.User.User.peN;
+      lblUser.Content = Context.User.User.peN;
       var lstMenu = new ItemsList();
 
       #region Sales Permision
-      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
+      if (Context.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add("frmAssistancesStatus", "Assitances Status", "Assistance.ico");
         lstMenu.Add("frmCreditCardTypes", "Credit Card Types", "Credit_Cards.png");
@@ -55,7 +55,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Host Invitations Permision
-      if (App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmChargeTo", "Charge To", "Charge_To.png");
         lstMenu.Add("frmGuestStatusTypes", "Guest Status Types", "Guests.ico");
@@ -63,14 +63,14 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Contracts Permision
-      if (App.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmContracts", "Contracts", "Contract.ico");
       }
       #endregion
 
       #region Agencies Permision
-      if (App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmAgencies", "Agencies", "Airplane.ico");
         lstMenu.Add("frmCountries", "Countries", "World.ico");
@@ -83,14 +83,14 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Currencies Permision
-      if (App.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmCurrencies", "Currencies", "currency.png");
       }
       #endregion
 
       #region Folios CxC Permission
-      if (App.User.HasPermission(EnumPermission.FoliosCxC, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.FoliosCxC, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmFoliosCXC", "Folios CxC", "Reports.ico");
         lstMenu.Add("frmFoliosCxCPR", "Folios CxC By PR", "Reports.ico");
@@ -98,7 +98,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Folio Invitations OutHouse Permission
-      if (App.User.HasPermission(EnumPermission.FoliosInvitationsOuthouse, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.FoliosInvitationsOuthouse, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmFoliosInvitationsOuthouse", "Folios Invitations Outhouse", "Reports.ico");
         lstMenu.Add("frmReasonCancellationFolios", "Reason for Cancellation of Folios", "Forbidden.png");
@@ -107,7 +107,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Gifts Permission
-      if (App.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmGiftsCategories", "Gifts Categories", "GiftCategory.png");
         lstMenu.Add("frmProducts", "Products", "Product.ico");
@@ -116,7 +116,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Locations Permission
-      if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmAreas", "Areas", "World.ico");
         lstMenu.Add("frmHotels", "Hotels", "Hotel.png");
@@ -131,21 +131,21 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Languages Permission
-      if (App.User.HasPermission(EnumPermission.Languages, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Languages, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmLanguages", "Languages", "World.ico");
       }
       #endregion
 
       #region Marital Status Permission
-      if (App.User.HasPermission(EnumPermission.MaritalStatus, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.MaritalStatus, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmMaritalStatus", "Marital Status", "Marital_Status.png");
       }
       #endregion
 
       #region Motives Permission
-      if (App.User.HasPermission(EnumPermission.Motives, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Motives, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmNotBookingMotives", "Not Booking Motives", "DateTime_Forbidden.png");
         lstMenu.Add("frmUnderPaymentMotives", "Under Payment  Motives", "Forbidden.png");
@@ -154,7 +154,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Teams Permission
-      if (App.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmPosts", "Posts", "Posts.png");
         lstMenu.Add("frmPostsLog", "Posts Log", "Log.ico");
@@ -165,7 +165,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Administrator Role
-      if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
+      if (Context.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
         lstMenu.Add("frmComputers", "Computers", "Computer.png");
         lstMenu.Add("frmConfigurationDetails", "Configuration", "Configuration.ico");
@@ -198,7 +198,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Secretary Role
-      if (App.User.HasRole(EnumRole.Secretary) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasRole(EnumRole.Secretary) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmSalesAmountRanges", "Sales Amount Ranges", "Money_Bag.png");
         lstMenu.Add("frmGoals", "Goals", "Goal.png");
@@ -207,7 +207,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Tour Times Permission
-      if (App.User.HasPermission(EnumPermission.TourTimes, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.TourTimes, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmTourTimesSchemas", "Tour Times Schemas", "IconDate.png");
         lstMenu.Add("frmTourTimes", "Tour Times", "IconDate.png");
@@ -215,21 +215,21 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region Warehouses Permission
-      if (App.User.HasPermission(EnumPermission.Warehouses, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Warehouses, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmWarehouses", "Warehouses", "Warehouse.png");
       }
       #endregion
 
       #region Wholesalers Permission
-      if (App.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmWholesalers", "Wholesalers", "shopping_cart.png");
       }
       #endregion
 
       #region Personnel Permission
-      if (App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.ReadOnly) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.ReadOnly) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmPersonnel", "Personnel", "Personnel.png");
       }
@@ -237,7 +237,7 @@ namespace IM.Administrator.Forms
       #endregion
 
       #region PRCaptian Roles
-      if (App.User.HasRole(EnumRole.PRCaptain) || App.User.HasRole(EnumRole.Administrator))
+      if (Context.User.HasRole(EnumRole.PRCaptain) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmNotices", "Notices", "Notice.png");
       }

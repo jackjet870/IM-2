@@ -1,17 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.InventoryMovements.Clases;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using IM.InventoryMovements.Clases;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Base.Forms;
-using IM.Base.Helpers;
-using IM.Model.Enums;
 
 namespace IM.InventoryMovements
 {
@@ -69,18 +69,18 @@ namespace IM.InventoryMovements
     /// </history>
     private void frmInventoryMovements_Loaded(object sender, RoutedEventArgs e)
     {
-      _salesRoom = BRSalesRooms.GetSalesRoom(App.User.Warehouse.whID);
+      _salesRoom = BRSalesRooms.GetSalesRoom(Context.User.Warehouse.whID);
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-      lblUserName.Content = App.User.User.peN;
-      lblWareHouse.Content = App.User.Warehouse.whN;
+      lblUserName.Content = Context.User.User.peN;
+      lblWareHouse.Content = Context.User.Warehouse.whN;
       lblCloseDate.Content = "Close Receipts Date: " + _salesRoom.srGiftsRcptCloseD.ToString("dd/MMM/yyyy");
       InitializeGrdNew();
       _dtmServerdate = BRHelpers.GetServerDate();
       dtpDate_SelectedDateChanged(null, null);
       GridHelper.SetUpGrid(grdNew, new WarehouseMovement());
-      if (((EnumPermisionLevel)App.User.Permissions.FirstOrDefault(c => c.pppm == "GIFTSRCPTS")?.pppl) >=
+      if (((EnumPermisionLevel)Context.User.Permissions.FirstOrDefault(c => c.pppm == "GIFTSRCPTS")?.pppl) >=
           EnumPermisionLevel.Special)
       {
         fraDate.IsEnabled = true;
@@ -144,7 +144,7 @@ namespace IM.InventoryMovements
       {
         _whsMovViewSource = ((CollectionViewSource)FindResource("whsMovViewSource"));
         // Load data by setting the CollectionViewSource.Source property:
-        _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
+        _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(Context.User.Warehouse.whID, dtpDate.Value.Value.Date);
         StatusBarReg.Content = $"{grd.SelectedItems.Count}/{_whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count()}";
       }
       if (dtpDate.Value != null) _dtmcurrent = dtpDate.Value.Value;
@@ -179,8 +179,8 @@ namespace IM.InventoryMovements
       _lstobjWhsMovs.ForEach(c =>
       {
         c.wmD = dtpDate.Value.Value;
-        c.wmwh = App.User.Warehouse.whID;
-        c.wmpe = App.User.User.peID;
+        c.wmwh = Context.User.Warehouse.whID;
+        c.wmpe = Context.User.User.peID;
       });
 
       List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
@@ -201,7 +201,7 @@ namespace IM.InventoryMovements
         {
           UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");
           InitializeGrdNew();
-          _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID,
+          _whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(Context.User.Warehouse.whID,
             dtpDate.Value.Value.Date);
         }
         else
@@ -369,7 +369,7 @@ namespace IM.InventoryMovements
       _objWhsMovsViewSource.Source = _lstobjWhsMovs;
       _getGiftsViewSource = ((CollectionViewSource)FindResource("getGiftsViewSource"));
       // Load data by setting the CollectionViewSource.Source property:
-      _getGiftsViewSource.Source = await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
+      _getGiftsViewSource.Source = await BRGifts.GetGiftsShort(Context.User.Warehouse.whID, 1);
     }
     #endregion
 

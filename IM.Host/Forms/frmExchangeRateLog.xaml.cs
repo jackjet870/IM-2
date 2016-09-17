@@ -1,18 +1,17 @@
-﻿using System.Windows;
-using System.Windows.Data;
-using IM.BusinessRules.BR;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
-using System.Collections.Generic;
-using System;
-using IM.Model;
-using System.Linq;
+using IM.BusinessRules.BR;
 using IM.Host.Classes;
-using System.Diagnostics;
+using IM.Model;
+using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Base.Forms;
-using IM.Model.Enums;
 
 namespace IM.Host.Forms
 {
@@ -92,7 +91,7 @@ namespace IM.Host.Forms
 
         if (fileinfo != null)
         {
-          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.ShowDialog();
         }         
       }

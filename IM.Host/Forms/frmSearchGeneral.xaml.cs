@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
@@ -82,12 +83,12 @@ namespace IM.Host.Forms
           // Ocultamos las fechas
           stkStartDate.Visibility = stkEndDate.Visibility = Visibility.Collapsed;
           // Lead Sources
-          dsLeadSource.Source = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
+          dsLeadSource.Source = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
           break;
       }
       cboLeadSource.SelectedIndex = -1;
       // Sales Room 
-      dsSalesRoom.Source = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+      dsSalesRoom.Source = await BRSalesRooms.GetSalesRoomsByUser(Context.User.User.peID);
       cboSalesRoom.SelectedIndex = -1;
 
       // Impedimos modificar los datos si el sistema esta en modo de solo lectura
@@ -311,7 +312,7 @@ namespace IM.Host.Forms
       }
 
       // Validamos el permisos del usuario
-      else if (!App.User.HasPermission(enumPermission, EnumPermisionLevel.Standard))
+      else if (!Context.User.HasPermission(enumPermission, EnumPermisionLevel.Standard))
       {
         UIHelper.ShowMessage("You have read access.", MessageBoxImage.Information, "Search General");
         return false;
@@ -337,7 +338,7 @@ namespace IM.Host.Forms
       int GuestID = 0;
       if (ValidatePermissions(EnumPermission.GiftsReceipts, ref GuestID))
       {
-        bool _edit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
+        bool _edit = Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
 
         frmGiftsReceipts giftsReceipt = new frmGiftsReceipts(GuestID)
         {
@@ -424,7 +425,7 @@ namespace IM.Host.Forms
       }
       else
       {
-        if (!App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
+        if (!Context.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard))
         {
           UIHelper.ShowMessage("Account has only read access.", MessageBoxImage.Information);
           return;

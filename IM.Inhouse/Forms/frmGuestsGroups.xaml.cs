@@ -1,16 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Base.Forms;
-using Xceed.Wpf.Toolkit;
 using System.Threading.Tasks;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Inhouse.Forms
 {
@@ -313,7 +314,7 @@ namespace IM.Inhouse.Forms
     /// </history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(App.User, EnumProgram.Inhouse, _date);
+      frmSearchGuest frmSGuest = new frmSearchGuest(Context.User, EnumProgram.Inhouse, _date);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
       frmSGuest.lstGuestAdd = new List<Guest>();

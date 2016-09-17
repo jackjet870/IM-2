@@ -1,24 +1,16 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.ProcessorGeneral.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.ProcessorGeneral.Classes;
-using IM.Base.Forms;
-using IM.Model.Enums;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -118,7 +110,7 @@ namespace IM.ProcessorGeneral.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         frmReportQ.SetExist(finfo.FullName, finfo);
 

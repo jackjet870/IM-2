@@ -1,18 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Linq;
-using System.Collections.Generic;
-using IM.BusinessRules.BR;
-using IM.Model;
-using IM.Model.Classes;
-using IM.Base.Helpers;
-using System.Windows.Media;
-using IM.Model.Enums;
-using IM.Model.Helpers;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 
 namespace IM.Host.Forms
 {
@@ -52,7 +51,7 @@ namespace IM.Host.Forms
 
       btnCancel.IsEnabled = false;
       //Validamos permisos del usuario
-      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.Standard))
+      if (!Context.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.Standard))
       {
         // Ocultamos los botones necesarios.
         btnAdd.IsEnabled = false;

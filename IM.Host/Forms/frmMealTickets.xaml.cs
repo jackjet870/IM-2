@@ -1,17 +1,18 @@
-﻿using IM.BusinessRules.BR;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Host.Classes;
 using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model.Helpers;
-using System.Linq;
-using IM.Base.Helpers;
-using System.Collections.Generic;
-using IM.Host.Classes;
-using IM.Model.Enums;
-using System.Collections.ObjectModel;
 
 namespace IM.Host.Forms
 {
@@ -56,7 +57,7 @@ namespace IM.Host.Forms
       if (guestID != 0)
       {
         lstMealTicket = BRMealTickets.GetMealTickets(guestID);
-        SalesRoomCloseDates closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+        SalesRoomCloseDates closeSalesRoom = BRSalesRooms.GetSalesRoom(Context.User.SalesRoom.srID);
 
         // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
         lstMealTicket.ForEach(x =>
@@ -72,7 +73,7 @@ namespace IM.Host.Forms
         if (!isclosed)
         {
           // Verificamos los permisos del usuario
-          if (App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard)) { _modeOpen = EnumMode.Edit; }
+          if (Context.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard)) { _modeOpen = EnumMode.Edit; }
           else { _modeOpen = EnumMode.ReadOnly; }
         }
       }
@@ -80,7 +81,7 @@ namespace IM.Host.Forms
       else
       {
         // Verificamos los permisos del usuario
-        if (App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard))
+        if (Context.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard))
         {
           _modeOpen = EnumMode.Edit;
         }
@@ -349,7 +350,7 @@ namespace IM.Host.Forms
       MealTicket mtck = grdMealTicket.SelectedItem as MealTicket;
       int folio = 0;
       if (!int.TryParse(mtck.meFolios, out folio)) { UIHelper.ShowMessage($"Could not print this meal ticket.\n{string.Join("\n", mtck.meFolios)}"); ; return; }
-      var mT = await BRMealTicketFolios.GetMealTicket(mtck.meID, Convert.ToInt32(mtck.meFolios), $"{App.User.User.peID} - {App.User.User.peN}");
+      var mT = await BRMealTicketFolios.GetMealTicket(mtck.meID, Convert.ToInt32(mtck.meFolios), $"{Context.User.User.peID} - {Context.User.User.peN}");
       if (mT != null)
       {
         StringHelper.Items = new List<string>();

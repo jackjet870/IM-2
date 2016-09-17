@@ -1,8 +1,10 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.ProcessorSales.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,9 +12,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using IM.ProcessorSales.Classes;
-using Xceed.Wpf.Toolkit;
 using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.ProcessorSales.Forms
 {
@@ -491,7 +492,7 @@ namespace IM.ProcessorSales.Forms
       if (!blnSalesRoom && !multiDate && !concentrate)
         return;
 
-      _lstSalesRoomByUsers.AddRange(await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID));
+      _lstSalesRoomByUsers.AddRange(await BRSalesRooms.GetSalesRoomsByUser(Context.User.User.peID));
 
       #region multidate
       //si es multidate

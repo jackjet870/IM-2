@@ -1,12 +1,13 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.BusinessRules.BR;
 using System.Windows.Threading;
-using IM.Base.Helpers;
 
 namespace IM.Inhouse.Forms
 {
@@ -52,7 +53,7 @@ namespace IM.Inhouse.Forms
       RTFNotices = string.Empty;
       RTFNotice = string.Empty;
 
-      var notices = await BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
+      var notices = await BRNotices.GetNotices(Context.User.LeadSource.lsID, BRHelpers.GetServerDate());
 
       if (notices.Count > 0)
       {

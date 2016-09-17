@@ -1,11 +1,11 @@
-﻿using IM.Base.Forms;
-using IM.Model.Classes;
-using IM.Model.Enums;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.GuestsPR.Forms;
+using IM.Model.Enums;
 using System.Windows;
-using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace IM.GuestsPR
 {
@@ -14,12 +14,6 @@ namespace IM.GuestsPR
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -53,7 +47,7 @@ namespace IM.GuestsPR
       if (frmLogin.IsAuthenticated)
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         frmGuestsPR frmMain = new frmGuestsPR();
         frmMain.ShowDialog();
         frmSplash.Close();
@@ -71,7 +65,7 @@ namespace IM.GuestsPR
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {

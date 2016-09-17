@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -62,8 +63,8 @@ namespace IM.ProcessorInhouse.Forms
     {
       ConfigurarGrids();
       SetupParameters();
-      lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue(App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+      lblUserName.Content = Context.User.User.peN;
+      _frmReportQueue = new frmReportQueue(Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
     }
 
     #endregion Window_ContentRendered
@@ -1150,7 +1151,7 @@ namespace IM.ProcessorInhouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
@@ -1239,7 +1240,7 @@ namespace IM.ProcessorInhouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
@@ -1314,7 +1315,7 @@ namespace IM.ProcessorInhouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();

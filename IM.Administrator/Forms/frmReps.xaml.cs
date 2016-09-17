@@ -1,13 +1,14 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Model.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -35,7 +36,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadReps();
     } 

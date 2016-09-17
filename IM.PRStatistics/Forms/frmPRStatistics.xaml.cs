@@ -1,20 +1,21 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.PRStatistics.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.PRStatistics.Utilities;
-using System.IO;
-using System.Data;
-using System.Linq;
-using IM.Base.Forms;
-using IM.Base.Helpers;
+
 using Xceed.Wpf.Toolkit;
-using IM.Model.Helpers;
-using IM.Model.Enums;
 
 namespace IM.PRStatistics.Forms
 {
@@ -53,7 +54,7 @@ namespace IM.PRStatistics.Forms
       dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.Value = DateTime.Now;
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
+      txtbUserName.Text = Context.User.User.peN;
 
     }
     /// <summary>
@@ -114,7 +115,7 @@ namespace IM.PRStatistics.Forms
 
         if (finfo != null)
         {
-          frmDocumentViewer documentViewer = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.ShowDialog();
         }
       }
@@ -585,8 +586,8 @@ namespace IM.PRStatistics.Forms
       chbxCountries.IsChecked = false;
       chbxAgencies.IsChecked = false;
       chbxMarkets.IsChecked = false;
-      DoGetLeadSources(App.User.User.peID);
-      DoGetSalesRooms(App.User.User.peID);
+      DoGetLeadSources(Context.User.User.peID);
+      DoGetSalesRooms(Context.User.User.peID);
       DoGetCountries();
       DoGetAgencies();
       DoGetMarkets();

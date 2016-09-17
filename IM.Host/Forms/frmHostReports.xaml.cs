@@ -1,17 +1,18 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.Base.Reports;
+using IM.BusinessRules.BR;
+using IM.Host.Classes;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Base.Reports;
-using IM.Host.Classes;
-using System.IO;
-using IM.Model.Enums;
-using IM.Base.Forms;
 
 namespace IM.Host.Forms
 {
@@ -30,7 +31,7 @@ namespace IM.Host.Forms
     {
       InitializeComponent();
       DataContext = this;
-      User = App.User.User;
+      User = Context.User.User;
       _date = selectedDate;
     }
     #endregion
@@ -62,33 +63,33 @@ namespace IM.Host.Forms
       switch ((lstHostReports.SelectedItem as ListBoxItem).Content.ToString())
       {
         case "Premanifest":
-          var lstPremanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value, salesRoom: App.User.SalesRoom.srID);
+          var lstPremanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value, salesRoom: Context.User.SalesRoom.srID);
           if (lstPremanifest.Any())
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
-            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+            filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
             fileinfo= await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
           break;
         case "Premanifest With Gifts":
-          var lstPremanifestWithG = await BRGeneralReports.GetRptPremanifestWithGifts(dtpDate.Value.Value, salesRoom: App.User.SalesRoom.srID);
+          var lstPremanifestWithG = await BRGeneralReports.GetRptPremanifestWithGifts(dtpDate.Value.Value, salesRoom: Context.User.SalesRoom.srID);
           if (lstPremanifestWithG.Any())
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
-            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+            filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
             fileinfo=await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
           break;
         case "Up List End":
-          var lstUplistEnd = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value.Date, salesRoom: App.User.SalesRoom.srID,uplistType: 1);
+          var lstUplistEnd = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value.Date, salesRoom: Context.User.SalesRoom.srID,uplistType: 1);
           if (lstUplistEnd.Any())
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
-            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+            filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
             var salesmans = lstUplistEnd.Select(c => c.Salesman).Distinct().ToList();
 
             salesmans.ForEach(s =>
@@ -108,11 +109,11 @@ namespace IM.Host.Forms
             UIHelper.ShowMessage("There is no data for make a report");
           break;
         case "Up List Start":
-          var lstUplistStart = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value, salesRoom: App.User.SalesRoom.srID);
+          var lstUplistStart = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value, salesRoom: Context.User.SalesRoom.srID);
           if (lstUplistStart.Any())
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
-            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+            filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
 
             var newUplist = new List<RptUpList>();
             var times = new List<string> { "08:00", "10:00", "12:00" };
@@ -147,7 +148,7 @@ namespace IM.Host.Forms
 
       if (fileinfo != null)
       {
-        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
         documentViewver.ShowDialog();
       }
     }

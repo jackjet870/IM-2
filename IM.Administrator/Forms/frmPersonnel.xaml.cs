@@ -1,13 +1,14 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.Model.Helpers;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -46,12 +47,12 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnDel = App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.Special);
-      _blnEdit = App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.Standard);
+      _blnDel = Context.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.Special);
+      _blnEdit = Context.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.Standard);
       btnDel.IsEnabled = _blnDel;
-      btnPostLog.IsEnabled = App.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly);
-      btnTeamLog.IsEnabled = App.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly);
-      btnChangeID.IsEnabled = (App.User.HasRole(EnumRole.Administrator) && App.User.HasPermission(EnumPermission.Personnel,EnumPermisionLevel.SuperSpecial));
+      btnPostLog.IsEnabled = Context.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly);
+      btnTeamLog.IsEnabled = Context.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly);
+      btnChangeID.IsEnabled = (Context.User.HasRole(EnumRole.Administrator) && Context.User.HasPermission(EnumPermission.Personnel,EnumPermisionLevel.SuperSpecial));
       LoadPersonnel();
     }
     #endregion

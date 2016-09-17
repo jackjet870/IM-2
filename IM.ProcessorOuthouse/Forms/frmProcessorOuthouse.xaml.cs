@@ -1,7 +1,9 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.ProcessorOuthouse.Classes;
 using System;
@@ -13,7 +15,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model.Classes;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -33,8 +34,8 @@ namespace IM.ProcessorOuthouse.Forms
       ConfigGrds();
       _clsFilter = new clsFilter();
       GetFirstDayValue();
-      lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue(App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+      lblUserName.Content = Context.User.User.peN;
+      _frmReportQueue = new frmReportQueue(Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
     }
     #endregion Constructor
 
@@ -968,7 +969,7 @@ namespace IM.ProcessorOuthouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);          
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(finfo.FullName, finfo);
       }
@@ -1384,7 +1385,7 @@ namespace IM.ProcessorOuthouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(finfo.FullName, finfo);
         _frmReportQueue.Activate();
@@ -1531,7 +1532,7 @@ namespace IM.ProcessorOuthouse.Forms
         if (finfo == null)
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
-          frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+          frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
           frmDocumentViewver.Show();
         }        
       }

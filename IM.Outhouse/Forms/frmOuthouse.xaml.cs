@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -6,9 +7,7 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Outhouse.Classes;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -71,7 +70,7 @@ namespace IM.Outhouse.Forms
         return false;
       }
       //validamos que el usuario tenga permiso de lectura
-      if (!App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly))
+      if (!Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly))
       {
         UIHelper.ShowMessage("Access denied.", MessageBoxImage.Asterisk);
         return false;
@@ -101,7 +100,7 @@ namespace IM.Outhouse.Forms
       //Validamos que no sea un huesped adicional
 
       //Validamos que tenga permiso de lectura de invitaciones
-      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
+      if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }
@@ -122,7 +121,7 @@ namespace IM.Outhouse.Forms
       try
       {        
         _outPremanifestViewSource.Source =
-        await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
+        await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, Context.User.Location.loID);
       }
       catch (Exception ex)
       {
@@ -149,8 +148,8 @@ namespace IM.Outhouse.Forms
       StaStart("Loading OutHouse...");
 
       //Cargamos las variables del usuario
-      txtUser.Text = App.User.User.peN;
-      txtLocation.Text = App.User.Location.loN;
+      txtUser.Text = Context.User.User.peN;
+      txtLocation.Text = Context.User.Location.loN;
 
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate();
@@ -295,7 +294,7 @@ namespace IM.Outhouse.Forms
       if (outPre != null && ValidateContact(outPre.guCheckIn, outPre.guInfo, outPre.guCheckOutD))
       {
         StaStart("Loading Contact´s Info...");
-        frmContact frmCont = new frmContact(outPre.guID, App.User);
+        frmContact frmCont = new frmContact(outPre.guID, Context.User);
         frmCont.Owner = this;
         frmCont.ShowInTaskbar = false;
         StaEnd();
@@ -398,20 +397,20 @@ namespace IM.Outhouse.Forms
       {
         frmLogin login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true,
             permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
-            invitationMode: true, invitationPlaceId: App.User.Location.loID);
+            invitationMode: true, invitationPlaceId: Context.User.Location.loID);
         if (!isInvit)
         {
-          if (App.User.AutoSign) login.UserData = App.User;
+          if (Context.User.AutoSign) login.UserData = Context.User;
           await login.getAllPlaces();
           login.ShowDialog();
 
           if (!login.IsAuthenticated) return;
         }
-        else if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !App.User.AutoSign)
+        else if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !Context.User.AutoSign)
         {
           login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse, validatePermission: true,
             permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: true,
-            invitationMode: true, invitationPlaceId: App.User.Location.loID);
+            invitationMode: true, invitationPlaceId: Context.User.Location.loID);
           await login.getAllPlaces();
           login.ShowDialog();
 
@@ -419,13 +418,13 @@ namespace IM.Outhouse.Forms
         }
         else
         {
-          login.UserData = App.User;
+          login.UserData = Context.User;
         }              
 
         if (isInvit || login.IsAuthenticated)
         {
           var invitacion = new frmInvitation
-            (EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId, allowReschedule: false) { Owner = this };
+            (EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId, allowReschedule: false) { Owner = this };
           invitacion.ShowDialog();
           if (invitacion.SaveGuestInvitation)
           {
@@ -648,14 +647,14 @@ namespace IM.Outhouse.Forms
       frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false,
         autoSign: true, switchLoginUserMode: true);
       await log.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        log.UserData = App.User;
+        log.UserData = Context.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        App.User = log.UserData;
+        Context.User = log.UserData;
         LoadOuthouse();
       }
     }
@@ -674,7 +673,7 @@ namespace IM.Outhouse.Forms
     {
       if (dgGuestPremanifest.Items.Count > 0)
       {
-        var remanifestOutside = BRGeneralReports.GetRptPremanifestOutSide(dtpDate.Value.Value, App.User.LeadSource.lsID);
+        var remanifestOutside = BRGeneralReports.GetRptPremanifestOutSide(dtpDate.Value.Value, Context.User.LeadSource.lsID);
         ReportsToExcel.PremanifestToExcel(remanifestOutside);
       }
       else
@@ -697,11 +696,11 @@ namespace IM.Outhouse.Forms
     {
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Outhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
-        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.Location.loID);
 
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        login.UserData = App.User;
+        login.UserData = Context.User;
       }
       await login.getAllPlaces();
       login.ShowDialog();
@@ -747,7 +746,7 @@ namespace IM.Outhouse.Forms
     {
       try
       {
-        var frmsearchGuest = new frmSearchGuest(App.User, EnumProgram.Outhouse)
+        var frmsearchGuest = new frmSearchGuest(Context.User, EnumProgram.Outhouse)
         {
           Owner = this,
           ShowInTaskbar = false
@@ -758,15 +757,15 @@ namespace IM.Outhouse.Forms
         if (!frmsearchGuest.cancel)
         {
           var guest = frmsearchGuest.lstGuestAdd[0];
-          guest.guls = App.User.LeadSource.lsID;
+          guest.guls = Context.User.LeadSource.lsID;
           guest.guBookCanc = false;
-          guest.guloInvit = App.User.LeadSource.lsID;
-          guest.gulsOriginal = App.User.LeadSource.lsID;
+          guest.guloInvit = Context.User.LeadSource.lsID;
+          guest.gulsOriginal = Context.User.LeadSource.lsID;
 
           //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
           //Si hubo un error al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso
           //se realizo, es decir ni se guardo el Guest ni el Log
-          if (await BRGuests.SaveChangedOfGuest(guest, App.User.LeadSource.lsHoursDif, App.User.User.peID) == 0)
+          if (await BRGuests.SaveChangedOfGuest(guest, Context.User.LeadSource.lsHoursDif, Context.User.User.peID) == 0)
           {
             //De no ser así informamos que no se guardo la información por algun motivo
             UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
@@ -792,7 +791,7 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      var frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User) { Owner = this };
+      var frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, Context.User) { Owner = this };
       frmAssistance.ShowDialog();
     }
 
@@ -808,7 +807,7 @@ namespace IM.Outhouse.Forms
     /// </history>
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      var frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs, App.User) { Owner = this }; ;
+      var frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs, Context.User) { Owner = this }; ;
       frmDaysOff.ShowDialog();
     }
 

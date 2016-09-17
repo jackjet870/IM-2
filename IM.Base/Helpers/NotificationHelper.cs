@@ -1,4 +1,4 @@
-﻿using IM.Model.Classes;
+﻿using IM.Base.Classes;
 using PalaceResorts.Common.Notifications.WinForm;
 using System;
 
@@ -15,26 +15,23 @@ namespace IM.Base.Helpers
     #region ShowMessage
 
     /// <summary>
-    /// Envia un mensaje al usuario
+    /// Notificamos una excepcion por correo electronico
     /// </summary>
-    /// <param name="message">Mensaje que se mostrará</param>
-    /// <param name="image">Imagen que se mostrará en la ventana</param>
-    /// <param name="title">Título de la ventana</param>
+    /// <param name="exception">Objeto con los datos de la excepcion</param>
     /// <history>
-    /// [lchairez] 24/Feb/2016 Created
-    /// [wtorres]  01/Mar/2016 Modified. Ahora la imagen y el titulo son opcionales
-    /// [emoguel]  28/Mar/2016 Modified. Ahora el boton se puede cambiar por otro
+    /// [wtorres] 14/Sep/2016 Created
+    /// [wtorres] 15/Sep/2016 Modified. Elimine el parametro user
     /// </history>
-    public static void SendException(Exception exception, UserData user)
+    public static void SendException(Exception exception)
     {
       // obtenemos los datos del usuario si estos estan disponibles
       AppUser appUser = null;
-      if (user != null && user.User !=null)
+      if (Context.User != null && Context.User.User != null)
       {
         appUser = new AppUser()
         {
-          Id = user.User.peID,
-          Name = user.User.peN
+          Id = Context.User.User.peID,
+          Name = Context.User.User.peN
         };
       }
 

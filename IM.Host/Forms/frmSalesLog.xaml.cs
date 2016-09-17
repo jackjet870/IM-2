@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using IM.BusinessRules.BR;
-using System.Windows;
-using System.Windows.Data;
-using IM.Base.Helpers;
-using IM.Base.Reports;
-using IM.Model;
-using System.IO;
-using IM.Model.Enums;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace IM.Host.Forms
 {
@@ -78,7 +77,7 @@ namespace IM.Host.Forms
           EpplusHelper.OrderColumns(saleLogDataDataGrid.Columns.ToList(), Classes.clsFormatReport.RptSaleLog()));
         if(fileInfo!=null)
         {
-          frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewver.ShowDialog();
         }
       }

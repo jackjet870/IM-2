@@ -65,7 +65,7 @@ namespace IM.Host.Forms
     public frmShow(int guestID)
     {
       _guestId = guestID;
-      _user = App.User;
+      _user = Context.User;
       InitializeComponent();
       GuestShow = new GuestShow();
       DataContext = GuestShow;
@@ -923,7 +923,7 @@ namespace IM.Host.Forms
       //  //WirePRHelper.SaveProfileOpera Me, mData
       //}
       // guardar
-      if (await BRGuests.SaveGuestShow(GuestShow, App.User, txtChangedBy.Text, Environment.MachineName, ComputerHelper.GetIpMachine()) == 0)
+      if (await BRGuests.SaveGuestShow(GuestShow, Context.User, txtChangedBy.Text, Environment.MachineName, ComputerHelper.GetIpMachine()) == 0)
       {
         UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
           MessageBoxImage.Error, "Information can not keep");
@@ -1125,13 +1125,13 @@ namespace IM.Host.Forms
       LoadCombos();
 
       //si tiene permiso especial
-      cmbgusr.IsEnabled = App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Special);
+      cmbgusr.IsEnabled = Context.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Special);
 
       // Verificamos la autentificación automatica
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        txtChangedBy.Text = App.User.User.peID;
-        txtPwd.Password = App.User.User.pePwd;
+        txtChangedBy.Text = Context.User.User.peID;
+        txtPwd.Password = Context.User.User.pePwd;
       }
 
       //configuramos la clase de datos
@@ -1145,7 +1145,7 @@ namespace IM.Host.Forms
       GridHelper.SetUpGrid(dtgGifts, new InvitationGift());
 
       //obtenemos la fechas de cierre
-      _salesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+      _salesRoom = BRSalesRooms.GetSalesRoom(Context.User.SalesRoom.srID);
 
       //cargamos los datos del show
       await LoadRecord();
@@ -1165,7 +1165,7 @@ namespace IM.Host.Forms
       //  si el sistema esta en modo de solo lectura o el usuario tiene cuando mucho permiso de lectura
       // o si el show es de una fecha cerrada
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE") ||
-          !App.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
+          !Context.User.HasPermission(EnumPermission.Show, EnumPermisionLevel.Standard) || !ValidateClosedDate(true))
       {
         imgButtonSave.IsEnabled = imgButtonPrint.IsEnabled = false;
       }
@@ -1360,7 +1360,7 @@ namespace IM.Host.Forms
     private void btnShowsSalesmen_Click(object sender, RoutedEventArgs e)
     {
       //si es una secretaria
-      if (App.User.HasRole(EnumRole.Secretary))
+      if (Context.User.HasRole(EnumRole.Secretary))
       {
         //Obtenermos los vendedores
 

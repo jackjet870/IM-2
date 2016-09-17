@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
@@ -597,7 +598,7 @@ namespace IM.ProcessorInhouse.Forms
         return;
       }
       grdPersonnel.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      List<LeadSourceByUser> listLeadSourceByUsers = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
+      List<LeadSourceByUser> listLeadSourceByUsers = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID, program);
       _lstPersonnel = await BRPersonnel.GetPersonnel(string.Join(",", listLeadSourceByUsers.Select(y => y.lsID)), roles: "PR", status: 0);
       grdPersonnel.ItemsSource = _lstPersonnel;
       chkAllPersonnel.IsChecked = blnAllPersonnel;
@@ -634,7 +635,7 @@ namespace IM.ProcessorInhouse.Forms
         return;
       }
       grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
+      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID, program);
       if (blnLsHotelNotNull)
       {
         List<string> lstLsIDHotelNotNull = (await BRLeadSources.GetLeadSources(1, EnumProgram.All)).Where(x => x.lsHotel != null).Select(x => x.lsID).ToList();

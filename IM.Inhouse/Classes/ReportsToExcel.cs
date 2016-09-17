@@ -1,4 +1,6 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -8,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using IM.Base.Forms;
 
 namespace IM.Inhouse.Classes
 {
@@ -36,7 +37,7 @@ namespace IM.Inhouse.Classes
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
-      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      filters.Add(Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
 
 
       if (arrivlas.Count > 0)
@@ -82,7 +83,7 @@ namespace IM.Inhouse.Classes
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
-      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      filters.Add(Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
       DateTime date = BRHelpers.GetServerDate();
       if (aviables.Count > 0)
       {
@@ -130,7 +131,7 @@ namespace IM.Inhouse.Classes
 
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
-      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      filters.Add(Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
       DateTime date = BRHelpers.GetServerDate();
       if (premanifest.Count > 0)
       {
@@ -159,7 +160,7 @@ namespace IM.Inhouse.Classes
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
-      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      filters.Add(Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
       DateTime date = BRHelpers.GetServerDate();
       if (withGifts.Count > 0)
       {
@@ -185,7 +186,7 @@ namespace IM.Inhouse.Classes
     {
       if (file != null)
       {
-        frmDocumentViewer documentViewer = new frmDocumentViewer(file,App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        frmDocumentViewer documentViewer = new frmDocumentViewer(file,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
         documentViewer.ShowDialog();
       }
     }

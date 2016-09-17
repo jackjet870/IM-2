@@ -1,16 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using IM.Services.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Helpers;
-using IM.Services.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -182,7 +183,7 @@ namespace IM.Administrator.Forms
               #endregion
 
               int nRes = await BRGifts.SaveGift(gift, (enumMode == EnumMode.Edit), lstAddLocations, lstDelLocations, lstAddAgencies, lstDelAgencies, lstAddGiftPack, lstDelGiftPack, lstUpdGiftPack,
-                (enumMode == EnumMode.Add && gift.giInven), App.User.User.peID);
+                (enumMode == EnumMode.Add && gift.giInven), Context.User.User.peID);
               UIHelper.ShowMessageResult("Gift", nRes);
               if (nRes > 0)
               {

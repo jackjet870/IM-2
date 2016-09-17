@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using IM.Base.Helpers;
 using System.Windows.Controls;
 using System.Windows.Input;
+using IM.Base.Classes;
 
 namespace IM.Host.Forms
 {
@@ -103,10 +104,10 @@ namespace IM.Host.Forms
                                                     };
 
       //Guardamos el nuevo Exchange Rate Agregado.  // por el momento el SaveLog se encuentra en la transaccion BRExchangeRate.SaveExchangeRate
-      BRExchangeRate.SaveExchangeRate(_modeOpen == EnumMode.Add ? true : false, _exchangeRate, exchangeNew.excu, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+      BRExchangeRate.SaveExchangeRate(_modeOpen == EnumMode.Add ? true : false, _exchangeRate, exchangeNew.excu, frmHost.dtpServerDate.Date, Context.User.SalesRoom.srHoursDif, Context.User.User.peID);
 
       //Guadarmos el Log del cambio.
-      //BRExchangeRatesLogs.SaveExchangeRateLog(exchangeNew.excu, frmHost.dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+      //BRExchangeRatesLogs.SaveExchangeRateLog(exchangeNew.excu, frmHost.dtpServerDate.Date, Context.User.SalesRoom.srHoursDif, Context.User.User.peID);
 
       DialogResult = true;
       // Cerramos la ventana.

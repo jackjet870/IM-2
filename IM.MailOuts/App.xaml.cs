@@ -1,9 +1,9 @@
 ﻿using IM.Base.Forms;
-using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.MailOuts.Forms;
 using System.Windows;
 using System.Windows.Threading;
+using IM.Base.Classes;
 
 namespace IM.MailOuts
 {
@@ -12,12 +12,6 @@ namespace IM.MailOuts
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -50,7 +44,7 @@ namespace IM.MailOuts
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         frmMailOuts frmMain = new frmMailOuts();
         frmMain.ShowDialog();
         frmSplash.Close();
@@ -68,7 +62,7 @@ namespace IM.MailOuts
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {

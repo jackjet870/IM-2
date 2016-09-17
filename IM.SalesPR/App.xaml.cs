@@ -1,5 +1,5 @@
-﻿using IM.Base.Forms;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.SalesPR.Forms;
 using System.Windows;
@@ -14,12 +14,6 @@ namespace IM.SalesPR
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -50,7 +44,7 @@ namespace IM.SalesPR
       if (frmLogin.IsAuthenticated)
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         frmSalesPR frmMain = new frmSalesPR();
         frmMain.ShowDialog();
         frmSplash.Close();
@@ -68,7 +62,7 @@ namespace IM.SalesPR
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
@@ -95,6 +89,7 @@ namespace IM.SalesPR
       }
     }
     #endregion
+
     #endregion
   }
 }

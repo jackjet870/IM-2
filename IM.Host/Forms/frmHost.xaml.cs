@@ -1,21 +1,21 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Reports;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Host.Forms;
+using IM.Model;
+using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Base.Forms;
-using IM.Model;
-using IM.Host.Forms;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Enums;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Data;
-using IM.Base.Reports;
-using System.Diagnostics;
 
 namespace IM.Host
 {
@@ -221,12 +221,12 @@ namespace IM.Host
         UIHelper.ShowMessage("Cancelled booking.", MessageBoxImage.Exclamation);
         return false;
       }
-      else if (!App.User.HasPermission(permission, EnumPermisionLevel.ReadOnly)) // validamos los permisos del usuario - SIN PERMISOS
+      else if (!Context.User.HasPermission(permission, EnumPermisionLevel.ReadOnly)) // validamos los permisos del usuario - SIN PERMISOS
       {
         UIHelper.ShowMessage("Access denied.", MessageBoxImage.Exclamation);
         return false;
       }
-      else if (!App.User.HasPermission(permission, EnumPermisionLevel.Standard)) // PERMISO - Solo Lectura
+      else if (!Context.User.HasPermission(permission, EnumPermisionLevel.Standard)) // PERMISO - Solo Lectura
       {
         if (!guest.guMealTicket && source == EnumEntities.MealTickets)
         {
@@ -270,7 +270,7 @@ namespace IM.Host
     private async Task GetAllCatalogsHost()
     {
       // Obtenemos el id de la sala de ventas.
-      string _salesRoom = App.User.SalesRoom.srID;
+      string _salesRoom = Context.User.SalesRoom.srID;
 
       List<Task> _lstTasks = new List<Task>();
 
@@ -498,8 +498,8 @@ namespace IM.Host
       _busyIndicator.BusyContent = "Loading catalogs...";
 
       // Agregamos la informacion del usuario
-      txtUser.Text = App.User.User.peN.ToString();
-      txtSalesRoom.Text = App.User.SalesRoom.srN.ToString();
+      txtUser.Text = Context.User.User.peN.ToString();
+      txtSalesRoom.Text = Context.User.SalesRoom.srN.ToString();
 
       // Obtenemos los catalogos
       await GetAllCatalogsHost();
@@ -538,7 +538,7 @@ namespace IM.Host
           // Asignamos la fecha seleccionada.
           _dtpCurrent = dtpDate.Value.Value.Date;
           CollectionViewSource hostInfo = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
+          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
         }
       }
     }
@@ -556,7 +556,7 @@ namespace IM.Host
     private void btnExchangeRate_Click(object sender, RoutedEventArgs e)
     {
       //Verificamos si el usuario cuenta con los permisos suficientes
-      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly))
+      if (!Context.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly))
       {
         UIHelper.ShowMessage("User doesn't have access");
         return;
@@ -598,7 +598,7 @@ namespace IM.Host
       var dateRangeFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
       var filters = new List<Tuple<string, string>>();
 
-      var lstManifestRange = await BRReportsBySalesRoom.GetRptManifestRangeByLs(dtpDate.Value, dtpDate.Value, App.User.SalesRoom.srID);
+      var lstManifestRange = await BRReportsBySalesRoom.GetRptManifestRangeByLs(dtpDate.Value, dtpDate.Value, Context.User.SalesRoom.srID);
       if (lstManifestRange.Any())
       {
         var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
@@ -616,7 +616,7 @@ namespace IM.Host
         }).ToList(), true, false);
 
         filters.Add(new Tuple<string, string>("Date Range", dateRange));
-        filters.Add(new Tuple<string, string>("Sales Room", App.User.SalesRoom.srID));
+        filters.Add(new Tuple<string, string>("Sales Room", Context.User.SalesRoom.srID));
         var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable,IM.Model.Classes.ExcelFormatItemsList>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
@@ -624,7 +624,7 @@ namespace IM.Host
 
         if (fileinfo != null)
         {
-          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.ShowDialog();
         }
           
@@ -643,7 +643,7 @@ namespace IM.Host
     private void btnMealTickets_Click(object sender, RoutedEventArgs e)
     {
       // Se verifica si el usuario tiene permisos de edicion!
-      //bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
+      //bool modeEdit = Context.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
 
       // Se invoca el formulario de acuerdo al permiso del usuario!
       var mealTickets = new frmMealTickets(EnumOpenBy.Button)
@@ -664,7 +664,7 @@ namespace IM.Host
     private void btnGiftsReceipts_Click(object sender, RoutedEventArgs e)
     {
       // Se verifica si el usuario tiene permisos de edicion!
-      bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
+      bool modeEdit = Context.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
 
       // Se invoca el formulario de acuerdo al permiso del usuario!
       var giftsReceipts = new frmGiftsReceipts()
@@ -688,7 +688,7 @@ namespace IM.Host
     private void btnCxCAuthorization_Click(object sender, RoutedEventArgs e)
     {
       // Verificamos si el usuario cuenta con los permisos suficientes
-      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
+      if (!Context.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.ReadOnly))
       {
         UIHelper.ShowMessage("Access denied.", MessageBoxImage.Exclamation, "CxCAuthorization");
         return;
@@ -728,7 +728,7 @@ namespace IM.Host
     private void btnCloseSalesRoom_Click(object sender, RoutedEventArgs e)
     {
       // Validamos que tenga permiso de lectura de cierre de sala de ventas
-      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly))
+      if (!Context.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly))
       {
         UIHelper.ShowMessage("Access denied.");
         return;
@@ -749,7 +749,7 @@ namespace IM.Host
     /// </history>
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      var assistance = new frmAssistance(EnumPlaceType.SalesRoom, App.User)
+      var assistance = new frmAssistance(EnumPlaceType.SalesRoom, Context.User)
       {
         Owner = this
       }
@@ -768,7 +768,7 @@ namespace IM.Host
     /// </history>
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      var _frmDaysOff = new frmDaysOff(EnumTeamType.TeamSalesmen, App.User)
+      var _frmDaysOff = new frmDaysOff(EnumTeamType.TeamSalesmen, Context.User)
       {
         Owner = this
       }
@@ -827,10 +827,10 @@ namespace IM.Host
         if (blnResult == true)
         {
           Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
-          guest.gusr = App.User.SalesRoom.srID;
+          guest.gusr = Context.User.SalesRoom.srID;
           guest.guBookCanc = false;
 
-          if (await BRGuests.SaveChangedOfGuest(guest, App.User.SalesRoom.srHoursDif, App.User.User.peID) == 0)
+          if (await BRGuests.SaveChangedOfGuest(guest, Context.User.SalesRoom.srHoursDif, Context.User.User.peID) == 0)
           {
             //De no ser así informamos que no se guardo la información por algun motivo
             UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
@@ -862,12 +862,12 @@ namespace IM.Host
     private async void btnInvitationOuthouse_Click(object sender, RoutedEventArgs e)
     {
       var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
-                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.SalesRoom.srID,
                                windowStartupLocation: WindowStartupLocation.CenterScreen);
 
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        login.UserData = App.User;
+        login.UserData = Context.User;
       }
       await login.getAllPlaces();
       login.ShowDialog();
@@ -922,12 +922,12 @@ namespace IM.Host
         Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
 
         var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
-                                 permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                                 permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.SalesRoom.srID,
                                  windowStartupLocation: WindowStartupLocation.CenterScreen);
 
-        if (App.User.AutoSign)
+        if (Context.User.AutoSign)
         {
-          login.UserData = App.User;
+          login.UserData = Context.User;
         }
         await login.getAllPlaces();
         login.ShowDialog();
@@ -974,12 +974,12 @@ namespace IM.Host
     private async void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
     {
       var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
-                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.SalesRoom.srID,
+                               permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.SalesRoom.srID,
                                windowStartupLocation: WindowStartupLocation.CenterScreen);
 
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        login.UserData = App.User;
+        login.UserData = Context.User;
       }
       await login.getAllPlaces();
       login.ShowDialog();
@@ -1043,14 +1043,14 @@ namespace IM.Host
                                     permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: false, windowStartupLocation: WindowStartupLocation.CenterScreen);
 
       await Login.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        Login.UserData = App.User;
+        Login.UserData = Context.User;
       }
       Login.ShowDialog();
       if (Login.IsAuthenticated)
       {
-        App.User = Login.UserData;
+        Context.User = Login.UserData;
         Host_Load();
       }
     }
@@ -1193,7 +1193,7 @@ namespace IM.Host
       //Validamos que sea un invitado valido
       if (ValidateGuest(guest, EnumPermission.GiftsReceipts, EnumEntities.GiftsReceipts))
       {
-        bool canEdit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
+        bool canEdit = Context.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
 
         frmGiftsReceipts frmGiftsReceipts = new frmGiftsReceipts(guest.guID)
         {
@@ -1242,17 +1242,17 @@ namespace IM.Host
       {
         case nameof(guest.guShowSeq):
           // si tiene al menos permiso estandar de Hostess
-          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
+          if (Context.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
           else { _currentCell.Column.IsReadOnly = true; }
           break;
         case nameof(guest.guWComments):
           // si tiene al menos permiso estandar de Hostess
-          if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
+          if (Context.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
           else { _currentCell.Column.IsReadOnly = true; }
           break;
         case nameof(guest.guTaxiIn):
           // si tiene al menos permiso estandar de Taxi In
-          if (App.User.HasPermission(EnumPermission.TaxiIn, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
+          if (Context.User.HasPermission(EnumPermission.TaxiIn, EnumPermisionLevel.Standard)) { stkMenu.IsEnabled = false; }
           else { _currentCell.Column.IsReadOnly = true; }
           break;
       }

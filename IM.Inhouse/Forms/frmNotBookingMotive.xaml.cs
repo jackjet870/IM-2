@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using System.Collections.Generic;
+using System.Windows;
 
 namespace IM.Inhouse.Forms
 {
@@ -51,11 +50,11 @@ namespace IM.Inhouse.Forms
     {
       Invit = false;
       Save = false;
-      lblUserName.Text = App.User.User.peN;
+      lblUserName.Text = Context.User.User.peN;
       //Cargamos los Controles y el Guest
       _guest = await BRGuests.GetGuest(_guestId);
       cbmgunb.ItemsSource = await BRNotBookingMotives.GetNotBookingMotives(1);
-      cbmguPRNoBook.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      cbmguPRNoBook.ItemsSource = await BRPersonnel.GetPersonnel(Context.User.Location.loID, "ALL", "PR");
       //Asignar valores
       if (_guest.guNoBookD != null) txtguNoBookD.Text = _guest.guNoBookD.Value.ToShortDateString();
       cbmgunb.SelectedValue = _guest.gunb;
@@ -76,9 +75,9 @@ namespace IM.Inhouse.Forms
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       var login = new frmLogin(switchLoginUserMode: true);
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        login.UserData = App.User;
+        login.UserData = Context.User;
       }
       login.ShowDialog();
       if (!login.IsAuthenticated) return;

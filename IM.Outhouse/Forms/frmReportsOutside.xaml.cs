@@ -1,7 +1,10 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,8 +12,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Base.Forms;
-using IM.Model.Enums;
 
 namespace IM.Outhouse.Forms
 {
@@ -29,7 +30,7 @@ namespace IM.Outhouse.Forms
     {
       InitializeComponent();
       DataContext = this;
-      User = App.User.User;
+      User = Context.User.User;
       _date = selectedDate;
     }
 
@@ -108,11 +109,11 @@ namespace IM.Outhouse.Forms
       switch ((lstReports.SelectedItem as ListBoxItem).Content.ToString())
       {
         case "Deposits by PR":
-          var lstRptDepPr = await BRReportsByLeadSource.GetRptDepositByPR(dtpDate.Value.Value, dtpDate.Value.Value, App.User.LeadSource.lsID);
+          var lstRptDepPr = await BRReportsByLeadSource.GetRptDepositByPR(dtpDate.Value.Value, dtpDate.Value.Value, Context.User.LeadSource.lsID);
           if (lstRptDepPr.Any())
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
-            filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+            filters.Add(Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
 
             var lstDepPr = lstRptDepPr[0] as List<RptDepositsByPR>;
             var currencies = lstRptDepPr[1] as List<Currency>;
@@ -135,7 +136,7 @@ namespace IM.Outhouse.Forms
 
       if (fileinfo != null)
       {
-        frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+        frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
         documentViewer.ShowDialog();
       }
     } 

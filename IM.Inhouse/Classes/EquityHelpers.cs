@@ -1,13 +1,14 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.Inhouse.Reports;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using IM.Services.CallCenterService;
 using IM.Services.Helpers;
 using System;
 using System.Linq;
 using System.Windows;
-using IM.Model.Helpers;
 
 namespace IM.Inhouse.Classes
 {
@@ -64,7 +65,7 @@ namespace IM.Inhouse.Classes
       // si tiene membrecia
       if (membershipNum != null && membershipNum != "")
       {//si tiene permiso para el reporte de equity
-        if (App.User.HasPermission(EnumPermission.Equity, EnumPermisionLevel.ReadOnly))
+        if (Context.User.HasPermission(EnumPermission.Equity, EnumPermisionLevel.ReadOnly))
         {
           // // // ShowReport
           // determinamos el club

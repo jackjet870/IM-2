@@ -1,5 +1,9 @@
 ﻿using IM.Model.Enums;
+using IM.BusinessRules.BR;
+using IM.Styles.Classes;
+using IM.Styles.Enums;
 using System;
+using System.Data.Entity.Validation;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
-using System.Data.Entity.Validation;
-using IM.BusinessRules.BR;
-using IM.Styles.Classes;
-using IM.Styles.Enums;
-using PalaceResorts.Common.Notifications.WinForm;
-using IM.Model.Classes;
 
 namespace IM.Base.Helpers
 {
@@ -107,7 +105,7 @@ namespace IM.Base.Helpers
       }
 
       // notificamos la excepcion por correo electronico
-      Notifier.AsyncSendException(ex);
+      NotificationHelper.SendException(ex);
 
       // desplegamos el mensaje de la excepcion
       return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);

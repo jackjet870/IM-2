@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Threading;
 using IM.Base.Forms;
-using IM.Base.Helpers;
 namespace IM.Transfer
 {
   /// <summary>
@@ -24,6 +23,8 @@ namespace IM.Transfer
 
     #endregion
 
+    #region Metodos
+
     #region OnStartup
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -35,10 +36,12 @@ namespace IM.Transfer
     }
     #endregion
 
+    #region OnExit
     protected override void OnExit(ExitEventArgs e)
     {
       base.OnExit(e);
-    }
+    } 
+    #endregion
 
     #region App_UnhandledException
     /// <summary>
@@ -50,13 +53,15 @@ namespace IM.Transfer
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, null);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
         Application.Current.Shutdown();
       }
     }
+    #endregion
+
     #endregion
   }
 }

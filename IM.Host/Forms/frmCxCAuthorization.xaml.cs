@@ -1,23 +1,20 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-
 
 namespace IM.Host.Forms
 {
- 
+
   /// <summary>
   /// Interaction logic for frmCxCAuthorization.xaml
   /// </summary>
@@ -38,9 +35,9 @@ namespace IM.Host.Forms
     DateTime dtmFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);// Fecha inicial seleccionada en el datepiker
     DateTime dtmTo = DateTime.Today; // Fecha final seleccionada en el datepiker 
     private DateTime? _dtmClose = null; // Fecha de corte 
-    string strSalesRoom = App.User.SalesRoom.srID;// Sale Room del usuario logueago
-    string strUserID = App.User.User.peID; // ID del usuario logueado
-    string strUserName = App.User.User.peN; // Nombre del usuario logueado
+    string strSalesRoom = Context.User.SalesRoom.srID;// Sale Room del usuario logueago
+    string strUserID = Context.User.User.peID; // ID del usuario logueado
+    string strUserName = Context.User.User.peN; // Nombre del usuario logueado
     string strLeadSource = "ALL"; // Leadsource para la busqueda del CxC
     string strPR = "ALL"; // Personel para combobox y busqueda de CxC
     CollectionViewSource CxCDataViewSource; // Coleccion para el datagrid de  los CxC
@@ -68,7 +65,7 @@ namespace IM.Host.Forms
       CxCDataViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("cxCDataViewSource")));
       LoadAtributes();
       underPaymentMotiveViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("underPaymentMotiveViewSource")));
-      if (!App.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.Standard))
+      if (!Context.User.HasPermission(EnumPermission.CxCAuthorization, EnumPermisionLevel.Standard))
       {
         imgButtonSave.IsEnabled = false;
         dtgCxC.Columns.SingleOrDefault(c => c.Header.ToString() == "Auth.").IsReadOnly = true;
@@ -91,7 +88,7 @@ namespace IM.Host.Forms
         await Task.Run(() =>
         {
           var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
+          index = lstPS.FindIndex(x => x.peID.Equals(Context.User.User.peID));
         });
         selectInCombobox(cbxPersonnel, index: index);
       }
@@ -171,7 +168,7 @@ namespace IM.Host.Forms
       if (cbxPersonnel.Items.Count > 0)
       {
         cbxPersonnel.SelectedIndex = 0;
-        selectPersonnelInCombobox(App.User.User.peID);
+        selectPersonnelInCombobox(Context.User.User.peID);
       }
       else
       {
@@ -232,7 +229,7 @@ namespace IM.Host.Forms
     {
 
       //Validamos permisos y restricciones para el combobox
-      if (App.User.HasPermission(enumPermission, enumPermisionLevel))
+      if (Context.User.HasPermission(enumPermission, enumPermisionLevel))
       {
         cbx.IsEnabled = true;
         if (cbxLeadSource.Items.Count > 0)
@@ -266,7 +263,7 @@ namespace IM.Host.Forms
     {
       try
       {
-        var data = await BRLeadSources.GetLeadSourcesByUser(user: App.User.User.peID);
+        var data = await BRLeadSources.GetLeadSourcesByUser(user: Context.User.User.peID);
         if (data.Count > 0)
         {
 
@@ -296,8 +293,8 @@ namespace IM.Host.Forms
       
       dtmFrom = dtpkFrom.Value.Value.Date;
       dtmTo = dtpkTo.Value.Value.Date;
-      strSalesRoom = App.User.SalesRoom.srID;
-      strUserID = App.User.User.peID;
+      strSalesRoom = Context.User.SalesRoom.srID;
+      strUserID = Context.User.User.peID;
       var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
       var leadSource = cbxLeadSource.SelectedValue as LeadSourceByUser;
       strPR = (personnelShort != null) ? personnelShort.peID : "ALL";

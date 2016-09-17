@@ -1,19 +1,19 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.BusinessRules.BRIC;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using IM.Base.Helpers;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Model;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using IM.Model.Helpers;
-using IM.BusinessRules.BRIC;
+using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
-using IM.Model.Classes;
 
 namespace IM.Host.Forms
 {
@@ -149,7 +149,7 @@ namespace IM.Host.Forms
     {
       //Exit Closers
       cmbsaExit1.ItemsSource =
-        cmbsaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "EXIT");
+        cmbsaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "EXIT");
     }
 
     #endregion
@@ -168,10 +168,10 @@ namespace IM.Host.Forms
       cmbsaCloser1.ItemsSource =
         cmbsaCloser2.ItemsSource =
           cmbsaCloser3.ItemsSource =
-            await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSER");
+            await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "CLOSER");
       //Capitan de Closers
       cmbsaCloserCaptain1.ItemsSource =
-        await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
+        await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "CLOSERCAPT");
     }
 
     #endregion
@@ -193,12 +193,12 @@ namespace IM.Host.Forms
       //PR´s
       cmbsaPR1.ItemsSource =
         cmbsaPR2.ItemsSource =
-          cmbsaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
+          cmbsaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "PR");
       //Capitanes de PRs
       cmbsaPRCaptain1.ItemsSource =
         cmbsaPRCaptain2.ItemsSource =
           cmbsaPRCaptain3.ItemsSource =
-            await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PRCAPT");
+            await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "PRCAPT");
     }
 
     #endregion
@@ -215,14 +215,14 @@ namespace IM.Host.Forms
     {
       //Liners
       cmbsaLiner1.ItemsSource =
-        cmbsaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINER");
+        cmbsaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "LINER");
       //Capitan de Liners
       cmbsaLinerCaptain1.ItemsSource =
-        await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINERCAPT");
+        await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "LINERCAPT");
       //Podium
-      cmbsaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PODIUM");
+      cmbsaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "PODIUM");
       //VLO
-      cmbsaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "VLO");
+      cmbsaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: Context.User.SalesRoom.srID, roles: "VLO");
     }
 
     #endregion
@@ -501,19 +501,19 @@ namespace IM.Host.Forms
       //criterios de busqueda
       //brincamos este paso ya que segun el modo si es Global o Sale se ocultara los criterios de busqueda asi que no ha necesidad de inabilitarlos
       //Botones
-      btnEdit.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard) &&
+      btnEdit.IsEnabled = (!blnEnable && Context.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard) &&
                            dtgSale.Items.Count > 0);
       //Solo permite eliminar ventanas si tiene permiso super especial de ventas
-      btnDelete.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.SuperSpecial) &&
+      btnDelete.IsEnabled = (!blnEnable && Context.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.SuperSpecial) &&
                              dtgSale.Items.Count > 0);
       btnSave.IsEnabled = btnUndo.IsEnabled = blnEnable;
       btnClose.IsEnabled = !blnEnable;
       //Autenticacion automatica
       grbChangedBy.IsEnabled = blnEnable;
-      if (blnEnable && App.User.AutoSign)
+      if (blnEnable && Context.User.AutoSign)
       {
-        txtChangedBy.Text = App.User.User.peID;
-        txtPwd.Password = App.User.User.pePwd;
+        txtChangedBy.Text = Context.User.User.peID;
+        txtPwd.Password = Context.User.User.pePwd;
       }
       else
       {
@@ -715,7 +715,7 @@ namespace IM.Host.Forms
       //si existe la venta 
       if (string.IsNullOrEmpty(txtsaID.Text)) return;
       //si es una secretaria 
-      if (App.User.HasRole(EnumRole.Secretary))
+      if (Context.User.HasRole(EnumRole.Secretary))
       {
         if (ValidateSalesSalesmen())
         {
@@ -790,7 +790,7 @@ namespace IM.Host.Forms
     /// </history>
     public async void CloseDate()
     {
-      _closeD = await BRSales.GetSalesCloseD(App.User.SalesRoom.srID);
+      _closeD = await BRSales.GetSalesCloseD(Context.User.SalesRoom.srID);
     }
     #endregion
 
@@ -1381,7 +1381,7 @@ namespace IM.Host.Forms
 
           //Guardamos todos los movimientos que estan relacionados con Sale
           var saleAmounts = GetSaleAmount();
-          var res = await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, App.User.SalesRoom.srHoursDif,
+          var res = await BRSales.SaveSale(_saleOld, _saleNew, _payments, txtsaRefMember.IsEnabled, Context.User.SalesRoom.srHoursDif,
                                              txtChangedBy.Text, saleAmounts < 0 ? -saleAmounts : saleAmounts, _saleMen, _saleAmountOriginal,
                                              ComputerHelper.GetIpMachine(), salesmenChanges, authorizedBy);
 
@@ -1577,7 +1577,7 @@ namespace IM.Host.Forms
             memberSalesmens.ZONA = _saleNew.sasr;
             //Actualizamos el vendedor de Intelligence contracts 
             await BRMemberSalesman.SaveMemberSalesman(memberSalesmens.RECNUM, memberSalesmens, txtChangedBy.Text);
-            //App.User.User.peID);
+            //Context.User.User.peID);
           }
           else //Si no tiene el rol solicitado
           {
@@ -1621,7 +1621,7 @@ namespace IM.Host.Forms
       _lstMemberSalesmens.Add(memberSalesmen);
       //Agregamos el vendedor en intelligence Contracts
       return await BRMemberSalesman.SaveMemberSalesman(0, memberSalesmen, txtChangedBy.Text);
-      //App.User.User.peID);      
+      //Context.User.User.peID);      
     }
 
     #endregion

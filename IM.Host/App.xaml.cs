@@ -1,6 +1,5 @@
-﻿using IM.Base.Forms;
-using IM.Host.Forms;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,12 +13,6 @@ namespace IM.Host
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
 
     /// <summary>
@@ -64,7 +57,7 @@ namespace IM.Host
 
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
        //frmSales frmMain = new frmSales();
         frmHost frmMain = new frmHost();
         frmMain.ShowDialog();
@@ -89,8 +82,7 @@ namespace IM.Host
       }
     } 
     #endregion
-
-
+    
     #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
@@ -101,7 +93,7 @@ namespace IM.Host
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {

@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
@@ -334,7 +335,7 @@ namespace IM.ProcessorOuthouse.Forms
 
       grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlLeadSources.Visibility = Visibility.Visible;
-      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program, "ALL");
+      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID, program, "ALL");
       grdLeadSources.ItemsSource = _lstLeadSources;
 
       chkAllLeadSources.IsChecked = blnAllLeadSources;
@@ -452,7 +453,7 @@ namespace IM.ProcessorOuthouse.Forms
 
       grdPR.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlPR.Visibility = Visibility.Visible;
-      var x = (await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse)).Select(y => y.lsID).ToList();
+      var x = (await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID, EnumProgram.Outhouse)).Select(y => y.lsID).ToList();
       _lstPRs = await BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
       grdPR.ItemsSource = _lstPRs;
 

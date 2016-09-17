@@ -1,18 +1,19 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using IM.ProcessorSales.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using IM.Base.Helpers;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
-using IM.BusinessRules.BR;
-using IM.Model.Enums;
-using IM.Model.Helpers;
 using System.Windows.Controls;
-using IM.Base.Forms;
-using IM.Model;
-using IM.ProcessorSales.Classes;
+using System.Windows.Input;
 
 namespace IM.ProcessorSales.Forms
 {
@@ -407,7 +408,7 @@ namespace IM.ProcessorSales.Forms
         {
           file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(file.FullName, file);
         _frmReportQueue.Activate();
@@ -557,7 +558,7 @@ namespace IM.ProcessorSales.Forms
         {
           file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
-        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
         _frmReportQueue.SetExist(file.FullName, file);
         _frmReportQueue.Activate();
@@ -820,8 +821,8 @@ namespace IM.ProcessorSales.Forms
       StaStart("Load Form...");
       LoadGrids();
       SetupParameters();
-      lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue(App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+      lblUserName.Content = Context.User.User.peN;
+      _frmReportQueue = new frmReportQueue(Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
       KeyboardHelper.CkeckKeysPress(statusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(statusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(statusBarNum, Key.NumLock);

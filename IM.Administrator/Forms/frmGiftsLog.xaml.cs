@@ -1,15 +1,16 @@
-﻿using System;
+﻿using IM.Administrator.Classes;
+using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Model;
-using IM.Administrator.Classes;
-using IM.Base.Forms;
-using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -107,7 +108,7 @@ namespace IM.Administrator.Forms
     {
       var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true, true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID", idGift) },
         $"Gift Logs - {idGift}", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
-        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, App.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
         documentViewver.ShowDialog();
     }
     #endregion

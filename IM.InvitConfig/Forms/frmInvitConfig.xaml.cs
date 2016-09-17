@@ -1,15 +1,14 @@
-﻿using IM.Styles.Interfaces;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Styles.Classes;
+using IM.Styles.Interfaces;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Styles.Classes;
-using IM.Model;
-using IM.Model.Enums;
 using System.Windows.Input;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 
 namespace IM.InvitConfig.Forms
 {
@@ -122,7 +121,7 @@ namespace IM.InvitConfig.Forms
     {
       EnableControls(true, false, true, false);
       StaStart("Load LeadSource...");
-      cmbLeadSource.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
+      cmbLeadSource.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
       StaStart("Load Languages...");
       cmbLanguage.ItemsSource =await BRLanguages.GetLanguages(1);
       cmbLanguage.SelectedIndex = cmbLeadSource.SelectedIndex = 0;

@@ -1,6 +1,6 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.ProcessorInhouse.Forms;
 using System.Windows;
@@ -13,12 +13,6 @@ namespace IM.ProcessorInhouse
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion Propiedades
-
     #region Constructores y destructores
 
     /// <summary>
@@ -47,8 +41,8 @@ namespace IM.ProcessorInhouse
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.UserData;
-        if (User.HasRole(EnumRole.Manager))
+        Context.User = frmLogin.UserData;
+        if (Context.User.HasRole(EnumRole.Manager))
         {
           frmProcessorInhouse frmMain = new frmProcessorInhouse();
           frmMain.Show();
@@ -73,7 +67,7 @@ namespace IM.ProcessorInhouse
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {

@@ -1,13 +1,13 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using IM.Model.Classes;
-using IM.Base.Forms;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using System.Collections.Generic;
 
 namespace IM.Inhouse
 {
@@ -37,7 +37,7 @@ namespace IM.Inhouse
     {
       InitializeComponent();
       _guestId = guestId;
-      lblUserName.Content = App.User.User.peN;
+      lblUserName.Content = Context.User.User.peN;
       Title = $"Availability - Guest ID: {guestId}";
     }
 
@@ -51,7 +51,7 @@ namespace IM.Inhouse
     {        
       _guest = await BRGuests.GetGuest(_guestId);
       cboguum.ItemsSource = await BRUnavailableMotives.GetUnavailableMotives(1);
-      cboguPRAvail.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      cboguPRAvail.ItemsSource = await BRPersonnel.GetPersonnel(Context.User.Location.loID, "ALL", "PR");
       if (_guest.guPRAvail != null)
       {
         cboguPRAvail.SelectedValue = _guest.guPRAvail;
@@ -264,7 +264,7 @@ namespace IM.Inhouse
           //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
           //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
           //_wasSaved que es el que indica que se guardo el Avail.
-          if (await BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
+          if (await BRGuests.SaveChangedOfGuest(_guest, Context.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
           {
             WasSaved = true;
           }
@@ -296,9 +296,9 @@ namespace IM.Inhouse
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       var log = new frmLogin(switchLoginUserMode: true, windowStartupLocation: WindowStartupLocation.CenterScreen);
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {        
-        log.UserData = App.User;
+        log.UserData = Context.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)

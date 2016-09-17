@@ -1,13 +1,11 @@
-﻿using IM.Base.Forms;
-using IM.Base.Helpers;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Outhouse.Forms;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-
 
 namespace IM.Outhouse
 {
@@ -16,13 +14,6 @@ namespace IM.Outhouse
   /// </summary>
   public partial class App : Application
   {
-
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -35,6 +26,8 @@ namespace IM.Outhouse
       Dispatcher.UnhandledException += App_UnhandledException;
     }
     #endregion
+
+    #region Metodos 
 
     #region OnStartup
     /// <summary>
@@ -58,15 +51,14 @@ namespace IM.Outhouse
       if (frmLogin.IsAuthenticated)
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         frmOuthouse frmMain = new frmOuthouse();
         frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
     #endregion
-
-
+    
     #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
@@ -77,7 +69,7 @@ namespace IM.Outhouse
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frm = new frmError(e.Exception, User);
+      var frm = new frmError(e.Exception);
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
@@ -103,6 +95,8 @@ namespace IM.Outhouse
         dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
     }
+    #endregion
+
     #endregion
   }
 }

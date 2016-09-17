@@ -1,4 +1,6 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
@@ -8,7 +10,6 @@ using OfficeOpenXml.Table.PivotTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Base.Forms;
 
 namespace IM.Outhouse.Classes
 {
@@ -24,7 +25,7 @@ namespace IM.Outhouse.Classes
     public static void PremanifestToExcel(List<RptPremanifestOuthouse> lstpremanifest)
     {
 
-      _filters = new List<Tuple<string, string>> {Tuple.Create("Lead Source", App.User.LeadSource.lsID)};
+      _filters = new List<Tuple<string, string>> {Tuple.Create("Lead Source", Context.User.LeadSource.lsID)};
       var date = BRHelpers.GetServerDate();
       if (lstpremanifest.Count > 0)
       {
@@ -48,7 +49,7 @@ namespace IM.Outhouse.Classes
         }).ToList();
 
         var dt = TableHelper.GetDataTableFromList(premanifestAux, true);
-        _rptName = "Premanifest  Outhouse " + App.User.LeadSource.lsN ;        
+        _rptName = "Premanifest  Outhouse " + Context.User.LeadSource.lsN ;        
         var dateRange = DateHelper.DateRangeFileName(date, date);
         var format = new List<ExcelFormatTable>();
 
@@ -72,7 +73,7 @@ namespace IM.Outhouse.Classes
        var info = EpplusHelper.CreatePivotRptExcel(false,_filters, dt, _rptName, dateRange, format,true);
         if (info != null)
         {
-          frmDocumentViewer documentViewer = new frmDocumentViewer(info, App.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(info, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.ShowDialog();
         }
       }

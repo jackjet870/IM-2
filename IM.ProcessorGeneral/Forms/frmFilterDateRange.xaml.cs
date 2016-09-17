@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
@@ -683,7 +684,7 @@ namespace IM.ProcessorGeneral.Forms
 
       grdSalesRoom.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlSalesRoom.Visibility = Visibility.Visible;
-      _lstSalesRoom = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+      _lstSalesRoom = await BRSalesRooms.GetSalesRoomsByUser(Context.User.User.peID);
       grdSalesRoom.ItemsSource = _lstSalesRoom;
 
       chkAllSalesRoom.IsChecked = blnAllSalesRoom;
@@ -721,7 +722,7 @@ namespace IM.ProcessorGeneral.Forms
 
       grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlLeadSource.Visibility = Visibility.Visible;
-      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
+      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
       grdLeadSources.ItemsSource = _lstLeadSources;
 
       chkAllLeadSources.IsChecked = blnAllLeadSources;
@@ -911,7 +912,7 @@ namespace IM.ProcessorGeneral.Forms
 
       grdWarehouse.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlWarehouse.Visibility = Visibility.Visible;
-      _lstWarehouseByUsers = await BRWarehouses.GetWarehousesByUser(App.User.User.peID);
+      _lstWarehouseByUsers = await BRWarehouses.GetWarehousesByUser(Context.User.User.peID);
       grdWarehouse.ItemsSource = _lstWarehouseByUsers;
 
       chkAllWarehouse.IsChecked = blnAllWarehouses;

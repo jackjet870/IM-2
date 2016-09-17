@@ -1,14 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
@@ -16,12 +6,16 @@ using IM.MailOutsConfig.Classes;
 using IM.MailOutsConfig.Reports;
 using IM.Model;
 using IM.Model.Enums;
-using Cursors = System.Windows.Input.Cursors;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MenuItem = System.Windows.Controls.MenuItem;
-using IM.Styles.Interfaces;
 using IM.Styles.Classes;
+using IM.Styles.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -69,7 +63,7 @@ namespace IM.MailOutsConfig.Forms
     {
       LoadDataSource();
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
+      txtbUserName.Text = Context.User.User.peN;
     }
     /// <summary>
     /// Actualiza el RTF de algun MailOutsText
@@ -154,7 +148,7 @@ namespace IM.MailOutsConfig.Forms
     private void imgAdminMailOuts_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       frmMailOutsConfig mailOutsConfig = new frmMailOutsConfig();
-      mailOutsConfig.txtbUserName.Text = App.User.User.peN;
+      mailOutsConfig.txtbUserName.Text = Context.User.User.peN;
       mailOutsConfig.Owner = this;
       mailOutsConfig.ShowDialog();
       if (!mailOutsConfig.IsActive)
@@ -606,7 +600,7 @@ namespace IM.MailOutsConfig.Forms
     {
       StaStart("Loading LeadSources & Languages...");
       //Cargamos LeadSource
-      DoGetLeadSources(App.User.User.peID);
+      DoGetLeadSources(Context.User.User.peID);
       //Cargamos Lenguage
       DoGetLanguages();
     }

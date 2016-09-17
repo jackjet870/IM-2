@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
-using System.Linq;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace IM.Administrator.Forms
 {
@@ -257,7 +258,7 @@ namespace IM.Administrator.Forms
           List<Personnel> lstAdd = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstDel = _lstOldPersonnel.Where(pe => !lstPersonnels.Any(pee => pee.peID == pe.peID)).ToList();
           List<Personnel> lstChanged = lstPersonnels.Where(pe => !_lstOldPersonnel.Any(pee => pee.peLinerID == pe.peLinerID)).ToList();
-          int nRes = await BRTeamsGuestServices.SaveTeam(App.User.User.peID, team, (enumMode == EnumMode.Edit), lstAdd, lstDel, lstChanged);
+          int nRes = await BRTeamsGuestServices.SaveTeam(Context.User.User.peID, team, (enumMode == EnumMode.Edit), lstAdd, lstDel, lstChanged);
           status.Visibility = Visibility.Collapsed;
           UIHelper.ShowMessageResult("Team", nRes);
           if (nRes > 0)

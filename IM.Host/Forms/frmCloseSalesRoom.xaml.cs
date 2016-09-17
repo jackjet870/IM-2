@@ -1,11 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using Xceed.Wpf.Toolkit;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model.Enums;
+using System;
+using System.Windows;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Host.Forms
 {
@@ -43,7 +42,7 @@ namespace IM.Host.Forms
     #region EVENTOS DE TIPO WINDOW
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      var _getSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+      var _getSalesRoom = BRSalesRooms.GetSalesRoom(Context.User.SalesRoom.srID);
 
       //Se agrega Binding a los controles correspondientes
       dtpCloseShowsLast.Value = _getSalesRoom.srShowsCloseD;
@@ -166,10 +165,10 @@ namespace IM.Host.Forms
         return;
 
       //Realizamos el cierre
-      BRSalesRooms.SetCloseSalesRoom(_closeType, App.User.SalesRoom.srID, _dateClose.Value);
+      BRSalesRooms.SetCloseSalesRoom(_closeType, Context.User.SalesRoom.srID, _dateClose.Value);
 
       //Guardamos la accion en el historico de sala de ventas
-      BRSalesRoomsLogs.SaveSalesRoomLog(App.User.SalesRoom.srID, Convert.ToInt16(App.User.SalesRoom.srHoursDif), App.User.User.peID);
+      BRSalesRoomsLogs.SaveSalesRoomLog(Context.User.SalesRoom.srID, Convert.ToInt16(Context.User.SalesRoom.srHoursDif), Context.User.User.peID);
 
       //Actualizamos datos de UI
       updateDate(_closeType, _dateClose.Value);
@@ -218,7 +217,7 @@ namespace IM.Host.Forms
     /// </history>
     private void validateUserPermissions()
     {
-      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.Standard))
+      if (!Context.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.Standard))
       {
         // Ocultamos los label's
         txbCloseShows.Visibility = Visibility.Collapsed;

@@ -1,19 +1,13 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IM.Host.Forms
 {
@@ -72,8 +66,8 @@ namespace IM.Host.Forms
       
       LoadPayments();
       LoadTexBox();
-      strUserID = App.User.User.peID;
-      strUserName = App.User.User.peN;
+      strUserID = Context.User.User.peID;
+      strUserName = Context.User.User.peN;
       tbxReceivedBy.Text = $"{strUserName}";
       textReceiptID.Text = $"{giftReceiptID}";
       textPaymentDt.Text = String.Format("{0:dd/MM/yyyy}", _dtpServerDate);

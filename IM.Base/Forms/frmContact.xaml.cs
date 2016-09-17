@@ -93,7 +93,7 @@ namespace IM.Base.Forms
       var log = new frmLogin(switchLoginUserMode:true);
       if (_userPrimero.AutoSign)
       {
-        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        //Context.User.User.pePwd = EncryptHelper.Encrypt(Context.User.User.pePwd);
         log.UserData = _userPrimero;
       }
       log.ShowDialog();
