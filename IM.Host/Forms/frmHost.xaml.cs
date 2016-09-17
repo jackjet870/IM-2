@@ -588,48 +588,58 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
     /// [edgrodriguez] 22/Junio/2016 Modified. Se agregó el proceso de creación del reporte Manifest By LS
+    /// [edgrodriguez] 14/Septiembre/2016 Modified. Se agregó un Try para poder detener el BusyIndicator cuando ocurra un error.
     /// </history>
     private async void btnExcel_Click(object sender, RoutedEventArgs e)
     {
       _busyIndicator.IsBusy = true;
-      _busyIndicator.BusyContent = "Loading premanifest";
-
-      var dateRange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
-      var dateRangeFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
-      var filters = new List<Tuple<string, string>>();
-
-      var lstManifestRange = await BRReportsBySalesRoom.GetRptManifestRangeByLs(dtpDate.Value, dtpDate.Value, Context.User.SalesRoom.srID);
-      if (lstManifestRange.Any())
+      _busyIndicator.BusyContent = "Loading Manifest";
+      try
       {
-        var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
-        var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>;
+        var dateRange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
+        var dateRangeFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
+        var filters = new List<Tuple<string, string>>();
 
-        var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
-
-        var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new
+        var lstManifestRange = await BRReportsBySalesRoom.GetRptManifestRangeByLs(dtpDate.Value, dtpDate.Value, Context.User.SalesRoom.srID);
+        if (lstManifestRange.Any())
         {
-          c.guloInvit,
-          c.LocationN,
-          guBookTime = c.guBookT,
-          c.guBookT,
-          c.Bookings
-        }).ToList(), true, false);
+          var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
+          var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>;
+          var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
 
-        filters.Add(new Tuple<string, string>("Date Range", dateRange));
-        filters.Add(new Tuple<string, string>("Sales Room", Context.User.SalesRoom.srID));
-        var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable,IM.Model.Classes.ExcelFormatItemsList>> {
+          var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new
+          {
+            c.guloInvit,
+            c.LocationN,
+            guBookTime = c.guBookT,
+            c.guBookT,
+            c.Bookings
+          }).ToList(), true, false);
+
+
+          filters.Add(new Tuple<string, string>("Date Range", dateRange));
+          filters.Add(new Tuple<string, string>("Sales Room", Context.User.SalesRoom.srID));
+          var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, IM.Model.Classes.ExcelFormatItemsList>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
 
-        if (fileinfo != null)
-        {
-          frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
-          documentViewer.ShowDialog();
+          if (fileinfo != null)
+          {
+            frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+            documentViewer.ShowDialog();
+
+          }
         }
-          
       }
-      _busyIndicator.IsBusy = false;
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        _busyIndicator.IsBusy = false;
+      }
     }
     #endregion
 

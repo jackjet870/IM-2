@@ -17,108 +17,26 @@ namespace IM.ProcessorSales.Classes
     /// [ecanul] 06/05/2016 Created
     /// [ecanul] 09/05/2016 Modified, Ahora usa columnas para Pivot, para poder realizar el calculo correcto
     /// </history>
-    public static List<ExcelFormatTable> RptStatisticsBySalesRoomLocation()
+    public static ExcelFormatItemsList RptStatisticsBySalesRoomLocation()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable()
-        {
-          Title = "Zona",
-          Order = 0,
-          Axis = ePivotFieldAxis.Row,
-          Compact = true,
-          Outline = true,
-          SubTotalFunctions = eSubTotalFunctions.Default,
-          InsertBlankRow = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Sales Room",
-          Order = 1,
-          Axis = ePivotFieldAxis.Row,
-          Compact = true,
-          Outline = true,
-          SubTotalFunctions = eSubTotalFunctions.Default,
-          InsertBlankRow = true
-        },
-        new ExcelFormatTable() {Title = "Program", Order = 2, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Sales Room ID", Order = 3, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Location Id", Order = 4, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Location", Order = 5, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable()
-        {
-          Title = "Volume",
-          Order = 0,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Shows",
-          Order = 1,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable()
-        {
-          Title = "VIP",
-          Order = 2,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Reg",
-          Order = 3,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Exit",
-          Order = 4,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Total",
-          Order = 5,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable()
-        {
-          Title = "OOP",
-          Order = 9,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number
-        },
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 6,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF(Shows =0,0,Total/Shows)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "Eff",
-          Order = 7,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF(Shows =0,0,Volume/Shows)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 8,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF(Total =0,0,Volume/Total)"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Zona", "Zona", isGroup: true, isVisible: false);
+      lst.Add("Program", "Program");
+      lst.Add("Sales Room ID", "SalesRoomId");
+      lst.Add("Sales Room", "SalesRoom", isGroup: true);
+      lst.Add("Location ID", "LocationId");
+      lst.Add("Location", "Location");
+      lst.Add("Volume", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("VIP", "SalesVIP", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Reg", "SalesRegular", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Exit", "SalesExit", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Total", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales]/[Shows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount]/[Shows])");
+      lst.Add("AV/S", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales] =0,0,[SalesAmount]/[Sales])");
+      lst.Add("OOP", "SalesAmountOOP", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      return lst;
     }
 
     #endregion
@@ -130,100 +48,21 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 09/05/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptStatisticsByLocation()
+    public static ExcelFormatItemsList RptStatisticsByLocation()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() {Title = "Location", Axis = ePivotFieldAxis.Row, Order = 0},
-        new ExcelFormatTable()
-        {
-          Title = "Volume",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Order = 0,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Shows",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number,
-          Order = 1,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "VIP",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number,
-          Order = 2,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Reg",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number,
-          Order = 3,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Exit",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number,
-          Order = 4,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "Total",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Number,
-          Order = 5,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-        new ExcelFormatTable()
-        {
-          Title = "OOP",
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Order = 9,
-          Function = DataFieldFunctions.Sum,
-          SubtotalWithCero = true
-        },
-
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 6,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF(Shows =0,0,Total/Shows)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "Eff",
-          Order = 7,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF(Shows =0,0,Volume/Shows)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 8,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF(Total =0,0,Volume/Total)"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Location", "Location");
+      lst.Add("Volume", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("VIP", "SalesVIP", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Reg", "SalesRegular", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Exit", "SalesExit", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Total", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales]/[Shows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.DecimalNumber, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount]/[Shows])");
+      lst.Add("AV/S", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales] =0,0,[SalesAmount]/[Sales])");
+      lst.Add("OOP", "SalesAmountOOP", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      return lst;
     }
 
     #endregion
@@ -235,55 +74,25 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptStatisticsByLocationMonthly()
+    public static ExcelFormatItemsList RptStatisticsByLocationMonthly()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() {Title = "Program", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, SubTotalFunctions = eSubTotalFunctions.Default, InsertBlankRow = true},
-        new ExcelFormatTable() { Title = "Location", Order = 1, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Volume Previous", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Shows Previous", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Goal", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Books", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Shows ", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
-        new ExcelFormatTable() {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Total Shows", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Volume", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Sales", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-
-        new ExcelFormatTable()
-        {
-          Title = "Sh%",
-          Order = 5,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF('Books'=0,0,'Shows '/'Books')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "EFF",
-          Order = 10,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('Total Shows'=0,0,'Volume'/'Total Shows')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 11,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF('Total Shows'=0,0,'Sales'/'Total Shows')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 12,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF(Sales =0,0,Volume/Sales)"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Program", "Program", isGroup: true, isVisible: false);
+      lst.Add("Location", "Location");
+      lst.Add("Volume Previous", "SalesAmountPrevious", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
+      lst.Add("Shows Previous", "UPSPrevious", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Goal", "Goal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossUPS", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([Books]=0,0,[GrossUPS]/[Books])");
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Total Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Volume", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("EFF", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated:true, formula: "IF([Shows]=0,0,[SalesAmount]/[Shows])");
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("AV/S", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales]=0,0,[SalesAmount]/[Sales])");
+      return lst;
     }
     #endregion
 
@@ -294,43 +103,22 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptSalesByLocationMonthly()
+    public static ExcelFormatItemsList RptSalesByLocationMonthly()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() { Title = "Location", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, SubTotalFunctions = eSubTotalFunctions.Default, InsertBlankRow = true},
-        new ExcelFormatTable() { Title = "Year", Order = 1, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true},
-        new ExcelFormatTable() {Title = "Month", Order = 2, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Shows", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
-        new ExcelFormatTable() {Title = "Sales", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Volume", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Cancel", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "V/N after CXL", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 5,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('Sales' =0,0,'V/N after CXL'/'Sales')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 6,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF(Shows=0,0,Sales/Shows)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "EFF",
-          Order = 7,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('Shows' =0,0,'V/N after CXL'/'Shows')"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Location", "Location", isGroup: true, isVisible: false);
+      lst.Add("Year", "Year", isGroup: true, isVisible: false);
+      lst.Add("Month", "MonthN");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Volume", "SalesAmountTotal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Cancel", "SalesAmountCancel", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("V/N after CXL", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("AV/S", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated:true, formula: "IF([Sales] =0,0,[SalesAmount]/[Sales])");
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows]=0,0,[Sales]/[Shows])");
+      lst.Add("EFF", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount]/[Shows])");
+
+      return lst;
     }
     #endregion
 
@@ -341,47 +129,25 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 13/05/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptConcentrateDailySales()
+    public static ExcelFormatItemsList RptConcentrateDailySales()
     {
-      return new List<ExcelFormatTable>()
-      {
-        new ExcelFormatTable() {Title = "SalesRoom", Order = 0, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Goal", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero },
-        new ExcelFormatTable() {Title = "Diference", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "UPS", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.NumberWithCero },
-        new ExcelFormatTable() {Title = "Sales", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.NumberWithCero},
-        new ExcelFormatTable() {Title = "Proc", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "OPP", Order = 5, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "Fall", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "Cxld", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "Total Proc", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
-        new ExcelFormatTable() {Title = "Pact", Order = 12, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.PercentWithCero},
-        new ExcelFormatTable() {Title = "Collect", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.PercentWithCero},
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 9,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF(UPS=0,0,Sales/UPS)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "EFF",
-          Order = 10,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('UPS' =0,0,'Total Proc'/'UPS')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 11,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('Sales' =0,0,'Total Proc'/'Sales')"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("SalesRoom", "SalesRoom");
+      lst.Add("Goal", "Goal", format: EnumFormatTypeExcel.DecimalNumberWithCero, function:DataFieldFunctions.Sum);
+      lst.Add("Difference", "Difference", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.NumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales", format: EnumFormatTypeExcel.NumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Proc", "Proc", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("OOP", "OOP", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Fall", "Fall", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Cxld", "Cancel", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("Total Proc", "TotalProc", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([UPS]=0,0,[Sales]/[UPS])");
+      lst.Add("EFF", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([UPS]=0,0,[TotalProc]/[UPS])");
+      lst.Add("AV/S", "AverageSales", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales] =0,0,[TotalProc]/[Sales])");
+      lst.Add("Pact", "Pact", format: EnumFormatTypeExcel.PercentWithCero);
+      lst.Add("Collect", "Collect", format: EnumFormatTypeExcel.PercentWithCero);
+      return lst;
     }
     #endregion
 
@@ -392,65 +158,26 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 16/05/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptDailySales()
+    public static ExcelFormatItemsList RptDailySales()
     {
-      return new List<ExcelFormatTable>()
-      {
-        //new ExcelFormatTable() {Title = "Rasd", Order = 0, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable() {Title = "Date", Order = 0, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Date},
-        new ExcelFormatTable() {Title = "UPS", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
-        new ExcelFormatTable() {Title = "Sale", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Exit", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "VIP", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Total Sale", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
-        new ExcelFormatTable() {Title = "Proc ", Order = 5, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "OPP", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Fall", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Cxld", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Total Proc", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable() {Title = "Pact", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency,},
-        new ExcelFormatTable() {Title = "Collect", Order = 14, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency},
-        new ExcelFormatTable
-        {
-          Title = "C%",
-          Order = 10,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF(UPS=0,0,Sale/UPS)"
-        },
-        new ExcelFormatTable
-        {
-          Title = "EFF",
-          Order = 11,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('UPS' =0,0,'Total Proc'/'UPS')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "AV/S",
-          Order = 12,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.DecimalNumber,
-          Formula = "IF('Total Sale' =0,0,'Total Proc'/'Total Sale')"
-        },
-        new ExcelFormatTable
-        {
-          Title = "Pact Factor",
-          Order = 15,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF('Pact'=0,0,IF('Total Proc'=0,0,'Pact'/1.1/'Total Proc'))"
-        },
-         new ExcelFormatTable
-        {
-          Title = "Collect Factor",
-          Order = 15,
-          Axis = ePivotFieldAxis.Values,
-          Format = EnumFormatTypeExcel.Percent,
-          Formula = "IF('Collect'=0,0,IF('Total Proc'=0,0,'Collect'/1.1/'Total Proc'))"
-        }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date);
+      lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sale", "Sale", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Exit", "Exit", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("VIP", "VIP", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Total Sale", "TotalSales", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Proc", "Proc", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("OOP", "OOP", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Fall", "Fall", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Cxld", "Cxld", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Total Proc", "TotalProc", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([UPS]=0,0,[TotalSales]/[UPS])");
+      lst.Add("EFF", "Efficiency", format: EnumFormatTypeExcel.DecimalNumber, isCalculated: true, formula: "IF([UPS] =0,0,[TotalProc]/[UPS])");
+      lst.Add("AV/S", "AverageSales", format: EnumFormatTypeExcel.DecimalNumber, isCalculated: true, formula: "IF([TotalSales] =0,0,[TotalProc]/[TotalSales])");
+      lst.Add("Pact", "Pact", format: EnumFormatTypeExcel.Percent);
+      lst.Add("Collect", "Collect", format: EnumFormatTypeExcel.Percent);
+      return lst;
     }
     #endregion
 
@@ -580,23 +307,21 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 04/07/2016 Created
     /// </history>
-    internal static List<ExcelFormatTable> RptStatisticsBySegments()
+    internal static ExcelFormatItemsList RptStatisticsBySegments()
     {
-      return new List<ExcelFormatTable>
-      {
-        new ExcelFormatTable{Title = "Segment",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Salesman Type", "SalemanType", axis: ePivotFieldAxis.Row, isGroup: true);
+      lst.Add("ID", "SalemanID", axis: ePivotFieldAxis.Row);
+      lst.Add("Salesman Name", "SalemanName", axis: ePivotFieldAxis.Row);
 
-        new ExcelFormatTable {Title = "Salesman Type", Order = 0,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default, Sort = eSortType.Ascending},
-        new ExcelFormatTable {Title = "ID", Order = 1, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable {Title = "Salesman Name", Order = 2, Axis = ePivotFieldAxis.Row},
+      lst.Add("UPS", "UPS", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
 
-        new ExcelFormatTable {Title = "UPS", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable {Title = "Sales", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable {Title = "Amount", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
-
-        new ExcelFormatTable { Title = "Efficiency", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('UPS' =0,0,'Amount'/'UPS')" },
-        new ExcelFormatTable { Title = "%", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('UPS' =0,0,'Sales'/'UPS')" }
-      };
+      lst.Add("Efficiency", "Efficiency", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, isCalculated:true, formula: "IF([UPS] =0,0,[Amount]/[UPS])");
+      lst.Add("%", "ClosingFactor", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([UPS] =0,0,[Sales]/[UPS])");
+      lst.Add("Segment", "SegmentN", axis: ePivotFieldAxis.Column);
+      return lst;
     }
     #endregion
 
@@ -607,25 +332,23 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 04/07/2016 Created
     /// </history>
-    internal static List<ExcelFormatTable> RptStatisticsBySegmentsGroupedByTeams()
+    internal static ExcelFormatItemsList RptStatisticsBySegmentsGroupedByTeams()
     {
-      return new List<ExcelFormatTable>
-      {
-        new ExcelFormatTable{Title = "Segment",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Team", "Team", axis: ePivotFieldAxis.Row, isGroup: true );
+      lst.Add("Status", "Status", axis: ePivotFieldAxis.Row, isGroup:true);
+      lst.Add("Salesman Type", "SalemanType", axis: ePivotFieldAxis.Row, isGroup: true);
+      lst.Add("ID", "SalemanID", axis: ePivotFieldAxis.Row);
+      lst.Add("Salesman Name", "SalemanName", axis: ePivotFieldAxis.Row);
 
-        new ExcelFormatTable {Title = "Team", Order = 0,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
-        new ExcelFormatTable {Title = "Status", Order = 1, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
-        new ExcelFormatTable {Title = "Salesman Type", Order = 2,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default, Sort = eSortType.Ascending},
-        new ExcelFormatTable {Title = "ID", Order = 3, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable {Title = "Salesman Name", Order = 4, Axis = ePivotFieldAxis.Row},
+      lst.Add("UPS", "UPS", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
+      lst.Add("Amount", "Amount", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
 
-        new ExcelFormatTable {Title = "UPS", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable {Title = "Sales", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
-        new ExcelFormatTable {Title = "Amount", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
-
-        new ExcelFormatTable { Title = "Efficiency", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('UPS' =0,0,'Amount'/'UPS')" },
-        new ExcelFormatTable { Title = "%", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('UPS' =0,0,'Sales'/'UPS')" }
-      };
+      lst.Add("Efficiency", "Efficiency", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([UPS] =0,0,[Amount]/[UPS])");
+      lst.Add("%", "ClosingFactor", axis: ePivotFieldAxis.Values, format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([UPS] =0,0,[Sales]/[UPS])");
+      lst.Add("Segment", "SegmentN", axis: ePivotFieldAxis.Column);
+      return lst;
     }
     #endregion
 

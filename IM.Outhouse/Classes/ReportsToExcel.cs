@@ -22,7 +22,7 @@ namespace IM.Outhouse.Classes
 
     #endregion
 
-    public static void PremanifestToExcel(List<RptPremanifestOuthouse> lstpremanifest)
+    public static async void PremanifestToExcel(List<RptPremanifestOuthouse> lstpremanifest)
     {
 
       _filters = new List<Tuple<string, string>> {Tuple.Create("Lead Source", Context.User.LeadSource.lsID)};
@@ -42,35 +42,36 @@ namespace IM.Outhouse.Classes
           c.guco,
           c.coN,
           c.guBookD,
-          c.guBookT,c.guPRInvit1,
+          c.guBookT,
+          c.guPRInvit1,
           guShow = c.guShow ? "✓" : "",
           guSale = c.guSale ? "✓" : "",
-          c.guComments,      
+          c.guComments,
         }).ToList();
 
         var dt = TableHelper.GetDataTableFromList(premanifestAux, true);
         _rptName = "Premanifest  Outhouse " + Context.User.LeadSource.lsN ;        
         var dateRange = DateHelper.DateRangeFileName(date, date);
-        var format = new List<ExcelFormatTable>();
+        var format = new ExcelFormatItemsList();
 
-        format.Add(new ExcelFormatTable { Title = "SR",            PropertyName = "SR",           Order = 0, Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Compact = true,  Outline = true,  Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left  });      
-        format.Add(new ExcelFormatTable { Title = "GUID" ,         PropertyName = "GUID",          Order = 1, Axis = ePivotFieldAxis.Row });           
-        format.Add(new ExcelFormatTable { Title = "Out Invit Num", PropertyName = "Out Invit Num", Order = 3, Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "Deposit",       PropertyName = "Deposit",       Order = 0, Axis = ePivotFieldAxis.Row,  SubTotalFunctions = eSubTotalFunctions.Default, Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable { Title = "Hotel",         PropertyName = "Hotel",       Order = 4, Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "RoomNum",       PropertyName = "RoomNum",     Order = 2, Axis = ePivotFieldAxis.Row });               
-        format.Add(new ExcelFormatTable { Title = "LastName",      PropertyName = "LastName1",   Order = 5, Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "FirstName",     PropertyName = "FirstName1",  Order = 6 , Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "Country ID",    PropertyName = "Country ID",          Order = 7, Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "Country",       PropertyName = "Country",           Order = 8 , Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "Book D",        PropertyName = "Book D",       Order = 9, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable { Title = "Book T",        PropertyName = "Book T",       Order = 10, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable { Title = "PR B",          PropertyName = "PR B",    Order = 11, Axis = ePivotFieldAxis.Row });
-        format.Add(new ExcelFormatTable { Title = "Sh",            PropertyName = "Sh",      Order = 12, Axis = ePivotFieldAxis.Values, Alignment = ExcelHorizontalAlignment.Center, Function = DataFieldFunctions.Count });
-        format.Add(new ExcelFormatTable { Title = "Sale",          PropertyName = "Sale",        Order = 13, Axis = ePivotFieldAxis.Values, Alignment = ExcelHorizontalAlignment.Center, Function = DataFieldFunctions.Count });
-        format.Add(new ExcelFormatTable { Title = "Deposits / Comments", PropertyName = "Deposits / Comments", Order = 14, Axis = ePivotFieldAxis.Row });     
+        format.Add("SR", "srN", isGroup: true, isVisible: false);
+        format.Add("Deposit", "Deposit", isGroup: true, isVisible: false);
+        format.Add("GUID", "guID");
+        format.Add("Out Invit", "guOutInvitNum");
+        format.Add("Hotel", "guHotel");
+        format.Add("Room", "guRoomNum");
+        format.Add("Last Name", "guLastName1");
+        format.Add("Firs tName", "guFirstName1");
+        format.Add("Country ID", "guco");
+        format.Add("Country", "coN");
+        format.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date);
+        format.Add("Book T", "guBookT", format: EnumFormatTypeExcel.Time);
+        format.Add("PR B", "guPRInvit1");
+        format.Add("Sh", "guShow", axis: ePivotFieldAxis.Values, aligment: ExcelHorizontalAlignment.Center, function: DataFieldFunctions.Count);
+        format.Add("Sale", "guSale", axis: ePivotFieldAxis.Values, aligment: ExcelHorizontalAlignment.Center, function: DataFieldFunctions.Count);
+        format.Add("Deposits / Comments", "guComments");
 
-       var info = EpplusHelper.CreatePivotRptExcel(false,_filters, dt, _rptName, dateRange, format,true);
+        var info = await EpplusHelper.CreateCustomExcel(dt, _filters, _rptName, dateRange, format, blnShowSubtotal:true, blnRowGrandTotal: true, addEnumeration: true);
         if (info != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(info, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
