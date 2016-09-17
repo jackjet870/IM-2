@@ -277,7 +277,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -312,7 +312,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -335,7 +335,7 @@ namespace IM.Administrator.Forms
       catch
       (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -357,7 +357,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -378,7 +378,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion
@@ -458,7 +458,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+        UIHelper.ShowMessage(ex);
       }
     }
 

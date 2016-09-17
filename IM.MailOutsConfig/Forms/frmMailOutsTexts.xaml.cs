@@ -244,7 +244,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -274,7 +274,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     /// <summary>

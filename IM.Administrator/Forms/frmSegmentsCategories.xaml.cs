@@ -277,7 +277,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Segments categories");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -146,7 +146,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Member Ship Type");
+        UIHelper.ShowMessage(ex);
       }
 
     } 
@@ -219,7 +219,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Membership Type");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

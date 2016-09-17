@@ -257,7 +257,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Locations");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

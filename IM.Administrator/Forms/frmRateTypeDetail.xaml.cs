@@ -104,7 +104,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Rate Type");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

@@ -181,7 +181,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitation Outhouse PR");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -299,7 +299,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Invitation Houthouse By PR");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -321,7 +321,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -343,7 +343,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -365,7 +365,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -388,7 +388,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -254,7 +254,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Periods");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -3054,10 +3054,9 @@ namespace IM.Base.Helpers
         {
           pk.SaveAs(name);
         }        
-        catch (Exception e)
+        catch (Exception ex)
         {
-          var message = UIHelper.GetMessageError(e);
-          UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
+          UIHelper.ShowMessage(ex);
           return null;
         }
         return name;
@@ -3087,10 +3086,9 @@ namespace IM.Base.Helpers
         }
         pk.SaveAs(newFile);
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
-        var message = UIHelper.GetMessageError(e);
-        UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
         return null;
       }
       pk.Dispose();

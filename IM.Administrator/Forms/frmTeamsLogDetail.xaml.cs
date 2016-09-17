@@ -171,7 +171,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Logs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -239,7 +239,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+        UIHelper.ShowMessage(ex);
       }      
     }
     #endregion
@@ -356,7 +356,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -377,7 +377,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Log");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

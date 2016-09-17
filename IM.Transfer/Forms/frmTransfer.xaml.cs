@@ -268,9 +268,9 @@ namespace IM.Transfer.Forms
       {
         AddLogGridReservations("Info", "Transfer Canceled.");
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Info", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       finally
       {
@@ -311,9 +311,9 @@ namespace IM.Transfer.Forms
       {
         AddLogGridExchangeRate("Info", "Update Canceled.");
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridExchangeRate("Info", UIHelper.GetMessageError(exception));
+        AddLogGridExchangeRate(ex);
       }
       finally
       {
@@ -599,7 +599,7 @@ namespace IM.Transfer.Forms
         }
         catch (Exception ex)
         {
-          AddLogGridReservations("Error", UIHelper.GetMessageError(ex));
+          AddLogGridReservations(ex);
         }
 
 
@@ -842,9 +842,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Hotel Countries.");
         await BRTransfer.AddCountriesHotel();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -855,9 +855,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Origos Countries.");
         await BRTransfer.AddCountries();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -868,9 +868,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Hotel Countries Names.");
         await BRTransfer.UpdateCountriesHotelNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -881,9 +881,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Origos Countries Names.");
         await BRTransfer.UpdateCountriesNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -906,9 +906,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Hotel Agencies.");
         await BRTransfer.AddAgenciesHotel();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -919,9 +919,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Origos Agencies.");
         await BRTransfer.AddAgencies();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -932,9 +932,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Hotel Agencies Names.");
         await BRTransfer.UpdateAgenciesHotelNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -945,9 +945,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Origos Agencies Names.");
         await BRTransfer.UpdateAgenciesNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
     }
@@ -969,9 +969,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Room Types.");
         await BRTransfer.AddRoomTypes();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -982,9 +982,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Room Types Names.");
         await BRTransfer.UpdateRoomTypesNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
     }
@@ -1006,9 +1006,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Contracts.");
         await BRTransfer.AddContracts();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1019,9 +1019,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Contracts Names.");
         await BRTransfer.UpdateContractsNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
     }
@@ -1042,9 +1042,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding Groups.");
         await BRTransfer.AddGroups();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
 
       try
@@ -1053,9 +1053,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Groups Names");
         await BRTransfer.UpdateGroupsNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
 
     }
@@ -1077,9 +1077,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Countries");
         await BRTransfer.UpdateTransferCountries();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1091,9 +1091,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Agencies");
         await BRTransfer.UpdateTransferAgencies();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1104,9 +1104,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Languages");
         await BRTransfer.UpdateTransferLanguages();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1117,9 +1117,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Markets");
         await BRTransfer.UpdateTransferMarkets();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1130,9 +1130,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Groups");
         await BRTransfer.UpdateTransferUnavailableMotivesByGroups();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1143,9 +1143,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Agency");
         await BRTransfer.UpdateTransferUnavailableMotivesByAgency();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1156,9 +1156,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Country");
         await BRTransfer.UpdateTransferUnavailableMotivesByCountry();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1169,9 +1169,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Contract");
         await BRTransfer.UpdateTransferUnavailableMotivesByContract();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1184,9 +1184,9 @@ namespace IM.Transfer.Forms
           AddLogGridReservations("Update", "Updating Unavailable Motives by Just One Night");
           await BRTransfer.UpdateTransferUnavailableMotivesBy1Night();
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-          AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+          AddLogGridReservations(ex);
         }
       }
       if (blnTwoNight)
@@ -1197,9 +1197,9 @@ namespace IM.Transfer.Forms
           AddLogGridReservations("Update", "Updating Unavailable Motives by Just Two Nights");
           await BRTransfer.UpdateTransferUnavailableMotivesBy2Nights();
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-          AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+          AddLogGridReservations(ex);
         }
       }
       #endregion
@@ -1212,9 +1212,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Transfer");
         await BRTransfer.UpdateTransferUnavailableMotivesByTransfer();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1225,9 +1225,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by New Member");
         await BRTransfer.UpdateTransferUnavailableMotivesByNewMember();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1238,9 +1238,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives by Pax");
         await BRTransfer.UpdateTransferUnavailableMotivesByPax();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1251,9 +1251,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Availability");
         await BRTransfer.UpdateTransferAvailability();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1276,9 +1276,9 @@ namespace IM.Transfer.Forms
         await BRTransfer.DeleteReservationsCancelled();
         AddLogGridReservations("Delete", "Deleting Canceled Reservations.");
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1289,9 +1289,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Room Numbers");
         await BRTransfer.UpdateGuestsRoomNumbers();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1302,9 +1302,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Room Types");
         await BRTransfer.UpdateGuestsRoomTypes();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1315,9 +1315,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Credit Cards");
         await BRTransfer.UpdateGuestsCreditCards();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1328,9 +1328,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Last Names");
         await BRTransfer.UpdateGuestsLastNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1341,9 +1341,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating First Names");
         await BRTransfer.UpdateGuestsFirstNames();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1354,9 +1354,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Check-In Dates");
         await BRTransfer.UpdateGuestsCheckInDates();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1367,9 +1367,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Check-Ins");
         await BRTransfer.UpdateGuestsCheckIns();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1380,9 +1380,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Check-Out Dates");
         await BRTransfer.UpdateGuestsCheckOutDates();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1393,9 +1393,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating E-mails");
         await BRTransfer.UpdateGuestsEmails();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1406,9 +1406,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Cities");
         await BRTransfer.UpdateGuestsCities();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1419,9 +1419,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating States");
         await BRTransfer.UpdateGuestsStates();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1432,9 +1432,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Countries");
         await BRTransfer.UpdateGuestsCountries();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1445,9 +1445,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Early Check-Outs");
         await BRTransfer.UpdateGuestsCheckOutsEarly();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1458,9 +1458,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Guest Types");
         await BRTransfer.UpdateGuestsGuestTypes();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1471,9 +1471,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Contracts");
         await BRTransfer.UpdateGuestsContracts();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1484,9 +1484,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Birth Dates");
         await BRTransfer.UpdateGuestsBirthDates();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1498,9 +1498,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Ages");
         await BRTransfer.UpdateGuestsAges();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1511,9 +1511,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Pax");
         await BRTransfer.UpdateGuestsPax();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1524,9 +1524,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Reservation Types");
         await BRTransfer.UpdateGuestsReservationTypes();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1537,9 +1537,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Id Profile Opera");
         await BRTransfer.UpdateGuestsIdProfileOpera();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1550,9 +1550,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Agencies");
         await BRTransfer.UpdateGuestsAgencies();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1563,9 +1563,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Markets");
         await BRTransfer.UpdateGuestsMarkets();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1576,9 +1576,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Availability & Unavailable Motives");
         await BRTransfer.UpdateGuestsAvailabilityUnavailableMotives();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1589,9 +1589,9 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Update", "Updating Unavailable Motives (Reverting One Night Availability)");
         await BRTransfer.UpdateGuestsUnavailableMotives1NightRevert();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1604,9 +1604,9 @@ namespace IM.Transfer.Forms
         DateTime dateTo = DateHelper.DaysBeforeOrAfter(60);
         await BRTransfer.UpdateGuestsAvailables(dateFrom, dateTo);
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       #endregion
 
@@ -1618,10 +1618,10 @@ namespace IM.Transfer.Forms
         AddLogGridReservations("Insert", "Adding New Guests.");
         iTotalRecordsAddTransfer =  await BRTransfer.AddGuests();
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
         iTotalRecordsAddTransfer = 0;
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
       
       #endregion
@@ -1645,9 +1645,9 @@ namespace IM.Transfer.Forms
       {
         await BRTransfer.StopZone(strZone);
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
-        AddLogGridReservations("Error", UIHelper.GetMessageError(exception));
+        AddLogGridReservations(ex);
       }
 
     }
@@ -1841,9 +1841,9 @@ namespace IM.Transfer.Forms
     /// </summary>
     /// <param name="strLogLevel">Tipo de mensaje en el log</param>
     /// <param name="strLogMessage">Mensaje en el log</param>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
+    /// <history>
+    /// [michan] 15/04/2016 Created
+    /// </history>
     public void AddLogGridReservations(string strLogLevel, string strLogMessage)
     {
       // validamos que el strLogLevel y el strMessage no sean vacios o nullos
@@ -1862,15 +1862,29 @@ namespace IM.Transfer.Forms
     }
     #endregion
 
+    #region AddLogGridReservations (Exception)
+    /// <summary>
+    /// Metodo para actualizar el grid de log de la actualizacion de reservaciones, pero con mensajes de excepciones
+    /// </summary>
+    /// <param name="exception">Objeto con los datos de la excepcion</param>
+    /// <history>
+    /// [wtorres]   17/Sep/2016 Created
+    /// </history>
+    public void AddLogGridReservations(Exception ex)
+    {
+      AddLogGridReservations("Error", UIHelper.GetMessageError(ex));
+    }
+    #endregion
+
     #region AddLogGridExchangeRate
     /// <summary>
-    /// Metodo para actualizar el grid de la actualizan de exchange rate.
+    /// Metodo para actualizar el grid de log de la actualizacion de tipos de cambio
     /// </summary>
     /// <param name="strLogLevel">Tipo de mensaje en el log</param>
     /// <param name="strLogMessage">Mesanje del log</param>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
+    /// <history>
+    /// [michan] 15/04/2016 Created
+    /// </history>
     public void AddLogGridExchangeRate(string strLogLevel, string strLogMessage)
     {
 
@@ -1885,6 +1899,20 @@ namespace IM.Transfer.Forms
         }
       }
 
+    }
+    #endregion
+
+    #region AddLogGridExchangeRate (Exception)
+    /// <summary>
+    /// Metodo para actualizar el grid de log de la actualizacion de tipos de cambio, pero con mensajes de excepciones
+    /// </summary>
+    /// <param name="exception">Objeto con los datos de la excepcion</param>
+    /// <history>
+    /// [wtorres]   17/Sep/2016 Created
+    /// </history>
+    public void AddLogGridExchangeRate(Exception ex)
+    {
+      AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
     }
     #endregion
 
@@ -2195,7 +2223,7 @@ namespace IM.Transfer.Forms
       catch (Exception ex)
       {
         AddLogGridExchangeRate("Warning", "Error ocurred in updating exchange rate (Mexican Pesos).");
-        AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
+        AddLogGridExchangeRate(ex);
       }
 
       if (exchangeRate != null)
@@ -2272,7 +2300,7 @@ namespace IM.Transfer.Forms
       catch (Exception ex)
       {
         AddLogGridExchangeRate("Warning", "Error ocurred in updating exchange rate (Canadian Dollars).");
-        AddLogGridExchangeRate("Error", UIHelper.GetMessageError(ex));
+        AddLogGridExchangeRate(ex);
       }
 
       // validamos que exista el tipo de cambio para el dia actual
@@ -2473,10 +2501,6 @@ namespace IM.Transfer.Forms
     #endregion}
 
     #endregion
-
-
-
+    
   }
-
-
 }

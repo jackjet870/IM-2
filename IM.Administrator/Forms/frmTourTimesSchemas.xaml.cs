@@ -259,7 +259,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Schemas");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

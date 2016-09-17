@@ -216,7 +216,7 @@ namespace IM.SalesLiner.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 

@@ -259,7 +259,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Reason For Cancellation Folios");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

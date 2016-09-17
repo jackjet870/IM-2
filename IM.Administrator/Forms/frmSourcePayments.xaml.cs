@@ -259,7 +259,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Source Payments");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

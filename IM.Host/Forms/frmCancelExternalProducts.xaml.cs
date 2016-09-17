@@ -229,7 +229,7 @@ namespace IM.Host.Forms
         }
         catch (Exception ex)
         {
-          UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Error Save promotions in sistur");
+          UIHelper.ShowMessage(ex);
         }
 
         DialogResult = true;

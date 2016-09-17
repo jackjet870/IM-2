@@ -267,7 +267,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Invitation Outhouse");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -1035,7 +1035,7 @@ namespace IM.Inhouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "GetRptReservationOrigos");
+        UIHelper.ShowMessage(ex, "WirePRHelper.GetRptReservationOrigos");
       }
     }
 

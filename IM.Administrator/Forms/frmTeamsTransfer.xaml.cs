@@ -82,7 +82,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams PRs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -110,7 +110,7 @@ namespace IM.Administrator.Forms
         cboPlaceIDTo.DisplayMemberPath = "srN";
       }catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Salesmen");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -254,7 +254,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

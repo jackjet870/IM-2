@@ -109,7 +109,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Schema");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

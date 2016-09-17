@@ -73,12 +73,14 @@ namespace IM.Base.Helpers
     /// Muestra un MessageBox con los errores encontrados en una Excepción, Implementa GetMessageError y EntityValidationException
     /// </summary>
     /// <param name="ex">Mensaje de la excepcion</param>
+    /// <param name="title">Título de la ventana</param>
     ///<history>
     ///[erosado]  28/May/2016 Created.
     ///[erosado]  08/Jul/2016 Modified. Se agregó buscar excepcion de tipo entityValidationException.
     ///[wtorres]  13/Ago/2016 Modified. Ahora envia un correo electronico con la excepcion
+    ///[wtorres]  17/Sep/2016 Modified. Agregue el parametro title
     /// </history>
-    public static MessageBoxResult ShowMessage(Exception ex)
+    public static MessageBoxResult ShowMessage(Exception ex, string title = "Error")
     {
       //Declaramos variables
       string message = string.Empty;
@@ -108,7 +110,7 @@ namespace IM.Base.Helpers
       NotificationHelper.SendException(ex);
 
       // desplegamos el mensaje de la excepcion
-      return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+      return MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
     }
     #endregion ShowMessage
 

@@ -261,7 +261,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Zones");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

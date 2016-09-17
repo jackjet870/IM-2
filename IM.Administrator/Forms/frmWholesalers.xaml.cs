@@ -305,7 +305,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Wholesalers");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

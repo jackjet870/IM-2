@@ -600,7 +600,7 @@ namespace IM.Inhouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Inhouse");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

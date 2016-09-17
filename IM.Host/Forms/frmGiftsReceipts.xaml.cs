@@ -1540,7 +1540,7 @@ namespace IM.Host.Forms
         }
         catch (Exception ex)
         {
-          UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Saving Gifts Receipt");
+          UIHelper.ShowMessage(ex);
         }
 
         await Load_Record();

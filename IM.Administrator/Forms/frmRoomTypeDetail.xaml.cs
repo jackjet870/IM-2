@@ -105,7 +105,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Room Type");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

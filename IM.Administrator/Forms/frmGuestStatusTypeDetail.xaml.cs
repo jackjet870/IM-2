@@ -98,7 +98,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Guest Status Type");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

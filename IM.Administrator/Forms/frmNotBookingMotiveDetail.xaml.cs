@@ -110,7 +110,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Not Booking Motives");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion
