@@ -92,6 +92,7 @@ namespace IM.Host.Forms
         if (fileinfo != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.Owner = this;
           documentViewer.ShowDialog();
         }         
       }

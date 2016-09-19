@@ -24,11 +24,9 @@ namespace IM.ProcessorGeneral.Forms
     #region Atributos
 
     private frmFilterDateRange _frmFilter;
-    private frmSystemCfg _systemConfig;
     private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
-    private bool _isConfigured;
     public clsFilter _clsFilter;
 
     #endregion

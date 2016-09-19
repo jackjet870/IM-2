@@ -674,7 +674,7 @@ namespace IM.Outhouse.Forms
       if (dgGuestPremanifest.Items.Count > 0)
       {
         var remanifestOutside = BRGeneralReports.GetRptPremanifestOutSide(dtpDate.Value.Value, Context.User.LeadSource.lsID);
-        ReportsToExcel.PremanifestToExcel(remanifestOutside);
+        ReportsToExcel.PremanifestToExcel(remanifestOutside,this);
       }
       else
       {

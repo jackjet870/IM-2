@@ -3,117 +3,88 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Base.Forms" WindowState="Maximized"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        xmlns:local="clr-namespace:IM.Base.Forms" WindowState="Maximized" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" Title="Report Viewer"
         Height="350" Width="525">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=ExportToExcel}" Key="E" Modifiers="Alt"/>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=ExportToPdf}" Key="P" Modifiers="Alt"/>
     </Window.InputBindings>
     <DockPanel LastChildFill="True">
-        <Border Background="#147F79" Height="10" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,-1,0,0"/>
-        <DocumentViewer x:Name="documentViewer" >
-            <DocumentViewer.Resources>
-                <Style x:Key="{x:Type DocumentViewer}"
-       TargetType="{x:Type DocumentViewer}">
-                    <Setter Property="Foreground"
-          Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-                    <Setter Property="Background"
-          Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-                    <Setter Property="FocusVisualStyle"
-          Value="{x:Null}" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DocumentViewer}">
-                                <Border BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                Focusable="False">
-                                    <Grid KeyboardNavigation.TabNavigation="Local">
-                                        <Grid.Background>
-                                            <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
-                                        </Grid.Background>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="32" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>                                        
-                                        <ToolBar ToolBarTray.IsLocked="True" KeyboardNavigation.TabNavigation="Continue">                                            
-                                            <Button Command="ApplicationCommands.Print"  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
+        <Border Background="#147F79" Height="30" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,-1,0,0">
+            <TextBlock Name="txbTitle" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Title" Foreground="White" Margin="0,0,5,0"/>
+        </Border>
+        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" KeyboardNavigation.TabNavigation="Continue" Height="32">
+            <Button Command="ApplicationCommands.Print"  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
                                                     ToolTip="Print (Ctrl + P)">
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BPrinter.png" />
-                                            </Button>
-                                            <Button Command="ApplicationCommands.Copy"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BPrinter.png" />
+            </Button>
+            <Button Command="ApplicationCommands.Copy"
                                                       CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                       ToolTip="Copy (Ctrl + C)">
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BCopy.png"/>
-                                            </Button>
-                                            <Separator />
-                                            <Button Command="NavigationCommands.IncreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BCopy.png"/>
+            </Button>
+            <Separator />
+            <Button Command="NavigationCommands.IncreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               ToolTip="Zoom In (Ctrl +)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BZoomIn.png" />
-                                            </Button>
-                                            <Button Command="NavigationCommands.DecreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BZoomIn.png" />
+            </Button>
+            <Button Command="NavigationCommands.DecreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               ToolTip="Zoom Out (Ctrl -)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BZoomOut.png" />
-                                            </Button>
-                                            <Separator />
-                                            <Button Command="NavigationCommands.Zoom"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BZoomOut.png" />
+            </Button>
+            <Separator />
+            <Button Command="NavigationCommands.Zoom"
                                               CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               CommandParameter="100.0"
                                               ToolTip="Actual Size (Ctrl + 1)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BActualSize.png" />
-                                            </Button>
-                                            <Button Command="DocumentViewer.FitToWidthCommand"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BActualSize.png" />
+            </Button>
+            <Button Command="DocumentViewer.FitToWidthCommand"
                                               CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               ToolTip="Fit to Width (Ctrl + 2)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BFitToWidth.png" />
-                                            </Button>
-                                            <Button Command="DocumentViewer.FitToMaxPagesAcrossCommand"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BFitToWidth.png" />
+            </Button>
+            <Button Command="DocumentViewer.FitToMaxPagesAcrossCommand"
                                               CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               CommandParameter="1"
                                               ToolTip="Whole Page (Ctrl + 3)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BWholePage.png" />
-                                            </Button>
-                                            <Button Command="DocumentViewer.FitToMaxPagesAcrossCommand"
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BWholePage.png" />
+            </Button>
+            <Button Command="DocumentViewer.FitToMaxPagesAcrossCommand"
                                               CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                               CommandParameter="2"
                                               ToolTip="Two Pages (Ctrl + 4)" >
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BTwoPages.png" />
-                                            </Button>
-                                            <Separator />
-                                            <Button Name="btnExportToPdf" Click="btnExportToPdf_Click" ToolTip="Export To Pdf (Alt + P)">
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BPdf.png" />
-                                            </Button>
-                                            <Button Name="btnExportToExcel" Click="btnExportToExcel_Click" ToolTip="Export To excel (Alt + E)">
-                                                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BExcel.png" />
-                                            </Button>
-
-                                        </ToolBar>
-
-                                        <ScrollViewer Grid.Row="1"
-                          CanContentScroll="true"
-                          HorizontalScrollBarVisibility="Auto"
-                          x:Name="PART_ContentHost"
-                          IsTabStop="true">
-                                            <ScrollViewer.Background>
-                                                <LinearGradientBrush EndPoint="0.5,1"
-                                     StartPoint="0.5,0">
-                                                    <GradientStop Color="{DynamicResource ControlLightColor}"
-                                Offset="0" />
-                                                    <GradientStop Color="{DynamicResource ControlMediumColor}"
-                                Offset="1" />
-                                                </LinearGradientBrush>
-                                            </ScrollViewer.Background>
-                                        </ScrollViewer>
-
-                                        <ContentControl Grid.Row="2"
-                            x:Name="PART_FindToolBarHost"/>
-                                    </Grid>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BTwoPages.png" />
+            </Button>
+            <Separator />
+            <Button Name="btnExportToPdf" Click="btnExportToPdf_Click" ToolTip="Export To Pdf (Alt + P)">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BPdf.png" />
+            </Button>
+            <Button Name="btnExportToExcel" Click="btnExportToExcel_Click" ToolTip="Export To excel (Alt + E)">
+                <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BExcel.png" />
+            </Button>
+            <Separator/>                            
+            <ComboBox SelectedIndex="0" ToolTip="Orientation" Name="cmbOrientation" Height="27" DisplayMemberPath="description" SelectedValuePath="pageOrientation"/>
+            <ComboBox SelectedIndex="0" Name="cmbPagerSize" ToolTip="Paper Size" Height="27" TextSearch.TextPath="name"  SelectedValuePath="paperSize" ItemTemplate="{StaticResource ResourceKey=cbx-PaperSize-img}">                
+            </ComboBox>            
+            <ComboBox SelectedIndex="0" Name="cmbMargin" ToolTip="Margins" Height="27" DisplayMemberPath="name" TextSearch.TextPath="name" SelectedValuePath="margin">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ComboBoxItem_MouseClick"/>
+                    </Style>
+                </ComboBox.ItemContainerStyle>                
+            </ComboBox>
+            <ComboBox SelectedIndex="0" Name="cmbScale" ToolTip="Scaling" Height="27" TextSearch.TextPath="name" DisplayMemberPath="name" SelectedValuePath="scale">                                                                
+                
+            </ComboBox>
+        </ToolBar>
+        <DocumentViewer x:Name="documentViewer" >
+            <DocumentViewer.Resources>                
+                    <!-- Ocultar the toolbar -->
+                    <Style TargetType="ToolBar">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </Style>
             </DocumentViewer.Resources>
         </DocumentViewer>
     </DockPanel>

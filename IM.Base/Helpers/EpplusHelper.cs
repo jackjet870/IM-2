@@ -3397,7 +3397,7 @@ namespace IM.Base.Helpers
       else      
         ws.Cells.AutoFitColumns(ColumnMinWidth, ColumnMaxWidth);
 
-      ws.PrinterSettings.PageOrder = ePageOrder.OverThenDown;
+      //ws.PrinterSettings.PageOrder = ePageOrder.OverThenDown;
       
     }
     

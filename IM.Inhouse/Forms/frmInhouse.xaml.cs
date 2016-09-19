@@ -577,7 +577,7 @@ namespace IM.Inhouse.Forms
           {
             List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.Value.Value, Context.User.LeadSource.lsID,
               _markets, _available, _info, _invited, _onGroup);
-            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value);
+            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value,this);
             hasData = true;
           }
           break;
@@ -587,7 +587,7 @@ namespace IM.Inhouse.Forms
           {
             List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate(),
               Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
-            ReportsToExcel.AvailablesToExcel(aviables);
+            ReportsToExcel.AvailablesToExcel(aviables,this);
             hasData = true;
           }
           break;
@@ -599,14 +599,14 @@ namespace IM.Inhouse.Forms
             {
               List<RptPremanifest> premanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value,
                 Context.User.LeadSource.lsID, _markets, _onGroup);
-              ReportsToExcel.PremanifestToExcel(premanifest);
+              ReportsToExcel.PremanifestToExcel(premanifest,this);
               hasData = true;
             }
             else
             {
               List<RptPremanifestWithGifts> withGifts = await BRGeneralReports.GetRptPremanifestWithGifts(
                 dtpDate.Value.Value, Context.User.LeadSource.lsID);
-              ReportsToExcel.PremanifestWithGiftsToExcel(withGifts);
+              ReportsToExcel.PremanifestWithGiftsToExcel(withGifts,this);
               hasData = true;
             }
           }

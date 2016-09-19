@@ -116,6 +116,7 @@ namespace IM.PRStatistics.Forms
         if (finfo != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.Owner = this;
           documentViewer.ShowDialog();
         }
       }

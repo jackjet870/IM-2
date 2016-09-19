@@ -445,6 +445,7 @@ namespace IM.Base.Forms
         if (file != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(file, user.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly),false);
+          documentViewver.Owner = this;
           documentViewver.ShowDialog();
         }          
       }

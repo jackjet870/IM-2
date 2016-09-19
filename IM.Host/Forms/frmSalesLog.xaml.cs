@@ -78,6 +78,7 @@ namespace IM.Host.Forms
         if(fileInfo!=null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewver.Owner = this;
           documentViewver.ShowDialog();
         }
       }

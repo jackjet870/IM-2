@@ -10,6 +10,7 @@ using OfficeOpenXml.Table.PivotTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace IM.Outhouse.Classes
 {
@@ -22,7 +23,7 @@ namespace IM.Outhouse.Classes
 
     #endregion
 
-    public static async void PremanifestToExcel(List<RptPremanifestOuthouse> lstpremanifest)
+    public async static void PremanifestToExcel(List<RptPremanifestOuthouse> lstpremanifest,Window window)
     {
 
       _filters = new List<Tuple<string, string>> {Tuple.Create("Lead Source", Context.User.LeadSource.lsID)};
@@ -75,6 +76,7 @@ namespace IM.Outhouse.Classes
         if (info != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(info, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.Owner = window;
           documentViewer.ShowDialog();
         }
       }

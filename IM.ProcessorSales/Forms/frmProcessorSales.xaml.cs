@@ -30,7 +30,6 @@ namespace IM.ProcessorSales.Forms
 
     #region Privados
     private frmReportQueue _frmReportQueue;
-    private frmSystemCfg _systemConfig;
     //Formulario de filtros
     private frmFilterDateRange _frmFilter;
     //Archivo de configuracion

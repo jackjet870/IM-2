@@ -129,6 +129,7 @@
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
     <Compile Include="Classes\ExcelFormatItemsList.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />
+    <Compile Include="Classes\Margin.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
     <Compile Include="Classes\GiftType.cs" />
     <Compile Include="Classes\GuestInvitation.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Enums\EnumQuinellas.cs" />
     <Compile Include="Enums\EnumSalesByMemberShipType.cs" />
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
+    <Compile Include="Enums\EnumScale.cs" />
     <Compile Include="Enums\EnumScreen.cs" />
     <Compile Include="Enums\EnumSearchHostType.cs" />
     <Compile Include="Enums\EnumStatus.cs" />
