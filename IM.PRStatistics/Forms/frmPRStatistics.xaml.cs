@@ -71,17 +71,17 @@ namespace IM.PRStatistics.Forms
               && lsbxMarkets.SelectedItems.Count > 0)
       {
 
-        if (DateHelper.ValidateValueDate(dtpkFrom,dtpkTo))
+        if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
         {
           filterTuple = new List<Tuple<string, string>>();
           StaStart("Loading Data...");
           imgButtonOk.IsEnabled = false;
           filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.Value.Value, dtpkTo.Value.Value)));
-          filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
-          filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
-          filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
-          filterTuple.Add(new Tuple<string, string>("Agencies", chbxAgencies.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
-          filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
+          filterTuple.Add(new Tuple<string, string>("LeadSource", UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
+          filterTuple.Add(new Tuple<string, string>("SalesRooms", UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
+          filterTuple.Add(new Tuple<string, string>("Countries", UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
+          filterTuple.Add(new Tuple<string, string>("Agencies", UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
+          filterTuple.Add(new Tuple<string, string>("Markets", UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
 
           DoGetRptPrStats(dtpkFrom.Value.Value, dtpkTo.Value.Value, filterTuple);
         }
@@ -111,7 +111,7 @@ namespace IM.PRStatistics.Forms
 
 
 
-        FileInfo finfo = await EpplusHelper.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal:true, blnRowGrandTotal:true);
+        FileInfo finfo = await EpplusHelper.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal: true, blnRowGrandTotal: true);
 
         if (finfo != null)
         {
@@ -390,7 +390,7 @@ namespace IM.PRStatistics.Forms
         StaEnd();
         UIHelper.ShowMessage(ex);
       }
-     
+
     }
 
     /// <summary>

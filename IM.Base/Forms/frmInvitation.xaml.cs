@@ -128,7 +128,7 @@ namespace IM.Base.Forms
         bool isValid = true;
 
         //Asignamos el focus al boton
-        imgButtonSave.Focus();        
+        imgButtonSave.Focus();
 
         //Validamos controles comunes y validaciones basicas
         if (!InvitationValidationRules.ValidateGeneral(this, CatObj))
@@ -140,7 +140,7 @@ namespace IM.Base.Forms
         {
           isValid = InvitationValidationRules.ValidateInformationGrids(this, CatObj);
         }
-        
+
         //Validamos que la informacion exista
         if (isValid)
         {
@@ -580,7 +580,6 @@ namespace IM.Base.Forms
         SetReadOnly();
       }
 
-      dtgBookingDeposits.IsReadOnly = IsReaOnlyBookingDeposits();
       //Configuramos los controles de Change,Reschedule,Rebook
       SetupChangeRescheduleRebook();
     }
@@ -767,7 +766,7 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
-      btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly ;
+      btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
       btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
       brdSearchButton.IsEnabled = string.IsNullOrWhiteSpace(CatObj.Guest.guHReservID);
       #endregion Enable false
@@ -825,7 +824,7 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = CatObj.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
-      btnAddGuestAdditional.IsEnabled = (CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType==EnumInvitationType.newExternal);
+      btnAddGuestAdditional.IsEnabled = (CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
       btnSearchGuestAdditional.IsEnabled = (CatObj.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
 
       #endregion Enable false
@@ -894,8 +893,12 @@ namespace IM.Base.Forms
         if (CatObj.Guest.guCheckOutD <= serverDate || CatObj.Guest.guInvitD != serverDate || (!_user.HasPermission(permission, EnumPermisionLevel.Special) || CatObj.
           Guest.guBookD < serverDate))
         {
-          //No permitimos modificacion de depositos desactivamos el contenedor
-          brdBookingDeposits.IsEnabled = false;
+          //No permitimos modificacion de depositos 
+          dtgBookingDeposits.IsReadOnly = true;
+          txtBurned.IsEnabled = false;
+          cmbCurrency.IsEnabled = false;
+          cmbPaymentType.IsEnabled = false;
+          cmbResorts.IsEnabled = false;
         }
       }
 
@@ -912,7 +915,7 @@ namespace IM.Base.Forms
           btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
         }
       }
-      else if(_module==EnumModule.OutHouse)
+      else if (_module == EnumModule.OutHouse)
       {
         dtgGuestAdditional.IsReadOnly = false;
         guestFormMode = EnumMode.Edit;
@@ -949,7 +952,8 @@ namespace IM.Base.Forms
         //Si la fecha de Booking origial es antes de hoy No permitimos modificar
         if (CatObj.CloneGuest.guBookD < serverDate)
         {
-          brdCreditCard.IsEnabled = false;
+          txtguCCType.IsEnabled = false;
+          dtgCCCompany.IsReadOnly = true;
           cmbGuestStatus.IsEnabled = false;
           stkRoomsQty.IsEnabled = false;
         }
@@ -976,9 +980,17 @@ namespace IM.Base.Forms
       brdPRInfo.IsEnabled = false;
       brdOtherInformation.IsEnabled = false;
       brdGuestStatus.IsEnabled = false;
-      brdGifts.IsEnabled = false;
-      brdBookingDeposits.IsEnabled = false;
-      brdCreditCard.IsEnabled = false;
+      //Gift
+      dtgGifts.IsReadOnly = true;
+      //Booking Deposits
+      dtgBookingDeposits.IsReadOnly = true;
+      txtBurned.IsEnabled = false;
+      cmbCurrency.IsEnabled = false;
+      cmbPaymentType.IsEnabled = false;
+      cmbResorts.IsEnabled = false;
+      //CreditCard
+      txtguCCType.IsEnabled = false;
+      dtgCCCompany.IsReadOnly = true;
       //Additional Guest
       dtgGuestAdditional.IsReadOnly = true;
       btnAddGuestAdditional.IsEnabled = false;
@@ -1006,9 +1018,17 @@ namespace IM.Base.Forms
       brdPRInfo.IsEnabled = true;
       brdOtherInformation.IsEnabled = true;
       brdGuestStatus.IsEnabled = true;
-      brdGifts.IsEnabled = true;
-      brdBookingDeposits.IsEnabled = true;
-      brdCreditCard.IsEnabled = true;
+      //Gift
+      dtgGifts.IsReadOnly = false;
+      //BookingDeposits
+      dtgBookingDeposits.IsReadOnly = IsReaOnlyBookingDeposits();
+      txtBurned.IsEnabled = true;
+      cmbCurrency.IsEnabled = true;
+      cmbPaymentType.IsEnabled = true;
+      cmbResorts.IsEnabled = true;
+      //CreditCard
+      txtguCCType.IsEnabled = true;
+      dtgCCCompany.IsReadOnly = false;
       //Additional Guest
       dtgGuestAdditional.IsEnabled = true;
       brdRoomsQtyAndElectronicPurse.IsEnabled = true;
@@ -1588,8 +1608,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 02/08/2016  Created.
     /// </history>
-    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-
+    public void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       DataGrid dtg = sender as DataGrid;
       InvitationGift invitationGift = e.Row.Item as InvitationGift;
@@ -1600,23 +1619,26 @@ namespace IM.Base.Forms
         {
           dtg.RowEditEnding -= dtgGifts_RowEditEnding;
           dtg.CancelEdit();
-          dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+          dtg.RowEditEnding += dtgGifts_RowEditEnding;
         }
         else
         {
           if (invitationGift?.igQty == 0 || string.IsNullOrEmpty(invitationGift?.iggi))
           {
-            UIHelper.ShowMessage("Please enter the required fields Qty and Gift to continue", MessageBoxImage.Exclamation, "Intelligence Marketing");
-            e.Cancel = true;
+            if ((UIHelper.ShowMessage("Please enter the required fields Qty and Gift to add a new gift. Do you want to keep adding the gift?", MessageBoxImage.Question) == MessageBoxResult.Yes))
+            {
+              e.Cancel = true;
+            }
+            else
+            {
+              dtg.RowEditEnding -= dtgGifts_RowEditEnding;
+              dtg.CancelEdit();
+              dtg.RowEditEnding += dtgGifts_RowEditEnding;
+            }
           }
         }
       }
-      else
-      {
-        //CommonCatObject dtContext = DataContext as CommonCatObject;
-        //dtContext.InvitationGiftList.RemoveAt(e.Row.GetIndex());
-      }
-    }
+}
 
     #endregion RowEditEnding
 
@@ -1797,7 +1819,7 @@ namespace IM.Base.Forms
       if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription((_module == EnumModule.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations)) && c.pppl <= 0))
         guestFormMode = EnumMode.ReadOnly;
 
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, guestFormMode,true) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, guestFormMode, true) { Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -1833,7 +1855,7 @@ namespace IM.Base.Forms
       else
         guestFormMode = EnumMode.Add;
 
-      frmGuest frmGuest = new frmGuest(_user, 0, _module, CatObj.Program, CatObj.InvitationMode,true) { GuestParent = CatObj?.Guest, Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, 0, _module, CatObj.Program, CatObj.InvitationMode, true) { GuestParent = CatObj?.Guest, Owner = this };
       frmGuest.ShowDialog();
       if (frmGuest.DialogResult.Value)
       {

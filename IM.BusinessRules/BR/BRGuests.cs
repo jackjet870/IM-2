@@ -640,6 +640,7 @@ namespace IM.BusinessRules.BR
     /// <returns>Un listado de PRNotes</returns>
     /// <history>
     /// [jorcanche] created 22/03/2016
+    /// [erosado] 19/09/2016  Modified. Se agregó TimeOut
     /// </history>
     public static async Task<List<GuestPremanifestOuthouse>> GetGuestPremanifestOuthouse(bool bookinvit, DateTime date, string leadSource)
     {
@@ -647,6 +648,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.GetGuestPremanifestOuthouse;
           try
           {
             return (from g in dbContext.Guests

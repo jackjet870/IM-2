@@ -874,5 +874,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_ValidateFolioInvitationOutside_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int GetGuestPremanifestOuthouse {
+            get {
+                return ((int)(this["GetGuestPremanifestOuthouse"]));
+            }
+            set {
+                this["GetGuestPremanifestOuthouse"] = value;
+            }
+        }
     }
 }
