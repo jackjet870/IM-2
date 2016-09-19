@@ -1,7 +1,9 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.ProcessorOuthouse.Classes;
 using System;
@@ -13,7 +15,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model.Classes;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -33,8 +34,8 @@ namespace IM.ProcessorOuthouse.Forms
       ConfigGrds();
       _clsFilter = new clsFilter();
       GetFirstDayValue();
-      lblUserName.Content = App.User.User.peN;
-      _frmReportQueue = new frmReportQueue();
+      lblUserName.Content = Context.User.User.peN;
+      _frmReportQueue = new frmReportQueue(Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
     }
     #endregion Constructor
 
@@ -963,13 +964,14 @@ namespace IM.ProcessorOuthouse.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);          
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(finfo.FullName, finfo);
       }
       catch (Exception ex)
       {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
         UIHelper.ShowMessage(ex);
       }
     }
@@ -1380,11 +1382,13 @@ namespace IM.ProcessorOuthouse.Forms
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
         }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+        frmDocumentViewver.Show();
+        _frmReportQueue.SetExist(finfo.FullName, finfo);
+        _frmReportQueue.Activate();
       }
       catch (Exception ex)
-      {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
+      {        
         UIHelper.ShowMessage(ex);
       }
     }
@@ -1470,12 +1474,12 @@ namespace IM.ProcessorOuthouse.Forms
         if (finfo == null)
         {
           finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
-        }
-        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+          frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
+          frmDocumentViewver.Show();
+        }        
       }
       catch (Exception ex)
       {
-        _frmReportQueue.SetFileInfoError(fileFullPath);
         UIHelper.ShowMessage(ex);
       }
     }
@@ -1499,31 +1503,6 @@ namespace IM.ProcessorOuthouse.Forms
     }
 
     #endregion WaitMessage
-
-    #region ShowSystemCfg
-    /// <summary>
-    ///   Abre la ventana para configurar opciones de sistema
-    /// </summary>
-    /// <history>
-    ///   [vku] 16/Jun/2016 Created
-    ///   [vku] 17/Jun/2016 Modified. Ahora verfica si se configuro la ruta. Devuelve true or false
-    /// </history>
-    private bool ShowSystemCfg()
-    {
-      _isConfigured = false;
-      MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) _isConfigured = false;
-      else
-      {
-        _systemConfig = new frmSystemCfg(EnumConfiguration.ReportsPath);
-        if (_systemConfig.ShowDialog() == true)
-        {
-          _isConfigured = true;
-        }
-      }
-      return _isConfigured;
-    }
-    #endregion
 
     #endregion Metodos
 
@@ -1597,10 +1576,6 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       if (sender.Equals(btnPrintRptByLeadSource)) PrepareReportByLeadSource();
       else if (sender.Equals(btnPrintRptByPR)) PrepareReportByPR();
       else if (sender.Equals(btnPrintOtherRpts)) PrepareOtherReports();
@@ -1651,10 +1626,6 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, RoutedEventArgs e)
     {
-      if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
@@ -1672,10 +1643,6 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-      else if (!ConfigRegistryHelper.ExistReportsPath())
-      {
-        if (!ShowSystemCfg()) return;
-      }
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();

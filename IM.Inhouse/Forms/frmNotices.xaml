@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         mc:Ignorable="d" Loaded="Window_Loaded"
-        Title="Notices" MinHeight="350" MinWidth="300" Height="350" Width="300" Background="Beige"  ResizeMode="CanResizeWithGrip"  WindowStyle="ToolWindow" 
+        Title="Notices" MinHeight="350" MinWidth="300" Height="350" Width="300"  ResizeMode="CanResizeWithGrip"  WindowStyle="ToolWindow"
         KeyDown="Window_KeyDown" WindowStartupLocation="Manual">
     <Grid>
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Name="_scrollViewer" ClipToBounds="False"  Grid.ColumnSpan="2" Grid.Row="0"  Margin="5" >
-            <RichTextBox  Name="rtbViewerNotice" MouseEnter="ViewerNotice_MouseEnter"  MouseLeave="ViewerNotice_MouseLeave" IsReadOnly="True" />
+            <RichTextBox Name="rtbViewerNotice" MouseEnter="ViewerNotice_MouseEnter"  MouseLeave="ViewerNotice_MouseLeave" IsReadOnly="True" BorderThickness="2" BorderBrush="#147F79"/>
         </ScrollViewer>
 
         <CheckBox Grid.Row="1" Name="chkAutoscroll" Margin="15,0" VerticalAlignment="Center" Content="Autoscroll" FontSize="15" Checked="chkAutoscroll_Checked" Unchecked="chkAutoscroll_Unchecked"/>

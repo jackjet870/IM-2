@@ -257,7 +257,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Membership Group");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

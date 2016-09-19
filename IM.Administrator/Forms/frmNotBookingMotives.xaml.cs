@@ -1,14 +1,15 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Extensions;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model.Enums;
-using IM.Base.Helpers;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Model.Helpers;
-using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -113,7 +114,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Motives, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(Model.Enums.EnumPermission.Motives, Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadNotBookingMotives();
     }
@@ -261,7 +262,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Not Booking Motives");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

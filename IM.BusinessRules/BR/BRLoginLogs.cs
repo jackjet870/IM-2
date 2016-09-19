@@ -41,11 +41,14 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<string>> GetLoginsLogPCName()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var query = dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c=>c).Distinct();
-        return await query.ToListAsync();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var query = dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c => c).Distinct();
+          return query.ToList();
+        }
+      });
     }
     #endregion
   }

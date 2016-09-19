@@ -1,5 +1,5 @@
-﻿using IM.Base.Forms;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Threading;
@@ -11,12 +11,6 @@ namespace IM.InventoryMovements
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -48,7 +42,7 @@ namespace IM.InventoryMovements
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (!frmLogin.IsAuthenticated) return;
-      User = frmLogin.UserData;
+      Context.User = frmLogin.UserData;
       frmInventoryMovements frmMain = new frmInventoryMovements();
       frmMain.ShowDialog();
       frmSplash.Close();

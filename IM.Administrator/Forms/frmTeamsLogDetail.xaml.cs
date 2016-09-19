@@ -1,15 +1,16 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Helpers;
-using Xceed.Wpf.Toolkit;
 using System.Windows.Data;
+using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace IM.Administrator.Forms
 {
@@ -78,7 +79,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          teamLog.tlChangedBy = App.User.User.peID;
+          teamLog.tlChangedBy = Context.User.User.peID;
           if (enumMode == EnumMode.Add)
           {
             teamLog.tlDT = DateTime.Now;
@@ -170,7 +171,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Logs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -238,7 +239,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+        UIHelper.ShowMessage(ex);
       }      
     }
     #endregion
@@ -355,7 +356,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -376,7 +377,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Log");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

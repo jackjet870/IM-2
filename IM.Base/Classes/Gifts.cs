@@ -429,6 +429,9 @@ namespace IM.Base.Classes
       iTourAllowed = iMaxTours - iToursUsed;
       iTours = iTourAllowed;
 
+      // Obtenemos la lista de Gifts del grid
+      var lstGifts = (dtg.Columns.Where(w => w.SortMemberPath == giftField).First() as DataGridComboBoxColumn).ItemsSource.Cast<Gift>().ToList();
+
       // Validamos con cada registro de tour
       foreach (var item in dtg.Items.SourceCollection)
       {
@@ -436,16 +439,16 @@ namespace IM.Base.Classes
 
         if (properties.Any())
         {
-          var giftValue = item.GetType().GetProperty(giftField).GetValue(item) as Gift;
+          var giftValue = lstGifts.Where(s => s.giID == (item.GetType().GetProperty(giftField).GetValue(item) as string)).First() as Gift;
           int qtyValue = Convert.ToInt32(item.GetType().GetProperty(qtyField).GetValue(item));
 
           if (giftValue != null)
           {
             // Evaluamos si son de toures y con descuento
-            if (giftValue.gigc == "TOURS" && !(bool)giftValue.giDiscount)
+            if (giftValue.gigc == nameof(EnumGiftCategory.TOURS) && !(bool)giftValue.giDiscount)
             {
-              iTours += iTours - (giftValue.giQty * qtyValue);
-              iTCont += iTCont + (giftValue.giQty * qtyValue);
+              iTours -= (giftValue.giQty * qtyValue);
+              iTCont += (giftValue.giQty * qtyValue);
             }
           }
         }
@@ -463,15 +466,15 @@ namespace IM.Base.Classes
 
         if (properties.Any())
         {
-          var giftValue = item.GetType().GetProperty(giftField).GetValue(item) as Gift;
+          var giftValue = lstGifts.Where(s => s.giID == (item.GetType().GetProperty(giftField).GetValue(item) as string)).First() as Gift;
           int qtyValue = Convert.ToInt32(item.GetType().GetProperty(qtyField).GetValue(item));
 
           if (giftValue != null)
           {
             if (giftValue.gigc == nameof(EnumGiftCategory.TOURS) && (bool)giftValue.giDiscount)
             {
-              iDisc = iDisc - (giftValue.giQty * qtyValue);
-              iDCont = iDCont + (giftValue.giQty * qtyValue);
+              iDisc -= (giftValue.giQty * qtyValue);
+              iDCont += (giftValue.giQty * qtyValue);
             }
           }
         }
@@ -510,29 +513,6 @@ namespace IM.Base.Classes
       piMinors = (pcurPax - piAdults) * 10;
     }
     #endregion
-
-    //#region LoadGuesStatusInfo
-    ///// <summary>
-    ///// Carga la informacion de GuestStatus para validaicon de nuevo schema de regalos
-    ///// </summary>
-    ///// <param name="guestID"> Clave del Guest</param>
-    ///// <param name="applyGuestStatusValidation"></param>
-    ///// <history>
-    ///// [vipacheco] 19/Abril/2016 Created
-    ///// [vipacheco] 08/Agosto/2016 Modified --> Migrado a esta clase  para el uso generico
-    ///// </history>
-    //public static void LoadGuesStatusInfo(int guestID, ref bool applyGuestStatusValidation, ref GuestStatusValidateData pGuestStatusInfo, int pReceiptID = 0)
-    //{
-    //  applyGuestStatusValidation = false;
-
-    //  pGuestStatusInfo = BRGuestStatus.GetStatusValidateInfo(pGuestID, pReceiptID);
-
-    //  // Solo si esta configurado se realiza la revision
-    //  if (pGuestStatusInfo != null)
-    //    if (pGuestStatusInfo.gsMaxQtyTours > 0)
-    //      applyGuestStatusValidation = true;
-    //}
-    //#endregion
 
   }
 }

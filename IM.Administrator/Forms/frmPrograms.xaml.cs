@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Model.Helpers;
-using System;
 
 namespace IM.Administrator.Forms
 {
@@ -37,7 +38,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       status.Visibility = Visibility.Visible;
-      _blnEdit = App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadPrograms();
     } 
@@ -220,7 +221,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Programs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion 

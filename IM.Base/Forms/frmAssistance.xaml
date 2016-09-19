@@ -73,7 +73,12 @@
                     <RowDefinition/>
                     <RowDefinition Height="44"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btnToExcel" Content="Excel" Grid.Row="0" VerticalAlignment="Center" Margin="20,10,10,10" Click="btnToExcel_Click" />
+                <Button x:Name="btnToExcel" ToolTip="Print" Grid.Row="0" VerticalAlignment="Center" Margin="20,10,10,10" Click="btnToExcel_Click" >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/Printer.png" />
+                        <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
+                    </StackPanel>
+                </Button>
                 <Button x:Name="btnShow" Content="Show" Grid.Row="2" VerticalAlignment="Center"  Margin="20,10,01,10" Click="btnShow_Click"  />
             </Grid>
             <!--#endregion Menu Buttons Column-->

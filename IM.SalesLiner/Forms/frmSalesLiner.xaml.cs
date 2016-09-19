@@ -1,16 +1,16 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using System.Diagnostics;
-using IM.Base.Forms;
-using IM.Model.Enums;
-using IM.Model.Helpers;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.SalesLiner.Forms
@@ -24,11 +24,14 @@ namespace IM.SalesLiner.Forms
     private List<Tuple<string, string>> filtersReport;
     public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
+
+    #region Constructores y destructores
     public frmSalesLiner()
     {
       InitializeComponent();
       LoadCombo = new ExecuteCommandHelper(x => LoadPersonnel());
-    }
+    } 
+    #endregion
 
     #region Eventos Ventana
     /// <summary>
@@ -64,7 +67,7 @@ namespace IM.SalesLiner.Forms
           filtersReport = new List<Tuple<string, string>>();
           filtersReport.Add(new Tuple<string, string>("Liner", string.Concat(linerPersonalShort.peID, " - ", linerPersonalShort.peN)));
 
-          DoGetSalesByLiner(dtpkFrom.Value.Value, dtpkTo.Value.Value, App.User.SalesRoom.srID, linerPersonalShort.peID);
+          DoGetSalesByLiner(dtpkFrom.Value.Value, dtpkTo.Value.Value, Context.User.SalesRoom.srID, linerPersonalShort.peID);
         }
         else
         {
@@ -94,7 +97,8 @@ namespace IM.SalesLiner.Forms
 
         if (fi != null)
         {
-          Process.Start(fi.FullName);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else
@@ -135,15 +139,15 @@ namespace IM.SalesLiner.Forms
     {
       var frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        frmlogin.UserData = App.User;
+        frmlogin.UserData = Context.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.UserData;
+        Context.User = frmlogin.UserData;
         LoadPersonnel();
       }
 
@@ -212,7 +216,7 @@ namespace IM.SalesLiner.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -363,14 +367,14 @@ namespace IM.SalesLiner.Forms
     public void setNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
-      txtbLocation.Text = App.User.SalesRoom.srN;
+      txtbUserName.Text = Context.User.User.peN;
+      txtbLocation.Text = Context.User.SalesRoom.srN;
       //Validamos permisos y restricciones para el combobox
       cbxPersonnel.IsEnabled = true;
 
       if (cbxPersonnel.Items.Count > 0)
       {
-        selectPersonnelInCombobox(App.User.User.peID);
+        selectPersonnelInCombobox(Context.User.User.peID);
       }
       else
       {
@@ -389,7 +393,7 @@ namespace IM.SalesLiner.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Liner));
+      DoGetPersonnel(Context.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Liner));
     }
 
     /// <summary>

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using System;
+using System.Windows;
 
 namespace IM.Inhouse.Forms
 {
@@ -31,6 +32,7 @@ namespace IM.Inhouse.Forms
       _user = user;
       _guestId = guestId;
       lblUserName.Text = user.peN;
+      Title = $"Booking Cancellation - Guest ID: {guestId}";
     }
     #endregion
 
@@ -72,12 +74,12 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
-      ValidateSave();
+      ValidateSave();  
     }
     #endregion
 
     #region ValidateSave
-   
+
     /// <summary>
     /// Guarda los cambios
     /// </summary>
@@ -97,7 +99,7 @@ namespace IM.Inhouse.Forms
         //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
         //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
         //_wasSaved que es el que indica que se guardo el Avail.
-        if (await BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.peID) == 0)
+        if (await BRGuests.SaveChangedOfGuest(_guest, Context.User.LeadSource.lsHoursDif, _user.peID) == 0)
         {
           //De no ser así informamos que no se guardo la información por algun motivo
           UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",

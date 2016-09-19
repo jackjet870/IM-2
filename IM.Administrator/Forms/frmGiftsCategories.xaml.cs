@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
-using IM.Model;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Linq;
+using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Helpers;
 using IM.Model.Extensions;
+using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace IM.Administrator.Forms
 {
@@ -88,7 +89,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Gifts, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(Model.Enums.EnumPermission.Gifts, Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadGiftsCategories();
     }
@@ -262,7 +263,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Gift Categories");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

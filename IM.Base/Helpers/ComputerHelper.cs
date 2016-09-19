@@ -21,27 +21,34 @@ namespace IM.Base.Helpers
     /// </history>
     public static string GetIpMachine()
     {
-      var ipMachine = string.Empty;
-      if (hasSessionCitrix())//Verificar si está abierto desde Citrix
+      try
       {
-        var ipAddress = Dns.GetHostAddresses(Environment.ExpandEnvironmentVariables("%CLIENTNAME%"));
-        if(ipAddress.Length>0)
+        var ipMachine = string.Empty;
+        if (hasSessionCitrix())//Verificar si está abierto desde Citrix
         {
-          ipMachine = ipAddress[0].ToString();
-        }
-      }
-      else//devolver la Ip Local
-      {        
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (IPAddress ip in host.AddressList)
-        {
-          if (ip.AddressFamily.ToString() == "InterNetwork")
+          var ipAddress = Dns.GetHostAddresses(Environment.ExpandEnvironmentVariables("%CLIENTNAME%"));
+          if (ipAddress.Length > 0)
           {
-            ipMachine = ip.ToString();
+            ipMachine = ipAddress[0].ToString();
           }
-        }        
+        }
+        else//devolver la Ip Local
+        {
+          var host = Dns.GetHostEntry(Dns.GetHostName());
+          foreach (IPAddress ip in host.AddressList)
+          {
+            if (ip.AddressFamily.ToString() == "InterNetwork")
+            {
+              ipMachine = ip.ToString();
+            }
+          }
+        }
+        return ipMachine;
       }
-      return ipMachine;
+      catch
+      {
+        return "";
+      }
     } 
     #endregion
 
@@ -56,13 +63,20 @@ namespace IM.Base.Helpers
     /// </history>
     public static string GetMachineName()
     {
-      if (hasSessionCitrix())//Verificar si está abierto desde Citrix
-      {        
-        return Environment.ExpandEnvironmentVariables("%CLIENTNAME%");
-      }
-      else//Devolver el nomber de la maquina local
+      try
       {
-        return Environment.MachineName;
+        if (hasSessionCitrix())//Verificar si está abierto desde Citrix
+        {
+          return Environment.ExpandEnvironmentVariables("%CLIENTNAME%");
+        }
+        else//Devolver el nomber de la maquina local
+        {
+          return Environment.MachineName;
+        }
+      }
+      catch
+      {
+        return "";
       }
     } 
     #endregion

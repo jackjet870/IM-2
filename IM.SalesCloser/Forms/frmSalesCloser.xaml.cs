@@ -1,18 +1,18 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
 using System.Data;
 using System.IO;
-using System.Diagnostics;
-using IM.Base.Forms;
-using IM.Model.Enums;
-using IM.Model.Helpers;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.SalesCloser.Forms
@@ -69,7 +69,7 @@ namespace IM.SalesCloser.Forms
           PersonnelShort closer = cbxPersonnel.SelectedValue as PersonnelShort;
           filtersReport = new List<Tuple<string, string>>();
           filtersReport.Add(new Tuple<string, string>("Closer", string.Concat(closer.peID, " - ", closer.peN)));
-          DoGetSalesByCloser(dtpkFrom.Value.Value, dtpkTo.Value.Value, App.User.SalesRoom.srID, closer.peID);
+          DoGetSalesByCloser(dtpkFrom.Value.Value, dtpkTo.Value.Value, Context.User.SalesRoom.srID, closer.peID);
         }
         else
         {
@@ -83,6 +83,7 @@ namespace IM.SalesCloser.Forms
     /// </summary>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
+    /// [emoguel] 09/09/2016 Modified. Ahora se abre el visor de reportes
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -102,7 +103,8 @@ namespace IM.SalesCloser.Forms
 
         if (fi != null)
         {
-          Process.Start(fi.FullName);
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else
@@ -143,15 +145,15 @@ namespace IM.SalesCloser.Forms
     {
       frmLogin frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        frmlogin.UserData = App.User;
+        frmlogin.UserData = Context.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.UserData;
+        Context.User = frmlogin.UserData;
         LoadPersonnel();
       }
 
@@ -368,15 +370,15 @@ namespace IM.SalesCloser.Forms
     public void setNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
-      txtbLocation.Text = App.User.SalesRoom.srN;
+      txtbUserName.Text = Context.User.User.peN;
+      txtbLocation.Text = Context.User.SalesRoom.srN;
       //Validamos permisos y restricciones para el combobox
       cbxPersonnel.IsEnabled = true;
 
       if (cbxPersonnel.Items.Count > 0)
       {
         List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-        int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
+        int index = lstPS.FindIndex(x => x.peID.Equals(Context.User.User.peID));
         if (index != -1)
         {
           cbxPersonnel.SelectedIndex = index;
@@ -402,7 +404,7 @@ namespace IM.SalesCloser.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Closer));
+      DoGetPersonnel(Context.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Closer));
     }
     #endregion
   }

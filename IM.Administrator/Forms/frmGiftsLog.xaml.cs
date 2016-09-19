@@ -1,14 +1,16 @@
-﻿using System;
+﻿using IM.Administrator.Classes;
+using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Model;
-using IM.Model.Classes;
-using IM.Administrator.Classes;
 
 namespace IM.Administrator.Forms
 {
@@ -105,7 +107,9 @@ namespace IM.Administrator.Forms
     private async void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true, true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID", idGift) },
-        "Gifts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
+        $"Gift Logs - {idGift}", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
+        frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        documentViewver.ShowDialog();
     }
     #endregion
 
@@ -143,12 +147,11 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Gifts");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
 
-    
     #endregion
   }
 }

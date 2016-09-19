@@ -1,15 +1,14 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Data;
-using System.Globalization;
-using IM.Model;
-using IM.Model.Enums;
-using IM.Model.Classes;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -50,8 +49,8 @@ namespace IM.Administrator.Forms
       try
       {
         List<TourTimesSchema> lstTourTimesSchemas = await BRTourTimesSchemas.GetTourTimesSchemas(nStatus: 1);
-        List<LeadSourceByUser> lstLeadSourceByUser = await BRLeadSources.GetLeadSourcesByUser((App.User.User.peID));
-        List<SalesRoomByUser> lstSalesRoomByUser = await BRSalesRooms.GetSalesRoomsByUser((App.User.User.peID));
+        List<LeadSourceByUser> lstLeadSourceByUser = await BRLeadSources.GetLeadSourcesByUser((Context.User.User.peID));
+        List<SalesRoomByUser> lstSalesRoomByUser = await BRSalesRooms.GetSalesRoomsByUser((Context.User.User.peID));
         List<WeekDay> lstWeekDays = await BRWeekDays.GetWeekDays("EN");
         int tourTimesSchema = await BRConfiguration.GetTourTimesSchema();
         cboSchema.SelectedValue = tourTimesSchema;
@@ -66,7 +65,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -117,7 +116,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Tour Times");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -263,7 +262,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(EnumPermission.TourTimes, EnumPermisionLevel.Special);
+      _blnEdit = Context.User.HasPermission(EnumPermission.TourTimes, EnumPermisionLevel.Special);
       if (!_blnEdit)
       {
         grpCopy.Visibility = Visibility.Collapsed;

@@ -413,9 +413,10 @@ namespace IM.BusinessRules.BR
     /// [jorcanche] 04/05/2016 Simplificado
     /// [vipacheco] 08/Agosto/2016 Modified -> Se le agrego timeout a la consulta.
     /// [vipacheco] 11/Agosto/2016 Modified -> Se agrego asincronia
+    /// [vipacheco] 06/Sep/2016 Modified -> Se agrego dentro del where la busqueda por el rango de fechas para disminuir el tiempo de consulta.
     /// </history>
     public async static Task<List<Guest>> GetSearchGuestByLS(string leadsource, string salesRoom, string name,
-      string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
+      string room, string reservation, int guid, DateTime dateFrom, DateTime dateTo, EnumProgram program, string PR)
     {
       return await Task.Run(() =>
       {
@@ -426,11 +427,9 @@ namespace IM.BusinessRules.BR
           dbContext.Database.CommandTimeout = 180;
 
           var query = from gu in dbContext.Guests
-                      join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                      //busqueda por program
-                      where ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)
-                      select gu;
+                      join ls in dbContext.LeadSources on gu.guls equals ls.lsID
+                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))     
+                      select gu; 
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -470,11 +469,10 @@ namespace IM.BusinessRules.BR
             {
               query = query.Where(gu => gu.guPRInvit1 == PR);
             }
-            //Busqueda por fecha de llegada
+            // Busqueda por rango de fechas 
+            query = query.Where(gu => ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) >= dateFrom) &&
+                                      ((program == EnumProgram.Outhouse ? gu.guBookD.Value : gu.guCheckInD) <= dateTo));
 
-            query = query.Where(gu =>
-              (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) >= from &&
-              (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) <= to);
           }
           //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con
           //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se
@@ -560,6 +558,7 @@ namespace IM.BusinessRules.BR
             {
               //guardamos la informacion de contacto
               dbContext.Entry(guest).State = EntityState.Modified;
+              var respuesta = dbContext.SaveChanges();
 
               //guardamos el Log del huesped
               dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
@@ -567,7 +566,7 @@ namespace IM.BusinessRules.BR
               //guardamos el movimiento de contactacion del huesped
               dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-              var respuesta = dbContext.SaveChanges();
+
               transaction.Commit();
               return respuesta;
             }
@@ -648,46 +647,53 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          return (from g in dbContext.Guests
-                  join co in dbContext.Countries on g.guco equals co.coID
-                  join ag in dbContext.Agencies on g.guag equals ag.agID
-                  where (bookinvit ? g.guBookD : g.guInvitD) == date
-                  where g.guls == leadSource
-                  orderby g.guBookT, g.guLastName1
-                  select new GuestPremanifestOuthouse
-                  {
-                    guStatus = g.guStatus,
-                    guID = g.guID,
-                    guCheckIn = g.guCheckIn,
-                    guRoomNum = g.guRoomNum,
-                    guLastName1 = g.guLastName1,
-                    guFirstName1 = g.guFirstName1,
-                    guCheckInD = g.guCheckInD,
-                    guCheckOutD = g.guCheckOutD,
-                    guco = g.guco,
-                    coN = co.coN,
-                    guag = g.guag,
-                    agN = ag.agN,
-                    guAvail = g.guAvail,
-                    guInfo = g.guInfo,
-                    guPRInfo = g.guPRInfo,
-                    guInfoD = g.guInfoD,
-                    guInvit = g.guInvit,
-                    guInvitD = g.guInvitD,
-                    guBookD = g.guBookD,
-                    guBookT = g.guBookT,
-                    guPRInvit1 = g.guPRInvit1,
-                    guMembershipNum = g.guMembershipNum,
-                    guBookCanc = g.guBookCanc,
-                    guShow = g.guShow,
-                    guSale = g.guSale,
-                    guComments = g.guComments,
-                    guPax = g.guPax
-                  }).ToList();
+          try
+          {
+            return (from g in dbContext.Guests
+                    join co in dbContext.Countries on g.guco equals co.coID
+                    join ag in dbContext.Agencies on g.guag equals ag.agID
+                    where (bookinvit ? g.guBookD : g.guInvitD) == date
+                    where g.guls == leadSource
+                    orderby g.guBookT, g.guLastName1
+                    select new GuestPremanifestOuthouse
+                    {
+                      guStatus = g.guStatus,
+                      guID = g.guID,
+                      guCheckIn = g.guCheckIn,
+                      guRoomNum = g.guRoomNum,
+                      guLastName1 = g.guLastName1,
+                      guFirstName1 = g.guFirstName1,
+                      guCheckInD = g.guCheckInD,
+                      guCheckOutD = g.guCheckOutD,
+                      guco = g.guco,
+                      coN = co.coN,
+                      guag = g.guag,
+                      agN = ag.agN,
+                      guAvail = g.guAvail,
+                      guInfo = g.guInfo,
+                      guPRInfo = g.guPRInfo,
+                      guInfoD = g.guInfoD,
+                      guInvit = g.guInvit,
+                      guInvitD = g.guInvitD,
+                      guBookD = g.guBookD,
+                      guBookT = g.guBookT,
+                      guPRInvit1 = g.guPRInvit1,
+                      guMembershipNum = g.guMembershipNum,
+                      guBookCanc = g.guBookCanc,
+                      guShow = g.guShow,
+                      guSale = g.guSale,
+                      guComments = g.guComments,
+                      guPax = g.guPax
+                    }).ToList();
+          }
+          catch (Exception)
+          {           
+            throw;
+          }
         }
       });
     }
-
+        
     #endregion GetGuestPremanifestOuthouse
 
     #region DeleteGuest
@@ -1013,7 +1019,7 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Guest Additional
-              dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", guestShow.AdditionalGuestList.Select(c => c.guID).ToList()));
+              dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", guestShow.AdditionalGuestList.Where(c=>c.guID > 0).Select(c => c.guID).ToList()));
               #endregion
 
               #region Proceso Guest Movements
@@ -1082,17 +1088,23 @@ namespace IM.BusinessRules.BR
           {
             guestInvitation.Guest.gulsOriginal = guestInvitation.Guest.guls;
           }
-          //Si esta null o si tiene el valor 
+          //Si esta null o si tiene el valor Minimo
           if (guestInvitation.Guest.guCheckOutHotelD == null || guestInvitation.Guest.guCheckOutHotelD == DateTime.MinValue)
           {
             guestInvitation.Guest.guCheckOutHotelD = guestInvitation.Guest.guCheckOutD;
+          }
+
+          //Si No tiene Show el Numero de Shows es igual al Numero de habitaciones
+          if (!guestInvitation.Guest.guShow)
+          {
+            guestInvitation.Guest.guShowsQty =(byte)guestInvitation.Guest.guRoomsQty;
           }
 
           #region Seguimiento
           if (enumProgram == EnumProgram.Inhouse)
           {
             //Si estaba contactado y no invitado
-            if (guestInvitation.Guest.guInfo == true && guestInvitation.Guest.guInvit)
+            if (guestInvitation.Guest.guInfo && !guestInvitation.Guest.guInvit)
             {
               //Con seguimiento
               guestInvitation.Guest.guFollow = true;
@@ -1111,7 +1123,7 @@ namespace IM.BusinessRules.BR
           }
           #endregion
 
-          #region Contratacion
+          #region Contactacion
           //contactado
           guestInvitation.Guest.guInfo = true;
 
@@ -1148,9 +1160,6 @@ namespace IM.BusinessRules.BR
 
           //invitation no cancelada
           guestInvitation.Guest.guBookCanc = false;
-
-          //PR de invitation
-          guestInvitation.Guest.guPRInvit1 = guestInvitation.Guest.guPRInvit1.Trim();
 
           //Captain de PR
           if (enumModule == EnumModule.Host || enumModule == EnumModule.OutHouse)
@@ -1314,7 +1323,7 @@ namespace IM.BusinessRules.BR
               #region Proceso Guest Additional
               if (guestInvitation.AdditionalGuestList.Any())
               {
-                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Select(c => c.guID).ToList()));
+                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Where(c => c.guID > 0).Select(c => c.guID).ToList()));
                 if (enumProgram == EnumProgram.Inhouse)
                 {
                   //Actualizamos los datos de los huespedes adicionales.

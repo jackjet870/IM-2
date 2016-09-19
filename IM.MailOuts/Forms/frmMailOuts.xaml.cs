@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.MailOuts.Classes;
@@ -194,8 +195,8 @@ namespace IM.MailOuts.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-      txtUser.Text = App.User.User.peN;
-      txtLocation.Text = App.User.LeadSource.lsN;
+      txtUser.Text = Context.User.User.peN;
+      txtLocation.Text = Context.User.LeadSource.lsN;
       _objGuestsMailOutsViewSource = ((CollectionViewSource)(this.FindResource("objGuestsMailOutsViewSource")));
       _languageViewSource = ((CollectionViewSource)(this.FindResource("languageViewSource")));
       _mailOutTextViewSource = ((CollectionViewSource)(this.FindResource("mailOutTextViewSource")));
@@ -217,12 +218,12 @@ namespace IM.MailOuts.Forms
 
       //cargamos los mail outs
       StaStart("Loading mail outs...");
-      _ltsMailOutTexts = await BRMailOutTexts.GetMailOutTexts(App.User.LeadSource.lsID, status: 1);
+      _ltsMailOutTexts = await BRMailOutTexts.GetMailOutTexts(Context.User.LeadSource.lsID, status: 1);
 
       _mailOutTextViewSource.Source = _ltsMailOutTexts.Where(x => x.mtla == "EN");
 
       // procesamos los huespedes para asignarle automaticamente un mail out en base a los criterios definidos
-      BRMailOuts.ProcessMailOuts(App.User.LeadSource.lsID);
+      BRMailOuts.ProcessMailOuts(Context.User.LeadSource.lsID);
 
       //cargamos los huespedes
       LoadGrid();
@@ -267,7 +268,7 @@ namespace IM.MailOuts.Forms
     {
       Thread.CurrentThread.CurrentCulture = new CultureInfo("es-MX");
 
-      string strPrintedBy = App.User.User.peID + " " + string.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
+      string strPrintedBy = Context.User.User.peID + " " + string.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
 
       _guestMailOutsText = (from gmo in dtgDatos.Items.OfType<GuestMailOut>()
                             join mot in _ltsMailOutTexts on new { a = gmo.gumo, b = gmo.gula } equals new { a = mot.mtmoCode, b = mot.mtla }
@@ -301,7 +302,7 @@ namespace IM.MailOuts.Forms
       StaStart("Loading guests...");
 
       _dtmServerdate = BRHelpers.GetServerDate();
-      _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(App.User.LeadSource.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
+      _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(Context.User.LeadSource.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
 
       List<ObjGuestsMailOuts> _ltsObjGuestsMailOuts = _ltsGuestsMailOuts.Select(parent => new ObjGuestsMailOuts(parent)).ToList();
 

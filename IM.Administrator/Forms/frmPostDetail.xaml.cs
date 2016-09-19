@@ -109,7 +109,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Permission");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -1,5 +1,9 @@
 ﻿using IM.Model.Enums;
+using IM.BusinessRules.BR;
+using IM.Styles.Classes;
+using IM.Styles.Enums;
 using System;
+using System.Data.Entity.Validation;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
-using System.Data.Entity.Validation;
-using IM.BusinessRules.BR;
-using IM.Styles.Classes;
-using IM.Styles.Enums;
-using PalaceResorts.Common.Notifications.WinForm;
 
 namespace IM.Base.Helpers
 {
@@ -74,12 +73,14 @@ namespace IM.Base.Helpers
     /// Muestra un MessageBox con los errores encontrados en una Excepción, Implementa GetMessageError y EntityValidationException
     /// </summary>
     /// <param name="ex">Mensaje de la excepcion</param>
+    /// <param name="title">Título de la ventana</param>
     ///<history>
     ///[erosado]  28/May/2016 Created.
     ///[erosado]  08/Jul/2016 Modified. Se agregó buscar excepcion de tipo entityValidationException.
     ///[wtorres]  13/Ago/2016 Modified. Ahora envia un correo electronico con la excepcion
+    ///[wtorres]  17/Sep/2016 Modified. Agregue el parametro title
     /// </history>
-    public static MessageBoxResult ShowMessage(Exception ex)
+    public static MessageBoxResult ShowMessage(Exception ex, string title = "Error")
     {
       //Declaramos variables
       string message = string.Empty;
@@ -106,10 +107,10 @@ namespace IM.Base.Helpers
       }
 
       // notificamos la excepcion por correo electronico
-      Notifier.AsyncSendException(ex);
+      NotificationHelper.SendException(ex);
 
       // desplegamos el mensaje de la excepcion
-      return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+      return MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
     }
     #endregion ShowMessage
 
@@ -211,11 +212,11 @@ namespace IM.Base.Helpers
           //Buscamos la descripción de la columna
           var columnDefinition = lstColumnsDefinitions.FirstOrDefault(cd => cd.column == pi.Name);
           #region tooltip
-          //var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
-          //if(controlTooltip!=null && columnDefinition!=null && !string.IsNullOrWhiteSpace(columnDefinition.description))
-          //{
-          //  controlTooltip.ToolTip = columnDefinition.description;
-          //}
+          var controlTooltip = lstControls.FirstOrDefault(cl => cl.Name.EndsWith(pi.Name));
+          if (controlTooltip != null && columnDefinition != null && !string.IsNullOrWhiteSpace(columnDefinition.description))
+          {
+            controlTooltip.ToolTip = columnDefinition.description;
+          }
           #endregion
 
           if (control != null && columnDefinition != null)//Verifcamos que tengamos un control
@@ -610,6 +611,47 @@ namespace IM.Base.Helpers
         }
       });
     }
+    #endregion
+
+    #region OpenWindow
+    /// <summary>
+    /// Verifica si una ventana ya está abierta
+    /// </summary>
+    ///<param name="activate">True. Activa la ventana en caso de que exista | False. no activa la ventana</param> 
+    ///<param name="name">Nombre de la ventana</param>
+    ///<param name="withName">Busca el la ventana por la propiedad Name</param>
+    ///<history>
+    ///[emoguel]
+    /// </history>
+    public static bool IsOpenWindow(string name, bool activate=false,bool withUid=true)
+    {
+      try
+      {
+        Window wd = null;
+        if (withUid)
+        {
+          wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == name).FirstOrDefault();//buscamos una ventana con el mismo Nombre          
+        }
+        else
+        {
+          wd = Application.Current.Windows.OfType<Window>().Where(x => x.GetType().Name == name).FirstOrDefault();//buscamos una ventana con el mismo Nombre
+        }        
+
+        if (wd == null)//Se crea la ventana
+        {
+          return false;
+        }
+        else//Se pone el foco en la ventana
+        {
+          if (activate) { wd.Activate(); }
+          return true;
+        }        
+      }
+      catch
+      {
+        throw;
+      }
+    } 
     #endregion
 
     #endregion Metodos

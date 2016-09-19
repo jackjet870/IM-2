@@ -666,7 +666,6 @@
                                                        AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" RowValidationErrorTemplate="{x:Null}" >
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="ID" Binding="{Binding bdID,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                        <DataGridTextColumn Header="Date" Binding="{Binding bdD,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:dd/MM/yyyy}'}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Deposits" Width="70" Binding="{Binding bdAmount,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:N2}}"/>
                                                         <DataGridTextColumn Header="Received" Width="70" Binding="{Binding bdReceived,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:N2}}"/>
                                                         <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True">
@@ -687,18 +686,14 @@
                                                                             SelectedValueBinding="{Binding bdcu,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="cuN"
                                                                             SelectedValuePath="cuID"
-                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" />
-                                                        <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
+                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" >               
+                                                        </DataGridComboBoxColumn>
+                            <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
                                                                             SelectedValueBinding="{Binding bdpt,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="ptN"
                                                                             SelectedValuePath="ptID"
                                                                             ItemsSource="{Binding Source={StaticResource paymentTypeList}}" />
-                                                        <DataGridComboBoxColumn x:Name="cmbDisputeStatusDeposits" Header="Dispute Status" Width="90"
-                                                                            SelectedValueBinding="{Binding bdds,UpdateSourceTrigger=PropertyChanged}"
-                                                                            DisplayMemberPath="dsN"
-                                                                            SelectedValuePath="dsID"
-                                                                            ItemsSource="{Binding Source={StaticResource disputeStatusList}}"/>
-                                                        <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
+                            <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
                                                                             SelectedValueBinding="{Binding bdpc,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="pcN"
                                                                             SelectedValuePath="pcID"
@@ -710,11 +705,8 @@
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
                                                         <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
                                                         <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC,UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                        <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                                                    </DataGrid.Columns>
+                            <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
+                          </DataGrid.Columns>
                                                 </DataGrid>
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel>

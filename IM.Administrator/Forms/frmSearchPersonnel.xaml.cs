@@ -1,13 +1,14 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Model.Enums;
-using IM.Model.Helpers;
-using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -155,7 +156,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        List<LeadSourceByUser> lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
+        List<LeadSourceByUser> lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
         dgrLeadSources.ItemsSource = lstLeadSources;
 
         List<string> lstSales = leadSource.Split(',').ToList();
@@ -172,7 +173,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -188,7 +189,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        List<SalesRoomByUser> lstSalesRoom =await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+        List<SalesRoomByUser> lstSalesRoom =await BRSalesRooms.GetSalesRoomsByUser(Context.User.User.peID);
         dgrSalesRoom.ItemsSource = lstSalesRoom;
         List<string> lstSales = leadSource.Split(',').ToList();
         lstSales.ForEach(sale => {
@@ -202,7 +203,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error , "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -225,7 +226,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Permission");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -248,7 +249,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -289,7 +290,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

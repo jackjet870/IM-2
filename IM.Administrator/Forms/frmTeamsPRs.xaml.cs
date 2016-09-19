@@ -61,7 +61,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams PRs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -82,7 +82,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams PRs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

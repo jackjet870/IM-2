@@ -67,7 +67,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Places"); 
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

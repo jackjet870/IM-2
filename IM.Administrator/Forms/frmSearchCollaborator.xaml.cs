@@ -95,7 +95,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

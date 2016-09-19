@@ -1,6 +1,5 @@
-﻿using IM.Base.Forms;
-using IM.Base.Helpers;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,12 +13,6 @@ namespace IM.Inhouse
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion Propiedades
-
     #region Constructores y destructores
 
     /// <summary>
@@ -64,7 +57,7 @@ namespace IM.Inhouse
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
 
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         Forms.frmInhouse frmMain = new Forms.frmInhouse();
         frmMain.ShowDialog();
 

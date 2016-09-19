@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ShowInTaskbar="False"
         xmlns:local="clr-namespace:IM.Administrator.Forms" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        mc:Ignorable="d" Uid="frmCreditCardTypes" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner"
         Title="Credit Card Types" Height="407" Width="470" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->

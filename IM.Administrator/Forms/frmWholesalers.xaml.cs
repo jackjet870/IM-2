@@ -1,13 +1,14 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.Model.Helpers;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
 
 namespace IM.Administrator.Forms
 {
@@ -39,9 +40,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
-      _blnDel = App.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.Special);
+      _blnDel = Context.User.HasPermission(EnumPermission.WholeSalers, EnumPermisionLevel.Special);
       LoadWholesalers();
     }
     #endregion
@@ -304,7 +305,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Wholesalers");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

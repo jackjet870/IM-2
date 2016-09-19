@@ -150,8 +150,8 @@
                             <DataGridTextColumn x:Name="gulsOriginalColumn" Width=".7*" Header="Hotel" Binding="{Binding gulsOriginal}" IsReadOnly="True"/>
                             <DataGridTextColumn x:Name="guHReservIDColumn" Width="1*" Header="Folio" Binding="{Binding guHReservID}" IsReadOnly="True"/>
                             <DataGridTextColumn x:Name="guRoomNumColumn" Width=".8*" Header="Room" Binding="{Binding guRoomNum}" IsReadOnly="True"/>
-                            <DataGridTextColumn x:Name="guCheckInDColumn" Width="1*" Header="Arrival" Binding="{Binding guCheckInD}" IsReadOnly="True"/>
-                            <DataGridTextColumn x:Name="guCheckOutDColumn" Width="1*" Header="Departure" Binding="{Binding guCheckOutD}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="guCheckInDColumn" Width="1*" Header="Arrival" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="guCheckOutDColumn" Width="1*" Header="Departure" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Extensions;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Enums;
-using System.Linq;
-using IM.Model.Helpers;
-using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -38,8 +39,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      
-      _blnEdit = App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
+      _blnEdit = Context.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
     }
@@ -118,6 +118,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region refresh
     /// <summary>
     /// Recarga los datos del grid
@@ -126,7 +127,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Agency agency = (Agency)dgrAgencies.SelectedItem;
+      Agency agency = (Agency)dtgAgencies.SelectedItem;
       LoadAgencies(agency);
     }
     #endregion
@@ -147,12 +148,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmAgencyDetail.agency))//Validamos si el nuevo registro cumple con los requisitos
         {
-          List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
+          List<Agency> lstAgencies = (List<Agency>)dtgAgencies.ItemsSource;//cateamos el itemsource
           lstAgencies.Add(frmAgencyDetail.agency);//Agregamos el registro nuevo
           lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista
           int nIndex = lstAgencies.IndexOf(frmAgencyDetail.agency);//obtenemos el index del registro nuevo        
-          dgrAgencies.Items.Refresh();//Refrescamos la lista
-          GridHelper.SelectRow(dgrAgencies, nIndex);
+          dtgAgencies.Items.Refresh();//Refrescamos la lista
+          GridHelper.SelectRow(dtgAgencies, nIndex);
           StatusBarReg.Content = lstAgencies.Count + " Agencies.";//Actualizamos el contador
         }
       }     
@@ -180,6 +181,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
     #region DobleClic Grid
     /// <summary>
     /// Abre la ventana detalle en modo "detalle" o "edición" dependiendo de sus permisos
@@ -191,7 +193,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Agency agency = (Agency)dgrAgencies.SelectedItem;      
+      Agency agency = (Agency)dtgAgencies.SelectedItem;      
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();      
       frmAgencyDetail.oldAgency = agency;
       frmAgencyDetail.Owner = this;
@@ -199,7 +201,7 @@ namespace IM.Administrator.Forms
       if(frmAgencyDetail.ShowDialog()==true)
       {
         int nIndex = 0;
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
+        List<Agency> lstAgencies = (List<Agency>)dtgAgencies.ItemsSource;//cateamos el itemsource
         if (!ValidateFilters(frmAgencyDetail.agency))
         {
           lstAgencies.Remove(agency);//quitamos el registro de la lista          
@@ -211,9 +213,9 @@ namespace IM.Administrator.Forms
           nIndex = lstAgencies.IndexOf(agency);
         }
         
-        dgrAgencies.Items.Refresh();
+        dtgAgencies.Items.Refresh();
         StatusBarReg.Content = lstAgencies.Count + " Agencies.";//Actualizamos el contador
-        GridHelper.SelectRow(dgrAgencies, nIndex);
+        GridHelper.SelectRow(dtgAgencies, nIndex);
       }
     }
     #endregion
@@ -233,19 +235,19 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Agency> lstAgencies = await BRAgencies.GetAgencies(_agencyFilter, _nStatus);
-        dgrAgencies.ItemsSource = lstAgencies;
+        dtgAgencies.ItemsSource = lstAgencies;
         if (agency != null && lstAgencies.Count > 0)
         {
           agency = lstAgencies.FirstOrDefault(ag => ag.agID == agency.agID);
           nIndex = lstAgencies.IndexOf(agency);
         }
-        GridHelper.SelectRow(dgrAgencies, nIndex);
+        GridHelper.SelectRow(dtgAgencies, nIndex);
         StatusBarReg.Content = lstAgencies.Count + " Agencies.";
         status.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");        
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

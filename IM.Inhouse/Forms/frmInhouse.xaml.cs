@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
@@ -17,14 +18,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Application = System.Windows.Application;
-using CheckBox = System.Windows.Controls.CheckBox;
-using Cursors = System.Windows.Input.Cursors;
-using DataGrid = System.Windows.Controls.DataGrid;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
-using RadioButton = System.Windows.Controls.RadioButton;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace IM.Inhouse.Forms
 {
@@ -105,28 +98,28 @@ namespace IM.Inhouse.Forms
         case EnumScreen.Arrivals: //GuestArrival
           ccArrivals.Visibility = Visibility.Visible;
           ccAvailables.Visibility = ccPremanifest.Visibility = ccGetGuest.Visibility = Visibility.Hidden;
-          var lstGuestArrivals = await BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
+          var lstGuestArrivals = await BRGuests.GetGuestsArrivals(_serverDate, Context.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
           _guestArrivalViewSource.Source = lstGuestArrivals.Select(parent => new ObjGuestArrival(parent, serverDate)).ToList();
           break;
 
         case EnumScreen.Availables: //GuestAvailable
           ccAvailables.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccPremanifest.Visibility = Visibility.Hidden;
-          var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
+          var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
           _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate));
           break;
 
         case EnumScreen.Premanifest: //GuestPremanifest
           ccPremanifest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
-          var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
+          var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, Context.User.LeadSource.lsID, _markets, _onGroup);
           _guestPremanifestViewSource.Source = lstGuestsPremanifest.Select(parent => new ObjGuestPremanifest(parent, serverDate)).ToList();
           break;
 
         case EnumScreen.Search: //GuestSearch
           ccGetGuest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccPremanifest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
-          var lstSearchGuest = await BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid);
+          var lstSearchGuest = await BRGuests.GetGuests(_guestdateFrom, _guestDateTo, Context.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid);
           _guestSearchedViewSource.Source = lstSearchGuest.Select(parent => new ObjGuestSearched(parent, serverDate)).ToList();
           break;
 
@@ -151,18 +144,18 @@ namespace IM.Inhouse.Forms
     {
       // impedimos modificar los datos si el sistema esta en modo de solo lectura
       //si tiene permiso estandar
-      if (!App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard)) return true;
+      if (!Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard)) return true;
       //si no tiene
       if (!checkIn) return true;
       //validamos que el huesped este en casa
-      if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard) &&
+      if (Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard) &&
           pguCheckInD > BRHelpers.GetServerDate() || pguCheckOutD < BRHelpers.GetServerDate())
       {
         UIHelper.ShowMessage("Guest is not in house.", MessageBoxImage.Asterisk, "Permissions");
         return false;
       }
       //validamos que el huesped este en casa con 2 dias de tolerancia
-      if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Special) &&
+      if (Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Special) &&
           pguCheckInD > BRHelpers.GetServerDate().AddDays(+2) ||
           pguCheckOutD < BRHelpers.GetServerDate().AddDays(-2))
       {
@@ -193,7 +186,7 @@ namespace IM.Inhouse.Forms
         UIHelper.ShowMessage("Guest has not made Check-in.");
         return false;
       }
-      if (App.User.HasPermission(EnumPermission.Available, EnumPermisionLevel.ReadOnly)) return true;
+      if (Context.User.HasPermission(EnumPermission.Available, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }
@@ -225,7 +218,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
       //validamos que el usuario tenga permiso de lectura
-      if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly)) return true;
+      if (Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }
@@ -279,7 +272,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
       //Validamos que el usuario tenga permisos de lectura
-      if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly)) return true;
+      if (Context.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }
@@ -375,9 +368,9 @@ namespace IM.Inhouse.Forms
     {
       //Validamos las credenciales del usuario y sus permisos
       var log = new frmLogin();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        log.UserData = App.User;
+        log.UserData = Context.User;
       }
       log.ShowDialog();
       if (!log.IsAuthenticated) return null;
@@ -454,7 +447,7 @@ namespace IM.Inhouse.Forms
       if (ValidateContact(guCheckIn, !guInfo, guCheckOutD))
       {
         StaStart("Loading Contact´s Info...");
-        frmContact frmCont = new frmContact(guID, App.User);
+        frmContact frmCont = new frmContact(guID, Context.User);
         frmCont.Owner = this;
         frmCont.ShowDialog();
         if (frmCont._wasSave)
@@ -582,7 +575,7 @@ namespace IM.Inhouse.Forms
         case EnumScreen.Arrivals:
           if (dgGuestArrival.Items.Count > 0)
           {
-            List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.Value.Value, App.User.LeadSource.lsID,
+            List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.Value.Value, Context.User.LeadSource.lsID,
               _markets, _available, _info, _invited, _onGroup);
             ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value);
             hasData = true;
@@ -593,7 +586,7 @@ namespace IM.Inhouse.Forms
           if (dgGuestAvailable.Items.Count > 0)
           {
             List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate(),
-              App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
+              Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
             ReportsToExcel.AvailablesToExcel(aviables);
             hasData = true;
           }
@@ -605,24 +598,24 @@ namespace IM.Inhouse.Forms
             if (!WithGifts) //Si no se mando nada o mando falso
             {
               List<RptPremanifest> premanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value,
-                App.User.LeadSource.lsID, _markets, _onGroup);
+                Context.User.LeadSource.lsID, _markets, _onGroup);
               ReportsToExcel.PremanifestToExcel(premanifest);
               hasData = true;
             }
             else
             {
               List<RptPremanifestWithGifts> withGifts = await BRGeneralReports.GetRptPremanifestWithGifts(
-                dtpDate.Value.Value, App.User.LeadSource.lsID);
+                dtpDate.Value.Value, Context.User.LeadSource.lsID);
               ReportsToExcel.PremanifestWithGiftsToExcel(withGifts);
               hasData = true;
             }
           }
           break;
       }
-      if (hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
-        UIHelper.ShowMessage("Generated Report", MessageBoxImage.Information, "Inhouse");
-      else //Si el Grid esta vacio
+      if (!hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
+      {
         UIHelper.ShowMessage("There is no data.");
+      }
     }
 
     #endregion CreateExcelReport
@@ -683,15 +676,15 @@ namespace IM.Inhouse.Forms
     private async void Inhouse_Loaded()
     {
       //Guardamos el log del login
-      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName);
+      BRLoginLogs.SaveGuestLog(Context.User.Location.loID, Context.User.User.peID, Environment.MachineName);
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       StaStart("Load Catalogs Inhouse...");
       //Cargamos las variables del usuario
-      txtUser.Text = App.User.User.peN;
-      txtLocation.Text = App.User.Location.loN;
+      txtUser.Text = Context.User.User.peN;
+      txtLocation.Text = Context.User.Location.loN;
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate();
       dtpDate_ValueChanged(null, null);
@@ -834,7 +827,6 @@ namespace IM.Inhouse.Forms
       //Es decir cuando es true entra en el metodo CheckIn por que en la interfaz mostraba que estaba deseleccionado
       // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest 
       //ya que un Guest con Check In ya no se le puede quitar 
-
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;   
     }
 
@@ -958,6 +950,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+      
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestArrival itema =
         dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
@@ -1040,7 +1035,7 @@ namespace IM.Inhouse.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "GetRptReservationOrigos");
+        UIHelper.ShowMessage(ex, "WirePRHelper.GetRptReservationOrigos");
       }
     }
 
@@ -1163,6 +1158,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestAvailable itema =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
@@ -1334,6 +1332,9 @@ namespace IM.Inhouse.Forms
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
 
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
+
       GuestPremanifest itema =
         dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as
           GuestPremanifest;
@@ -1504,8 +1505,6 @@ namespace IM.Inhouse.Forms
 
     #endregion GetGuestEquity_MouseLeftButtonUp
 
-    #endregion 4.- GetGuest
-
     #region chkGuestsGroupsSearched
 
     private async void chkGuestsGroupsGuestSearched_Click(object sender, RoutedEventArgs e)
@@ -1517,6 +1516,9 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
+
+      if (!chk.IsChecked.Value)
+        chk.IsChecked = true;
 
       GuestSearched itema = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
       action = EnumAction.None;
@@ -1574,6 +1576,8 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion chkGuestsGroupsSearched
+
+    #endregion 4.- GetGuest
 
     #region dg_SelectionChanged
 
@@ -1662,14 +1666,14 @@ namespace IM.Inhouse.Forms
         autoSign: true, switchLoginUserMode: true);
 
       await log.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        log.UserData = App.User;
-      }
+        log.UserData = Context.User;
+      } 
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        App.User = log.UserData;
+        Context.User = log.UserData;
         Inhouse_Loaded();
       }
     }
@@ -1730,7 +1734,7 @@ namespace IM.Inhouse.Forms
       if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;
       StaStart($"Loading {_screen}...");
       _serverDate = dtpDate.Value.Value;
-      txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, App.User.Location.loID);
+      txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, Context.User.Location.loID);
       LoadGrid();
     }
 
@@ -1741,11 +1745,11 @@ namespace IM.Inhouse.Forms
       //External Invitation
       var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse,
         validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard,
-        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
+        switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.Location.loID);
 
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        login.UserData = App.User;
+        login.UserData = Context.User;
       }
       await login.getAllPlaces();
       login.ShowDialog();
@@ -1835,7 +1839,7 @@ namespace IM.Inhouse.Forms
 
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs, App.User);
+      frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs, Context.User);
       frmDaysOff.ShowDialog();
     }
 
@@ -1881,7 +1885,7 @@ namespace IM.Inhouse.Forms
 
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User);
+      frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, Context.User);
       frmAssistance.Owner = this;
       frmAssistance.ShowDialog();
     }
@@ -1963,29 +1967,52 @@ namespace IM.Inhouse.Forms
     /// </history>
     private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit, DataGrid dg)
     {
+      //Validamos, Si la persona logeada en el modulo tiene permisos redonly de PRInvitation pordra entrar 
       if (ValidateInvitation(guCheckIn, gagu))
       {
-        frmLogin login = null;
+        //Incializamos el Login
+        frmLogin login = login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
+            invitationMode: true, invitationPlaceId: Context.User.Location.loID);
+        //Si no esta invitado mostramos el login 
         if (!isInvit)
         {
-          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: App.User.Location.loID);
-
-          if (App.User.AutoSign)
-          {
-            login.UserData = App.User;
+          if (Context.User.AutoSign)
+            login.UserData = Context.User;           
+          else
+          { 
+            await login.getAllPlaces();
+            login.ShowDialog();
+            if (!login.IsAuthenticated) return;
           }
+      
+        }
+        else if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !Context.User.AutoSign)
+        {
+          login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
+            permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: true,
+            invitationMode: true, invitationPlaceId: Context.User.Location.loID);
+
           await login.getAllPlaces();
           login.ShowDialog();
+
+          if (!login.IsAuthenticated) return;
         }
-        if (isInvit || login.IsAuthenticated)
+        else
         {
-          var invitacion = new frmInvitation(EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : App.User, guId) { Owner = this };
+          login.UserData = Context.User;
+        }
+      
+
+        if (isInvit || login.IsAuthenticated || Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
+        {
+          var invitacion = new frmInvitation
+            (EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId) { Owner = this };
           invitacion.ShowDialog();
           //Si se guardó la información
           if (invitacion.SaveGuestInvitation)
           {
-            //actualizamos los datos del grid
-            //TODO:Revisar este metodo JORGE CANCHE
+            //actualizamos los datos del grid            
             UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);
           }
         }
@@ -2120,15 +2147,15 @@ namespace IM.Inhouse.Forms
         UIHelper.ShowMessage("Guest has not made Check-In.");
         return false;
       }
-      //Validamos que no sea un huesped adicional
-      if (gagu != null)
-      {
-        UIHelper.ShowMessage("An additional guest can not have invitation.");
-        return false;
-      }
+      ////Validamos que no sea un huesped adicional
+      //if (gagu != null)
+      //{
+      //  UIHelper.ShowMessage("An additional guest can not have invitation.");
+      //  return false;
+      //}
 
       //Validamos que tenga permiso de lectura de invitaciones
-      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
+      if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly)) return true;
       UIHelper.ShowMessage("Access denied.");
       return false;
     }

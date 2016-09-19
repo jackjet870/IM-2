@@ -182,7 +182,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configurations");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -209,7 +209,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -230,7 +230,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -251,7 +251,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -272,7 +272,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -293,7 +293,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Extensions;
+using IM.Model.Helpers;
+using IM.Services.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Model;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Helpers;
-using IM.Services.Helpers;
-using System.Windows.Data;
 
 namespace IM.Administrator.Forms
 {
@@ -207,7 +208,7 @@ namespace IM.Administrator.Forms
             personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
 
 
-            int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.Edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
+            int nRes = await BRPersonnel.SavePersonnel(Context.User.User.peID, personnel, (enumMode == EnumMode.Edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
               lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo),
               (personnel.peTeamType != oldPersonnel.peTeamType || personnel.pePlaceID != oldPersonnel.pePlaceID || personnel.peTeam != oldPersonnel.peTeam));
             UIHelper.ShowMessageResult("Personnel", nRes);
@@ -708,7 +709,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -728,7 +729,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -748,7 +749,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -768,7 +769,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -792,7 +793,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }     
 
     }
@@ -809,7 +810,7 @@ namespace IM.Administrator.Forms
     {
       try
       {        
-        var lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID.ToString());
+        var lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID.ToString());
        cmbLeadSource.ItemsSource = lstLeadSources;        
         if (enumMode != EnumMode.Add)
         {
@@ -821,7 +822,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -837,7 +838,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        List<SalesRoomByUser> lstSalesRoom = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+        List<SalesRoomByUser> lstSalesRoom = await BRSalesRooms.GetSalesRoomsByUser(Context.User.User.peID);
         cmbSalesRoom.ItemsSource = lstSalesRoom;
 
         if (enumMode != EnumMode.Add)
@@ -848,7 +849,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -864,7 +865,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        List<WarehouseByUser> lstWarehouse = await BRWarehouses.GetWarehousesByUser(App.User.User.peID.ToString());
+        List<WarehouseByUser> lstWarehouse = await BRWarehouses.GetWarehousesByUser(Context.User.User.peID.ToString());
         cmbWarehouses.ItemsSource = lstWarehouse;
 
         if (enumMode != EnumMode.Add)
@@ -875,7 +876,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -904,7 +905,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -930,7 +931,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -950,7 +951,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -970,7 +971,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -990,7 +991,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Personnel");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion    

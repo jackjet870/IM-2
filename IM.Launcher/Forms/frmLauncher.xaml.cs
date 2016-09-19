@@ -157,6 +157,7 @@ namespace IM.Launcher.Forms
       lstMenu.Add(EnumMenu.Inhouse);
       lstMenu.Add(EnumMenu.Assignment);
       lstMenu.Add(EnumMenu.MailOuts);
+      lstMenu.Add(EnumMenu.Outhouse);
       lstMenu.Add(EnumMenu.InventoryMovs);
       lstMenu.Add(EnumMenu.ProcessorINH);
       lstMenu.Add(EnumMenu.ProcessorOUT);

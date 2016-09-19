@@ -1,6 +1,8 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -8,7 +10,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model.Classes;
 
 namespace IM.Inhouse.Forms
 {
@@ -30,7 +31,7 @@ namespace IM.Inhouse.Forms
     //si se esta creando la nota 
     private bool _creatingNote;
     public bool SaveNote;
-
+ 
     #endregion
 
     #region Contructores y destructores
@@ -131,7 +132,7 @@ namespace IM.Inhouse.Forms
       _guest = await BRGuests.GetGuest(_guestId);
       EnabledControls(true, true, false);
       //Cargamos los PR
-      cbopnPR.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      cbopnPR.ItemsSource = await BRPersonnel.GetPersonnel(Context.User.Location.loID, "ALL", "PR");
       // desplegamos los datos del huesped
       txtguID.Text = _guest.guID.ToString();
       txtguLastName1.Text = _guest.guLastName1;
@@ -185,7 +186,7 @@ namespace IM.Inhouse.Forms
       }
 
       var validate =
-        BRHelpers.ValidateChangedByExist(txtpnPR.Text, EncryptHelper.Encrypt(txtPwd.Password), App.User.LeadSource.lsID,
+        BRHelpers.ValidateChangedByExist(txtpnPR.Text, EncryptHelper.Encrypt(txtPwd.Password), Context.User.LeadSource.lsID,
           "PR").Single();
 
       //Validamos que los datos de quien hizo el cambio y su contraseña existan
@@ -228,11 +229,11 @@ namespace IM.Inhouse.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       CleanControls();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        txtpnPR.Text = App.User.User.peID;
-        cbopnPR.SelectedValue = App.User.User.peID;
-        txtPwd.Password = App.User.User.pePwd;
+        txtpnPR.Text = Context.User.User.peID;
+        cbopnPR.SelectedValue = Context.User.User.peID;
+        txtPwd.Password = Context.User.User.pePwd;
       }
       EnabledControls(false, false, true);
       //ingresamos la fecha en el campo 
@@ -326,8 +327,8 @@ namespace IM.Inhouse.Forms
     /// </history>
     public void Pass()
     {
-      txtPwd.Password = (App.User.AutoSign
-        ? (App.User.User.peID != txtpnPR.Text ? string.Empty : App.User.User.pePwd)
+      txtPwd.Password = (Context.User.AutoSign
+        ? (Context.User.User.peID != txtpnPR.Text ? string.Empty : Context.User.User.pePwd)
         : string.Empty);
     }
 

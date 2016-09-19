@@ -1,5 +1,5 @@
-﻿using IM.Base.Forms;
-using IM.Model.Classes;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.SalesCloser.Forms;
 using System.Windows;
@@ -14,12 +14,6 @@ namespace IM.SalesCloser
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -52,7 +46,7 @@ namespace IM.SalesCloser
       if (frmLogin.IsAuthenticated)
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
-        User = frmLogin.UserData;
+        Context.User = frmLogin.UserData;
         frmSalesCloser frmMain = new frmSalesCloser();
         frmMain.ShowDialog();
         frmSplash.Close();

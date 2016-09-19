@@ -1,14 +1,12 @@
-﻿using IM.Base.Forms;
+﻿using IM.Administrator.Forms;
+using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Classes;
 using IM.Model.Enums;
-using IM.Administrator.Forms;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System;
-using System.ComponentModel;
 
 namespace IM.Administrator
 {
@@ -17,12 +15,6 @@ namespace IM.Administrator
   /// </summary>
   public partial class App : Application
   {
-    #region Propiedades
-
-    public static UserData User;
-
-    #endregion
-
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -49,8 +41,8 @@ namespace IM.Administrator
       if (frmLogin.IsAuthenticated)
       {
 
-        User = frmLogin.UserData;
-        if (User.HasRole(EnumRole.Manager))
+        Context.User = frmLogin.UserData;
+        if (Context.User.HasRole(EnumRole.Manager))
         {
           
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));

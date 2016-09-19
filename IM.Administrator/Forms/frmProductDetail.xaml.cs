@@ -418,7 +418,7 @@ namespace IM.Administrator.Forms
       catch(Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Product Detail");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -439,7 +439,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Product Detail");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -469,7 +469,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Product Detail");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

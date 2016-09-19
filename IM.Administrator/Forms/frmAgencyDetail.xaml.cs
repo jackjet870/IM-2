@@ -149,48 +149,10 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel_Click(null, null);
+        Close();
       }
     }
 
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 29/03/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if(enumMode!=EnumMode.ReadOnly)
-      {
-        if (!ObjectHelper.IsEquals(agency, oldAgency))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
-    }
     #endregion
     #endregion
 
@@ -212,7 +174,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -233,7 +195,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -255,7 +217,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -276,7 +238,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -298,7 +260,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -319,7 +281,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -331,24 +293,25 @@ namespace IM.Administrator.Forms
     /// <summary>
     /// Cierra la ventana
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
-    /// [emoguel[ created 30/05/2016
+    /// [emoguel] 30/05/2016 created
+    /// [emoguel] 31/08/2016 modified--->Se agregaron las validaciones del boton cancel
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
       if (!_isClosing)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        if (enumMode != EnumMode.ReadOnly)
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          if (!ObjectHelper.IsEquals(agency, oldAgency))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result == MessageBoxResult.No)
+            {
+              e.Cancel = true;
+            }
+          }
         }
       }
     }

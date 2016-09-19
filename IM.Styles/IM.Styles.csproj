@@ -515,6 +515,20 @@
   <ItemGroup>
     <Resource Include="Images\BOk.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\32x32\BCopy.png" />
+    <Resource Include="Images\32x32\BPrinter.png" />
+    <Resource Include="Images\32x32\BZoomIn.png" />
+    <Resource Include="Images\32x32\BZoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\32x32\BActualSize.png" />
+    <Resource Include="Images\32x32\BExcel.png" />
+    <Resource Include="Images\32x32\BFitToWidth.png" />
+    <Resource Include="Images\32x32\BPdf.png" />
+    <Resource Include="Images\32x32\BTwoPages.png" />
+    <Resource Include="Images\32x32\BWholePage.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

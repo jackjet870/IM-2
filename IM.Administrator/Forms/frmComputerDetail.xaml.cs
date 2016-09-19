@@ -96,7 +96,7 @@ namespace IM.Administrator.Forms
           if (sMsj == "")
           {
             nRes = await BREntities.OperationEntity(computer, mode);
-            UIHelper.ShowMessageResult("Coomputer", nRes);
+            UIHelper.ShowMessageResult("Computer", nRes);
             if (nRes > 0)
             {
               _isClosing = true;
@@ -113,7 +113,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Computers");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -176,7 +176,7 @@ namespace IM.Administrator.Forms
       }
       catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Computers");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion    

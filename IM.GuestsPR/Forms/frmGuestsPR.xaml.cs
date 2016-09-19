@@ -1,17 +1,16 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.GuestsPR.Utilities;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using System.Diagnostics;
-using IM.GuestsPR.Utilities;
-using IM.Base.Forms;
-using IM.Model.Enums;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.GuestsPR.Forms
@@ -79,8 +78,9 @@ namespace IM.GuestsPR.Forms
         //Creamos el reporte
         var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
         if (fi != null)
-        {
-          Process.Start(fi.FullName);
+        {          
+          frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.ShowDialog();
         }
       }
       else
@@ -120,15 +120,15 @@ namespace IM.GuestsPR.Forms
     {
       var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
       await frmlogin.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        frmlogin.UserData = App.User;
+        frmlogin.UserData = Context.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.UserData;
+        Context.User = frmlogin.UserData;
         LoadPersonnel();
       }
     }
@@ -194,7 +194,7 @@ namespace IM.GuestsPR.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -345,15 +345,15 @@ namespace IM.GuestsPR.Forms
     public void SetNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
-      txtbLocation.Text = App.User.Location.loN;
+      txtbUserName.Text = Context.User.User.peN;
+      txtbLocation.Text = Context.User.Location.loN;
       //Validamos permisos y restricciones para el combobox
-      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
+      if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
       {
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(App.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID);
         }
         else
         {
@@ -365,7 +365,7 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = false;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(App.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID);
         }
         else
         {
@@ -382,7 +382,7 @@ namespace IM.GuestsPR.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, "PR");
+      DoGetPersonnel(Context.User.LeadSource.lsID, "PR");
     }
 
     /// <summary>
@@ -424,12 +424,12 @@ namespace IM.GuestsPR.Forms
           {
             imgButtonOk.IsEnabled = false;
             filtersBool = new List<bool>();
-            var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+            var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : Context.User.LeadSource.lsID);
             var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
             #region Check Filter for Report
             filtersReport = new List<Tuple<string, string>>();
 
-            filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+            filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", Context.User.LeadSource.lsID));
             filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
             filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
             filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));

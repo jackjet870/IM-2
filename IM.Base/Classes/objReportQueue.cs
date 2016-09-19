@@ -16,12 +16,12 @@ namespace IM.Base.Classes
       set { SetField(ref _reportName, value); }
     }
 
-    private FileInfo _fileInfo;
+    private string _fileName=null;
 
-    public FileInfo FileInfo
+    public string FileName
     {
-      get { return _fileInfo; }
-      set { SetField(ref _fileInfo, value); }
+      get { return _fileName; }
+      set { SetField(ref _fileName, value); }
     }
 
     private bool _exists;

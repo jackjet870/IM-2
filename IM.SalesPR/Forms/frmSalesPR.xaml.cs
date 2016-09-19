@@ -1,17 +1,17 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using System.Diagnostics;
-using IM.Base.Forms;
-using IM.Model.Enums;
-using IM.Model.Helpers;
 using Xceed.Wpf.Toolkit;
 
 namespace IM.SalesPR.Forms
@@ -24,11 +24,13 @@ namespace IM.SalesPR.Forms
     public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
 
+    #region Constructores y destructores
     public frmSalesPR()
     {
       InitializeComponent();
       LoadCombo = new ExecuteCommandHelper(x => LoadPersonnel());
-    }
+    } 
+    #endregion
 
     #region Eventos Ventana
     /// <summary>
@@ -60,10 +62,10 @@ namespace IM.SalesPR.Forms
         {
           StaStart("Loading data...");
           imgButtonOk.IsEnabled = false;
-          var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+          var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : Context.User.LeadSource.lsID);
           var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
           _filtersReport = new List<Tuple<string, string>>();
-          _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+          _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", Context.User.LeadSource.lsID));
           DoGetSalesByPr(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
         }
         else
@@ -78,6 +80,7 @@ namespace IM.SalesPR.Forms
     /// </summary>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
+    /// [emoguel] 09/09/2016 Modified. Ahora se abre al visor de reportes
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -96,7 +99,8 @@ namespace IM.SalesPR.Forms
 
           if (fi != null)
           {
-            Process.Start(fi.FullName);
+            frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+            documentViewer.ShowDialog();
           }
         }
       }
@@ -138,15 +142,15 @@ namespace IM.SalesPR.Forms
     {
       var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
-      if (App.User.AutoSign)
+      if (Context.User.AutoSign)
       {
-        frmlogin.UserData = App.User;
+        frmlogin.UserData = Context.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.UserData;
+        Context.User = frmlogin.UserData;
         LoadPersonnel();
       }
 
@@ -213,7 +217,7 @@ namespace IM.SalesPR.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -378,18 +382,18 @@ namespace IM.SalesPR.Forms
     public void SetNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
-      txtbUserName.Text = App.User.User.peN;
-      txtbLocation.Text = App.User.Location.loN;
+      txtbUserName.Text = Context.User.User.peN;
+      txtbLocation.Text = Context.User.Location.loN;
       //Validamos permisos y restricciones para el combobox
 
-      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
+      if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
       {
         chkLeadSource.Visibility = Visibility.Visible;
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
           var lstPs = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          cbxPersonnel.SelectedIndex = lstPs.FindIndex(x => x.peID == App.User.User.peID);
+          cbxPersonnel.SelectedIndex = lstPs.FindIndex(x => x.peID == Context.User.User.peID);
         }
         else
         {
@@ -403,7 +407,7 @@ namespace IM.SalesPR.Forms
         if (cbxPersonnel.Items.Count > 0)
         {
           var lstPs = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          var index = lstPs.FindIndex(x => x.peID.Equals(App.User.User.peID));
+          var index = lstPs.FindIndex(x => x.peID.Equals(Context.User.User.peID));
           cbxPersonnel.SelectedIndex = index;
         }
         else
@@ -424,7 +428,7 @@ namespace IM.SalesPR.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, EnumToListHelper.GetEnumDescription(EnumRole.PR));
+      DoGetPersonnel(Context.User.LeadSource.lsID, EnumToListHelper.GetEnumDescription(EnumRole.PR));
     }
     #endregion
   }

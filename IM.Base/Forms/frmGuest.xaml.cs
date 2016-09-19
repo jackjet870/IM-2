@@ -24,9 +24,10 @@ namespace IM.Base.Forms
 
     private UserData _user;
     private readonly int _guestId;
-    private bool _isReadOnly;
     private EnumModule _module;
     private EnumProgram _program;
+    private EnumMode _mode;
+    private bool _isInvitation;
 
     //private bool _isInvitation;
 
@@ -49,14 +50,15 @@ namespace IM.Base.Forms
 
     #region Constructores y destructores
 
-    public frmGuest(UserData user, int guestId, EnumModule module,EnumProgram program, bool isReadOnly = false)
+    public frmGuest(UserData user, int guestId, EnumModule module,EnumProgram program, EnumMode mode, bool isInvitation)
     {
       WindowStartupLocation = WindowStartupLocation.CenterScreen;
       _user = user;
       _guestId = guestId;
-      _isReadOnly = isReadOnly;
       _module = module;
       _program = program;
+      _mode = mode;
+      _isInvitation = isInvitation;
       InitializeComponent();
     }
 
@@ -80,13 +82,18 @@ namespace IM.Base.Forms
       LoadControls();
       UIHelper.SetUpControls(new Guest(), this);
       DataContext = _catObj;
-
       Gifts.CalculateTotalGifts(dtgGifts, EnumGiftsType.InvitsGifts, "igQty", "iggi", "igPriceM", "igPriceMinor", "igPriceAdult", "igPriceA", "igPriceExtraAdult", txtGiftTotalCost, txtGiftTotalPrice);
+      UpdateLayout();
 
       //Detenemos el BusyIndicator
       _busyIndicator.IsBusy = false;
     }
 
+    /// <summary>
+    /// Guarda/Actualiza los datos de un Guest.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (!Validate()) return;
@@ -101,7 +108,7 @@ namespace IM.Base.Forms
           ((GuestInvitation)DataContext).Guest = await BRGuests.GetGuest(result);
           UIHelper.ShowMessage("Guest saved successfully.");
         }
-
+        DialogResult = true;
         Close();
       }
       catch (Exception ex)
@@ -130,6 +137,17 @@ namespace IM.Base.Forms
       //GuestStatus _guestsStatus = BRGuestStatus.GetGuestsStatus(_guestID);
       //GuestStatusType _guestStatusType = BRGuestStatusTypes.GetGuestStatusTypeByID(_guestsStatus.gtgs);
       //curMaxAuthGifts = _guestsStatus.gtQuantity * _guestStatusType.gsMaxAuthGifts;
+    }
+
+    /// <summary>
+    /// Cancela el proceso de creacion o actualizacion de un guest.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      DialogResult = false;
+      Close();
     }
 
     #region Métodos Genéricos
@@ -318,16 +336,18 @@ namespace IM.Base.Forms
 
     private void ConfigurationControls()
     {
-      btnSave.IsEnabled = !_isReadOnly;
-      dtgGifts.IsReadOnly = _isReadOnly;
+      btnSave.IsEnabled = !(_mode == EnumMode.ReadOnly);
+      dtgGifts.IsReadOnly = _mode == EnumMode.ReadOnly;
       grbGuestInfo.IsEnabled =
         grbOtherInformation.IsEnabled =
           grbGuest1.IsEnabled =
             grbGuest2.IsEnabled =
-              grbGuestStatus.IsEnabled = !_isReadOnly;
+              grbGuestStatus.IsEnabled = !(_mode == EnumMode.ReadOnly);
 
       dtpArrival.IsEnabled =
         dtpDeparture.IsEnabled = !(_program == EnumProgram.Inhouse);
+
+      stpTotalPrice.Visibility = (_isInvitation) ? Visibility.Collapsed : Visibility.Visible;
     }
 
     #endregion Configuración de controles
@@ -354,7 +374,7 @@ namespace IM.Base.Forms
 
       txtUser.Text = _user.User.peID;
       txtPassword.Password = _user.User.pePwd;
-      if (!_isReadOnly) return;
+      if (_mode == EnumMode.ReadOnly  || _mode==EnumMode.Edit) return;
       cmbOtherInfoAgency.SelectedValue = GuestParent.guag;
       dtpArrival.Value = _catObj.Guest.guCheckInD;
       dtpDeparture.Value = _catObj.Guest.guCheckOutD;
@@ -444,7 +464,7 @@ namespace IM.Base.Forms
     {
       var pass = EncryptHelper.Encrypt(txtPassword.Password);
 
-      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text, pass, _catObj.Guest.guls).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
+      var valid = BRHelpers.ValidateChangedByExist(txtUser.Text, pass, GuestParent.guls).FirstOrDefault();//BRGuests.ChangedByExist(txtUser.Text, pass, _user.LeadSource.lsID);
        
       if (string.IsNullOrWhiteSpace(valid?.Focus)) return true;
 

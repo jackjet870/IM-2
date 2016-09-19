@@ -1,14 +1,15 @@
-﻿using System;
+﻿using IM.Base.Classes;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using IM.Model;
-using IM.Model.Helpers;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using IM.Model.Enums;
-using System.Linq;
-using System.ComponentModel;
 
 namespace IM.Administrator.Forms
 {
@@ -81,7 +82,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams PRs");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -109,7 +110,7 @@ namespace IM.Administrator.Forms
         cboPlaceIDTo.DisplayMemberPath = "srN";
       }catch(Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Salesmen");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -196,7 +197,7 @@ namespace IM.Administrator.Forms
         skpStatus.Visibility = Visibility.Visible;
         txtStatus.Text = "Saving Data...";
         List<Personnel> lstPersonnels = grdTo.Items.Cast<Personnel>().ToList();
-        int nRes = await BRTransfer.TransferTeamMembers(App.User.User.peID, cboPlaceIDTo.SelectedValue.ToString(), cboTeamTo.SelectedValue.ToString(), lstPersonnels, _enumTeamType);
+        int nRes = await BRTransfer.TransferTeamMembers(Context.User.User.peID, cboPlaceIDTo.SelectedValue.ToString(), cboTeamTo.SelectedValue.ToString(), lstPersonnels, _enumTeamType);
         skpStatus.Visibility = Visibility.Collapsed;
         UIHelper.ShowMessageResult("Integrants", nRes);
         if(nRes > 0)

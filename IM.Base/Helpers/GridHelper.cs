@@ -249,15 +249,19 @@ namespace IM.Base.Helpers
     ///             1. Que tenga al menos un registro
     ///             2. Que no tenga registros repetido
     /// </summary>
-    /// <param name="Grid"></param>
-    /// <param name="ValidateEmpty"></param>
-    /// <param name="NumMinItems"></param>
-    /// <param name="strItem"></param>
-    /// <returns></returns>
+    /// <param name="dtg"> DataGrid a validar</param>
+    /// <param name="ValidateEmpty">  Validacion de vacio </param>
+    /// <param name="NumMinItems">Items minimos permitidos </param>
+    /// <param name="NamePluralItem"> Nombre del objeto del grid en plural </param>
+    /// <param name="NameSingularItem"> Nombre del objeto del grid en singular </param>
+    /// <param name="lstFields"> Campos a validar </param>
+    /// <param name="lstItems"> lista de objetos del grid </param>
+    /// <returns> TRUE - Todo correcto | FALSE - Alguna validacion no cumplida </returns>
     /// <history>
     /// [vipacheco] 10/Junio/2016 Created
+    /// [vipacheco] 14/Sep/2016 Modified -> Se agregó la validacion de repeditos dentro del mismo metodo
     /// </history>
-    public static bool Validate(DataGrid Grid, bool ValidateEmpty = true, int NumMinItems = 1, string NamePluralItem = "", string NameSingularItem = "", List<string> Fields = null)
+    public static bool Validate<T>(DataGrid dtg, bool ValidateEmpty = true, int NumMinItems = 1, string NamePluralItem = "", string NameSingularItem = "", List<string> lstFields = null, List<T> lstItems = null)
     {
       // si se debe validar que el grid no este vacio
       if (ValidateEmpty)
@@ -266,7 +270,7 @@ namespace IM.Base.Helpers
         if (NumMinItems < 2)
         {
           // validamos que se haya ingresado al menos un registro
-          if (Grid.Items.Count == 0)
+          if (dtg.Items.Count == 0)
           {
             UIHelper.ShowMessage("Specify at least one " + NameSingularItem + ".", MessageBoxImage.Information);
             return false;
@@ -276,7 +280,7 @@ namespace IM.Base.Helpers
         else
         {
           // validamos que tenga al menos determinado numero de elementos
-          if (!(Grid.Items.Count >= NumMinItems))
+          if (!(dtg.Items.Count >= NumMinItems))
           {
             UIHelper.ShowMessage("Specify at least " + NumMinItems + " " + NameSingularItem + ".", MessageBoxImage.Information);
             return false;
@@ -284,124 +288,52 @@ namespace IM.Base.Helpers
         }
       }
 
-      string message = "";
-      // si esta repetido algun elemento
-      if (HasRepeatedItems(Grid, NamePluralItem, NameSingularItem, ref message, Fields))
+      string message = NamePluralItem + " must not be repeated.\r\n" + NameSingularItem + " repetead is ";
+      string valuesRepeated = "";
+      int countRepeated = 0;
+
+      lstFields.ForEach(field =>
       {
-        UIHelper.ShowMessage(message, MessageBoxImage.Exclamation, "Cancel External Products");
+        if (ObjectHelper.AreAnyDuplicates(lstItems, field))
+        {
+          // Obtenemos el campo seleccionado
+          var valueSelected = lstItems.GroupBy(e => e.GetType().GetProperty(field).GetValue(e)).Where(w => w.Count() > 1).First();
+          // Obtenemos la columna en el que se encuentra
+          int index = dtg.Columns.Where(w => w.SortMemberPath == field).Select(s => s.DisplayIndex).First();
+          // Obtenemos el valor
+          var ColumnSelected = dtg.Columns[index];
+
+          if (ColumnSelected is DataGridComboBoxColumn)
+          {
+            DataGridComboBoxColumn column = ColumnSelected as DataGridComboBoxColumn;
+            IEnumerable<object> list = column.ItemsSource.Cast<object>().ToList();
+
+            // Recorremos la lista de acuerdo al combo que se haya seleccionado.
+            foreach (var item in list)
+            {
+              // Obtenemos el ID del valor seleccionado.
+              var ValueID = item.GetType().GetProperty(column.SelectedValuePath).GetValue(item, null);
+
+              if (ValueID.Equals(valueSelected.Key))
+              {
+                // Obtenemos el valor seleccionado
+                valuesRepeated += $"{item.GetType().GetProperty(column.DisplayMemberPath).GetValue(item, null).ToString()}, ";
+                break;
+              }
+            }
+            countRepeated++;
+          }
+        }
+      });
+
+      if (countRepeated == lstFields.Count())
+      {
+        message += valuesRepeated.TrimEnd(',', ' ');
+        UIHelper.ShowMessage(message, MessageBoxImage.Exclamation, "Intelligence Marketing");
         return false;
       }
 
       return true;
-    }
-    #endregion
-
-    #region HasRepeatedItems
-    /// <summary>
-    /// Indica si un grid tiene elementos repetidos mediante los campos especificados
-    /// </summary>
-    /// <param name="Grid"></param>
-    /// <param name="NamePlural"></param>
-    /// <param name="NameSingular"></param>
-    /// <param name="message"></param>
-    /// <param name="Fields"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco]  10/Junio/2016 Created
-    /// </history>
-    public static bool HasRepeatedItems(DataGrid Grid, string NamePlural, string NameSingular, ref string message, List<string> Fields = null)
-    {
-      int i = 0, j = 0;
-      int valid = 0;
-
-      // Construimos el mensaje inicial
-      message = NamePlural + " must not be repeated.\r\n" + NameSingular + " repetead is ";
-
-      string RepeatFields = "";
-      //Grid.IsReadOnly = true;
-
-      // recorremos las filas
-      foreach (var _Grid in Grid.Items)
-      {
-        Type type = _Grid.GetType();
-        var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
-
-        // verificamos que el registro no este vacio
-        if (property.Count > 0 && ((string)type.GetProperty(Fields[0]).GetValue(_Grid, null) != ""))
-        {
-          // recorremos las filas que quedan
-          foreach (var _GridTemp in Grid.Items)
-          {
-            Type typeTemp = _GridTemp.GetType();
-            var propertyTemp = typeTemp.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
-
-            if (propertyTemp.Count > 0 && i != j) // Para evitar que sea el mismo row
-            {
-              // recorremos los campos que forman la llave primaria
-              foreach (string field in Fields)
-              {
-                if ((type.GetProperty(field).GetValue(_Grid, null)).Equals(typeTemp.GetProperty(field).GetValue(_GridTemp, null)))
-                {
-                  int num = Grid.Columns.ToList().FindIndex(x => x.SortMemberPath == field); // Obtenemos el index de la columna
-                  RepeatFields += " " + GetDescription(Grid, num, field, (string)(type.GetProperty(field).GetValue(_Grid, null)), ref valid); // Obtnemos su descripcion
-                }
-              }
-            }
-
-            if (!string.IsNullOrEmpty(RepeatFields) && valid == Fields.Count)
-            {
-              Grid.IsReadOnly = false;
-              message += RepeatFields;
-              return true;
-            }
-            j++;
-          }
-          j = 0;
-          i++;
-        }
-      }
-      return false;
-    }
-    #endregion
-
-    #region GetDescription
-    /// <summary>
-    /// Obtienen la descripcion del campo repetido
-    /// </summary>
-    /// <param name="Grid"></param>
-    /// <param name="Column"></param>
-    /// <param name="ColumnName"></param>
-    /// <param name="value"></param>
-    /// <param name="valid"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 10/Junio/2016 Created
-    /// </history>
-    private static string GetDescription(DataGrid Grid, int Column, string ColumnName, object value, ref int valid)
-    {
-      var ColumnSelected = Grid.Columns[Column];
-
-      if (ColumnSelected is DataGridComboBoxColumn)
-      {
-        DataGridComboBoxColumn _Column = (DataGridComboBoxColumn)ColumnSelected;
-        IEnumerable<object> list = _Column.ItemsSource.Cast<object>().ToList();
-
-        foreach (var item in list)
-        {
-          string ID = _Column.SelectedValuePath;
-          var ValueID = item.GetType().GetProperty(ID).GetValue(item, null);
-
-          if (ValueID.Equals(value))
-          {
-            string name = _Column.DisplayMemberPath;
-            var sd = item.GetType().GetProperty(name).GetValue(item, null);
-            valid++;
-            return sd.ToString();
-          }
-        }
-      }
-
-      return string.Empty;
     }
     #endregion
 
@@ -798,6 +730,28 @@ namespace IM.Base.Helpers
     public static void dtg_Sorting(object sender, DataGridSortingEventArgs e)
     {
       e.Handled = IsInEditMode(sender as DataGrid, false);
+    }
+    #endregion
+
+    #region GetRowEditing
+    /// <summary>
+    /// Obtiene la fila que se está editando
+    /// </summary>
+    /// <param name="dtgGrid">Datagrid del cual se desea obtener la fila en edición</param>
+    /// <returns>
+    /// [emoguel] 10/09/2016 Created
+    /// </returns>
+    public static DataGridRow GetRowEditing(DataGrid dtgGrid)
+    {
+      DataGridRow row = null;
+      List<object> lstObject = dtgGrid.ItemsSource.OfType<object>().ToList();
+      var lstRows = dtgGrid.ItemsSource.OfType<object>().Select(obj => dtgGrid.ItemContainerGenerator.ContainerFromIndex(lstObject.IndexOf(obj))).ToList().OfType<DataGridRow>().ToList();
+      var rowEdit = lstRows.FirstOrDefault(rw => rw.IsEditing);
+      if (rowEdit != null)
+      {
+        return rowEdit;
+      }
+      return row;
     } 
     #endregion
   }

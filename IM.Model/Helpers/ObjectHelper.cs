@@ -262,63 +262,6 @@ namespace IM.Model.Helpers
     {
       return list.GroupBy(e => e.GetType().GetProperty(specificField).GetValue(e)).Any(x => x.Count() > 1);
     }
-    /// <summary>
-    ///  Valida que no se repitan los elementos en una lista
-    /// </summary>
-    /// <typeparam name="T">Object</typeparam>
-    /// <param name="list">List<Object></param>
-    /// <param name="lstFieldName"> Field Name List</param></param>
-    /// <param name="blnWithAnd">True. Compara todos los campos que vienen en lstFieldName | False. compara campo por campo de que los vienen en lstFieldName</param>
-    /// <returns>string message Hay duplicados| string.Empty no hay duplicados</returns>
-    /// <history>
-    /// [erosado] 09/08/2016  Created.
-    /// </history>
-    public static string AreAnyDuplicates<T>(List<T> list, List<string> lstFieldName, bool blnWithAnd = false)
-    {
-      bool _isValid = false;
-      string _message = string.Empty;
-      if (blnWithAnd)
-      {
-        if (list.Any() && lstFieldName.Any())
-        {
-          Type type = list.GetType();
-          List<T> lstResults = new List<T>();
-          List<PropertyInfo> properties = type.GetProperties(BindingFlags.CreateInstance | BindingFlags.DeclaredOnly).Where(pi => pi.GetMethod.IsVirtual && lstFieldName.Contains(pi.Name)).ToList();
-          foreach (var pi in properties)//Recorremos la lista de 
-          {
-            if (_isValid) { break; }//Romper el ciclo
-            var value = type.GetProperty(pi.Name).GetValue(pi);
-            foreach (var item in list)
-            {
-              lstResults = list.Where(property => type.GetProperty(pi.Name).GetValue(property) == value ||
-                                      (value != null && value.Equals(type.GetProperty(pi.Name).GetValue(property)))).ToList();
-              if (lstResults.Count > 1)
-              {
-                _isValid = true;
-                _message = $"We found a duplicate element on {pi.Name} column";
-              }
-            }
-          }
-        }
-      }
-      else
-      {
-        if (list.Any() && lstFieldName.Any())
-        {
-          foreach (var item in lstFieldName)
-          {
-            _isValid = list.GroupBy(e => e.GetType().GetProperty(item).GetValue(e)).Any(x => x.Count() > 1);
-
-            if (_isValid)
-            {
-              _message = $"We found a duplicate element on {item} column";
-              break;
-            }
-          }
-        }
-      }
-      return _message;
-    }
     #endregion
 
     public static List<T> orderListBy<T>(this List<T> lst, string Order)

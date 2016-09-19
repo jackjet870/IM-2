@@ -205,7 +205,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Segment By Agency");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -241,7 +241,7 @@ namespace IM.Administrator.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Segments By Agency");
+        UIHelper.ShowMessage(ex);
       }
     } 
     #endregion

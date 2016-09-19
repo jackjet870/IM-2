@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using IM.Base.Classes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -557,7 +557,7 @@ namespace IM.MailOutsConfig.Forms
     {
       StaStart("Loading LeadSources, Markets, Agencies, Countries ...");
       //Cargamos LeadSource
-      DoGetLeadSources(App.User.User.peID);
+      DoGetLeadSources(Context.User.User.peID);
       //Cargamos Markets
       DoGetMarkets();
       //Cargamos Agencies

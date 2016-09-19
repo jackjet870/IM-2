@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" Uid="frmDesks" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         Title="Desks" Height="407" Width="470" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
