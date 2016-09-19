@@ -626,9 +626,8 @@ namespace IM.Host
 
           if (fileinfo != null)
           {
-            frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+            frmDocumentViewer documentViewer = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false) { Owner = this };
             documentViewer.ShowDialog();
-
           }
         }
       }

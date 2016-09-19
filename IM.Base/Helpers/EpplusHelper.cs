@@ -1167,7 +1167,7 @@ namespace IM.Base.Helpers
                 //Dibujamos todos los headers de grupo.
                 for (var j = 0; j < groupsAct.Length; j++)
                 {
-                  if (j == groupsAct.Length - 1
+                  if (j == groupsAct.Length - 2
                     && (groupsAct.Contains("MANIFEST")
                     || groupsAct.Contains("COURTESY TOUR")
                     || groupsAct.Contains("SAVE TOUR"))
@@ -1210,7 +1210,7 @@ namespace IM.Base.Helpers
                   //Si el nivel actual es diferente al valor anterior.
                   if (groupsAct[j] != previousGroup[j])
                   {
-                    if (j == groupsAct.Length - 1
+                    if (j == groupsAct.Length - 2
                        && (groupsAct.Contains("MANIFEST")
                     || groupsAct.Contains("COURTESY TOUR")
                     || groupsAct.Contains("SAVE TOUR"))
@@ -1293,6 +1293,7 @@ namespace IM.Base.Helpers
               {
                 //Obtenemos la fila inicial.
                 var dataIniRow = rowNumber - dataValues.Rows.Count;
+                var countGroup = formatTableColumns.Count(c => c.IsGroup && !c.IsVisible);
                 //Si el indice siguiente es menor que la cantidad total de items.
                 if (i + 1 < dynamicListData.Count)
                 {
@@ -1408,12 +1409,12 @@ namespace IM.Base.Helpers
                     {
                       rowNumber++;
 
-                      var TotalShow = "COUNTA(" + wsData.Cells[dataIniRow, formatTableColumns.FindIndex(f => f.PropertyName == "Show") + 1, rowNumber - 2, formatTableColumns.FindIndex(f => f.PropertyName == "Show") + 1].Address + ")";
-                      var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") + 1].Address})";
-                      var TotalBookings = wsData.Cells[dataIniRow - 1, dtTableBookings.Columns.Count].Address;
-                      var resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") + 1].Address;
-                      var direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") + 1].Address;
-                      var inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") + 1].Address;
+                      var TotalShow = "COUNTA(" + wsData.Cells[dataIniRow, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1, rowNumber - 2, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address + ")";
+                      var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
+                      var TotalBookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count].Address;
+                      var resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
+                      var direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
+                      var inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
 
                       for (int k = 1; k <= 15; k++)
                       {

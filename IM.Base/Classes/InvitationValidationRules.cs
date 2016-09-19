@@ -1315,13 +1315,13 @@ namespace IM.Base.Classes
     /// <history>
     /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo)
+    public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo, EnumProgram program)
     {
       bool _hasError = false;
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guID":
-          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, true)).Item1;
+          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, program, true)).Item1;
           break;
       }
       return _hasError;
@@ -1340,7 +1340,7 @@ namespace IM.Base.Classes
     /// <history>
     /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, bool showMsg = false)
+    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, EnumProgram program, bool showMsg = false)
     {
       bool IsValid = true;
       string msg = "";
@@ -1355,7 +1355,7 @@ namespace IM.Base.Classes
         msg = "The main guest can't be an additional guest.";
         IsValid = false;
       }
-      else if (!additional.guCheckIn)
+      else if (!additional.guCheckIn && program == EnumProgram.Inhouse)
       {
         msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} has not made Check-In.";
         IsValid = false;
@@ -1376,7 +1376,8 @@ namespace IM.Base.Classes
       {
         msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
         IsValid = false;
-      }
+      }            
+        
 
       if (showMsg && !string.IsNullOrWhiteSpace(msg))
       {

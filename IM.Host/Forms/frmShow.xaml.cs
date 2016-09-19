@@ -1889,7 +1889,7 @@ namespace IM.Host.Forms
         _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
         Guest guestAdditionalRow = e.Row.Item as Guest;
         Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));//await BRGuests.GetGuest(guestAdditionalRow.guID);
-        var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(GuestShow.Guest, guestAdditional, _IGCurrentCell));
+        var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(GuestShow.Guest, guestAdditional, _IGCurrentCell, _enumProgram));
         if (!notValid)
         {
           e.Row.Item = guestAdditional;
@@ -1924,7 +1924,7 @@ namespace IM.Host.Forms
         {
           int columnIndex = 0;
           _isCellCommitGuestAdditional = false;
-          e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, (Guest)e.Row.Item, true)).Item1;
+          e.Cancel = !AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, (Guest)e.Row.Item, _enumProgram, true)).Item1;
           if (e.Cancel)
           {
             _isCellCommitGuestAdditional = true;//true para que no haga el commit
@@ -1971,7 +1971,7 @@ namespace IM.Host.Forms
         {
           //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
           //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
-          var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, ga);
+          var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, ga, _enumProgram);
           if (!validate.Item1) { lstMsg.Add($"Guest ID: {ga.guID} \t{validate.Item2}"); continue; }
           if (validate.Item1 && GuestShow.AdditionalGuestList.Any(c => c.guID == ga.guID)) { lstMsg.Add($"Guest ID: {ga.guID} \tIt is already in the list."); continue; }
           GuestShow.AdditionalGuestList.Add(ga);
@@ -2051,12 +2051,12 @@ namespace IM.Host.Forms
         return;
       }
 
-      if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
+      if (_user.Permissions.Exists(c => c.pppm == EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
         guestFormMode = EnumMode.ReadOnly;
       else
-       guestFormMode=EnumMode.Add;
+        guestFormMode = EnumMode.Add;
 
-      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, _enumProgram, guestFormMode,false) { GuestParent = GuestShow?.Guest, Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, 0, EnumModule.Host, _enumProgram, guestFormMode, false) { GuestParent = GuestShow?.Guest, Owner = this };
       frmGuest.ShowDialog();
       if (frmGuest.DialogResult.Value)
       {
@@ -2066,7 +2066,7 @@ namespace IM.Host.Forms
         if (guestAdditional.guID == 0) return;
         //Si la invitacion esta en modo ReadOnly y el ID del guestadditional es igual al guest principal
         //O si el guestadditional ya tiene una invitacion.Ya no se agrega a la lista.
-        var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow?.Guest, guestAdditional, true);
+        var validate = await InvitationValidationRules.ValidateAdditionalGuest(GuestShow?.Guest, guestAdditional, _enumProgram, true);
         if (validate.Item1)
           GuestShow?.AdditionalGuestList.Add(guestAdditional);
       }
