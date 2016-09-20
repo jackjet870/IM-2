@@ -1,5 +1,6 @@
 ﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Inhouse.Forms;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,9 +43,8 @@ namespace IM.Inhouse
     protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Inhouse");
+      frmSplash frmSplash = new frmSplash();
 
-      //frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location,true, EnumProgram.Inhouse);
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, true,
         changePassword: true, autoSign: true, permission: EnumPermission.Register,
         permissionLevel: EnumPermisionLevel.ReadOnly);
@@ -58,9 +58,9 @@ namespace IM.Inhouse
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
 
         Context.User = frmLogin.UserData;
-        Forms.frmInhouse frmMain = new Forms.frmInhouse();
+        frmInhouse frmMain = new frmInhouse();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
-
         frmSplash.Close();
       }
     }

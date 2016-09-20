@@ -37,7 +37,7 @@ namespace IM.MailOutsConfig
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Mail Outs Configuration");
+      frmSplash frmSplash = new frmSplash();
       var frmLogin = new frmLogin(frmSplash,changePassword: true, validatePermission:true, permission:EnumPermission.MailOutsTexts, permissionLevel:EnumPermisionLevel.ReadOnly);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
@@ -45,6 +45,7 @@ namespace IM.MailOutsConfig
       {
         Context.User = frmLogin.UserData;
         frmMailOutsTexts frmMain = new frmMailOutsTexts();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

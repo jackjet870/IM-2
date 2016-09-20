@@ -1015,7 +1015,7 @@ namespace IM.Base.Classes
             //Si es tarjeta de credito verificar que tenga el tipo de tarjeta
             if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
             {
-              UIHelper.ShowMessage("Specify a credit card");
+              UIHelper.ShowMessage("Specify a credit card type");
               return false;
             }
 

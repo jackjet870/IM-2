@@ -37,7 +37,7 @@ namespace IM.Assignment
     protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Assignment");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location,EnumProgram.Inhouse, validatePermission:true ,changePassword: true, autoSign: true, permission:EnumPermission.Assignment, permissionLevel:EnumPermisionLevel.ReadOnly);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -46,6 +46,7 @@ namespace IM.Assignment
       {
         Context.User = frmLogin.UserData;
         frmAssignment frmMain = new frmAssignment();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

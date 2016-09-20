@@ -36,7 +36,7 @@ namespace IM.InventoryMovements
     protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Inventory Movements");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Warehouse, validatePermission:true, permission:EnumPermission.GiftsReceipts, permissionLevel:EnumPermisionLevel.Standard, changePassword:true);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -44,6 +44,7 @@ namespace IM.InventoryMovements
       if (!frmLogin.IsAuthenticated) return;
       Context.User = frmLogin.UserData;
       frmInventoryMovements frmMain = new frmInventoryMovements();
+      frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
       frmMain.ShowDialog();
       frmSplash.Close();
     }

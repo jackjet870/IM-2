@@ -1,7 +1,9 @@
-﻿using IM.Transfer.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Transfer.Forms;
 using System.Windows;
 using System.Windows.Threading;
-using IM.Base.Forms;
+
 namespace IM.Transfer
 {
   /// <summary>
@@ -29,10 +31,10 @@ namespace IM.Transfer
     protected override void OnStartup(StartupEventArgs e)
     {
       //EventManager.RegisterClassHandler(typeof(Window), Window.KeyDownEvent, new RoutedEventHandler(KeyDown));
-      frmTransferLauncher _frm = new frmTransferLauncher();
-      _frm.ShowInTaskbar = true;
-      _frm.ShowDialog();
-      
+      frmTransferLauncher frmMain = new frmTransferLauncher();
+      frmMain.ShowInTaskbar = true;
+      frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
+      frmMain.ShowDialog();
     }
     #endregion
 

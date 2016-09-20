@@ -236,7 +236,7 @@ namespace IM.Administrator.Forms
 
       #endregion
 
-      #region PRCaptian Roles
+      #region PRCaptain Roles
       if (Context.User.HasRole(EnumRole.PRCaptain) || Context.User.HasRole(EnumRole.Administrator))
       {
         lstMenu.Add("frmNotices", "Notices", "Notice.png");

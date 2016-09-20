@@ -36,7 +36,7 @@ namespace IM.PRStatistics
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("PR Statistics");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, changePassword: true, validatePermission:true, permission:EnumPermission.PRInvitations, permissionLevel:EnumPermisionLevel.Special);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
@@ -45,6 +45,7 @@ namespace IM.PRStatistics
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
         frmPRStatistics frmMain = new frmPRStatistics();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

@@ -1,18 +1,18 @@
-﻿using System;
+﻿using IM.Assignment.Classes;
+using IM.Base.Classes;
+using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Globalization;
-using IM.Model;
-using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using System.IO;
-using IM.Assignment.Classes;
 using System.Windows.Input;
-using IM.Base.Forms;
-using IM.Model.Enums;
-using IM.Base.Classes;
 
 namespace IM.Assignment
 {

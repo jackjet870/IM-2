@@ -44,7 +44,7 @@ namespace IM.Host
       EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
 
       //Creamos el Splash Base!
-      frmSplash frmSplash = new frmSplash("Host");
+      frmSplash frmSplash = new frmSplash();
 
       //Creamos el tipo de login que se necesita!
       var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom,changePassword: true, autoSign: true, validatePermission:true, permission:EnumPermission.Host, permissionLevel:EnumPermisionLevel.ReadOnly);
@@ -58,8 +58,8 @@ namespace IM.Host
       if (frmLogin.IsAuthenticated)
       {
         Context.User = frmLogin.UserData;
-       //frmSales frmMain = new frmSales();
         frmHost frmMain = new frmHost();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

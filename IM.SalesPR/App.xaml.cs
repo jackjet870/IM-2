@@ -36,7 +36,7 @@ namespace IM.SalesPR
     protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales by PR");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, changePassword: true, autoSign: true);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -46,6 +46,7 @@ namespace IM.SalesPR
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
         frmSalesPR frmMain = new frmSalesPR();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

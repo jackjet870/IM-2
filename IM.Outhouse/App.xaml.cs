@@ -40,7 +40,7 @@ namespace IM.Outhouse
     protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Outhouse");
+      frmSplash frmSplash = new frmSplash();
 
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Outhouse, true, changePassword: true,
         autoSign: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly);
@@ -53,6 +53,7 @@ namespace IM.Outhouse
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
         frmOuthouse frmMain = new frmOuthouse();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }
