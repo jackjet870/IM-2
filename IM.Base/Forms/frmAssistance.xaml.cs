@@ -37,7 +37,6 @@ namespace IM.Base.Forms
     //Para el Excel
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
-    private string rptName;
     #endregion Atributos
 
     #region Constructores y destructores

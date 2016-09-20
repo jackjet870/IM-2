@@ -216,7 +216,9 @@ namespace IM.Base.Forms
     private void ComboBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
     {
       ComboBoxItem comboItem = sender as ComboBoxItem;
-      if (cmbMargin.Items.IndexOf(comboItem.Content) == 3)
+      int index = cmbMargin.Items.IndexOf(comboItem.Content);
+      cmbMargin.SelectedIndex = index;
+      if ( index== 3)
       {
         Margin margin = cmbMargin.SelectedValue as Margin;
         frmMargin frmMargin = new frmMargin(margin);
@@ -229,8 +231,8 @@ namespace IM.Base.Forms
       }
       else
       {
-        LoadXps();
-      }
+        LoadXps();        
+      }      
 
     }
     #endregion
