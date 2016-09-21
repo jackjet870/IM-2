@@ -80,8 +80,8 @@ namespace IM.ProcessorGeneral.Forms
     private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
     {
       biWait.IsBusy = true;
-      biWait.BusyContent = "Loading Report...";
       if (dgvLoginsLog.Items.Count <= 0) return;
+      biWait.BusyContent = "Loading Report...";
 
       string message = ValidateFields();
 
