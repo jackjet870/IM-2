@@ -250,7 +250,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <!--#region Fechas-->
-            <Grid Margin="20 20 20 5">
+            <Grid Margin="20 20 20 5" Name="grpDates">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>

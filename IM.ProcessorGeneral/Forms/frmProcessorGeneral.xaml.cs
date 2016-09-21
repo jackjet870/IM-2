@@ -1168,8 +1168,17 @@ namespace IM.ProcessorGeneral.Forms
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
-      _frmFilter.ConfigurarFomulario(blnLeadSources: true, blnOneDate: _blnOneDate,
+      switch (strReport)
+      {
+        case "Personnel Access":
+          _frmFilter.ConfigurarFomulario(blnLeadSources: true, blnOneDate: _blnOneDate,
+        blnOnlyOneRegister: _blnOnlyOneRegister, blnDateRange: false);
+          break;
+        default:
+          _frmFilter.ConfigurarFomulario(blnLeadSources: true, blnOneDate: _blnOneDate,
         blnOnlyOneRegister: _blnOnlyOneRegister);
+          break;
+      }
 
       WaitMessage(false);
       _frmFilter.ShowDialog();
@@ -1305,7 +1314,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstPersonnelAccess = await BRReportsByLeadSource.GetRptPersonnelAccess(string.Join(",",
                 filter.LstLeadSources));
             if (lstPersonnelAccess.Any())
-              finfo = await clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters, lstPersonnelAccess);
+              finfo = await clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters.Where(c=>c.Item1!= "Date Range").ToList(), lstPersonnelAccess);
             break;
 
           #endregion

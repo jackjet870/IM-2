@@ -424,9 +424,9 @@ namespace IM.ProcessorGeneral.Forms
       EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival,
       EnumQuinellas enumQuinellas = EnumQuinellas.NoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.NoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking,
-      EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestId = false, bool blnGiftSale = false)
+      EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestId = false, bool blnGiftSale = false,bool blnDateRange=true)
     {
-      ConfigureDates(blnOneDate, enumPeriod);
+      ConfigureDates(blnOneDate, enumPeriod, blnDateRange);
       ConfigureFilters(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blncbStatus, blnGiftReceiptType,
         blnGuestId, blnGiftSale);
@@ -489,7 +489,7 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 05/Mar/2016 Created
     /// </history>
-    private void ConfigureDates(bool blnOneDate, EnumPeriod enumPeriod)
+    private void ConfigureDates(bool blnOneDate, EnumPeriod enumPeriod, bool blnDateRange)
     {
       Dictionary<EnumPredefinedDate, string> dictionaryPredefinedDate = EnumToListHelper.GetList<EnumPredefinedDate>();
 
@@ -533,6 +533,7 @@ namespace IM.ProcessorGeneral.Forms
       cboDate.SelectedIndex = 0;
       //Si es un rango de fechas.
       cboDate.IsEnabled = pnlDtmEnd.IsEnabled = !blnOneDate;
+      grpDates.Visibility = (blnDateRange) ? Visibility.Visible : Visibility.Collapsed;
     }
 
     #endregion ConfigureDates
