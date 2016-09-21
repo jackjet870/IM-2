@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using IM.Base.Helpers;
 using IM.Model.Classes;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace IM.Base.Forms
 {
@@ -66,15 +67,16 @@ namespace IM.Base.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       string name = _excelFile.Name.Replace(_excelFile.Extension, string.Empty);
-      Uid = name;
-      txbTitle.Text = name;
+      Title = $"Report Viewer - {name}";
+      Uid = name;      
       LoadCombobox();
       UpdateLayout();
       LoadXps();
       documentViewer.Focus();//para que se activen los controles del toolbar
+      documentViewer.FitToWidth();//Default para mostrar la pagina
       #region Agregarle los eventos a los combobox
       cmbOrientation.SelectionChanged += cmb_SelectionChanged;
-      cmbPagerSize.SelectionChanged += cmb_SelectionChanged;
+      cmbPageSize.SelectionChanged += cmb_SelectionChanged;
       cmbScale.SelectionChanged += cmb_SelectionChanged;
       #endregion
     }
@@ -179,7 +181,7 @@ namespace IM.Base.Forms
         List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles("*.*", SearchOption.AllDirectories).Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
         lstFiles.ForEach(fi => fi.Delete());
         //Eliminamos los archivos que fueron creados hoy
-        lstFiles = directoryInfo.GetFiles($"{txbTitle.Text}*").ToList();
+        lstFiles = directoryInfo.GetFiles($"{Uid}*").ToList();
         lstFiles.ForEach(f => f.Delete());
       }
       catch (Exception ex)
@@ -199,7 +201,12 @@ namespace IM.Base.Forms
     private void cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       ComboBox combo = sender as ComboBox;
-      if (combo.Name != nameof(cmbMargin))
+      if (combo.Name == nameof(cmbOrientation))
+      {
+        UpdateIcons((cmbOrientation.SelectedIndex == 0) ? "H" : "V");
+        LoadXps();
+      }
+      else
       {
         LoadXps();
       }
@@ -216,14 +223,14 @@ namespace IM.Base.Forms
     private void ComboBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
     {
       ComboBoxItem comboItem = sender as ComboBoxItem;
-      int index = cmbMargin.Items.IndexOf(comboItem.Content);
-      cmbMargin.SelectedIndex = index;
+      int index = cmbMargin.Items.IndexOf(comboItem.Content);      
       if ( index== 3)
       {
         Margin margin = cmbMargin.SelectedValue as Margin;
         frmMargin frmMargin = new frmMargin(margin);
         if (frmMargin.ShowDialog() == true)
         {
+          cmbMargin.SelectedIndex = index;
           List<dynamic> lstObj = cmbMargin.ItemsSource.OfType<dynamic>().ToList();
           lstObj[3] = new { name = "Custom Margins", margin = margin };
           LoadXps();
@@ -231,6 +238,7 @@ namespace IM.Base.Forms
       }
       else
       {
+        cmbMargin.SelectedIndex = index;
         LoadXps();        
       }      
 
@@ -289,7 +297,7 @@ namespace IM.Base.Forms
     public void exportFile(EnumFileFormat enumFileFormat)
     {
       SaveFileDialog dialog = new SaveFileDialog();//Cargamos el saveFileDialog
-      dialog.FileName = txbTitle.Text;
+      dialog.FileName = Uid;
       switch (enumFileFormat)
       {
         case EnumFileFormat.Pdf:
@@ -333,7 +341,7 @@ namespace IM.Base.Forms
           //Obtenemos la orientacion seleccionada
           XlPageOrientation pageOrientation =(XlPageOrientation)cmbOrientation.SelectedValue;
           //Obtenemos el tamaño de papel seleccionado
-          XlPaperSize paperSize =(XlPaperSize)cmbPagerSize.SelectedValue;
+          XlPaperSize paperSize =(XlPaperSize)cmbPageSize.SelectedValue;
           //Obtenemos el margen seleccionado
           Margin margin = cmbMargin.SelectedValue as Margin;
           //Obtenemos la escala seleccionada
@@ -428,46 +436,105 @@ namespace IM.Base.Forms
     {
       #region Orientation
       List<dynamic> lstOrientation = new List<dynamic>();
-      lstOrientation.Add(new { description = "Orientation Horizontal", pageOrientation = XlPageOrientation.xlLandscape });
-      lstOrientation.Add(new { description = "Orientation Vertical", pageOrientation = XlPageOrientation.xlPortrait });
+      lstOrientation.Add(new { description = "Orientation Horizontal", pageOrientation = XlPageOrientation.xlLandscape, img= "pack://application:,,,/IM.Styles;component/Images/32x32/BHorizontalPage.png" });
+      lstOrientation.Add(new { description = "Orientation Vertical", pageOrientation = XlPageOrientation.xlPortrait, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BVerticalPage.png" });
       cmbOrientation.ItemsSource = lstOrientation;
       #endregion
 
-      #region PageSize
-      
+      #region PageSize      
       List<dynamic> lstPaperSize = new List<dynamic>();
-      lstPaperSize.Add(new { name = "Paper Letter", description="21.59 cm x 29.7 cm",  paperSize = XlPaperSize.xlPaperLetter });
-      lstPaperSize.Add(new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall });
-      lstPaperSize.Add(new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger });
-      lstPaperSize.Add(new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal });
-      lstPaperSize.Add(new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3 });
-      lstPaperSize.Add(new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4 });
-      lstPaperSize.Add(new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5 });
-      lstPaperSize.Add(new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17 });
-      lstPaperSize.Add(new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote });
-      cmbPagerSize.ItemsSource = lstPaperSize;
+      lstPaperSize.Add(new { name = "Paper Letter", description="21.59 cm x 29.7 cm",  paperSize = XlPaperSize.xlPaperLetter, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      lstPaperSize.Add(new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
+      cmbPageSize.ItemsSource = lstPaperSize;
       #endregion      
 
       #region Margin
       var lstMargins = new List<object>();
-      lstMargins.Add(new { name= "Normal Margins", margin=new Margin { left=1.78,right=1.78,top=1.91,bottom=1.91 } });
-      lstMargins.Add(new { name = "Wide Margins", margin = new Margin { left = 2.54, right = 2.54, top = 2.54, bottom = 2.54 } });
-      lstMargins.Add(new { name = "Strech Margins", margin = new Margin { left = 0.64, right = 0.64, top = 1.91, bottom = 1.91 } });
-      lstMargins.Add(new { name = "Custom Margins", margin = new Margin { left = 0, right = 0, top = 0, bottom = 0 } });
+      lstMargins.Add(new { name= "Normal Margins", margin=new Margin { left=1.78,right=1.78,top=1.91,bottom=1.91 }, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BNormalMarginH.png" });
+      lstMargins.Add(new { name = "Wide Margins", margin = new Margin { left = 2.54, right = 2.54, top = 2.54, bottom = 2.54 }, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BWideMarginH.png" });
+      lstMargins.Add(new { name = "Stretch Margins", margin = new Margin { left = 0.64, right = 0.64, top = 1.91, bottom = 1.91 }, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BStretchMarginH.png" });
+      lstMargins.Add(new { name = "Custom Margins", margin = new Margin { left = 0, right = 0, top = 0, bottom = 0 }, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BCustomMarginH.png" });
       cmbMargin.ItemsSource = lstMargins;
       #endregion
 
       #region Scale
       List<dynamic> lstScales = new List<dynamic>();
-      lstScales.Add(new { name = "No Scaling",scale=EnumScale.Noscaling });
-      lstScales.Add(new { name = "Fit Sheet on One Page",scale=EnumScale.FitSheetOnOnePage });
-      lstScales.Add(new { name = "Fit All Columns on One Page",scale=EnumScale.FitAllColumnsOnOnePage });
-      lstScales.Add(new { name = "Fit All Rows on One Page",scale=EnumScale.FitAllRowsOnOnePage});
+      lstScales.Add(new { name = "No Scaling",scale=EnumScale.Noscaling, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BNoScalingH.png" });
+      lstScales.Add(new { name = "Fit Sheet on One Page",scale=EnumScale.FitSheetOnOnePage, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BFitOnOnePageH.png" });
+      lstScales.Add(new { name = "Fit All Columns on One Page",scale=EnumScale.FitAllColumnsOnOnePage, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BFitColumnOnPageH.png" });
+      lstScales.Add(new { name = "Fit All Rows on One Page",scale=EnumScale.FitAllRowsOnOnePage, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BFitRowsOnPageH.png" });
       cmbScale.ItemsSource = lstScales;
       #endregion
     }
-    #endregion   
+    #endregion
 
+    #region UpdateIcons
+    /// <summary>
+    /// Cambia los iconos de los combobox dependiendo de la opcion seleccionada
+    /// </summary>
+    /// <param name="Orientation">
+    /// H .-Horizontal
+    /// V .-Vertical
+    /// </param>
+    /// <history>
+    /// [created] 21/09/2016 emoguel
+    /// </history>
+    private void UpdateIcons(string Orientation)
+    {
+      //Desuscribimos los combos del evento selectionchaged
+      cmbPageSize.SelectionChanged -= cmb_SelectionChanged;
+      cmbScale.SelectionChanged -= cmb_SelectionChanged;
+      //Actualizamos las listas, como son listas dinamicas no se puede actualizar solo una propiedad
+      #region Scale      
+      int indexScale = cmbScale.SelectedIndex;
+      List<dynamic> lstScaling = cmbScale.ItemsSource as List<dynamic>;
+      lstScaling[0] = new { name = "No Scaling", scale = EnumScale.Noscaling, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BNoScaling{Orientation}.png" };
+      lstScaling[1] = new { name = "Fit Sheet on One Page", scale = EnumScale.FitSheetOnOnePage, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BFitOnOnePage{Orientation}.png" };
+      lstScaling[2] = new { name = "Fit All Columns on One Page", scale = EnumScale.FitAllColumnsOnOnePage, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BFitColumnOnPage{Orientation}.png" };
+      lstScaling[3] = new { name = "Fit All Rows on One Page", scale = EnumScale.FitAllRowsOnOnePage, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BFitRowsOnPage{Orientation}.png" };      
+      cmbScale.SelectedItem = lstScaling[indexScale];
+      cmbScale.SelectedIndex = indexScale;
+      #endregion
+
+      #region Margin
+      int indexMargin = cmbMargin.SelectedIndex;
+      var lstMargins = cmbMargin.ItemsSource as List<dynamic>;
+      lstMargins[0] = new { name = "Normal Margins", margin = new Margin { left = 1.78, right = 1.78, top = 1.91, bottom = 1.91 }, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BNormalMargin{Orientation}.png" };
+      lstMargins[1] = new { name = "Wide Margins", margin = new Margin { left = 2.54, right = 2.54, top = 2.54, bottom = 2.54 }, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BWideMargin{Orientation}.png" };
+      lstMargins[2] = new { name = "Stretch Margins", margin = new Margin { left = 0.64, right = 0.64, top = 1.91, bottom = 1.91 }, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BStretchMargin{Orientation}.png" };
+      lstMargins[3] = new { name = "Custom Margins", margin = lstMargins[3].margin, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BCustomMargin{Orientation}.png" };
+      cmbMargin.SelectedItem = lstMargins[indexMargin];
+      cmbMargin.SelectedIndex = indexMargin;
+      #endregion
+
+      #region PageSize      
+      int indexSize = cmbPageSize.SelectedIndex;
+      List<dynamic> lstPaperSize = cmbPageSize.ItemsSource as List<dynamic>;
+      lstPaperSize[0] = new { name = "Paper Letter", description = "21.59 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperLetter, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[1] = new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[2] = new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[3] = new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[4] = new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[5] = new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[6] = new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[7] = new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[8] = new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      cmbPageSize.SelectedItem = lstPaperSize[indexSize];
+      cmbPageSize.SelectedIndex = indexSize;
+      #endregion
+
+      //Suscribimos los combos al evento selectionchaged
+      cmbPageSize.SelectionChanged += cmb_SelectionChanged;
+      cmbScale.SelectionChanged += cmb_SelectionChanged;
+    } 
+    #endregion
     #endregion
 
   }

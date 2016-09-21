@@ -6,14 +6,18 @@
         xmlns:local="clr-namespace:IM.Base.Forms" WindowState="Maximized" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" Title="Report Viewer"
         Height="350" Width="525">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=ExportToExcel}" Key="E" Modifiers="Alt"/>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=ExportToPdf}" Key="P" Modifiers="Alt"/>
     </Window.InputBindings>
-    <DockPanel LastChildFill="True">
-        <Border Background="#147F79" Height="30" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,-1,0,0">
-            <TextBlock Name="txbTitle" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Title" Foreground="White" Margin="0,0,5,0"/>
-        </Border>
+    <DockPanel LastChildFill="True" >        
         <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" KeyboardNavigation.TabNavigation="Continue" Height="32">
             <Button Command="ApplicationCommands.Print"  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
                                                     ToolTip="Print (Ctrl + P)">
@@ -65,21 +69,18 @@
                 <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BExcel.png" />
             </Button>
             <Separator/>                            
-            <ComboBox SelectedIndex="0" ToolTip="Orientation" Name="cmbOrientation" Height="27" DisplayMemberPath="description" SelectedValuePath="pageOrientation"/>
-            <ComboBox SelectedIndex="0" Name="cmbPagerSize" ToolTip="Paper Size" Height="27" TextSearch.TextPath="name"  SelectedValuePath="paperSize" ItemTemplate="{StaticResource ResourceKey=cbx-PaperSize-img}">                
-            </ComboBox>            
-            <ComboBox SelectedIndex="0" Name="cmbMargin" ToolTip="Margins" Height="27" DisplayMemberPath="name" TextSearch.TextPath="name" SelectedValuePath="margin">
+            <ComboBox SelectedIndex="0" ToolTip="Orientation" Name="cmbOrientation" SelectedValuePath="pageOrientation" ItemTemplate="{StaticResource ResourceKey=cbx-PageOrientation-img}"/>
+            <ComboBox SelectedIndex="0" Name="cmbPageSize" ToolTip="Paper Size" TextSearch.TextPath="name"  SelectedValuePath="paperSize" ItemTemplate="{StaticResource ResourceKey=cbx-PageSize-img}"/>
+            <ComboBox SelectedIndex="2" Name="cmbMargin" ToolTip="Margins" TextSearch.TextPath="name" SelectedValuePath="margin" ItemTemplate="{StaticResource ResourceKey=cbx-PageMargin-img}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ComboBoxItem_MouseClick"/>
                     </Style>
                 </ComboBox.ItemContainerStyle>                
             </ComboBox>
-            <ComboBox SelectedIndex="0" Name="cmbScale" ToolTip="Scaling" Height="27" TextSearch.TextPath="name" DisplayMemberPath="name" SelectedValuePath="scale">                                                                
-                
-            </ComboBox>
+            <ComboBox SelectedIndex="2" Name="cmbScale" ToolTip="Scaling" TextSearch.TextPath="name" SelectedValuePath="scale" ItemTemplate="{StaticResource ResourceKey=cbx-PageScaling-img}"/>
         </ToolBar>
-        <DocumentViewer x:Name="documentViewer" >
+        <DocumentViewer x:Name="documentViewer"  >
             <DocumentViewer.Resources>                
                     <!-- Ocultar the toolbar -->
                     <Style TargetType="ToolBar">

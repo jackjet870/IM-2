@@ -520,6 +520,30 @@
     <Resource Include="Images\32x32\BTwoPages.png" />
     <Resource Include="Images\32x32\BWholePage.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\32x32\BCustomMarginH.png" />
+    <Resource Include="Images\32x32\BFitColumnOnPageH.png" />
+    <Resource Include="Images\32x32\BFitOnOnePageH.png" />
+    <Resource Include="Images\32x32\BFitRowsOnPageH.png" />
+    <Resource Include="Images\32x32\BHorizontalPage.png" />
+    <Resource Include="Images\32x32\BNormalMarginH.png" />
+    <Resource Include="Images\32x32\BNoScalingH.png" />
+    <Resource Include="Images\32x32\BStretchMarginH.png" />
+    <Resource Include="Images\32x32\BVerticalPage.png" />
+    <Resource Include="Images\32x32\BWideMarginH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\32x32\BCustomMarginV.png" />
+    <Resource Include="Images\32x32\BFitColumnOnPageV.png" />
+    <Resource Include="Images\32x32\BFitOnOnePageV.png" />
+    <Resource Include="Images\32x32\BFitRowsOnPageV.png" />
+    <Resource Include="Images\32x32\BNormalMarginV.png" />
+    <Resource Include="Images\32x32\BNoScalingV.png" />
+    <Resource Include="Images\32x32\BStretchMarginV.png" />
+    <Resource Include="Images\32x32\BWideMarginV.png" />
+    <Resource Include="Images\32x32\BPageH.png" />
+    <Resource Include="Images\32x32\BPageV.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
