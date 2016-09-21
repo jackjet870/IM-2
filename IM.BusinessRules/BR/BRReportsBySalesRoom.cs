@@ -912,7 +912,8 @@ namespace IM.BusinessRules.BR
               Location = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.Location ?? lstBookings.FirstOrDefault(b => b.LocationN == c).guloInvit,
               LocationN = c,
               SaleType = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleType ?? 0,
-              SaleTypeN = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleTypeN ?? "MANIFEST"
+              SaleTypeN = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleTypeN ?? "MANIFEST",
+              ShowProgramN = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.ShowProgramN ?? "Regular"
             });
           });
 

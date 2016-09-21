@@ -492,14 +492,14 @@ namespace IM.ProcessorGeneral.Forms
           case "Bookings By Sales Room, Program & Time":
             var lstRptBbSalesRoom = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(filter.StartDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptBbSalesRoom.Any())
-              finfo = clsReports.ExportRptBookingsBySalesRoomProgramTime(strReportName, fileFullPath, filters, lstRptBbSalesRoom);
+              finfo = await clsReports.ExportRptBookingsBySalesRoomProgramTime(strReportName, fileFullPath, filters, lstRptBbSalesRoom);
             break;
           #endregion
           #region Bookings By Sales Room, Program, Lead Source & Time
           case "Bookings By Sales Room, Program, Lead Source & Time":
             var lstRptBbSalesRoomPlst = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(filter.StartDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptBbSalesRoomPlst.Any())
-              finfo = clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReportName, fileFullPath, filters, lstRptBbSalesRoomPlst);
+              finfo = await clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReportName, fileFullPath, filters, lstRptBbSalesRoomPlst);
             break;
           #endregion
 
@@ -511,7 +511,7 @@ namespace IM.ProcessorGeneral.Forms
           case "CxC":
             var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxC.Any())
-              finfo = clsReports.ExportRptCxc(strReportName, fileFullPath, filters, lstRptCxC);
+              finfo = await clsReports.ExportRptCxc(strReportName, fileFullPath, filters, lstRptCxC);
             break;
           #endregion
           #region CxC By Type
@@ -525,7 +525,7 @@ namespace IM.ProcessorGeneral.Forms
           case "CxC Deposits":
             var lstRptCxCDeposits = await BRReportsBySalesRoom.GetRptCxCDeposits(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCDeposits.Any())
-              finfo = clsReports.ExportRptCxCDeposits(strReportName, fileFullPath, filters, lstRptCxCDeposits);
+              finfo = await clsReports.ExportRptCxCDeposits(strReportName, fileFullPath, filters, lstRptCxCDeposits);
             break;
           #endregion
           #region CxC Gifts
@@ -558,7 +558,7 @@ namespace IM.ProcessorGeneral.Forms
           case "Deposits":
             var lstRptDeposits = await BRReportsBySalesRoom.GetRptDeposits(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptDeposits.Any())
-              finfo = clsReports.ExportRptDeposits(strReportName, fileFullPath, filters, lstRptDeposits);
+              finfo = await clsReports.ExportRptDeposits(strReportName, fileFullPath, filters, lstRptDeposits);
             break;
           #endregion
           #region Burned Deposits
