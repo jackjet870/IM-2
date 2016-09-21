@@ -1,6 +1,7 @@
 ﻿using IM.Base.Classes;
 using IM.Base.Forms;
 using IM.Model.Enums;
+using IM.SalesLiner.Forms;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,7 +36,7 @@ namespace IM.SalesLiner
     protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      var frmSplash = new frmSplash("Sales by Liner");
+      var frmSplash = new frmSplash();
       var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword:true, autoSign:true);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -44,7 +45,8 @@ namespace IM.SalesLiner
       {
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
-        var frmMain = new Forms.frmSalesLiner();
+        var frmMain = new frmSalesLiner();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

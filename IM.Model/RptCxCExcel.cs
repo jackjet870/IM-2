@@ -15,11 +15,8 @@ namespace IM.Model
     {
         public string grpe { get; set; }
         public System.DateTime grD { get; set; }
-        public int grID { get; set; }
         public string grNum { get; set; }
         public string grsr { get; set; }
-        public string grls { get; set; }
-        public string peID { get; set; }
         public string peN { get; set; }
         public string Comments { get; set; }
         public Nullable<decimal> CxC { get; set; }
@@ -28,18 +25,5 @@ namespace IM.Model
         public Nullable<decimal> TotalCxC { get; set; }
         public Nullable<decimal> ToPayUS { get; set; }
         public Nullable<decimal> ToPayMN { get; set; }
-        public Nullable<decimal> PaidUS { get; set; }
-        public Nullable<decimal> PaidMN { get; set; }
-        public Nullable<decimal> BalanceUS { get; set; }
-        public Nullable<decimal> BalanceMN { get; set; }
-        public string GiftComments { get; set; }
-        public int guID { get; set; }
-        public string guHReservID { get; set; }
-        public string guOutInvitNum { get; set; }
-        public string AuthSts { get; set; }
-        public Nullable<System.DateTime> grCxCAppD { get; set; }
-        public string grAuthorizedBy { get; set; }
-        public string AuthName { get; set; }
-        public string CxCComments { get; set; }
     }
 }

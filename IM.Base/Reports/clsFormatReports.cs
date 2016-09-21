@@ -26,6 +26,7 @@ namespace IM.Base.Reports
       lst.Add("Date", "DateManifest", format: EnumFormatTypeExcel.Date);
       lst.Add("Group", "SaleTypeN", isGroup: true);
       lst.Add("LocationN", "LocationN", isGroup: true, isVisible: false);
+      lst.Add("ShowProgram", "ShowProgramN", isGroup: true, isVisible: false);
       lst.Add("SR", "SalesRoom");
       lst.Add("LS", "LeadSource");
       lst.Add("GUID", "guID");
@@ -67,14 +68,17 @@ namespace IM.Base.Reports
       lst.Add("Pend Original", "PendOriginal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend New", "PendNew", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend Gross", "PendGross", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("Deposit Sale", "DepositSale");
+      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
+      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPayment]/[PendGross]),[saDownPayment]/[ProcGross])");
+      lst.Add("$ EDP", "saDownPaymentPaid", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent,isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPaymentPaid]/[PendGross]),[saDownPaymentPaid]/[ProcGross])");
+      lst.Add("Deposit Sale", "DepositSale", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
       lst.Add("Deposit #", "DepositSaleNum");
       lst.Add("CC", "CC");
       lst.Add("Comments", "Comments");
       lst.Add("SaleType", "SaleType", isVisible: false);
       lst.Add("Location", "Location", isVisible: false);
       lst.Add("Sequency", "Sequency", isVisible: false);
-      lst.Add("ShowProgram", "ShowProgramN", isVisible: false);
       lst.Add("Agency ID", "Agency", isVisible: false);
       lst.Add("Country ID", "Country", isVisible: false);
       lst.Add("PR 2", "PR2", isVisible: false);
@@ -87,10 +91,7 @@ namespace IM.Base.Reports
       lst.Add("Closer 3 Name", "Closer3N", isVisible: false);
       lst.Add("Exit 2", "Exit2", isVisible: false);
       lst.Add("Exit 2 Name", "Exit2N", isVisible: false);
-      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isVisible: false);
-      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent, isVisible: false);
-      lst.Add("saDownPayment", "saDownPayment", isVisible: false);
-      lst.Add("saDownPaymentPaid", "saDownPaymentPaid", isVisible: false);
+
       return lst;
     }
 

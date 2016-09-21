@@ -35,7 +35,6 @@ namespace IM.ProcessorInhouse.Forms
     #region Atributos
 
     public ClsFilter _clsFilter;
-    private frmSystemCfg _systemConfig;
     private frmFilterDateRange _frmFilter;
     private frmReportQueue _frmReportQueue;
 

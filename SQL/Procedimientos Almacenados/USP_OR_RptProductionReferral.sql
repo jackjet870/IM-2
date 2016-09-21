@@ -2,17 +2,13 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_Rpt
 drop procedure [dbo].[USP_OR_RptProductionReferral]
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
 
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
 ** Devuelve los datos para el reporte de produccion de referidos
-** Los referidos son aquellas invitaciones con código de contrato (guO1) igual a REFREE-7 para 2007, REFREE-8 para 2008, etc
+** Los referidos son aquellas invitaciones con cÃ³digo de contrato (guO1) igual a REFREE-7 para 2007, REFREE-8 para 2008, etc
 **
 ** [wtorres] 	08/Jul/2009 Created
 ** [wtorres] 	19/Nov/2013 Modified. Reemplace el uso de las funciones UFN_OR_GetMonthArrivalsByContract, UFN_OR_GetMonthArrivalsByContractLike,
@@ -23,7 +19,7 @@ GO
 **							Antes solo tomaba exactamente los Rate Codes CLRF, CLRP y RCIR
 **
 */
-create procedure [dbo].[USP_OR_RptProductionReferral]
+CREATE procedure [dbo].[USP_OR_RptProductionReferral]
 	@DateFrom datetime,				-- Fecha desde
 	@DateTo datetime				-- Fecha hasta
 as
@@ -38,7 +34,7 @@ select
 	DateName(Month, dbo.DateSerial([Year], [Month], 1)) as MonthN,
 	-- Mes
 	[Month],
-	-- Año
+	-- AÃ±o
 	[Year],
 	-- Llegadas
 	Sum(Arrivals) as Arrivals,
@@ -59,26 +55,21 @@ select
 from (
 	-- Llegadas
 	select [Year], [Month], Arrivals, 0 as Shows, 0 as Sales, 0 as SalesAmount
-	from UFN_OR_GetMonthArrivals(@DateFrom, @DateTo, default, default, default, default, default, default, default, @Contracts)
+	from UFN_OR_GetMonthArrivals(@DateFrom, @DateTo, default, default, default, default, default, default, default, @Contracts, default)
 	-- Shows
 	union all
 	select [Year], [Month], 0, Shows, 0, 0
-	from UFN_OR_GetMonthShows(@DateFrom, @DateTo, default, default, default, default, default, default, default, default, default, @Contracts, default)
+	from UFN_OR_GetMonthShows(@DateFrom, @DateTo, default, default, default, default, default, default, default, default, default, @Contracts, default, default)
 	-- Numero de ventas
 	union all
 	select [Year], [Month], 0, 0, Sales, 0
-	from UFN_OR_GetMonthSales(@DateFrom, @DateTo, default, default, default, default, default, default, @Contracts, default)
+	from UFN_OR_GetMonthSales(@DateFrom, @DateTo, default, default, default, default, default, default, @Contracts, default, default)
 	-- Monto de ventas
 	union all
 	select [Year], [Month], 0, 0, 0, SalesAmount
-	from UFN_OR_GetMonthSalesAmount	(@DateFrom, @DateTo, default, default, default, default, default, default, @Contracts, default)
+	from UFN_OR_GetMonthSalesAmount	(@DateFrom, @DateTo, default, default, default, default, default, default, @Contracts, default, default)
 ) as D
 group by [Year], [Month]
 order by [Year], [Month]
 
-GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
-GO
 

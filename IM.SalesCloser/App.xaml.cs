@@ -38,7 +38,7 @@ namespace IM.SalesCloser
     protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales by Closer");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword: true, autoSign: true);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -48,6 +48,7 @@ namespace IM.SalesCloser
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
         frmSalesCloser frmMain = new frmSalesCloser();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

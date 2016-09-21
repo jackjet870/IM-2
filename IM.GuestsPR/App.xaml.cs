@@ -39,7 +39,7 @@ namespace IM.GuestsPR
     protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      var frmSplash = new frmSplash("Guests by PR");
+      var frmSplash = new frmSplash();
       var frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, changePassword: true, autoSign: true);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -49,6 +49,7 @@ namespace IM.GuestsPR
         EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         Context.User = frmLogin.UserData;
         frmGuestsPR frmMain = new frmGuestsPR();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

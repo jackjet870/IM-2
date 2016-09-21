@@ -53,6 +53,7 @@ namespace IM.Model
         public System.DateTime srSalesCloseD { get; set; }
         public string srPropertyOpera { get; set; }
         public bool srUseSistur { get; set; }
+        public string srzn { get; set; }
     
         public virtual Area Area { internal get; set; }
         public virtual Currency Currency { internal get; set; }

@@ -37,7 +37,7 @@ namespace IM.MailOuts
     protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Mail Outs");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, changePassword: true, autoSign: true, permission:EnumPermission.Register, permissionLevel:EnumPermisionLevel.Standard);
       await frmLogin.getAllPlaces();
       frmSplash.Show();
@@ -46,6 +46,7 @@ namespace IM.MailOuts
       {
         Context.User = frmLogin.UserData;
         frmMailOuts frmMain = new frmMailOuts();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

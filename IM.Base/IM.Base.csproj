@@ -67,6 +67,10 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PalaceResorts2.Common.PalaceTools, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d399b2cc59d85ff0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>R:\PalaceResorts\Common2.0\PalaceTools\PalaceResorts2.Common.PalaceTools.dll</HintPath>
+    </Reference>
     <Reference Include="PalaceResorts4.Common.Notifications.WinForm">
       <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Notifications.WinForm\PalaceResorts4.Common.Notifications.WinForm.dll</HintPath>
     </Reference>
@@ -141,6 +145,9 @@
     </Compile>
     <Compile Include="Forms\frmGuestsMovements.xaml.cs">
       <DependentUpon>frmGuestsMovements.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMargin.xaml.cs">
+      <DependentUpon>frmMargin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
@@ -298,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmInvitation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMargin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

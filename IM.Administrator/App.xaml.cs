@@ -34,7 +34,7 @@ namespace IM.Administrator
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Administrator");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole: true, role: EnumRole.Manager, changePassword: true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
@@ -50,6 +50,7 @@ namespace IM.Administrator
           EventManager.RegisterClassHandler(typeof(ComboBox), UIElement.KeyDownEvent, new KeyEventHandler(cmb_KeyDown));         
 
           frmAdmin frmMain = new frmAdmin();
+          frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
           frmMain.ShowDialog();
           frmSplash.Close();
         }
@@ -61,6 +62,7 @@ namespace IM.Administrator
       }
     }
     #endregion
+
     #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion

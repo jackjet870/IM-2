@@ -613,4 +613,17 @@
     </DataTemplate>
     <!--#endregion-->
 
+    <!--#region PaperSize Img-->
+    <DataTemplate x:Key="cbx-PaperSize-img">        
+            <Grid Width="Auto">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding name}" FontStyle="Oblique" Grid.Row="0"/>
+                <TextBlock Text="{Binding description}" Foreground="Gray" Grid.Row="1"/>
+            </Grid>
+    </DataTemplate>
+    <!--#endregion-->
+
 </ResourceDictionary>

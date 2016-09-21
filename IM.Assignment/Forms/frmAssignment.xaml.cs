@@ -259,6 +259,7 @@ namespace IM.Assignment
       if (finfo != null)
       {
         frmDocumentViewer documentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+        documentViewver.Owner = this;
         documentViewver.ShowDialog();
       }
     }

@@ -495,8 +495,6 @@
           <Property Name="grcucxcTaxiOut" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="grcxcAuthComments" Type="varchar" MaxLength="50" />
           <Property Name="grCancelD" Type="datetime" />
-          <Property Name="grAmountPaid" Type="money" />
-          <Property Name="grBalance" Type="money" />
         </EntityType>
         <EntityType Name="GiftsReceiptsC">
           <Key>
@@ -1852,6 +1850,7 @@
           <Property Name="srSalesCloseD" Type="datetime" Nullable="false" />
           <Property Name="srPropertyOpera" Type="varchar" MaxLength="10" />
           <Property Name="srUseSistur" Type="bit" Nullable="false" />
+          <Property Name="srzn" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="SalesRoomsLog">
           <Key>
@@ -5529,6 +5528,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalesRooms_Zones">
+          <End Role="Zones" Type="Self.Zones" Multiplicity="0..1" />
+          <End Role="SalesRooms" Type="Self.SalesRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zones">
+              <PropertyRef Name="znID" />
+            </Principal>
+            <Dependent Role="SalesRooms">
+              <PropertyRef Name="srzn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SalesRoomsLog_Personnel">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="SalesRoomsLog" Type="Self.SalesRoomsLog" Multiplicity="*" />
@@ -8914,6 +8925,10 @@
             <End Role="Warehouses" EntitySet="Warehouses" />
             <End Role="SalesRooms" EntitySet="SalesRooms" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalesRooms_Zones" Association="Self.FK_SalesRooms_Zones">
+            <End Role="Zones" EntitySet="Zones" />
+            <End Role="SalesRooms" EntitySet="SalesRooms" />
+          </AssociationSet>
           <AssociationSet Name="FK_SalesRoomsLog_Personnel" Association="Self.FK_SalesRoomsLog_Personnel">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesRoomsLog" EntitySet="SalesRoomsLog" />
@@ -9571,8 +9586,6 @@
           <Property Name="grcucxcTaxiOut" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="grcxcAuthComments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="grCancelD" Type="DateTime" Precision="3" />
-          <Property Name="grAmountPaid" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="grBalance" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="ChargeTo" Relationship="Self.FK_GiftsReceipts_ChargeTo" FromRole="GiftsReceipts" ToRole="ChargeTo" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Currency" Relationship="Self.FK_GiftsReceipts_Currencies_CxCDeposit" FromRole="GiftsReceipts" ToRole="Currencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Currency_Deposit" Relationship="Self.FK_GiftsReceipts_Currencies_Deposit" FromRole="GiftsReceipts" ToRole="Currencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11273,6 +11286,8 @@
           <NavigationProperty Name="TeamsSalesmen" Relationship="Self.FK_TeamsSalesmen_SalesRooms" FromRole="SalesRooms" ToRole="TeamsSalesmen" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="TourTimesBySalesRoomWeekDay" Relationship="Self.FK_TourTimesBySalesRoomWeekDay_SalesRooms" FromRole="SalesRooms" ToRole="TourTimesBySalesRoomWeekDay" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Banks" Relationship="Self.BanksBySalesRooms" FromRole="SalesRooms" ToRole="Banks" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="srzn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Zone" Relationship="IMModel.FK_SalesRooms_Zones" FromRole="SalesRoom" ToRole="Zone" />
           <NavigationProperty Name="LeadSources" Relationship="IMModel.FK_LeadSources_SalesRooms" FromRole="SalesRoom" ToRole="LeadSource" />
         </EntityType>
         <EntityType Name="SalesRoomLog">
@@ -11653,6 +11668,7 @@
           <Property Name="znZoneHotel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="znRunTrans" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_Zones" FromRole="Zones" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SalesRooms" Relationship="IMModel.FK_SalesRooms_Zones" FromRole="Zone" ToRole="SalesRoom" />
         </EntityType>
         <Association Name="FK_Agencies_Clubs">
           <End Role="Clubs" Type="Self.Club" Multiplicity="0..1" />
@@ -17899,6 +17915,10 @@
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
             <Parameter Name="UpListType" Mode="In" Type="Int32" />
           </FunctionImport>
+          <AssociationSet Name="FK_SalesRooms_Zones" Association="IMModel.FK_SalesRooms_Zones">
+            <End Role="Zone" EntitySet="Zones" />
+            <End Role="SalesRoom" EntitySet="SalesRooms" />
+          </AssociationSet>
           <FunctionImport Name="USP_IM_RptFTMInOutHouse" ReturnType="Collection(IMModel.RptFTMInOutHouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -21686,11 +21706,8 @@
         <ComplexType Name="RptCxCExcel">
           <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
-          <Property Type="Int32" Name="grID" Nullable="false" />
           <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="grls" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="Comments" Nullable="true" MaxLength="20" />
           <Property Type="Decimal" Name="CxC" Nullable="true" Precision="15" Scale="2" />
@@ -21699,19 +21716,6 @@
           <Property Type="Decimal" Name="TotalCxC" Nullable="true" Precision="15" Scale="2" />
           <Property Type="Decimal" Name="ToPayUS" Nullable="true" Precision="15" Scale="2" />
           <Property Type="Decimal" Name="ToPayMN" Nullable="true" Precision="15" Scale="2" />
-          <Property Type="Decimal" Name="PaidUS" Nullable="true" Precision="15" Scale="2" />
-          <Property Type="Decimal" Name="PaidMN" Nullable="true" Precision="15" Scale="2" />
-          <Property Type="Decimal" Name="BalanceUS" Nullable="true" Precision="15" Scale="2" />
-          <Property Type="Decimal" Name="BalanceMN" Nullable="true" Precision="15" Scale="2" />
-          <Property Type="String" Name="GiftComments" Nullable="true" MaxLength="100" />
-          <Property Type="Int32" Name="guID" Nullable="false" />
-          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="AuthSts" Nullable="false" MaxLength="4" />
-          <Property Type="DateTime" Name="grCxCAppD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="grAuthorizedBy" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="AuthName" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="CxCComments" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="SaleShort">
           <Property Type="Int32" Name="saID" Nullable="false" />
@@ -22529,6 +22533,18 @@
           <Property Type="Decimal" Name="AmountM" Nullable="true" Precision="19" />
           <Property Type="String" Name="TimeN" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <Association Name="FK_SalesRooms_Zones">
+          <End Type="IMModel.Zone" Role="Zone" Multiplicity="0..1" />
+          <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zone">
+              <PropertyRef Name="znID" />
+            </Principal>
+            <Dependent Role="SalesRoom">
+              <PropertyRef Name="srzn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <ComplexType Name="RptFTMInOutHouse">
           <Property Type="String" Name="Liner" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
@@ -23480,8 +23496,6 @@
                 <ScalarProperty Name="grcucxcTaxiOut" ColumnName="grcucxcTaxiOut" />
                 <ScalarProperty Name="grcxcAuthComments" ColumnName="grcxcAuthComments" />
                 <ScalarProperty Name="grCancelD" ColumnName="grCancelD" />
-                <ScalarProperty Name="grAmountPaid" ColumnName="grAmountPaid" />
-                <ScalarProperty Name="grBalance" ColumnName="grBalance" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -24740,6 +24754,7 @@
           <EntitySetMapping Name="SalesRooms">
             <EntityTypeMapping TypeName="IMModel.SalesRoom">
               <MappingFragment StoreEntitySet="SalesRooms">
+                <ScalarProperty Name="srzn" ColumnName="srzn" />
                 <ScalarProperty Name="srID" ColumnName="srID" />
                 <ScalarProperty Name="srN" ColumnName="srN" />
                 <ScalarProperty Name="srHoursDif" ColumnName="srHoursDif" />
@@ -29723,32 +29738,16 @@
               <ComplexTypeMapping TypeName="IMModel.RptCxCExcel">
                 <ScalarProperty Name="grpe" ColumnName="grpe" />
                 <ScalarProperty Name="grD" ColumnName="grD" />
-                <ScalarProperty Name="grID" ColumnName="grID" />
                 <ScalarProperty Name="grNum" ColumnName="grNum" />
                 <ScalarProperty Name="grsr" ColumnName="grsr" />
-                <ScalarProperty Name="grls" ColumnName="grls" />
-                <ScalarProperty Name="peID" ColumnName="peID" />
                 <ScalarProperty Name="peN" ColumnName="peN" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="CxC" ColumnName="CxC" />
                 <ScalarProperty Name="exExchRate" ColumnName="exExchRate" />
                 <ScalarProperty Name="CxCP" ColumnName="CxCP" />
                 <ScalarProperty Name="TotalCxC" ColumnName="TotalCxC" />
-                <ScalarProperty Name="ToPayUS" ColumnName="ToPayUS" />
-                <ScalarProperty Name="ToPayMN" ColumnName="ToPayMN" />
-                <ScalarProperty Name="PaidUS" ColumnName="PaidUS" />
-                <ScalarProperty Name="PaidMN" ColumnName="PaidMN" />
-                <ScalarProperty Name="BalanceUS" ColumnName="BalanceUS" />
-                <ScalarProperty Name="BalanceMN" ColumnName="BalanceMN" />
-                <ScalarProperty Name="GiftComments" ColumnName="GiftComments" />
-                <ScalarProperty Name="guID" ColumnName="guID" />
-                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
-                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
-                <ScalarProperty Name="AuthSts" ColumnName="AuthSts" />
-                <ScalarProperty Name="grCxCAppD" ColumnName="grCxCAppD" />
-                <ScalarProperty Name="grAuthorizedBy" ColumnName="grAuthorizedBy" />
-                <ScalarProperty Name="AuthName" ColumnName="AuthName" />
-                <ScalarProperty Name="CxCComments" ColumnName="CxCComments" />
+                <ScalarProperty Name="ToPayUS" ColumnName="CxCPaidUS" />
+                <ScalarProperty Name="ToPayMN" ColumnName="CxCPaidMN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

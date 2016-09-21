@@ -1,8 +1,6 @@
-﻿using IM.Model.Helpers;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using IM.BusinessRules.BR;
-
+using IM.Base.Classes;
 
 namespace IM.Base.Forms
 {
@@ -24,14 +22,16 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="title">Formulario principal del modulo</param>
     /// <history>
-    /// [wtorres]  10/Mar/2016 Modified. Agregue el parametro title
-    /// [wtorres]  12/Abr/2016 Modified. Ahora despliega el nombre del servidor y de la base de datos
+    /// [wtorres]   10/Mar/2016 Modified. Agregue el parametro title
+    /// [wtorres]   12/Abr/2016 Modified. Ahora despliega el nombre del servidor y de la base de datos
+    /// [wtorres]   19/Sep/2016 Modified. Ahora despliega el ambiente y elimine el parametro title
     /// </history>
-    public frmSplash(string title)
+    public frmSplash()
     {
       InitializeComponent();
-      Title = title;
-      lblTitle.Content = string.Format("Intelligence Marketing - {0}", title);
+      Title = Context.Module;
+      lblTitle.Content = $"Intelligence Marketing - {Context.Module}";
+      lblEnvironment.Content = Context.Environment;
     }
 
     #endregion Constructores y destructores

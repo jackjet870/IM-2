@@ -1,5 +1,6 @@
 ﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.InvitConfig.Forms;
 using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Threading;
@@ -35,7 +36,7 @@ namespace IM.InvitConfig
     protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Invit Config");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal,validatePermission:true,
         changePassword: true, permission: EnumPermission.HostInvitations,
         permissionLevel: EnumPermisionLevel.ReadOnly);
@@ -46,7 +47,8 @@ namespace IM.InvitConfig
       if (frmLogin.IsAuthenticated)
       {
         Context.User = frmLogin.UserData;
-        Forms.frmInvitConfig frmMain = new Forms.frmInvitConfig();
+        frmInvitConfig frmMain = new frmInvitConfig();
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

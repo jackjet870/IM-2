@@ -35,7 +35,7 @@ namespace IM.ProcessorInhouse
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Processor Inhouse");
+      frmSplash frmSplash = new frmSplash();
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal,validateRole:true, role:EnumRole.Manager, changePassword:true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
@@ -45,6 +45,7 @@ namespace IM.ProcessorInhouse
         if (Context.User.HasRole(EnumRole.Manager))
         {
           frmProcessorInhouse frmMain = new frmProcessorInhouse();
+          frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
           frmMain.Show();
           frmLogin.Close();
           frmSplash.Close();

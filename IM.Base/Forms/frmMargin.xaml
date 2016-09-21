@@ -1,0 +1,41 @@
+﻿<Window x:Class="IM.Base.Forms.frmMargin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        xmlns:styClasses="clr-namespace:IM.Styles.Classes;assembly=IM.Styles"
+        mc:Ignorable="d"
+        Title="Custom Margins" Height="300" Width="300">
+    <Grid>
+        <!--#region configuration-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="80*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region  textblocks-->
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Left" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Right" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Top" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Bottom" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <!--#endregion-->
+        <!--#region  TextBoxs-->
+        <TextBox Name="txtLeft" Text="{Binding left}" Height="25" styClasses:PrecisionPropertyClass.Precision="18,2" Grid.Column="1" Grid.Row="0" Margin="0 0 13 0"/>
+        <TextBox Name="txtRight" Text="{Binding right}" Height="25" styClasses:PrecisionPropertyClass.Precision="18,2" Grid.Column="1" Grid.Row="1" Margin="0 0 13 0"/>
+        <TextBox Name="txtTop" Text="{Binding top}" Height="25" styClasses:PrecisionPropertyClass.Precision="18,2" Grid.Column="1" Grid.Row="2" Margin="0 0 13 0"/>
+        <TextBox Name="txtBottom" Text="{Binding bottom}" Height="25" styClasses:PrecisionPropertyClass.Precision="18,2" Grid.Column="1" Grid.Row="3" Margin="0 0 13 0"/>
+        <!--#endregion  TextBoxs-->
+        <!--#region Buttons-->
+        <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="4" Margin="0,6,93,13"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,6,13,13"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

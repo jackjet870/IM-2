@@ -874,5 +874,29 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_ValidateFolioInvitationOutside_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int GetGuestPremanifestOuthouse {
+            get {
+                return ((int)(this["GetGuestPremanifestOuthouse"]));
+            }
+            set {
+                this["GetGuestPremanifestOuthouse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int USP_IM_RptWeeklyMonthlyHostess_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptWeeklyMonthlyHostess_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptWeeklyMonthlyHostess_Timeout"] = value;
+            }
+        }
     }
 }

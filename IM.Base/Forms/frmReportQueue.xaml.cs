@@ -90,7 +90,7 @@ namespace IM.Base.Forms
             if (!UIHelper.IsOpenWindow(file.Name.Replace(file.Extension,string.Empty), true))//Verificamos si la ventana ya está abierta
             {
               //Abrimos el visor de reportes
-              frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file,_exportExcel);
+              frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file,_exportExcel);              
               frmDocumentViewver.Show();
             }            
           }

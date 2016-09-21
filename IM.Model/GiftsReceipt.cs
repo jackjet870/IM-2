@@ -72,8 +72,6 @@ namespace IM.Model
         public string grcucxcTaxiOut { get; set; }
         public string grcxcAuthComments { get; set; }
         public Nullable<System.DateTime> grCancelD { get; set; }
-        public Nullable<decimal> grAmountPaid { get; set; }
-        public Nullable<decimal> grBalance { get; set; }
     
         public virtual ChargeTo ChargeTo { internal get; set; }
         public virtual Currency Currency { internal get; set; }

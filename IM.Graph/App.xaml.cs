@@ -1,4 +1,5 @@
-﻿using IM.Base.Forms;
+﻿using IM.Base.Classes;
+using IM.Base.Forms;
 using IM.Graph.Forms;
 using IM.Model;
 using System.Windows;
@@ -37,7 +38,7 @@ namespace IM.Graph
     {
       base.OnStartup(e);
 
-      frmSplash frmSplash = new frmSplash("Graph");
+      frmSplash frmSplash = new frmSplash();
       Window frmLS = new frmLS(frmSplash);
       await ((frmLS)frmLS).GetLeadSources();
       frmSplash.Show();
@@ -46,6 +47,7 @@ namespace IM.Graph
       {
         LeadSource leadsource = ((frmLS)frmLS).LeadSource;
         frmGraph frmMain = new frmGraph(leadsource);
+        frmMain.Title = $"{Context.Module} - [{Context.Environment}]";
         frmMain.ShowDialog();
         frmSplash.Close();
       }

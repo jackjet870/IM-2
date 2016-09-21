@@ -142,245 +142,7 @@ namespace IM.Base.Classes
 
     #region Grid Invitation Gift
 
-    #region StartEdit
 
-    /// <summary>
-    /// Inicia las validaciones de los campos del Grid
-    /// </summary>
-    /// <param name="invitationGift">Objeto enlazado al Row que se esta modificando</param>
-    /// <param name="currentCellInfo">Celda que se esta editando</param>
-    /// <param name="dtg">El datagrid que se esta modificando</param>
-    /// <param name="_hasError">True tiene error | False No tiene</param>
-    public static void StartEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
-    {
-      //Index del Row en edicion
-      int rowIndex = dtg.SelectedIndex != -1 ? dtg.SelectedIndex : 0;
-
-      if (invitationGift.iggr == null || invitationGift.iggr == 0)
-      {
-        switch (currentCellInfo.Column.SortMemberPath)
-        {
-          case "iggi":
-            //Si no ha ingresado una cantidad
-            if (invitationGift.igQty == 0)
-            {
-              UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-              _hasError = true;
-              //Asignamos la cantidad minima
-              invitationGift.igQty = 1;
-              //Mandamos el foco a la columna igQty index[0].
-              GridHelper.SelectRow(dtg, rowIndex, 0, true);
-            }
-            break;
-
-          case "igAdults":
-          case "igMinors":
-          case "igExtraAdults":
-            //Si no se ha seleccionado un regalo
-            if (string.IsNullOrEmpty(invitationGift.iggi))
-            {
-              UIHelper.ShowMessage("Enter the gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-              _hasError = true;
-              //Mandamos el foco a la columna iggi index[1].
-              GridHelper.SelectRow(dtg, rowIndex, 1, true);
-            }
-            else
-            {
-              //Obtenemos el Gift Completo
-              var gift = BRGifts.GetGiftId(invitationGift.iggi);
-              // se permite modificar si el regalo maneja Pax
-              currentCellInfo.Column.IsReadOnly = !gift.giWPax;
-            }
-            break;
-
-          default:
-            break;
-        }
-      }
-      //Si el regalo ya fue entregado (No necesita validar las columnas)
-      else
-      {
-        _hasError = false;
-      }
-    }
-
-    #endregion StartEdit
-
-    #region ValidateEdit
-
-    /// <summary>
-    /// Valida la informacion del Grid
-    /// </summary>
-    /// <param name="invitationGift">Objeto enlazada a la fila que se esta editando</param>
-    /// <param name="currentCellInfo">Celda que se esta editando</param>
-    /// <returns>
-    /// True  si tiene error| False si NO tiene
-    /// </returns>
-    /// <history>
-    /// [erosado] 27/07/2016  Created.
-    /// </history>
-    public static bool ValidateEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo)
-    {
-      bool _hasError = false;
-      switch (currentCellInfo.Column.SortMemberPath)
-      {
-        case "igQty":
-          //Si tiene seleccionado un gift
-          if (invitationGift.iggi != null)
-          {
-            //Buscamos el Gift
-            var gift = BRGifts.GetGiftId(invitationGift.iggi);
-            //Validacion cantidad máxima del regalo
-            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, gift, false, 1, ref _hasError, nameof(invitationGift.igQty));
-          }//Si no ha seleccionado el Gift
-          else
-          {
-            //Validacion cantidad máxima del regalo
-            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref _hasError, nameof(invitationGift.igQty));
-          }
-          return _hasError;
-
-        case "igAdults":
-          //Validacion Numero de Adultos
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
-          return _hasError;
-
-        case "igMinors":
-          //Validacion Numero de menores
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
-          return _hasError;
-
-        default:
-          break;
-      }
-      return _hasError;
-    }
-
-    #endregion ValidateEdit
-
-    #region AfterEdit
-
-    /// <summary>
-    /// Valida la informacion de la celda.
-    /// </summary>
-    /// <param name="dtg">DataGrid que estamos validando</param>
-    /// <param name="invitationGift">Objeto enlazado a la fila que estamos validando</param>
-    /// <param name="currentCell">Celda que estamos validando</param>
-    /// <param name="txtTotalCost">Caja de texto donde se pondrá el resultado del calculo de Costos</param>
-    /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
-    /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
-    public static void AfterEdit(int guestId, DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
-      ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, EnumProgram program)
-    {
-      //Obtenemos el Gift
-      var gift = BRGifts.GetGiftId(invitationGift.iggi);
-
-      switch (currentCell.Column.SortMemberPath)
-      {
-        case nameof(invitationGift.igQty):
-          //Si son diferentes de NULL
-          if (invitationGift?.igQty >= 0 && invitationGift?.igAdults >= 0 && invitationGift?.igMinors >= 0 &&
-             invitationGift?.igExtraAdults >= 0)
-          {
-            //Calcula costos y precios
-            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
-              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
-              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
-              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
-              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult));
-          }
-          break;
-
-        case nameof(invitationGift.iggi):
-          //Si se selecciono el Gift
-          if (!string.IsNullOrEmpty(invitationGift.iggi))
-          {
-            // Cargar a Marketing
-            invitationGift.igct = "MARKETING";
-
-            //Si el regalo no maneja Pax
-            if (!gift.giWPax)
-            {
-              //Agrega valores default
-              invitationGift.igAdults = 1;
-              invitationGift.igMinors = 0;
-              invitationGift.igExtraAdults = 0;
-            }
-            //Establecemos valores default de adultos y menores
-            invitationGift.igAdults = 1;
-            invitationGift.igMinors = 0;
-            invitationGift.igExtraAdults = 0;
-            invitationGift.igPriceA = 0;
-            invitationGift.igPriceM = 0;
-            invitationGift.igPriceAdult = 0;
-            invitationGift.igPriceMinor = 0;
-            invitationGift.igPriceExtraAdult = 0;
-
-            //Validamos la cantidad maxima que podemos regalar de el regalo en específico.
-            Gifts.ValidateMaxQuantity(gift, invitationGift.igQty, false, ref invitationGift, nameof(invitationGift.igQty));
-
-            //Si es InHouse y ya selecciono guestStatusType
-            if (program == EnumProgram.Inhouse && guestStatusType != null && guestId != 0)
-            {
-              //Obtenemos el GuestStatusInfo
-              var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(guestId, 0);
-
-              if (guestStatusInfo != null)
-              {
-                //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
-                Gifts.ValidateGiftsGuestStatus(dtg, guestStatusInfo, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
-              }
-            }
-
-            //Calculamos los costos y los precios
-            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
-                nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
-                nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
-                nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
-                nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false);
-          }
-          break;
-
-        case nameof(invitationGift.igAdults):
-          // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
-              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
-              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
-              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
-              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Adults);
-          break;
-
-        case nameof(invitationGift.igMinors):
-          // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
-              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
-              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
-              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
-              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Minors);
-          break;
-
-        case nameof(invitationGift.igExtraAdults):
-          // calculamos los costos y precios
-          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
-              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
-              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
-              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
-              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.ExtraAdults);
-          break;
-
-        default:
-          break;
-      }
-      //Calculamos el monto total de los regalos
-      Gifts.CalculateTotalGifts(dtg, EnumGiftsType.InvitsGifts, nameof(invitationGift.igQty), nameof(invitationGift.iggi),
-        nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceAdult),
-        nameof(invitationGift.igPriceA), nameof(invitationGift.igPriceExtraAdult), txtTotalCost, txtTotalPrice);
-
-      //Refresca los datos en las celdas del Grid
-      GridHelper.UpdateCellsFromARow(dtg);
-    }
-
-    #endregion AfterEdit
 
     #endregion Grid Invitation Gift
 
@@ -708,6 +470,247 @@ namespace IM.Base.Classes
 
     #endregion ValidateFolioOuthouseFormat
 
+    #region DataGrid Invitation Gifts
+    #region StartEdit
+
+    /// <summary>
+    /// Inicia las validaciones de los campos del Grid
+    /// </summary>
+    /// <param name="invitationGift">Objeto enlazado al Row que se esta modificando</param>
+    /// <param name="currentCellInfo">Celda que se esta editando</param>
+    /// <param name="dtg">El datagrid que se esta modificando</param>
+    /// <param name="_hasError">True tiene error | False No tiene</param>
+    public static void StartEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
+    {
+      //Index del Row en edicion
+      int rowIndex = dtg.SelectedIndex != -1 ? dtg.SelectedIndex : 0;
+
+      if (invitationGift.iggr == null || invitationGift.iggr == 0)
+      {
+        switch (currentCellInfo.Column.SortMemberPath)
+        {
+          case "iggi":
+            //Si no ha ingresado una cantidad
+            if (invitationGift.igQty == 0)
+            {
+              UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+              _hasError = true;
+              //Asignamos la cantidad minima
+              invitationGift.igQty = 1;
+              //Mandamos el foco a la columna igQty index[0].
+              GridHelper.SelectRow(dtg, rowIndex, 0, true);
+            }
+            break;
+
+          case "igAdults":
+          case "igMinors":
+          case "igExtraAdults":
+            //Si no se ha seleccionado un regalo
+            if (string.IsNullOrEmpty(invitationGift.iggi))
+            {
+              UIHelper.ShowMessage("Enter the gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+              _hasError = true;
+              //Mandamos el foco a la columna iggi index[1].
+              GridHelper.SelectRow(dtg, rowIndex, 1, true);
+            }
+            else
+            {
+              //Obtenemos el Gift Completo
+              var gift = BRGifts.GetGiftId(invitationGift.iggi);
+              // se permite modificar si el regalo maneja Pax
+              currentCellInfo.Column.IsReadOnly = !gift.giWPax;
+            }
+            break;
+
+          default:
+            break;
+        }
+      }
+      //Si el regalo ya fue entregado (No necesita validar las columnas)
+      else
+      {
+        _hasError = false;
+      }
+    }
+
+    #endregion StartEdit
+
+    #region ValidateEdit
+
+    /// <summary>
+    /// Valida la informacion del Grid
+    /// </summary>
+    /// <param name="invitationGift">Objeto enlazada a la fila que se esta editando</param>
+    /// <param name="currentCellInfo">Celda que se esta editando</param>
+    /// <returns>
+    /// True  si tiene error| False si NO tiene
+    /// </returns>
+    /// <history>
+    /// [erosado] 27/07/2016  Created.
+    /// </history>
+    public static bool ValidateEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo)
+    {
+      bool _hasError = false;
+      switch (currentCellInfo.Column.SortMemberPath)
+      {
+        case "igQty":
+          //Si tiene seleccionado un gift
+          if (invitationGift.iggi != null)
+          {
+            //Buscamos el Gift
+            var gift = BRGifts.GetGiftId(invitationGift.iggi);
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, gift, false, 1, ref _hasError, nameof(invitationGift.igQty));
+          }//Si no ha seleccionado el Gift
+          else
+          {
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref _hasError, nameof(invitationGift.igQty));
+          }
+          return _hasError;
+
+        case "igAdults":
+          //Validacion Numero de Adultos
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return _hasError;
+
+        case "igMinors":
+          //Validacion Numero de menores
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return _hasError;
+
+        default:
+          break;
+      }
+      return _hasError;
+    }
+
+    #endregion ValidateEdit
+
+    #region AfterEdit
+
+    /// <summary>
+    /// Valida la informacion de la celda.
+    /// </summary>
+    /// <param name="dtg">DataGrid que estamos validando</param>
+    /// <param name="invitationGift">Objeto enlazado a la fila que estamos validando</param>
+    /// <param name="currentCell">Celda que estamos validando</param>
+    /// <param name="txtTotalCost">Caja de texto donde se pondrá el resultado del calculo de Costos</param>
+    /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
+    /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
+    public static void AfterEdit(int guestId, DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
+      ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, EnumProgram program)
+    {
+      //Obtenemos el Gift
+      var gift = BRGifts.GetGiftId(invitationGift.iggi);
+
+      switch (currentCell.Column.SortMemberPath)
+      {
+        case nameof(invitationGift.igQty):
+          //Si son diferentes de NULL
+          if (invitationGift?.igQty >= 0 && invitationGift?.igAdults >= 0 && invitationGift?.igMinors >= 0 &&
+             invitationGift?.igExtraAdults >= 0)
+          {
+            //Calcula costos y precios
+            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult));
+          }
+          break;
+
+        case nameof(invitationGift.iggi):
+          //Si se selecciono el Gift
+          if (!string.IsNullOrEmpty(invitationGift.iggi))
+          {
+            // Cargar a Marketing
+            invitationGift.igct = "MARKETING";
+
+            //Si el regalo no maneja Pax
+            if (!gift.giWPax)
+            {
+              //Agrega valores default
+              invitationGift.igAdults = 1;
+              invitationGift.igMinors = 0;
+              invitationGift.igExtraAdults = 0;
+            }
+            //Establecemos valores default de adultos y menores
+            invitationGift.igAdults = 1;
+            invitationGift.igMinors = 0;
+            invitationGift.igExtraAdults = 0;
+            invitationGift.igPriceA = 0;
+            invitationGift.igPriceM = 0;
+            invitationGift.igPriceAdult = 0;
+            invitationGift.igPriceMinor = 0;
+            invitationGift.igPriceExtraAdult = 0;
+
+            //Validamos la cantidad maxima que podemos regalar de el regalo en específico.
+            Gifts.ValidateMaxQuantity(gift, invitationGift.igQty, false, ref invitationGift, nameof(invitationGift.igQty));
+
+            //Si es InHouse y ya selecciono guestStatusType
+            if (program == EnumProgram.Inhouse && guestStatusType != null && guestId != 0)
+            {
+              //Obtenemos el GuestStatusInfo
+              var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(guestId, 0);
+
+              if (guestStatusInfo != null)
+              {
+                //Valida que no den mas de los tours permitidos && Validamos que no den mas de los descuentos de Tour
+                Gifts.ValidateGiftsGuestStatus(dtg, guestStatusInfo, nameof(invitationGift.igQty), nameof(invitationGift.iggi));
+              }
+            }
+
+            //Calculamos los costos y los precios
+            Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+                nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+                nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+                nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+                nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false);
+          }
+          break;
+
+        case nameof(invitationGift.igAdults):
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Adults);
+          break;
+
+        case nameof(invitationGift.igMinors):
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.Minors);
+          break;
+
+        case nameof(invitationGift.igExtraAdults):
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref invitationGift, gift, nameof(invitationGift.igQty),
+              nameof(invitationGift.igAdults), nameof(invitationGift.igMinors),
+              nameof(invitationGift.igExtraAdults), nameof(invitationGift.igPriceA),
+              nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceAdult),
+              nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceExtraAdult), false, EnumPriceType.ExtraAdults);
+          break;
+
+        default:
+          break;
+      }
+      //Calculamos el monto total de los regalos
+      Gifts.CalculateTotalGifts(dtg, EnumGiftsType.InvitsGifts, nameof(invitationGift.igQty), nameof(invitationGift.iggi),
+        nameof(invitationGift.igPriceM), nameof(invitationGift.igPriceMinor), nameof(invitationGift.igPriceAdult),
+        nameof(invitationGift.igPriceA), nameof(invitationGift.igPriceExtraAdult), txtTotalCost, txtTotalPrice);
+
+      //Refresca los datos en las celdas del Grid
+      GridHelper.UpdateCellsFromARow(dtg);
+    }
+
+    #endregion AfterEdit
+
     #region InvitationGiftValidation
 
     /// <summary>
@@ -721,35 +724,112 @@ namespace IM.Base.Classes
     /// </history>
     public static bool InvitationGiftValidation(ref frmInvitation form, GuestInvitation dbContext)
     {
-      bool _isValid = true;
-      //Validamos gift duplicados
-      if (ObjectHelper.AreAnyDuplicates(dbContext.InvitationGiftList.ToList(), nameof(InvitationGift.iggi)))
+      bool isValid = true;
+      int columnIndex = 0;
+      //Validar que ya se haya salido del modo edición del Grid de Gift
+      DataGridRow row = GridHelper.GetRowEditing(form.dtgGifts);
+      if (row != null)
       {
-        UIHelper.ShowMessage("Repeated gift");
-        form.dtgGifts.Focus();
-        _isValid = false;
+        //Revisamos la fila que esta en edicion buscando algun valor incorrecto.
+        PropertyInfo[] properties = (row.Item as InvitationGift).GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo pi in properties)
+        {
+          //Si encontro algun valor incorrecto buscamos en que columna fue y le asignamos al columnIndex.
+          if (!ValidateEditBeforeSave(pi.Name,row.Item as InvitationGift,ref columnIndex))
+          {
+            var column = form.dtgGifts.Columns.Where(cl => cl.SortMemberPath == pi.Name).FirstOrDefault();
+            columnIndex = (column != null) ? column.DisplayIndex : 0;
+            isValid = false;
+          }
+        }
+        //Si Los valores que estan en la fila en edicion son correctos entonces hacemos commit
+        if (isValid)
+        {
+          form.dtgGifts.RowEditEnding -= form.dtgGifts_RowEditEnding;
+          form.dtgGifts.CommitEdit();
+          form.dtgGifts.RowEditEnding += form.dtgGifts_RowEditEnding;
+        }
+        //Si hay algun valor incorrecto
+        else
+        {
+          isValid = false;
+          GridHelper.SelectRow(form.dtgGifts, row.GetIndex(), columnIndex, true);
+        }
+
       }
-      //Si pasó la validacion de Registros duplicados
-      if (_isValid)
+      //Validamos gift duplicados
+      if (isValid)
       {
-        //Validamos el GuestStatus
+        if (ObjectHelper.AreAnyDuplicates(dbContext.InvitationGiftList.ToList(), nameof(InvitationGift.iggi)))
+        {
+          UIHelper.ShowMessage("Repeated gift");
+          form.dtgGifts.Focus();
+          isValid = false;
+        }
+      }
+      //Validamos el GuestStatus
+      if (isValid)
+      {
         var guestStatusInfo = BRGuestStatus.GetGuestStatusInfo(dbContext.Guest.guID);
 
         //Si tiene informacion de GuestStatus y se desea aplicar la validacion de Tours
         if (guestStatusInfo != null && guestStatusInfo.gsMaxQtyTours > 0)
         {
-          _isValid = Gifts.ValidateGiftsGuestStatus(form.dtgGifts, guestStatusInfo, nameof(InvitationGift.igQty), nameof(InvitationGift.iggi));
+          isValid = Gifts.ValidateGiftsGuestStatus(form.dtgGifts, guestStatusInfo, nameof(InvitationGift.igQty), nameof(InvitationGift.iggi));
         }
       }
       //Si pasó la validacion de GuestStatus  validamos  monto maximo de regalos
-      if (_isValid)
+      if (isValid)
       {
-        _isValid = Gifts.ValidateMaxAuthGifts(form.txtGiftTotalCost.Text, form.txtGiftMaxAuth.Text);
+        isValid = Gifts.ValidateMaxAuthGifts(form.txtGiftTotalCost.Text, form.txtGiftMaxAuth.Text);
       }
-      return _isValid;
+      return isValid;
     }
 
-    #endregion InvitationGiftValidation
+    #endregion
+
+    #region ValidateEdit BeforeSave
+    public static bool ValidateEditBeforeSave(string propertyName, InvitationGift invitationGift, ref int columnIndex)
+    {
+      bool hasError = false;
+      switch (propertyName)
+      {
+        case "igQty":
+          //Si tiene seleccionado un gift
+          if (invitationGift.iggi != null)
+          {
+            //Buscamos el Gift
+            var gift = BRGifts.GetGiftId(invitationGift.iggi);
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, gift, false, 1, ref hasError, nameof(invitationGift.igQty));
+          }//Si no ha seleccionado el Gift
+          else
+          {
+            //Validacion cantidad máxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref hasError, nameof(invitationGift.igQty));
+          }
+          return hasError;
+
+        case "igAdults":
+          //Validacion Numero de Adultos
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return hasError;
+
+        case "igMinors":
+          //Validacion Numero de menores
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return hasError;
+
+        default:
+          break;
+      }
+      return hasError;
+    }
+
+    #endregion
+
+
+    #endregion
 
     #region DataGrid Booking Deposits    
     #region StartEditBokingDeposits
@@ -1120,10 +1200,11 @@ namespace IM.Base.Classes
         {
           isValid = false;
           GridHelper.SelectRow(form.dtgBookingDeposits, row.GetIndex(), columnIndex, true);
+          form.tabStatusGiftsOthers.IsSelected = true;
         }
       }
       return isValid;
-    } 
+    }
     #endregion
 
     #endregion
@@ -1171,13 +1252,13 @@ namespace IM.Base.Classes
     /// <history>
     /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo)
+    public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo, EnumProgram program)
     {
       bool _hasError = false;
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guID":
-          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, true)).Item1;
+          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, program, true)).Item1;
           break;
       }
       return _hasError;
@@ -1196,43 +1277,44 @@ namespace IM.Base.Classes
     /// <history>
     /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, bool showMsg = false)
+    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, EnumProgram program, bool showMsg = false)
     {
       bool IsValid = true;
       string msg = "";
 
-        if (additional == null || (additional != null && additional.guID == 0))
-        {
-          msg = "Guest ID doesn't exists.";
-          IsValid = false;
-        }
-        else if (parent.guID > 0 && additional.guID == parent.guID)
-        {
-          msg = "The main guest can't be an additional guest.";
-          IsValid = false;
-        }
-        else if (!additional.guCheckIn)
-        {
-          msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} has not made Check-In.";
-          IsValid = false;
-        }
-        else if (!(parent.guID > 0 && parent.guRef != null))
-        {
-          // obtenemos un huesped principal que tenga como huesped adicional al huesped adicional en cuestion.
-          var guestAux = await BRGuests.GetMainGuest(additional.guID, (parent.guID > 0) ? parent.guID : 0);
+      if (additional == null || (additional != null && additional.guID == 0))
+      {
+        msg = "Guest ID doesn't exists.";
+        IsValid = false;
+      }
+      else if (parent.guID > 0 && additional.guID == parent.guID)
+      {
+        msg = "The main guest can't be an additional guest.";
+        IsValid = false;
+      }
+      else if (!additional.guCheckIn && program == EnumProgram.Inhouse)
+      {
+        msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} has not made Check-In.";
+        IsValid = false;
+      }
+      else if (!(parent.guID > 0 && parent.guRef != null))
+      {
+        // obtenemos un huesped principal que tenga como huesped adicional al huesped adicional en cuestion.
+        var guestAux = await BRGuests.GetMainGuest(additional.guID, (parent.guID > 0) ? parent.guID : 0);
 
-          //Si lo encontramos.
-          if (guestAux != null && guestAux.guID > 0)
-          {
-            msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already belongs to the invitation {guestAux.guID} - {guestAux.guLastName1} {guestAux.guFirstName1}.";
-            IsValid = false;
-          }
-        }
-        else if (additional.guInvit)
+        //Si lo encontramos.
+        if (guestAux != null && guestAux.guID > 0)
         {
-          msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
+          msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already belongs to the invitation {guestAux.guID} - {guestAux.guLastName1} {guestAux.guFirstName1}.";
           IsValid = false;
-        }     
+        }
+      }
+      else if (additional.guInvit)
+      {
+        msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
+        IsValid = false;
+      }            
+        
 
       if (showMsg && !string.IsNullOrWhiteSpace(msg))
       {

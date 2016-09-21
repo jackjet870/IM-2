@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Windows;
 
 namespace IM.Inhouse.Classes
 {
@@ -33,7 +34,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 19/04/2016 Created
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
     /// </history>
-    public async static void ArrivalsToExcel(List<RptArrivals> arrivlas, DateTime date)
+    public async static void ArrivalsToExcel(List<RptArrivals> arrivlas, DateTime date,Window window)
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
@@ -63,7 +64,7 @@ namespace IM.Inhouse.Classes
         format.Add("PR B", "guPRInvit1");
         format.Add("Comments", "guComments");
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt,filters,rptName,dateRange, format, addEnumeration:true));
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt,filters,rptName,dateRange, format, addEnumeration:true),window);
       }
     }
 
@@ -79,7 +80,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 19/04/2016 Created
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
     /// </history>
-    public async static void AvailablesToExcel(List<RptAvailables> aviables)
+    public async static void AvailablesToExcel(List<RptAvailables> aviables,Window window)
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
@@ -109,7 +110,7 @@ namespace IM.Inhouse.Classes
         format.Add("PR B", "guPRInvit1");
         format.Add("Comments", "guComments");
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true));
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true),window);
       }
     }
 
@@ -126,7 +127,7 @@ namespace IM.Inhouse.Classes
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    public static async void PremanifestToExcel(List<RptPremanifest> premanifest)
+    public static async void PremanifestToExcel(List<RptPremanifest> premanifest,Window window)
     {
 
       filters = new List<Tuple<string, string>>();
@@ -140,7 +141,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest ";
         int j = dt.Columns.Count;
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()));
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()),window);
       }
     }
 
@@ -156,7 +157,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 19/04/2016 Created
     /// [jorcanche]  se agrego para abrir el archivo despues de guardar
     /// </history>
-    public static async void PremanifestWithGiftsToExcel(List<RptPremanifestWithGifts> withGifts)
+    public static async void PremanifestWithGiftsToExcel(List<RptPremanifestWithGifts> withGifts,Window window)
     {
       filters = new List<Tuple<string, string>>();
       dt = new DataTable();
@@ -168,7 +169,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest with gifts";
         string dateRange = DateHelper.DateRangeFileName(date, date);
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()));
+        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()),window);
       }
     }
 
@@ -182,11 +183,12 @@ namespace IM.Inhouse.Classes
     /// [jorcanche] 07/05/2016 created
     /// [emoguel] 08/09/2016 Modified. Ahora abre el visor de reportes
     /// </history>
-    private static void OpenFile(FileInfo file)
+    private static void OpenFile(FileInfo file,Window window)
     {
       if (file != null)
       {
         frmDocumentViewer documentViewer = new frmDocumentViewer(file,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
+        documentViewer.Owner = window;       
         documentViewer.ShowDialog();
       }
     }

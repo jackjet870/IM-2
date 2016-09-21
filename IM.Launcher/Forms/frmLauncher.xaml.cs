@@ -1,18 +1,16 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Classes;
 using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using IM.Model.Helpers;
-using IM.Model.Classes;
 
 namespace IM.Launcher.Forms
 {
@@ -36,7 +34,7 @@ namespace IM.Launcher.Forms
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
       InitializeComponent();
-      
+      Title = $"{Context.Module} - [{Context.Environment}]";
     }
 
     #endregion
@@ -159,6 +157,7 @@ namespace IM.Launcher.Forms
       lstMenu.Add(EnumMenu.MailOuts);
       lstMenu.Add(EnumMenu.Outhouse);
       lstMenu.Add(EnumMenu.InventoryMovs);
+      lstMenu.Add(EnumMenu.ProcessorGRAL);
       lstMenu.Add(EnumMenu.ProcessorINH);
       lstMenu.Add(EnumMenu.ProcessorOUT);
       lstMenu.Add(EnumMenu.PRStatistics);

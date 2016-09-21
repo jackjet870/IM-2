@@ -109,7 +109,8 @@ namespace IM.Administrator.Forms
       var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftLogData>)dgrGifsLog.ItemsSource, true, true, true), new List<Tuple<string, string>> { Tuple.Create("GIFT ID", idGift) },
         $"Gift Logs - {idGift}", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dgrGifsLog.Columns.ToList(), clsFormatReport.RptGiftLog()));
         frmDocumentViewer documentViewver = new frmDocumentViewer(fileinfo, Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly),false);
-        documentViewver.ShowDialog();
+      documentViewver.Owner = this;
+      documentViewver.ShowDialog();
     }
     #endregion
 

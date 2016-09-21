@@ -688,12 +688,12 @@
                                                                             SelectedValuePath="cuID"
                                                                             ItemsSource="{Binding Source={StaticResource currencyList}}" >               
                                                         </DataGridComboBoxColumn>
-                            <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
+                                                        <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
                                                                             SelectedValueBinding="{Binding bdpt,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="ptN"
                                                                             SelectedValuePath="ptID"
                                                                             ItemsSource="{Binding Source={StaticResource paymentTypeList}}" />
-                            <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
+                                                        <DataGridComboBoxColumn x:Name="cmbPaymentPlaceDeposits" Header="Payment Place" Width="90"   IsReadOnly="True"                                                                        
                                                                             SelectedValueBinding="{Binding bdpc,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="pcN"
                                                                             SelectedValuePath="pcID"
@@ -705,8 +705,8 @@
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
                                                         <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
                                                         <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
-                          </DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataGrid.Columns>
                                                 </DataGrid>
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel>

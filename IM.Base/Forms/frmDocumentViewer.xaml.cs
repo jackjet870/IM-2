@@ -10,8 +10,9 @@ using IM.Model.Enums;
 using Microsoft.Win32;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows.Controls;
 using IM.Base.Helpers;
+using IM.Model.Classes;
+using System.Windows.Controls;
 
 namespace IM.Base.Forms
 {
@@ -25,35 +26,57 @@ namespace IM.Base.Forms
     string _fullPathAndName;
     private bool _exportExcel = false;
     public ExecuteCommandHelper ExportToExcel { get; set; }
-    public ExecuteCommandHelper ExportToPdf { get; set; } 
+    public ExecuteCommandHelper ExportToPdf { get; set; }
     #endregion
     #region Eventos del formulario
+    #region frmDocumentViewer
+    /// <summary>
+    /// Constructor del formulario
+    /// </summary>
+    /// <param name="fileInfo">Archivo a mostrar</param>
+    /// <param name="exportExcel">Permiso para exportar a excel</param>
+    /// <param name="isProcessor">Si se abre desde un processor de reportes</param>
+    /// <history>
+    /// [emoguel] 13/09/2016 created
+    /// </history>
     public frmDocumentViewer(FileInfo fileInfo, bool exportExcel, bool isProcessor = true)
     {
       InitializeComponent();
       _excelFile = fileInfo;
-      _exportExcel = exportExcel;      
+      _exportExcel = exportExcel;
       _fullPathAndName = _excelFile.FullName.Replace(_excelFile.Extension, string.Empty);
       if (!isProcessor)
       {
         Closing += Window_Closed;
+        ShowInTaskbar = false;
       }
       //Creamos los commands para exportar a Excel y Pdf
-      ExportToExcel = new ExecuteCommandHelper(x => btnExportToExcel_Click(null,null));
-      ExportToPdf = new ExecuteCommandHelper(x => btnExportToPdf_Click(null,null));
-    }
+      ExportToExcel = new ExecuteCommandHelper(x => btnExportToExcel_Click(null, null));
+      ExportToPdf = new ExecuteCommandHelper(x => btnExportToPdf_Click(null, null));
+    } 
+    #endregion
+    
     #region Window_Loaded
     /// <summary>
     /// Carga el documentViewver
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 05/09/2016 created
+    /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       string name = _excelFile.Name.Replace(_excelFile.Extension, string.Empty);
       Uid = name;
-      Title = name;
+      txbTitle.Text = name;
+      LoadCombobox();
+      UpdateLayout();
       LoadXps();
+      documentViewer.Focus();//para que se activen los controles del toolbar
+      #region Agregarle los eventos a los combobox
+      cmbOrientation.SelectionChanged += cmb_SelectionChanged;
+      cmbPagerSize.SelectionChanged += cmb_SelectionChanged;
+      cmbScale.SelectionChanged += cmb_SelectionChanged;
+      #endregion
     }
     #endregion
 
@@ -156,13 +179,61 @@ namespace IM.Base.Forms
         List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles("*.*", SearchOption.AllDirectories).Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
         lstFiles.ForEach(fi => fi.Delete());
         //Eliminamos los archivos que fueron creados hoy
-        lstFiles = directoryInfo.GetFiles($"{Title}*").ToList();
+        lstFiles = directoryInfo.GetFiles($"{txbTitle.Text}*").ToList();
         lstFiles.ForEach(f => f.Delete());
       }
       catch (Exception ex)
       {
         Helpers.UIHelper.ShowMessage(ex);
       }
+    }
+    #endregion
+
+    #region cmb_SelectionChanged
+    /// <summary>
+    /// Crea un nuevo xps con las opciones seleccionadas
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 14/19/2016
+    /// </history>
+    private void cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      ComboBox combo = sender as ComboBox;
+      if (combo.Name != nameof(cmbMargin))
+      {
+        LoadXps();
+      }
+    }
+    #endregion
+
+    #region ComboBoxItem_MouseClick
+    /// <summary>
+    /// Asigna el margen al documento, segun lo seleccionado en el combobox
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 17/09/2016
+    /// </history>
+    private void ComboBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
+    {
+      ComboBoxItem comboItem = sender as ComboBoxItem;
+      int index = cmbMargin.Items.IndexOf(comboItem.Content);
+      cmbMargin.SelectedIndex = index;
+      if ( index== 3)
+      {
+        Margin margin = cmbMargin.SelectedValue as Margin;
+        frmMargin frmMargin = new frmMargin(margin);
+        if (frmMargin.ShowDialog() == true)
+        {
+          List<dynamic> lstObj = cmbMargin.ItemsSource.OfType<dynamic>().ToList();
+          lstObj[3] = new { name = "Custom Margins", margin = margin };
+          LoadXps();
+        }
+      }
+      else
+      {
+        LoadXps();        
+      }      
+
     }
     #endregion
     #endregion
@@ -175,21 +246,15 @@ namespace IM.Base.Forms
     /// <history>
     /// [emogue] 01/09/2016 created
     /// </history>
-    private async void LoadXps()
+    private void LoadXps()
     {
-      Cursor = Cursors.Wait;
+      Mouse.OverrideCursor = Cursors.Wait;
       XpsDocument xps = null;
       try
       { 
         if (_excelFile.Exists)
-        {
-          if (!File.Exists($"{_fullPathAndName}.xps"))
-          {
-            await Task.Run(() =>
-          {
-            CreateFile(EnumFileFormat.Xps);
-          });
-          }
+        {          
+          CreateFile(EnumFileFormat.Xps);          
           if (File.Exists($"{_fullPathAndName}.xps"))
           {
             xps = new XpsDocument($"{_fullPathAndName}.xps", FileAccess.Read);//Cargamos el xps
@@ -207,7 +272,7 @@ namespace IM.Base.Forms
         {
           xps.Close();
         }
-        Cursor = Cursors.Arrow;
+        Mouse.OverrideCursor = null;
       }
 
     }
@@ -224,6 +289,7 @@ namespace IM.Base.Forms
     public void exportFile(EnumFileFormat enumFileFormat)
     {
       SaveFileDialog dialog = new SaveFileDialog();//Cargamos el saveFileDialog
+      dialog.FileName = txbTitle.Text;
       switch (enumFileFormat)
       {
         case EnumFileFormat.Pdf:
@@ -264,21 +330,58 @@ namespace IM.Base.Forms
       {
         if (_excelFile.Exists)
         {
-
+          //Obtenemos la orientacion seleccionada
+          XlPageOrientation pageOrientation =(XlPageOrientation)cmbOrientation.SelectedValue;
+          //Obtenemos el tamaño de papel seleccionado
+          XlPaperSize paperSize =(XlPaperSize)cmbPagerSize.SelectedValue;
+          //Obtenemos el margen seleccionado
+          Margin margin = cmbMargin.SelectedValue as Margin;
+          //Obtenemos la escala seleccionada
+          EnumScale enumScale = (EnumScale)cmbScale.SelectedValue;          
           excel = new Microsoft.Office.Interop.Excel.Application();
           excel.Visible = false;
           excel.ScreenUpdating = false;
           excel.DisplayAlerts = false;
           
           wb = excel.Workbooks.Open(_excelFile.FullName, 0, false, Missing.Value, Missing.Value, Missing.Value, true, XlPlatform.xlWindows, Missing.Value, false, false, Missing.Value, false, true, false);//Cargamos el excel                              
-          _Worksheet ws = ((_Worksheet)wb.ActiveSheet);          
+          _Worksheet ws = ((_Worksheet)wb.ActiveSheet);
 
-          ws.PageSetup.PaperSize = XlPaperSize.xlPaperLetter;//Tamaño carta          
-          ws.PageSetup.LeftMargin=0.64;
-          ws.PageSetup.RightMargin = 0.64;
-          ws.PageSetup.TopMargin = 1.91;
-          ws.PageSetup.BottomMargin = 1.91;
-          ws.PageSetup.Orientation = XlPageOrientation.xlLandscape;
+          ws.PageSetup.PaperSize = paperSize;//asignamos el tamaño de hoja
+          ws.PageSetup.Orientation = pageOrientation;//asignamos orientación de la pagina
+          ws.PageSetup.LeftMargin=excel.CentimetersToPoints(margin.left);//asignamos Margen Izquierdo
+          ws.PageSetup.RightMargin =excel.CentimetersToPoints(margin.right);//asignamos Margen Derecho
+          ws.PageSetup.TopMargin = excel.CentimetersToPoints(margin.top);//asignamos Margen de arriba
+          ws.PageSetup.BottomMargin = excel.CentimetersToPoints(margin.bottom);//asignamos Margen de abajo  
+          ws.PageSetup.Zoom = false;
+          //Asignamos la escala seleccionada
+          switch(enumScale)
+          {
+            case EnumScale.Noscaling:
+              {
+                ws.PageSetup.FitToPagesTall = false;
+                ws.PageSetup.FitToPagesWide = false;
+                break;
+              }
+            case EnumScale.FitSheetOnOnePage:
+              {
+                ws.PageSetup.FitToPagesTall = 1;
+                ws.PageSetup.FitToPagesWide = 1;
+                break;
+              }
+            case EnumScale.FitAllColumnsOnOnePage:
+              {                
+                ws.PageSetup.FitToPagesWide = 1;
+                ws.PageSetup.FitToPagesTall = false;
+                break;
+              }
+            case EnumScale.FitAllRowsOnOnePage:
+              {
+                ws.PageSetup.FitToPagesTall = 1;
+                ws.PageSetup.FitToPagesWide = false;               
+                break;
+              }
+          }
+          
           ws.PageSetup.Order = XlOrder.xlOverThenDown;
           
           switch (enumFileFormat)
@@ -314,6 +417,58 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #region LoadCombobox
+    /// <summary>
+    /// Llena los combos del toolbar
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 14/09/2016
+    /// </history>
+    private void LoadCombobox()
+    {
+      #region Orientation
+      List<dynamic> lstOrientation = new List<dynamic>();
+      lstOrientation.Add(new { description = "Orientation Horizontal", pageOrientation = XlPageOrientation.xlLandscape });
+      lstOrientation.Add(new { description = "Orientation Vertical", pageOrientation = XlPageOrientation.xlPortrait });
+      cmbOrientation.ItemsSource = lstOrientation;
+      #endregion
+
+      #region PageSize
+      
+      List<dynamic> lstPaperSize = new List<dynamic>();
+      lstPaperSize.Add(new { name = "Paper Letter", description="21.59 cm x 29.7 cm",  paperSize = XlPaperSize.xlPaperLetter });
+      lstPaperSize.Add(new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall });
+      lstPaperSize.Add(new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger });
+      lstPaperSize.Add(new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal });
+      lstPaperSize.Add(new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3 });
+      lstPaperSize.Add(new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4 });
+      lstPaperSize.Add(new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5 });
+      lstPaperSize.Add(new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17 });
+      lstPaperSize.Add(new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote });
+      cmbPagerSize.ItemsSource = lstPaperSize;
+      #endregion      
+
+      #region Margin
+      var lstMargins = new List<object>();
+      lstMargins.Add(new { name= "Normal Margins", margin=new Margin { left=1.78,right=1.78,top=1.91,bottom=1.91 } });
+      lstMargins.Add(new { name = "Wide Margins", margin = new Margin { left = 2.54, right = 2.54, top = 2.54, bottom = 2.54 } });
+      lstMargins.Add(new { name = "Strech Margins", margin = new Margin { left = 0.64, right = 0.64, top = 1.91, bottom = 1.91 } });
+      lstMargins.Add(new { name = "Custom Margins", margin = new Margin { left = 0, right = 0, top = 0, bottom = 0 } });
+      cmbMargin.ItemsSource = lstMargins;
+      #endregion
+
+      #region Scale
+      List<dynamic> lstScales = new List<dynamic>();
+      lstScales.Add(new { name = "No Scaling",scale=EnumScale.Noscaling });
+      lstScales.Add(new { name = "Fit Sheet on One Page",scale=EnumScale.FitSheetOnOnePage });
+      lstScales.Add(new { name = "Fit All Columns on One Page",scale=EnumScale.FitAllColumnsOnOnePage });
+      lstScales.Add(new { name = "Fit All Rows on One Page",scale=EnumScale.FitAllRowsOnOnePage});
+      cmbScale.ItemsSource = lstScales;
+      #endregion
+    }
+    #endregion   
+
     #endregion
+
   }
 }

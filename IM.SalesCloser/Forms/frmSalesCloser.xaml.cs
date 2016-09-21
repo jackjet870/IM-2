@@ -104,6 +104,7 @@ namespace IM.SalesCloser.Forms
         if (fi != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewer.Owner = this;
           documentViewer.ShowDialog();
         }
       }

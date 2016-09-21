@@ -6,21 +6,17 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         Title="About" Height="420" Width="570" Background="SkyBlue" ResizeMode="NoResize" ShowInTaskbar="False">
-    <Grid>
-        <Image Source="pack://application:,,,/IM.Styles;component/Images/IM.png" Width="80" Height="80" Margin="10,10,452,279" ></Image>
-        <TextBlock Text="INTELLIGENCE MARKETING" FontSize="30" Margin="122,10,10,314" FontWeight="Bold" Foreground="Blue"/>
-        <TextBlock Text="The best timeshare management" FontSize="18" Foreground="DarkBlue" Margin="169,55,88,279"/>
-        <Label Content="Versión:" Margin="6,95,478,237"/>
-        <TextBlock Name="txtVersion" Text="v1.1.0" Margin="59,100,429,241"/>
-        <TextBlock Text="Contact:" FontSize="16" FontWeight="Bold" Margin="76,148,397,181"></TextBlock>
-        <TextBlock Text="support@intelligencemarketing.com" FontSize="16" Margin="149,148,113,194"></TextBlock>
-        <TextBlock Text="Web Site:" FontSize="16" FontWeight="Bold" Margin="67,188,402,141"></TextBlock>
-        <TextBlock Text="www.intelligencemarketing.com" FontSize="16" Margin="149,188,113,154"></TextBlock>
-        <TextBlock Text="Product licensed:" FontSize="16" FontWeight="Bold" Margin="10,228,398,101"></TextBlock>
-        <TextBlock Text="Palace Premier" FontSize="16" Margin="149,228,113,114"></TextBlock>
-        <TextBlock Text="Serie Number:" FontSize="16" FontWeight="Bold" Margin="30,268,395,61"></TextBlock>
-        <TextBlock Text="OS-Pr1-001" FontSize="16" Margin="149,268,113,74"></TextBlock>
-        <Button Name="btnCerrar" Content="Close" Margin="456,308,10,36" Background="White" FontWeight="Bold" Click="btnCerrar_Click"/>
-        <Label Content="1998-2005 Copyright. This computer program was produced by copyright law and international treaties." FontSize="10" Margin="0,355,0,0"/>
-    </Grid>
+  <Grid>
+    <Image Source="pack://application:,,,/IM.Styles;component/Images/IM.png" Width="80" Height="80" Margin="10,10,452,279" ></Image>
+    <TextBlock Text="Intelligence Marketing" FontSize="30" Margin="149,10,48,330" FontWeight="Bold" Foreground="Blue"  />
+    <TextBlock Text="The best timeshare management" FontSize="18" Foreground="DarkBlue" Margin="181,67,74,290"/>
+    <TextBlock Text="Version:" Margin="10,107,498,260"/>
+    <TextBlock Name="txtVersion" Text="1.0.0" Margin="71,107,451,259" RenderTransformOrigin="0.426,1.311"/>
+    <TextBlock Text="Contact:" FontSize="16" FontWeight="Bold" Margin="10,132,486,233"></TextBlock>
+    <TextBlock FontSize="16" Margin="10,164,10,131"><Run Text="William Jesús Torres Flota (wtorres@palaceresorts.com)"/><LineBreak/><Run Text="Edder Salim RosadoLira (erosado@palaceresorts.com"/><Run Text=")"/><LineBreak/><Run Text="Edgar René Rodriguez Medina (edgrodriguez@palaceresorts.com)"/><LineBreak/><Run Text="Edwin Abimael Moguel Morales (emoguel@palaceresorts.com"/><Run Text=")"/></TextBlock>
+    <TextBlock Text="Product licensed:" FontSize="16" FontWeight="Bold" Margin="10,266,420,90"></TextBlock>
+    <TextBlock Text="Palace Elite" FontSize="16" Margin="149,266,10,90"></TextBlock>
+    <Button Name="btnCerrar" Content="Close" Margin="456,308,10,36" Background="White" FontWeight="Bold" Click="btnCerrar_Click"/>
+    <Label Content="2016 Copyright. This computer program was produced by copyright law and international treaties." FontSize="10" Margin="0,355,0,0"/>
+  </Grid>
 </Window>
