@@ -1916,7 +1916,7 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Fo
     public static ExcelFormatItemsList RptLoginsLog()
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
-      lst.Add("Date Time", "Date_Time", format:EnumFormatTypeExcel.Date);
+      lst.Add("Date Time", "Date_Time", format:EnumFormatTypeExcel.DateTime);
       lst.Add("Location", "Location");
       lst.Add("Code", "Code");
       lst.Add("Name", "Name");
@@ -2101,7 +2101,7 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Fo
     {
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
 
-      lst.Add("Date", "wmD");
+      lst.Add("Date", "wmD", format:EnumFormatTypeExcel.Date);
       lst.Add("Qty", "wmQty", format: EnumFormatTypeExcel.Number);
       lst.Add("Gift", "giN");
       lst.Add("Code", "wmpe");

@@ -1463,11 +1463,11 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private async void ShowGeneralReport(string strReportName, clsFilter filter, bool blndateRange = false)
     {
-      //var dateRange = (blndateRange)
-      //  ? ((_blnOneDate)
-      //    ? DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.StartDate)
-      //    : DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.EndDate))
-      //  : "";
+      var dateRange = (blndateRange)
+        ? ((_blnOneDate)
+          ? DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.StartDate)
+          : DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.EndDate))
+        : "";
       var dateRangeFileNameRep = (blndateRange) ? (_blnOneDate ? DateHelper.DateRangeFileName(filter.StartDate, filter.StartDate) : DateHelper.DateRangeFileName(filter.StartDate, filter.EndDate)) : "";
       FileInfo finfo = null;
       var filters = new List<Tuple<string, string>>();
@@ -1550,8 +1550,11 @@ namespace IM.ProcessorGeneral.Forms
           case "Production Referral":
             var lstRptProductionReferral = await BRGeneralReports.GetRptProductionReferral(filter.StartDate, filter.EndDate);
             if (lstRptProductionReferral.Any())
+            {
+              filters.Add(Tuple.Create("Date Range", dateRange));
               finfo = await clsReports.ExportRptProductionReferral(strReportName, fileFullPath, filters,
                 lstRptProductionReferral);
+            }
             break;
 
           #endregion
@@ -1570,7 +1573,10 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptSalesByProgramLeadSourceMarkets = await BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(filter.StartDate,
                 filter.EndDate);
             if (lstRptSalesByProgramLeadSourceMarkets.Any())
+            {
+              filters.Add(Tuple.Create("Date Range", dateRange));
               finfo = await clsReports.ExportRptSalesByProgramLeadSourceMarket(strReportName, fileFullPath, filters, lstRptSalesByProgramLeadSourceMarkets);
+            }
             break;
 
           #endregion
@@ -1580,8 +1586,8 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
             if (lstRptWarehouseMovements.Any())             
             {
+              filters.Add(Tuple.Create("Date Range", dateRange));
               filters.Add(Tuple.Create("Warehouse", (filter.AllWarehouses ? "ALL" : string.Join(",", filter.LstWarehouses))));
-
               finfo = await clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
                 lstRptWarehouseMovements);
             }
