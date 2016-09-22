@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Xps.Packaging;
@@ -13,8 +12,8 @@ using System.Collections.Generic;
 using IM.Base.Helpers;
 using IM.Model.Classes;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Diagnostics;
+using IM.Model.Extensions;
 
 namespace IM.Base.Forms
 {
@@ -97,21 +96,13 @@ namespace IM.Base.Forms
         Mouse.OverrideCursor = Cursors.Wait;
         if (_excelFile.Exists)//Si existe el excel crear el excel para general el pdf
         {
-          if (File.Exists($"{_fullPathAndName}.pdf"))//verificar si existe el pdf, solo copiar
-          {
-            exportFile(EnumFileFormat.Pdf);
-          }
-          else//Si no existe crear el PDF
-          {
-            CreateFile(EnumFileFormat.Pdf);
-            exportFile(EnumFileFormat.Pdf);
-          }          
+          CreateFile(EnumFileFormat.Pdf);
         }
 
       }
       catch (Exception ex)
       {
-        Helpers.UIHelper.ShowMessage(ex);
+        UIHelper.ShowMessage(ex);
       }
       finally
       {
@@ -138,7 +129,7 @@ namespace IM.Base.Forms
           {
               if (_excelFile.Exists)//verificar si existe el pdf, solo copiar
             {
-                exportFile(EnumFileFormat.Excel);//Exportamos a Excel
+              ExportExcel();//Exportamos a Excel
             }
           }
         }
@@ -281,7 +272,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region exportFile
+    #region ExportExcel
     /// <summary>
     /// Copia un archivo a la ruta que seleccione el usuario
     /// </summary>
@@ -289,49 +280,24 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel] 02/09/2016 created
     /// </history>
-    public void exportFile(EnumFileFormat enumFileFormat)
+    public void ExportExcel()
     {
       SaveFileDialog dialog = new SaveFileDialog();//Cargamos el saveFileDialog
       dialog.FileName = Uid;
-      switch (enumFileFormat)
+      dialog.Filter = "Excel files(*.xlsx) | *.xlsx;";
+      if (dialog.ShowDialog() == true)
       {
-        case EnumFileFormat.Pdf:
-          {
-            dialog.Filter = "Pdf files(*.pdf) | *.pdf;";
-            if (dialog.ShowDialog() == true)
-            {
-              File.Copy(_fullPathAndName + ".pdf", dialog.FileName, true); 
-              if(File.Exists(dialog.FileName))
-              {
-                UIHelper.ShowMessage("Document sufesfully saved.");
-                Process.Start(dialog.FileName);
-              }     
-              else
-              {
-                UIHelper.ShowMessage("Document not saved");
-              }        
-            }
-            break;
-          }
-        case EnumFileFormat.Excel:
-          {
-            dialog.Filter = "Excel files(*.xlsx) | *.xlsx;";
-            if (dialog.ShowDialog() == true)
-            {
-              File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, true);
+        File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, true);
 
-              if (File.Exists(dialog.FileName))
-              {
-                UIHelper.ShowMessage("Document sufesfully saved.");
-                Process.Start(dialog.FileName);
-              }
-              else
-              {
-                UIHelper.ShowMessage("Document not saved.");
-              }
-            }
-            break;
-          }
+        if (File.Exists(dialog.FileName))
+        {
+          UIHelper.ShowMessage("Document sufesfully saved.");
+          Process.Start(dialog.FileName);
+        }
+        else
+        {
+          UIHelper.ShowMessage("Document not saved.");
+        }
       }
     }
     #endregion
@@ -348,12 +314,37 @@ namespace IM.Base.Forms
     {
       Workbook wb = null;
       Microsoft.Office.Interop.Excel.Application excel = null;
+      string defaultPrinter = "";
+      bool blnChagePrinter = false;
       try
       {
         if (_excelFile.Exists)
         {
-          //Obtenemos la orientacion seleccionada
-          XlPageOrientation pageOrientation =(XlPageOrientation)cmbOrientation.SelectedValue;
+          #region Printer
+          defaultPrinter =PrinterHelper.GetDefaultPrinter();
+          if(!string.IsNullOrWhiteSpace(defaultPrinter) && defaultPrinter.Contains("pdf", StringComparison.OrdinalIgnoreCase))//Ver si hay impresora predeterminada y que no sea pdf
+          {
+            var lstPrinters = PrinterHelper.getAllPrinters().Where(printer=>!printer.Contains("pdf",StringComparison.OrdinalIgnoreCase)).ToList();//Obtener la lista de impresoras que no sean pdf
+
+            //Verificar si hay una impresora xps
+            string xpsPrinter = lstPrinters.FirstOrDefault(printer => printer.Contains("xps", StringComparison.OrdinalIgnoreCase));//Buscar impresora XPS
+            if (!string.IsNullOrWhiteSpace(xpsPrinter))//Verficar si existe una impresora XPS
+            {
+              PrinterHelper.SetDefaultPrinter(xpsPrinter);//Predefinir la impresora XPS
+              blnChagePrinter = true;
+            }
+            else
+            { 
+                PrinterHelper.SetDefaultPrinter(lstPrinters[0]);//Predefinir la primera impresora       
+             blnChagePrinter = true;  
+            }
+           }
+          
+        #endregion
+
+
+        //Obtenemos la orientacion seleccionada
+        XlPageOrientation pageOrientation =(XlPageOrientation)cmbOrientation.SelectedValue;
           //Obtenemos el tamaño de papel seleccionado
           XlPaperSize paperSize =(XlPaperSize)cmbPageSize.SelectedValue;
           //Obtenemos el margen seleccionado
@@ -364,19 +355,22 @@ namespace IM.Base.Forms
           excel.Visible = false;
           excel.ScreenUpdating = false;
           excel.DisplayAlerts = false;
-          
-          wb = excel.Workbooks.Open(_excelFile.FullName, 0, false, Missing.Value, Missing.Value, Missing.Value, true, XlPlatform.xlWindows, Missing.Value, false, false, Missing.Value, false, true, false);//Cargamos el excel                              
+
+          wb = excel.Workbooks.Open(_excelFile.FullName, 0, false, Missing.Value, Missing.Value, Missing.Value,true, XlPlatform.xlWindows, Missing.Value, false, false, Missing.Value, false, true, false);//Cargamos el excel                              
           _Worksheet ws = ((_Worksheet)wb.ActiveSheet);
 
+          #region Page Configuration
           ws.PageSetup.PaperSize = paperSize;//asignamos el tamaño de hoja
           ws.PageSetup.Orientation = pageOrientation;//asignamos orientación de la pagina
-          ws.PageSetup.LeftMargin=excel.CentimetersToPoints(margin.left);//asignamos Margen Izquierdo
-          ws.PageSetup.RightMargin =excel.CentimetersToPoints(margin.right);//asignamos Margen Derecho
+          ws.PageSetup.LeftMargin = excel.CentimetersToPoints(margin.left);//asignamos Margen Izquierdo
+          ws.PageSetup.RightMargin = excel.CentimetersToPoints(margin.right);//asignamos Margen Derecho
           ws.PageSetup.TopMargin = excel.CentimetersToPoints(margin.top);//asignamos Margen de arriba
-          ws.PageSetup.BottomMargin = excel.CentimetersToPoints(margin.bottom);//asignamos Margen de abajo  
+          ws.PageSetup.BottomMargin = excel.CentimetersToPoints(margin.bottom);//asignamos Margen de abajo            
           ws.PageSetup.Zoom = false;
+          #endregion
+          #region Scale
           //Asignamos la escala seleccionada
-          switch(enumScale)
+          switch (enumScale)
           {
             case EnumScale.Noscaling:
               {
@@ -391,7 +385,7 @@ namespace IM.Base.Forms
                 break;
               }
             case EnumScale.FitAllColumnsOnOnePage:
-              {                
+              {
                 ws.PageSetup.FitToPagesWide = 1;
                 ws.PageSetup.FitToPagesTall = false;
                 break;
@@ -399,18 +393,35 @@ namespace IM.Base.Forms
             case EnumScale.FitAllRowsOnOnePage:
               {
                 ws.PageSetup.FitToPagesTall = 1;
-                ws.PageSetup.FitToPagesWide = false;               
+                ws.PageSetup.FitToPagesWide = false;
                 break;
               }
-          }
-          
-          ws.PageSetup.Order = XlOrder.xlOverThenDown;
-          
+          } 
+          #endregion
+
+          ws.PageSetup.Order = XlOrder.xlOverThenDown;          
           switch (enumFileFormat)
           {
             case EnumFileFormat.Pdf:
               {
-                wb.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, $"{_fullPathAndName}.pdf", XlFixedFormatQuality.xlQualityStandard, false, true, Missing.Value, Missing.Value, false, Missing.Value);//Guardamos como PDF
+                SaveFileDialog dialog = new SaveFileDialog();//Cargamos el saveFileDialog
+                dialog.FileName = Uid;
+                dialog.Filter = "PDF files(*.pdf) | *.pdf;";
+                if (dialog.ShowDialog() == true)
+                {
+                  wb.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, dialog.FileName, XlFixedFormatQuality.xlQualityStandard, false, true, Missing.Value, Missing.Value, false, Missing.Value);//Guardamos como PDF
+                  //File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, true);
+
+                  if (File.Exists(dialog.FileName))
+                  {
+                    UIHelper.ShowMessage("Document sufesfully saved.");
+                    Process.Start(dialog.FileName);
+                  }
+                  else
+                  {
+                    UIHelper.ShowMessage("Document not saved.");
+                  }
+                }                
                 break;
               }
             case EnumFileFormat.Xps:
@@ -435,18 +446,22 @@ namespace IM.Base.Forms
         {          
           excel.Quit();
         }
+        if(blnChagePrinter)
+        {
+          PrinterHelper.SetDefaultPrinter(defaultPrinter);
+        }
       }
     }
-    #endregion
+    #endregion    
 
     #region LoadCombobox
-    /// <summary>
-    /// Llena los combos del toolbar
-    /// </summary>
-    /// <history>
-    /// [emoguel] created 14/09/2016
-    /// </history>
-    private void LoadCombobox()
+  /// <summary>
+  /// Llena los combos del toolbar
+  /// </summary>
+  /// <history>
+  /// [emoguel] created 14/09/2016
+  /// </history>
+  private void LoadCombobox()
     {
       #region Orientation
       List<dynamic> lstOrientation = new List<dynamic>();

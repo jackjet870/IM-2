@@ -1,11 +1,8 @@
-﻿using IM.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IM.Base.Helpers
 {
@@ -42,6 +39,18 @@ namespace IM.Base.Helpers
 
     [DllImport("winspool.Drv", EntryPoint = "WritePrinter", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
     public static extern bool WritePrinter(IntPtr hPrinter, IntPtr pBytes, Int32 dwCount, out Int32 dwWritten);
+
+    #region SetDefaultPrinter
+    /// <summary>
+    /// Asigna una impresora como predefinida a partir del nombre
+    /// </summary>
+    /// <param name="Name">Nombre de la impresora</param>
+    /// <history>
+    /// [emoguel] 22/09/2016 created
+    /// </history>
+    [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
+    public static extern bool SetDefaultPrinter(string Name); 
+    #endregion
 
     // SendBytesToPrinter()
     // When the function is given a printer name and an unmanaged array
@@ -138,6 +147,47 @@ namespace IM.Base.Helpers
       Marshal.FreeCoTaskMem(pBytes);
       ClosePrinter(hPrinter);
       return true;
-    }    
+    }
+
+    #region getAllPrinters
+    /// <summary>
+    /// Obtiene la lista de impresoras
+    /// </summary>
+    /// <returns>devuelve el nombre de la lista de impresoras</returns>
+    /// <history>
+    /// [emoguel] 22/09/2016 created
+    /// </history>
+    public static List<string> getAllPrinters()
+    {
+      List<string> printers = new List<string>();
+      foreach (var item in PrinterSettings.InstalledPrinters)
+      {
+        printers.Add(item.ToString());
+      }
+      return printers;
+    }
+    #endregion
+
+    #region GetDefaultPrinter
+    /// <summary>
+    /// Obtiene la impresora predefinida de la PC
+    /// </summary>
+    /// <returns>Nombre de la impresora predefinida, en caso de quie no se tenga predefinina alguna, devuelve string.empty</returns>
+    /// <history>
+    /// [emoguel] m22/09/2016 created
+    /// </history>
+    public static string GetDefaultPrinter()
+    {
+      PrinterSettings settings = new PrinterSettings();
+      foreach (string printer in PrinterSettings.InstalledPrinters)
+      {
+        settings.PrinterName = printer;
+        if (settings.IsDefaultPrinter)
+          return printer;
+      }
+      return string.Empty;
+    } 
+    #endregion
+
   }
 }
