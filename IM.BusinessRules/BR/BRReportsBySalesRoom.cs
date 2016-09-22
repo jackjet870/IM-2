@@ -1308,6 +1308,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptWeeklyMonthlyHostess_Timeout;
           var lstRptWeeklyMonthly = dbContext.USP_IM_RptWeeklyMonthlyHostess(dtmStart, dtmStart.Value.AddDays(6), salesRooms)
           .MultipleResults()
           .With<RptWeeklyMonthlyHostess_ByPR>()

@@ -1655,7 +1655,6 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "Gifts Receipts", rptGroup = "Gifts"},
           new {rptNombre = "Gifts Sale", rptGroup = "Gifts"},
           new {rptNombre = "Gifts Receipts Payments", rptGroup = "Gifts"},
-          //new {rptNombre = "Gifts Sale (Excel)", rptGroup = "Gifts"},
           new {rptNombre = "Gifts Used by Sistur", rptGroup = "Gifts"},
 
           new {rptNombre = "Manifest", rptGroup = "Guests"},
@@ -1683,7 +1682,6 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "Liner Statistics", rptGroup = "Salesmen"},
           new {rptNombre = "Closer Statistics", rptGroup = "Salesmen"},
           new {rptNombre = "Weekly and Monthly Hostess", rptGroup = "Salesmen"},
-          //new {rptNombre = "Weekly and Monthly Hostess (Golf & Sunrise)", rptGroup = "Salesmen"},
 
           new {rptNombre = "Taxis In", rptGroup = "Taxis"},
           new {rptNombre = "Taxis Out", rptGroup = "Taxis"}

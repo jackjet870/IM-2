@@ -2,26 +2,23 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_Rpt
 drop procedure [dbo].[USP_OR_RptCxCExcel]
 GO
 
-SET QUOTED_IDENTIFIER ON 
-GO
-SET ANSI_NULLS ON 
-GO
-
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
 **
-** Devuelve los datos para el reporte de CxC (Excel)
+** Devuelve los datos para el reporte de CxC por tipo (regalos, depositos y taxis)
 ** 
-** [wtorres]	20/Feb/2014 Depurado
-** [lchairez]	27/Mar/2014 Se agregan 3 columnas nuevas "Total CxC", "CxC Paid US" y "CxC Paid MN"
+** [wtorres]		20/Feb/2014 Modified. Depurado
+** [lchairez]		27/Mar/2014 Modified. Se agregan 3 columnas nuevas "Total CxC", "CxC Paid US" y "CxC Paid MN"
+** [lormartinez]	13/Ago/2015 Modified. Se agregan las columnas para el pago de CxC
 **
 */
-create procedure [dbo].[USP_OR_RptCxCExcel]
+CREATE procedure [dbo].[USP_OR_RptCxCExcel]
 	@DateFrom datetime,		-- Fecha desde
 	@DateTo datetime,		-- Fecha hasta
 	@SalesRoom varchar(10)	-- Clave de sala de ventas
 as
+set fmtonly off
 set nocount on
 
 -- CxC de regalos
@@ -211,10 +208,3 @@ from #Report R
 order by grpe, grD, Comments
 
 DROP TABLE #Report
-
-GO
-SET QUOTED_IDENTIFIER OFF 
-GO
-SET ANSI_NULLS ON 
-GO
-

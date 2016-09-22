@@ -1,10 +1,3 @@
-USE [OrigosVCPalace]
-GO
-/****** Object:  StoredProcedure [dbo].[sprptWeeklyGiftsItemsSimple]    Script Date: 04/08/2016 15:35:05 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -14,7 +7,7 @@ GO
 ** [edgrodriguez]	08/Abr/2016 Creado
 **
 */
-CREATE procedure [dbo].[USP_IM_WeeklyGiftsItemsSimple]
+CREATE procedure [dbo].[USP_IM_RptWeeklyGiftsItemsSimple]
 	@StartDate as datetime,
 	@EndDate as datetime,
 	@SalesRooms as varchar(8000)= 'ALL'

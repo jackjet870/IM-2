@@ -886,5 +886,17 @@ namespace IM.BusinessRules.Properties {
                 this["GetGuestPremanifestOuthouse"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int USP_IM_RptWeeklyMonthlyHostess_Timeout {
+            get {
+                return ((int)(this["USP_IM_RptWeeklyMonthlyHostess_Timeout"]));
+            }
+            set {
+                this["USP_IM_RptWeeklyMonthlyHostess_Timeout"] = value;
+            }
+        }
     }
 }
