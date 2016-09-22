@@ -757,7 +757,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        [global::System.Configuration.DefaultSettingValueAttribute("240")]
         public int USP_OR_GetGuestsByPR {
             get {
                 return ((int)(this["USP_OR_GetGuestsByPR"]));
