@@ -14,6 +14,7 @@ using IM.Base.Helpers;
 using IM.Model.Classes;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Diagnostics;
 
 namespace IM.Base.Forms
 {
@@ -89,15 +90,15 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel] created 02/09/2016
     /// </history>
-    private async void btnExportToPdf_Click(object sender, RoutedEventArgs e)
+    private void btnExportToPdf_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        Cursor = Cursors.Wait;
+        Mouse.OverrideCursor = Cursors.Wait;
         if (_excelFile.Exists)//Si existe el excel crear el excel para general el pdf
         {
-          await Task.Run(() =>
-          {
+          //await Task.Run(() =>
+          //{
             if (File.Exists($"{_fullPathAndName}.pdf"))//verificar si existe el pdf, solo copiar
             {
               exportFile(EnumFileFormat.Pdf);
@@ -107,7 +108,7 @@ namespace IM.Base.Forms
               CreateFile(EnumFileFormat.Pdf);
               exportFile(EnumFileFormat.Pdf);
             }
-          });
+          //});
         }
 
       }
@@ -117,7 +118,7 @@ namespace IM.Base.Forms
       }
       finally
       {
-        Cursor = Cursors.Arrow;
+        Mouse.OverrideCursor = null;
       }
     }
     #endregion
@@ -135,16 +136,16 @@ namespace IM.Base.Forms
       {
         if (_exportExcel)//Verificamos si tiene permiso para exportar a Excel
         {
-          Cursor = Cursors.Wait;
+          Mouse.OverrideCursor = Cursors.Wait;
           if (_excelFile.Exists)//Si existe el excel crear el excel para general el pdf
           {
-            await Task.Run(() =>
-            {
+            //await Task.Run(() =>
+            //{
               if (_excelFile.Exists)//verificar si existe el pdf, solo copiar
             {
                 exportFile(EnumFileFormat.Excel);//Exportamos a Excel
               }
-            });
+            //});
           }
         }
         else
@@ -158,7 +159,7 @@ namespace IM.Base.Forms
       }
       finally
       {
-        Cursor = Cursors.Arrow;
+        Mouse.OverrideCursor = null;
       }
     }
     #endregion
@@ -305,7 +306,16 @@ namespace IM.Base.Forms
             dialog.Filter = "Pdf files(*.pdf) | *.pdf;";
             if (dialog.ShowDialog() == true)
             {
-              File.Copy(_fullPathAndName + ".pdf", dialog.FileName, false);
+              File.Copy(_fullPathAndName + ".pdf", dialog.FileName, true); 
+              if(File.Exists(dialog.FileName))
+              {
+                UIHelper.ShowMessage("Document sufesfully saved.");
+                Process.Start(dialog.FileName);
+              }     
+              else
+              {
+                UIHelper.ShowMessage("Document not saved");
+              }        
             }
             break;
           }
@@ -314,7 +324,17 @@ namespace IM.Base.Forms
             dialog.Filter = "Excel files(*.xlsx) | *.xlsx;";
             if (dialog.ShowDialog() == true)
             {
-              File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, false);
+              File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, true);
+
+              if (File.Exists(dialog.FileName))
+              {
+                UIHelper.ShowMessage("Document sufesfully saved.");
+                Process.Start(dialog.FileName);
+              }
+              else
+              {
+                UIHelper.ShowMessage("Document not saved.");
+              }
             }
             break;
           }
