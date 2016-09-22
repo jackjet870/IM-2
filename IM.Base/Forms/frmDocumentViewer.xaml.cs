@@ -97,18 +97,15 @@ namespace IM.Base.Forms
         Mouse.OverrideCursor = Cursors.Wait;
         if (_excelFile.Exists)//Si existe el excel crear el excel para general el pdf
         {
-          //await Task.Run(() =>
-          //{
-            if (File.Exists($"{_fullPathAndName}.pdf"))//verificar si existe el pdf, solo copiar
-            {
-              exportFile(EnumFileFormat.Pdf);
-            }
-            else//Si no existe crear el PDF
-            {
-              CreateFile(EnumFileFormat.Pdf);
-              exportFile(EnumFileFormat.Pdf);
-            }
-          //});
+          if (File.Exists($"{_fullPathAndName}.pdf"))//verificar si existe el pdf, solo copiar
+          {
+            exportFile(EnumFileFormat.Pdf);
+          }
+          else//Si no existe crear el PDF
+          {
+            CreateFile(EnumFileFormat.Pdf);
+            exportFile(EnumFileFormat.Pdf);
+          }          
         }
 
       }
@@ -130,7 +127,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [emoguel] 02/09/2016 created
     /// </history>
-    private async void btnExportToExcel_Click(object sender, RoutedEventArgs e)
+    private void btnExportToExcel_Click(object sender, RoutedEventArgs e)
     {
       try
       {
@@ -139,13 +136,10 @@ namespace IM.Base.Forms
           Mouse.OverrideCursor = Cursors.Wait;
           if (_excelFile.Exists)//Si existe el excel crear el excel para general el pdf
           {
-            //await Task.Run(() =>
-            //{
               if (_excelFile.Exists)//verificar si existe el pdf, solo copiar
             {
                 exportFile(EnumFileFormat.Excel);//Exportamos a Excel
-              }
-            //});
+            }
           }
         }
         else
