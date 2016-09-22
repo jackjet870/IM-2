@@ -357,7 +357,7 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(Context.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID, true);
         }
         else
         {
@@ -369,7 +369,7 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = false;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(Context.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID, false);
         }
         else
         {
@@ -396,7 +396,7 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 25/04/2016
     /// </history>
-    private bool selectPersonnelInCombobox(string user)
+    private bool selectPersonnelInCombobox(string user, bool specialLevel)
     {
       var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
       var index = lstPS.FindIndex(x => x.peID.Equals(user));
@@ -408,11 +408,17 @@ namespace IM.GuestsPR.Forms
       }
       else
       {
-        //Limpiamos el DataGrid y deshabilitamos los botones
+        //Limpiamos el DataGrid
         dtgr.DataContext = null;
+        
+        //Si no tiene permisos especiales  deshabilitamos los controles
+        if (!specialLevel)
+        {
+          imgButtonOk.IsEnabled = false;
+          imgButtonPrint.IsEnabled = false;
+        }
         cbxPersonnel.SelectedItem = null;
-        imgButtonOk.IsEnabled = false;
-        imgButtonPrint.IsEnabled = false;
+       
         return false;
       }
     }
