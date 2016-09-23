@@ -1,9 +1,7 @@
-USE [OrigosVCPalace];
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptManifestByLS]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptManifestByLS]
 GO
-SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -14,21 +12,24 @@ GO
 **		3. Deposit Sales
 **		4. Ventas de otros dias, Be Backs, OOP, Cancellations, Regens, Deposit Before, etc.
 **
-** [wtorres]	05/Ene/2009 Depuracion
-** [wtorres]	11/May/2009 Modifique la consulta de bookings:
+** [wtorres]		05/Ene/2009 Modified. Depuracion
+** [wtorres]		11/May/2009 Modified. Modifique la consulta de bookings:
 **								1. Devolver el nombre de la locacion (loN)
 **								2. Elimine los campos guDeposit, loFlyers
-** [wtorres]	18/Jun/2010 Agregue el campo saProcRD
-** [wtorres]	20/Jul/2011 Ahora no se traen los bookings cancelados
-** [wtorres]	08/Ago/2011 Agregue los campos de programa de show
-** [wtorres]	10/Ago/2011 Elimine los campos de calificado y no calificado y agregue el campo de programa de rescate
-** [wtorres]	12/Oct/2011 Elimine el campo de categoria de programa de show y fusione los In & outs en Regular Tours
-** [wtorres]	11/Ene/2012 Agregue el campo descripcion de la agencia
-** [wtorres]	28/Ene/2012 Agregue el campo descripcion del pais
-** [wtorres]	03/Jun/2013 Agregue los campos de porcentaje de enganche pactado y pagado
-** [wtorres]	16/Nov/2013 Agregue el campo de categoria de tipo de venta
-** [wtorres]	22/Feb/2014 Agregue el campo de Lead Source
-** [LorMartinez] 21/Ene/2016 Se agrega validacion para GuestAdicionales
+** [wtorres]		18/Jun/2010 Modified. Agregue el campo saProcRD
+** [wtorres]		20/Jul/2011 Modified. Ahora no se traen los bookings cancelados
+** [wtorres]		08/Ago/2011 Modified. Agregue los campos de programa de show
+** [wtorres]		10/Ago/2011 Modified. Elimine los campos de calificado y no calificado y agregue el campo de programa de rescate
+** [wtorres]		12/Oct/2011 Modified. Elimine el campo de categoria de programa de show y fusione los In & outs en Regular Tours
+** [wtorres]		11/Ene/2012 Modified. Agregue el campo descripcion de la agencia
+** [wtorres]		28/Ene/2012 Modified. Agregue el campo descripcion del pais
+** [wtorres]		03/Jun/2013 Modified. Agregue los campos de porcentaje de enganche pactado y pagado
+** [wtorres]		16/Nov/2013 Modified. Agregue el campo de categoria de tipo de venta
+** [wtorres]		22/Feb/2014 Modified. Agregue el campo de Lead Source
+** [LorMartinez]	21/Ene/2016 Modified. Se agrega validacion para GuestAdicionales
+** [lchairez]		27/Abr/2016 Modified. Se agrega el campo saOriginalAmount al Select de ventas.
+** [wtorres]		16/Jun/2016 Modified. Ahora se valida que no traiga las ventas que no son de la fecha indicada
+**
 */
 CREATE procedure [dbo].[USP_OR_RptManifestByLS]
 	@Date Datetime,			-- Fecha
@@ -60,25 +61,32 @@ where
 	and G.guBookCanc = 0
 order by G.guloInvit, G.guDeposit, G.guBookT
 
+/*Se calculan los Additionals*/
+DECLARE @AddGuest table(gagu integer,
+                        gaShow datetime,
+                        gaLoc varchar(50),
+                        gaFlyers varchar(50),
+                        gaLoN varchar(50)
+                        )
 
--- consideramos los shows que tienen ventas en otra sala
-select 
-	sagu,
-	sast,
-	saMembershipNum,
-	saGrossAmount, 
-	saNewAmount, 
-	saD,
-	saProcD,
-	saCancelD,
-	saClosingCost,
-	saComments,
-	saProcRD,
-	saDownPaymentPercentage,
-	saDownPaymentPaidPercentage
-into #Sales
-from Sales
-where sasr = @SalesRoom
+
+INSERT INTO @AddGuest       
+SELECT  ga.gaAdditional,      
+    CASE WHEN isnull(ga.gagu,0) > 0 AND g.gushowD is null THEN 
+      g2.guShowD 
+    ELSE
+      NULL
+    END [gaShow],
+    g2.guloInvit [gaLoc],
+    l2.loFlyers [gaFlyers],
+    l2.loN [gaLoN]    
+FROM guests g
+INNER JOIN dbo.GuestsAdditional ga ON ga.gaAdditional = g.guid                
+INNER JOIN dbo.Guests g2 ON g2.guID = ga.gagu
+LEFT JOIN dbo.Locations l2 ON l2.loID= g2.guloInvit
+WHERE g2.gusr= @SalesRoom
+AND g.gusr = @SalesRoom
+AND g2.guShowD= @Date
 
 -- ================================================
 -- 					MANIFIESTO
@@ -96,7 +104,7 @@ from (
 		G.guShowSeq,
 		isnull(G.guloInvit,gadd.gaLoc) as guloInvit,
 		isnull(L.loN,gadd.gaLoN) as loN,
-		isnull(L.loFlyers,gadd.gaFlyers) as loFlyers,
+		isnull(L.loFlyers,gadd.gaFlyers) as loFlyers,    
 		G.guDeposit,
 		G.guHotel, 
 		G.guRoomNum, 
@@ -152,6 +160,7 @@ from (
 		S.sast,
 		ST.ststc,
 		S.saMembershipNum,
+		S.saOriginalAmount,
 		S.saGrossAmount, 
 		S.saNewAmount, 
 		S.saD,
@@ -165,7 +174,7 @@ from (
 		dbo.UFN_OR_GetShowProgram(G.guSaveProgram, G.guCTour, 0, SR.srAppointment) as ShowProgram,
     gadd.gashow  
 	from Guests G
-		left join #Sales S on G.guID = S.sagu
+		left join Sales S on G.guID = S.sagu AND S.sasr = @SalesRoom AND (S.saD = @Date OR S.saProcD = @Date OR S.saCancelD = @Date)
 		left join SaleTypes ST on ST.stID = S.sast
 		left join Personnel P1 on P1.peID = G.guPRInvit1
 		left join Personnel P2 on P2.peID = G.guPRInvit2
@@ -181,27 +190,16 @@ from (
 		left join SalesRooms SR on SR.srID = G.gusr
 		left join Agencies A on A.agID = G.guag
 		left join Countries C on C.coID = G.guco
-     OUTER APPLY (SELECT 
-                  CASE WHEN isnull(ga.gagu,0) > 0 AND g.gushowD is null THEN 
-                    g2.guShowD 
-                  ELSE
-                    NULL
-                  END [gaShow],
-                  g2.guloInvit [gaLoc],
-                  l2.loFlyers [gaFlyers],
-                  l2.loN [gaLoN]
-               FROM dbo.GuestsAdditional ga
-               INNER JOIN dbo.Guests g2 ON g2.guID = ga.gagu
-               LEFT JOIN dbo.Locations l2 ON l2.loID= g2.guloInvit
-               WHERE ga.gaAdditional = g.guid  ) gadd
+    LEFT JOIN @AddGuest gadd ON gadd.gagu= G.guID    
 	where
 		-- Fecha de show
-		ISNULL(gadd.gashow,G.guShowD) = @Date
+  	ISNULL(gadd.gashow,G.guShowD) = @Date
 		-- Sala de ventas
-		and G.gusr = @SalesRoom
+	and G.gusr = @SalesRoom
 ) as D
 	inner join ShowPrograms SH on D.ShowProgram = SH.skID
 order by D.guID
+
 
 --Devolvemos el manifesto
 SELECT * FROM #Manifest
@@ -322,6 +320,7 @@ from (
 		S.sast,
 		ST.ststc,
 		S.saMembershipNum,
+		S.saOriginalAmount,
 		S.saGrossAmount, 
 		S.saNewAmount, 
 		S.sasr,
@@ -396,4 +395,3 @@ from (
     and m.guid is null
 ) as D
 	inner join ShowPrograms SH on D.ShowProgram = SH.skID
-GO

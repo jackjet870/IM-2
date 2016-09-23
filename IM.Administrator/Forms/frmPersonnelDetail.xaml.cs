@@ -87,9 +87,9 @@ namespace IM.Administrator.Forms
       }
       DataContext = personnel;
       dgrRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
-      dgrSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
-      dgrWarehouses.BeginningEdit += GridHelper.dgr_BeginningEdit;
-      dgrLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgWarehouses.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
     }
     #endregion
 
@@ -107,9 +107,9 @@ namespace IM.Administrator.Forms
       if (!_isClosing)
       {
         #region PersonnelPermision changes
-        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
-        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
-        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
+        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dtgWarehouses.ItemsSource;
+        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dtgSalesRoom.ItemsSource;
+        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dtgLeadSources.ItemsSource;
         List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
         List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
         var lstPersonnelPermissionAdd = (lstPersonnelPermision != null) ? lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList() : new List<PersonnelPermission>();
@@ -126,10 +126,10 @@ namespace IM.Administrator.Forms
           }
           else
           {
-            dgrLeadSources.CancelEdit();
+            dtgLeadSources.CancelEdit();
             dgrPermission.CancelEdit();
-            dgrSalesRoom.CancelEdit();
-            dgrWarehouses.CancelEdit();
+            dtgSalesRoom.CancelEdit();
+            dtgWarehouses.CancelEdit();
             dgrRoles.CancelEdit();
           }
         }
@@ -156,9 +156,9 @@ namespace IM.Administrator.Forms
       {
         btnAccept.Focus();
         personnel.pePwd = psbpePwd.Password;
-        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
-        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
-        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
+        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dtgWarehouses.ItemsSource;
+        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dtgSalesRoom.ItemsSource;
+        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dtgLeadSources.ItemsSource;
         List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
         List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
 
@@ -427,6 +427,27 @@ namespace IM.Administrator.Forms
             {              
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit,strPropGrid: "plLSSRID",typeName:e.Column.Header.ToString());
               e.Cancel = blnIsRepeat;
+              if(!blnIsRepeat)
+              {
+                switch(dgrEdit.Name.ToString())
+                {
+                  case nameof(dtgLeadSources):
+                    {
+                      cmbLeadSource.Header = $"Lead Sources ({dgrEdit.Items.Count-1})";                      
+                      break;
+                    }
+                  case nameof(dtgSalesRoom):
+                    {
+                      cmbSalesRoom.Header=$"Sales Room ({dgrEdit.Items.Count - 1})";
+                      break;
+                    }
+                  case nameof(dtgWarehouses):
+                    {
+                      cmbWarehouses.Header = $"Warehouses({dgrEdit.Items.Count - 1})";
+                      break;
+                    }
+                }
+              }
               
               break;
             }
@@ -620,13 +641,14 @@ namespace IM.Administrator.Forms
 
       if (strMsj == "")
       {
-        dgrLeadSources.CancelEdit();
+        dtgLeadSources.CancelEdit();
         List<LeadSourceByUser> lstLeadSourceByUser = (List<LeadSourceByUser>)cmbLeadSource.ItemsSource;
         List<string> lstPrograms = dgrPrograms.SelectedItems.OfType<Program>().Select(pg => pg.pgID).ToList();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
         var LeadSourceAsign = lstLeadSourceByUser.Where(lsb => lstPrograms.Contains(lsb.lspg) && lstRegions.Contains(lsb.lsrg)).ToList();        
         List<PersonnelAccess> lstLeadSources = LeadSourceAsign.Select(ls => new PersonnelAccess { plLSSRID = ls.lsID }).ToList();
-        dgrLeadSources.ItemsSource = lstLeadSources;
+        dtgLeadSources.ItemsSource = lstLeadSources;
+        cmbLeadSource.Header = $"Lead Sources ({lstLeadSources.Count})";
       }
       else
       {
@@ -653,14 +675,15 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        dgrSalesRoom.CancelEdit();
+        dtgSalesRoom.CancelEdit();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
         List<SalesRoomByUser> lstSalesRoomByUser = (List<SalesRoomByUser>)cmbSalesRoom.ItemsSource;
         var lstSalesRoomAssign = lstSalesRoomByUser.Where(sr => lstRegions.Contains(sr.arrg)).ToList();
 
         List<PersonnelAccess> lstSalesRoom = lstSalesRoomAssign.Select(sr => new PersonnelAccess { plLSSRID=sr.srID}).ToList();
         
-        dgrSalesRoom.ItemsSource = lstSalesRoom;
+        dtgSalesRoom.ItemsSource = lstSalesRoom;
+        cmbSalesRoom.Header = $"Sales Room ({lstSalesRoom.Count})";
       }
     }
     #endregion
@@ -682,12 +705,51 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        dgrWarehouses.CancelEdit();
+        dtgWarehouses.CancelEdit();
         List<string> lstRegions = dgrRegion.SelectedItems.OfType<Region>().Select(rg => rg.rgID).ToList();
         List<WarehouseByUser> lstWarehousesByUser = (List<WarehouseByUser>)cmbWarehouses.ItemsSource;
         var lstWarehousesAsign = lstWarehousesByUser.Where(wh => lstRegions.Contains(wh.arrg)).ToList();
         List<PersonnelAccess> lstWarehouses = lstWarehousesAsign.Select(wh => new PersonnelAccess { plLSSRID = wh.whID }).ToList();
-        dgrWarehouses.ItemsSource = lstWarehouses;
+        dtgWarehouses.ItemsSource = lstWarehouses;
+        cmbWarehouses.Header=$"Warehouses ({lstWarehouses.Count})";
+      }
+    }
+    #endregion
+
+    #region KeyDown
+    // <summary>
+    /// Cambia el contador de los registros
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 21/09/2016
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      DataGridRow dgrRow = sender as DataGridRow;
+      if (e.Key == Key.Delete)
+      {        
+        if(dgrRow.Item.GetType().Name == nameof(PersonnelAccess))
+        {
+          var item =dgrRow.Item as PersonnelAccess;
+          switch(item.plLSSR)
+          {
+            case "LS":
+              {
+                cmbLeadSource.Header = $"Lead Sources({dtgLeadSources.Items.Count-(dtgLeadSources.SelectedItems.Count+1)})";
+                break;
+              }
+            case "SR":
+              {
+                cmbSalesRoom.Header = $"Sales Rooms({dtgSalesRoom.Items.Count - (dtgSalesRoom.SelectedItems.Count+1)})";
+                break;
+              }
+            case "WH":
+              {
+                cmbWarehouses.Header = $"Warehouses({dtgWarehouses.Items.Count - (dtgWarehouses.SelectedItems.Count+1)})";
+                break;
+              }
+          }
+        }        
       }
     }
     #endregion
@@ -817,7 +879,8 @@ namespace IM.Administrator.Forms
           _lstOldAccesLeadSource = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.LeadSource);          
         }
         
-        dgrLeadSources.ItemsSource = _lstOldAccesLeadSource.ToList();
+        dtgLeadSources.ItemsSource = _lstOldAccesLeadSource.ToList();
+        cmbLeadSource.Header = $"Lead Sources ({_lstOldAccesLeadSource.Count})";
         
       }
       catch (Exception ex)
@@ -845,7 +908,8 @@ namespace IM.Administrator.Forms
         {
           _lstOldAccesSalesRoom = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.SalesRoom);                    
         }
-        dgrSalesRoom.ItemsSource = _lstOldAccesSalesRoom.ToList();
+        dtgSalesRoom.ItemsSource = _lstOldAccesSalesRoom.ToList();
+        cmbSalesRoom.Header = $"Sales Rooms ({_lstOldAccesSalesRoom.Count})";
       }
       catch (Exception ex)
       {
@@ -872,7 +936,8 @@ namespace IM.Administrator.Forms
         {
           _lstOldAccesWH = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.Warehouse);                    
         }
-        dgrWarehouses.ItemsSource = _lstOldAccesWH.ToList();
+        dtgWarehouses.ItemsSource = _lstOldAccesWH.ToList();
+        cmbWarehouses.Header = $"Warehouses ({_lstOldAccesWH.Count})";
       }
       catch (Exception ex)
       {
@@ -1093,7 +1158,7 @@ namespace IM.Administrator.Forms
       //Si es un usuario activo y no se capturo ningunu LeadSource o Sala
       if (chkpeA.IsChecked == true)
       {
-        if (dgrSalesRoom.Items.Count == 0 && dgrLeadSources.Items.Count == 0)
+        if (dtgSalesRoom.Items.Count == 0 && dtgLeadSources.Items.Count == 0)
         {
           strMsj += "Specify at least one Lead Source or Sales Room.";
         }

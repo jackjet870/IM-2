@@ -160,6 +160,7 @@ namespace IM.Launcher.Forms
       lstMenu.Add(EnumMenu.ProcessorGRAL);
       lstMenu.Add(EnumMenu.ProcessorINH);
       lstMenu.Add(EnumMenu.ProcessorOUT);
+      lstMenu.Add(EnumMenu.ProcessorSales);
       lstMenu.Add(EnumMenu.PRStatistics);
       lstMenu.Add(EnumMenu.Graph);
       lstMenu.Add(EnumMenu.GuestsByPR);

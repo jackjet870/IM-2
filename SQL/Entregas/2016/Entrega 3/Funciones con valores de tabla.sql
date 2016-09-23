@@ -1,132 +1,152 @@
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSales]    Script Date: 09/21/2016 17:07:30 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetBestFTBS]    Script Date: 09/22/2016 19:19:14 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetBestFTBS]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[UFN_IM_GetBestFTBS]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSales]    Script Date: 09/22/2016 19:19:14 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetCloserSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetCloserSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSalesAmount]    Script Date: 09/21/2016 17:07:31 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSalesAmount]    Script Date: 09/22/2016 19:19:15 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetCloserSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetCloserSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserShows]    Script Date: 09/21/2016 17:07:32 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserShows]    Script Date: 09/22/2016 19:19:16 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetCloserShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetCloserShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomBookings]    Script Date: 09/21/2016 17:07:32 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomBookings]    Script Date: 09/22/2016 19:19:17 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetFlightSalesRoomBookings]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetFlightSalesRoomBookings]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSales]    Script Date: 09/21/2016 17:07:33 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSales]    Script Date: 09/22/2016 19:19:17 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetFlightSalesRoomSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetFlightSalesRoomSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]    Script Date: 09/21/2016 17:07:33 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]    Script Date: 09/22/2016 19:19:18 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomShows]    Script Date: 09/21/2016 17:07:34 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomShows]    Script Date: 09/22/2016 19:19:19 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetFlightSalesRoomShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetFlightSalesRoomShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelBookings]    Script Date: 09/21/2016 17:07:35 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelBookings]    Script Date: 09/22/2016 19:19:20 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelBookings]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelBookings]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSales]    Script Date: 09/21/2016 17:07:36 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSales]    Script Date: 09/22/2016 19:19:20 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesAmount]    Script Date: 09/21/2016 17:07:36 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesAmount]    Script Date: 09/22/2016 19:19:21 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomBookings]    Script Date: 09/21/2016 17:07:37 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomBookings]    Script Date: 09/22/2016 19:19:22 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSalesRoomBookings]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSalesRoomBookings]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSales]    Script Date: 09/21/2016 17:07:38 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSales]    Script Date: 09/22/2016 19:19:22 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSalesRoomSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSalesRoomSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]    Script Date: 09/21/2016 17:07:38 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]    Script Date: 09/22/2016 19:19:23 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomShows]    Script Date: 09/21/2016 17:07:39 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomShows]    Script Date: 09/22/2016 19:19:24 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelSalesRoomShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelSalesRoomShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelShows]    Script Date: 09/21/2016 17:07:40 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelShows]    Script Date: 09/22/2016 19:19:24 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetHotelShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetHotelShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSales]    Script Date: 09/21/2016 17:07:40 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerExitSales]    Script Date: 09/22/2016 19:19:25 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetLinerExitSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[UFN_IM_GetLinerExitSales]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerOverflow]    Script Date: 09/22/2016 19:19:26 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetLinerOverflow]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[UFN_IM_GetLinerOverflow]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSales]    Script Date: 09/22/2016 19:19:26 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetLinerSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetLinerSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSalesAmount]    Script Date: 09/21/2016 17:07:41 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSalesAmount]    Script Date: 09/22/2016 19:19:27 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetLinerSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetLinerSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerShows]    Script Date: 09/21/2016 17:07:42 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerShows]    Script Date: 09/22/2016 19:19:28 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetLinerShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetLinerShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveBookings]    Script Date: 09/21/2016 17:07:43 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetPersonnelTeamSalesmenByDate]    Script Date: 09/22/2016 19:19:29 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetPersonnelTeamSalesmenByDate]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[UFN_IM_GetPersonnelTeamSalesmenByDate]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveBookings]    Script Date: 09/22/2016 19:19:29 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveBookings]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveBookings]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSales]    Script Date: 09/21/2016 17:07:43 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSales]    Script Date: 09/22/2016 19:19:30 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesAmount]    Script Date: 09/21/2016 17:07:44 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesAmount]    Script Date: 09/22/2016 19:19:31 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomBookings]    Script Date: 09/21/2016 17:07:44 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomBookings]    Script Date: 09/22/2016 19:19:31 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSalesRoomBookings]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSalesRoomBookings]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSales]    Script Date: 09/21/2016 17:07:45 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSales]    Script Date: 09/22/2016 19:19:32 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSalesRoomSales]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSalesRoomSales]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]    Script Date: 09/21/2016 17:07:46 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]    Script Date: 09/22/2016 19:19:33 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomShows]    Script Date: 09/21/2016 17:07:46 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomShows]    Script Date: 09/22/2016 19:19:34 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveSalesRoomShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveSalesRoomShows]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveShows]    Script Date: 09/21/2016 17:07:47 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveShows]    Script Date: 09/22/2016 19:19:34 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UFN_IM_GetWaveShows]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[UFN_IM_GetWaveShows]
 GO
@@ -134,7 +154,47 @@ GO
 USE [OrigosVCPalace]
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSales]    Script Date: 09/21/2016 17:07:47 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetBestFTBS]    Script Date: 09/22/2016 19:19:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Devuelve los mejores FTBs entre las fechas seleccionadas
+**
+** [ecanul] 08/08/2016 Created
+**
+*/
+
+CREATE FUNCTION [dbo].[UFN_IM_GetBestFTBS](
+	@SalesRoom varchar(10),
+	@DateFrom datetime,
+	@DateTo datetime
+)
+
+RETURNS @Table table(
+	espe varchar(10),
+	peN varchar(40)
+)
+as
+begin
+insert @Table
+	SELECT es.espe, p.peN
+	FROM dbo.Efficiency ef
+		INNER JOIN dbo.EfficiencySalesmen es ON es.esef = ef.efID
+		INNER JOIN dbo.Personnel p on es.espe = p.peID
+	WHERE ef.efsr =  @SalesRoom AND ef.efDateFrom = @DateFrom AND ef.efDateTo = @DateTo
+		AND ef.efpd = 'W' AND ef.efet = 'BEST_FTBS'
+RETURN
+END
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSales]    Script Date: 09/22/2016 19:19:37 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -329,7 +389,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSalesAmount]    Script Date: 09/21/2016 17:07:50 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserSalesAmount]    Script Date: 09/22/2016 19:19:40 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -576,7 +636,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserShows]    Script Date: 09/21/2016 17:07:55 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetCloserShows]    Script Date: 09/22/2016 19:19:44 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -690,7 +750,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomBookings]    Script Date: 09/21/2016 17:07:57 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomBookings]    Script Date: 09/22/2016 19:19:46 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -777,7 +837,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSales]    Script Date: 09/21/2016 17:08:00 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSales]    Script Date: 09/22/2016 19:19:49 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -867,7 +927,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]    Script Date: 09/21/2016 17:08:04 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomSalesAmount]    Script Date: 09/22/2016 19:19:53 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -956,7 +1016,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomShows]    Script Date: 09/21/2016 17:08:08 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetFlightSalesRoomShows]    Script Date: 09/22/2016 19:19:57 ******/
 SET ANSI_NULLS OFF
 GO
 
@@ -1031,7 +1091,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelBookings]    Script Date: 09/21/2016 17:08:11 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelBookings]    Script Date: 09/22/2016 19:20:00 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1117,7 +1177,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSales]    Script Date: 09/21/2016 17:08:15 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSales]    Script Date: 09/22/2016 19:20:04 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1206,7 +1266,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesAmount]    Script Date: 09/21/2016 17:08:19 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesAmount]    Script Date: 09/22/2016 19:20:07 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1296,7 +1356,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomBookings]    Script Date: 09/21/2016 17:08:22 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomBookings]    Script Date: 09/22/2016 19:20:11 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1386,7 +1446,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSales]    Script Date: 09/21/2016 17:08:26 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSales]    Script Date: 09/22/2016 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1480,7 +1540,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]    Script Date: 09/21/2016 17:08:30 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomSalesAmount]    Script Date: 09/22/2016 19:20:18 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1573,7 +1633,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomShows]    Script Date: 09/21/2016 17:08:34 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelSalesRoomShows]    Script Date: 09/22/2016 19:20:22 ******/
 SET ANSI_NULLS OFF
 GO
 
@@ -1652,7 +1712,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelShows]    Script Date: 09/21/2016 17:08:37 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetHotelShows]    Script Date: 09/22/2016 19:20:25 ******/
 SET ANSI_NULLS OFF
 GO
 
@@ -1727,7 +1787,184 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSales]    Script Date: 09/21/2016 17:08:40 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerExitSales]    Script Date: 09/22/2016 19:20:29 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Devuelve el numero de ventas Exit por Liner
+** 
+** [ecanul]	27/06/2016 Created.
+** [ecanul]	29/06/2016 Modified. Agregado parameto @Regen Solo para validar shows Regen
+**
+*/
+CREATE FUNCTION [dbo].[UFN_IM_GetLinerExitSales](
+	@DateFrom Datetime,
+	@DateTo Datetime,
+	@SalesRooms varchar(MAX) = 'ALL',
+	@ConsiderOutOfPending bit = 0,	-- Indica si se debe considerar Out Of Pending
+	@ConsiderCancel bit = 0,		-- Indica si se debe considerar canceladas	
+	@ConsiderPending bit = 0,		-- Indica si se debe considerar pendientes
+	@saLiner1Type int = -1,			--Filtro de Tipo de liner.
+									-- -1.- Sin Filtro
+									--	0.- Liner
+									--	1.- Front to Middle
+									--	2.- Front to Back
+	@Regen bit = 0					-- Solo ventas regen Regen	
+)
+
+RETURNS @Table TABLE(
+	Liner varchar(10),
+	ExitSales money
+)
+AS
+BEGIN
+INSERT @Table
+SELECT S.saLiner1, Sum(dbo.UFN_OR_GetPercentageSalesman(S.saLiner1,S.saLiner2,default,default,default))
+FROM dbo.Sales S
+	LEFT JOIN dbo.SaleTypes ST ON ST.stID = S.sast
+	LEFT JOIN dbo.MembershipTypes MT ON MT.mtID = S.samt
+	LEFT JOIN dbo.MembershipGroups MG ON MG.mgID = MT.mtGroup
+WHERE 
+	-- Liner 1
+	S.saLiner1 IS NOT NULL
+	--Que sean Exit
+	AND MG.mgID = 'EXIT'
+	-- Fecha Procesable
+	AND ((((@ConsiderPending = 0 and S.saProcD between @DateFrom and @DateTo)
+	-- Fecha de venta
+	or (@ConsiderPending = 1 and S.saD between @DateFrom and @DateTo and (S.saProc = 0 or not S.saProcD between @DateFrom and @DateTo)))))
+	-- No downgrades
+	and ST.ststc <> 'DG'
+	-- Fecha de cancelacion
+	and ((@ConsiderCancel = 0 and (S.saCancel = 0 or S.saCancelD not between @DateFrom and @DateTo))
+		or (@ConsiderCancel = 1 and S.saCancelD between @DateFrom and @DateTo))
+	-- Out Of Pending
+	and (@ConsiderOutOfPending = 0 or S.saD <> S.saProcD)
+	-- Sales Rooms
+	and (@SalesRooms = 'ALL' or S.sasr in (select item from split(@SalesRooms, ',')))
+	--Tipo de Liner
+	and(@saLiner1Type = -1 or S.saLiner1Type=@saLiner1Type)
+	-- Ventas Regen
+	AND (@Regen = 0 OR S.sast = 'REGEN')
+GROUP BY S.saLiner1
+UNION ALL
+SELECT S.saLiner2, Sum(dbo.UFN_OR_GetPercentageSalesman(S.saLiner1,S.saLiner2,default,default,default))
+FROM dbo.Sales S
+	LEFT JOIN dbo.SaleTypes ST ON ST.stID = S.sast
+	LEFT JOIN dbo.MembershipTypes MT ON MT.mtID = S.samt
+	LEFT JOIN dbo.MembershipGroups MG ON MG.mgID = MT.mtGroup
+WHERE 
+	-- Liner 2
+	S.saLiner2 IS NOT NULL
+	--Que sean Exit
+	AND MG.mgID = 'EXIT'
+	-- Fecha Procesable
+	AND ((((@ConsiderPending = 0 and S.saProcD between @DateFrom and @DateTo)
+	-- Fecha de venta
+	or (@ConsiderPending = 1 and S.saD between @DateFrom and @DateTo and (S.saProc = 0 or not S.saProcD between @DateFrom and @DateTo)))))
+	-- No downgrades
+	and ST.ststc <> 'DG'
+	-- Fecha de cancelacion
+	and ((@ConsiderCancel = 0 and (S.saCancel = 0 or S.saCancelD not between @DateFrom and @DateTo))
+		or (@ConsiderCancel = 1 and S.saCancelD between @DateFrom and @DateTo))
+	-- Out Of Pending
+	and (@ConsiderOutOfPending = 0 or S.saD <> S.saProcD)
+	-- Sales Rooms
+	and (@SalesRooms = 'ALL' or S.sasr in (select item from split(@SalesRooms, ',')))
+	--Tipo de Liner
+	and(@saLiner1Type = -1 or S.saLiner1Type=@saLiner1Type)
+	-- Ventas Regen
+	AND (@Regen = 0 OR S.sast = 'REGEN')
+GROUP BY S.saLiner2
+RETURN
+END
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerOverflow]    Script Date: 09/22/2016 19:20:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Devuelve el numero de shows por Liner solo si son Overflow
+** 
+** [ecanul]		28/06/2016 Created 
+**
+*/
+CREATE function [dbo].[UFN_IM_GetLinerOverflow](
+	@DateFrom datetime,					-- Fecha desde
+	@DateTo datetime,					-- Fecha hasta
+	@SalesRooms varchar(max) = 'ALL'	-- Clave de las salas de ventas
+)
+returns @Table table (
+	Liner varchar(10),
+	Overflow money
+)
+as
+begin
+
+insert @Table
+-- Shows (Liner 1)
+-- =============================================
+select
+	G.guLiner1,
+	Sum(dbo.UFN_OR_GetPercentageSalesman(G.guLiner1, G.guLiner2,default,default,default))
+from dbo.Guests G
+LEFT JOIN dbo.Sales S ON S.sagu = G.guID
+where
+	--Filtros de fechas
+	G.guShowD BETWEEN @DateFrom AND @DateTo
+	-- SalesRoom
+	and (@SalesRooms = 'ALL' or G.gusr in (select item from split(@SalesRooms, ',')))
+	-- Que sean Overflow
+	AND G.guOverflow = 1 
+	--Que sean Liner
+	AND (G.guLiner1 IS NOT NULL)
+	--Selfen
+	AND (G.guSelfGen = 1
+	-- Liner 1 configurado como Front To Middle
+	OR G.guLiner1 IN (SELECT peLinerID FROM dbo.Personnel WHERE peLinerID IS NOT NULL))
+group by G.guLiner1
+UNION ALL
+-- Shows (Liner 2)
+-- =============================================
+select
+	G.guLiner2,
+	Sum(dbo.UFN_OR_GetPercentageSalesman(G.guLiner1, G.guLiner2,default,default,default))
+from dbo.Guests G
+LEFT JOIN dbo.Sales S ON S.sagu = G.guID
+where
+	--Filtros de fechas
+	G.guShowD BETWEEN @DateFrom AND @DateTo
+	-- SalesRoom	
+	and (@SalesRooms = 'ALL' or G.gusr in (select item from split(@SalesRooms, ',')))
+	-- Que sean Overflow
+	AND G.guOverflow = 1 
+	--Que sean Liner
+	AND G.guLiner2 IS NOT NULL
+	--Selfen
+	AND (G.guSelfGen = 1
+	-- Liner 2 configurado como Front To Middle
+	OR G.guLiner2 IN (SELECT peLinerID FROM dbo.Personnel WHERE peLinerID IS NOT NULL))
+group by G.guLiner2
+return
+end
+
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSales]    Script Date: 09/22/2016 19:20:34 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1846,7 +2083,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSalesAmount]    Script Date: 09/21/2016 17:08:44 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerSalesAmount]    Script Date: 09/22/2016 19:20:38 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1979,7 +2216,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerShows]    Script Date: 09/21/2016 17:08:48 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetLinerShows]    Script Date: 09/22/2016 19:20:42 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2069,7 +2306,127 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveBookings]    Script Date: 09/21/2016 17:08:50 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetPersonnelTeamSalesmenByDate]    Script Date: 09/22/2016 19:20:45 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*
+** Palace Resorts
+** Grupo de Desarrollo Palace
+**
+** Obtiene el equipo y la sala de un vendedor en una fecha determinada
+** 
+** [aalcocer]	23/Jun/2016 Creado
+**
+*/
+
+create function [dbo].[UFN_IM_GetPersonnelTeamSalesmenByDate](
+	@PersonnelID varchar(10),	-- Clave del personal
+	@Date datetime				-- Fecha desde
+)
+returns @Table table (
+	Team varchar(10),
+	TeamN varchar(20),
+	TeamLeader varchar(10),
+	TeamLeaderN varchar(40),
+	SalesRoom varchar(10),
+	SalesRoomN varchar(30)
+)
+as
+BEGIN
+	declare
+	@TeamsLogCount int,	-- Numero de registros encontrados en el historico de equipos
+	@PersonnelCount int	-- Numero de registros encontrados en el catalogo de personal
+
+-- consultamos el historico de equipos
+
+select @TeamsLogCount = Count(tlDT)
+from TeamsLog
+where
+	-- Personal
+	tlpe = @PersonnelID
+	-- Con fecha anterior a la fecha enviada
+	and DateDiff(Day, tlDT, @Date) >= 0
+	-- No equipos de Guest Services
+	and tlTeamType <> 'GS'
+
+-- si se encontro registros en el historico de equipos
+if @TeamsLogCount > 0
+	insert @Table
+	select	
+		tlTeam as Team,
+		tsN as TeamN,
+		tsLeader as TeamLeader,
+		peN as TeamLeaderN,
+		tlPlaceID as SalesRoom, 
+		srN as SalesRoomN
+	from TeamsLog
+	left join TeamsSalesmen on tlTeam = tsID and tlPlaceID = tssr
+	left join Personnel on tsLeader = peID
+	left join SalesRooms on tlPlaceID = srID
+	where
+		-- Personal
+		tlpe = @PersonnelID
+		-- Fecha
+		and tlDT = (
+			select Max(tlDT)
+			from TeamsLog 
+			where
+				-- Personal
+				tlpe = @PersonnelID
+				-- Con fecha anterior a la fecha enviada
+				and DateDiff(Day, tlDT, @Date) >= 0
+				-- No equipos de Guest Services
+				and tlTeamType <> 'GS'
+		)
+		-- No equipos de Guest Services 
+		and tlTeamType <> 'GS'
+else
+begin
+	-- consultamos el catalogo de personal
+	select @PersonnelCount = Count(peID)
+	from Personnel
+	where peID = @PersonnelID
+
+	-- si el personal existe
+	if @PersonnelCount > 0
+		insert @Table
+		select
+			P.peTeam as Team,
+			tsN as TeamN,
+			tsLeader as TeamLeader,
+			L.peN as TeamLeaderN,
+			P.pePlaceID as SalesRoom, 
+			srN as SalesRoomN
+		from Personnel P
+		left join TeamsSalesmen on P.peTeam = tsID and P.pePlaceID = tssr
+		left join Personnel L on tsLeader = L.peID
+		left join SalesRooms on P.pePlaceID = srID
+		where P.peID = @PersonnelID
+
+	-- si el personal no existe
+	else
+		insert @Table
+		select			
+			'' as Team,
+			'' as TeamN,
+			'' as TeamLeader,
+			'' as TeamLeaderN,
+			'' as SalesRoom,
+			'' as SalesRoomN
+end
+RETURN
+END
+
+
+
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveBookings]    Script Date: 09/22/2016 19:20:46 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2156,7 +2513,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSales]    Script Date: 09/21/2016 17:08:54 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSales]    Script Date: 09/22/2016 19:20:50 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2248,7 +2605,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesAmount]    Script Date: 09/21/2016 17:08:58 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesAmount]    Script Date: 09/22/2016 19:20:53 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2339,7 +2696,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomBookings]    Script Date: 09/21/2016 17:09:02 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomBookings]    Script Date: 09/22/2016 19:20:57 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2431,7 +2788,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSales]    Script Date: 09/21/2016 17:09:05 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSales]    Script Date: 09/22/2016 19:21:01 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2527,7 +2884,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]    Script Date: 09/21/2016 17:09:09 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomSalesAmount]    Script Date: 09/22/2016 19:21:04 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2622,7 +2979,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomShows]    Script Date: 09/21/2016 17:09:13 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveSalesRoomShows]    Script Date: 09/22/2016 19:21:08 ******/
 SET ANSI_NULLS OFF
 GO
 
@@ -2703,7 +3060,7 @@ end
 
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveShows]    Script Date: 09/21/2016 17:09:16 ******/
+/****** Object:  UserDefinedFunction [dbo].[UFN_IM_GetWaveShows]    Script Date: 09/22/2016 19:21:11 ******/
 SET ANSI_NULLS OFF
 GO
 

@@ -1408,7 +1408,13 @@ namespace IM.ProcessorOuthouse.Forms
       switch (strReport)
       {
         case "Folios Invitations Outhouse":
+        case "Folios Invitations Outhouse by PR":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolSeries: true, blnFolFrom: true, blnFolTo: true, enumPrograms: EnumProgram.All);
+          break;
+
+        case "Folios CxC by PR":
+        case "Folios CXC":
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolFrom: true, blnFolTo: true, blnAllFolios: true, enumPrograms: EnumProgram.All);
           break;
       }
 
@@ -1465,6 +1471,55 @@ namespace IM.ProcessorOuthouse.Forms
               );
             if (lstRptFoliosInvitationByDateFolio.Any())
               finfo = await clsReports.ExportRptFoliosInvitationByDateFolio(strReport, fileFullPath, filters, lstRptFoliosInvitationByDateFolio);
+            break;
+          #endregion
+
+          #region Folios Invitations Outhouse by PR
+          case "Folios Invitations Outhouse by PR":
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", filter.AllLeadSources ? "ALL" : string.Join(",", filter._lstLeadSources)));
+
+            List<RptFoliosInvitationsOuthouseByPR> lstRptFoliosInvitationsOuthouseByPR = await BRReportsByLeadSource.GetRptFoliosInvitationsOuthouseByPR(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
+              _cboFolSeriesSelected,
+              _folFrom,
+              _folTo,
+              string.Join(",", filter._lstLeadSources),
+              string.Join(",", filter._lstPRs)
+              );
+            if (lstRptFoliosInvitationsOuthouseByPR.Any())
+              finfo = clsReports.ExportRptFoliosInvitationOuthouseByPR(strReport, fileFullPath, filters, lstRptFoliosInvitationsOuthouseByPR);
+            break;
+          #endregion
+
+          #region Folios CxC by PR
+          case "Folios CxC by PR":
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", filter.AllLeadSources ? "ALL" : string.Join(",", filter._lstLeadSources)));
+
+            List<RptFoliosCxCByPR> lstRptFoliosCxCByPR = await BRReportsByLeadSource.GetRptFoliosCxCByPR(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
+              _frmFilter.chkAllFolios.IsChecked.Value,
+              _folFrom,
+              _folTo,
+              string.Join(",", filter._lstLeadSources),
+              filter.AllPRs ? "ALL" : string.Join(",", filter._lstPRs));
+            if (lstRptFoliosCxCByPR.Any())
+              finfo = clsReports.ExportRptFoliosCxCByPR(strReport, fileFullPath, filters, lstRptFoliosCxCByPR);
+            break;
+          #endregion
+
+          #region Folios CXC
+          case "Folios CXC":
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", filter.AllLeadSources ? "ALL" : string.Join(",", filter._lstLeadSources)));
+
+            List<RptFoliosCXC> lstRptFoliosCXC = await BRReportsByLeadSource.GetRptFoliosCXC(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
+              _frmFilter.chkAllFolios.IsChecked.Value,
+              _folFrom,
+              _folTo,
+              string.Join(",", filter._lstLeadSources),
+              string.Join(",", filter._lstPRs));
+            if (lstRptFoliosCXC.Any())
+              finfo = await clsReports.ExportRptFoliosCXC(strReport, fileFullPath, filters, lstRptFoliosCXC);
             break;
             #endregion
         }

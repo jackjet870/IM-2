@@ -184,21 +184,36 @@
                     <!--#endregion-->
 
                     <!--#region Lead Sources-->
-                    <DataGrid Name="dgrLeadSources" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="0" Grid.Row="1">
+                    <DataGrid Name="dtgLeadSources" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="0" Grid.Row="1">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Width="100*" x:Name="cmbLeadSource" SelectedValueBinding="{Binding plLSSRID}" SelectedValuePath="lsID" DisplayMemberPath="lsN" Header="Lead Sources"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <!--#endregion-->
                     <!--#region  Sales Room-->
-                    <DataGrid Name="dgrSalesRoom" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="1" Grid.Row="1">
+                    <DataGrid Name="dtgSalesRoom" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="1" Grid.Row="1">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Width="100*" x:Name="cmbSalesRoom" SelectedValuePath="srID" DisplayMemberPath="srN" SelectedValueBinding="{Binding plLSSRID}" Header="Sales Rooms"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <!--#endregion-->
                     <!--#region Warehouses-->
-                    <DataGrid Margin="3" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" Name="dgrWarehouses" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1">
+                    <DataGrid Margin="3" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" Name="dtgWarehouses" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Width="100*" x:Name="cmbWarehouses" DisplayMemberPath="whN" SelectedValuePath="whID" SelectedValueBinding="{Binding plLSSRID}" Header="Warehouses"/>
                         </DataGrid.Columns>

@@ -845,6 +845,12 @@
     <Compile Include="RptEfficiencyWeekly.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptFoliosCXC.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFoliosCxCByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptFoliosInvitationByDateFolio.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

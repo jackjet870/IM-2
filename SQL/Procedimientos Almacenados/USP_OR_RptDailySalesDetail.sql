@@ -1,9 +1,7 @@
-USE [OrigosVCPalace];
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptDailySalesDetail]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptDailySalesDetail]
 GO
-SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -17,6 +15,7 @@ GO
 **							- Reemplace el uso de las funciones UFN_OR_ObtenerVentasPorTipoMembresia, UFN_OR_ObtenerOutOfPending
 **							  y UFN_OR_ObtenerVentasCanceladas por UFN_OR_GetSales y UFN_OR_GetSalesAmount
 ** [LorMartinez] 18/Ene/2016, Modificado, Se agrega manejo de mas de un saleroom
+**
 */
 CREATE procedure [dbo].[USP_OR_RptDailySalesDetail]
 	@DateFrom datetime,		-- Fecha inicial
@@ -51,7 +50,6 @@ declare @TableSale table(
   Down money,
   Down_Coll money
 )
-
 
 -- mientras haya mas fechas
 while @Date <= @DateTo
@@ -111,4 +109,3 @@ select [Date] ,
       DownColl,
       CnxSalesAmount
 from @TableDetail
-GO

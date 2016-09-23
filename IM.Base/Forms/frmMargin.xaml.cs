@@ -10,12 +10,10 @@ namespace IM.Base.Forms
   /// </summary>
   public partial class frmMargin : Window
   {
-    private Margin oldMargin = new Margin();
     public frmMargin(Margin margin)
     {
       InitializeComponent();
       //Asignamos el datacontext
-      oldMargin = ObjectHelper.CopyProperties(margin);
       DataContext = margin;
       //Agregamos el evento para que pueda escribir sólo decimales
       txtLeft.PreviewTextInput += TextBoxHelper.DecimalTextInput;
@@ -28,15 +26,8 @@ namespace IM.Base.Forms
     {
       btnAccept.Focus();
       Margin margin = DataContext as Margin;
-      if(ObjectHelper.IsEquals(margin,oldMargin))
-      {
-        Close();
-      }
-      else
-      {
-        DialogResult = true;
-        Close();
-      }
+      DialogResult = true;
+      Close();
     }
   }
 }

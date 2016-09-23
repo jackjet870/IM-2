@@ -1240,5 +1240,101 @@ namespace IM.ProcessorOuthouse.Classes
     }
 
     #endregion ExportRptFoliosInvitationByDateFolio
+
+    #region ExportRptFoliosInvitationOuthouseByPR
+    /// <summary>
+    ///  Obtiene los datos para el reporte FoliosInvitationOuthouseByPR
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="string.Empty">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosInvitationOuthouseByPR">Lista de Folios de invitationbyPR</param>
+    /// <history>
+    ///   [vku] 05/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosInvitationOuthouseByPR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosInvitationsOuthouseByPR> lstRptFoliosInvitationOuthouseByPR)
+    {
+      var lstRptFoliosInvitationOuthouseByPRAux = lstRptFoliosInvitationOuthouseByPR.Select(c => new
+      {
+        c.peN,
+        c.guStatus,
+        c.guSerie,   
+        c.guFrom,
+        c.guTo,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+      }).OrderBy(c=>c.peN).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationOuthouseByPRAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptFoliosInvitationOuthouseByPR(), fileFullPath: fileFullPath);
+    }
+    #endregion
+
+    #region ExportRptFoliosCxCByPR
+    /// <summary>
+    ///   Obtiene los datos para el reporte FoliosCxCByPR
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="string.Empty">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosCxCByPR">Lista de Folios CxC by PR</param>
+    /// <history>
+    ///   [vku] 06/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosCxCByPR(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosCxCByPR> lstRptFoliosCxCByPR)
+    {
+      var lstRptFoliosCxCByPRAux = lstRptFoliosCxCByPR.Select(c => new
+      {
+        c.peN,
+        c.guStatus,
+        c.guFrom,
+        c.guTo,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+      }).OrderBy(c=>c.peN).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCxCByPRAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptFoliosCxCByPR(), fileFullPath: fileFullPath);  
+    }
+    #endregion
+
+    #region ExportRptFoliosCXC
+    /// <summary>
+    ///   Obtiene los datos para el reporte Folios CXC
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="string.Empty">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosCxC">Lista de folios CXC</param>
+    /// <history>
+    ///   [vku] 07/May/2016 Created
+    /// </history>
+    public static async System.Threading.Tasks.Task<FileInfo> ExportRptFoliosCXC(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosCXC> lstRptFoliosCXC)
+    {
+      var lstRptFoliosCXCAux = lstRptFoliosCXC.Select(c => new
+      {
+        c.EsShow,
+        c.Tipo,
+        c.bdFolioCXC,
+        c.PR,
+        c.PRN,
+        c.guOutInvitNum,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+        c.bdUserCXC,
+        c.peN,
+        c.bdEntryDCXC
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCXCAux);
+      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosCXC(), fileFullPath: fileFullPath, addEnumeration: true);
+    }
+    #endregion
   }
 }

@@ -56,6 +56,8 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      //Limpiamos el Grid y buscamos la informacion
+      dtgr.DataContext = null;
       GetGuestByPR();
     }
 
@@ -227,6 +229,7 @@ namespace IM.GuestsPR.Forms
         }
         StaEnd();
         imgButtonOk.IsEnabled = true;
+        imgButtonPrint.IsEnabled = true;
       }
       catch (Exception ex)
       {
@@ -354,7 +357,7 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(Context.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID, true);
         }
         else
         {
@@ -366,7 +369,7 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = false;
         if (cbxPersonnel.Items.Count > 0)
         {
-          selectPersonnelInCombobox(Context.User.User.peID);
+          selectPersonnelInCombobox(Context.User.User.peID, false);
         }
         else
         {
@@ -393,19 +396,31 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 25/04/2016
     /// </history>
-    private void selectPersonnelInCombobox(string user)
+    private bool selectPersonnelInCombobox(string user, bool specialLevel)
     {
       var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
       var index = lstPS.FindIndex(x => x.peID.Equals(user));
       if (index != -1)
       {
         cbxPersonnel.SelectedIndex = index;
+        GetGuestByPR();
+        return true;
       }
       else
       {
+        //Limpiamos el DataGrid
+        dtgr.DataContext = null;
+        
+        //Si no tiene permisos especiales  deshabilitamos los controles
+        if (!specialLevel)
+        {
+          imgButtonOk.IsEnabled = false;
+          imgButtonPrint.IsEnabled = false;
+        }
         cbxPersonnel.SelectedItem = null;
+       
+        return false;
       }
-      GetGuestByPR();
     }
 
     /// <summary>
@@ -423,7 +438,7 @@ namespace IM.GuestsPR.Forms
        
           if (chkAssign?.IsChecked == true || chkContact?.IsChecked == true || chkFollowUp?.IsChecked == true || chkInvitation?.IsChecked == true || chkShows?.IsChecked == true)
           {
-            imgButtonOk.IsEnabled = false;
+            imgButtonOk.IsEnabled = false;            
             filtersBool = new List<bool>();
             var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : Context.User.LeadSource.lsID);
             var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
