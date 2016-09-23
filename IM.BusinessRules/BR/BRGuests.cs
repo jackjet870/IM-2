@@ -1081,6 +1081,7 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se guardó | >0. Los datos se guardaron correctamente</returns>
     /// <history>
     /// [emoguel] 18/08/2016 created
+    /// [emoguel] 23/09/2016 Modified--- Se cambio la validacion de GuestSattus
     /// </history>
     public async static Task<int> SaveGuestInvitation(GuestInvitation guestInvitation, EnumProgram enumProgram, EnumModule enumModule, UserData user, EnumMode enumMode,
       string computerName, string iPAddress, EnumGuestsMovementsType guestMovementType, short hoursDiff)
@@ -1351,7 +1352,7 @@ namespace IM.BusinessRules.BR
               dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
               #endregion
               #region Add
-              if (guestInvitation.Guest.guStatus != null)
+              if (guestInvitation.Guest.guGStatus != null)
               {
                 GuestStatus guestStatus = new GuestStatus();
                 guestStatus.gtQuantity = 1;
