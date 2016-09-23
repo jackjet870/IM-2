@@ -28,39 +28,50 @@ select @Res=0
 
 ;with cte as
 (
-select 	saDownPayment,saDownPaymentPaid
-	from Guests
-	left outer join Sales on guID = sagu
-	where guShowD between @DateFrom and @DateTo 
+select 	s.saDownPayment,s.saDownPaymentPaid
+	from Guests g
+	left outer join Sales s on g.guID = s.sagu
+  OUTER APPLY (SELECT TOP 1 s2.saID SaleID
+               FROM dbo.Sales s2
+               WHERE s2.saMembershipNum= s.saMembershipNum
+               ORDER By s2.saID DESC
+              )LastSale
+	where g.guShowD between @DateFrom and @DateTo 
     --Sales room
-    and (@SalesRoom='ALL' OR (@SalesRoom <> 'ALL' AND gusr in (select item from dbo.split(@SalesRoom,','))))
+    and (@SalesRoom='ALL' OR (@SalesRoom <> 'ALL' AND g.gusr in (select item from dbo.split(@SalesRoom,','))))
     --and gusr = @SalesRoom
 		-- Procesado
-    and saProc = 1
+    and s.saProc = 1
 		-- No se toman en cuenta las ventas pendientes
-		and (guShowD = saProcD or (guShowD <> saProcD and saProcD between @DateFrom and @DateTo))
+		and (g.guShowD = s.saProcD or (g.guShowD <> s.saProcD and s.saProcD between @DateFrom and @DateTo))
 		-- No se toman en cuenta las ventas Bump ni Regen
-		and sast <> 'BUMP' and sast <> 'REGEN'
+		and s.sast <> 'BUMP' and s.sast <> 'REGEN'
 		-- No se toman en cuenta las ventas canceladas
-		and saCancel <> 1
+		and s.saCancel <> 1
 UNION ALL    
 select
-	saDownPayment,saDownPaymentPaid
-	from Guests
-	left outer join Sales on guID = sagu
+	s.saDownPayment,s.saDownPaymentPaid
+	from Guests g
+	left outer join Sales s on guID = sagu
+  OUTER APPLY (SELECT TOP 1 s2.saID SaleID
+               FROM dbo.Sales s2
+               WHERE s2.saMembershipNum= s.saMembershipNum
+               ORDER By s2.saID DESC
+              )LastSale
 	where 
 		-- Ventas que no tienen Show o que su show es de otro dia
-		( (guShowD is null or not guShowD between @DateFrom and @DateTo)
+		( (g.guShowD is null or not g.guShowD between @DateFrom and @DateTo)
 		-- Ventas del dia  y ventas procesables del dia (no se toman en cuenta las canceladas)
-		and (saD between @DateFrom and @DateTo or saProcD between @DateFrom and @DateTo)
+		and (s.saD between @DateFrom and @DateTo or s.saProcD between @DateFrom and @DateTo)
 		-- Bumps, Regen y las ventas de otra sala
-		or ( (sast = 'BUMP' or sast = 'REGEN' or gusr <> sasr) and saD between @DateFrom and @DateTo) )
+		or ( (s.sast = 'BUMP' or s.sast = 'REGEN' or g.gusr <> s.sasr) and s.saD between @DateFrom and @DateTo) )
 		-- Ventas de la sala  and sasr = @SalesRoom
 		and (@SalesRoom='ALL' OR (@SalesRoom <> 'ALL' AND gusr in (select item from dbo.split(@SalesRoom,','))))
 		-- No se toman en cuenta los Deposit Before
-		and not (sast = 'NS' and guDepSale > 0 and not (saProc = 1 and saD <> saProcD and saProcD between @DateFrom and @DateTo))
+		and not (s.sast = 'NS' and g.guDepSale > 0 and not (s.saProc = 1 and s.saD <> s.saProcD and s.saProcD between @DateFrom and @DateTo))
 		-- No se toman en cuenta las ventas pendientes
-		and not (saProcD > @DateTo)
+		and not (s.saProcD > @DateTo)
+    AND Lastsale.SaleID = s.saID
 )
 SELECT @Res = CASE 
       WHEN @Collected = 0 THEN sum(isnull(c.saDownPayment,0))

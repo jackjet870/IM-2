@@ -1,9 +1,7 @@
-USE [OrigosVCPalace];
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptDailySalesHeader]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptDailySalesHeader]
 GO
-SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -40,4 +38,3 @@ select
 	dbo.UFN_OR_GetShows(@DateFromPrevious, @DateToPrevious, default, @SalesRoom, default, 4, default, default) as ShowsPrevious,
 	-- Monto de ventas del período anterior
 	dbo.UFN_OR_GetSalesAmount(@DateFromPrevious, @DateToPrevious, default, @SalesRoom, default, default, default, default) as SalesAmountPrevious
-GO

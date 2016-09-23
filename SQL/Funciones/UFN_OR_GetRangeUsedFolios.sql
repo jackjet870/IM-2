@@ -10,7 +10,7 @@ GO
 **
 ** Regresa una tabla con los rangos de folios no usados
 ** 
-** [lchairezReload]	08/Ene/2016 Creado
+** [lchairez]	08/Ene/2016 Creado
 **
 */
 ALTER FUNCTION [dbo].[UFN_OR_GetRangeUsedFolios]

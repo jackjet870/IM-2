@@ -1,9 +1,7 @@
-USE [OrigosVCPalace];
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[NumberToLetters]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[NumberToLetters]
 GO
-SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
+
 /*
 ** Palace Resorts
 ** Grupo de Desarrollo Palace
@@ -167,4 +165,3 @@ if @Original = 1 and @Language = 'P' and @Gender = 'F' and @Units = 2
 -- establecemos respuesta de la funcion
 return @Letters
 end
-GO
