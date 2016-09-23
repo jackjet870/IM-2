@@ -1351,6 +1351,7 @@ namespace IM.BusinessRules.BR
               var lstGuestStatusDel = dbContext.GuestsStatus.Where(gs => gs.gtgu == guestInvitation.Guest.guID);
               dbContext.GuestsStatus.RemoveRange(lstGuestStatusDel);
               #endregion
+
               #region Add
               if (guestInvitation.Guest.guGStatus != null)
               {
