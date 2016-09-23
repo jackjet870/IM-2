@@ -1854,7 +1854,7 @@ namespace IM.Inhouse.Forms
     /// [jorcanche] 17/03/2016
     /// </history>
     private void btnSearchGuest_Click(object sender, RoutedEventArgs e)
-    {
+    {           
       StaStart("loading Searched...");
       //StaStart("loading Searched...");
       var searchGuests = new frmSearchGuests { Owner = this };

@@ -36,7 +36,11 @@ namespace IM.Inhouse.Classes
     {
       get { return (guPRNote ? "pack://application:,,,/IM.Styles;component/Images/Note.ico" : string.Empty); }
     }
-
+    //Atributo que se utiliza para mostrar el tooltip
+    public string toolTip
+    {
+      get { return HelperToObjGuest.toolTip(Status); }
+    }
     public string EquityColumn
     {
       get { return (string.IsNullOrEmpty(guMembershipNum)? string.Empty:"pack://application:,,,/IM.Styles;component/Images/Report.ico" ); }

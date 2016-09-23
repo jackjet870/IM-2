@@ -18,7 +18,11 @@ namespace IM.Inhouse.Classes
       { GetType().GetProperty(prop.Name).SetValue(this, prop.GetValue(parent, null), null); }
       Status = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail, guInvit, guBookCanc, guBookD, guShow, guInfo, serverDate);
     }
-
+    //Atributo que se utiliza para mostrar el tooltip
+    public string toolTip
+    {
+      get { return HelperToObjGuest.toolTip(Status); }
+    }
     public int StatusColumn
     {
       get { return Status; }
