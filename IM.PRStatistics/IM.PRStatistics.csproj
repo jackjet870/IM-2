@@ -60,6 +60,9 @@
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PalaceResorts4.Common.PalaceTools.Epplus">
+      <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Epplus\PalaceResorts4.Common.PalaceTools.Epplus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />

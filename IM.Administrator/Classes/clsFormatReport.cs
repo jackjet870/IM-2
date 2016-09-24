@@ -1,7 +1,6 @@
-﻿using IM.Model.Classes;
-using OfficeOpenXml.Style;
-using System.Collections.Generic;
-using IM.Model.Enums;
+﻿using OfficeOpenXml.Style;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.Administrator.Classes
 {

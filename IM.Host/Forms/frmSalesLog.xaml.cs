@@ -4,6 +4,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,7 +70,7 @@ namespace IM.Host.Forms
       {
         if (saleLogDataDataGrid.ItemsSource == null) return;
 
-        FileInfo fileInfo = await EpplusHelper.CreateCustomExcel(
+        FileInfo fileInfo = await ReportBuilder.CreateCustomExcel(
           TableHelper.GetDataTableFromList((List<SaleLogData>)saleLogDataDataGrid.ItemsSource, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
           "Sale Log",

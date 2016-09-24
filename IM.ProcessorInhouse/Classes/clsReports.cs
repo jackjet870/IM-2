@@ -1,6 +1,7 @@
 ﻿using IM.Base.Helpers;
 using IM.Model;
 using IM.Model.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,7 +30,7 @@ namespace IM.ProcessorInhouse.Classes
     internal async static Task<FileInfo> ExportRptCostByPR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrs, replaceStringNullOrWhiteSpace: true);
-      return  await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal:true, fileFullPath: fileFullPath, addEnumeration:true);
+      return  await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
       
     }
 
@@ -61,7 +62,7 @@ namespace IM.ProcessorInhouse.Classes
         c.TotalCost
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPRWithDetailGiftsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptCostByPRWithDetailGifts
@@ -96,7 +97,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByAgenciesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByAgencyFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByAgencyFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptFollowUpByAgencies
@@ -131,7 +132,7 @@ namespace IM.ProcessorInhouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByPRAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByPRFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByPRFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptFollowUpByPRs
@@ -171,7 +172,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgeInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgeInhouseFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgeInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportProductionByAgeInhouses
@@ -213,7 +214,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listProductionByAgeMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportProductionByAgeMarketOriginallyAvailableInhouses
@@ -254,7 +255,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).OrderBy(c => c.Agency).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByContractAgencyInhouses
@@ -297,7 +298,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses
@@ -336,7 +337,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByCoupleTypeInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByCoupleTypeInhouses
@@ -376,7 +377,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByNationalityInhouses
@@ -418,7 +419,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByNationalityMarketOriginallyAvailableInhouses
@@ -457,7 +458,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByDeskInhouseFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByDeskInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByDeskInhouses
@@ -497,7 +498,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGiftQuantityFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGiftQuantityFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByGiftQuantities
@@ -539,7 +540,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGroupInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGroupInhouseFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGroupInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByGroupInhouses
@@ -583,7 +584,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRGroupInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRGroupInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRGroupInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByPRGroupInhouses
@@ -624,7 +625,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGuestStatusInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByGuestStatusInhouses
@@ -665,7 +666,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyInhouses
@@ -708,7 +709,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses
@@ -757,7 +758,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_OOP
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByPRInhouses
@@ -807,7 +808,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_OOP
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRSalesRoomInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRSalesRoomInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRSalesRoomInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByPRSalesRoomInhouses
@@ -840,7 +841,7 @@ namespace IM.ProcessorInhouse.Classes
         c.agTotalPay,
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptRepsPayments
@@ -875,7 +876,7 @@ namespace IM.ProcessorInhouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentSummariesAux, replaceStringNullOrWhiteSpace: true);
 
 
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), fileFullPath: fileFullPath, addEnumeration: true, blnRowGrandTotal:true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true, blnRowGrandTotal: true);
     }
 
     #endregion ExportRptRepsPaymentSummaries
@@ -933,7 +934,7 @@ namespace IM.ProcessorInhouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptGiftsReceivedBySR
@@ -964,7 +965,7 @@ namespace IM.ProcessorInhouse.Classes
         c.ByUser
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptUnavailableMotivesByAgenciesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptUnavailableMotivesByAgencyFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptUnavailableMotivesByAgencyFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptUnavailableMotivesByAgencies
@@ -996,7 +997,7 @@ namespace IM.ProcessorInhouse.Classes
         c.WalkOuts
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptShowFactorByBookingDatesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptShowFactorByBookingDateFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptShowFactorByBookingDateFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptShowFactorByBookingDates
@@ -1042,7 +1043,7 @@ namespace IM.ProcessorInhouse.Classes
           c.SalesAmount
         }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgencyMonthlyAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgencyMonthlyFormat(), showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgencyMonthlyFormat(), showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByAgencyMonthly
@@ -1153,10 +1154,10 @@ namespace IM.ProcessorInhouse.Classes
       DataTable dtDataMonths = TableHelper.GetDataTableFromList(listGraphProduction_Months, replaceStringNullOrWhiteSpace: true);
       dtDataMonths.TableName = "GraphProduction_Months";
 
-      template = EpplusHelper.UpdateTableExcel(template, dtDataWeeks);
-      template = EpplusHelper.UpdateTableExcel(template, dtDataMonths);
+      template = ReportBuilder.UpdateDataFromExcelTemplate(template, dtDataWeeks);
+      template = ReportBuilder.UpdateDataFromExcelTemplate(template, dtDataMonths);
 
-      return EpplusHelper.CreateExcelFromTemplate(filters, template, reportname, string.Empty, fileFullPath: fileFullPath);
+      return ReportBuilder.CreateExcelFromTemplate(filters, template, reportname, string.Empty, isRptQueue:true, filePath: fileFullPath);
     }
 
     #endregion ExportGraphProduction
@@ -1238,7 +1239,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMembersAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByMembers
@@ -1315,7 +1316,7 @@ namespace IM.ProcessorInhouse.Classes
         }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(productionByAgencyInhouses);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportProductionByAgencyInhouses
@@ -1349,7 +1350,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMembersAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMonthFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMonthFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptProductionByMonths
@@ -1388,7 +1389,7 @@ namespace IM.ProcessorInhouse.Classes
                           }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(scoreByPRAux);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, fileFullPath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptScoreByPrs
@@ -1466,7 +1467,7 @@ namespace IM.ProcessorInhouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(listRptContactBookShowQuinellasAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptContactBookShowQuinellasFormat(), true, fileFullPath: fileFullPath);
+      return ReportBuilder.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptContactBookShowQuinellasFormat(), true, isRptQueue:true ,filePath:fileFullPath);
     }
 
     #endregion ExportRptContactBookShowQuinellas

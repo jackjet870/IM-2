@@ -13,6 +13,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -479,7 +480,7 @@ namespace IM.ProcessorGeneral.Forms
         new Tuple<string, string>("Sales Room", filter.AllSalesRooms ? "ALL" : string.Join(",", filter.LstSalesRooms))
       };
 
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReportName);
       try
       {
@@ -1104,10 +1105,9 @@ namespace IM.ProcessorGeneral.Forms
 
             #endregion
         }
-
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1217,7 +1217,7 @@ namespace IM.ProcessorGeneral.Forms
       filters.Add(new Tuple<string, string>("Lead Sources",
         filter.AllLeadSources ? "ALL" : string.Join(",", filter.LstLeadSources)));
 
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReportName);
       try
       {
@@ -1334,7 +1334,7 @@ namespace IM.ProcessorGeneral.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1471,7 +1471,7 @@ namespace IM.ProcessorGeneral.Forms
       var dateRangeFileNameRep = (blndateRange) ? (_blnOneDate ? DateHelper.DateRangeFileName(filter.StartDate, filter.StartDate) : DateHelper.DateRangeFileName(filter.StartDate, filter.EndDate)) : "";
       FileInfo finfo = null;
       var filters = new List<Tuple<string, string>>();
-      string fileFullPath = (strReportName != "Logins Log") ? EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep) : "";
+      string fileFullPath = (strReportName != "Logins Log") ? ReportBuilder.CreateEmptyExcel(strReportName, dateRangeFileNameRep) : "";
       if (strReportName != "Logins Log") { _frmReportQueue.AddReport(fileFullPath, strReportName); }
       try
       {
@@ -1598,7 +1598,7 @@ namespace IM.ProcessorGeneral.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();

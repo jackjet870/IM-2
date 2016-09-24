@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -93,7 +94,7 @@ namespace IM.SalesLiner.Forms
         //Obtenemos el dataTable con la lista formateada
         var dt = TableHelper.GetDataTableFromList(listaSaleByLiner, true);
         //Creamos el reporte
-        var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
+        var fi = await ReportBuilder.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
 
         if (fi != null)
         {

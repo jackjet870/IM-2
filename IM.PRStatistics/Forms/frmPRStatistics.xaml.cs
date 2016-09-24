@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.PRStatistics.Utilities;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -111,7 +112,7 @@ namespace IM.PRStatistics.Forms
 
 
 
-        FileInfo finfo = await EpplusHelper.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal: true, blnRowGrandTotal: true);
+        FileInfo finfo = await ReportBuilder.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal: true, blnRowGrandTotal: true);
 
         if (finfo != null)
         {

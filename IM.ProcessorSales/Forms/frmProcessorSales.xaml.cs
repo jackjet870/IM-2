@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.ProcessorSales.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -214,7 +215,7 @@ namespace IM.ProcessorSales.Forms
       #endregion
 
       List<dynamic> list = new List<dynamic>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(reporteName, dateRangeFileName);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(reporteName, dateRangeFileName);
       _frmReportQueue.AddReport(fileFullPath, reporteName);
       try
       {
@@ -405,7 +406,7 @@ namespace IM.ProcessorSales.Forms
         }
         if (file == null)
         {
-          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
+          file = ReportBuilder.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -459,7 +460,7 @@ namespace IM.ProcessorSales.Forms
       #endregion
 
       List<dynamic> list = new List<dynamic>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(reporteName, dateRangeFileName);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(reporteName, dateRangeFileName);
       _frmReportQueue.AddReport(fileFullPath, reporteName);
       try
       {
@@ -555,7 +556,7 @@ namespace IM.ProcessorSales.Forms
         }
         if (file == null)
         {
-          file = EpplusHelper.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
+          file = ReportBuilder.CreateNoInfoRptExcel(filters, reporteName, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(file, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();

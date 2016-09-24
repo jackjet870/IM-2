@@ -7,6 +7,7 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.ProcessorInhouse.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -645,7 +646,7 @@ namespace IM.ProcessorInhouse.Forms
         reportname += " With Details Gifts";
       var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
       var list = new List<dynamic>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(reportname, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, reportname);
       try
       {
@@ -1148,7 +1149,7 @@ namespace IM.ProcessorInhouse.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1183,7 +1184,7 @@ namespace IM.ProcessorInhouse.Forms
       string reportname = EnumToListHelper.GetEnumDescription(rptPR);
       var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
       var list = new List<dynamic>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(reportname, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, reportname);
       try
       {
@@ -1237,7 +1238,7 @@ namespace IM.ProcessorInhouse.Forms
         }
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1272,7 +1273,7 @@ namespace IM.ProcessorInhouse.Forms
       string reportname = EnumToListHelper.GetEnumDescription(rptGeneral);
       var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
       var list = new List<dynamic>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(reportname, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, reportname);
       try
       {
@@ -1312,7 +1313,7 @@ namespace IM.ProcessorInhouse.Forms
         }
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();

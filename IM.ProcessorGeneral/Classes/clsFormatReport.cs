@@ -1,7 +1,7 @@
-﻿using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
+﻿using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 using System.Collections.Generic;
 
 namespace IM.ProcessorGeneral.Classes

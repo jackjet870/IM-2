@@ -10,6 +10,7 @@ using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.Model;
 using System.Windows.Input;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 
 namespace IM.Base.Forms
 {
@@ -81,7 +82,7 @@ namespace IM.Base.Forms
     {
       if (dgGuestLog.ItemsSource == null) return;
 
-      await EpplusHelper.CreateCustomExcel(
+      await ReportBuilder.CreateCustomExcel(
         TableHelper.GetDataTableFromList((List<GuestLogData>)dgGuestLog.ItemsSource, true, true, true),
         new List<Tuple<string, string>> { Tuple.Create("Guest Id", _idGuest.ToString()) },
         "Guest Log",

@@ -16,6 +16,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 
 namespace IM.Host
 {
@@ -619,7 +620,7 @@ namespace IM.Host
 
           filters.Add(new Tuple<string, string>("Date Range", dateRange));
           filters.Add(new Tuple<string, string>("Sales Room", Context.User.SalesRoom.srID));
-          var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, IM.Model.Classes.ExcelFormatItemsList>> {
+          var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, ExcelFormatItemsList>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);

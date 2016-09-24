@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 namespace IM.Host.Classes
 {
   public static class clsFormatReport

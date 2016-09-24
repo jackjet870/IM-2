@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.Base.Classes
 {
@@ -98,7 +100,7 @@ namespace IM.Base.Classes
       string dateRange = DateHelper.DateRange(dtmStart, dtmEnd);
       string dateRangeFileName = DateHelper.DateRangeFileName(dtmStart, dtmEnd);
 
-      FileInfo file = await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, RptAssistanceFormat());
+      FileInfo file = await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRangeFileName, RptAssistanceFormat());
       return file;
     } 
     #endregion

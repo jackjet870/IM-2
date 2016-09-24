@@ -1,5 +1,6 @@
 ﻿using IM.Base.Helpers;
 using IM.Model;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -46,7 +47,7 @@ namespace IM.Assignment.Classes
         sunday = "",
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignmentByPRAux);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR(), addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR(), addEnumeration: true);
       
     }
     #endregion
@@ -65,7 +66,7 @@ namespace IM.Assignment.Classes
     public async static Task<FileInfo> ExportRptGeneralAssignment(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignment> lstRptAssignment)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignment, true);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
       
     }
     #endregion
@@ -84,7 +85,7 @@ namespace IM.Assignment.Classes
     public async static Task<FileInfo> ExportRptAssignmentArrivals(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptAssignmentArrivals> lstRptAssignmentArrivals)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptAssignmentArrivals, true);
-      return await EpplusHelper.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls(), addEnumeration: true);
       
     }
     #endregion

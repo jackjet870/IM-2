@@ -65,6 +65,9 @@
     <Reference Include="PalaceResorts4.Common.Notifications.WinForm">
       <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Notifications.WinForm\PalaceResorts4.Common.Notifications.WinForm.dll</HintPath>
     </Reference>
+    <Reference Include="PalaceResorts4.Common.PalaceTools.Epplus">
+      <HintPath>R:\PalaceResorts\Common4.0\PalaceTools.Epplus\PalaceResorts4.Common.PalaceTools.Epplus.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="ReachFramework" />

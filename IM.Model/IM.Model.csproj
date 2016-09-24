@@ -126,9 +126,6 @@
     <Compile Include="Classes\ColumnDefinition.cs" />
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
     <Compile Include="Classes\EntityBase.cs" />
-    <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
-    <Compile Include="Classes\ExcelFormatItemsList.cs" />
-    <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\Margin.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
     <Compile Include="Classes\GiftType.cs" />
@@ -233,11 +230,9 @@
     <Compile Include="Enums\EnumConfiguration.cs" />
     <Compile Include="Enums\EnumEntities.cs" />
     <Compile Include="Enums\EnumExternalProduct.cs" />
-    <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFileFormat.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
     <Compile Include="Enums\EnumFormatFolio.cs" />
-    <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumGiftCategory.cs" />
     <Compile Include="Enums\EnumGiftsType.cs" />
     <Compile Include="Enums\EnumInvitationMode.cs" />

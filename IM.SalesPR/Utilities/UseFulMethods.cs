@@ -1,9 +1,6 @@
-﻿using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table.PivotTable;
-using System.Collections.Generic;
+﻿using OfficeOpenXml.Table.PivotTable;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.SalesPR.Utilities
 {

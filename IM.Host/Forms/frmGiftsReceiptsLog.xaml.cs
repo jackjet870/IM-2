@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Host.Classes;
 using IM.Model;
 using IM.Model.Enums;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,7 +179,7 @@ namespace IM.Host.Forms
     {
       if (((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Any())
       {
-        var fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source, true, true, true),
+        var fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift Receipt ID", string.Join(",", ((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Select(c => c.goID).Distinct().ToList())) },
           "Gift Receipts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(grdLog.Columns.ToList(), clsFormatReport.RptGiftReceiptsLog()));
 

@@ -1,13 +1,7 @@
-﻿using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
+﻿using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 namespace IM.Base.Reports
 {
   public static class clsFormatReports
@@ -296,5 +290,7 @@ namespace IM.Base.Reports
     }
 
     #endregion RptDepositByPr
+
+
   }
 }
