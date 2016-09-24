@@ -94,7 +94,10 @@ namespace IM.ProcessorGeneral.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>
       {
         Tuple.Create("Date Range",
-          DateHelper.DateRange(dtmStart.Value.Value, dtmEnd.Value.Value))
+          DateHelper.DateRange(dtmStart.Value.Value, dtmEnd.Value.Value)),
+        Tuple.Create("Location",cbLocation.SelectedValue.ToString()),
+        Tuple.Create("Personnel",cbPersonnel.SelectedValue.ToString()),
+        Tuple.Create("PC Name",cbPcName.SelectedValue.ToString())
       };
 
       string strReportName = "Logins Log";

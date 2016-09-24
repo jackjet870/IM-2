@@ -932,7 +932,9 @@ namespace IM.Base.Helpers
         FileInfo pathFinalFile;
         using (var pk = new ExcelPackage())
         {
+
           var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+          wsData.Protection.IsProtected = true;
           var totalFilterRows = 0;
           var dtTable = Data[0].Item1;
           var formatTable = Data[0].Item2;
@@ -1030,7 +1032,7 @@ namespace IM.Base.Helpers
             #endregion
 
             //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
-            var subtotalFormulas = new Dictionary<string, string>[formatTableColumns.Count(c => c.IsGroup)];
+            var subtotalFormulas = new Dictionary<string, string>[formatTableColumns.Count(c => c.IsGroup && c.PropertyName != "ShowProgramN")];
             //Lista de grupos.       
             var dynamicListData = qTable.OfType<dynamic>().ToList();
             //Total de columnas que no son grupo.
@@ -1049,7 +1051,7 @@ namespace IM.Base.Helpers
               if (i == 0 || (i > 0 && groupsAct[0] != previousGroup[0]))
               {
                 //Dibujamos todos los headers de grupo.
-                for (var j = 0; j < groupsAct.Length; j++)
+                for (var j = 0; j < groupsAct.Length - 1; j++)
                 {
                   if (j == groupsAct.Length - 2
                     && (groupsAct.Contains("MANIFEST")
@@ -1066,6 +1068,18 @@ namespace IM.Base.Helpers
                       range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
                       range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
                     }
+
+                    wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
+                    using (var range = wsData.Cells[rowNumber + 1, 1, rowNumber + 1, totalColumns])
+                    {
+                      range.Merge = true;
+                      range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                      range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].BackGroundColor));
+                      range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].FontColor));
+                      range.Style.Font.Bold = backgroundColorGroups[j + 1].FontBold;
+                      range.Style.HorizontalAlignment = backgroundColorGroups[j + 1].TextAligment;
+                    }
+                    rowNumber++;
                   }
                   else
                   {
@@ -1079,6 +1093,20 @@ namespace IM.Base.Helpers
                       range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                       range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
                     }
+                    if (j == groupsAct.Length - 2)
+                    {
+                      wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
+                      using (var range = wsData.Cells[rowNumber + 1, 1, rowNumber + 1, totalColumns])
+                      {
+                        range.Merge = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].BackGroundColor));
+                        range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].FontColor));
+                        range.Style.Font.Bold = backgroundColorGroups[j + 1].FontBold;
+                        range.Style.HorizontalAlignment = backgroundColorGroups[j + 1].TextAligment;
+                      }
+                      rowNumber++;
+                    }
                   }
                   rowNumber++;
                 }
@@ -1088,9 +1116,9 @@ namespace IM.Base.Helpers
               else if (i > 0)
               {
                 //Recorremos los encabezados(Niveles).
-                for (var j = 0; j < groupsAct.Length; j++)
+                for (var j = 0; j < groupsAct.Length - 1; j++)
                 {
-                  if (groupsAct[j] == previousGroup[j] && j < groupsAct.Length - 1) continue;
+                  if (groupsAct[j] == previousGroup[j]) continue;
                   //Si el nivel actual es diferente al valor anterior.
                   if (groupsAct[j] != previousGroup[j])
                   {
@@ -1109,6 +1137,18 @@ namespace IM.Base.Helpers
                         range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
                         range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
                       }
+
+                      wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
+                      using (var range = wsData.Cells[rowNumber + 1, 1, rowNumber + 1, totalColumns])
+                      {
+                        range.Merge = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].BackGroundColor));
+                        range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j + 1].FontColor));
+                        range.Style.Font.Bold = backgroundColorGroups[j + 1].FontBold;
+                        range.Style.HorizontalAlignment = backgroundColorGroups[j + 1].TextAligment;
+                      }
+                      rowNumber++;
                     }
                     else
                     {
@@ -1122,22 +1162,7 @@ namespace IM.Base.Helpers
                         range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                         range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                         range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                      }
-                    }
-                    rowNumber++;
-                  }
-                  else
-                  {
-                    //Dibujamos el encabezado.
-                    wsData.Cells[rowNumber, 1].Value = groupsAct[j];
-                    using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
-                    {
-                      range.Merge = true;
-                      range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                      range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-                      range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-                      range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
-                      range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                      }                      
                     }
                     rowNumber++;
                   }
@@ -1205,10 +1230,22 @@ namespace IM.Base.Helpers
                     nextGroup = new string[groupsAct.Length];//Limpiamos la lista
                 }
                 //Recorremos los niveles del arreglo actual.
-                for (var j = groupsAct.Length - 1; j >= 0; j--)
+                for (var j = groupsAct.Length - 2; j >= 1; j--)
                 {
+                  var Tours = 0;
+                  var Shows = "";
+                  var RealShows = "";
+                  var Bookings = "";
+                  var resch = "";
+                  var direct = "";
+                  var inOut = "";
+                  var procGross = "";
+                  var procSales = "";
+                  var eff = "";
+                  var closingFactor = "";
+
                   //Si los valores del index actual de cada lista son diferentes o el valor del index de la siguiente lista esta vacia o nula.
-                  if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]) || j == groupsAct.Length - 1)
+                  if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]) || j == groupsAct.Length - 2)
                   {
                     formatIndex = 1;
                     //Recorremos las columnas.
@@ -1245,7 +1282,7 @@ namespace IM.Base.Helpers
                         {
                           var formula = "";
                           //Si es el ultimo nivel
-                          if (j == groupsAct.Length - 1)
+                          if (j == groupsAct.Length - 2)
                             formula = wsData.Cells[dataIniRow, formatIndex, rowNumber - 1, formatIndex].Address;//Aplicamos la seleccion segun la cantidad de registros que tenga el grupo.
                           else
                           {
@@ -1259,7 +1296,7 @@ namespace IM.Base.Helpers
                               formula = subtotalFormulas[index][format.PropertyName];
 
                               //Si no es el ultimo nivel y el nivel actual de cada arreglo son diferentes o el nivel actual del arreglo siguiente  es nulo.
-                              if (j < groupsAct.Length - 1 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
+                              if (j < groupsAct.Length - 2 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
                               {
                                 //Limpiamos la formula.
                                 subtotalFormulas[index][format.PropertyName] = string.Empty;
@@ -1269,14 +1306,14 @@ namespace IM.Base.Helpers
                           switch (format.Function)
                           {
                             case DataFieldFunctions.Sum:
-                              range.Formula = "=SUM(" + formula + ")";
+                              range.Formula = $"=SUM({formula})";
                               break;
                             case DataFieldFunctions.Average:
-                              range.Formula = "=AVERAGE(" + formula + ")";
+                              range.Formula = $"=AVERAGE({formula})";
                               break;
                             case DataFieldFunctions.Count:
                               if (format.Format == EnumFormatTypeExcel.General || format.Format == EnumFormatTypeExcel.Boolean)
-                                range.Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
+                                range.Formula = (j == groupsAct.Length - 2) ? $"= COUNTA({ formula})" : $"= SUM({formula})";
                               break;
                           }
                           if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey(format.PropertyName))
@@ -1304,61 +1341,61 @@ namespace IM.Base.Helpers
                       range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                     }
 
-                    if (j == groupsAct.Length - 1)
+                    if (j == groupsAct.Length - 2)
                     {
                       rowNumber++;
-
-                      var TotalShow = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
-                      var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
-                      var TotalBookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count].Address;
-                      var resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
-                      var direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
-                      var inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
-                      var procGross = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcGross") - countGroup + 1].Address;
-                      var procSales = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcSales") - countGroup + 1].Address;
-                      var eff = (groupsAct.Contains("MANIFEST")) ? $"IF({Totaltour}=0,0,{procGross}/{Totaltour})" : $"IF({TotalShow}=0,0,{procGross}/{TotalShow})";
-                      var closingFactor = (groupsAct.Contains("MANIFEST")) ? $"IF({Totaltour}=0,0,{procSales}/{Totaltour})" : $"IF({TotalShow}=0,0,{procSales}/{TotalShow})";
-
-                      for (int k = 1; k <= 19; k++)
+                      //Calculamos los factores
+                      Tours = dataValues.AsEnumerable().Count(c => (c["Tour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["Tour"].ToString())) || (c["WO"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["WO"].ToString())) || ((c["CTour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["CTour"].ToString())) || (c["STour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["STour"].ToString())) && (c["ProcGross"] != DBNull.Value && Convert.ToDecimal(c["ProcGross"]) > 0)));
+                      Shows = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
+                      RealShows = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
+                      Bookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count].Address;
+                      resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
+                      direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
+                      inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
+                      procGross = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcGross") - countGroup + 1].Address;
+                      procSales = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcSales") - countGroup + 1].Address;
+                      eff = (groupsAct.Contains("MANIFEST")) ? $"IF({RealShows}=0,0,{procGross}/{RealShows})" : $"IF({Shows}=0,0,{procGross}/{Shows})";
+                      closingFactor = (groupsAct.Contains("MANIFEST")) ? $"IF({RealShows}=0,0,{procSales}/{RealShows})" : $"IF({Shows}=0,0,{procSales}/{Shows})";
+                      for (int k = 1; k <= 21; k++)
                       {
                         switch (k)
                         {
                           case 1:
-                            wsData.Cells[rowNumber, k].Formula = $"= {Totaltour}";
+                            wsData.Cells[rowNumber, k].Formula = $"= {RealShows}";
                             break;
                           case 2:
                             wsData.Cells[rowNumber, k].Value = "Tour %";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,{Totaltour}/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,{RealShows}/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 4:
                             wsData.Cells[rowNumber, k].Value = "Shows";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= {TotalShow}";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= {Shows}";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
                             break;
                           case 6:
                             wsData.Cells[rowNumber, k].Value = "Shows %";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow})/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 8:
                             wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{resch}-{direct})/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 10:
                             wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{direct})/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 12:
                             wsData.Cells[rowNumber, k].Value = "Sin Rsch";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{resch})/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 14:
                             wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{inOut})/{TotalBookings})";
+                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
 
@@ -1372,10 +1409,36 @@ namespace IM.Base.Helpers
                             wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
-
+                          case 20:
+                            wsData.Cells[rowNumber, k].Formula = Bookings;
+                            wsData.Cells[rowNumber, k].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k].Style.Font.Color.SetColor(Color.White);
+                            wsData.Cells[rowNumber, k + 1].Value = Tours;
+                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k + 1].Style.Font.Color.SetColor(Color.White);
+                            if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey("TTours"))
+                            {
+                              subtotalFormulas[j]["TTours"] += (subtotalFormulas[j]["TTours"] == string.Empty) ? wsData.Cells[rowNumber, k + 1].Address : "," + wsData.Cells[rowNumber, k + 1].Address;
+                            }
+                            else
+                            {
+                              if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
+                              subtotalFormulas[j].Add("TTours", wsData.Cells[rowNumber, k + 1].Address);
+                            }
+                            if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey("TBookings"))
+                            {
+                              subtotalFormulas[j]["TBookings"] += (subtotalFormulas[j]["TBookings"] == string.Empty) ? wsData.Cells[rowNumber, k].Formula : "," + wsData.Cells[rowNumber, k].Formula;
+                            }
+                            else
+                            {
+                              if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
+                              subtotalFormulas[j].Add("TBookings", wsData.Cells[rowNumber, k].Formula);
+                            }
+                            break;
                         }
                       }
                     }
+
                     rowNumber += 2;
                   }
                 }
@@ -1400,14 +1463,19 @@ namespace IM.Base.Helpers
                     switch (format.Function)
                     {
                       case DataFieldFunctions.Sum:
-                        range.Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                        if(format.PropertyName=="ProcSales"  || format.PropertyName == "ProcOriginal" || format.PropertyName == "ProcNew" || format.PropertyName == "ProcGross")
+                        {
+                          range.Formula = $"=SUM({string.Join(",", subtotalFormulas[1][format.PropertyName].Split(',').Select(c => $"SUMIF({c},\">0\")").ToList())})";
+                        }
+                        else
+                          range.Formula = $"=SUM({subtotalFormulas[1][format.PropertyName]})";
                         break;
                       case DataFieldFunctions.Average:
-                        range.Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
+                        range.Formula = $"=AVERAGE({subtotalFormulas[1][format.PropertyName]})";
                         break;
                       case DataFieldFunctions.Count:
                         if (format.Format == EnumFormatTypeExcel.General || format.Format == EnumFormatTypeExcel.Boolean)
-                          range.Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                          range.Formula = $"=SUM({subtotalFormulas[1][format.PropertyName]})";
                         break;
                     }
                   }
@@ -1426,57 +1494,58 @@ namespace IM.Base.Helpers
                 range.Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
               }
 
-              var TotalShow = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
-              var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
-              var TotalBookings = dtTableBookings.AsEnumerable().Sum(c => Convert.ToDecimal(c[$"Total{separator.ToString()}Bookings"])).ToString();
+              var Tours = $"SUM({subtotalFormulas[1]["TTours"]})";
+              var Shows = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
+              var RealShows = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
+              var Bookings = dtTableBookings.AsEnumerable().Sum(c => Convert.ToDecimal(c[$"Total{separator.ToString()}Bookings"])).ToString();
               var resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
               var direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
               var inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
               var procGross = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcGross") - countGroup + 1].Address;
               var procSales = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "ProcSales") - countGroup + 1].Address;
-              var eff = $"IF({Totaltour}=0,0,{procGross}/{Totaltour})";
-              var closingFactor = $"IF({Totaltour}=0,0,{procSales}/{Totaltour})";
+              var eff = $"IF({Tours}=0,0,{procGross}/{Tours})";
+              var closingFactor = $"IF({Tours}=0,0,{procSales}/{Tours})";
 
-              for (int k = 1; k <= 19; k++)
+              for (int k = 1; k <= 21; k++)
               {
                 switch (k)
                 {
                   case 1:
-                    wsData.Cells[rowNumber, k].Formula = $"= {Totaltour}";
+                    wsData.Cells[rowNumber, k].Formula = $"= {RealShows}";
                     break;
                   case 2:
                     wsData.Cells[rowNumber, k].Value = "Tour %";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,{Totaltour}/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,{RealShows}/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 4:
                     wsData.Cells[rowNumber, k].Value = "Shows";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= {TotalShow}";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= {Shows}";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
                     break;
                   case 6:
                     wsData.Cells[rowNumber, k].Value = "Shows %";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow})/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 8:
                     wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{resch}-{direct})/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 10:
                     wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{direct})/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 12:
                     wsData.Cells[rowNumber, k].Value = "Sin Rsch";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{resch})/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 14:
                     wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({TotalBookings}=0,0,({TotalShow}-{inOut})/{TotalBookings})";
+                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
 
@@ -1490,13 +1559,20 @@ namespace IM.Base.Helpers
                     wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
-
+                  case 20:
+                    wsData.Cells[rowNumber, k].Value = "Total Bookings";
+                    wsData.Cells[rowNumber, k + 1].Formula = Bookings;
+                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 2].Formula = Tours;
+                    wsData.Cells[rowNumber, k + 2].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 2].Style.Font.Color.SetColor(Color.White);
+                    break;
                 }
               }
 
             }
 
-            #endregion Simple con Agrupado
+            #endregion Simple con Agrupados
           }
           else
           {

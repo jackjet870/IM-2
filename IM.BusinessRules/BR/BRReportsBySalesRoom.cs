@@ -902,7 +902,7 @@ namespace IM.BusinessRules.BR
               guloInvit = c,
               LocationN = lstBookings.FirstOrDefault(b => b.guloInvit == c)?.LocationN ?? lstRptManifest.FirstOrDefault(b => b.Location == c)?.LocationN ?? "",
               guBookT = "Total",
-              Bookings = (!lstBookings.Any(b=>b.guloInvit==c)) ? lstBookings.Where(b => b.guloInvit == c).Sum(b => b.Bookings) : 0
+              Bookings = (lstBookings.Any(b=>b.guloInvit==c)) ? lstBookings.Where(b => b.guloInvit == c).Sum(b => b.Bookings) : 0
             });
           });
           var NotExitsInManifest = lstBookings.Select(c => c.LocationN).Except(lstRptManifest.Where(c => c.SaleType == 0 || c.SaleType == 1 || c.SaleType == 2).Select(c => c.LocationN)).ToList();

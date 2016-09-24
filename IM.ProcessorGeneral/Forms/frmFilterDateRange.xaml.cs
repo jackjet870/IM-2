@@ -388,6 +388,8 @@ namespace IM.ProcessorGeneral.Forms
     /// <param name="e"></param>
     private void date_LostFocus(object sender, RoutedEventArgs e)
     {
+      DateHelper.ValidateValueDate(dtmStart);
+      DateHelper.ValidateValueDate(dtmEnd);
       DateTime dtStart = dtmStart.Value.Value;
       DateTime dtEnd = dtmEnd.Value.Value;
 
