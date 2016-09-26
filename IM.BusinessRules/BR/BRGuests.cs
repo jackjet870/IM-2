@@ -350,19 +350,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [erosado] 18/03/2016 Created.
     /// [erosado] 06/07/2016 Modified. Se agregó Async.
+    /// [edgrodriguez]  26/09/2016 Modified. Se agrega el parámetro Program.
     /// </history>
-    public static async Task<List<GuestByPR>> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
+    public static async Task<List<GuestByPR>> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string program, string PR, List<bool> filtros)
     {
-      List<GuestByPR> result = new List<GuestByPR>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuestsByPR;
-          result = dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
+          return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6], program).ToList();
         }
       });
-      return result;
     }
 
     #endregion GetGuestByPR

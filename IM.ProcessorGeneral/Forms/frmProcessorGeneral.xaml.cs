@@ -604,7 +604,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstSalesRooms));
             if (lstRptDailyG.Any())
-              finfo = clsReports.ExportRptDailyGiftSimple(strReportName, fileFullPath, filters, lstRptDailyG);
+              finfo = await clsReports.ExportRptDailyGiftSimple(strReportName, fileFullPath, filters, lstRptDailyG);
             break;
 
           #endregion
@@ -753,7 +753,7 @@ namespace IM.ProcessorGeneral.Forms
                   ? "ALL"
                   : string.Join(",", filter.LstSalesRooms));
             if (lstWeeklyGiftsSimple.Any())
-              finfo = clsReports.ExportRptWeeklyGiftSimple(strReportName, fileFullPath, filters, lstWeeklyGiftsSimple);
+              finfo = await clsReports.ExportRptWeeklyGiftSimple(strReportName, fileFullPath, filters, lstWeeklyGiftsSimple);
             break;
 
           #endregion
@@ -779,7 +779,7 @@ namespace IM.ProcessorGeneral.Forms
             var lstRptGuestNoBuyers = await BRReportsBySalesRoom.GetRptGuestNoBuyers(filter.StartDate, filter.EndDate,
                 string.Join(",", filter.LstSalesRooms));
             if (lstRptGuestNoBuyers.Any())
-              finfo = clsReports.ExportRptGuestNoBuyers(strReportName, fileFullPath, filters, lstRptGuestNoBuyers);
+              finfo = await clsReports.ExportRptGuestNoBuyers(strReportName, fileFullPath, filters, lstRptGuestNoBuyers);
             break;
 
           #endregion

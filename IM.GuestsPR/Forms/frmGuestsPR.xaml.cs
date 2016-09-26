@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
+using System.Linq;
 
 namespace IM.GuestsPR.Forms
 {
@@ -24,6 +25,8 @@ namespace IM.GuestsPR.Forms
     #region Propiedades, Atributos
     private List<bool> filtersBool;
     private List<Tuple<string, string>> filtersReport;
+    private List<LeadSourceByUser> _leadSources;
+    private List<Program> _programs;
     public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
 
@@ -34,6 +37,8 @@ namespace IM.GuestsPR.Forms
     }
 
     #region Eventos Ventana
+
+    #region Window_Loaded
     /// <summary>
     /// Evento que se lanza al iniciar la aplicacion
     /// </summary>
@@ -43,12 +48,19 @@ namespace IM.GuestsPR.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadPersonnel();
+      LoadLeadSources();
+      LoadProgram();
       //Seleccionamos los días en el datapicker 
       dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.Value = DateTime.Now;
       //Agregamos login del usuario en la interfaz
       SetNewUserLogin();
+      chbxProgram.IsChecked = true;
+
     }
+    #endregion
+
+    #region imgButtonOk_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando realizamos la consulta boton Search
     /// </summary>
@@ -61,7 +73,9 @@ namespace IM.GuestsPR.Forms
       dtgr.DataContext = null;
       GetGuestByPR();
     }
+    #endregion
 
+    #region imgButtonPrint_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
     /// </summary>
@@ -81,7 +95,7 @@ namespace IM.GuestsPR.Forms
         //Creamos el reporte
         var fi = await ReportBuilder.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
         if (fi != null)
-        {          
+        {
           frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.Owner = this;
           documentViewer.ShowDialog();
@@ -92,6 +106,9 @@ namespace IM.GuestsPR.Forms
         UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
       }
     }
+    #endregion
+
+    #region imgButtonAbout_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando abrimos la ventana About boton About
     /// </summary>
@@ -104,6 +121,9 @@ namespace IM.GuestsPR.Forms
       formAbout.Owner = this;
       formAbout.ShowDialog();
     }
+    #endregion
+
+    #region imgButtonExit_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando queremos salir de la aplicacion boton exit
     /// </summary>
@@ -114,6 +134,9 @@ namespace IM.GuestsPR.Forms
     {
       Close();
     }
+    #endregion
+
+    #region imageLogOut_MouseLeftButtonDown
     /// <summary>
     /// Evento de dispara cuando el usuario cambia de sesion en el modulo.
     /// </summary>
@@ -122,7 +145,7 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
       if (Context.User.AutoSign)
       {
@@ -136,6 +159,9 @@ namespace IM.GuestsPR.Forms
         LoadPersonnel();
       }
     }
+    #endregion
+
+    #region dtpEnterKey
     /// <summary>
     /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
     /// </summary>
@@ -159,6 +185,41 @@ namespace IM.GuestsPR.Forms
     }
     #endregion
 
+    #region lsbxLeadSource_SelectionChanged
+    /// <summary>
+    /// Muestra en un Textblock cuantos elementos de la lista LeadSource estan seleccionados 
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 29/09/2016 Created
+    /// </history>
+    private void lsbxLeadSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      txtbLSSelected.Text = $"{lsbxLeadSources.SelectedItems.Count.ToString()}/{lsbxLeadSources.Items.Count.ToString()}";
+    }
+    #endregion
+
+    #region lsbxPrograms_SelectionChanged
+    /// <summary>
+    /// Muestra en un Textblock cuantos elementos de la lista Programs estan seleccionados 
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 26/09/2016 Created
+    /// </history>
+    private void lsbxPrograms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      txtbProgramSelected.Text = $"{lsbxPrograms.SelectedItems.Count.ToString()}/{lsbxPrograms.Items.Count.ToString()}";
+      var idProgram = lsbxPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID).ToList();
+      if (idProgram.Any())
+      {
+        lsbxLeadSources.ItemsSource = _leadSources.Where(c => idProgram.Contains(c.lspg)).ToList();
+      }
+      else
+      {
+        lsbxLeadSources.ItemsSource = _leadSources;
+      }
+    }
+    #endregion
+
     #region SelectionChanged
     /// <summary>
     /// Evento que se dispara cada que el usuario preciona el mouse sobre una fila del datagrid
@@ -172,7 +233,75 @@ namespace IM.GuestsPR.Forms
     }
     #endregion
 
+    #region Check & UnCheck
+
+    #region chbx_Checked
+    /// <summary>
+    /// Selecciona todos los elementos de las listas
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 29/09/2016 Created
+    /// </history>
+    private void chbx_Checked(object sender, RoutedEventArgs e)
+    {
+      if (sender.GetType().Name == "CheckBox")
+      {
+        string chbxName = ((System.Windows.Controls.CheckBox)(sender)).Content.ToString();
+
+        switch (chbxName)
+        {
+          case "All Lead Sources":
+            lsbxLeadSources.IsEnabled = false;
+            lsbxLeadSources.SelectAll();
+            break;
+          case "All Programs":
+            lsbxPrograms.IsEnabled = false;
+            lsbxPrograms.SelectAll();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    #endregion
+
+    #region chbx_Unchecked
+    /// <summary>
+    /// Deselecciona los elementos de las listas
+    /// </summary>
+    /// <history>
+    /// [erosado] 08/Mar/2016 Created
+    /// </history>
+    private void chbx_Unchecked(object sender, RoutedEventArgs e)
+    {
+      if (sender.GetType().Name == "CheckBox")
+      {
+        string chbxName = ((System.Windows.Controls.CheckBox)(sender)).Content.ToString();
+
+        switch (chbxName)
+        {
+          case "All Lead Sources":
+            lsbxLeadSources.IsEnabled = true;
+            lsbxLeadSources.UnselectAll();
+            break;
+          case "All Programs":
+            lsbxPrograms.IsEnabled = true;
+            lsbxPrograms.UnselectAll();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #endregion
+
     #region Async Methods
+
+    #region DoGetPersonnel
     /// <summary>
     /// Obtiene la lista del personal
     /// </summary>
@@ -201,7 +330,9 @@ namespace IM.GuestsPR.Forms
         UIHelper.ShowMessage(ex);
       }
     }
+    #endregion
 
+    #region DoGetGuestsByPR
     /// <summary>
     /// Obtiene los Guests By PR
     /// </summary>
@@ -211,13 +342,14 @@ namespace IM.GuestsPR.Forms
     /// <param name="PR">Pr</param>
     /// <param name="filters">Filters</param>
     /// <history>
-    /// [erosado] 16/Mar/2016 Created
+    /// [erosado]       16/Mar/2016 Created
+    /// [edgrodriguez]  26/Sep/2016 Modified. Se agrega el parámetro Program.
     /// </history>
-    public async void DoGetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filters)
+    public async void DoGetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string program, string PR, List<bool> filters)
     {
       try
       {
-        var data = await BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters);
+        var data = await BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, program, PR, filters);
         if (data.Count > 0)
         {
           dtgr.DataContext = data;
@@ -235,11 +367,60 @@ namespace IM.GuestsPR.Forms
       catch (Exception ex)
       {
         StaEnd();
+        imgButtonOk.IsEnabled = true;
         UIHelper.ShowMessage(ex);
       }
 
 
     }
+    #endregion
+
+    #region DoGetProgram
+    /// <summary>
+    /// Obtiene los programs.
+    /// </summary>
+    public async void DoGetProgram()
+    {
+      try
+      {
+        _programs = await BRPrograms.GetPrograms();
+        if (_programs.Count > 0)
+        {
+          lsbxPrograms.ItemsSource = _programs;
+        }
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex);
+      }
+    }
+    #endregion
+
+    #region DoGetLeadSource
+    /// <summary>
+    /// Obtiene los leadsource del usuario autentificado.
+    /// </summary>
+    public async void DoGetLeadSource()
+    {
+      try
+      {
+        _leadSources = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
+        if (_leadSources.Count > 0)
+        {
+          lsbxLeadSources.ItemsSource = _leadSources;
+        }
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex);
+      }
+    }
+    #endregion
+
     #endregion
 
     #region StatusBar
@@ -341,6 +522,8 @@ namespace IM.GuestsPR.Forms
     #endregion
 
     #region Metodos
+
+    #region SetNewUserLogin
     /// <summary>
     /// Este metodo se encarga de validar y actualizar los permisos del usuario logeado sobre el sistema
     /// </summary>
@@ -378,6 +561,9 @@ namespace IM.GuestsPR.Forms
         }
       }
     }
+    #endregion
+
+    #region LoadPersonnel
     /// <summary>
     /// Carga personal en el combobox
     /// </summary>
@@ -389,7 +575,9 @@ namespace IM.GuestsPR.Forms
       StaStart("Loading personnel...");
       DoGetPersonnel(Context.User.LeadSource.lsID, "PR");
     }
+    #endregion
 
+    #region selectPersonnelInCombobox
     /// <summary>
     /// Busca en una lista y selecciona al personal
     /// </summary>
@@ -411,7 +599,7 @@ namespace IM.GuestsPR.Forms
       {
         //Limpiamos el DataGrid
         dtgr.DataContext = null;
-        
+
         //Si no tiene permisos especiales  deshabilitamos los controles
         if (!specialLevel)
         {
@@ -419,11 +607,13 @@ namespace IM.GuestsPR.Forms
           imgButtonPrint.IsEnabled = false;
         }
         cbxPersonnel.SelectedItem = null;
-       
+
         return false;
       }
     }
+    #endregion
 
+    #region GetGuestByPR
     /// <summary>
     /// Trae los Guest del PR seleccionado.
     /// </summary>
@@ -432,52 +622,78 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void GetGuestByPR()
     {
-      if (DateHelper.ValidateValueDate(dtpkFrom, dtpkTo))
+      if (!DateHelper.ValidateValueDate(dtpkFrom, dtpkTo)) { return; }
+      if (cbxPersonnel?.SelectedValue == null)
       {
-        if (cbxPersonnel?.SelectedValue != null)
-        {
-       
-          if (chkAssign?.IsChecked == true || chkContact?.IsChecked == true || chkFollowUp?.IsChecked == true || chkInvitation?.IsChecked == true || chkShows?.IsChecked == true)
-          {
-            imgButtonOk.IsEnabled = false;            
-            filtersBool = new List<bool>();
-            var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : Context.User.LeadSource.lsID);
-            var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
-            #region Check Filter for Report
-            filtersReport = new List<Tuple<string, string>>();
-
-            filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", Context.User.LeadSource.lsID));
-            filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
-            filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
-            filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
-            filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
-            filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
-            filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
-
-            filtersBool.Add(chkAssign.IsChecked ?? false);
-            filtersBool.Add(chkContact.IsChecked ?? false);
-            filtersBool.Add(chkFollowUp.IsChecked ?? false);
-            filtersBool.Add(chkInvitation.IsChecked ?? false);
-            filtersBool.Add(chkShows.IsChecked ?? false);
-            filtersBool.Add(chkWithSale.IsChecked ?? false);
-            filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
-            #endregion
-
-            StaStart("Loading data...");
-            DoGetGuestsByPR(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, personnelShort.peID, filtersBool);
-          }
-          else
-          {
-            UIHelper.ShowMessage("Please specify at least one of the following 5 options: Assign, Contact, Follow Up, Invit, Show", MessageBoxImage.Warning);
-          }
-        }
-        else
-        {
-          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
-          cbxPersonnel.Focus();
-        }
+        UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+        cbxPersonnel.Focus();
+        return;
       }
+      if (lsbxPrograms.SelectedItems.Count == 0) { UIHelper.ShowMessage("No program is selected."); return; }
+      if (lsbxLeadSources.SelectedItems.Count == 0) { UIHelper.ShowMessage("No lead source is selected."); return; }
+      if (chkAssign?.IsChecked == true || chkContact?.IsChecked == true || chkFollowUp?.IsChecked == true || chkInvitation?.IsChecked == true || chkShows?.IsChecked == true)
+      {
+        imgButtonOk.IsEnabled = false;
+        filtersBool = new List<bool>();
+        var program = (chbxLeadSources.IsChecked == true ? "ALL" : string.Join(",", lsbxPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID)));
+        var leadSource = (chbxLeadSources.IsChecked == true ? "ALL" : string.Join(",", lsbxLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID)));
+        var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+        #region Check Filter for Report
+        filtersReport = new List<Tuple<string, string>>();
+
+        filtersReport.Add(chbxProgram.IsChecked == true ? Tuple.Create("Program", "ALL") : Tuple.Create("Program", program));
+        filtersReport.Add(chbxLeadSources.IsChecked == true ? Tuple.Create("Lead Source", "ALL") : Tuple.Create("Lead Source", Context.User.LeadSource.lsID));
+        filtersReport.Add(chkContact.IsChecked == true ? Tuple.Create("Contacts", "YES") : Tuple.Create("Contacts", "ALL"));
+        filtersReport.Add(chkFollowUp.IsChecked == true ? Tuple.Create("Follow Up", "YES") : Tuple.Create("Follow Up", "ALL"));
+        filtersReport.Add(chkInvitation.IsChecked == true ? Tuple.Create("Invitation", "YES") : Tuple.Create("Invitation", "ALL"));
+        filtersReport.Add(chkShows.IsChecked == true ? Tuple.Create("Shows", "YES") : Tuple.Create("Shows", "ALL"));
+        filtersReport.Add(chkWithSale.IsChecked == true ? Tuple.Create("With Sale", "YES") : Tuple.Create("With Sale", "ALL"));
+        filtersReport.Add(chkBasedOnArrival.IsChecked == true ? Tuple.Create("Based On Arrival Date", "YES") : Tuple.Create("Based On Arrival Date", "ALL"));
+
+        filtersBool.Add(chkAssign.IsChecked ?? false);
+        filtersBool.Add(chkContact.IsChecked ?? false);
+        filtersBool.Add(chkFollowUp.IsChecked ?? false);
+        filtersBool.Add(chkInvitation.IsChecked ?? false);
+        filtersBool.Add(chkShows.IsChecked ?? false);
+        filtersBool.Add(chkWithSale.IsChecked ?? false);
+        filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
+        #endregion
+
+        StaStart("Loading data...");
+        DoGetGuestsByPR(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, program, personnelShort.peID, filtersBool);
+      }
+      else
+        UIHelper.ShowMessage("Please specify at least one of the following 5 options: Assign, Contact, Follow Up, Invit, Show", MessageBoxImage.Warning);
     }
+    #endregion
+
+    #region LoadProgram
+    /// <summary>
+    /// Carga la lista de programas.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 26/09/2016  Created
+    /// </history>
+    public void LoadProgram()
+    {
+      StaStart("Loading program...");
+      DoGetProgram();
+    }
+    #endregion
+
+    #region LoadLeadSources
+    /// <summary>
+    /// Carga la lista de leadsources
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 26/09/2016  Created
+    /// </history>
+    public void LoadLeadSources()
+    {
+      StaStart("Loading lead sources...");
+      DoGetLeadSource();
+    }
+    #endregion
     #endregion
   }
 }

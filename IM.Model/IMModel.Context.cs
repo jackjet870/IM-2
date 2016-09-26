@@ -894,7 +894,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveExchangeRateLog", currencyParameter, dateParameter, hoursDifParameter, changedByParameter);
         }
     
-        public virtual ObjectResult<GuestByPR> USP_OR_GetGuestsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR, Nullable<bool> considerAssign, Nullable<bool> considerContact, Nullable<bool> considerFollowUp, Nullable<bool> considerInvit, Nullable<bool> considerShow, Nullable<bool> considerSale, Nullable<bool> basedOnArrival)
+        public virtual ObjectResult<GuestByPR> USP_OR_GetGuestsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR, Nullable<bool> considerAssign, Nullable<bool> considerContact, Nullable<bool> considerFollowUp, Nullable<bool> considerInvit, Nullable<bool> considerShow, Nullable<bool> considerSale, Nullable<bool> basedOnArrival, string program)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -940,7 +940,11 @@ namespace IM.Model
                 new ObjectParameter("BasedOnArrival", basedOnArrival) :
                 new ObjectParameter("BasedOnArrival", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestByPR>("USP_OR_GetGuestsByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter, considerAssignParameter, considerContactParameter, considerFollowUpParameter, considerInvitParameter, considerShowParameter, considerSaleParameter, basedOnArrivalParameter);
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestByPR>("USP_OR_GetGuestsByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter, considerAssignParameter, considerContactParameter, considerFollowUpParameter, considerInvitParameter, considerShowParameter, considerSaleParameter, basedOnArrivalParameter, programParameter);
         }
     
         public virtual ObjectResult<GuestSearched> USP_OR_GetGuests(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string name, string roomNumber, string reservation, Nullable<int> guestID)

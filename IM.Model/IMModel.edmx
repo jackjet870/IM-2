@@ -6396,7 +6396,7 @@
         <Function Name="USP_OR_GetGuestsByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar(max)" Mode="In" />
           <Parameter Name="PR" Type="varchar" Mode="In" />
           <Parameter Name="ConsiderAssign" Type="bit" Mode="In" />
           <Parameter Name="ConsiderContact" Type="bit" Mode="In" />
@@ -6405,6 +6405,7 @@
           <Parameter Name="ConsiderShow" Type="bit" Mode="In" />
           <Parameter Name="ConsiderSale" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+          <Parameter Name="Program" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetGuestsMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="guls" Type="varchar" Mode="In" />
@@ -16521,6 +16522,7 @@
             <Parameter Name="ConsiderShow" Mode="In" Type="Boolean" />
             <Parameter Name="ConsiderSale" Mode="In" Type="Boolean" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+            <Parameter Name="Program" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuests" ReturnType="Collection(IMModel.GuestSearched)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />

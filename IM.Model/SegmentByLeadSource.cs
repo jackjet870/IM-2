@@ -28,5 +28,6 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LeadSource> LeadSources { internal get; set; }
+        public virtual SegmentCategory SegmentsCategory { get; set; }
     }
 }

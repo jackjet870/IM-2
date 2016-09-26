@@ -648,9 +648,9 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 07/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptDailyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDailyGiftSimple> lstRptDailyGiftSimples)
+    public static async Task<FileInfo> ExportRptDailyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDailyGiftSimple> lstRptDailyGiftSimples)
     {
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptDailyGiftSimples, true, false),strReport, string.Empty, clsFormatReport.RptDailyGiftSimple(), true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDailyGiftSimples, true, false), filters, strReport, string.Empty, clsFormatReport.RptDailyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1262,9 +1262,10 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptWeeklyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWeeklyGiftsItemsSimple> lstRptWeeklyGiftsSimple)
+    public static async Task<FileInfo> ExportRptWeeklyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWeeklyGiftsItemsSimple> lstRptWeeklyGiftsSimple)
     {
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptWeeklyGiftsSimple, true, false),strReport, string.Empty, clsFormatReport.RptWeeklyGiftSimple(), true, isRptQueue:true ,filePath:fileFullPath);
+      lstRptWeeklyGiftsSimple = lstRptWeeklyGiftsSimple.orderListBy("grD asc, ShortN asc, Gift asc");
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptWeeklyGiftsSimple, true, false), filters, strReport, string.Empty, clsFormatReport.RptWeeklyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1304,14 +1305,14 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGuestNoBuyers(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestsNoBuyers> lstRptGuestNoBuyers)
+    public static async Task<FileInfo> ExportRptGuestNoBuyers(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestsNoBuyers> lstRptGuestNoBuyers)
     {
       lstRptGuestNoBuyers = lstRptGuestNoBuyers
         .OrderBy(c => c.Program)
         .ThenBy(c => c.LeadSource)
         .ThenBy(c => c.GuestID)
         .ToList();
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestNoBuyers, true, false),strReport, string.Empty, clsFormatReport.RptGuestNoBuyers(), isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGuestNoBuyers, true, false), filters, strReport, string.Empty, clsFormatReport.RptGuestNoBuyers(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
 

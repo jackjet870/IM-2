@@ -471,16 +471,16 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 07/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptDailyGiftSimple()
+    public static ExcelFormatItemsList RptDailyGiftSimple()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Canceled", PropertyName = "grCancel"},
-new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 2 },
-new ExcelFormatTable() { Title = "Gift Name", PropertyName = "giN", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending },
-new ExcelFormatTable() { Title = "Gift", PropertyName = "giShortN", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "geQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1 },
-new ExcelFormatTable() { Title = "Location", PropertyName = "grlo", Axis = ePivotFieldAxis.Row, Order = 1, Sort = eSortType.Ascending },
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Quantity", "geQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values);
+      lst.Add("Location", "grlo", axis: ePivotFieldAxis.Row);
+      lst.Add("Gift", "giShortN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Gift Name", "giN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Cancelled", "grCancel", isVisible: false);
+      return lst;
     }
 
     #endregion RptDailyGiftSimple
@@ -792,14 +792,14 @@ new ExcelFormatTable() { Title = "Location", PropertyName = "grlo", Axis = ePivo
     /// <history>
     /// [edgrodriguez] 07/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptWeeklyGiftSimple()
+    public static ExcelFormatItemsList RptWeeklyGiftSimple()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row },
-new ExcelFormatTable() { Title = "Gift Name", PropertyName = "Gift", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending },
-new ExcelFormatTable() { Title = "Gift", PropertyName = "ShortN", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending },
-new ExcelFormatTable() { Title = "Quantity", PropertyName = "Qty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1 },
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Quantity", "Qty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values);
+      lst.Add("Gift Name", "Gift", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Gift", "ShortN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      return lst;
     }
 
     #endregion RptWeeklyGiftSimple
@@ -839,21 +839,21 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGuestNoBuyers()
+    public static ExcelFormatItemsList RptGuestNoBuyers()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Program", PropertyName = "Program", Axis = ePivotFieldAxis.Row, Order = 1, Compact = true, Outline = true  },
-new ExcelFormatTable() { Title = "LeadSource", PropertyName = "LeadSource", Axis = ePivotFieldAxis.Row, Order = 2, Compact = true, Outline = true  },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "GuestID", Axis = ePivotFieldAxis.Row, Order = 3 },
-new ExcelFormatTable() { Title = "Last Name", PropertyName = "LastName", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "First Name", PropertyName = "FirstName", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Email", PropertyName = "Email", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "Email 2", PropertyName = "Email2", Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "City", PropertyName = "City", Axis = ePivotFieldAxis.Row, Order = 8},
-new ExcelFormatTable() { Title = "State", PropertyName = "State", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "Country ID", PropertyName = "Country" },
-new ExcelFormatTable() { Title = "Country", PropertyName = "CountryN", Axis = ePivotFieldAxis.Row, Order = 10 }
-      };
+      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      lst.Add("Program", "Program", isGroup: true, isVisible: false);
+      lst.Add("LeadSource", "LeadSource", isGroup: true, isVisible: false);
+      lst.Add("GUID", "GuestID");
+      lst.Add("Last Name", "LastName");
+      lst.Add("First Name", "FirstName");
+      lst.Add("Email", "Email");
+      lst.Add("Email 2", "Email2");
+      lst.Add("City", "City");
+      lst.Add("State", "State");
+      lst.Add("Country", "CountryN");
+      lst.Add("Country ID", "Country", isVisible: false);
+      return lst;
     }
 
     #endregion RptGuestNoBuyers
