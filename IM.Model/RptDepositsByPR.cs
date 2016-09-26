@@ -27,6 +27,6 @@ namespace IM.Model
         public string gupt { get; set; }
         public Nullable<decimal> guDeposit { get; set; }
         public Nullable<decimal> guDepositReceived { get; set; }
-        public Nullable<decimal> guDepositTwisted { get; set; }
+        public Nullable<decimal> CxC { get; set; }
     }
 }

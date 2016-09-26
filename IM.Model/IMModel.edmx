@@ -21013,7 +21013,7 @@
           <Property Type="String" Name="gupt" Nullable="false" MaxLength="10" />
           <Property Type="Decimal" Name="guDeposit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="guDepositReceived" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="guDepositTwisted" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CxC" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptDepositsNoShow">
           <Property Type="Int32" Name="guID" Nullable="true" />
@@ -28763,7 +28763,7 @@
                 <ScalarProperty Name="gupt" ColumnName="gupt" />
                 <ScalarProperty Name="guDeposit" ColumnName="guDeposit" />
                 <ScalarProperty Name="guDepositReceived" ColumnName="guDepositReceived" />
-                <ScalarProperty Name="guDepositTwisted" ColumnName="guDepositTwisted" />
+                <ScalarProperty Name="CxC" ColumnName="CxC" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
