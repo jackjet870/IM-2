@@ -30,7 +30,7 @@ namespace IM.SalesPR.Forms
     {
       InitializeComponent();
       LoadCombo = new ExecuteCommandHelper(x => LoadPersonnel());
-    } 
+    }
     #endregion
 
     #region Eventos Ventana
@@ -65,8 +65,14 @@ namespace IM.SalesPR.Forms
           imgButtonOk.IsEnabled = false;
           var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : Context.User.LeadSource.lsID);
           var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+
           _filtersReport = new List<Tuple<string, string>>();
-          _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", Context.User.LeadSource.lsID));
+          _filtersReport.Add(chkLeadSource.IsChecked == true ? 
+            new Tuple<string, string>("Lead Source", "ALL") :
+            new Tuple<string, string>("Lead Source", Context.User.LeadSource.lsID));
+
+
+
           DoGetSalesByPr(dtpkFrom.Value.Value, dtpkTo.Value.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
         }
         else
@@ -81,7 +87,6 @@ namespace IM.SalesPR.Forms
     /// </summary>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
-    /// [emoguel] 09/09/2016 Modified. Ahora se abre al visor de reportes
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -90,17 +95,19 @@ namespace IM.SalesPR.Forms
       {
         if (dtpkFrom.Value != null & dtpkTo.Value != null)
         {
+          //Obtenemos el dateRange(Nombre sugerido al momento de generar el archivo del reporte es una concatenacion de fechas From -> To )
           var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.Value.Value, dtpkTo.Value.Value);
-          //Obtenemos el nombre del reporte y el dateRange
+          //Nombre del Reporte
           const string rptName = "Sales By PR";
           //Obtenemos el dataTable con la lista formateada 
           var dt = TableHelper.GetDataTableFromList(listaSaleByPr, true);
           //Creamos el reporte
-          var fi = await ReportBuilder.CreateCustomExcel(dt, _filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true, blnRowGrandTotal: true);
+          var fileInfo = await ReportBuilder.CreateCustomExcel(dt, _filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(),
+            addEnumeration: true, blnRowGrandTotal: true);
 
-          if (fi != null)
+          if (fileInfo != null)
           {
-            frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+            frmDocumentViewer documentViewer = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
             documentViewer.Owner = this;
             documentViewer.ShowDialog();
           }

@@ -17,6 +17,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// </summary>
     /// <history>
     ///   [vku] 07/Abr/2016 Created
+    ///   [erosado] 27/09/2016  Modified. Se elimino la columna ToPay y se agregó la columna CxC
     /// </history>
     public static List<ExcelFormatTable> rptDepositsPaymentByPR()
     {
@@ -50,7 +51,7 @@ namespace IM.ProcessorOuthouse.Classes
 
       new ExcelFormatTable() { Title = "Amount", PropertyName = "bdAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 19 },
       new ExcelFormatTable() { Title = "Received", PropertyName = "bdReceived", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 20 },
-      new ExcelFormatTable() { Title = "Payment", PropertyName = "topay", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 21 }
+      new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 21 },
       };
     }
 

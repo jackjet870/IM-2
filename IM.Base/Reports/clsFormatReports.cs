@@ -62,10 +62,10 @@ namespace IM.Base.Reports
       lst.Add("Pend Original", "PendOriginal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend New", "PendNew", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend Gross", "PendGross", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
-      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPayment]/[PendGross]),[saDownPayment]/[ProcGross])");
+      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPayment]/[PendGross]),[saDownPayment]/[ProcGross])");
       lst.Add("$ EDP", "saDownPaymentPaid", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent,isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPaymentPaid]/[PendGross]),[saDownPaymentPaid]/[ProcGross])");
+      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPaymentPaid]/[PendGross]),[saDownPaymentPaid]/[ProcGross])");
       lst.Add("Deposit Sale", "DepositSale", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
       lst.Add("Deposit #", "DepositSaleNum");
       lst.Add("CC", "CC");
@@ -281,7 +281,7 @@ namespace IM.Base.Reports
       lst.Add("Book Date", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
       lst.Add("Deposited", "guDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
       lst.Add("Received", "guDepositReceived", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
-      lst.Add("Burned", "guDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
+      lst.Add("CxC", "CxC",  format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, isCalculated:true, formula: "[guDeposit]-[guDepositReceived]");
       lst.Add("Currency", "gucu", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
       lst.Add("Payment Type", "gupt", axis: ePivotFieldAxis.Column, sort: eSortType.Descending);
       lst.Add("guInvitD", "guInvitD", isVisible: false);

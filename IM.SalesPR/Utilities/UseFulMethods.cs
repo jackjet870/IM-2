@@ -7,9 +7,9 @@ namespace IM.SalesPR.Utilities
   public class UseFulMethods
   {
     /// <summary>
-    /// Genera las columnas que necesito en el reporte RPTStatistics
+    /// Genera las columnas que necesito en el reporte Sales by PR
     /// </summary>
-    /// <returns>List<ExcelFormatTable></returns>
+    /// <returns>List<ExcelFormatItemsList></returns>
     /// <history>
     /// [erosado] 23/Mar/2016  Created
     /// </history>

@@ -1,14 +1,9 @@
 ﻿using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using IM.Model.Helpers;
-using Microsoft.Win32;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
 using OfficeOpenXml.Table.PivotTable;
-using OfficeOpenXml.VBA;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,22 +11,18 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
-using System.Xml;
 using System.Threading.Tasks;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using PalaceResorts.Common.PalaceTools.Epplus.Enums;
-using PalaceResorts.Common.PalaceTools.Epplus.Helpers;
 
 namespace IM.Base.Helpers
 {
   public static class EpplusHelper
   {
     private static char separator = '|';
-
+    
     #region Public Methods
     //Metodos Propios de IM
 

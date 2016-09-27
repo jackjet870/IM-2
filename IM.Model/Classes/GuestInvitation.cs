@@ -91,8 +91,8 @@ namespace IM.Model.Classes
       set { SetField(ref _creditCardTypes, value); }
     }
 
-    private List<GiftShort> _gifts;
-    public List<GiftShort> Gifts
+    private List<Gift> _gifts;
+    public List<Gift> Gifts
     {
       get { return _gifts; }
       set { SetField(ref _gifts, value); }
