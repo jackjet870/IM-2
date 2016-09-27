@@ -5712,6 +5712,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SegmentsByAgency_SegmentsCategories">
+          <End Role="SegmentsCategories" Type="Self.SegmentsCategories" Multiplicity="0..1" />
+          <End Role="SegmentsByAgency" Type="Self.SegmentsByAgency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SegmentsCategories">
+              <PropertyRef Name="scID" />
+            </Principal>
+            <Dependent Role="SegmentsByAgency">
+              <PropertyRef Name="sesc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SegmentsByLeadSource_SegmentsCategories">
+          <End Role="SegmentsCategories" Type="Self.SegmentsCategories" Multiplicity="0..1" />
+          <End Role="SegmentsByLeadSource" Type="Self.SegmentsByLeadSource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SegmentsCategories">
+              <PropertyRef Name="scID" />
+            </Principal>
+            <Dependent Role="SegmentsByLeadSource">
+              <PropertyRef Name="sosc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ShowPrograms_ShowProgramsCategories">
           <End Role="ShowProgramsCategories" Type="Self.ShowProgramsCategories" Multiplicity="0..1" />
           <End Role="ShowPrograms" Type="Self.ShowPrograms" Multiplicity="*" />
@@ -9050,6 +9074,14 @@
             <End Role="Seasons" EntitySet="Seasons" />
             <End Role="SeasonsDates" EntitySet="SeasonsDates" />
           </AssociationSet>
+          <AssociationSet Name="FK_SegmentsByAgency_SegmentsCategories" Association="Self.FK_SegmentsByAgency_SegmentsCategories">
+            <End Role="SegmentsCategories" EntitySet="SegmentsCategories" />
+            <End Role="SegmentsByAgency" EntitySet="SegmentsByAgency" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SegmentsByLeadSource_SegmentsCategories" Association="Self.FK_SegmentsByLeadSource_SegmentsCategories">
+            <End Role="SegmentsCategories" EntitySet="SegmentsCategories" />
+            <End Role="SegmentsByLeadSource" EntitySet="SegmentsByLeadSource" />
+          </AssociationSet>
           <AssociationSet Name="FK_ShowPrograms_ShowProgramsCategories" Association="Self.FK_ShowPrograms_ShowProgramsCategories">
             <End Role="ShowProgramsCategories" EntitySet="ShowProgramsCategories" />
             <End Role="ShowPrograms" EntitySet="ShowPrograms" />
@@ -11517,6 +11549,7 @@
           <Property Name="seO" Type="Int32" Nullable="false" DefaultValue="9999" />
           <Property Name="sesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_SegmentsByAgency" FromRole="SegmentsByAgency" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SegmentsCategory" Relationship="IMModel.FK_SegmentsByAgency_SegmentsCategories" FromRole="SegmentByAgency" ToRole="SegmentCategory" />
         </EntityType>
         <EntityType Name="SegmentByLeadSource">
           <Key>
@@ -11528,6 +11561,7 @@
           <Property Name="soO" Type="Int32" Nullable="false" />
           <Property Name="sosc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_SegmentsByLeadSource" FromRole="SegmentsByLeadSource" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SegmentsCategory" Relationship="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" FromRole="SegmentByLeadSource" ToRole="SegmentCategory" />
         </EntityType>
         <EntityType Name="SegmentCategory">
           <Key>
@@ -11537,6 +11571,8 @@
           <Property Name="scN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="scA" Type="Boolean" Nullable="false" />
           <Property Name="scO" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SegmentsByAgencies" Relationship="IMModel.FK_SegmentsByAgency_SegmentsCategories" FromRole="SegmentCategory" ToRole="SegmentByAgency" />
+          <NavigationProperty Name="SegmentsByLeadSources" Relationship="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" FromRole="SegmentCategory" ToRole="SegmentByLeadSource" />
         </EntityType>
         <EntityType Name="ShowProgram">
           <Key>
@@ -18266,6 +18302,14 @@
             <Parameter Name="Agency" Mode="In" Type="String" />
             <Parameter Name="Country" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK_SegmentsByAgency_SegmentsCategories" Association="IMModel.FK_SegmentsByAgency_SegmentsCategories">
+            <End Role="SegmentCategory" EntitySet="SegmentsCategories" />
+            <End Role="SegmentByAgency" EntitySet="SegmentsByAgencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SegmentsByLeadSource_SegmentsCategories" Association="IMModel.FK_SegmentsByLeadSource_SegmentsCategories">
+            <End Role="SegmentCategory" EntitySet="SegmentsCategories" />
+            <End Role="SegmentByLeadSource" EntitySet="SegmentsByLeadSources" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22174,7 +22218,7 @@
           <Property Type="String" Name="bdcu" Nullable="false" MaxLength="10" />
           <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
           <Property Type="Decimal" Name="bdReceived" Nullable="false" Precision="19" />
-          <Property Type="Decimal" Name="ToPay" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CxC" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="CxCData">
           <Property Type="Int32" Name="grID" Nullable="false" />
@@ -23228,6 +23272,30 @@
           <Property Type="String" Name="Post" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="PostN" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <Association Name="FK_SegmentsByAgency_SegmentsCategories">
+          <End Type="IMModel.SegmentCategory" Role="SegmentCategory" Multiplicity="0..1" />
+          <End Type="IMModel.SegmentByAgency" Role="SegmentByAgency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SegmentCategory">
+              <PropertyRef Name="scID" />
+            </Principal>
+            <Dependent Role="SegmentByAgency">
+              <PropertyRef Name="sesc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SegmentsByLeadSource_SegmentsCategories">
+          <End Type="IMModel.SegmentCategory" Role="SegmentCategory" Multiplicity="0..1" />
+          <End Type="IMModel.SegmentByLeadSource" Role="SegmentByLeadSource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SegmentCategory">
+              <PropertyRef Name="scID" />
+            </Principal>
+            <Dependent Role="SegmentByLeadSource">
+              <PropertyRef Name="sosc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -26738,7 +26806,7 @@
                 <ScalarProperty Name="bdcu" ColumnName="bdcu" />
                 <ScalarProperty Name="bdAmount" ColumnName="bdAmount" />
                 <ScalarProperty Name="bdReceived" ColumnName="bdReceived" />
-                <ScalarProperty Name="ToPay" ColumnName="ToPay" />
+                <ScalarProperty Name="CxC" ColumnName="CxC" />
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>

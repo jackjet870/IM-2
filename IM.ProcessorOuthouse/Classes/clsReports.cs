@@ -66,7 +66,7 @@ namespace IM.ProcessorOuthouse.Classes
                                    payType.ptN,
                                    paymentByPRDep.bdAmount,
                                    paymentByPRDep.bdReceived,
-                                   paymentByPRDep.ToPay
+                                   paymentByPRDep.CxC
                                  }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);

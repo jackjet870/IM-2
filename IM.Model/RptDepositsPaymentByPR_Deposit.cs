@@ -32,6 +32,6 @@ namespace IM.Model
         public string bdcu { get; set; }
         public decimal bdAmount { get; set; }
         public decimal bdReceived { get; set; }
-        public Nullable<decimal> ToPay { get; set; }
+        public Nullable<decimal> CxC { get; set; }
     }
 }

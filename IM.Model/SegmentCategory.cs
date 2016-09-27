@@ -14,9 +14,21 @@ namespace IM.Model
     
     public partial class SegmentCategory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SegmentCategory()
+        {
+            this.SegmentsByAgencies = new HashSet<SegmentByAgency>();
+            this.SegmentsByLeadSources = new HashSet<SegmentByLeadSource>();
+        }
+    
         public string scID { get; set; }
         public string scN { get; set; }
         public bool scA { get; set; }
         public int scO { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SegmentByAgency> SegmentsByAgencies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SegmentByLeadSource> SegmentsByLeadSources { get; set; }
     }
 }

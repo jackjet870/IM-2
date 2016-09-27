@@ -466,6 +466,8 @@
         <AssociationConnector Association="IMModel.FK_LeadSources_SalesRooms" />
         <AssociationConnector Association="IMModel.FK_SegmentsByAgency_SegmentsCategories" />
         <AssociationConnector Association="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" />
+        <AssociationConnector Association="IMModel.FK_SegmentsByAgency_SegmentsCategories" />
+        <AssociationConnector Association="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
