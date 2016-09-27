@@ -49,6 +49,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd)) { oldPersonnel.pePwd= EncryptHelper.Encrypt(oldPersonnel.pePwd); };
       ObjectHelper.CopyProperties(personnel, oldPersonnel);   
       LoadSalesMen();
@@ -88,7 +89,7 @@ namespace IM.Administrator.Forms
       dtgRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
       dtgSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
       dtgWarehouses.BeginningEdit += GridHelper.dgr_BeginningEdit;
-      dtgLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;      
     }
     #endregion
 
@@ -884,6 +885,10 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex);
       }     
+      finally
+      {
+        Mouse.OverrideCursor = null;
+      }
 
     }
     #endregion
@@ -1361,6 +1366,7 @@ namespace IM.Administrator.Forms
             }
             txtLocSal.Text = "Location";
             cmbpeLinerID.IsEnabled = true;
+            personnel.peTeamType = "GS";
             break;
           }
         case "FTM":
@@ -1382,6 +1388,7 @@ namespace IM.Administrator.Forms
             }
             cmbpeLinerID.IsEnabled = false;
             txtLocSal.Text = "Sales Room";
+            personnel.peTeamType = "SA";
             break;
           }
         default:
@@ -1389,10 +1396,10 @@ namespace IM.Administrator.Forms
             txtLocSal.Text = "Place ID";
             if (cmbpePlaceID.Items.Count > 0)
             {
-              cmbpePlaceID.ItemsSource = null;
-              personnel.peTeamType = "";
+              cmbpePlaceID.ItemsSource = null;              
             }
             cmbpeLinerID.IsEnabled = false;
+            personnel.peTeamType = "";
             break;
           }
       }
