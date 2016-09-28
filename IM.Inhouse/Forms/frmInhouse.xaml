@@ -272,17 +272,18 @@
                           SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="ToolTip" Value="Status" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
                             <DataGridTextColumn.ElementStyle>
                                 <Style  TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="Text"  Value="{Binding StatusColumn}" />
+                                    <Setter Property="ToolTip" Value="{Binding toolTip}"/>
                                     <Setter Property="Width" Value="15" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding guCheckIn}" Value="true">
-                                            <Setter Property="Text"  Value="{Binding StatusColumn}" />
-                                            <Setter Property="Background"  Value="{Binding ColorColumn}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -439,6 +440,7 @@
                                 <Style  TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="ToolTip" Value="{Binding toolTip}"/>
                                     <Setter Property="Width" Value="15" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
@@ -584,6 +586,7 @@
                                 <Style  TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="ToolTip" Value="{Binding toolTip}"/>
                                     <Setter Property="Width" Value="15" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
@@ -733,6 +736,7 @@
                                 <Style  TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="ToolTip" Value="{Binding toolTip}"/>
                                     <Setter Property="Width" Value="15" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>

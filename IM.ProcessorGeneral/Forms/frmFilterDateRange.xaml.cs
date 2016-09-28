@@ -388,6 +388,8 @@ namespace IM.ProcessorGeneral.Forms
     /// <param name="e"></param>
     private void date_LostFocus(object sender, RoutedEventArgs e)
     {
+      DateHelper.ValidateValueDate(dtmStart);
+      DateHelper.ValidateValueDate(dtmEnd);
       DateTime dtStart = dtmStart.Value.Value;
       DateTime dtEnd = dtmEnd.Value.Value;
 
@@ -631,18 +633,34 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private string ValidateFields()
     {
-      if (pnlSalesRoom.Visibility == Visibility.Visible && grdSalesRoom.SelectedItems.Count == 0)
+      if (pnlSalesRoom.Visibility == Visibility.Visible &&
+        ((grdSalesRoom.SelectionMode == DataGridSelectionMode.Extended && grdSalesRoom.SelectedItems.Count == 0) ||
+        (grdSalesRoom.SelectionMode == DataGridSelectionMode.Single && grdSalesRoom.SelectedItem == null)))
         return "No sales room is selected";
-      if (pnlRateTypes.Visibility == Visibility.Visible && grdRatetypes.SelectedItems.Count == 0)
+      if (pnlRateTypes.Visibility == Visibility.Visible &&
+        ((grdRatetypes.SelectionMode == DataGridSelectionMode.Extended && grdRatetypes.SelectedItems.Count == 0) ||
+        (grdRatetypes.SelectionMode == DataGridSelectionMode.Single && grdRatetypes.SelectedItem == null)))
         return "No Rate types is selected.";
-      if (pnlPrograms.Visibility == Visibility.Visible && grdPrograms.SelectedItems.Count == 0)
+      if (pnlPrograms.Visibility == Visibility.Visible &&
+        ((grdPrograms.SelectionMode == DataGridSelectionMode.Extended && grdPrograms.SelectedItems.Count == 0) ||
+        (grdPrograms.SelectionMode == DataGridSelectionMode.Single && grdPrograms.SelectedItem == null)))
         return "No program is selected.";
-      if (pnlLeadSource.Visibility == Visibility.Visible && grdLeadSources.SelectedItems.Count == 0)
+      if (pnlLeadSource.Visibility == Visibility.Visible &&
+        ((grdLeadSources.SelectionMode == DataGridSelectionMode.Extended && grdLeadSources.SelectedItems.Count == 0) ||
+        (grdLeadSources.SelectionMode == DataGridSelectionMode.Single && grdLeadSources.SelectedItem == null)))
         return "No lead source is selected.";
-      if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
+      if (pnlGifts.Visibility == Visibility.Visible &&
+        ((grdGifts.SelectionMode == DataGridSelectionMode.Extended && grdGifts.SelectedItems.Count == 0) ||
+        (grdGifts.SelectionMode == DataGridSelectionMode.Single && grdGifts.SelectedItem == null)))
         return "No gift is selected.";
-      if (pnlCategories.Visibility == Visibility.Visible && grdCategories.SelectedItems.Count == 0)
+      if (pnlCategories.Visibility == Visibility.Visible &&
+        ((grdCategories.SelectionMode == DataGridSelectionMode.Extended && grdCategories.SelectedItems.Count == 0) ||
+        (grdCategories.SelectionMode == DataGridSelectionMode.Single && grdCategories.SelectedItem == null)))
         return "No category is selected.";
+      if (pnlWarehouse.Visibility == Visibility.Visible &&
+        ((grdWarehouse.SelectionMode == DataGridSelectionMode.Extended && grdWarehouse.SelectedItems.Count == 0) ||
+        (grdWarehouse.SelectionMode == DataGridSelectionMode.Single && grdWarehouse.SelectedItem == null)))
+        return "No warehouse is selected.";
       if (pnlDtmEnd.IsEnabled && dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
       else

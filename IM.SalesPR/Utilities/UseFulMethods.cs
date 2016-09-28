@@ -1,18 +1,15 @@
-﻿using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table.PivotTable;
-using System.Collections.Generic;
+﻿using OfficeOpenXml.Table.PivotTable;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.SalesPR.Utilities
 {
   public class UseFulMethods
   {
     /// <summary>
-    /// Genera las columnas que necesito en el reporte RPTStatistics
+    /// Genera las columnas que necesito en el reporte Sales by PR
     /// </summary>
-    /// <returns>List<ExcelFormatTable></returns>
+    /// <returns>List<ExcelFormatItemsList></returns>
     /// <history>
     /// [erosado] 23/Mar/2016  Created
     /// </history>

@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.ProcessorOuthouse.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -403,7 +404,7 @@ namespace IM.ProcessorOuthouse.Forms
       string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
       try
       {
@@ -961,7 +962,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);          
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReport, fileFullPath);          
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1056,7 +1057,7 @@ namespace IM.ProcessorOuthouse.Forms
       string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
       try
       {
@@ -1377,7 +1378,7 @@ namespace IM.ProcessorOuthouse.Forms
         }
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();
@@ -1451,7 +1452,7 @@ namespace IM.ProcessorOuthouse.Forms
       string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReport, dateRangeFileNameRep);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReport, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReport);
       try
       {
@@ -1525,7 +1526,7 @@ namespace IM.ProcessorOuthouse.Forms
         }
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
           frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
           frmDocumentViewver.Show();
         }        

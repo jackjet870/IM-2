@@ -1,13 +1,7 @@
-﻿using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
+﻿using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 namespace IM.Base.Reports
 {
   public static class clsFormatReports
@@ -68,10 +62,10 @@ namespace IM.Base.Reports
       lst.Add("Pend Original", "PendOriginal", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend New", "PendNew", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Pend Gross", "PendGross", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
-      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPayment]/[PendGross]),[saDownPayment]/[ProcGross])");
+      lst.Add("$ DP", "saDownPayment", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("% DP", "saDownPaymentPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPayment]/[PendGross]),[saDownPayment]/[ProcGross])");
       lst.Add("$ EDP", "saDownPaymentPaid", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
-      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent,isCalculated:true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPaymentPaid]/[PendGross]),[saDownPaymentPaid]/[ProcGross])");
+      lst.Add("% EDP", "saDownPaymentPaidPercentage", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([ProcGross]=0,IF([PendGross]=0,0,[saDownPaymentPaid]/[PendGross]),[saDownPaymentPaid]/[ProcGross])");
       lst.Add("Deposit Sale", "DepositSale", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Sum);
       lst.Add("Deposit #", "DepositSaleNum");
       lst.Add("CC", "CC");
@@ -296,5 +290,7 @@ namespace IM.Base.Reports
     }
 
     #endregion RptDepositByPr
+
+
   }
 }

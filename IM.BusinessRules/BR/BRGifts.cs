@@ -121,25 +121,52 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Activos</param>
     /// <param name="gift">Objeto con filtros adicionales</param>
+    /// <param name="giftPack"></param>
+    /// <param name="location">Lista de locaciones para filtrar la lista de Gift separados por ,</param>
     /// <returns>Lista tipo Gift</returns>
     /// <history>
     /// [emoguel] created 23/05/2016
     /// [emoguel] modified 30/06/2016 ----> Se agregaron más filtros
+    /// [erosado] 27/09/2016  Modified. Se agregó el parametro location 
     /// </history>
-    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null, int giftPack = -1)
+    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null, int giftPack = -1, string location = null)
     {
       List<Gift> lstGift = new List<Gift>();
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+
           var query = from gi in dbContext.Gifts
                       select gi;
+
 
           if (nStatus != -1)//Filtro por estatus
           {
             bool blnStatus = Convert.ToBoolean(nStatus);
             query = query.Where(gi => gi.giA == blnStatus);
+          }
+          //Filtro por location
+          if (!string.IsNullOrEmpty(location))
+          {
+            if (location == "ALL")
+            {
+              query = query.Include(gi => gi.Locations);
+            }
+            else
+            {
+              var locList = location.Split(',').ToList(); ;
+
+              query = query
+              .Include(loc => loc.Locations)
+              .Select(gi => new
+              {
+                Loc = gi.Locations.Select(l => l.loID).Where(l => locList.Contains(l)),
+                giftAux = gi
+              })
+              .Where(l => l.Loc.Any())
+              .Select(gi => gi.giftAux);
+            }
           }
 
           if (gift != null)

@@ -84,7 +84,7 @@ namespace IM.Base.Classes
           LoadGifts(_user),
           LoadProgram(_module, _invitationType, _guID),
           LoadAdditionalGuest(_guID),
-           //Cargamos la invitacion
+          //Cargamos la invitacion
           DefaultValueInvitation(_user, _guID)
           );
       }
@@ -346,7 +346,7 @@ namespace IM.Base.Classes
 
     private async Task LoadGifts(UserData _user)
     {
-      var result = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
+      var result = await BRGifts.GetGifts(nStatus: 1, location: _user.Location == null ? "ALL" : _user.Location.loID);
       Gifts = result;
     }
 

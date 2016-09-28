@@ -1,8 +1,5 @@
-﻿using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
-using System.Collections.Generic;
+﻿using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.SalesLiner.Utilities
 {

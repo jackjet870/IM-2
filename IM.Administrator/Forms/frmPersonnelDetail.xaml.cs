@@ -3,7 +3,6 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Extensions;
 using IM.Model.Helpers;
 using IM.Services.Helpers;
 using System;
@@ -50,6 +49,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd)) { oldPersonnel.pePwd= EncryptHelper.Encrypt(oldPersonnel.pePwd); };
       ObjectHelper.CopyProperties(personnel, oldPersonnel);   
       LoadSalesMen();
@@ -86,10 +86,10 @@ namespace IM.Administrator.Forms
         personnel.peps = "ACTIVE";
       }
       DataContext = personnel;
-      dgrRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
       dtgSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
       dtgWarehouses.BeginningEdit += GridHelper.dgr_BeginningEdit;
-      dtgLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgLeadSources.BeginningEdit += GridHelper.dgr_BeginningEdit;      
     }
     #endregion
 
@@ -110,8 +110,8 @@ namespace IM.Administrator.Forms
         List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dtgWarehouses.ItemsSource;
         List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dtgSalesRoom.ItemsSource;
         List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dtgLeadSources.ItemsSource;
-        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
-        List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dtgPermission.ItemsSource;
+        List<Role> lstRoles = (List<Role>)dtgRoles.ItemsSource;
         var lstPersonnelPermissionAdd = (lstPersonnelPermision != null) ? lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList() : new List<PersonnelPermission>();
         var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
         var lstPersonnelPermissionUpd = _lstOldPersonnelPermission.Where(pp => lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
@@ -127,10 +127,10 @@ namespace IM.Administrator.Forms
           else
           {
             dtgLeadSources.CancelEdit();
-            dgrPermission.CancelEdit();
+            dtgPermission.CancelEdit();
             dtgSalesRoom.CancelEdit();
             dtgWarehouses.CancelEdit();
-            dgrRoles.CancelEdit();
+            dtgRoles.CancelEdit();
           }
         }
         if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd))
@@ -159,8 +159,8 @@ namespace IM.Administrator.Forms
         List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dtgWarehouses.ItemsSource;
         List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dtgSalesRoom.ItemsSource;
         List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dtgLeadSources.ItemsSource;
-        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
-        List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dtgPermission.ItemsSource;
+        List<Role> lstRoles = (List<Role>)dtgRoles.ItemsSource;
 
         #region PersonnelPermision changes
         var lstPersonnelPermissionAdd = lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
@@ -274,7 +274,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnPermission_Click(object sender, RoutedEventArgs e)
     {
-      dgrPermission.CancelEdit();
+      dtgPermission.CancelEdit();
       List<PersonnelPermission> lstNewPersonnelPermision = new List<PersonnelPermission>();
 
       if (hasRoles("PR,PRMEMBER"))
@@ -395,7 +395,8 @@ namespace IM.Administrator.Forms
         AddPermision(lstNewPersonnelPermision, EnumToListHelper.GetEnumDescription(EnumPermission.Teams), (int)EnumPermisionLevel.Standard);
       }
 
-      dgrPermission.ItemsSource = lstNewPersonnelPermision;
+      dtgPermission.ItemsSource = lstNewPersonnelPermision;
+      cmbPermission.Header = $"Permissions ({dtgPermission.Items.Count})";
     }
     #endregion
 
@@ -418,9 +419,13 @@ namespace IM.Administrator.Forms
           case "pppm":
             {
               blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit, false, "pppm");
-              PersonnelPermission personnelPermission = (PersonnelPermission)dgrPermission.SelectedItem;
+              PersonnelPermission personnelPermission = (PersonnelPermission)dtgPermission.SelectedItem;
               personnelPermission.pppl = 1;
               GridHelper.UpdateCellsFromARow(dgrEdit);       
+              if(!blnIsRepeat)
+              {
+                cmbPermission.Header = $"Permission ({dtgPermission.Items.Count-1})";
+              }
               break;
             }
           case "plLSSRID":
@@ -456,7 +461,15 @@ namespace IM.Administrator.Forms
               if (e.Column.SortMemberPath != "pppl")
               {
                 blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrEdit);
+                if (e.Column.SortMemberPath == "roID")
+                {
+                  if (!blnIsRepeat)
+                  {
+                    cmbRoles.Header = $"Roles ({dtgRoles.Items.Count-1})";
+                  }
+                }
               }
+              
               break;
             }
         }
@@ -569,7 +582,7 @@ namespace IM.Administrator.Forms
             List<TeamGuestServices> lstTeamguestService = await BRTeamsGuestServices.GetTeamsGuestServices(1, new TeamGuestServices { tglo = personnel.pePlaceID });
             cmbpeTeam.ItemsSource = lstTeamguestService;
             cmbpeTeam.SelectedValuePath = "tgID";
-            cmbpeTeam.DisplayMemberPath = "tgN";
+            cmbpeTeam.DisplayMemberPath = "tgN";            
             break;
           }
         case "FTM":
@@ -595,8 +608,9 @@ namespace IM.Administrator.Forms
             }
             break;
           }
-      }
-      
+          
+      }      
+
     }
     #endregion
 
@@ -727,28 +741,42 @@ namespace IM.Administrator.Forms
     {
       DataGridRow dgrRow = sender as DataGridRow;
       if (e.Key == Key.Delete)
-      {        
-        if(dgrRow.Item.GetType().Name == nameof(PersonnelAccess))
+      {
+        switch (dgrRow.Item.GetType().Name)
         {
-          var item =dgrRow.Item as PersonnelAccess;
-          switch(item.plLSSR)
-          {
-            case "LS":
+          case nameof(PersonnelAccess):
+            {
+              var item = dgrRow.Item as PersonnelAccess;
+              switch (item.plLSSR)
               {
-                cmbLeadSource.Header = $"Lead Sources({dtgLeadSources.Items.Count-(dtgLeadSources.SelectedItems.Count+1)})";
-                break;
+                case "LS":
+                  {
+                    cmbLeadSource.Header = $"Lead Sources({dtgLeadSources.Items.Count - 2})";
+                    break;
+                  }
+                case "SR":
+                  {
+                    cmbSalesRoom.Header = $"Sales Rooms({dtgSalesRoom.Items.Count - 2})";
+                    break;
+                  }
+                case "WH":
+                  {
+                    cmbWarehouses.Header = $"Warehouses({dtgWarehouses.Items.Count - 2})";
+                    break;
+                  }
               }
-            case "SR":
-              {
-                cmbSalesRoom.Header = $"Sales Rooms({dtgSalesRoom.Items.Count - (dtgSalesRoom.SelectedItems.Count+1)})";
-                break;
-              }
-            case "WH":
-              {
-                cmbWarehouses.Header = $"Warehouses({dtgWarehouses.Items.Count - (dtgWarehouses.SelectedItems.Count+1)})";
-                break;
-              }
-          }
+              break;
+            }
+          case nameof(PersonnelPermission):
+            {
+              cmbPermission.Header = $"Permission ({dtgPermission.Items.Count-2})";
+              break;
+            }
+          case nameof(Role):
+            {
+              cmbRoles.Header = $"Roles ({dtgRoles.Items.Count-2})";
+              break;
+            }
         }        
       }
     }
@@ -857,6 +885,10 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex);
       }     
+      finally
+      {
+        Mouse.OverrideCursor = null;
+      }
 
     }
     #endregion
@@ -964,9 +996,10 @@ namespace IM.Administrator.Forms
         {
           _lstOldRoles = await BRRoles.GetRolesByUser(personnel.peID);          
         }
-        dgrRoles.ItemsSource = _lstOldRoles.ToList();
+        dtgRoles.ItemsSource = _lstOldRoles.ToList();
         cmbpepo.SelectionChanged += cmbpepo_SelectionChanged;
-        LoadPlaces(new Post { poID = "-01" });     
+        LoadPlaces(new Post { poID = "-01" });
+        cmbRoles.Header = $"Roles ({_lstOldRoles.Count})";
       }
       catch (Exception ex)
       {
@@ -992,7 +1025,8 @@ namespace IM.Administrator.Forms
         {
           _lstOldPersonnelPermission = await BRPermissions.GetPersonnelPermission(personnel.peID);          
         }
-        dgrPermission.ItemsSource = _lstOldPersonnelPermission.Select(pe=>new PersonnelPermission {pppe=pe.pppe,pppl=pe.pppl,pppm=pe.pppm }).ToList();
+        dtgPermission.ItemsSource = _lstOldPersonnelPermission.Select(pe=>new PersonnelPermission {pppe=pe.pppe,pppl=pe.pppl,pppm=pe.pppm }).ToList();
+        cmbPermission.Header = $"Permission ({_lstOldPersonnelPermission.Count})";
       }
       catch (Exception ex)
       {
@@ -1070,7 +1104,7 @@ namespace IM.Administrator.Forms
     private bool hasRoles(string roles)
     {
       List<string> lstPredRoles = roles.Split(',').ToList();
-      List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+      List<Role> lstRoles = (List<Role>)dtgRoles.ItemsSource;
 
       List<Role> hasRoles = lstRoles.Where(ro => lstPredRoles.Contains(ro.roID)).ToList();
       return (hasRoles.Count > 0);
@@ -1177,8 +1211,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void SetRoles(string post)
     {
-      dgrRoles.CancelEdit();
-      List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+      dtgRoles.CancelEdit();
+      List<Role> lstRoles = (List<Role>)dtgRoles.ItemsSource;
       List<Role> lstAllRole = (List<Role>)cmbRoles.ItemsSource;
       switch (post)
       {
@@ -1259,8 +1293,8 @@ namespace IM.Administrator.Forms
           #endregion
       }
 
-      dgrRoles.Items.Refresh();
-      GridHelper.SelectRow(dgrRoles, 0);
+      dtgRoles.Items.Refresh();
+      GridHelper.SelectRow(dtgRoles, 0);
     }
 
     #endregion
@@ -1332,6 +1366,7 @@ namespace IM.Administrator.Forms
             }
             txtLocSal.Text = "Location";
             cmbpeLinerID.IsEnabled = true;
+            personnel.peTeamType = "GS";
             break;
           }
         case "FTM":
@@ -1353,6 +1388,7 @@ namespace IM.Administrator.Forms
             }
             cmbpeLinerID.IsEnabled = false;
             txtLocSal.Text = "Sales Room";
+            personnel.peTeamType = "SA";
             break;
           }
         default:
@@ -1360,10 +1396,10 @@ namespace IM.Administrator.Forms
             txtLocSal.Text = "Place ID";
             if (cmbpePlaceID.Items.Count > 0)
             {
-              cmbpePlaceID.ItemsSource = null;
-              personnel.peTeamType = "";
+              cmbpePlaceID.ItemsSource = null;              
             }
             cmbpeLinerID.IsEnabled = false;
+            personnel.peTeamType = "";
             break;
           }
       }

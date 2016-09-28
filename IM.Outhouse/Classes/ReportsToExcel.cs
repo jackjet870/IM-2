@@ -3,10 +3,11 @@ using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +73,7 @@ namespace IM.Outhouse.Classes
         format.Add("Sale", "guSale", axis: ePivotFieldAxis.Values, aligment: ExcelHorizontalAlignment.Center, function: DataFieldFunctions.Count);
         format.Add("Deposits / Comments", "guComments");
 
-        var info = await EpplusHelper.CreateCustomExcel(dt, _filters, _rptName, dateRange, format, blnShowSubtotal:true, blnRowGrandTotal: true, addEnumeration: true);
+        var info = await ReportBuilder.CreateCustomExcel(dt, _filters, _rptName, dateRange, format, blnShowSubtotal: true, blnRowGrandTotal: true, addEnumeration: true);
         if (info != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(info, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);

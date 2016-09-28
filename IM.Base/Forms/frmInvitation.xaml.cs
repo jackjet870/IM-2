@@ -269,13 +269,16 @@ namespace IM.Base.Forms
         CatObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
         DataContext = CatObj;
         await CatObj.LoadAll();
-        SetReadOnly();
+        //Configuramos nuevamente el formulario
+        ControlsConfiguration();
 
         //Habilitamos los botones editar e imprimir
         imgButtonEdit.IsEnabled = true;
         imgButtonPrint.IsEnabled = true;
         imgButtonSave.IsEnabled = false;
         _busyIndicator.IsBusy = false;
+
+
       }
       //Si no estabamos editando cerramos la aplicacion
       else
@@ -335,7 +338,8 @@ namespace IM.Base.Forms
         CatObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
         DataContext = CatObj;
         //Configuramos de nuevo el formulario
-        Window_Loaded(this, null);
+        //Window_Loaded(this, null);
+        await LoadInvitationForm();
       }
     }
 
@@ -854,6 +858,45 @@ namespace IM.Base.Forms
 
     #endregion ControlsBehaviorOutHouse
 
+    #region StarModeControls
+    /// <summary>
+    /// Reinicia los controles para que luego sean configurados dependiendo del modulo y invitationType
+    /// </summary>
+    private void StarModeControls()
+    {
+      //Barra Menu
+      imgButtonEdit.IsEnabled = imgButtonPrint.IsEnabled = imgButtonSave.IsEnabled = imgButtonCancel.IsEnabled = imgButtonLog.IsEnabled = imgButtonReLogin.IsEnabled = true;
+      //Guest Information
+      brdGuestInfo.IsEnabled = stkGuestInfo.IsEnabled = stkGuid.IsEnabled = stkRsrvNum.IsEnabled = brdSearchButton.IsEnabled = stkOutInvitation.IsEnabled = stkRebookRef.IsEnabled = stkInvitationTypeAndLenguage.IsEnabled = chkguQuinella.IsEnabled = chkguShow.IsEnabled = chkguInterval.IsEnabled = cmbLanguage.IsEnabled = true;
+      //Guest Profile Opera
+      brdProfileOpera.IsEnabled = stkProfileOpera.IsEnabled = true;
+      //Guest 1
+      brdGuest1.IsEnabled = stkGuest1.IsEnabled = true;
+      //Guest 2
+      brdGuest2.IsEnabled = stkGuest2.IsEnabled = true;
+      //PR
+      brdPRInfo.IsEnabled = btnChange.IsEnabled = btnReschedule.IsEnabled = btnRebook.IsEnabled = stkPRContact.IsEnabled = cmbPRContact.IsEnabled = stkPR.IsEnabled = cmbPR.IsEnabled = stkSales.IsEnabled = cmbSalesRooms.IsEnabled = stkLocation.IsEnabled = cmbLocation.IsEnabled = stkBookDateAndTime.IsEnabled = chkguAntesIO.IsEnabled = dtpBookDate.IsEnabled = cmbBookT.IsEnabled = chkDirect.IsEnabled = stkRescheduleDate.IsEnabled = dtpRescheduleDate.IsEnabled = cmbReschT.IsEnabled = chkReschedule.IsEnabled = stkFlightNumber.IsEnabled = true;
+      //Other Information
+      brdOtherInformation.IsEnabled = txtguRoomNum.IsEnabled = cmbOtherInfoHotel.IsEnabled = cmbOtherInfoAgency.IsEnabled = cmbOtherInfoCountry.IsEnabled = txtguPax.IsEnabled = dtpOtherInfoArrivalD.IsEnabled = dtpOtherInfoDepartureD.IsEnabled = true;
+      //Guest Status
+      brdGuestStatus.IsEnabled = cmbGuestStatus.IsEnabled = true;
+      //Gifts
+      brdGifts.IsEnabled = dtgGifts.IsEnabled = true;
+      dtgGifts.IsReadOnly = false;
+      //Deposits
+      brdBookingDeposits.IsEnabled = dtgBookingDeposits.IsEnabled = txtBurned.IsEnabled = cmbCurrency.IsEnabled = cmbPaymentType.IsEnabled = cmbResorts.IsEnabled = true;
+      dtgBookingDeposits.IsReadOnly = false;
+      //Credit Card
+      brdCreditCard.IsEnabled = txtguCCType.IsEnabled = dtgCCCompany.IsEnabled = true;
+      dtgCCCompany.IsReadOnly = false;
+      //Additional Guest
+      brdAdditionalGuest.IsEnabled = btnSearchGuestAdditional.IsEnabled = btnAddGuestAdditional.IsEnabled = dtgGuestAdditional.IsEnabled = true;
+      dtgGuestAdditional.IsReadOnly = false;
+      //RoomsQtyAndElectronicPurse
+      brdRoomsQtyAndElectronicPurse.IsEnabled = stkRoomsQty.IsEnabled = txtguRoomsQty.IsEnabled = stkElectronicPurse.IsEnabled = txtguAccountGiftsCard.IsEnabled = true;
+    }
+    #endregion
+
     #region EditModeControlsBehavior
 
     /// <summary>
@@ -1255,8 +1298,12 @@ namespace IM.Base.Forms
         //si la fecha de invitacion es hoy o si la fecha de booking es despues de hoy
         if (CatObj.Guest.guInvitD == serverDate || CatObj.Guest.guBookD > serverDate)
         {
+          //Fecha y hora del booking
+          stkBookDateAndTime.IsEnabled = true;
           //Se activa la fecha de Book
           dtpBookDate.IsEnabled = true;
+          //Se activa la Hora de Book
+          cmbBookT.IsEnabled = true;
 
           //Si tiene permiso especial
           if (_user.HasPermission(permission, EnumPermisionLevel.Special))
@@ -1282,8 +1329,12 @@ namespace IM.Base.Forms
       //Si no se permite Reschedule
       else
       {
-        //Fecha de Booking
+        //Fecha y hora del booking
         stkBookDateAndTime.IsEnabled = true;
+        //Se activa la fecha de Book
+        dtpBookDate.IsEnabled = true;
+        //Se activa la Hora de Book
+        cmbBookT.IsEnabled = true;
 
         //PR Contact
         if (!cmbPRContact.IsEnabled)
@@ -1327,12 +1378,10 @@ namespace IM.Base.Forms
       //Fecha de Reschedule
       stkRescheduleDate.IsEnabled = true;
       dtpRescheduleDate.IsEnabled = true;
+      cmbReschT.IsEnabled = true;
 
       //Fecha y hora en que se hizo es reschedule
       CatObj.Guest.guReschDT = BRHelpers.GetServerDateTime();
-
-      //Reschedule TourTimes
-      cmbReschT.IsEnabled = true;
 
       //Activamos el Check de reschedule
       chkReschedule.IsChecked = true;
@@ -1419,13 +1468,24 @@ namespace IM.Base.Forms
       CatObj.Guest.guHotel = "";
 
       //Regalos
-      CatObj.InvitationGiftList = new ObservableCollection<InvitationGift>();
+      CatObj.InvitationGiftList.Clear();
+      
 
       //Numero de habitaciones
       if (CatObj.Guest.guRoomsQty != 0)
       {
         CatObj.Guest.guRoomsQty = 1;
       }
+
+      //Reset DataContext
+      var context = DataContext;
+      DataContext = null;
+      DataContext = context;
+
+      StarModeControls();
+
+      ControlsConfiguration();
+
     }
     #endregion Rebook
 
@@ -1638,7 +1698,7 @@ namespace IM.Base.Forms
           }
         }
       }
-}
+    }
 
     #endregion RowEditEnding
 

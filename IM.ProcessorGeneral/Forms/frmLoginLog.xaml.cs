@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.ProcessorGeneral.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -93,22 +94,25 @@ namespace IM.ProcessorGeneral.Forms
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>
       {
         Tuple.Create("Date Range",
-          DateHelper.DateRange(dtmStart.Value.Value, dtmEnd.Value.Value))
+          DateHelper.DateRange(dtmStart.Value.Value, dtmEnd.Value.Value)),
+        Tuple.Create("Location",cbLocation.SelectedValue.ToString()),
+        Tuple.Create("Personnel",cbPersonnel.SelectedValue.ToString()),
+        Tuple.Create("PC Name",cbPcName.SelectedValue.ToString())
       };
 
       string strReportName = "Logins Log";
       string dateFileName = DateHelper.DateRangeFileName(dtmStart.Value.Value, dtmEnd.Value.Value);
 
-      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateFileName);
+      string fileFullPath = ReportBuilder.CreateEmptyExcel(strReportName, dateFileName);
       frmReportQ.AddReport(fileFullPath, strReportName);
       try
       {
         
-        var finfo = await EpplusHelper.CreateCustomExcel(dtRptLoginsLog, filters, strReportName, string.Empty, clsFormatReport.RptLoginsLog(), fileFullPath: fileFullPath, addEnumeration: true);
+        var finfo = await ReportBuilder.CreateCustomExcel(dtRptLoginsLog, filters, strReportName, string.Empty, clsFormatReport.RptLoginsLog(), isRptQueue:true, filePath: fileFullPath, addEnumeration: true);
 
         if (finfo == null)
         {
-          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+          finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
         }
         frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo,Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
         frmDocumentViewver.Show();

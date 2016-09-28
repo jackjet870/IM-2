@@ -44,6 +44,7 @@ namespace IM.Base.Forms
     {
       InitializeComponent();
       _excelFile = fileInfo;
+      _excelFile.Refresh();
       _exportExcel = exportExcel;
       _fullPathAndName = _excelFile.FullName.Replace(_excelFile.Extension, string.Empty);
       if (!isProcessor)

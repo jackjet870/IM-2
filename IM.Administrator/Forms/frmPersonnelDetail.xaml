@@ -82,7 +82,7 @@
                         <TextBlock Name="txtLocSal" Grid.Column="0" HorizontalAlignment="Left">Place ID</TextBlock>
                         <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0">Team</TextBlock>
                         <ComboBox Name="cmbpePlaceID" SelectionChanged="cmbpePlaceID_SelectionChanged" Grid.Column="0" VerticalAlignment="Top" SelectedValue="{Binding pePlaceID}"  Margin="69,0,0,0"/>
-                        <ComboBox Name="cmbpeTeam" Grid.Column="1" VerticalAlignment="Top" Text="{Binding peTeam}" Margin="69,0,0,0" />
+                        <ComboBox Name="cmbpeTeam" Grid.Column="1" VerticalAlignment="Top" SelectedValue="{Binding peTeam,Mode=TwoWay}" Margin="69,0,0,0" />
                     </Grid>
                     <ComboBox Name="cmbpeLinerID" Grid.Column="1"  Grid.Row="7" TextSearch.TextPath="peN" VerticalAlignment="Top" SelectedValuePath="peID" SelectedValue="{Binding peLinerID}" Margin="69,0,0,0" >
                         <ComboBox.ItemTemplate>
@@ -128,20 +128,30 @@
                                 <AccessText Margin="3,0,0,0" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Assign _Permissions"/>
                             </StackPanel>
                         </Button>
-                        <DataGrid AutoGenerateColumns="False" RowEditEnding="RowEditEnding" CellEditEnding="CellEditEnding" Name="dgrRoles" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+                        <DataGrid AutoGenerateColumns="False" SelectionMode="Single" RowEditEnding="RowEditEnding" CellEditEnding="CellEditEnding" Name="dtgRoles" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn x:Name="cmbRoles" Width="100*" SelectedValuePath="roID" DisplayMemberPath="roN" SelectedValueBinding="{Binding roID}" Header="Roles"/>                            
                             </DataGrid.Columns>
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                                </Style>
+                            </DataGrid.Resources>
                         </DataGrid>
                     </DockPanel>
                     
                     <!--#endregion-->
                     <!--#region  Level Permission-->
-                    <DataGrid Grid.Column="1" AutoGenerateColumns="False" Margin="3" Name="dgrPermission" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" BeginningEdit="dgrPermission_BeginningEdit">
+                    <DataGrid Grid.Column="1" AutoGenerateColumns="False" Margin="3" Name="dtgPermission" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" BeginningEdit="dgrPermission_BeginningEdit">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn x:Name="cmbPermission" Width="50*" SelectedValuePath="pmID" DisplayMemberPath="pmN" SelectedValueBinding="{Binding pppm,UpdateSourceTrigger=PropertyChanged}" Header="Permission"/>
                             <DataGridComboBoxColumn x:Name="cmbLevelPermission" Width="50*" SelectedValuePath="plID" DisplayMemberPath="plN" SelectedValueBinding="{Binding pppl,UpdateSourceTrigger=PropertyChanged}" Header="Level"/>                            
                         </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                            </Style>
+                        </DataGrid.Resources>
                     </DataGrid>
                     <!--#endregion-->                    
                 </Grid>
@@ -184,7 +194,7 @@
                     <!--#endregion-->
 
                     <!--#region Lead Sources-->
-                    <DataGrid Name="dtgLeadSources" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="0" Grid.Row="1">
+                    <DataGrid Name="dtgLeadSources" CellEditEnding="CellEditEnding" SelectionMode="Single" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="0" Grid.Row="1">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
@@ -196,7 +206,7 @@
                     </DataGrid>
                     <!--#endregion-->
                     <!--#region  Sales Room-->
-                    <DataGrid Name="dtgSalesRoom" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="1" Grid.Row="1">
+                    <DataGrid Name="dtgSalesRoom" CellEditEnding="CellEditEnding" SelectionMode="Single" RowEditEnding="RowEditEnding" AutoGenerateColumns="False" Margin="3" Grid.Column="1" Grid.Row="1">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
@@ -208,7 +218,7 @@
                     </DataGrid>
                     <!--#endregion-->
                     <!--#region Warehouses-->
-                    <DataGrid Margin="3" CellEditEnding="CellEditEnding" RowEditEnding="RowEditEnding" Name="dtgWarehouses" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1">
+                    <DataGrid Margin="3" CellEditEnding="CellEditEnding" SelectionMode="Single" RowEditEnding="RowEditEnding" Name="dtgWarehouses" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>

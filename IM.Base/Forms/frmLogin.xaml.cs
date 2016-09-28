@@ -331,6 +331,7 @@ namespace IM.Base.Forms
           if (index == -1)
           {
             UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            cmbPlace.SelectedItem = null;
           }
           else
           {

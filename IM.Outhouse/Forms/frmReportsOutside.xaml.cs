@@ -5,6 +5,7 @@ using IM.Base.Reports;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -125,7 +126,7 @@ namespace IM.Outhouse.Forms
               c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
             });
 
-            fileinfo = await EpplusHelper.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false),
+            fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false),
               filters, "Deposits by PR", dateFileName, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isPivot: true, addEnumeration: true);
           }
           else

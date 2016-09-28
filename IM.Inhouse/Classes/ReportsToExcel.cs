@@ -4,8 +4,9 @@ using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Model.Classes;
 using IM.Model.Enums;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -64,7 +65,7 @@ namespace IM.Inhouse.Classes
         format.Add("PR B", "guPRInvit1");
         format.Add("Comments", "guComments");
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt,filters,rptName,dateRange, format, addEnumeration:true),window);
+        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true), window);
       }
     }
 
@@ -110,7 +111,7 @@ namespace IM.Inhouse.Classes
         format.Add("PR B", "guPRInvit1");
         format.Add("Comments", "guComments");
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true),window);
+        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true), window);
       }
     }
 
@@ -141,7 +142,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest ";
         int j = dt.Columns.Count;
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()),window);
+        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()), window);
       }
     }
 
@@ -169,7 +170,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest with gifts";
         string dateRange = DateHelper.DateRangeFileName(date, date);
 
-        OpenFile(await EpplusHelper.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()),window);
+        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()), window);
       }
     }
 

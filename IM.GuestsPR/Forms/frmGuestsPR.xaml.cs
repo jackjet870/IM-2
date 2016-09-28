@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.GuestsPR.Utilities;
 using IM.Model;
 using IM.Model.Enums;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -12,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
+using System.Linq;
 
 namespace IM.GuestsPR.Forms
 {
@@ -33,6 +35,8 @@ namespace IM.GuestsPR.Forms
     }
 
     #region Eventos Ventana
+
+    #region Window_Loaded
     /// <summary>
     /// Evento que se lanza al iniciar la aplicacion
     /// </summary>
@@ -48,6 +52,9 @@ namespace IM.GuestsPR.Forms
       //Agregamos login del usuario en la interfaz
       SetNewUserLogin();
     }
+    #endregion
+
+    #region imgButtonOk_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando realizamos la consulta boton Search
     /// </summary>
@@ -60,7 +67,9 @@ namespace IM.GuestsPR.Forms
       dtgr.DataContext = null;
       GetGuestByPR();
     }
+    #endregion
 
+    #region imgButtonPrint_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
     /// </summary>
@@ -78,9 +87,9 @@ namespace IM.GuestsPR.Forms
         //Obtenemos el dataTable con la lista formateada
         var dt = TableHelper.GetDataTableFromList(listaGuestByPR, true);
         //Creamos el reporte
-        var fi = await EpplusHelper.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
+        var fi = await ReportBuilder.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable(), addEnumeration: true);
         if (fi != null)
-        {          
+        {
           frmDocumentViewer documentViewer = new frmDocumentViewer(fi, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewer.Owner = this;
           documentViewer.ShowDialog();
@@ -91,6 +100,9 @@ namespace IM.GuestsPR.Forms
         UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
       }
     }
+    #endregion
+
+    #region imgButtonAbout_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando abrimos la ventana About boton About
     /// </summary>
@@ -103,6 +115,9 @@ namespace IM.GuestsPR.Forms
       formAbout.Owner = this;
       formAbout.ShowDialog();
     }
+    #endregion
+
+    #region imgButtonExit_MouseLeftButtonDown
     /// <summary>
     /// Evento que se lanza cuando queremos salir de la aplicacion boton exit
     /// </summary>
@@ -113,6 +128,9 @@ namespace IM.GuestsPR.Forms
     {
       Close();
     }
+    #endregion
+
+    #region imageLogOut_MouseLeftButtonDown
     /// <summary>
     /// Evento de dispara cuando el usuario cambia de sesion en el modulo.
     /// </summary>
@@ -121,7 +139,7 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
       if (Context.User.AutoSign)
       {
@@ -135,6 +153,9 @@ namespace IM.GuestsPR.Forms
         LoadPersonnel();
       }
     }
+    #endregion
+
+    #region dtpEnterKey
     /// <summary>
     /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
     /// </summary>
@@ -171,7 +192,11 @@ namespace IM.GuestsPR.Forms
     }
     #endregion
 
+    #endregion
+
     #region Async Methods
+
+    #region DoGetPersonnel
     /// <summary>
     /// Obtiene la lista del personal
     /// </summary>
@@ -200,7 +225,9 @@ namespace IM.GuestsPR.Forms
         UIHelper.ShowMessage(ex);
       }
     }
+    #endregion
 
+    #region DoGetGuestsByPR
     /// <summary>
     /// Obtiene los Guests By PR
     /// </summary>
@@ -234,11 +261,14 @@ namespace IM.GuestsPR.Forms
       catch (Exception ex)
       {
         StaEnd();
+        imgButtonOk.IsEnabled = true;
         UIHelper.ShowMessage(ex);
       }
 
 
     }
+    #endregion
+
     #endregion
 
     #region StatusBar
@@ -340,6 +370,8 @@ namespace IM.GuestsPR.Forms
     #endregion
 
     #region Metodos
+
+    #region SetNewUserLogin
     /// <summary>
     /// Este metodo se encarga de validar y actualizar los permisos del usuario logeado sobre el sistema
     /// </summary>
@@ -377,6 +409,9 @@ namespace IM.GuestsPR.Forms
         }
       }
     }
+    #endregion
+
+    #region LoadPersonnel
     /// <summary>
     /// Carga personal en el combobox
     /// </summary>
@@ -388,7 +423,9 @@ namespace IM.GuestsPR.Forms
       StaStart("Loading personnel...");
       DoGetPersonnel(Context.User.LeadSource.lsID, "PR");
     }
+    #endregion
 
+    #region selectPersonnelInCombobox
     /// <summary>
     /// Busca en una lista y selecciona al personal
     /// </summary>
@@ -410,7 +447,7 @@ namespace IM.GuestsPR.Forms
       {
         //Limpiamos el DataGrid
         dtgr.DataContext = null;
-        
+
         //Si no tiene permisos especiales  deshabilitamos los controles
         if (!specialLevel)
         {
@@ -418,11 +455,13 @@ namespace IM.GuestsPR.Forms
           imgButtonPrint.IsEnabled = false;
         }
         cbxPersonnel.SelectedItem = null;
-       
+
         return false;
       }
     }
+    #endregion
 
+    #region GetGuestByPR
     /// <summary>
     /// Trae los Guest del PR seleccionado.
     /// </summary>
@@ -477,6 +516,8 @@ namespace IM.GuestsPR.Forms
         }
       }
     }
+    #endregion
+
     #endregion
   }
 }

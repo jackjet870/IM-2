@@ -1,9 +1,8 @@
-﻿using IM.Model.Classes;
-using IM.Model.Enums;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table;
+﻿using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
 using System.Collections.Generic;
+using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.ProcessorInhouse.Classes
 {
@@ -1255,7 +1254,7 @@ namespace IM.ProcessorInhouse.Classes
 
         new ExcelFormatTable {Title = "No. Ventas", Order =12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Volumen de ventas", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
-        new ExcelFormatTable { Title = "% Total", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, DataFieldShowDataAs=EnumDataFieldShowDataAs.PercentOfCol },
+        new ExcelFormatTable { Title = "% Total", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, DataFieldShowDataAs=EnumTableDynamicFunction.PercentOfCol },
 
         new ExcelFormatTable {Title = "% Contactación",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Llegadas =0,0,Contactos/Llegadas)" },
         new ExcelFormatTable {Title = "% Disponibles",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Contactos =0,0,Disponibles/Contactos)" },

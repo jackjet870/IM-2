@@ -51,10 +51,10 @@ namespace IM.Inhouse.Classes
       if (guInfo)
         return 1;
       //Disponible
-      return guAvail?  0 : 8;
-    }                   
+      return guAvail ? 0 : 8;
+    }
 
-    
+
 
     #endregion
 
@@ -108,6 +108,59 @@ namespace IM.Inhouse.Classes
           break;
       }
       return "#" + _color.R.ToString("X2") + _color.G.ToString("X2") + _color.B.ToString("X2");
+    }
+    #endregion
+
+    #region toolTip
+    /// <summary>
+    /// Retorna el tooltip segun el status 
+    /// </summary>
+    /// <param name="status">Numero en el que se encuentra el status</param>
+    /// <history>
+    /// [jorcanche]  created 22/09/2016
+    /// </history>
+    public static string toolTip(int status)
+    {
+      string tooltip = "";
+      switch (status)
+      {
+        case 0:
+          tooltip = "Available no info";
+          break;
+
+        case 1:
+          tooltip = "Info, no Invit";
+          break;
+
+        case 2:
+          tooltip = "Invit Stand-by";
+          break;
+
+        case 3:
+          tooltip = "Invit, Show";
+          break;
+
+        case 4:
+          tooltip = "Invit, No Show";
+          break;
+
+        case 5:
+          tooltip = "Invit canceled";
+          break;
+
+        case 6:
+          tooltip = "Unavailable";
+          break;
+
+        case 7:
+          tooltip = "Check-Out";
+          break;
+
+        case 8:
+          tooltip = "No Check-In";
+          break;
+      }
+      return tooltip;
     } 
     #endregion
   }

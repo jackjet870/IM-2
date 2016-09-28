@@ -52,14 +52,17 @@ namespace IM.Inhouse.Classes
     /// <param name="company">compania</param>
     /// <param name="clubAgency">agencia</param>
     /// <param name="clubGuest">club</param>
+    /// <param name="owner">Ventana padre</param>
     /// <history>
     /// [ecanul] 06/04/2016 Created
     /// [ecanul] 07/04/2016 Modificated Agregado Validaciones y "show" del reporte
     /// [ecanul] 20/04/2016 Modificated Metodo Movido de frmInhouse a EquityHelpers
     /// [ecanul] 06/07/2016 Modified. Agregue subreporte RptEquityMembershipsPrevious
     /// [ecanul] 08/09/2016 Modified. Agregado nombre del web service y Club en el titulo del mensaje que genero un error.
+    /// [wtorres] 06/09/2016 Modified. Agregue el parametro owner
     /// </history>
-    public static void EquityReport(string membershipNum, Decimal company, int? clubAgency, int? clubGuest)
+    public static void EquityReport(string membershipNum, Decimal company, int? clubAgency, int? clubGuest,
+      Window owner)
     {
       EnumClub club;
       // si tiene membrecia
@@ -233,8 +236,9 @@ namespace IM.Inhouse.Classes
               if (rptClubes.MemberExtension.WHOLESALER)
                 equity.ReportDefinition.Sections["Section2"].SectionFormat.EnableSuppress = false;
 
-          var _frmViewer = new frmViewer(equity);
-          _frmViewer.ShowDialog();
+          var frm = new frmViewer(equity);
+          frm.Owner = owner;
+          frm.ShowDialog();
         }
         else
           UIHelper.ShowMessage("Access denied");
