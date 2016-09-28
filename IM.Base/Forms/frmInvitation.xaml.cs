@@ -123,8 +123,10 @@ namespace IM.Base.Forms
     {
       try
       {
+
         //Ponemos el cursor en modo espera
         Mouse.OverrideCursor = Cursors.Wait;
+        imgButtonSave.IsEnabled = false;
         bool isValid = true;
 
         //Asignamos el focus al boton
@@ -150,8 +152,8 @@ namespace IM.Base.Forms
         //Guardamos la informacion
         if (isValid)
         {
-          _busyIndicator.IsBusy = true;
-          _busyIndicator.BusyContent = "Saving invitation...";
+          //_busyIndicator.IsBusy = true;
+          //_busyIndicator.BusyContent = "Saving invitation...";
 
           var guestInvitation = CatObj as GuestInvitation;
 
@@ -160,7 +162,7 @@ namespace IM.Base.Forms
           await BRGuests.SaveGuestInvitation(guestInvitation, CatObj.Program, _module, _user, CatObj.InvitationMode,
            ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
 
-          _busyIndicator.IsBusy = false;
+          //_busyIndicator.IsBusy = false;
 
           UIHelper.ShowMessage("The data was saved successfully");
 
@@ -168,14 +170,14 @@ namespace IM.Base.Forms
           if (_module == EnumModule.OutHouse && _invitationType == EnumInvitationType.newOutHouse)
           {
             //Volvemos a cargar la invitacion
-            _busyIndicator.IsBusy = true;
-            _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
+            //_busyIndicator.IsBusy = true;
+            //_busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
             DataContext = null;
             UpdateLayout();
             CatObj = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
             DataContext = CatObj;
             await CatObj.LoadAll();
-            _busyIndicator.IsBusy = false;
+            //_busyIndicator.IsBusy = false;
           }
           else
           {
@@ -190,8 +192,9 @@ namespace IM.Base.Forms
       }
       finally
       {
-        _busyIndicator.IsBusy = false;
+        //_busyIndicator.IsBusy = false;
         Mouse.OverrideCursor = null;
+        imgButtonSave.IsEnabled = true;
       }
     }
 

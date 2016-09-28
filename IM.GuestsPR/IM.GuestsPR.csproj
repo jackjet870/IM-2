@@ -161,6 +161,9 @@
       <Name>IM.Styles</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)App.$(ConfigurationName).config" "$(TargetDir)$(TargetFileName).config" /y</PostBuildEvent>
