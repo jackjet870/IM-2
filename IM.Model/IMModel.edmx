@@ -6788,6 +6788,7 @@
           <Parameter Name="FolioALL" Type="int" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar(max)" Mode="In" />
           <Parameter Name="PRs" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptFoliosCxCByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -17533,6 +17534,7 @@
             <Parameter Name="FolioALL" Mode="In" Type="Int32" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptFoliosCxCByPR" ReturnType="Collection(IMModel.RptFoliosCxCByPR)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -21438,6 +21440,12 @@
           <Property Type="Decimal" Name="GrossShows" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
           <Property Type="String" Name="Tipo" Nullable="false" MaxLength="9" />
+          <Property Type="Decimal" Name="Books" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="InOuts" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Shows" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CxC" Nullable="true" Precision="19" />
+          <Property Type="String" Name="PaymentSchema" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="PaymentSchemaFactor" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptFoliosCxCByPR">
           <Property Type="String" Name="lsID" Nullable="true" MaxLength="10" />
@@ -29462,6 +29470,12 @@
                 <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
                 <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="CxC" ColumnName="CxC" />
+                <ScalarProperty Name="PaymentSchema" ColumnName="PaymentSchema" />
+                <ScalarProperty Name="PaymentSchemaFactor" ColumnName="PaymentSchemaFactor" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

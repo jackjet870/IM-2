@@ -31,5 +31,11 @@ namespace IM.Model
         public Nullable<decimal> GrossShows { get; set; }
         public Nullable<decimal> ShowsFactor { get; set; }
         public string Tipo { get; set; }
+        public Nullable<decimal> Books { get; set; }
+        public Nullable<decimal> InOuts { get; set; }
+        public Nullable<decimal> Shows { get; set; }
+        public Nullable<decimal> CxC { get; set; }
+        public string PaymentSchema { get; set; }
+        public Nullable<decimal> PaymentSchemaFactor { get; set; }
     }
 }

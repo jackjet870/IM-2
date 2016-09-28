@@ -55,8 +55,6 @@ namespace IM.GuestsPR.Forms
       dtpkTo.Value = DateTime.Now;
       //Agregamos login del usuario en la interfaz
       SetNewUserLogin();
-      chbxProgram.IsChecked = true;
-
     }
     #endregion
 
@@ -184,20 +182,7 @@ namespace IM.GuestsPR.Forms
       }
     }
     #endregion
-
-    #region lsbxLeadSource_SelectionChanged
-    /// <summary>
-    /// Muestra en un Textblock cuantos elementos de la lista LeadSource estan seleccionados 
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 29/09/2016 Created
-    /// </history>
-    private void lsbxLeadSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      txtbLSSelected.Text = $"{lsbxLeadSources.SelectedItems.Count.ToString()}/{lsbxLeadSources.Items.Count.ToString()}";
-    }
-    #endregion
-
+       
     #region lsbxPrograms_SelectionChanged
     /// <summary>
     /// Muestra en un Textblock cuantos elementos de la lista Programs estan seleccionados 
@@ -207,7 +192,6 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void lsbxPrograms_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbProgramSelected.Text = $"{lsbxPrograms.SelectedItems.Count.ToString()}/{lsbxPrograms.Items.Count.ToString()}";
       var idProgram = lsbxPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID).ToList();
       if (idProgram.Any())
       {
@@ -370,8 +354,6 @@ namespace IM.GuestsPR.Forms
         imgButtonOk.IsEnabled = true;
         UIHelper.ShowMessage(ex);
       }
-
-
     }
     #endregion
 
@@ -379,6 +361,9 @@ namespace IM.GuestsPR.Forms
     /// <summary>
     /// Obtiene los programs.
     /// </summary>
+    /// <history>
+    /// [edgrodriguez] 26/09/2016  Created
+    /// </history>
     public async void DoGetProgram()
     {
       try
@@ -402,6 +387,9 @@ namespace IM.GuestsPR.Forms
     /// <summary>
     /// Obtiene los leadsource del usuario autentificado.
     /// </summary>
+    /// <history>
+    /// [edgrodriguez] 26/09/2016  Created
+    /// </history>
     public async void DoGetLeadSource()
     {
       try
@@ -635,8 +623,8 @@ namespace IM.GuestsPR.Forms
       {
         imgButtonOk.IsEnabled = false;
         filtersBool = new List<bool>();
-        var program = (chbxLeadSources.IsChecked == true ? "ALL" : string.Join(",", lsbxPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID)));
-        var leadSource = (chbxLeadSources.IsChecked == true ? "ALL" : string.Join(",", lsbxLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID)));
+        var program = (chbxProgram.IsChecked == true ? "ALL" : string.Join(",", lsbxPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID)));
+        var leadSource = (chbxLeadSources.IsChecked == true && chbxProgram.IsChecked ==true ? "ALL" : string.Join(",", lsbxLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID)));
         var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
         #region Check Filter for Report
         filtersReport = new List<Tuple<string, string>>();

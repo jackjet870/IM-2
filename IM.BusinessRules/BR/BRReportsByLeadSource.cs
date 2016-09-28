@@ -2164,7 +2164,7 @@ namespace IM.BusinessRules.BR
     ///   [vku] 07/May/2016 Created
     ///   [vku] 30/May/2016 Modified. Se agregó asincronía
     /// </history>
-    public async static Task<List<RptFoliosCXC>> GetRptFoliosCXC(DateTime? dtmStart, DateTime? dtmEnd, bool allFolios, string folioFrom, string folioTo, string leadSources, string PRs)
+    public async static Task<List<RptFoliosCXC>> GetRptFoliosCXC(DateTime? dtmStart, DateTime? dtmEnd, bool allFolios, string folioFrom, string folioTo, string leadSources, string PRs, string program)
     {
       List<RptFoliosCXC> result = null;
       await Task.Run(() =>
@@ -2172,7 +2172,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_ReportsProcessorOuthouse_TimeOut;
-          result = dbContext.USP_OR_RptFoliosCXC(dtmStart, dtmEnd, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), Convert.ToInt32(allFolios), leadSources, PRs).ToList();
+          result = dbContext.USP_OR_RptFoliosCXC(dtmStart, dtmEnd, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), Convert.ToInt32(allFolios), leadSources, PRs, program).ToList();
         }
       });
       return result;

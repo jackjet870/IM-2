@@ -1154,6 +1154,7 @@ namespace IM.ProcessorOuthouse.Classes
       ExcelFormatItemsList lst = new ExcelFormatItemsList();
       lst.Add("Es Show", "EsShow", isGroup: true, isVisible: false);
       lst.Add("Tipo", "Tipo", isGroup: true, isVisible: false);
+      lst.Add("PaymentSchema", "PaymentSchema", isGroup: true, isVisible: false);
       lst.Add("Folio CXC", "bdFolioCXC");
       lst.Add("PR ID", "PR");
       lst.Add("PR Name", "PRN");
@@ -1162,9 +1163,17 @@ namespace IM.ProcessorOuthouse.Classes
       lst.Add("Last Name", "guLastName1");
       lst.Add("First Name", "guFirstName1");
       lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date);
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("IO", "InOuts", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.DecimalNumber);
+      lst.Add("Sh %", "ShowsFactor", format: EnumFormatTypeExcel.Percent);
+      lst.Add("P. sch. %", "PaymentSchemaFactor", format: EnumFormatTypeExcel.Percent);
       lst.Add("CXC User", "bdUserCXC");
       lst.Add("CXC User Name", "peN");
-      lst.Add("Date CXC", "bdEntryDCXC", format: EnumFormatTypeExcel.Date);
+      lst.Add("Date CXC", "bdEntryDCXC", format: EnumFormatTypeExcel.DateTime);
+
       return lst;
     }
     #endregion

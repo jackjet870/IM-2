@@ -117,7 +117,14 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="chbxProgram" Content="All Programs" 
 						Margin="0,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                                    <TextBlock Name="txtbProgramSelected" Margin="2,5,0,0" />
+                                    <TextBlock Name="txtbProgramSelected" Margin="2,5,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} / {1}">
+                                                <Binding ElementName="lsbxPrograms"  Path="SelectedItems.Count"/>
+                                                <Binding ElementName="lsbxPrograms" Path="Items.Count"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -126,7 +133,7 @@
                                 <TextBlock Text="Lead Sources" Style="{StaticResource txtb-HeaderCatalogs}"/>
                                 <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="lsN" SelectedValuePath="lsID"
-                             TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
+                             TextSearch.TextPath="lsN" >
                                     <ListBox.Resources>
                                         <!--Fondo para Item Seleccionado-->
                                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
@@ -138,12 +145,17 @@
                                     <CheckBox x:Name="chbxLeadSources" Content="All Lead Sources" 
 						Margin="0,5,0,5"
 						TextSearch.Text="lsN" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                                    <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" />
+                                    <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" >
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} / {1}">
+                                                <Binding ElementName="lsbxLeadSources"  Path="SelectedItems.Count"/>
+                                                <Binding ElementName="lsbxLeadSources" Path="Items.Count"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </StackPanel>
-
                             </StackPanel>
                         </Border>
-
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                         <CheckBox x:Name="chkAssign"  Content="Assign" Margin="0,5,5,5" IsChecked="True" VerticalAlignment="Top"/>

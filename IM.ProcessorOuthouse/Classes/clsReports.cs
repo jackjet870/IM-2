@@ -1312,7 +1312,8 @@ namespace IM.ProcessorOuthouse.Classes
     /// <param name="filters">Filtros</param>
     /// <param name="lstRptFoliosCxC">Lista de folios CXC</param>
     /// <history>
-    ///   [vku] 07/May/2016 Created
+    ///   [vku]           07/May/2016 Created
+    ///   [edgrodriguez]  28/Sep/2016 Modified. Se agregaron las columnas Books,GrossBooks,InOuts,Shows,GrossShows,PaymentSchema,PaymentSchemaFactor 
     /// </history>
     public static async System.Threading.Tasks.Task<FileInfo> ExportRptFoliosCXC(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosCXC> lstRptFoliosCXC)
     {
@@ -1330,7 +1331,15 @@ namespace IM.ProcessorOuthouse.Classes
         c.guBookD,
         c.bdUserCXC,
         c.peN,
-        c.bdEntryDCXC
+        c.bdEntryDCXC,
+        c.Books,
+        c.GrossBooks,
+        c.InOuts,
+        c.Shows,
+        c.GrossShows,
+        c.ShowsFactor,
+        c.PaymentSchema,
+        c.PaymentSchemaFactor
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCXCAux);

@@ -4283,7 +4283,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_AddAccessAdministrator", placeTypeParameter);
         }
     
-        public virtual ObjectResult<RptFoliosCXC> USP_OR_RptFoliosCXC(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> folioFrom, Nullable<int> folioTo, Nullable<int> folioALL, string leadSources, string pRs)
+        public virtual ObjectResult<RptFoliosCXC> USP_OR_RptFoliosCXC(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> folioFrom, Nullable<int> folioTo, Nullable<int> folioALL, string leadSources, string pRs, string program)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -4313,7 +4313,11 @@ namespace IM.Model
                 new ObjectParameter("PRs", pRs) :
                 new ObjectParameter("PRs", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosCXC>("USP_OR_RptFoliosCXC", dateFromParameter, dateToParameter, folioFromParameter, folioToParameter, folioALLParameter, leadSourcesParameter, pRsParameter);
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFoliosCXC>("USP_OR_RptFoliosCXC", dateFromParameter, dateToParameter, folioFromParameter, folioToParameter, folioALLParameter, leadSourcesParameter, pRsParameter, programParameter);
         }
     
         public virtual ObjectResult<RptFoliosCxCByPR> USP_OR_RptFoliosCxCByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<bool> allFolios, Nullable<int> folioFrom, Nullable<int> folioTo, string leadSource, string promotors)
