@@ -98,57 +98,61 @@
                     </Border>
                 </StackPanel>
                 <TextBlock Text="Filters" Margin="10,0,0,0"/>
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
-                        <StackPanel>
-                            <TextBlock Text="Program" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                            <ListBox x:Name="lsbxPrograms" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
+                <StackPanel Orientation="Vertical" Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Program" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                                <ListBox x:Name="lsbxPrograms" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="pgN" SelectedValuePath="pgID"
                              TextSearch.TextPath="pgN" SelectionChanged="lsbxPrograms_SelectionChanged">
-                                <ListBox.Resources>
-                                    <!--Fondo para Item Seleccionado-->
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                                    <!--Fondo para Item No seleccionado-->
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                                </ListBox.Resources>
-                            </ListBox>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="chbxProgram" Content="All Programs" 
+                                    <ListBox.Resources>
+                                        <!--Fondo para Item Seleccionado-->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
+                                        <!--Fondo para Item No seleccionado-->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
+                                    </ListBox.Resources>
+                                </ListBox>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="chbxProgram" Content="All Programs" 
 						Margin="0,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                                <TextBlock Name="txtbProgramSelected" Margin="2,5,0,0" />
+                                    <TextBlock Name="txtbProgramSelected" Margin="2,5,0,0" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
-                    <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
-                        <StackPanel>
-                            <TextBlock Text="Lead Sources" Style="{StaticResource txtb-HeaderCatalogs}"/>
-                            <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
+                        </Border>
+                        <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Lead Sources" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                                <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Extended" Height="100"
                              DisplayMemberPath="lsN" SelectedValuePath="lsID"
                              TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
-                                <ListBox.Resources>
-                                    <!--Fondo para Item Seleccionado-->
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                                    <!--Fondo para Item No seleccionado-->
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                                </ListBox.Resources>
-                            </ListBox>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="chbxLeadSources" Content="All Lead Sources" 
+                                    <ListBox.Resources>
+                                        <!--Fondo para Item Seleccionado-->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
+                                        <!--Fondo para Item No seleccionado-->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
+                                    </ListBox.Resources>
+                                </ListBox>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="chbxLeadSources" Content="All Lead Sources" 
 						Margin="0,5,0,5"
 						TextSearch.Text="lsN" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                                <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" />
-                            </StackPanel>
+                                    <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" />
+                                </StackPanel>
 
-                        </StackPanel>
-                    </Border>
-                    <!--<CheckBox x:Name="chkLeadSource"  Content="All Lead Sources" Margin="5"/>-->
-                    <CheckBox x:Name="chkAssign"  Content="Assign" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkContact"  Content="Contact" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkFollowUp"  Content="Follow Up" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkInvitation"  Content="Invitation" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkShows"  Content="Shows" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkWithSale"  Content="With Sale" Margin="5" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkBasedOnArrival" Content="Based On Arrival Date" Margin="5" VerticalAlignment="Top"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                        <CheckBox x:Name="chkAssign"  Content="Assign" Margin="0,5,5,5" IsChecked="True" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkContact"  Content="Contact" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkFollowUp"  Content="Follow Up" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkInvitation"  Content="Invitation" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkShows"  Content="Shows" Margin="5" IsChecked="True" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkWithSale"  Content="With Sale" Margin="5" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="chkBasedOnArrival" Content="Based On Arrival Date" Margin="5" VerticalAlignment="Top"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Border>
