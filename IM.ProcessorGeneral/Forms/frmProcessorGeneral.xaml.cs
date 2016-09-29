@@ -855,7 +855,7 @@ namespace IM.ProcessorGeneral.Forms
             {
               filters.Add(Tuple.Create("Rate Type", (filter.AllRateTypes ? "ALL" : string.Join(",", filter.LstRateTypes))));
 
-              finfo = clsReports.ExportRptMealTickets(strReportName, fileFullPath, filters, lstMealTickets,
+              finfo = await clsReports.ExportRptMealTickets(strReportName, fileFullPath, filters, lstMealTickets,
                 (strReportName == "Meal Tickets by Host"));
             }
             break;
@@ -873,7 +873,7 @@ namespace IM.ProcessorGeneral.Forms
             {
               filters.Add(Tuple.Create("Rate Type", (filter.AllRateTypes ? "ALL" : string.Join(",", filter.LstRateTypes))));
 
-              finfo = clsReports.ExportRptMealTicketsCost(strReportName, fileFullPath, filters, lstMealTicketsCost);
+              finfo = await clsReports.ExportRptMealTicketsCost(strReportName, fileFullPath, filters, lstMealTicketsCost);
             }
             break;
 

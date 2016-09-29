@@ -1433,9 +1433,9 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptMealTickets(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMealTickets> lstRptMealTickets, bool groupByHost = false)
+    public static async Task<FileInfo> ExportRptMealTickets(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMealTickets> lstRptMealTickets, bool groupByHost = false)
     {
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptMealTickets, true, true,true),strReport, string.Empty, groupByHost ? clsFormatReport.RptMealTicketsByHost() : clsFormatReport.RptMealTickets(), true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptMealTickets, true, true, true), filters, strReport, string.Empty, groupByHost ? clsFormatReport.RptMealTicketsByHost() : clsFormatReport.RptMealTickets(), true, isRptQueue: true, blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion
@@ -1453,9 +1453,24 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptMealTicketsCost(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMealTicketsCost> lstRptMealTicketsCost)
+    public static async Task<FileInfo> ExportRptMealTicketsCost(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMealTicketsCost> lstRptMealTicketsCost)
     {
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptMealTicketsCost, true, false,true),strReport, string.Empty, clsFormatReport.RptMealTicketsCost(), true, true, isRptQueue:true ,filePath:fileFullPath);
+      var lstMealTicketCost = new List<RptMealTicketsCost>();
+      lstMealTicketCost.AddRange(lstRptMealTicketsCost);
+      lstRptMealTicketsCost.Select(c => new { c.Date }).Distinct().ToList().ForEach(c =>
+         {
+           lstMealTicketCost.Add(new RptMealTicketsCost
+           {
+             Date = c.Date,
+             Type = "TOTAL",
+             Adults = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.Adults),
+             Minors = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.Minors),
+             AdultsAmount = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.AdultsAmount),
+             MinorsAmount = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.MinorsAmount),
+             TotalAmount = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.TotalAmount)
+           });
+         });
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstMealTicketCost, true, false, true), filters, strReport, string.Empty, clsFormatReport.RptMealTicketsCost(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 

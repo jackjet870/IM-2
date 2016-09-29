@@ -957,7 +957,7 @@ namespace IM.Base.Forms
         {
           dtgGuestAdditional.IsReadOnly = true;
           guestFormMode = EnumMode.ReadOnly;
-          btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
+          btnAddGuestAdditional.IsEnabled = false;//CatObj.InvitationMode != EnumMode.ReadOnly;
           btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
         }
       }
@@ -1882,7 +1882,7 @@ namespace IM.Base.Forms
       if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription((_module == EnumModule.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations)) && c.pppl <= 0))
         guestFormMode = EnumMode.ReadOnly;
 
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, guestFormMode, true) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, _module, CatObj.Program, guestFormMode, true) { GuestParent = CatObj?.Guest, Owner = this };
       frmGuest.ShowDialog();
     }
 

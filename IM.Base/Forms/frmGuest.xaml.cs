@@ -374,15 +374,15 @@ namespace IM.Base.Forms
 
       txtUser.Text = _user.User.peID;
       txtPassword.Password = _user.User.pePwd;
-      if (_mode == EnumMode.ReadOnly  || _mode==EnumMode.Edit) return;
-      cmbOtherInfoAgency.SelectedValue = GuestParent.guag;
-      dtpArrival.Value = _catObj.Guest.guCheckInD;
-      dtpDeparture.Value = _catObj.Guest.guCheckOutD;
-      _catObj.Guest.gulsOriginal = GuestParent.guls;
-      _catObj.Guest.guls = GuestParent.guls;
-      _catObj.Guest.gusr = GuestParent.gusr;
-     _catObj.Guest.guCheckOutHotelD = GuestParent.guCheckOutD;
-      
+      if (_mode == EnumMode.ReadOnly) return;
+      cmbOtherInfoAgency.SelectedValue = cmbOtherInfoAgency.SelectedValue == null ? GuestParent.guag : cmbOtherInfoAgency.SelectedValue;
+      dtpArrival.Value = dtpArrival.Value == null ? _catObj.Guest.guCheckInD : dtpArrival.Value;
+      dtpDeparture.Value = dtpArrival.Value == null ? _catObj.Guest.guCheckOutD : dtpDeparture.Value;
+      _catObj.Guest.gulsOriginal = _catObj.Guest.gulsOriginal == null ? GuestParent.guls : _catObj.Guest.gulsOriginal;
+      _catObj.Guest.guls = _catObj.Guest.guls == null ? GuestParent.guls : _catObj.Guest.guls;
+      _catObj.Guest.gusr = _catObj.Guest.gusr == null ? GuestParent.gusr : _catObj.Guest.gusr;
+      _catObj.Guest.guCheckOutHotelD = _catObj.Guest.guCheckOutHotelD == null ? GuestParent.guCheckOutD : _catObj.Guest.guCheckOutHotelD;
+
       #endregion User
     }
 
