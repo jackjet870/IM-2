@@ -259,8 +259,9 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Border BorderThickness="1" BorderBrush="Gray" Grid.ColumnSpan="2" Grid.RowSpan="3" />
+                <Border BorderThickness="1" BorderBrush="Gray" Grid.ColumnSpan="2" Grid.RowSpan="4" />                
                 <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
@@ -270,6 +271,10 @@
                 <Grid Name="pnlDtmEnd"  Grid.Row="2" Grid.Column="1">
                     <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" DefaultValue="{x:Static sys:DateTime.Today}" LostFocus="date_LostFocus" Width="170"  Style="{StaticResource dtp-DateRange-TK}" DisplayDefaultValueOnEmptyText="True" />
                 </Grid>
+                <!--#region Filtro para GiftUsed By Sistur-->
+                <TextBlock Name="txbDateBO" Text="Date based on" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Visibility="Collapsed"/>
+                <ComboBox Name="cmbDateBO" SelectedIndex="0" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedValuePath="Id" DisplayMemberPath="Name" Height="21" Margin="10 5 10 5" Visibility="Collapsed"/>
+                <!--#endregion-->
             </Grid>
             <!--#endregion-->
             <!--#region Checkboxs -->

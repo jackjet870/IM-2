@@ -716,18 +716,23 @@ namespace IM.BusinessRules.BR
     /// <param name="salesRooms"></param>
     /// <param name="programs"></param>
     /// <param name="leadsources"></param>
+    /// <param name="dateBasedOn">
+    /// 0.- Filtra por la fecha del recibo de regalos de Origos
+    /// 1.- Filtra por la fecha del cupón de Sistur
+    /// </param>
     /// <returns> List of RptGiftsUsedBySistur </returns>
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
+    /// [emoguel] 29/09/2016 Se agrego el parametro dateBasedOn
     /// </history>
-    public static async Task<List<RptGiftsUsedBySistur>> GetRptGiftsUsedBySistur(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string programs = "ALL", string leadsources = "ALL")
+    public static async Task<List<RptGiftsUsedBySistur>> GetRptGiftsUsedBySistur(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string programs = "ALL", string leadsources = "ALL",int dateBasedOn=0)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
-          var lstGiftSist = dbContext.USP_OR_RptGiftsUsedBySistur(dtmStart, dtmEnd, salesRooms, programs, leadsources).ToList();
+          var lstGiftSist = dbContext.USP_OR_RptGiftsUsedBySistur(dtmStart, dtmEnd, salesRooms, programs, leadsources,dateBasedOn).ToList();          
 
           return lstGiftSist;
         }

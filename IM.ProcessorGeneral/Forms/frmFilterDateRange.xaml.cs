@@ -2,6 +2,7 @@
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
@@ -418,6 +419,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 03/Mar/2016 Created
+    /// [emoguel] 29/09/2016 Modified--->Se agregó un parametro para saber si mostrará el combo de "DateBasedOn" y el nombre del reporte
     /// </history>
     public void ConfigurarFomulario(bool blnSalesRoom = false, bool blnAllSalesRoom = false, bool blnGifts = false, bool blnAllGifts = false,
       bool blnCategories = false, bool blnAllCategories = false, bool blnPrograms = false, bool blnAllPrograms = false,
@@ -426,15 +428,15 @@ namespace IM.ProcessorGeneral.Forms
       EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival,
       EnumQuinellas enumQuinellas = EnumQuinellas.NoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.NoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking,
-      EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestId = false, bool blnGiftSale = false,bool blnDateRange=true)
+      EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestId = false, bool blnGiftSale = false,bool blnDateRange=true,bool blnDateBaseOn=false,string strReportName="")
     {
       ConfigureDates(blnOneDate, enumPeriod, blnDateRange);
       ConfigureFilters(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blncbStatus, blnGiftReceiptType,
-        blnGuestId, blnGiftSale);
+        blnGuestId, blnGiftSale,blnDateBaseOn);
 
       LoadCombos();
-
+      
       #region Configuracion de Grids.
       LoadSalesRooms(blnOnlyOneRegister, blnSalesRoom, blnAllSalesRoom);
       LoadCategories(blnOnlyOneRegister, blnCategories, blnAllCategories);
@@ -444,11 +446,11 @@ namespace IM.ProcessorGeneral.Forms
       LoadRateTypes(blnOnlyOneRegister, blnRatetypes, blnAllRatetypes);
       LoadWarehouses(blnOnlyOneRegister, blnWarehouse, blnAllWarehouse);
       #endregion Configuracion de Grids.
-
+      LoadDateBasedOn(strReportName);
       LoadUserFilters(blnOneDate);
-    } 
+    }
     #endregion
-
+    
     #endregion Métodos Publicos
 
     #region Métodos Privados
@@ -460,10 +462,11 @@ namespace IM.ProcessorGeneral.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
+    /// [emoguel] 29/09/2016 Modified--->Ahora se muestra u oculta el combobox de DateBasedOn
     /// </history>
     private void ConfigureFilters(EnumBasedOnArrival enumBasedOnArrival, EnumQuinellas enumQuinellas, EnumDetailGifts enumDetailGifts,
       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumSalesByMemberShipType? enumSalesMemberShipType, EnumBasedOnBooking enumBasedOnBooking,
-      EnumExternalInvitation? enumExternalInvitation, bool blncbStatus, bool blnGiftReceiptType, bool blnGuestId, bool blnGiftSale)
+      EnumExternalInvitation? enumExternalInvitation, bool blncbStatus, bool blnGiftReceiptType, bool blnGuestId, bool blnGiftSale,bool blnDateBasedOn)
     {
       chkDetailGifts.Visibility = (enumDetailGifts == EnumDetailGifts.DetailGifts) ? Visibility.Visible : Visibility.Collapsed;
       chkBasedOnArrival.Visibility = (enumBasedOnArrival == EnumBasedOnArrival.BasedOnArrival) ? Visibility.Visible : Visibility.Collapsed;
@@ -479,6 +482,9 @@ namespace IM.ProcessorGeneral.Forms
       cboGiftSale.Visibility = lblGiftSale.Visibility = (blnGiftSale) ? Visibility.Visible : Visibility.Collapsed;
       cboSaveCourtesyTours.Visibility = (enumSaveCourtesyTours != null) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
+
+      txbDateBO.Visibility = (blnDateBasedOn) ? Visibility.Visible : Visibility.Collapsed;
+      cmbDateBO.Visibility = (blnDateBasedOn) ? Visibility.Visible : Visibility.Collapsed;
     }
 
     #endregion ConfigureFilters
@@ -588,6 +594,8 @@ namespace IM.ProcessorGeneral.Forms
       FrmProcGen._clsFilter.AllSalesRooms = chkAllSalesRoom.IsChecked.Value;
       FrmProcGen._clsFilter.AllWarehouses = chkAllWarehouse.IsChecked.Value;
 
+      FrmProcGen._clsFilter.DateBasedOn = (cmbDateBO.Visibility==Visibility.Visible)?cmbDateBO.SelectedValue.ToString():"";
+      
     }
 
     #endregion SaveFrmFilterValues
@@ -663,6 +671,8 @@ namespace IM.ProcessorGeneral.Forms
         return "No warehouse is selected.";
       if (pnlDtmEnd.IsEnabled && dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
+      if (cmbDateBO.Visibility == Visibility.Visible && cmbDateBO.SelectedIndex == -1)
+        return "No Date Based On is selected.";
       else
         return "";
     }
@@ -950,7 +960,31 @@ namespace IM.ProcessorGeneral.Forms
       }
       else
         grdWarehouse.SelectedItem = _lstWarehouseByUsers.FirstOrDefault(c=>c.whID == FrmProcGen._clsFilter.LstWarehouses[0]);
-    } 
+    }
+    #endregion
+
+    #region LoadDateBasedOn
+    /// <summary>
+    /// Carga el combobox de DateBasedOn
+    /// </summary>
+    /// <param name="strReportName">Nombre del reporte</param>
+    /// <history>
+    /// [emoguel] 29/09/2016 created
+    /// </history>
+    public void LoadDateBasedOn(string strReportName)
+    {
+      List<Item> lstItems = new List<Item>();
+      switch (strReportName)
+      {
+        case "Gifts Used by Sistur":
+          {
+            lstItems.Add(new Item { Id = "0", Name = "Gifts Receipt Date" });
+            lstItems.Add(new Item { Id = "1", Name = "Sistur Coupon Date" });
+            break;
+          }
+      }
+      cmbDateBO.ItemsSource = lstItems;
+    }
     #endregion
 
     #endregion Métodos Privados

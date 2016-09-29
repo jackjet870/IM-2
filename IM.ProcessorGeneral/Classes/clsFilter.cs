@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IM.Model;
 using IM.Model.Enums;
 
 namespace IM.ProcessorGeneral.Classes
@@ -12,6 +8,7 @@ namespace IM.ProcessorGeneral.Classes
   {
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    public string DateBasedOn { get; set; }
 
     public List<string> LstGifts { get; set; } = new List<string>();
     public List<string> LstGiftsCate { get; set; } = new List<string>();
@@ -42,5 +39,6 @@ namespace IM.ProcessorGeneral.Classes
     public bool AllRateTypes { get; set; }
     public bool AllSalesRooms { get; set; }
     public bool AllWarehouses { get; set; }
+    
   }
 }

@@ -39,7 +39,8 @@ namespace IM.Model
         public Nullable<decimal> gspPax { get; set; }
         public Nullable<decimal> gspAmount { get; set; }
         public Nullable<decimal> Cost { get; set; }
-        public Nullable<decimal> Difference { get; set; }
+        public int Difference { get; set; }
         public string Cecos { get; set; }
+        public Nullable<decimal> sisturCost { get; set; }
     }
 }

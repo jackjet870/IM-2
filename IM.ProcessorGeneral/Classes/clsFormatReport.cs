@@ -777,6 +777,7 @@ namespace IM.ProcessorGeneral.Classes
       lst.Add("Pax", "gspPax", format: EnumFormatTypeExcel.Number);
       lst.Add("Sistur Price", "gspAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Cost", "Cost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
+      lst.Add("Sistur Cost", "sisturCost", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Difference", "Difference", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("CeCos", "Cecos");
       return lst;

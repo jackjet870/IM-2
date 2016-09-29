@@ -3813,7 +3813,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsSale>("USP_OR_RptGiftsSale", dateFromParameter, dateToParameter, salesRoomsParameter, categoriesParameter, giftsParameter, saleParameter);
         }
     
-        public virtual ObjectResult<RptGiftsUsedBySistur> USP_OR_RptGiftsUsedBySistur(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string programs, string leadSources)
+        public virtual ObjectResult<RptGiftsUsedBySistur> USP_OR_RptGiftsUsedBySistur(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string programs, string leadSources, Nullable<int> dateBasedOn)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -3835,7 +3835,11 @@ namespace IM.Model
                 new ObjectParameter("LeadSources", leadSources) :
                 new ObjectParameter("LeadSources", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsUsedBySistur>("USP_OR_RptGiftsUsedBySistur", dateFromParameter, dateToParameter, salesRoomsParameter, programsParameter, leadSourcesParameter);
+            var dateBasedOnParameter = dateBasedOn.HasValue ?
+                new ObjectParameter("DateBasedOn", dateBasedOn) :
+                new ObjectParameter("DateBasedOn", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsUsedBySistur>("USP_OR_RptGiftsUsedBySistur", dateFromParameter, dateToParameter, salesRoomsParameter, programsParameter, leadSourcesParameter, dateBasedOnParameter);
         }
     
         public virtual ObjectResult<RptInOutByPR> USP_OR_RptInOutByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)

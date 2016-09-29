@@ -426,7 +426,7 @@ namespace IM.ProcessorGeneral.Forms
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnPrograms: true, blnAllPrograms: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
           break;
         case "Gifts Used by Sistur":
-          _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnPrograms: true, blnAllPrograms: true, blnLeadSources: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
+          _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnPrograms: true, blnAllPrograms: true, blnLeadSources: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnDateBaseOn: true,strReportName: "Gifts Used by Sistur");
           break;
         case "Production by Sales Room":
         case "Production by Sales Room & Market":
@@ -440,6 +440,7 @@ namespace IM.ProcessorGeneral.Forms
         case "Meal Tickets Cancelled":
         case "Meal Tickets with Cost":
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnRatetypes: true, blnAllRatetypes: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
+
           break;
         default:
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
@@ -734,7 +735,7 @@ namespace IM.ProcessorGeneral.Forms
                 (filter.AllLeadSources)
                   ? "ALL"
                   : string.Join(",",
-                    filter.LstLeadSources));
+                    filter.LstLeadSources),Convert.ToInt32(_clsFilter.DateBasedOn));
             if (lstRptGiftsSistur.Any())
             {
               filters.Add(Tuple.Create("Program", (filter.AllPrograms ? "ALL" : string.Join(",", filter.LstPrograms))));
