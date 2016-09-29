@@ -1865,6 +1865,11 @@ namespace IM.Host.Forms
         UIHelper.ShowMessage("First select a Sales Room ", MessageBoxImage.Warning, "Intelligence Marketing");
         e.Cancel = true;
       }
+      else if (GuestShow != null && !GuestShow.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Shows that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        e.Cancel = true;
+      }
       else if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
       {
         _IGCurrentCell = dtgGuestAdditional.CurrentCell;
@@ -1887,12 +1892,16 @@ namespace IM.Host.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
-        Guest guestAdditionalRow = e.Row.Item as Guest;
+        Guest guestAdditionalRow = GuestShow.AdditionalGuestList[e.Row.GetIndex()];
         Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));//await BRGuests.GetGuest(guestAdditionalRow.guID);
         var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(GuestShow.Guest, guestAdditional, _IGCurrentCell, _enumProgram));
         if (!notValid)
         {
-          e.Row.Item = guestAdditional;
+          guestAdditionalRow.guFirstName1 = guestAdditional.guFirstName1;
+          guestAdditionalRow.guLastName1 = guestAdditional.guLastName1;
+          guestAdditionalRow.guCheckIn = guestAdditional.guCheckIn;
+          guestAdditionalRow.guRef = guestAdditional.guRef;
+          GridHelper.UpdateCellsFromARow(dtgGuestAdditional);
         }
         else
         {
@@ -1954,7 +1963,7 @@ namespace IM.Host.Forms
     {
       if (GuestShow != null && !GuestShow.Guest.guQuinella)
       {
-        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        UIHelper.ShowMessage("Shows that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
         return;
       }
       frmSearchGuest frmSrchGu = new frmSearchGuest(_user, EnumProgram.Outhouse)
@@ -2012,14 +2021,14 @@ namespace IM.Host.Forms
       }
       if (GuestShow != null && !GuestShow.Guest.guQuinella)
       {
-        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        UIHelper.ShowMessage("Shows that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
         return;
       }
 
       if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
         guestFormMode = EnumMode.ReadOnly;
 
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, guestFormMode,false) { Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, guestFormMode,false) { GuestParent = GuestShow?.Guest,Owner = this };
       frmGuest.ShowDialog();
     }
 
@@ -2047,7 +2056,7 @@ namespace IM.Host.Forms
       }
       if (GuestShow != null && !GuestShow.Guest.guQuinella)
       {
-        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        UIHelper.ShowMessage("Shows that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
         return;
       }
 

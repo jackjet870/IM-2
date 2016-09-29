@@ -47,9 +47,10 @@ namespace IM.GuestsPR.Forms
     /// </history>   
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      LoadPersonnel();
-      LoadLeadSources();
       LoadProgram();
+      LoadLeadSources();
+      LoadPersonnel();
+
       //Seleccionamos los días en el datapicker 
       dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.Value = DateTime.Now;
@@ -153,7 +154,9 @@ namespace IM.GuestsPR.Forms
 
       if (frmlogin.IsAuthenticated)
       {
-        Context.User = frmlogin.UserData;
+        Context.User = frmlogin.UserData;        
+        LoadProgram();
+        LoadLeadSources();
         LoadPersonnel();
       }
     }
@@ -372,6 +375,7 @@ namespace IM.GuestsPR.Forms
         if (_programs.Count > 0)
         {
           lsbxPrograms.ItemsSource = _programs;
+          chbxProgram.IsChecked = false;
         }
         StaEnd();
       }
@@ -398,6 +402,7 @@ namespace IM.GuestsPR.Forms
         if (_leadSources.Count > 0)
         {
           lsbxLeadSources.ItemsSource = _leadSources;
+          chbxLeadSources.IsChecked = false;
         }
         StaEnd();
       }
@@ -580,6 +585,10 @@ namespace IM.GuestsPR.Forms
       if (index != -1)
       {
         cbxPersonnel.SelectedIndex = index;
+        lsbxLeadSources.SelectAll();
+        lsbxPrograms.SelectAll();
+        chbxLeadSources.IsChecked = true;
+        chbxProgram.IsChecked = true;
         GetGuestByPR();
         return true;
       }

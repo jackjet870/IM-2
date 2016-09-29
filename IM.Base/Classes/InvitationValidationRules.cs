@@ -1289,7 +1289,6 @@ namespace IM.Base.Classes
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guFirstName1":
-          //Si no ha ingresado una cantidad
           _hasError = true;
           break;
 

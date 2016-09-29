@@ -773,7 +773,7 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
-      btnAddGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
+      btnAddGuestAdditional.IsEnabled = false;
       btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
       brdSearchButton.IsEnabled = string.IsNullOrWhiteSpace(CatObj.Guest.guHReservID);
       #endregion Enable false
@@ -957,7 +957,7 @@ namespace IM.Base.Forms
         {
           dtgGuestAdditional.IsReadOnly = true;
           guestFormMode = EnumMode.ReadOnly;
-          btnAddGuestAdditional.IsEnabled = false;//CatObj.InvitationMode != EnumMode.ReadOnly;
+          btnAddGuestAdditional.IsEnabled = false;
           btnSearchGuestAdditional.IsEnabled = CatObj.InvitationMode != EnumMode.ReadOnly;
         }
       }
@@ -1729,6 +1729,11 @@ namespace IM.Base.Forms
         tabGeneral.UpdateLayout();
         cmbSalesRooms.Focus();
       }
+      else if (CatObj != null && !CatObj.Guest.guQuinella)
+      {
+        UIHelper.ShowMessage("Invitations that are not Quinellas can not have additional guests.", title: "Intelligence Marketing");
+        e.Cancel = true;
+      }
       else if (!GridHelper.IsInEditMode(dtgGuestAdditional) && !_hasError)
       {
         _IGCurrentCell = dtgGuestAdditional.CurrentCell;
@@ -1751,12 +1756,16 @@ namespace IM.Base.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitGuestAdditional = (Keyboard.IsKeyDown(Key.Enter));
-        Guest guestAdditionalRow = e.Row.Item as Guest;
+        Guest guestAdditionalRow = CatObj.AdditionalGuestList[e.Row.GetIndex()];
         Guest guestAdditional = AsyncHelper.RunSync(() => BRGuests.GetGuest(guestAdditionalRow?.guID ?? 0));
         var notValid = AsyncHelper.RunSync(() => InvitationValidationRules.dtgGuestAdditional_ValidateEdit(CatObj.Guest, guestAdditional, _IGCurrentCell, CatObj.Program));
         if (!notValid)
         {
-          e.Row.Item = guestAdditional;
+          guestAdditionalRow.guFirstName1 = guestAdditional.guFirstName1;
+          guestAdditionalRow.guLastName1 = guestAdditional.guLastName1;
+          guestAdditionalRow.guCheckIn = guestAdditional.guCheckIn;
+          guestAdditionalRow.guRef = guestAdditional.guRef;
+          GridHelper.UpdateCellsFromARow(dtgGuestAdditional);
         }
         else
         {
