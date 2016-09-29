@@ -1852,7 +1852,7 @@ namespace IM.ProcessorGeneral.Classes
 
       lstDepPrNoShow = lstDepPrNoShow.OrderBy(c => c.guPRInvit1).ThenBy(c => c.guID).ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsNoShow(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
