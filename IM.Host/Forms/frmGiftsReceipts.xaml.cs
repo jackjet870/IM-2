@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
 using IM.Base.Classes;
-using System.Data.Entity.Validation;
 
 namespace IM.Host.Forms
 {

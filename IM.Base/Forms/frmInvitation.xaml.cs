@@ -474,11 +474,9 @@ namespace IM.Base.Forms
     /// [erosado] 02/09/2016  Created.
     private void cmbLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (cmbLocation.SelectedValue != null)
-      {
-        var location = cmbLocation.SelectedItem as LocationByUser;
-        CatObj.Guest.guls = location.lols;
-      }
+      if (cmbLocation.SelectedValue == null) return;
+      var location = cmbLocation.SelectedItem as LocationByUser;
+      if (location != null) CatObj.Guest.guls = location.lols;
     }
     #endregion
 
@@ -489,12 +487,10 @@ namespace IM.Base.Forms
     /// [erosado] 03/09/2016  Created.
     private async void cmbOtherInfoAgency_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (cmbOtherInfoAgency.SelectedValue != null)
-      {
-        var agency = await BRAgencies.GetAgenciesByIds(new List<string>() { cmbOtherInfoAgency?.SelectedValue?.ToString() });
-        CatObj.Guest.gumk = agency.FirstOrDefault().agmk;
-
-      }
+      if (cmbOtherInfoAgency.SelectedValue == null) return;
+      var agency = await BRAgencies.GetAgenciesByIds(new List<string>() { cmbOtherInfoAgency?.SelectedValue?.ToString() });
+      var ag = agency.FirstOrDefault();
+      if (ag != null) CatObj.Guest.gumk = ag.agmk;
     }
     #endregion
 
