@@ -620,10 +620,10 @@ namespace IM.Host
 
           filters.Add(new Tuple<string, string>("Date Range", dateRange));
           filters.Add(new Tuple<string, string>("Sales Room", Context.User.SalesRoom.srID));
-          var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, ExcelFormatItemsList>> {
-        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
+          var fileinfo = await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, ColumnFormatList>> {
+        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs(EnumModule.Host)),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
-      }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
+      }, filters, "Manifest", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
 
           if (fileinfo != null)
           {

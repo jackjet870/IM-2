@@ -16,9 +16,9 @@ namespace IM.ProcessorSales.Classes
     /// [ecanul] 06/05/2016 Created
     /// [ecanul] 09/05/2016 Modified, Ahora usa columnas para Pivot, para poder realizar el calculo correcto
     /// </history>
-    public static ExcelFormatItemsList RptStatisticsBySalesRoomLocation()
+    public static ColumnFormatList RptStatisticsBySalesRoomLocation()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Zona", "Zona", isGroup: true, isVisible: false);
       lst.Add("Program", "Program");
       lst.Add("Sales Room ID", "SalesRoomId");
@@ -47,9 +47,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 09/05/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptStatisticsByLocation()
+    public static ColumnFormatList RptStatisticsByLocation()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Location", "Location");
       lst.Add("Volume", "SalesAmount", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -73,9 +73,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptStatisticsByLocationMonthly()
+    public static ColumnFormatList RptStatisticsByLocationMonthly()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true, isVisible: false);
       lst.Add("Location", "Location");
       lst.Add("Volume Previous", "SalesAmountPrevious", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
@@ -102,9 +102,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 10/05/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptSalesByLocationMonthly()
+    public static ColumnFormatList RptSalesByLocationMonthly()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Location", "Location", isGroup: true, isVisible: false);
       lst.Add("Year", "Year", isGroup: true, isVisible: false);
       lst.Add("Month", "MonthN");
@@ -128,9 +128,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 13/05/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptConcentrateDailySales()
+    public static ColumnFormatList RptConcentrateDailySales()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("SalesRoom", "SalesRoom");
       lst.Add("Goal", "Goal", format: EnumFormatTypeExcel.DecimalNumberWithCero, function:DataFieldFunctions.Sum);
       lst.Add("Difference", "Difference", format: EnumFormatTypeExcel.DecimalNumberWithCero, function: DataFieldFunctions.Sum);
@@ -157,9 +157,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 16/05/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDailySales()
+    public static ColumnFormatList RptDailySales()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date);
       lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Sale", "Sale", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -187,9 +187,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 07/06/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptManifest()
+    public static ColumnFormatList RptManifest()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sale TypeN", "SaleTypeN", isGroup: true, isVisible: false);
       lst.Add("GUID", "guID", format: EnumFormatTypeExcel.Id);
       lst.Add("Last Name", "guLastName1");
@@ -261,9 +261,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 04/07/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptFTMInOutHouse()
+    public static ColumnFormatList RptFTMInOutHouse()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("ID", "Liner", format: EnumFormatTypeExcel.General);
       lst.Add("Salesman Name", "peN", format: EnumFormatTypeExcel.General);
       lst.Add("OOP", "OOP", format: EnumFormatTypeExcel.DecimalNumber, function: DataFieldFunctions.Count);
@@ -306,9 +306,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 04/07/2016 Created
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsBySegments()
+    internal static ColumnFormatList RptStatisticsBySegments()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Salesman Type", "SalemanType", axis: ePivotFieldAxis.Row, isGroup: true);
       lst.Add("ID", "SalemanID", axis: ePivotFieldAxis.Row);
       lst.Add("Salesman Name", "SalemanName", axis: ePivotFieldAxis.Row);
@@ -331,9 +331,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 04/07/2016 Created
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsBySegmentsGroupedByTeams()
+    internal static ColumnFormatList RptStatisticsBySegmentsGroupedByTeams()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Team", "Team", axis: ePivotFieldAxis.Row, isGroup: true );
       lst.Add("Status", "Status", axis: ePivotFieldAxis.Row, isGroup:true);
       lst.Add("Salesman Type", "SalemanType", axis: ePivotFieldAxis.Row, isGroup: true);
@@ -359,9 +359,9 @@ namespace IM.ProcessorSales.Classes
     /// [aalcocer]  04/07/2016 Created
     /// [ecanul]    16/08/2016 Modified, cambiado el formato para que se use con el formato CreateExcelCustom
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByCloser(bool groupByTeams = false)
+    internal static ColumnFormatList RptStatisticsByCloser(bool groupByTeams = false)
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Team", "Team", isGroup: groupByTeams, isVisible: !groupByTeams);
       lst.Add("Saleman Status", "SalesmanStatus", isVisible: !groupByTeams, isGroup: groupByTeams);
       lst.Add("ID", "SalemanID");
@@ -472,9 +472,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 18/07/2016 Created
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByExitCloser()
+    internal static ColumnFormatList RptStatisticsByExitCloser()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
 
 
       lst.Add("SalemanType", "SalemanType", axis: ePivotFieldAxis.Row, isGroup: true);
@@ -502,9 +502,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [aalcocer] 18/07/2016 Created
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByExitCloserGroupedByTeams()
+    internal static ColumnFormatList RptStatisticsByExitCloserGroupedByTeams()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
 
       lst.Add("Team", "Team", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Status", "SalesmanStatus", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
@@ -532,9 +532,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///   [ecanul] 28/07/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptSelfGenAndSelfGenTeam()
+    public static ColumnFormatList RptSelfGenAndSelfGenTeam()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
 
       lst.Add("SelfGenType", "SelfGenType", format: EnumFormatTypeExcel.General, isGroup: true, isVisible: false);
       lst.Add("ID", "Liner", format: EnumFormatTypeExcel.General);
@@ -572,9 +572,9 @@ namespace IM.ProcessorSales.Classes
     /// [edgrodriguez] 03/09/2016 Modified. Se agregó una bandera para indicar si el reporte sera por equipos o individual.
     ///                                     Se cambio el formato.
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByFTB(bool byTeams)
+    internal static ColumnFormatList RptStatisticsByFTB(bool byTeams)
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Team", "Team", format: EnumFormatTypeExcel.General, isGroup: byTeams, isVisible: false);
       lst.Add("Status", "SalesmanStatus", format: EnumFormatTypeExcel.General, isGroup: byTeams, isVisible: false);
       lst.Add("Post", "PostName", format: EnumFormatTypeExcel.General, isGroup: true, isVisible: false);
@@ -636,9 +636,9 @@ namespace IM.ProcessorSales.Classes
     /// [edgrodriguez] 05/09/2016 Modified. Se agregó una bandera para indicar si el reporte sera por equipos o individual.
     ///                                     Se cambio el formato.
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByFTBByLocations(bool ByTeam)
+    internal static ColumnFormatList RptStatisticsByFTBByLocations(bool ByTeam)
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Team", "Team", format: EnumFormatTypeExcel.General, isGroup:ByTeam, isVisible: false);
       lst.Add("Locations", "Locations", format: EnumFormatTypeExcel.General, isGroup: true, isVisible: false);
       lst.Add("ID", "SalemanID", format: EnumFormatTypeExcel.General);
@@ -671,9 +671,9 @@ namespace IM.ProcessorSales.Classes
     /// [edgrodriguez] 05/09/2016 Modified. Se agregó una bandera para indicar si el reporte sera por equipos o individual.
     ///                                     Se cambio el formato.
     /// </history>
-    internal static ExcelFormatItemsList RptStatisticsByFTBByCategories(bool byTeam)
+    internal static ColumnFormatList RptStatisticsByFTBByCategories(bool byTeam)
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Team", "Team", format: EnumFormatTypeExcel.General, isGroup: byTeam, isVisible: false);
       lst.Add("Locations", "Locations", format: EnumFormatTypeExcel.General, isGroup: true, isVisible: false);
 
@@ -706,9 +706,9 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     ///   [ecanul] 16/08/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptEfficiencyWeekly()
+    public static ColumnFormatList RptEfficiencyWeekly()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Efficiency Type", "EfficiencyType", isGroup: true, isVisible: false);
       lst.Add("ID", "SalemanID");
       lst.Add("Salesman Name", "SalemanName");

@@ -17,14 +17,14 @@ namespace IM.Host.Classes
     /// <summary>
     /// Formato para el reporte Up List Start o Up List End
     /// </summary>
-    /// <returns> List of ExcelFormatTable</returns>
+    /// <returns> List of ColumnFormat</returns>
     /// <history>
     /// [edgrodriguez] 21/Jun/2016 Created
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el formato.
     /// </history>
-    public static ExcelFormatItemsList RptUpList()
+    public static ColumnFormatList RptUpList()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Post Name", "SalesmanPostN", isGroup: true, isVisible:false);
       lst.Add("ID", "Salesman", axis: ePivotFieldAxis.Row);
       lst.Add("Salesman Name", "SalesmanN", axis: ePivotFieldAxis.Row);
@@ -44,13 +44,13 @@ namespace IM.Host.Classes
     /// <summary>
     /// Formato para el reporte Exchange Rates Log
     /// </summary>
-    /// <returns> List of ExcelFormatTable</returns>
+    /// <returns> List of ColumnFormat</returns>
     /// <history>
     /// [edgrodriguez] 08/Jul/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptExchangeRatesLog()
+    public static ColumnFormatList RptExchangeRatesLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
         lst.Add("By", "elChangedBy" );
         lst.Add("Name", "ChangedByN");
         lst.Add("Update Date/Time", "elID", format: EnumFormatTypeExcel.DateTime );
@@ -64,13 +64,13 @@ namespace IM.Host.Classes
     /// <summary>
     /// Formato para el reporte Gifts Receipts Log
     /// </summary>
-    /// <returns> List of ExcelFormatTable</returns>
+    /// <returns> List of ColumnFormat</returns>
     /// <history>
     /// [edgrodriguez] 08/Jun/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftReceiptsLog()
+    public static ColumnFormatList RptGiftReceiptsLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales man", "goChangedBy");
       lst.Add("Name", "ChangedByN");
       lst.Add("Update Date/Time", "goID", format: EnumFormatTypeExcel.DateTime);
@@ -104,13 +104,13 @@ namespace IM.Host.Classes
     /// <summary>
     /// Formato para el reporte Gifts Receipts Log
     /// </summary>
-    /// <returns> List of ExcelFormatTable</returns>
+    /// <returns> List of ColumnFormat</returns>
     /// <history>
     /// [edgrodriguez] 08/Jun/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCloseSalesRoomLog()
+    public static ColumnFormatList RptCloseSalesRoomLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("By", "sqChangedBy");
       lst.Add("Name", "ChangedByN");
       lst.Add("Update Date/Time", "sqID", format: EnumFormatTypeExcel.DateTime);
@@ -130,9 +130,9 @@ namespace IM.Host.Classes
     /// <history>
     /// [jorcanche]  created  07072016
     /// </history>    
-    public static ExcelFormatItemsList RptSaleLog()
+    public static ColumnFormatList RptSaleLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("By", "slChangedBy", aligment: ExcelHorizontalAlignment.Left);
       lst.Add("Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left);
       lst.Add("Update Date/Time", "slID", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.DateTime);

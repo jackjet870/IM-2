@@ -54,7 +54,7 @@ namespace IM.Outhouse.Classes
         var dt = TableHelper.GetDataTableFromList(premanifestAux, true);
         _rptName = "Premanifest  Outhouse " + Context.User.LeadSource.lsN ;        
         var dateRange = DateHelper.DateRangeFileName(date, date);
-        var format = new ExcelFormatItemsList();
+        var format = new ColumnFormatList();
 
         format.Add("SR", "srN", isGroup: true, isVisible: false);
         format.Add("Deposit", "Deposit", isGroup: true, isVisible: false);

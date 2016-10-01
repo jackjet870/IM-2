@@ -20,9 +20,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptBookingsBySalesRoomProgramTime()
+    public static ColumnFormatList RptBookingsBySalesRoomProgramTime()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "SalesRoom", axis: ePivotFieldAxis.Row, isGroup:true, isVisible:false);
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Book Type", "BookType", axis: ePivotFieldAxis.Row);
@@ -41,9 +41,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptBookingsBySalesRoomProgramLeadSourceTime()
+    public static ColumnFormatList RptBookingsBySalesRoomProgramLeadSourceTime()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "SalesRoom", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Lead Source", "LeadSource", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
@@ -67,9 +67,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 22/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxc()
+    public static ColumnFormatList RptCxc()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Group", "grGroup", isGroup: true, isVisible: false);
       lst.Add("PR", "grpe");
       lst.Add("PR Name", "peN");
@@ -116,9 +116,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 17/May/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxcByType()
+    public static ColumnFormatList RptCxcByType()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("grpe", "grpe", isGroup: true, isVisible: false);
       lst.Add("Receipt Date", "grD", format: EnumFormatTypeExcel.Date);
       lst.Add("Receipt ID", "grID");
@@ -160,9 +160,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 23/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxcDeposits()
+    public static ColumnFormatList RptCxcDeposits()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
 
       lst.Add("Ch B", "grID", format: EnumFormatTypeExcel.Id, axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
@@ -191,9 +191,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 29/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxcGifts()
+    public static ColumnFormatList RptCxcGifts()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("CHB", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
       lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row);
@@ -230,9 +230,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 01/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxcNotAuthorized()
+    public static ColumnFormatList RptCxcNotAuthorized()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Rcpt", "grID");
       lst.Add("Chb PP", "grNum");
       lst.Add("LS", "grls");
@@ -258,9 +258,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCxcPayments()
+    public static ColumnFormatList RptCxcPayments()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Rcpt", "grID");
       lst.Add("Rcpt D", "grD", format: EnumFormatTypeExcel.Date);
       lst.Add("LS", "grls");
@@ -297,9 +297,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 01/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDeposits()
+    public static ColumnFormatList RptDeposits()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
       lst.Add("Out. Inv.", "guOutInvitNum", axis: ePivotFieldAxis.Row);
@@ -332,9 +332,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptBurnedDeposits()
+    public static ColumnFormatList RptBurnedDeposits()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
       lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
@@ -366,9 +366,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptBurnedDepositsByResorts()
+    public static ColumnFormatList RptBurnedDepositsByResorts()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Resort", "guHotelB", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
@@ -400,9 +400,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptPaidDeposits()
+    public static ColumnFormatList RptPaidDeposits()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
       lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
@@ -436,9 +436,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 06/Jun/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCancelledGiftsManifest()
+    public static ColumnFormatList RptCancelledGiftsManifest()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("GUID", "grgu", axis: ePivotFieldAxis.Row);
       lst.Add("Guest Name", "grGuest", axis: ePivotFieldAxis.Row);
       lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
@@ -471,9 +471,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 07/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDailyGiftSimple()
+    public static ColumnFormatList RptDailyGiftSimple()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Quantity", "geQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values);
       lst.Add("Location", "grlo", axis: ePivotFieldAxis.Row);
@@ -493,9 +493,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsByCategory()
+    public static ColumnFormatList RptGiftsByCategory()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Gift", "Gift", axis: ePivotFieldAxis.Row);
       lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Total Qty", "TotalQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
@@ -516,9 +516,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsByCategoryProgram()
+    public static ColumnFormatList RptGiftsByCategoryProgram()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Gift", "Gift", axis: ePivotFieldAxis.Row);
       lst.Add("Quantity", "Quantity", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
@@ -540,9 +540,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsCertificates()
+    public static ColumnFormatList RptGiftsCertificates()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Status", "Status", isGroup: true, isVisible: false);
       lst.Add("Gift ID", "GiftID", axis: ePivotFieldAxis.Row);
       lst.Add("Gift Name", "GiftN", axis: ePivotFieldAxis.Row);
@@ -575,9 +575,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 09/May/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsManifest()
+    public static ColumnFormatList RptGiftsManifest()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Guest ID", "GuestID", axis: ePivotFieldAxis.Row);
       lst.Add("Reserv ID", "ReservID", axis: ePivotFieldAxis.Row);
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
@@ -624,9 +624,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 11/May/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsReceipts()
+    public static ColumnFormatList RptGiftsReceipts()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Guest ID", "GuestID", axis: ePivotFieldAxis.Row);
       lst.Add("Reserv ID", "ReservID", axis: ePivotFieldAxis.Row);
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
@@ -676,9 +676,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsReceiptsPayments()
+    public static ColumnFormatList RptGiftsReceiptsPayments()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("GroupSource1", "GroupSource1", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("GroupSource2", "GroupSource2", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Source", "Source", axis: ePivotFieldAxis.Row);
@@ -699,9 +699,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 28/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsSale()
+    public static ColumnFormatList RptGiftsSale()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row);
       lst.Add("Receipt", "Receipt", axis: ePivotFieldAxis.Row);
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date);
@@ -748,9 +748,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsUsedBySistur()
+    public static ColumnFormatList RptGiftsUsedBySistur()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "srN", isGroup: true);
       lst.Add("Program", "pgN", isGroup: true);
       lst.Add("Lead Source", "lsN", isGroup: true);
@@ -793,9 +793,9 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 07/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptWeeklyGiftSimple()
+    public static ColumnFormatList RptWeeklyGiftSimple()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
       lst.Add("Quantity", "Qty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values);
       lst.Add("Gift Name", "Gift", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
@@ -817,16 +817,16 @@ namespace IM.ProcessorGeneral.Classes
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static List<ExcelFormatTable> RptGuestCeco()
+    public static List<ColumnFormat> RptGuestCeco()
     {
-      return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "Society", PropertyName = "soccecoid", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ExcelFormatTable() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 7 },
-new ExcelFormatTable() { Title = "Sales Room", PropertyName = "srN", Axis = ePivotFieldAxis.Row, Order = 1, Outline = true },
-new ExcelFormatTable() { Title = "Activity", PropertyName = "acn", Axis = ePivotFieldAxis.Row, Order = 2, Outline = true },
-new ExcelFormatTable() { Title = "CECO", PropertyName = "ceco", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis = ePivotFieldAxis.Row, Order = 3, Outline = true }
+      return new List<ColumnFormat>() {
+new ColumnFormat() { Title = "Society", PropertyName = "soccecoid", Axis = ePivotFieldAxis.Row, Order = 6 },
+new ColumnFormat() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 4 },
+new ColumnFormat() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 7 },
+new ColumnFormat() { Title = "Sales Room", PropertyName = "srN", Axis = ePivotFieldAxis.Row, Order = 1, Outline = true },
+new ColumnFormat() { Title = "Activity", PropertyName = "acn", Axis = ePivotFieldAxis.Row, Order = 2, Outline = true },
+new ColumnFormat() { Title = "CECO", PropertyName = "ceco", Axis = ePivotFieldAxis.Row, Order = 5 },
+new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePivotFieldAxis.Row, Order = 3, Outline = true }
       };
     }
 
@@ -840,9 +840,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGuestNoBuyers()
+    public static ColumnFormatList RptGuestNoBuyers()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true, isVisible: false);
       lst.Add("LeadSource", "LeadSource", isGroup: true, isVisible: false);
       lst.Add("GUID", "GuestID");
@@ -867,9 +867,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 09/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptInOut()
+    public static ColumnFormatList RptInOut()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "SalesRoom", isGroup: true, isVisible: false);
       lst.Add("Location", "Location", isGroup: true, isVisible: false);
       lst.Add("GUID", "GUID");
@@ -912,9 +912,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 06/Jun/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptManifestRange()
+    public static ColumnFormatList RptManifestRange()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "DateManifest", format: EnumFormatTypeExcel.Date);
       lst.Add("Group", "SaleTypeN", isGroup: true);
       lst.Add("GUID", "guID");
@@ -987,9 +987,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 09/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGuestNoShow()
+    public static ColumnFormatList RptGuestNoShow()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("GUID", "guID");
       lst.Add("Loc", "guloInvit");
       lst.Add("Room", "guRoomNum");
@@ -1022,9 +1022,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMealTickets()
+    public static ColumnFormatList RptMealTickets()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Rate Type", "RateTypeN", isGroup: true, isVisible: false);
       lst.Add("No", "meID");
       lst.Add("Date", "meD", format: EnumFormatTypeExcel.Date);
@@ -1064,9 +1064,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMealTicketsByHost()
+    public static ColumnFormatList RptMealTicketsByHost()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Rate Type", "RateTypeN", isGroup: true, isVisible: false);
       lst.Add("Host", "guEntryHost", isGroup: true, isVisible: false);
       lst.Add("No", "meID");
@@ -1106,9 +1106,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMealTicketsCost()
+    public static ColumnFormatList RptMealTicketsCost()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
       lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function:DataFieldFunctions.Sum);
       lst.Add("Minors", "Minors", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
@@ -1133,9 +1133,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMemberships()
+    public static ColumnFormatList RptMemberships()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sale ID", "saID");
       lst.Add("Sale Date", "saD", format: EnumFormatTypeExcel.Date);
       lst.Add("Proc Date", "saProcD", format: EnumFormatTypeExcel.Date);
@@ -1181,9 +1181,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMembershipsByAgencyMarket()
+    public static ColumnFormatList RptMembershipsByAgencyMarket()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Market", "mkN", isGroup: true, isVisible: false);
       lst.Add("Agency", "agN", isGroup: true, isVisible: false);
       lst.Add("Sale ID", "saID");
@@ -1218,9 +1218,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 14/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptMembershipsByHost()
+    public static ColumnFormatList RptMembershipsByHost()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Host", "guEntryHost", isGroup: true, isVisible: false);
       lst.Add("Sale Type", "SaleType", isGroup: true, isVisible: false);
       lst.Add("Sale ID", "saID");
@@ -1256,9 +1256,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionBySalesRoom()
+    public static ColumnFormatList RptProductionBySalesRoom()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "SalesRoom", format: EnumFormatTypeExcel.Number);
       lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -1284,9 +1284,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionBySalesRoomMarket()
+    public static ColumnFormatList RptProductionBySalesRoomMarket()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Market", "Market", isGroup: true, isVisible: false);
       lst.Add("Sales Room", "SalesRoom", format: EnumFormatTypeExcel.Number);
       lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -1313,9 +1313,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionBySalesRoomMarketSubMarket()
+    public static ColumnFormatList RptProductionBySalesRoomMarketSubMarket()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true, isVisible: false);
       lst.Add("Market", "Market", isGroup: true, isVisible: false);
       lst.Add("Submarket", "Submarket", isGroup: true, isVisible: false);
@@ -1344,9 +1344,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionByShowProgram()
+    public static ColumnFormatList RptProductionByShowProgram()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Show Program Category", "ShowProgramCategory", isGroup: true, isVisible: false);
       lst.Add("Show Program", "ShowProgram");
       lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -1373,9 +1373,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 15/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionByShowProgramProgram()
+    public static ColumnFormatList RptProductionByShowProgramProgram()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true, isVisible: false);
       lst.Add("Show Program Category", "ShowProgramCategory", isGroup: true, isVisible: false);
       lst.Add("Show Program", "ShowProgram");
@@ -1407,9 +1407,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 11/May/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptCloserStatistic()
+    public static ColumnFormatList RptCloserStatistic()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PS", "saCloserps", isGroup: true, isVisible: false);
       lst.Add("ID", "saCloser");
       lst.Add("Closer Name", "saCloserN");
@@ -1442,9 +1442,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 12/May/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptLinerStatistic()
+    public static ColumnFormatList RptLinerStatistic()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PS", "saLinerps", isGroup: true, isVisible: false);
       lst.Add("ID", "saLiner");
       lst.Add("Liner Name", "saLinerN");
@@ -1485,9 +1485,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 09/Jun/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptWeeklyMonthlyHostessByPr()
+    public static ColumnFormatList RptWeeklyMonthlyHostessByPr()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("LS", "guls", isGroup: true, isVisible: false);
       lst.Add("PR Name", "guPRInvitN", axis: ePivotFieldAxis.Row);
       lst.Add("PR", "guPRInvit", axis: ePivotFieldAxis.Row);
@@ -1500,9 +1500,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
       return lst;
     }
 
-    public static ExcelFormatItemsList RptWeeklyMonthlyHostessByTourTime()
+    public static ColumnFormatList RptWeeklyMonthlyHostessByTourTime()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("LS", "guls", isGroup: true, isVisible: false);
       lst.Add("Day", "guD", format: EnumFormatTypeExcel.Day, axis: ePivotFieldAxis.Row);
       lst.Add("B", "guBook", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
@@ -1526,9 +1526,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptTaxisIn()
+    public static ColumnFormatList RptTaxisIn()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Show Type", "ShowType", isGroup: true);
       lst.Add("GUID", "guID");
       lst.Add("Loc", "guloInvit");
@@ -1555,9 +1555,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptTaxisOut()
+    public static ColumnFormatList RptTaxisOut()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Ch B", "grID");
       lst.Add("Chb PP", "grNum");
       lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date);
@@ -1589,9 +1589,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDepositsBurnedGuests()
+    public static ColumnFormatList RptDepositsBurnedGuests()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("GUID", "guID", axis: ePivotFieldAxis.Row);
       lst.Add("Out Invit", "guOutInvitNum", axis: ePivotFieldAxis.Row);
       lst.Add("Guest", "Guest", axis: ePivotFieldAxis.Row);
@@ -1618,9 +1618,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDepositRefunds()
+    public static ColumnFormatList RptDepositRefunds()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Sales Room", "srN");
       lst.Add("Lead Source", "lsN");
       lst.Add("Refund ID", "drID");
@@ -1651,9 +1651,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptDepositsNoShow()
+    public static ColumnFormatList RptDepositsNoShow()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PR", "guPRInvit1", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("GUID", "guID", axis: ePivotFieldAxis.Row);
       lst.Add("Out Invit", "guOutInvitNum", axis: ePivotFieldAxis.Row);
@@ -1682,9 +1682,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptInOutByPr()
+    public static ColumnFormatList RptInOutByPr()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PR 1", "PR1", isGroup: true, isVisible: false);
       lst.Add("GUID", "GUID");
       lst.Add("Location", "Location");
@@ -1726,9 +1726,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptPaidDepositsByPr()
+    public static ColumnFormatList RptPaidDepositsByPr()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Ch B",  "grID", axis: ePivotFieldAxis.Row);
       lst.Add("Chb PP",  "grNum", axis: ePivotFieldAxis.Row);
@@ -1758,9 +1758,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 19/Abr/2016 Created
     /// </history>✓
-    public static ExcelFormatItemsList RptPersonnelAccess()
+    public static ColumnFormatList RptPersonnelAccess()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("lsN", "lsN", isGroup: true, isVisible: false);
       lst.Add("peps", "peps", isGroup: true, isVisible: false);
       lst.Add("ID", "peID");
@@ -1795,9 +1795,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 25/Abr/2016 Created
     /// </history>✓
-    public static ExcelFormatItemsList RptSelfGen()
+    public static ColumnFormatList RptSelfGen()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Peps", "PRps", isGroup: true, isVisible: false);
       lst.Add("ID", "PRID");
       lst.Add("PR Name", "PRN");
@@ -1836,10 +1836,10 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptAgencies()
+    public static ColumnFormatList RptAgencies()
     {
 
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Agency", "agID");
       lst.Add("Agency Name", "agN");
       lst.Add("Unavailable Motive", "umN");
@@ -1862,9 +1862,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGifts()
+    public static ColumnFormatList RptGifts()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Gift ID", "giID");
       lst.Add("Gift Name", "giN");
       lst.Add("Short N.", "giShortN");
@@ -1892,9 +1892,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptGiftsKardex()
+    public static ColumnFormatList RptGiftsKardex()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "MovD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
       lst.Add("In", "InQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Out", "OutQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
@@ -1914,9 +1914,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 27/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptLoginsLog()
+    public static ColumnFormatList RptLoginsLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date Time", "Date_Time", format:EnumFormatTypeExcel.DateTime);
       lst.Add("Location", "Location");
       lst.Add("Code", "Code");
@@ -1935,9 +1935,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 17/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptPersonnel()
+    public static ColumnFormatList RptPersonnel()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Status", "peps", isGroup: true, isVisible: false);
       lst.Add("Dept", "deN", isGroup: true, isVisible: false);
       lst.Add("Post", "poN", isGroup: true, isVisible: false);
@@ -1977,9 +1977,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionByLeadSourceMarketMonthly()
+    public static ColumnFormatList RptProductionByLeadSourceMarketMonthly()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true);
       lst.Add("Year", "Year", isGroup: true);
       lst.Add("Month", "MonthN", isGroup: true);
@@ -2025,9 +2025,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptProductionReferral()
+    public static ColumnFormatList RptProductionReferral()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Year", "Year", isGroup: true, isVisible: false);
       lst.Add("Month", "MonthN");
       lst.Add("Arrivals", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
@@ -2052,9 +2052,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptReps()
+    public static ColumnFormatList RptReps()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Rep ID", "rpID");
       lst.Add("Active", "rpA", format: EnumFormatTypeExcel.Boolean, aligment: ExcelHorizontalAlignment.Center);
       return lst;
@@ -2070,9 +2070,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptSalesByProgramLeadSourceMarket()
+    public static ColumnFormatList RptSalesByProgramLeadSourceMarket()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Program", "Program", isGroup: true, isVisible: false);
       lst.Add("Lead Source", "LeadSource", isGroup: true, isVisible: false);
       lst.Add("Market", "Market", isGroup: true, isVisible: false);
@@ -2098,9 +2098,9 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
     /// <history>
     /// [edgrodriguez] 26/Abr/2016 Created
     /// </history>
-    public static ExcelFormatItemsList RptWarehouseMovements()
+    public static ColumnFormatList RptWarehouseMovements()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
 
       lst.Add("Date", "wmD", format:EnumFormatTypeExcel.Date);
       lst.Add("Qty", "wmQty", format: EnumFormatTypeExcel.Number);

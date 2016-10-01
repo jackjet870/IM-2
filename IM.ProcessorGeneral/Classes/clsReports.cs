@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using IM.Model;
-using System.IO;
-using IM.Base.Helpers;
-using System.Data;
-using System.Collections;
+﻿using IM.Base.Helpers;
 using IM.Base.Reports;
-using System.Threading.Tasks;
-using IM.Model.Classes;
+using IM.Model;
+using IM.Model.Enums;
 using IM.Model.Helpers;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
-using PalaceResorts.Common.PalaceTools.Epplus.Enums;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace IM.ProcessorGeneral.Classes
 {
   public static class clsReports
@@ -584,7 +584,7 @@ namespace IM.ProcessorGeneral.Classes
       });
 
       var firstPivotdt = new DataTable();
-      var formatPivot2 = new ExcelFormatItemsList();
+      var formatPivot2 = new ColumnFormatList();
       if (cancelledGifts.Any(g => g.grDeposit > 0) || cancelledGifts.Any(g => g.grDepositTwisted > 0))
       {
         //Obtenemos el primer pivot.
@@ -599,7 +599,7 @@ namespace IM.ProcessorGeneral.Classes
         firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
         {
           if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-          formatPivot2.Insert(order, new ExcelFormatTable { PropertyName = col.ColumnName });
+          formatPivot2.Insert(order, new ColumnFormat { PropertyName = col.ColumnName });
           order++;
         });       
       }
@@ -857,14 +857,14 @@ namespace IM.ProcessorGeneral.Classes
       var pivot2 = new List<string>() { "Deposited", "Currency", "PaymentType" };
 
       //Obtenemos la nueva lista excluyendo las columnas que ya sirvieron como pivote.
-      var formatPivot2 = new ExcelFormatItemsList();
+      var formatPivot2 = new ColumnFormatList();
       formatPivot2.AddRange(format.Where(c => !pivot2.Contains(c.PropertyName)));
       //var afterPivot = format.Where(c => c.Order > order).OrderBy(c=>c.Order).ToList();
       //Obtenemos las columnas que ya se les aplico el pivot.Y las agregamos a la lista de formatos.
       firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
       {
         if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-        formatPivot2.Insert(order, (new ExcelFormatTable { PropertyName = col.ColumnName }));
+        formatPivot2.Insert(order, (new ColumnFormat { PropertyName = col.ColumnName }));
         order++;
       });
 
@@ -995,7 +995,7 @@ namespace IM.ProcessorGeneral.Classes
       var pivot2 = new List<string>() { "Deposited", "Burned", "Currency", "PaymentType" };
 
       //Obtenemos la nueva lista excluyendo las columnas que ya sirvieron como pivote.
-      var formatPivot2 = new ExcelFormatItemsList();
+      var formatPivot2 = new ColumnFormatList();
       formatPivot2.AddRange(format.Where(c => !pivot2.Contains(c.PropertyName)));
 
       var afterPivot = format.Where(c => c.Order > order).OrderBy(c => c.Order).ToList();
@@ -1003,7 +1003,7 @@ namespace IM.ProcessorGeneral.Classes
       firstPivotdt.Columns.Cast<DataColumn>().ToList().ForEach(col =>
       {
         if (formatPivot2.Exists(c => c.PropertyName == col.ColumnName)) return;
-        formatPivot2.Insert(order, (new ExcelFormatTable { PropertyName = col.ColumnName, Order = order }));
+        formatPivot2.Insert(order, (new ColumnFormat { PropertyName = col.ColumnName, Order = order }));
         order++;
 
       });
@@ -1390,8 +1390,8 @@ namespace IM.ProcessorGeneral.Classes
         c.Bookings
       }).ToList(), true, false);
 
-      return await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, ExcelFormatItemsList>> {
-        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
+      return await EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, ColumnFormatList>> {
+        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs(EnumModule.ProcessorGeneral)),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, strReport, string.Empty, blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
@@ -1711,7 +1711,7 @@ namespace IM.ProcessorGeneral.Classes
 
       var dtHostessTime = TableHelper.GetDataTableFromList(hostessTime);
 
-      return EpplusHelper.ExportRptWeeklyMonthlyHostess(new List<Tuple<DataTable, ExcelFormatItemsList, string>> {
+      return EpplusHelper.ExportRptWeeklyMonthlyHostess(new List<Tuple<DataTable, ColumnFormatList, string>> {
         Tuple.Create(weeklyMonthly, clsFormatReport.RptWeeklyMonthlyHostessByPr(),strReport+" By PR"),
         Tuple.Create(dtHostessTime,clsFormatReport.RptWeeklyMonthlyHostessByTourTime(),strReport+" By Tour Time")
       }, filters, strReport, string.Empty, blnShowSubtotal: true, blnRowGrandTotal:true, fileFullPath:fileFullPath);
