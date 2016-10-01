@@ -148,6 +148,14 @@ namespace IM.Model.Classes
       set { SetField(ref _invitationInfo, value); }
     }
 
+    private bool _allowReschedule;
+
+    public bool AllowReschedule
+    {
+      get { return _allowReschedule; }
+      set { _allowReschedule = value; }
+    }
+
 
     #endregion
 
@@ -183,13 +191,19 @@ namespace IM.Model.Classes
       set
       { SetField(ref _guest, value); }
     }
-    private List<TourTimeAvailable> _tourTimes;
-    public List<TourTimeAvailable> TourTimes
+    private List<TourTimeAvailable> _tourTimesBook;
+    public List<TourTimeAvailable> TourTimesBook
     {
-      get { return _tourTimes; }
-      set { SetField(ref _tourTimes, value); }
+      get { return _tourTimesBook; }
+      set { SetField(ref _tourTimesBook, value); }
     }
 
+    private List<TourTimeAvailable> _tourTimesReschedule;
+    public List<TourTimeAvailable> TourTimesReschedule
+    {
+      get { return _tourTimesReschedule; }
+      set { SetField(ref _tourTimesReschedule, value); }
+    }
 
     #endregion
 

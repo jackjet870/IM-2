@@ -895,13 +895,13 @@ namespace IM.Host
           invitacion.ShowDialog();
 
           // si se guardo la invitacion
-          if (invitacion.CatObj.Guest.guInvit)
+          if (invitacion.dbContext.Guest.guInvit)
           {
             dtpDate_ValueChanged(null, null);
             // Seleccionamos el row invitado
             if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
             {
-              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.CatObj.Guest.guID);
+              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.dbContext.Guest.guID);
             }
           }
         }
@@ -955,13 +955,13 @@ namespace IM.Host
             invitacion.ShowDialog();
 
             // si se guardo la invitacion
-            if (invitacion.CatObj.Guest.guInvit)
+            if (invitacion.dbContext.Guest.guInvit)
             {
               dtpDate_ValueChanged(null, null);
               // Seleccionamos el row invitado
               if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
               {
-                grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.CatObj.Guest.guID);
+                grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.dbContext.Guest.guID);
               }
             }
           }
@@ -1007,13 +1007,13 @@ namespace IM.Host
           invitacion.ShowDialog();
 
           // si se guardo la invitacion
-          if (invitacion.CatObj.Guest.guInvit)
+          if (invitacion.dbContext.Guest.guInvit)
           {
             dtpDate_ValueChanged(null, null);
             // Seleccionamos el row invitado
             if (grdPremanifestHost != null && grdPremanifestHost.Items.Count > 0)
             {
-              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.CatObj.Guest.guID);
+              grdPremanifestHost.SelectedIndex = grdPremanifestHost.Items.Cast<GuestPremanifestHost>().ToList().FindIndex(x => x.guID == invitacion.dbContext.Guest.guID);
             }
           }
         }

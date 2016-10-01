@@ -432,7 +432,7 @@
                                                                       ValueChanged="dtpBookDate_ValueChanged"/>
                                                 <TextBlock Text="Time" Margin="0,5"/>
                                                 <ComboBox Name="cmbBookT" Width="Auto"  
-                                                          ItemsSource="{Binding TourTimes}"
+                                                          ItemsSource="{Binding TourTimesBook}"
                                                           Style="{StaticResource cbx-General}" 
                                                           ToolTip="{Binding Path=SelectedItem.Tour, RelativeSource={RelativeSource Self}}"
                                                           SelectedValuePath="Tour"
@@ -450,8 +450,10 @@
                                                                               ValueChanged="dtpRescheduleDate_ValueChanged" />
                                                         <TextBlock Text="Time" Margin="0,5" />
                                                         <ComboBox Name="cmbReschT" Width="130"
-                                                                  ItemsSource="{Binding TourTimes}"
+                                                                  ItemsSource="{Binding TourTimesReschedule}"
                                                                   Style="{StaticResource cbx-General}"
+                                                                  ToolTip="{Binding Path=SelectedItem.Tour, RelativeSource={RelativeSource Self}}"
+																  SelectedValuePath="Tour"
                                                                   SelectedValue="{Binding Guest.guReschT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                   ItemTemplate="{StaticResource cbx-TourTimes-img}"/>
                                                         <CheckBox Name="chkReschedule" Content="Reschedule" Margin="0,5" IsChecked="{Binding Guest.guResch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

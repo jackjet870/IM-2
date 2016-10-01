@@ -277,7 +277,7 @@ namespace IM.Base.Classes
     {
       bool _isValid = true;
       //Si se permite reschedule
-      if (form._allowReschedule)
+      if (dbContext.AllowReschedule)
       {
         //Si se puede modificar la fecha de Reschedule
         if (form.dtpRescheduleDate.IsEnabled)
@@ -1252,7 +1252,7 @@ namespace IM.Base.Classes
       if (row != null)
       {
         int columnIndex = 0;
-        bool gridvalid = EndingEditBookingDeposits(row.Item as BookingDeposit, form.dtgBookingDeposits, form.CatObj.CloneBookingDepositList, form.CatObj.Guest.guID, ref columnIndex);
+        bool gridvalid = EndingEditBookingDeposits(row.Item as BookingDeposit, form.dtgBookingDeposits, form.dbContext.CloneBookingDepositList, form.dbContext.Guest.guID, ref columnIndex);
         if (gridvalid)
         {
           form.dtgBookingDeposits.RowEditEnding -= form.dtgBookingDeposits_RowEditEnding;
