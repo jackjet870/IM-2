@@ -135,7 +135,7 @@
             </Button>
           </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Informartion User" HorizontalAlignment="Right" Width="261" VerticalAlignment="Top" Height="70" FontWeight="Bold" Margin="0,0,0,0" Foreground="White">
+        <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Information User" HorizontalAlignment="Right" Width="261" VerticalAlignment="Top" Height="70" FontWeight="Bold" Margin="0,0,0,0" Foreground="White">
           <Grid >
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="60"/>
