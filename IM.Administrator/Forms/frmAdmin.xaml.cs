@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace IM.Administrator.Forms
@@ -37,7 +39,7 @@ namespace IM.Administrator.Forms
     protected void CreateMenu()
     {      
       status.Visibility = Visibility.Visible;
-      lblUser.Content = Context.User.User.peN;
+      txbUser.Text = Context.User.User.peN;
       var lstMenu = new ItemsList();
 
       #region Sales Permision
@@ -249,20 +251,48 @@ namespace IM.Administrator.Forms
       lstMenuAdm.ItemsSource = lstMenu;
 
       // seleccionamos por default el catalogo de Personnel
-      int nIndex = 0;
+      
       Item personnelCatalog = lstMenu.Where(item => item.Id == "frmPersonnel").FirstOrDefault();      
       if(personnelCatalog != null)
-      {        
-        nIndex = lstMenu.IndexOf(personnelCatalog);
+      {
+        lstMenuAdm.SelectedItem = personnelCatalog;
+        
+        var listBoxItem = (ListBoxItem)lstMenuAdm
+        .ItemContainerGenerator
+        .ContainerFromItem(personnelCatalog);
+        FocusManager.SetFocusedElement(lstMenuAdm, listBoxItem);        
       }
-      lstMenuAdm.SelectedIndex = nIndex;
+      
 
       lstMenuAdm.Focus();
       status.Visibility = Visibility.Collapsed;
 
       // indicamos el numero de catalogos
       StatusBarReg.Content = $"{lstMenuAdm.Items.Count} Catalogs.";
+
+      //vinculamos el view de la lista con la funcion para filtrar
+      CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
+      view.Filter = UserFilter;      
+
     }
+
+    #region UserFilter
+    /// <summary>
+    /// Filtra la lista dependiendo de lo escrito en el textbox
+    /// </summary>
+    /// <param name="item">item que se va a validar para saber si se muestra en la lista</param>
+    /// <returns>Lista tipo dynamic</returns>
+    /// <history>
+    /// [emoguel] 30/09/2016 created
+    /// </history>
+    private bool UserFilter(object item)
+    {
+      if (String.IsNullOrEmpty(txtFilter.Text))
+        return true;
+      else
+        return ((item as dynamic).Name.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+    } 
+    #endregion
 
     #endregion
 
@@ -389,6 +419,19 @@ namespace IM.Administrator.Forms
             break;
           }
       }
+    }
+    #endregion
+
+    #region TextBox_TextChanged
+    /// <summary>
+    /// refresca la lista dependiendo de lo escrito en el textbox
+    /// </summary>
+    /// <history>
+    /// [emoguel] 30/09/2016
+    /// </history>
+    private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+      CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource).Refresh();
     }
     #endregion
 

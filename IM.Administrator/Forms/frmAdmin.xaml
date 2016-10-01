@@ -19,14 +19,20 @@
         </Grid.ColumnDefinitions>
         <!--#endregion-->
         <!--#region Nombre de usuario -->
-        <StackPanel Grid.Row="0" Background="LightBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border Background="Transparent" BorderBrush="White" BorderThickness="1.5" Height="35" Margin="10,10,10,10">                
-                <Label x:Name="lblUser" Content="Bienvenido usuario" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-            </Border>
-        </StackPanel>
+            <Border Background="Transparent" Grid.Row="0" BorderBrush="White" BorderThickness="1.5" Height="35" Margin="10,10,10,10"/>
+            <Grid Grid.Row="0" Height="35"  Margin="10,10,10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Margin="5" Text="Text Search" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBox Width="200" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Name="txtFilter" TextChanged="TextBox_TextChanged" />
+                <TextBlock x:Name="txbUser" Grid.Column="2" Text="Bienvenido usuario" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </Grid>
         <!--#endregion-->
         <!--#region List Menu-->
-        <ListView Grid.Row="1" Name="lstMenuAdm" TextSearch.TextPath="Name" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10">
+        <ListView Grid.Row="1"  SelectionMode="Single" Name="lstMenuAdm" TextSearch.TextPath="Name" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10" Selector.IsSelected="True">
             <ListView.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray">
                 </SolidColorBrush>
@@ -49,9 +55,9 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                    <EventSetter Event="MouseDoubleClick" Handler="lstMenuAdm_MouseDoubleClick" />
-                   <EventSetter Event="KeyDown" Handler="lstMenuAdm_KeyDown"/>
-                </Style>
-            </ListView.ItemContainerStyle>
+                   <EventSetter Event="KeyDown" Handler="lstMenuAdm_KeyDown"/>                            
+                    </Style>                
+            </ListView.ItemContainerStyle>                
             </ListView>
         <!--#endregion-->
         <!--#region Status bar-->
@@ -65,6 +71,7 @@
                         <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                     </StackPanel>
                 </StatusBarItem>
+                <!--<TextBox Width="200" Name="txtFilter" Grid.Column="4" TextChanged="TextBox_TextChanged"/>-->
                 <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Items." HorizontalAlignment="Right" Width="85"/>
             </StatusBar>
             <!--#endregion-->

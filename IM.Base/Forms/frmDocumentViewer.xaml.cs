@@ -14,6 +14,8 @@ using IM.Model.Classes;
 using System.Windows.Controls;
 using System.Diagnostics;
 using IM.Model.Extensions;
+using System.Printing;
+using System.Windows.Documents;
 
 namespace IM.Base.Forms
 {
@@ -41,7 +43,7 @@ namespace IM.Base.Forms
     /// [emoguel] 13/09/2016 created
     /// </history>
     public frmDocumentViewer(FileInfo fileInfo, bool exportExcel, bool isProcessor = true)
-    {
+    { 
       InitializeComponent();
       _excelFile = fileInfo;
       _excelFile.Refresh();
@@ -165,7 +167,7 @@ namespace IM.Base.Forms
         DirectoryInfo directoryInfo = new DirectoryInfo(Helpers.SettingsHelper.GetReportsPath());
         //Eliminamos archivos que no sean de la fecha de hoy
         //en caso de que se haya cambiado el nombre de la Maquina
-        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles("*.*", SearchOption.AllDirectories).Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
+        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles("*.*", SearchOption.AllDirectories).Where(f => f.CreationTime.Date < DateTime.Now.Date.AddDays(-1)).ToList();
         lstFiles.ForEach(fi => fi.Delete());
         //Eliminamos los archivos que fueron creados hoy
         lstFiles = directoryInfo.GetFiles($"{Uid}*").ToList();
@@ -229,6 +231,31 @@ namespace IM.Base.Forms
         LoadXps();        
       }      
 
+    }
+    #endregion
+
+    #region print
+    /// <summary>
+    /// Abre un print dialog para imprimir el archivo
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 23/09/2016
+    /// </history>
+    private void print(object sender, RoutedEventArgs e)
+    {      
+      PrintDialog prtDialog = new PrintDialog();
+      prtDialog.PrintTicket.PageOrientation = (cmbOrientation.SelectedIndex == 0) ? PageOrientation.Landscape : PageOrientation.Portrait;
+      prtDialog.UserPageRangeEnabled = true;
+      prtDialog.PrintTicket.PageMediaSize = setPageSize();      
+      if (prtDialog.ShowDialog() == true)
+      {
+        DocumentPaginator docPaginator = documentViewer.Document.DocumentPaginator;
+        prtDialog.PrintDocument(docPaginator, Uid);
+      }
+      else
+      {
+        prtDialog = null;
+      }
     }
     #endregion
     #endregion
@@ -400,7 +427,8 @@ namespace IM.Base.Forms
           } 
           #endregion
 
-          ws.PageSetup.Order = XlOrder.xlOverThenDown;          
+          ws.PageSetup.Order = XlOrder.xlOverThenDown;//Poner el orden de la paginas
+          #region Export
           switch (enumFileFormat)
           {
             case EnumFileFormat.Pdf:
@@ -411,7 +439,6 @@ namespace IM.Base.Forms
                 if (dialog.ShowDialog() == true)
                 {
                   wb.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, dialog.FileName, XlFixedFormatQuality.xlQualityStandard, false, true, Missing.Value, Missing.Value, false, Missing.Value);//Guardamos como PDF
-                  //File.Copy(_fullPathAndName + ".xlsx", dialog.FileName, true);
 
                   if (File.Exists(dialog.FileName))
                   {
@@ -422,7 +449,7 @@ namespace IM.Base.Forms
                   {
                     UIHelper.ShowMessage("Document not saved.");
                   }
-                }                
+                }
                 break;
               }
             case EnumFileFormat.Xps:
@@ -430,7 +457,8 @@ namespace IM.Base.Forms
                 wb.ExportAsFixedFormat(XlFixedFormatType.xlTypeXPS, $"{_fullPathAndName}.xps", XlFixedFormatQuality.xlQualityStandard, false, true, Missing.Value, Missing.Value, false, Missing.Value);//Guardamos como XPS          
                 break;
               }
-          }
+          } 
+          #endregion
         }
       }
       catch (Exception ex)
@@ -474,8 +502,6 @@ namespace IM.Base.Forms
       #region PageSize      
       List<dynamic> lstPaperSize = new List<dynamic>();
       lstPaperSize.Add(new { name = "Paper Letter", description="21.59 cm x 29.7 cm",  paperSize = XlPaperSize.xlPaperLetter, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
-      lstPaperSize.Add(new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
-      lstPaperSize.Add(new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
       lstPaperSize.Add(new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
       lstPaperSize.Add(new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
       lstPaperSize.Add(new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4, img = "pack://application:,,,/IM.Styles;component/Images/32x32/BPageH.png" });
@@ -563,9 +589,55 @@ namespace IM.Base.Forms
       //Suscribimos los combos al evento selectionchaged
       cmbPageSize.SelectionChanged += cmb_SelectionChanged;
       cmbScale.SelectionChanged += cmb_SelectionChanged;
-    } 
-    #endregion
+    }
     #endregion
 
+    #region setPageSize
+    /// <summary>
+    /// obtiene el tamaño de hoja para el print dialog
+    /// </summary>
+    /// <returns>Page media size</returns>
+    /// <history>
+    /// [emoguel] created 23/09/2016
+    /// </history>
+    private PageMediaSize setPageSize()
+    {
+      XlPaperSize paperSize = (XlPaperSize)cmbPageSize.SelectedValue;
+      switch (paperSize)
+      {
+        case XlPaperSize.xlPaperLegal:
+          {
+            return new PageMediaSize(PageMediaSizeName.NorthAmericaLegal);
+          }
+        case XlPaperSize.xlPaperA3:
+          {
+            return new PageMediaSize(PageMediaSizeName.ISOA3);
+          }
+        case XlPaperSize.xlPaperA4:
+          {
+            return new PageMediaSize(PageMediaSizeName.ISOA4);
+          }
+        case XlPaperSize.xlPaperA5:
+          {
+            return new PageMediaSize(PageMediaSizeName.ISOA5);
+          }
+        case XlPaperSize.xlPaper11x17:
+          {
+            return new PageMediaSize(PageMediaSizeName.NorthAmerica11x17);
+          }
+        case XlPaperSize.xlPaperNote:
+          {
+            return new PageMediaSize(PageMediaSizeName.NorthAmericaNote);
+          }
+        default:
+          {
+            return new PageMediaSize(PageMediaSizeName.NorthAmericaLetter);
+          }
+      }
+    }
+    #endregion
+
+    #endregion
+    
   }
 }

@@ -203,7 +203,7 @@ namespace IM.Base.Forms
 
         //Borrar archivos con fecha diferente a la de hoy
         DirectoryInfo directoryInfo = new DirectoryInfo(SettingsHelper.GetReportsPath());
-        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles().Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
+        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles().Where(f => f.CreationTime.Date < DateTime.Now.Date.AddDays(-1)).ToList();
         lstFiles.ForEach(fi => fi.Delete());//Eliminamos los archivos
 
         if (btnClear)
