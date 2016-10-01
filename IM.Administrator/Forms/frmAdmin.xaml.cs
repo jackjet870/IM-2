@@ -250,21 +250,7 @@ namespace IM.Administrator.Forms
 
       lstMenuAdm.ItemsSource = lstMenu;
 
-      // seleccionamos por default el catalogo de Personnel
       
-      Item personnelCatalog = lstMenu.Where(item => item.Id == "frmPersonnel").FirstOrDefault();      
-      if(personnelCatalog != null)
-      {
-        lstMenuAdm.SelectedItem = personnelCatalog;
-        
-        var listBoxItem = (ListBoxItem)lstMenuAdm
-        .ItemContainerGenerator
-        .ContainerFromItem(personnelCatalog);
-        FocusManager.SetFocusedElement(lstMenuAdm, listBoxItem);        
-      }
-      
-
-      lstMenuAdm.Focus();
       status.Visibility = Visibility.Collapsed;
 
       // indicamos el numero de catalogos
@@ -272,7 +258,18 @@ namespace IM.Administrator.Forms
 
       //vinculamos el view de la lista con la funcion para filtrar
       CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
-      view.Filter = UserFilter;      
+      view.Filter = UserFilter;
+
+      // seleccionamos por default el catalogo de Personnel
+      Item personnelCatalog = lstMenu.Where(item => item.Id == "frmPersonnel").FirstOrDefault();
+      if (personnelCatalog != null)
+      {
+        lstMenuAdm.SelectedItem = personnelCatalog;        
+        var listBoxItem = (ListBoxItem)lstMenuAdm
+        .ItemContainerGenerator
+        .ContainerFromItem(personnelCatalog);
+        listBoxItem.Focus();
+      }
 
     }
 

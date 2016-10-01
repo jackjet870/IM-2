@@ -54,6 +54,7 @@ namespace IM.Administrator.Forms
       btnTeamLog.IsEnabled = Context.User.HasPermission(EnumPermission.Teams, EnumPermisionLevel.ReadOnly);
       btnChangeID.IsEnabled = (Context.User.HasRole(EnumRole.Administrator) && Context.User.HasPermission(EnumPermission.Personnel,EnumPermisionLevel.SuperSpecial));
       LoadPersonnel();
+      dgrPersonnels.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 
