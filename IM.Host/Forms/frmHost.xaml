@@ -153,10 +153,16 @@
         </GroupBox>
         <!--#region Fila 2 Columna 1-->
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
-          <GroupBox x:Name="grbDate" Header="Date" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Stretch" FontWeight="Bold" Margin="1,0,0,10" Width="212" Foreground="White">
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Left">
+          <GroupBox x:Name="grbDate" Header="Date" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Stretch" FontWeight="Bold" Margin="1,0,0,10" Width="Auto" Foreground="White">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
               <xctk:DateTimePicker x:Name="dtpDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="30" Format="LongDate" Value="{x:Static sys:DateTime.Today}" FontSize="10" TextAlignment="Justify" PreviewKeyDown="dtpDate_PreviewKeyDown" ValueChanged="dtpDate_ValueChanged" Style="{StaticResource dtp-DateRange-TK}" Margin="10,0"/>
-            </Grid>
+              <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="Auto" Click="btnRefresh_Click" >
+                <StackPanel>
+                  <Image Source="pack://application:,,,/IM.Styles;component/Images/Refresh.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                  <TextBlock Text="Refresh" HorizontalAlignment="Center" FontWeight="Bold" />
+                </StackPanel>
+              </Button>
+            </StackPanel>
           </GroupBox>
           <Border Margin="10,3,3,3" BorderBrush="White" BorderThickness="1" CornerRadius="2">
             <StackPanel Orientation="Horizontal" Margin="3">

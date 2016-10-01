@@ -1067,6 +1067,28 @@ namespace IM.Host
     }
     #endregion
 
+    #region btnRefresh_Click
+    /// <summary>
+    /// Refresca el grid principal de Host
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Oct/2016 Created
+    /// </history>
+    private void btnRefresh_Click(object sender, RoutedEventArgs e)
+    {
+      if (_dtpCurrent != dtpDate.Value)
+      {
+        if (dtpDate.Value != null)
+        {
+          // Asignamos la fecha seleccionada.
+          _dtpCurrent = dtpDate.Value.Value.Date;
+          CollectionViewSource hostInfo = ((CollectionViewSource)(FindResource("dsPremanifestHost")));
+          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
+        }
+      }
+    }
+    #endregion
+
     #endregion
 
     #region Metodos de CheckBox
