@@ -2113,9 +2113,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     }
 
     #endregion RptWarehouseMovements
-
-
-
+    
     #endregion General Reports
   }
 }

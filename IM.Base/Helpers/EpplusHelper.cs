@@ -1063,7 +1063,9 @@ namespace IM.Base.Helpers
                       range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                       range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                       range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                      range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
+                      wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                      var columnName = dtTableBookings.Columns.OfType<DataColumn>().Where(c => c.ColumnName != "LocationN").Select(c => c.ColumnName).ToArray();
+                      wsData.Cells[rowNumber, 20].LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable().DefaultView.ToTable(false, columnName), false);
                     }
 
                     wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
@@ -1132,7 +1134,9 @@ namespace IM.Base.Helpers
                         range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                         range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                         range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                        range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
+                        wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                        var columnName = dtTableBookings.Columns.OfType<DataColumn>().Where(c => c.ColumnName != "LocationN").Select(c => c.ColumnName).ToArray();
+                        wsData.Cells[rowNumber, 20].LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable().DefaultView.ToTable(false, columnName), false);
                       }
 
                       wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
@@ -1366,7 +1370,7 @@ namespace IM.Base.Helpers
                       Tours = dataValues.AsEnumerable().Count(c => (c["Tour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["Tour"].ToString())) || (c["WO"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["WO"].ToString())) || ((c["CTour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["CTour"].ToString())) || (c["STour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["STour"].ToString())) && (c["ProcGross"] != DBNull.Value && Convert.ToDecimal(c["ProcGross"]) > 0)));
                       Shows = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
                       RealShows = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
-                      Bookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count].Address;
+                      Bookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count - 1 + 19].Address;
                       resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
                       direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
                       inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
@@ -1400,53 +1404,53 @@ namespace IM.Base.Helpers
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 8:
-                            wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 12].Value = "Sin R/D";
+                            wsData.Cells[rowNumber, k + 12].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 12].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 13].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 13].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 10:
-                            wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 14].Value = "Sin Dtas";
+                            wsData.Cells[rowNumber, k + 14].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 14].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 15].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 15].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 12:
-                            wsData.Cells[rowNumber, k].Value = "Sin Rch";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 16].Value = "Sin Rch";
+                            wsData.Cells[rowNumber, k + 16].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 16].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 17].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 17].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 14:
-                            wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 18].Value = "Sin I&O";
+                            wsData.Cells[rowNumber, k + 18].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 18].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 19].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 19].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
 
                           case 16:
-                            wsData.Cells[rowNumber, k].Value = "Eff";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k + 1].Formula = eff;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
+                            wsData.Cells[rowNumber, k + 20].Value = "Eff";
+                            wsData.Cells[rowNumber, k + 20].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 21].Formula = eff;
+                            wsData.Cells[rowNumber, k + 21].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
                             break;
                           case 18:
-                            wsData.Cells[rowNumber, k].Value = "C %";
-                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                            wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 22].Value = "C %";
+                            wsData.Cells[rowNumber, k + 22].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 23].Formula = closingFactor;
+                            wsData.Cells[rowNumber, k + 23].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 20:
-                            wsData.Cells[rowNumber, k].Formula = Bookings;
-                            wsData.Cells[rowNumber, k].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                            wsData.Cells[rowNumber, k].Style.Font.Color.SetColor(Color.White);
-                            wsData.Cells[rowNumber, k + 1].Value = Tours;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                            wsData.Cells[rowNumber, k + 1].Style.Font.Color.SetColor(Color.White);
+                            wsData.Cells[rowNumber, k + 24].Formula = Bookings;
+                            wsData.Cells[rowNumber, k + 24].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k + 24].Style.Font.Color.SetColor(Color.White);
+                            wsData.Cells[rowNumber, k + 25].Value = Tours;
+                            wsData.Cells[rowNumber, k + 25].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k + 25].Style.Font.Color.SetColor(Color.White);
                             if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey("TTours"))
                             {
                               subtotalFormulas[j]["TTours"] += (subtotalFormulas[j]["TTours"] == string.Empty) ? wsData.Cells[rowNumber, k + 1].Address : "," + wsData.Cells[rowNumber, k + 1].Address;
@@ -1567,55 +1571,55 @@ namespace IM.Base.Helpers
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 8:
-                    wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 12].Value = "Sin R/D";
+                    wsData.Cells[rowNumber, k + 12].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 12].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 13].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 13].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 10:
-                    wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 14].Value = "Sin Dtas";
+                    wsData.Cells[rowNumber, k + 14].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 14].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 15].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 15].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 12:
-                    wsData.Cells[rowNumber, k].Value = "Sin Rch";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 16].Value = "Sin Rch";
+                    wsData.Cells[rowNumber, k + 16].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 16].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 17].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 17].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 14:
-                    wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 18].Value = "Sin I&O";
+                    wsData.Cells[rowNumber, k + 18].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 18].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 19].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 19].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
 
                   case 16:
-                    wsData.Cells[rowNumber, k].Value = "Eff";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k + 1].Formula = eff;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
+                    wsData.Cells[rowNumber, k + 20].Value = "Eff";
+                    wsData.Cells[rowNumber, k + 20].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 21].Formula = eff;
+                    wsData.Cells[rowNumber, k + 21].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
                     break;
                   case 18:
-                    wsData.Cells[rowNumber, k].Value = "C %";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 22].Value = "C %";
+                    wsData.Cells[rowNumber, k + 22].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 23].Formula = closingFactor;
+                    wsData.Cells[rowNumber, k + 23].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 20:
-                    wsData.Cells[rowNumber, k].Value = "Total Bookings";
-                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
-                    wsData.Cells[rowNumber, k].Style.Font.Size = 6;
-                    wsData.Cells[rowNumber, k + 1].Formula = Bookings;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                    wsData.Cells[rowNumber, k + 2].Formula = Tours;
-                    wsData.Cells[rowNumber, k + 2].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                    wsData.Cells[rowNumber, k + 2].Style.Font.Color.SetColor(Color.White);
+                    wsData.Cells[rowNumber, k + 24].Value = "Total Bookings";
+                    wsData.Cells[rowNumber, k + 24].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 24].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 25].Formula = Bookings;
+                    wsData.Cells[rowNumber, k + 25].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 26].Formula = Tours;
+                    wsData.Cells[rowNumber, k + 26].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 26].Style.Font.Color.SetColor(Color.White);
                     break;
                 }
               }
