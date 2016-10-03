@@ -530,7 +530,7 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 26/02/2016 Created
     /// </history>
-    private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    private async void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       if (_dtpCurrent != dtpDate.Value)
       {
@@ -539,7 +539,7 @@ namespace IM.Host
           // Asignamos la fecha seleccionada.
           _dtpCurrent = dtpDate.Value.Value.Date;
           CollectionViewSource hostInfo = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
+          hostInfo.Source = await BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
         }
       }
     }
@@ -1074,17 +1074,17 @@ namespace IM.Host
     /// <history>
     /// [vipacheco] 10/Oct/2016 Created
     /// </history>
-    private void btnRefresh_Click(object sender, RoutedEventArgs e)
+    private async void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
-      if (_dtpCurrent != dtpDate.Value)
+      if (dtpDate.Value != null)
       {
-        if (dtpDate.Value != null)
-        {
-          // Asignamos la fecha seleccionada.
-          _dtpCurrent = dtpDate.Value.Value.Date;
-          CollectionViewSource hostInfo = ((CollectionViewSource)(FindResource("dsPremanifestHost")));
-          hostInfo.Source = BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
-        }
+        _busyIndicator.IsBusy = true;
+        _busyIndicator.BusyContent = "Updating information";
+        // Asignamos la fecha seleccionada.
+        _dtpCurrent = dtpDate.Value.Value.Date;
+        CollectionViewSource hostInfo = ((CollectionViewSource)(FindResource("dsPremanifestHost")));
+        hostInfo.Source = await BRGuests.GetPremanifestHost(_dtpCurrent, Context.User.SalesRoom.srID);
+        _busyIndicator.IsBusy = false;
       }
     }
     #endregion
@@ -1138,7 +1138,7 @@ namespace IM.Host
         var frmShow = new frmShow(guest.guID) { Owner = this };
         frmShow.ShowDialog();
 
-        ((GuestPremanifestHost) grdPremanifestHost.SelectedItem).guShow = frmShow.GuestShow.Guest.guShow;
+        ((GuestPremanifestHost)grdPremanifestHost.SelectedItem).guShow = frmShow.GuestShow.Guest.guShow;
         ((GuestPremanifestHost)grdPremanifestHost.SelectedItem).guTour = frmShow.GuestShow.Guest.guTour;
         grdPremanifestHost.Items.Refresh();
       }
@@ -1268,8 +1268,8 @@ namespace IM.Host
       GuestPremanifestHost guest = dataGrid.Items.CurrentItem as GuestPremanifestHost;
       _currentCell = grdPremanifestHost.CurrentCell;
       // Verificamos que no exista el guest current
-      if (_guestCurrent == null) { _guestCurrent =await  BRGuests.GetGuest(guest.guID,true); }
-      else if (_guestCurrent.guID != guest.guID) { _guestCurrent = await BRGuests.GetGuest(guest.guID,true); }
+      if (_guestCurrent == null) { _guestCurrent = await BRGuests.GetGuest(guest.guID, true); }
+      else if (_guestCurrent.guID != guest.guID) { _guestCurrent = await BRGuests.GetGuest(guest.guID, true); }
 
       switch (_currentCell.Column.SortMemberPath)
       {

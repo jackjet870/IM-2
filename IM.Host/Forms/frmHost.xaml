@@ -226,172 +226,174 @@
 
       <!--#region DATAGRID-->
       <Grid Grid.Row="1" DataContext="{StaticResource dsPremanifestHost}" >
-        <DataGrid Name="grdPremanifestHost" RowValidationErrorTemplate="{x:Null}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" PreparingCellForEdit="dtgPremanifestHost_PreparingCellForEdit" CellEditEnding="grdPremanifestHost_CellEditEnding" RowEditEnding="grdPremanifestHost_RowEditEnding">
-          <DataGrid.Columns>
-            <!--#region DEFAULT COLUMN-->
-            <DataGridTextColumn x:Name="guShowSeqColumn" Binding="{Binding guShowSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Seq" Width="SizeToHeader">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Sequency"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="Auto" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Guest ID"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="gulsColumn" Binding="{Binding guls}" Header="LS" Width="Auto" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Lead Source"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guloInvitColumn" Binding="{Binding guloInvit}" Header="Loc" Width="Auto" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Location"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridCheckBoxColumn x:Name="guQuinellaColumn" Binding="{Binding guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Qui" Width="SizeToHeader" IsReadOnly="True">
-              <DataGridCheckBoxColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Quinella"/>
-                </Style>
-              </DataGridCheckBoxColumn.HeaderStyle>
-            </DataGridCheckBoxColumn>
-            <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" Header="Reserv. #" Width="SizeToHeader" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Reservation Number"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guOutInvitNumColumn" Binding="{Binding guOutInvitNum}" Header="Out Invit." Width="SizeToHeader" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Outside Invitation"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridCheckBoxColumn x:Name="guReschColumn" Binding="{Binding guResch}" Header="Rch" Width="SizeToHeader" IsReadOnly="True">
-              <DataGridCheckBoxColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Reschedule"/>
-                </Style>
-              </DataGridCheckBoxColumn.HeaderStyle>
-            </DataGridCheckBoxColumn>
-            <DataGridCheckBoxColumn x:Name="guBookCancColumn" Binding="{Binding guBookCanc}" Header="C.Bk" Width="SizeToHeader" IsReadOnly="True">
-              <DataGridCheckBoxColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Cancelled book"/>
-                </Style>
-              </DataGridCheckBoxColumn.HeaderStyle>
-            </DataGridCheckBoxColumn>
-            <DataGridTextColumn x:Name="guBookTColumn" Binding="{Binding guBookT, StringFormat='HH:mm'}" Header="Book T"  Width="Auto" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Book Time"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="Last Name" Width="SizeToHeader" IsReadOnly="True"/>
-            <DataGridTextColumn x:Name="guPRInvit1Column" Binding="{Binding guPRInvit1}" Header="PR B" Width="Auto" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="PR who made the booking"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guMembershipNumColumn" Binding="{Binding guMembershipNum}" Header="Member" Width="SizeToHeader" IsReadOnly="True">
-              <DataGridTextColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Membership Number"/>
-                </Style>
-              </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn x:Name="guDepositColumn" Binding="{Binding guDeposit}" Header="Deposit" Width="SizeToHeader" IsReadOnly="True"/>
-            <DataGridTemplateColumn x:Name="refundColumn" IsReadOnly="False"  Header="Dep Ref" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox x:Name="ShowDepositsRefund" IsChecked="{Binding refund}"  Click="ShowDepositsRefund_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Deposit Refund"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="Taxi In" Width="SizeToHeader"/>
-            <DataGridTemplateColumn x:Name="guShowColumn" IsReadOnly="False"  Header="Sh" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <CheckBox IsChecked="{Binding guShow}"  Click="ShowShow_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Show up"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-                        <DataGridTemplateColumn x:Name="guTourColumn"  Header="Tour" Width="SizeToHeader">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guTour}"  Click="ShowShow_Click"  HorizontalAlignment="Center" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                            <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Tour"/>
-                </Style>
+        <xctk:BusyIndicator x:Name="_busyIndicatorGrid" >
+          <DataGrid Name="grdPremanifestHost" RowValidationErrorTemplate="{x:Null}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" PreparingCellForEdit="dtgPremanifestHost_PreparingCellForEdit" CellEditEnding="grdPremanifestHost_CellEditEnding" RowEditEnding="grdPremanifestHost_RowEditEnding">
+            <DataGrid.Columns>
+              <!--#region DEFAULT COLUMN-->
+              <DataGridTextColumn x:Name="guShowSeqColumn" Binding="{Binding guShowSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Seq" Width="SizeToHeader">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Sequency"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="Auto" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Guest ID"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="gulsColumn" Binding="{Binding guls}" Header="LS" Width="Auto" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Lead Source"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guloInvitColumn" Binding="{Binding guloInvit}" Header="Loc" Width="Auto" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Location"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridCheckBoxColumn x:Name="guQuinellaColumn" Binding="{Binding guQuinella, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Qui" Width="SizeToHeader" IsReadOnly="True">
+                <DataGridCheckBoxColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Quinella"/>
+                  </Style>
+                </DataGridCheckBoxColumn.HeaderStyle>
+              </DataGridCheckBoxColumn>
+              <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" Header="Reserv. #" Width="SizeToHeader" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Reservation Number"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guOutInvitNumColumn" Binding="{Binding guOutInvitNum}" Header="Out Invit." Width="SizeToHeader" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Outside Invitation"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridCheckBoxColumn x:Name="guReschColumn" Binding="{Binding guResch}" Header="Rch" Width="SizeToHeader" IsReadOnly="True">
+                <DataGridCheckBoxColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Reschedule"/>
+                  </Style>
+                </DataGridCheckBoxColumn.HeaderStyle>
+              </DataGridCheckBoxColumn>
+              <DataGridCheckBoxColumn x:Name="guBookCancColumn" Binding="{Binding guBookCanc}" Header="C.Bk" Width="SizeToHeader" IsReadOnly="True">
+                <DataGridCheckBoxColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Cancelled book"/>
+                  </Style>
+                </DataGridCheckBoxColumn.HeaderStyle>
+              </DataGridCheckBoxColumn>
+              <DataGridTextColumn x:Name="guBookTColumn" Binding="{Binding guBookT, StringFormat='HH:mm'}" Header="Book T"  Width="Auto" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Book Time"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="Last Name" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="guPRInvit1Column" Binding="{Binding guPRInvit1}" Header="PR B" Width="Auto" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="PR who made the booking"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guMembershipNumColumn" Binding="{Binding guMembershipNum}" Header="Member" Width="SizeToHeader" IsReadOnly="True">
+                <DataGridTextColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Membership Number"/>
+                  </Style>
+                </DataGridTextColumn.HeaderStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn x:Name="guDepositColumn" Binding="{Binding guDeposit}" Header="Deposit" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTemplateColumn x:Name="refundColumn" IsReadOnly="False"  Header="Dep Ref" Width="SizeToHeader" >
+                <DataGridTemplateColumn.CellTemplate >
+                  <DataTemplate>
+                    <CheckBox x:Name="ShowDepositsRefund" IsChecked="{Binding refund}"  Click="ShowDepositsRefund_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Deposit Refund"/>
+                  </Style>
                 </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox x:Name="guMealTickets" IsChecked="{Binding guMealTicket}"  Click="ShowMealTickets_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Meal Ticket"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn x:Name="guSaleColumn" IsReadOnly="False"  Header="Sale" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox x:Name="guSale" IsChecked="{Binding guSale}"  Click="ShowSale_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Sale"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn x:Name="guGiftsReceivedColumn" IsReadOnly="False"  Header="Gifts" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox x:Name="guGiftsReceived" IsChecked="{Binding guGiftsReceived}"  Click="ShowGiftsReceived_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Gifts Received"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="Comments" Width="*" />
-            <!--#endregion-->
-          </DataGrid.Columns>
-        </DataGrid>
+              </DataGridTemplateColumn>
+              <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="Taxi In" Width="SizeToHeader"/>
+              <DataGridTemplateColumn x:Name="guShowColumn" IsReadOnly="False"  Header="Sh" Width="SizeToHeader" >
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <CheckBox IsChecked="{Binding guShow}"  Click="ShowShow_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Show up"/>
+                  </Style>
+                </DataGridTemplateColumn.HeaderStyle>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn x:Name="guTourColumn"  Header="Tour" Width="SizeToHeader">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <CheckBox IsChecked="{Binding guTour}"  Click="ShowShow_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Tour"/>
+                  </Style>
+                </DataGridTemplateColumn.HeaderStyle>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
+                <DataGridTemplateColumn.CellTemplate >
+                  <DataTemplate>
+                    <CheckBox x:Name="guMealTickets" IsChecked="{Binding guMealTicket}"  Click="ShowMealTickets_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Meal Ticket"/>
+                  </Style>
+                </DataGridTemplateColumn.HeaderStyle>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn x:Name="guSaleColumn" IsReadOnly="False"  Header="Sale" Width="SizeToHeader" >
+                <DataGridTemplateColumn.CellTemplate >
+                  <DataTemplate>
+                    <CheckBox x:Name="guSale" IsChecked="{Binding guSale}"  Click="ShowSale_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Sale"/>
+                  </Style>
+                </DataGridTemplateColumn.HeaderStyle>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn x:Name="guGiftsReceivedColumn" IsReadOnly="False"  Header="Gifts" Width="SizeToHeader" >
+                <DataGridTemplateColumn.CellTemplate >
+                  <DataTemplate>
+                    <CheckBox x:Name="guGiftsReceived" IsChecked="{Binding guGiftsReceived}"  Click="ShowGiftsReceived_Click"  HorizontalAlignment="Center" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.HeaderStyle>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="ToolTip" Value="Gifts Received"/>
+                  </Style>
+                </DataGridTemplateColumn.HeaderStyle>
+              </DataGridTemplateColumn>
+              <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="Comments" Width="*" />
+              <!--#endregion-->
+            </DataGrid.Columns>
+          </DataGrid>
+        </xctk:BusyIndicator>
       </Grid>
       <!--#endregion-->
 

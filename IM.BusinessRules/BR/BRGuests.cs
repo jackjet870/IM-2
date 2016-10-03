@@ -99,13 +99,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 22/02/2016 Created
     /// [wtorres]   23/03/2016 Modified. Movido desde BRSalesRooms
+    /// [vipacheco] 10/Oct/2016 Modified -> Se agrego asincronia
     /// </history>
-    public static List<GuestPremanifestHost> GetPremanifestHost(DateTime? currentDate, string salesRoomID)
+    public static async Task<List<GuestPremanifestHost>> GetPremanifestHost(DateTime? currentDate, string salesRoomID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetPremanifestHost(currentDate, salesRoomID).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetPremanifestHost(currentDate, salesRoomID).ToList();
+        }
+      });
     }
 
     #endregion GetPremanifestHost
