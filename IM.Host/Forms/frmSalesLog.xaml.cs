@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace IM.Host.Forms
 {
@@ -38,11 +39,11 @@ namespace IM.Host.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Mouse.OverrideCursor = Cursors.Wait;
       Title = $"Sales Log - Sale ID {_sale} / Membership Number {_membership}"; 
       var saleLog = await BRSales.GetSaleLog(_sale);
-     // var saleLogDataViewSource = (CollectionViewSource)FindResource("saleLogDataViewSource");
-     // saleLogDataViewSource.Source = saleLog;
       saleLogDataDataGrid.ItemsSource = saleLog;
+      Mouse.OverrideCursor = null;
     }
 
     /// <summary>
@@ -51,10 +52,10 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche]  created 07072016
     /// </history>
-    private void btnSalesMan_Click(object sender, RoutedEventArgs e)
+    private void btnSalesMenChanges_Click(object sender, RoutedEventArgs e)
     {
       var salesmenchanges = new frmSalesmenChanges(_sale, _membership) {Owner = this};
-      salesmenchanges.ShowDialog();
+      salesmenchanges.ShowDialog();      
     }
 
     /// <summary>
@@ -64,28 +65,37 @@ namespace IM.Host.Forms
     /// [jorcanche]  created 07072016
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private async void btnPrintGuestLog_Click(object sender, RoutedEventArgs e)
-    {
+    private async void btnPrintSaleLog_Click(object sender, RoutedEventArgs e)
+    {     
       try
       {
-        if (saleLogDataDataGrid.ItemsSource == null) return;
-
+        if (saleLogDataDataGrid == null) return;
+        if (saleLogDataDataGrid.Items.Count == 0)
+        {
+          UIHelper.ShowMessage("There is no info to make a report");
+          return;
+        }
+        Mouse.OverrideCursor = Cursors.Wait;
         FileInfo fileInfo = await ReportBuilder.CreateCustomExcel(
           TableHelper.GetDataTableFromList((List<SaleLogData>)saleLogDataDataGrid.ItemsSource, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
           "Sale Log",
           DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
           EpplusHelper.OrderColumns(saleLogDataDataGrid.Columns.ToList(), Classes.clsFormatReport.RptSaleLog()));
-        if(fileInfo!=null)
+        if (fileInfo != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
           documentViewver.Owner = this;
           documentViewver.ShowDialog();
         }
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        Mouse.OverrideCursor = null;
       }
     }
   }

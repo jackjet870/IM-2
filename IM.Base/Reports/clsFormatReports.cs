@@ -297,5 +297,26 @@ namespace IM.Base.Reports
     }
 
     #endregion RptDepositByPr
+
+    #region RptGuestMovements
+    /// <summary>
+    /// Formato para el reporte de Guest Movements
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 07072016 
+    /// </history>    
+    public static ColumnFormatList RptGuestMovements()
+    {
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("By", "gmpe");
+      lst.Add("Name", "peN" );
+      lst.Add("Date/Time", "gmDT");
+      lst.Add("Movement", "gnN");
+      lst.Add("Computer", "gmcp");
+      lst.Add("Computer name", "cpN");
+      lst.Add("IP Address", "gmIpAddress");   
+      return lst;
+    }
+    #endregion
   }
 }

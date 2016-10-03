@@ -509,7 +509,10 @@ namespace IM.Host.Forms
       btnSave.IsEnabled = btnUndo.IsEnabled = blnEnable;
       btnClose.IsEnabled = !blnEnable;
       //Autenticacion automatica
-      grbChangedBy.IsEnabled = blnEnable;
+      txtPwd.IsEnabled = blnEnable;
+      txtChangedBy.IsEnabled = blnEnable;
+      btnLog.IsEnabled = true;
+
       if (blnEnable && Context.User.AutoSign)
       {
         txtChangedBy.Text = Context.User.User.peID;

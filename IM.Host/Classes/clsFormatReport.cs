@@ -195,5 +195,30 @@ namespace IM.Host.Classes
       return lst;
     }
     #endregion
+
+    #region RptSalesmenChanges
+    /// <summary>
+    /// Formato para el reporte de Sales Log
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created  03102016
+    /// </history>    
+    public static ColumnFormatList RptSalesmenChanges()
+    {
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Date / Time", "schDT", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Authorized By", "schAuthorizedBy", aligment: ExcelHorizontalAlignment.Left);      
+      lst.Add("Authorized By Name", "AuthorizedByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Made By", "schMadeBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Made By Name", "MadeByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Role", "roN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Position", "schPosition", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Old Salesman", "schOldSalesman", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Old Salesman Name", "OldSalesmanN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("New Salesman", "schNewSalesman", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("New Salesman Name", "NewSalesmanN", aligment: ExcelHorizontalAlignment.Left);    
+      return lst;
+    }
+    #endregion
   }
 }

@@ -6,15 +6,17 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesmenChanges"
         mc:Ignorable="d"
-        Background="#147F79"  ResizeMode="NoResize"
+        ResizeMode="CanResize"
         Title="Salesmen Changes" ShowInTaskbar="False"  Height="297.736" Width="860" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
     <Window.Resources>
-
         <CollectionViewSource x:Key="salesmenChangesViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SalesmenChanges}, CreateList=True}"/>
-
     </Window.Resources>
     <Grid DataContext="{StaticResource salesmenChangesViewSource}">
-        <DataGrid x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="3" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="AUTO" />
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row ="0"  x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="3" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="White" BorderBrush="#147F79" BorderThickness="3">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="schDTColumn" Header="Date / Time" Width="auto" Binding="{Binding schDT,StringFormat= 0:dd/MM/yyyy}"/>
                 <DataGridTextColumn x:Name="schAuthorizedByColumn" Binding="{Binding schAuthorizedBy}" Header="Authorized By" Width="auto"/>
@@ -29,5 +31,6 @@
                 <DataGridTextColumn x:Name="newSalesmanNColumn" Binding="{Binding NewSalesmanN}" Header="New Salesman Name" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="1"  Name="btnPrintSalesmenChangeslog" Content="Print Salesmen Changes" Width="125" Margin="5" Click="btnPrintSalesmenChangeslog_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
     </Grid>
 </Window>
