@@ -17,23 +17,11 @@ namespace IM.Model
     
     public partial class IMEntities : DbContext
     {
-    #region Constructores y destructores
-
-    /// <summary>
-    /// Constructor que permite utilizar una cadena de conexion
-    /// </summary>
-    /// <param name="connectionString">Cadena de conexion</param>
-    /// <history>
-    /// [wtorres]  23/Mar/2016 Created
-    /// </history>
-    public IMEntities(string connectionString)
-      : base(connectionString)
+        public IMEntities()
+            : base("name=IMEntities")
         {
-      Configuration.ProxyCreationEnabled = false;
         }
     
-    #endregion
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

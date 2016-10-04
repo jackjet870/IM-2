@@ -109,6 +109,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\ColumnDefinition.cs" />
+    <Compile Include="Classes\Contexts\AsistenciaModel.Context.cs" />
+    <Compile Include="Classes\Contexts\ICModel.Context.cs" />
+    <Compile Include="Classes\Contexts\IMModel.Context.cs" />
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
     <Compile Include="Classes\EntityBase.cs" />
     <Compile Include="Classes\Margin.cs" />
