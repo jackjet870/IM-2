@@ -118,12 +118,22 @@ namespace IM.Base.Forms
     /// </history>
     private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      if (imgButtonSave.IsEnabled)
+      {
+        //Invocamos el metodo Guardar Invitacion y esperamos que termine
+        await SaveInvitation();
+      }
+    }
+
+    private async Task SaveInvitation()
+    {
       try
       {
-
         //Ponemos el cursor en modo espera
         Mouse.OverrideCursor = Cursors.Wait;
         imgButtonSave.IsEnabled = false;
+        
+        
         bool isValid = true;
 
         //Asignamos el focus al boton
@@ -149,35 +159,36 @@ namespace IM.Base.Forms
         //Guardamos la informacion
         if (isValid)
         {
-          //_busyIndicator.IsBusy = true;
-          //_busyIndicator.BusyContent = "Saving invitation...";
+          _busyIndicator.IsBusy = true;
+          _busyIndicator.BusyContent = "Saving invitation...";
 
           var guestInvitation = dbContext as GuestInvitation;
 
           var hoursDiff = _module != EnumModule.Host ? _user.LeadSource.lsHoursDif : _user.SalesRoom.srHoursDif;
 
-          await BRGuests.SaveGuestInvitation(guestInvitation, dbContext.Program, _module, _user, dbContext.InvitationMode,
-           ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
+          await
+            BRGuests.SaveGuestInvitation(guestInvitation, dbContext.Program, _module, _user, dbContext.InvitationMode,
+              ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
 
-          //_busyIndicator.IsBusy = false;
-
+          _busyIndicator.IsBusy = false;
           UIHelper.ShowMessage("The data was saved successfully");
 
           //Si es del modulo OutHouse y el tipo de invitacion es NewOutHouse, NO cerramos la ventana, solo la reiniciamos
           if (_module == EnumModule.OutHouse && _invitationType == EnumInvitationType.newOutHouse)
           {
+            _busyIndicator.IsBusy = true;
+            _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
             //Volvemos a cargar la invitacion
-            //_busyIndicator.IsBusy = true;
-            //_busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
             DataContext = null;
             UpdateLayout();
             dbContext = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
             DataContext = dbContext;
             await dbContext.LoadAll();
-            //_busyIndicator.IsBusy = false;
+            _busyIndicator.IsBusy = false;
           }
           else
           {
+            _busyIndicator.IsBusy = false;
             SaveGuestInvitation = true;
             Close();
           }
@@ -189,7 +200,7 @@ namespace IM.Base.Forms
       }
       finally
       {
-        //_busyIndicator.IsBusy = false;
+        _busyIndicator.IsBusy = false;
         Mouse.OverrideCursor = null;
         imgButtonSave.IsEnabled = true;
       }
@@ -444,7 +455,7 @@ namespace IM.Base.Forms
     {
       try
       {
-        if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue && 
+        if (dtpBookDate.Value.HasValue && dtpBookDate?.Value != DateTime.MinValue &&
           cmbSalesRooms?.SelectedItem != null && cmbBookT.IsEnabled)
         {
           //Consultamos los horarios disponibles
@@ -1467,7 +1478,7 @@ namespace IM.Base.Forms
 
       //Regalos
       dbContext.InvitationGiftList.Clear();
-      
+
 
       //Numero de habitaciones
       if (dbContext.Guest.guRoomsQty != 0)
