@@ -106,7 +106,7 @@
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->
-                <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Informartion User">
+                <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Information User">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>

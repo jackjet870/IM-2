@@ -112,9 +112,9 @@ namespace IM.Base.Classes
     /// <history>
     /// [ecanul] 13/09/2016 Created
     /// </history>
-    private static ExcelFormatItemsList RptAssistanceFormat()
+    private static ColumnFormatList RptAssistanceFormat()
     {
-      ExcelFormatItemsList format = new ExcelFormatItemsList();
+      ColumnFormatList format = new ColumnFormatList();
       format.Add("Place Type", "asPlaceType");
       format.Add("Place ID", "asPlaceID");
       format.Add("Date Start", "asStartD", format: EnumFormatTypeExcel.Date);

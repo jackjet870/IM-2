@@ -11,6 +11,9 @@ using IM.Base.Reports;
 using IM.Model;
 using System.Windows.Input;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
+using System.IO;
+using IM.Base.Classes;
+using IM.Model.Enums;
 
 namespace IM.Base.Forms
 {
@@ -78,16 +81,38 @@ namespace IM.Base.Forms
     /// [jorcanche]  created 07/07/2016
     /// [edgrodriguez] 05/09/2016 Modified. Se cambio el método CreateExcelCustom por CreatCustomExcel
     /// </history>
-    private async void btnPrintSaleLog_Click(object sender, RoutedEventArgs e)
+    private async void btnPrintGuestLog_Click(object sender, RoutedEventArgs e)
     {
-      if (dgGuestLog.ItemsSource == null) return;
-
-      await ReportBuilder.CreateCustomExcel(
-        TableHelper.GetDataTableFromList((List<GuestLogData>)dgGuestLog.ItemsSource, true, true, true),
-        new List<Tuple<string, string>> { Tuple.Create("Guest Id", _idGuest.ToString()) },
-        "Guest Log",
-        DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
-        EpplusHelper.OrderColumns(dgGuestLog.Columns.ToList(), clsFormatReports.RptGuestLog()));
+      try
+      {
+        if (dgGuestLog == null) return;
+        if (dgGuestLog.Items.Count == 0)
+        {
+          UIHelper.ShowMessage("There is no info to make a report");
+          return;
+        }
+        Mouse.OverrideCursor = Cursors.Wait;
+        FileInfo fileInfo = await ReportBuilder.CreateCustomExcel(
+          TableHelper.GetDataTableFromList((List<GuestLogData>)dgGuestLog.ItemsSource, true, true, true),
+          new List<Tuple<string, string>> { Tuple.Create("Guest Id", _idGuest.ToString()) },
+          "Guest Log",
+          DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
+          EpplusHelper.OrderColumns(dgGuestLog.Columns.ToList(), clsFormatReports.RptGuestLog()));
+        if (fileInfo != null)
+        {
+          frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
+          documentViewver.Owner = this;
+          documentViewver.ShowDialog();
+        }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        Mouse.OverrideCursor = null;
+      }
     }
     #endregion
   }

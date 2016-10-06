@@ -9,13 +9,13 @@ namespace IM.SalesPR.Utilities
     /// <summary>
     /// Genera las columnas que necesito en el reporte Sales by PR
     /// </summary>
-    /// <returns>List<ExcelFormatItemsList></returns>
+    /// <returns>List<ColumnFormatList></returns>
     /// <history>
     /// [erosado] 23/Mar/2016  Created
     /// </history>
-    public static ExcelFormatItemsList getExcelFormatTable()
+    public static ColumnFormatList getExcelFormatTable()
     {
-      ExcelFormatItemsList  formatColumns = new ExcelFormatItemsList();
+      ColumnFormatList  formatColumns = new ColumnFormatList();
       formatColumns.Add("Sale ID", "saID");
       formatColumns.Add("LS", "sals");
       formatColumns.Add("SR", "sasr");

@@ -106,7 +106,7 @@
             </GroupBox>
             <!--#endregion-->
             <!--#region Informacion Usuario-->
-            <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Informartion User" HorizontalAlignment="Right" Width="300" VerticalAlignment="Top" Height="70" FontWeight="Bold">
+            <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Information User" HorizontalAlignment="Right" Width="300" VerticalAlignment="Top" Height="70" FontWeight="Bold">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60" />

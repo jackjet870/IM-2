@@ -8,13 +8,13 @@ namespace IM.GuestsPR.Utilities
     /// <summary>
     /// Genera las columnas que necesito en el reporte RPTStatistics
     /// </summary>
-    /// <returns>List<ExcelFormatTable></returns>
+    /// <returns>List<ColumnFormat></returns>
     /// <history>
     /// [erosado] 14/Mar/2016  Created
     /// </history>
-    public static ExcelFormatItemsList getExcelFormatTable()
+    public static ColumnFormatList getExcelFormatTable()
     {
-      ExcelFormatItemsList formatColumns = new ExcelFormatItemsList();
+      ColumnFormatList formatColumns = new ColumnFormatList();
       formatColumns.Add("GUID", "guID");
       formatColumns.Add("Last Name", "guLastName1");
       formatColumns.Add("First Name", "guFirstName1");

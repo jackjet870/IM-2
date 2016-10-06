@@ -424,12 +424,12 @@ namespace IM.Outhouse.Forms
         if (isInvit || login.IsAuthenticated)
         {
           var invitacion = new frmInvitation
-            (EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId, allowReschedule: false) { Owner = this };
+            (EnumModule.OutHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId) { Owner = this };
           invitacion.ShowDialog();
           if (invitacion.SaveGuestInvitation)
           {
             //actualizamos los datos del grid            
-            UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dgGuestPremanifest);
+            UpdateGridInvitation(invitacion.dbContext.Guest, invitacion._module, dgGuestPremanifest);
           }
           
         }
@@ -707,7 +707,7 @@ namespace IM.Outhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData, allowReschedule: false)
+        var invitacion = new frmInvitation(EnumModule.OutHouse, EnumInvitationType.newOutHouse, login.UserData)
         {
           Owner = this
         };

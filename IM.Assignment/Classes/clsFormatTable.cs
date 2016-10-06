@@ -14,7 +14,7 @@ namespace IM.Assignment.Classes
   public class clsFormatTable
   {
     #region Atributos
-    public static List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+    public static List<ColumnFormat> format = new List<ColumnFormat>();
     #endregion
 
     #region getExcelFormatTableAssignByPR
@@ -26,9 +26,9 @@ namespace IM.Assignment.Classes
     ///   [vku] 20/Jul/2016 Modified. Elimine las columnas PR ID, PR N Assigned
     ///                               Se corrigio el orden de las columnas    
     /// </history>
-    public static ExcelFormatItemsList getExcelFormatTableAssignByPR()
+    public static ColumnFormatList getExcelFormatTableAssignByPR()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("In", "guCheckInD", format: EnumFormatTypeExcel.Date);
       lst.Add("Out", "guCheckOutD", format: EnumFormatTypeExcel.Date);
       lst.Add("Room", "guRoomNum", format: EnumFormatTypeExcel.Id);
@@ -58,9 +58,9 @@ namespace IM.Assignment.Classes
     /// <history>
     ///   [vku] 31/Mar/2016 Created
     /// </history>
-    public static ExcelFormatItemsList getExcelFormatTableGenAsignyArvls()
+    public static ColumnFormatList getExcelFormatTableGenAsignyArvls()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("ID", "guID", format: EnumFormatTypeExcel.Id);
       lst.Add("Check In D", "guCheckInD", format: EnumFormatTypeExcel.Date);
       lst.Add("In", "guCheckIn", format: EnumFormatTypeExcel.Boolean);

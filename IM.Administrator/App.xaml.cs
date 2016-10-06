@@ -99,10 +99,8 @@ namespace IM.Administrator
 
     #region dataGrid_MouseLeftButtonUp
     /// <summary>
-    /// Cambia el cmapo de busqueda del grid
+    /// Cambia el campo de busqueda del grid
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
     /// [erosado] created 21/06/2016
     /// </history>

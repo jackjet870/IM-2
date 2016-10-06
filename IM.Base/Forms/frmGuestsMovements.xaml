@@ -8,7 +8,11 @@
         x:Class="IM.Base.Forms.frmGuestsMovements" 
         Title="frmGuestsMovements" ShowInTaskbar="False"  Height="297.736" Width="700" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid x:Name="guestMovementsDataGrid" CanUserAddRows="False" CanUserResizeColumns="True" IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="7" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" BorderThickness="2" BorderBrush="#147F79">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="AUTO" />
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row ="0" x:Name="guestMovementsDataGrid" CanUserAddRows="False" CanUserResizeColumns="True" IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="7" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" BorderThickness="2" BorderBrush="#147F79">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="gmpeColumn" Width="auto" Header="By" Binding="{Binding gmpe}"/>
                 <DataGridTextColumn x:Name="peNColumn" Width="*" Header="Name" Binding="{Binding peN}"/>
@@ -19,5 +23,6 @@
                 <DataGridTextColumn x:Name="gmIpAddressColumn" Width="auto" Header="Ip Address" Binding="{Binding gmIpAddress}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="1"  Name="btnPrintGuestMovements" Content="Print Guest Movements" Width="125" Margin="5" Click="btnPrintGuestMovements_Click" />
     </Grid>
 </Window>

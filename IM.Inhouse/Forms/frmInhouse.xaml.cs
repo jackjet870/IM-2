@@ -2013,7 +2013,7 @@ namespace IM.Inhouse.Forms
           if (invitacion.SaveGuestInvitation)
           {
             //actualizamos los datos del grid            
-            UpdateGridInvitation(invitacion.CatObj.Guest, invitacion._module, dg);
+            UpdateGridInvitation(invitacion.dbContext.Guest, invitacion._module, dg);
           }
         }
        

@@ -1410,12 +1410,12 @@ namespace IM.ProcessorOuthouse.Forms
       {
         case "Folios Invitations Outhouse":
         case "Folios Invitations Outhouse by PR":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolSeries: true, blnFolFrom: true, blnFolTo: true, enumPrograms: EnumProgram.All);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolSeries: true, blnFolFrom: true, blnFolTo: true);
           break;
 
         case "Folios CxC by PR":
         case "Folios CXC":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolFrom: true, blnFolTo: true, blnAllFolios: true, enumPrograms: EnumProgram.All);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolFrom: true, blnFolTo: true, blnAllFolios: true);
           break;
       }
 
@@ -1527,9 +1527,13 @@ namespace IM.ProcessorOuthouse.Forms
         if (finfo == null)
         {
           finfo = ReportBuilder.CreateNoInfoRptExcel(filters, strReport, fileFullPath);
-          frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly));
-          frmDocumentViewver.Show();
-        }        
+        }
+        frmDocumentViewer frmDocumentViewver = new frmDocumentViewer(finfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly))
+        {
+          Owner = this
+        };
+        frmDocumentViewver.Show();
+
       }
       catch (Exception ex)
       {

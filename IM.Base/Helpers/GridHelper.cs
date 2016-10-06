@@ -752,7 +752,25 @@ namespace IM.Base.Helpers
         return rowEdit;
       }
       return row;
+    }
+    #endregion
+
+    #region dtg_CurrentCellChanged
+    /// <summary>
+    /// Cambia el campo de busqueda del grid
+    /// </summary>
+    /// <history>
+    /// [emoguel] 01/10/2016 created
+    /// </history>
+    public static void dtg_CurrentCellChanged(object sender, EventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      if (dgr.CurrentColumn != null)
+      {
+        dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+      }
     } 
     #endregion
+
   }
 }

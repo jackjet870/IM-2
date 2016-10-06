@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IM.GuestsPR.Forms"
+        xmlns:model="clr-namespace:IM.Model;assembly=IM.Model"
         mc:Ignorable="d"
          Title="Guests By PR"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     WindowState="Maximized" WindowStyle="SingleBorderWindow"
-    KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
+    KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded" d:DataContext="{d:DesignInstance model:GuestByPR}">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
             AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
@@ -118,29 +119,49 @@
                       EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="guid" Width="Auto" Header="GUID" Binding="{Binding guID}"/>
-                    <DataGridTextColumn x:Name="lastName" Width="Auto" Header="Last Name" Binding="{Binding guLastName1}" />
                     <DataGridTextColumn x:Name="firstName" Width="Auto" Header="First Name" Binding="{Binding guFirstName1}"/>
+                    <DataGridTextColumn x:Name="lastName" Width="Auto" Header="Last Name" Binding="{Binding guLastName1}" />
                     <DataGridTextColumn x:Name="ls" Width="Auto" Header="LS" Binding="{Binding guls}"/>
+                    <DataGridTextColumn x:Name="sr" Width="Auto" Header="SR" Binding="{Binding gusr}"/>
+                    <DataGridTextColumn x:Name="agencyID" Width="Auto" Header="Agency ID" Binding="{Binding guag}"/>
                     <DataGridTextColumn x:Name="agency" Width="Auto" Header="Agency" Binding="{Binding agN}"/>
+                    <DataGridTextColumn x:Name="marketID" Width="Auto" Header="Market ID" Binding="{Binding gumk}"/>
                     <DataGridTextColumn x:Name="market" Width="Auto" Header="Market" Binding="{Binding mkN}"/>
                     <DataGridCheckBoxColumn x:Name="ext" Width="Auto" Header="Ext" Binding="{Binding External}"  IsReadOnly="True"/>
+
                     <DataGridCheckBoxColumn x:Name="rbk" Width="Auto" Header="Rbk" Binding="{Binding Rebook}"  IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="checkInD" Width="Auto" Header="Check-In D" Binding="{Binding guCheckInD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="prA" Width="Auto" Header="PR A" Binding="{Binding guPRAssign}"/>
                     <DataGridCheckBoxColumn x:Name="avl" Width="Auto" Header="Avl" Binding="{Binding guAvail}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn x:Name="oAvl" Width="Auto" Header="O.Avl" Binding="{Binding guOriginAvail}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn x:Name="info" Width="Auto" Header="Info" Binding="{Binding guInfo}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guinfoD" Width="Auto" Header="Info D" Binding="{Binding guInfoD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="guprInfo" Width="Auto" Header="PR Info" Binding="{Binding guPRInfo}"/>
+                    <DataGridTextColumn x:Name="guprInfoName" Width="Auto" Header="PR Info Name" Binding="{Binding PRInfoN}"/>
                     <DataGridCheckBoxColumn x:Name="fu" Width="Auto" Header="FU" Binding="{Binding guFollow}" IsReadOnly="True"/>
+
+                    <DataGridTextColumn x:Name="guFollowD" Width="Auto" Header="Follow D" Binding="{Binding guFollowD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="guPRFollow" Width="Auto" Header="PR Follow" Binding="{Binding guPRFollow}"/>
+                    <DataGridTextColumn x:Name="PRFollowN" Width="Auto" Header="PR Follow Name" Binding="{Binding PRFollowN}"/>
                     <DataGridCheckBoxColumn x:Name="invit" Width="Auto" Header="Invit" Binding="{Binding guInvit}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="pr" Width="Auto" Header="PR" Binding="{Binding guPRInfo}"/>
-                    <DataGridTextColumn x:Name="prName" Width="Auto" Header="PR Name" Binding="{Binding PRInfoN}"/>
+                    <DataGridTextColumn x:Name="guBookD" Width="Auto" Header="Book D" Binding="{Binding guBookD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="pr" Width="Auto" Header="PR" Binding="{Binding guPRInvit1}"/>
+                    <DataGridTextColumn x:Name="prName" Width="Auto" Header="PR Name" Binding="{Binding PR1N}"/>
+                    <DataGridTextColumn x:Name="pr2" Width="Auto" Header="PR 2" Binding="{Binding guPRInvit2}"/>
+                    <DataGridTextColumn x:Name="prName2" Width="Auto" Header="PR Name 2" Binding="{Binding PR2N}"/>
+                    <DataGridTextColumn x:Name="pr3" Width="Auto" Header="PR 3" Binding="{Binding guPRInvit3}"/>
+
+                    <DataGridTextColumn x:Name="prName3" Width="Auto" Header="PR Name 3" Binding="{Binding PR3N}"/>
                     <DataGridCheckBoxColumn x:Name="qui" Width="Auto" Header="Qui" Binding="{Binding guQuinella}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="books" Width="Auto" Header="Books" Binding="{Binding guRoomsQty}"/>
                     <DataGridCheckBoxColumn x:Name="sh" Width="Auto" Header="Sh" Binding="{Binding guShow}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guShowD" Width="Auto" Header="Show D" Binding="{Binding guShowD, StringFormat={}{0:dd/MM/yyyy}}"/>
                     <DataGridCheckBoxColumn x:Name="tour" Width="Auto" Header="Tour" Binding="{Binding guTour}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn x:Name="io" Width="Auto" Header="IO" Binding="{Binding guInOut}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn x:Name="wo" Width="Auto" Header="WO" Binding="{Binding guWalkOut}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn x:Name="qs" Width="Auto" Header="QS" Binding="{Binding guQuinellaSplit}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="shows" Width="Auto" Header="Shows" Binding="{Binding guShowsQty}"/>
+                    
                     <DataGridCheckBoxColumn x:Name="sale" Width="Auto" Header="Sale" Binding="{Binding guSale}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="sales" Width="Auto" Header="Sales" Binding="{Binding Sales}"/>
                     <DataGridTextColumn x:Name="amount" Width="*" Header="Amount" Binding="{Binding SalesAmount, StringFormat={}{0:n2}}"/>

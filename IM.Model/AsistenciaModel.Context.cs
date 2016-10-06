@@ -9,61 +9,48 @@
 
 namespace IM.Model
 {
-  using System;
-  using System.Data.Entity;
-  using System.Data.Entity.Infrastructure;
-  using System.Data.Entity.Core.Objects;
-  using System.Linq;
-
-  public partial class AsistenciaEntities : DbContext
-  {
-
-
-    #region Constructores y destructores
-
-    /// <summary>
-    /// Constructor que permite utilizar una cadena de conexion
-    /// </summary>
-    /// <param name="connectionString">Cadena de conexion</param>
-    /// <history>
-    /// [erosado]  20/06/2016 Created
-    /// </history>
-    public AsistenciaEntities(string connectionString)
-      : base(connectionString)
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
+    
+    public partial class AsistenciaEntities : DbContext
     {
-      Configuration.ProxyCreationEnabled = false;
+        public AsistenciaEntities()
+            : base("name=AsistenciaEntities")
+        {
+        }
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
+    
+        public virtual ObjectResult<Collaborator> USP_ObtenerColaboradoresPorParametro(string id, string name, string puesto, string locacion, string hotel)
+        {
+            var idParameter = id != null ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var puestoParameter = puesto != null ?
+                new ObjectParameter("Puesto", puesto) :
+                new ObjectParameter("Puesto", typeof(string));
+    
+            var locacionParameter = locacion != null ?
+                new ObjectParameter("Locacion", locacion) :
+                new ObjectParameter("Locacion", typeof(string));
+    
+            var hotelParameter = hotel != null ?
+                new ObjectParameter("Hotel", hotel) :
+                new ObjectParameter("Hotel", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Collaborator>("USP_ObtenerColaboradoresPorParametro", idParameter, nameParameter, puestoParameter, locacionParameter, hotelParameter);
+        }
     }
-
-    #endregion
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    {
-      throw new UnintentionalCodeFirstException();
-    }
-
-
-    public virtual ObjectResult<Collaborator> USP_ObtenerColaboradoresPorParametro(string id, string name, string puesto, string locacion, string hotel)
-    {
-      var idParameter = id != null ?
-          new ObjectParameter("Id", id) :
-          new ObjectParameter("Id", typeof(string));
-
-      var nameParameter = name != null ?
-          new ObjectParameter("Name", name) :
-          new ObjectParameter("Name", typeof(string));
-
-      var puestoParameter = puesto != null ?
-          new ObjectParameter("Puesto", puesto) :
-          new ObjectParameter("Puesto", typeof(string));
-
-      var locacionParameter = locacion != null ?
-          new ObjectParameter("Locacion", locacion) :
-          new ObjectParameter("Locacion", typeof(string));
-
-      var hotelParameter = hotel != null ?
-          new ObjectParameter("Hotel", hotel) :
-          new ObjectParameter("Hotel", typeof(string));
-
-      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Collaborator>("USP_ObtenerColaboradoresPorParametro", idParameter, nameParameter, puestoParameter, locacionParameter, hotelParameter);
-    }
-  }
 }

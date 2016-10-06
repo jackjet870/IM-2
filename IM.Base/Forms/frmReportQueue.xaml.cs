@@ -151,7 +151,7 @@ namespace IM.Base.Forms
         ObjReportQueues.Where(x => x.Id == id).ToList().ForEach(x =>
         {
           x.ReportName = reportname;
-          
+          x.Exists = false;
         });
       }
       else
@@ -159,7 +159,8 @@ namespace IM.Base.Forms
         ObjReportQueues.Insert(0, new objReportQueue()
         {
           Id = id,
-          ReportName = reportname
+          ReportName = reportname,
+          Exists = false
         });
       }
     }
@@ -202,21 +203,33 @@ namespace IM.Base.Forms
 
         //Borrar archivos con fecha diferente a la de hoy
         DirectoryInfo directoryInfo = new DirectoryInfo(SettingsHelper.GetReportsPath());
-        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles().Where(f => f.CreationTime.Date != DateTime.Now.Date).ToList();
+        List<FileInfo> lstFiles = directoryInfo.Parent.GetFiles().Where(f => f.CreationTime.Date < DateTime.Now.Date.AddDays(-1)).ToList();
         lstFiles.ForEach(fi => fi.Delete());//Eliminamos los archivos
 
-        //Borrar archivos con el mismo nombre
-        ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList()
-          .ForEach(x =>
-          {     
-            if(btnClear)
+        if (btnClear)
+        {
+          //Borrar archivos con el mismo nombre
+          ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList()
+            .ForEach(x =>
             {
-              ObjReportQueues.Remove(x);
-            }   
-            lstFiles = directoryInfo.GetFiles($"{x.FileName}*").ToList();
-            lstFiles.ForEach(f => f.Delete());            
-          });      
-        
+              if (x.Exists)
+              {
+                ObjReportQueues.Remove(x);
+                lstFiles = directoryInfo.GetFiles($"{x.FileName}*").ToList();
+                lstFiles.ForEach(f => f.Delete());
+              }
+
+            });
+        }
+        else
+        {
+          ObjReportQueues.Where(x => !string.IsNullOrWhiteSpace(x.ReportName)).ToList()
+            .ForEach(x =>
+            {
+              lstFiles = directoryInfo.GetFiles($"{x.FileName}*").ToList();
+              lstFiles.ForEach(f => f.Delete());
+            });
+        }
 
       }
       catch (Exception ex)

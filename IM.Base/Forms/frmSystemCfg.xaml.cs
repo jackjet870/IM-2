@@ -3,9 +3,6 @@ using System;
 using System.Printing;
 using System.Windows;
 using IM.Base.Helpers;
-using IM.Model.Enums;
-using System.IO;
-using System.Windows.Controls;
 
 namespace IM.Base.Forms
 {
@@ -20,23 +17,15 @@ namespace IM.Base.Forms
   {
 
     #region Atributo
-    readonly EnumConfiguration _enumConfiguration;
-    string defaultSelectedPath = "P:\\";
-    public string FileName
-    {
-      get { return txtPath.Text; }
-      set { txtPath.Text = value; }
-    }
+
     #endregion
 
     #region Constructor
-    public frmSystemCfg(
-      EnumConfiguration enumConfiguration = EnumConfiguration.None
-      )
+    public frmSystemCfg()
     {
-      WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+      WindowStartupLocation = WindowStartupLocation.CenterScreen;
       InitializeComponent();
-      _enumConfiguration = enumConfiguration;
+      
     }
     #endregion
 
@@ -52,9 +41,7 @@ namespace IM.Base.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       FillPrinters();
-      SelectItemTab();
       SelectedPrinterLoaded();
-      LoadReportsPath();
     }
     #endregion
 
@@ -72,7 +59,7 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Select one printer invitation please");
         return;
       }
-      else if (cmbPrinterMeal.SelectedIndex == -1)
+      if (cmbPrinterMeal.SelectedIndex == -1)
       {
         UIHelper.ShowMessage("Select one printer meal ticket please");
         return;
@@ -99,34 +86,7 @@ namespace IM.Base.Forms
 
     #region Métodos privados
 
-    #region SelectItemTab
-    /// <summary>
-    ///   Selecciona el tab requerido
-    /// </summary>
-    /// <history>
-    ///   [vku] 10/Jun/2016 Created
-    /// </history>
-    private void SelectItemTab()
-    {
-      switch (_enumConfiguration)
-      {
-        case EnumConfiguration.Printer:
-          tabControl.SelectedIndex = 0;
-          Printer.Visibility = Visibility.Visible;
-          break;
-        case EnumConfiguration.ReportsPath:
-          tabControl.SelectedIndex = 1;
-          Reports.Visibility = Visibility.Visible;
-          break;
-        default:
-         foreach (TabItem item in tabControl.Items)
-          {
-            item.Visibility = Visibility.Visible;
-          }
-          break;
-      }
-    }
-    #endregion
+    
 
     #region FillPrinters
     /// <summary>
@@ -172,9 +132,7 @@ namespace IM.Base.Forms
       }
       catch (Exception ex)
       {
-        string message = String.Format("Can not save the configuration printer\n {0}", ex?.Message);
-        UIHelper.ShowMessage(message,MessageBoxImage.Error);
-        return;
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion
@@ -215,10 +173,11 @@ namespace IM.Base.Forms
 
         return configurationKey;
       }
-      catch (Exception)
+      catch (Exception ex)
       {
-        return null;
+        UIHelper.ShowMessage(ex);
       }
+      return null;
     }
     #endregion
 
@@ -237,130 +196,9 @@ namespace IM.Base.Forms
       cmbPrinterMeal.SelectedValue = ConfigRegistryHelper.GetConfiguredPrinter("PrintMealTicket");
     }
     #endregion
-
-    #region LoadReportsPath
-    /// <summary>
-    ///  Carga la ruta para los reportes desde el registro de windows
-    /// </summary>
-    /// <history>
-    ///   [vku] 06/Jun/2016 Created
-    /// </history>
-    private void LoadReportsPath()
-    {
-      FileName = ConfigRegistryHelper.GetReportsPath();
-     }
+    
     #endregion
 
-    #region SavePath
-    /// <summary>
-    ///   Guarda la ruta para los reportes en el registro de windows
-    /// </summary>
-    /// <history>
-    ///   [vku] 07/Jun/2016 Created
-    /// </history>
-    private void SavePath()
-    {
-      try
-      {
-        RegistryKey configurationKey = CreateUrlConfiguration();
-        if (configurationKey != null)
-        {
-          configurationKey.SetValue("ReportsPath", FileName);
-          UIHelper.ShowMessage("path successfully saved", MessageBoxImage.Information, "System Configuration");
-          DialogResult = true;
-          Close();
-        }
-      }
-      catch (System.Security.SecurityException)
-      {
-        UIHelper.ShowMessage("The user doesn't have the required permissions", MessageBoxImage.Error, "System Configuration");
-      }
-    }
-    #endregion
-
-    #endregion
-
-    #region Eventos
-
-    #region btnBrowser_Click
-    /// <summary>
-    ///   Abre el browser Folder
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 06/Jun/2016 Created
-    ///   [vku] 17/Jun/2016 Modified. Ahora verifica que exista el directorio por default (P:\\)
-    /// </history>
-    private void btnBrowser_Click(object sender, RoutedEventArgs e)
-    {
-      System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-      if (!Directory.Exists(defaultSelectedPath)){ defaultSelectedPath = "M:\\"; } 
-      dialog.SelectedPath = defaultSelectedPath;
-      System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-      if (result == System.Windows.Forms.DialogResult.OK)
-        FileName = dialog.SelectedPath;
-    }
-    #endregion
-
-    public event EventHandler FileNameChanged;
-
-    #region txtPath_TextChanged
-    /// <summary>
-    ///   Ruta para los reportes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 06/Jun/2016 Created
-    /// </history>
-    private void txtPath_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-    {
-      e.Handled = true;
-      if (FileNameChanged != null)
-      {
-        FileNameChanged(this, EventArgs.Empty);
-      }
-    }
-    #endregion
-
-    #region btnSaveChanges_Click
-    /// <summary>
-    ///  Guarda la ruta seleccionada en el registro de windows
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 06/Jun/2016 Created
-    /// </history>
-    private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
-    {
-      if (txtPath.Text != string.Empty)
-      {
-        SavePath();
-      }
-      else
-      {
-        UIHelper.ShowMessage("Select Path", MessageBoxImage.Exclamation, "System Configuration");
-      }
-    }
-    #endregion
-
-    #region btnCancelPath_Click
-    /// <summary>
-    ///   Cierra la ventana
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 06/Jun/2016 Created
-    /// </history>
-    private void btnCancelPath_Click(object sender, RoutedEventArgs e)
-    {
-      SystemCommands.CloseWindow(this);
-    }
-    #endregion
-
-    #endregion
+   
   }
 }

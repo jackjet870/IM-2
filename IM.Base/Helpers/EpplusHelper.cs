@@ -19,12 +19,17 @@ using PalaceResorts.Common.PalaceTools.Epplus.Enums;
 
 namespace IM.Base.Helpers
 {
+  /// <summary>
+  /// Asistente para la generacion de reportes en Excel
+  /// </summary>
+  /// <remarks>
+  /// Estos metodos son para generar reportes propios de IM
+  /// </remarks>
   public static class EpplusHelper
   {
     private static char separator = '|';
-    
-    #region Public Methods
-    //Metodos Propios de IM
+
+    #region Metodos publicos
 
     #region CreateGraphExcel
 
@@ -36,15 +41,15 @@ namespace IM.Base.Helpers
     /// <param name="graphTotals">Tiene los totales del la semana y el mex</param>
     /// <param name="reportName">Nombre del reporte</param>
     /// <param name="dateRangeFileName">Nombre del reporte con fecha</param>
-    /// <param name="tupleGraph1">tuple la semana: item1:Rango de fecha de la semana - item2:DataTable con la informacion de la semana - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
-    /// <param name="tupleGraph2">tuple la semana: item1:Rango de fecha del mes- item2:DataTable con la informacion del mes - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
+    /// <param name="tupleGraph1">tuple la semana: item1:Rango de fecha de la semana - item2:DataTable con la informacion de la semana - item3:Lista de ExcelFormatColumn donde definimos la estructura</param>
+    /// <param name="tupleGraph2">tuple la semana: item1:Rango de fecha del mes- item2:DataTable con la informacion del mes - item3:Lista de ExcelFormatColumn donde definimos la estructura</param>
     /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
     ///   [aalcocer] 27/04/2016 Created.
     ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
-    public static FileInfo CreateGraphExcel(List<Tuple<string, string>> filter, GraphTotals graphTotals, string reportName, string dateRangeFileName, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph1, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph2, string fileFullPath = null)
+    public static FileInfo CreateGraphExcel(List<Tuple<string, string>> filter, GraphTotals graphTotals, string reportName, string dateRangeFileName, Tuple<string, DataTable, List<ColumnFormat>> tupleGraph1, Tuple<string, DataTable, List<ColumnFormat>> tupleGraph2, string fileFullPath = null)
     {
       #region Variables Atributos, Propiedades
 
@@ -220,7 +225,7 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 09/06/2016  Created.
     /// </history>
-    public static FileInfo ExportRptWeeklyMonthlyHostess(List<Tuple<DataTable, ExcelFormatItemsList, string>> Data, List<Tuple<string, string>> filters,
+    public static FileInfo ExportRptWeeklyMonthlyHostess(List<Tuple<DataTable, ColumnFormatList, string>> Data, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false, string fileFullPath = null)
     {
@@ -244,7 +249,7 @@ namespace IM.Base.Helpers
             //Obtenemos la tabla ya con las columnas pivote.
             var dtTableAux = ReportBuilder.GetPivotTable(pair.Item2, pair.Item1);
 
-            var formatTableColumns = new List<ExcelFormatTable>();
+            var formatTableColumns = new List<ColumnFormat>();
 
             //Generamos la nueva lista de formatos
             dtTableAux.Columns.Cast<DataColumn>().ToList().ForEach(col =>
@@ -263,7 +268,7 @@ namespace IM.Base.Helpers
                 }
               }
 
-              formatTableColumns.Add(new ExcelFormatTable
+              formatTableColumns.Add(new ColumnFormat
               {
                 Title = format.Title,
                 PropertyName = col.ColumnName,
@@ -428,14 +433,13 @@ namespace IM.Base.Helpers
               #region Formato para encabezados de grupo
               rowNumber++;
               //Formato para los encabezados de grupo.
-              var backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
-            new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            //Formato para la fila de Gran Total.
-            new ExcelFormatGroupHeaders { BackGroundColor="#000000", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left }
-        };
+              var backgroundColorGroups = new GroupFormatList();
+              backgroundColorGroups.Add("#004E48");
+              backgroundColorGroups.Add("#147F79");
+              backgroundColorGroups.Add("#2D8B85");
+              backgroundColorGroups.Add("#4CA09A");
+              //Formato para la fila de Gran Total.
+              backgroundColorGroups.Add("#000000");
               #endregion
 
               #region Obtenemos los encabezados de grupo y sus valores
@@ -883,10 +887,10 @@ namespace IM.Base.Helpers
         if (fileFullPath == null)
         {
           var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-          pathFinalFile = ReportBuilder.SaveExcel(pk, suggestedName: suggestedFilaName); 
+          pathFinalFile = ReportBuilder.SaveExcel(pk, suggestedName: suggestedFilaName);
         }
         else
-          pathFinalFile = ReportBuilder.SaveExcel(pk,filePath:fileFullPath);
+          pathFinalFile = ReportBuilder.SaveExcel(pk, filePath: fileFullPath);
       }
       return pathFinalFile;
     }
@@ -914,7 +918,7 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 13/06/2016  Created.
     /// </history>
-    public static async Task<FileInfo> ExportRptManifestRangeByLs(List<Tuple<DataTable, ExcelFormatItemsList>> Data, List<Tuple<string, string>> filters,
+    public static async Task<FileInfo> ExportRptManifestRangeByLs(List<Tuple<DataTable, ColumnFormatList>> Data, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false, string fileFullPath = null)
     {
@@ -925,13 +929,13 @@ namespace IM.Base.Helpers
         {
 
           var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
-          wsData.Protection.IsProtected = true;
           var totalFilterRows = 0;
           var dtTable = Data[0].Item1;
           var formatTable = Data[0].Item2;
           var dtTableBookings = Data[1].Item1.Rows.Count > 0 ? ReportBuilder.GetPivotTable(Data[1].Item2, Data[1].Item1) : Data[1].Item1;
           var formatBookings = Data[1].Item2;
           var formatIndex = 1;
+
           //Creamos el encabezado
           ReportBuilder.CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows);
 
@@ -944,11 +948,10 @@ namespace IM.Base.Helpers
             col.SetOrdinal(c.index);
           });
 
-
           var rowNumber = totalFilterRows + 1;
 
           //Obtenemos las columnas y las ordenamos.
-          var formatTableColumns = new List<ExcelFormatTable>();
+          var formatTableColumns = new List<ColumnFormat>();
 
           #region Creando Headers
           //Agregando los headers de acuerdo al orden de la lista.
@@ -998,14 +1001,13 @@ namespace IM.Base.Helpers
             #region Formato para encabezados de grupo
 
             //Formato para los encabezados de grupo.
-            var backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
-            new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
-            new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
+            var backgroundColorGroups = new GroupFormatList();
+            backgroundColorGroups.Add("#004E48");
+            backgroundColorGroups.Add("#147F79");
+            backgroundColorGroups.Add("#2D8B85");
+            backgroundColorGroups.Add("#4CA09A");
             //Formato para la fila de Gran Total.
-            new ExcelFormatGroupHeaders { BackGroundColor="#000000", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left }
-        };
+            backgroundColorGroups.Add("#000000");
             #endregion
 
             #region Obtenemos los encabezados de grupo y sus valores
@@ -1021,6 +1023,10 @@ namespace IM.Base.Helpers
               .Select("new(Key as qgroup, it as Values)");
 
             #endregion
+
+            #region Encabezados de grupo, Insertamos los datos y calculamos los subtotales.
+
+            #region Dibujamos los encabezados
 
             //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
             var subtotalFormulas = new Dictionary<string, string>[formatTableColumns.Count(c => c.IsGroup && c.PropertyName != "ShowProgramN")];
@@ -1057,7 +1063,9 @@ namespace IM.Base.Helpers
                       range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                       range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                       range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                      range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
+                      wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                      var columnName = dtTableBookings.Columns.OfType<DataColumn>().Where(c => c.ColumnName != "LocationN").Select(c => c.ColumnName).ToArray();
+                      wsData.Cells[rowNumber, 20].LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable().DefaultView.ToTable(false, columnName), false);
                     }
 
                     wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
@@ -1126,7 +1134,9 @@ namespace IM.Base.Helpers
                         range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                         range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                         range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                        range.LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable(), false);
+                        wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                        var columnName = dtTableBookings.Columns.OfType<DataColumn>().Where(c => c.ColumnName != "LocationN").Select(c => c.ColumnName).ToArray();
+                        wsData.Cells[rowNumber, 20].LoadFromDataTable(dtTableBookings.AsEnumerable().Where(c => c["LocationN"].ToString() == groupsAct[j]).CopyToDataTable().DefaultView.ToTable(false, columnName), false);
                       }
 
                       wsData.Cells[rowNumber + 1, 1].Value = groupsAct[groupsAct.Length - 1];
@@ -1153,24 +1163,28 @@ namespace IM.Base.Helpers
                         range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
                         range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                         range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
-                      }                      
+                      }
                     }
                     rowNumber++;
                   }
                 }
                 previousGroup = groupsAct;
               }
+              #endregion
 
               #region Ingresamos los valores de las columnas
+
               //Obtenemos los datos.
               var dataValues = ((IEnumerable<DataRow>)dynamicListData[i].Values).CopyToDataTable();
               var camposGrupo = formatTableColumns.Where(col => col.IsGroup).Select(col => col.PropertyName).ToList();
+
               //Eliminamos las columnas que fueron configuradas como grupo y son  No visibles. Y obtenemos el formato de las columnas que se visualizaran en el reporte.
               formatIndex = 1;
               dataValues.Columns.OfType<DataColumn>().ToList().ForEach(c =>
               {
                 var format = formatTableColumns.FirstOrDefault(f => f.PropertyName == c.ColumnName);
                 if (format == null) return;
+
                 //Si el campo se encuentra en la lista de Grupos y es No Visible o el campo es no Visible
                 if ((camposGrupo.Contains(c.ColumnName) && !format.IsVisible) || !format.IsVisible)
                 {
@@ -1182,26 +1196,43 @@ namespace IM.Base.Helpers
                   //Aplicamos el formato al campo.
                   using (var range = wsData.Cells[rowNumber, formatIndex, rowNumber + dataValues.Rows.Count, formatIndex])
                   {
+                    // Formato
                     range.Style.Numberformat.Format = ReportBuilder.GetFormat(format.Format);
-                    formatIndex++;
+
+                    // Tamaño de fuente
+                    range.Style.Font.Size = format.FontSize;
+
+                    // Ajuste de linea
+                    if (format.WordWrap)
+                      range.Style.WrapText = true;
                   }
+
+                  // Ancho de la columna
+                  if (format.Width > 0)
+                  {
+                    var column = wsData.Column(formatIndex);
+                    column.Width = format.Width;
+                  }
+
+                  formatIndex++;
                 }
               });
 
               //Agregamos los datos al excel.
               using (var range = wsData.Cells[rowNumber, 1].LoadFromDataTable(dataValues, false))
               {
-                //Aplicamos estilo a las celdas.
+                //Borde de las celdas
                 range.Style.Border.Top.Style = range.Style.Border.Right.Style = range.Style.Border.Left.Style = range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                 range.Style.Border.Top.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
                 range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
                 range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
                 range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
-                range.Style.Font.Size = 9;
               }
 
               rowNumber += dataValues.Rows.Count;
               #endregion
+
+              #region Agregamos los subtotales de cada grupo
 
               //Si se mostrará el subtotal de cada grupo.
               if (blnShowSubtotal)
@@ -1339,7 +1370,7 @@ namespace IM.Base.Helpers
                       Tours = dataValues.AsEnumerable().Count(c => (c["Tour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["Tour"].ToString())) || (c["WO"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["WO"].ToString())) || ((c["CTour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["CTour"].ToString())) || (c["STour"] != DBNull.Value && !string.IsNullOrWhiteSpace(c["STour"].ToString())) && (c["ProcGross"] != DBNull.Value && Convert.ToDecimal(c["ProcGross"]) > 0)));
                       Shows = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Show") - countGroup + 1].Address;
                       RealShows = $"SUM({wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Tour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "WO") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "CTour") - countGroup + 1].Address},{wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "STour") - countGroup + 1].Address})";
-                      Bookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count].Address;
+                      Bookings = wsData.Cells[dataIniRow - 2, dtTableBookings.Columns.Count - 1 + 19].Address;
                       resch = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Resch") - countGroup + 1].Address;
                       direct = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "Direct") - countGroup + 1].Address;
                       inOut = wsData.Cells[rowNumber - 1, formatTableColumns.FindIndex(f => f.PropertyName == "IO") - countGroup + 1].Address;
@@ -1356,57 +1387,70 @@ namespace IM.Base.Helpers
                             break;
                           case 2:
                             wsData.Cells[rowNumber, k].Value = "Tour %";
+                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                             wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,{RealShows}/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 4:
                             wsData.Cells[rowNumber, k].Value = "Shows";
+                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                             wsData.Cells[rowNumber, k + 1].Formula = $"= {Shows}";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
                             break;
                           case 6:
                             wsData.Cells[rowNumber, k].Value = "Shows %";
+                            wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                             wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows})/{Bookings})";
                             wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 8:
-                            wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 12].Value = "Sin R/D";
+                            wsData.Cells[rowNumber, k + 12].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 12].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 13].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 13].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 10:
-                            wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 14].Value = "Sin Dtas";
+                            wsData.Cells[rowNumber, k + 14].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 14].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 15].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 15].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 12:
-                            wsData.Cells[rowNumber, k].Value = "Sin Rsch";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 16].Value = "Sin Rch";
+                            wsData.Cells[rowNumber, k + 16].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 16].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 17].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 17].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 14:
-                            wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                            wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 18].Value = "Sin I&O";
+                            wsData.Cells[rowNumber, k + 18].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 18].Style.Font.Size = 6;
+                            wsData.Cells[rowNumber, k + 19].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
+                            wsData.Cells[rowNumber, k + 19].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
 
                           case 16:
-                            wsData.Cells[rowNumber, k].Value = "Eff";
-                            wsData.Cells[rowNumber, k + 1].Formula = eff;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
+                            wsData.Cells[rowNumber, k + 20].Value = "Eff";
+                            wsData.Cells[rowNumber, k + 20].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 21].Formula = eff;
+                            wsData.Cells[rowNumber, k + 21].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
                             break;
                           case 18:
-                            wsData.Cells[rowNumber, k].Value = "C %";
-                            wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                            wsData.Cells[rowNumber, k + 22].Value = "C %";
+                            wsData.Cells[rowNumber, k + 22].Style.Font.Bold = true;
+                            wsData.Cells[rowNumber, k + 23].Formula = closingFactor;
+                            wsData.Cells[rowNumber, k + 23].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                             break;
                           case 20:
-                            wsData.Cells[rowNumber, k].Formula = Bookings;
-                            wsData.Cells[rowNumber, k].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                            wsData.Cells[rowNumber, k].Style.Font.Color.SetColor(Color.White);
-                            wsData.Cells[rowNumber, k + 1].Value = Tours;
-                            wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                            wsData.Cells[rowNumber, k + 1].Style.Font.Color.SetColor(Color.White);
+                            wsData.Cells[rowNumber, k + 24].Formula = Bookings;
+                            wsData.Cells[rowNumber, k + 24].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k + 24].Style.Font.Color.SetColor(Color.White);
+                            wsData.Cells[rowNumber, k + 25].Value = Tours;
+                            wsData.Cells[rowNumber, k + 25].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                            wsData.Cells[rowNumber, k + 25].Style.Font.Color.SetColor(Color.White);
                             if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey("TTours"))
                             {
                               subtotalFormulas[j]["TTours"] += (subtotalFormulas[j]["TTours"] == string.Empty) ? wsData.Cells[rowNumber, k + 1].Address : "," + wsData.Cells[rowNumber, k + 1].Address;
@@ -1435,7 +1479,11 @@ namespace IM.Base.Helpers
                 }
               }
               rowNumber++;
+              #endregion
             }
+            #endregion
+
+            #region Fila de Gran Total
 
             if (blnRowGrandTotal)
             {
@@ -1454,7 +1502,7 @@ namespace IM.Base.Helpers
                     switch (format.Function)
                     {
                       case DataFieldFunctions.Sum:
-                        if(format.PropertyName=="ProcSales"  || format.PropertyName == "ProcOriginal" || format.PropertyName == "ProcNew" || format.PropertyName == "ProcGross")
+                        if (format.PropertyName == "ProcSales" || format.PropertyName == "ProcOriginal" || format.PropertyName == "ProcNew" || format.PropertyName == "ProcGross")
                         {
                           range.Formula = $"=SUM({string.Join(",", subtotalFormulas[1][format.PropertyName].Split(',').Select(c => $"SUMIF({c},\">0\")").ToList())})";
                         }
@@ -1506,153 +1554,94 @@ namespace IM.Base.Helpers
                     break;
                   case 2:
                     wsData.Cells[rowNumber, k].Value = "Tour %";
+                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                     wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,{RealShows}/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 4:
                     wsData.Cells[rowNumber, k].Value = "Shows";
+                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                     wsData.Cells[rowNumber, k + 1].Formula = $"= {Shows}";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
                     break;
                   case 6:
                     wsData.Cells[rowNumber, k].Value = "Shows %";
+                    wsData.Cells[rowNumber, k].Style.Font.Bold = true;
                     wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows})/{Bookings})";
                     wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 8:
-                    wsData.Cells[rowNumber, k].Value = "Sin R/D";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 12].Value = "Sin R/D";
+                    wsData.Cells[rowNumber, k + 12].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 12].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 13].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch}-{direct})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 13].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 10:
-                    wsData.Cells[rowNumber, k].Value = "Sin Dtas";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 14].Value = "Sin Dtas";
+                    wsData.Cells[rowNumber, k + 14].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 14].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 15].Formula = $"= IF({Bookings}=0,0,({Shows}-{direct})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 15].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 12:
-                    wsData.Cells[rowNumber, k].Value = "Sin Rsch";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 16].Value = "Sin Rch";
+                    wsData.Cells[rowNumber, k + 16].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 16].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 17].Formula = $"= IF({Bookings}=0,0,({Shows}-{resch})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 17].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 14:
-                    wsData.Cells[rowNumber, k].Value = "Sin I&O";
-                    wsData.Cells[rowNumber, k + 1].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 18].Value = "Sin I&O";
+                    wsData.Cells[rowNumber, k + 18].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 18].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 19].Formula = $"= IF({Bookings}=0,0,({Shows}-{inOut})/{Bookings})";
+                    wsData.Cells[rowNumber, k + 19].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
 
                   case 16:
-                    wsData.Cells[rowNumber, k].Value = "Eff";
-                    wsData.Cells[rowNumber, k + 1].Formula = eff;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
+                    wsData.Cells[rowNumber, k + 20].Value = "Eff";
+                    wsData.Cells[rowNumber, k + 20].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 21].Formula = eff;
+                    wsData.Cells[rowNumber, k + 21].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.DecimalNumber);
                     break;
                   case 18:
-                    wsData.Cells[rowNumber, k].Value = "C %";
-                    wsData.Cells[rowNumber, k + 1].Formula = closingFactor;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
+                    wsData.Cells[rowNumber, k + 22].Value = "C %";
+                    wsData.Cells[rowNumber, k + 22].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 23].Formula = closingFactor;
+                    wsData.Cells[rowNumber, k + 23].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Percent);
                     break;
                   case 20:
-                    wsData.Cells[rowNumber, k].Value = "Total Bookings";
-                    wsData.Cells[rowNumber, k + 1].Formula = Bookings;
-                    wsData.Cells[rowNumber, k + 1].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                    wsData.Cells[rowNumber, k + 2].Formula = Tours;
-                    wsData.Cells[rowNumber, k + 2].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
-                    wsData.Cells[rowNumber, k + 2].Style.Font.Color.SetColor(Color.White);
+                    wsData.Cells[rowNumber, k + 24].Value = "Total Bookings";
+                    wsData.Cells[rowNumber, k + 24].Style.Font.Bold = true;
+                    wsData.Cells[rowNumber, k + 24].Style.Font.Size = 6;
+                    wsData.Cells[rowNumber, k + 25].Formula = Bookings;
+                    wsData.Cells[rowNumber, k + 25].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 26].Formula = Tours;
+                    wsData.Cells[rowNumber, k + 26].Style.Numberformat.Format = ReportBuilder.GetFormat(EnumFormatTypeExcel.Number);
+                    wsData.Cells[rowNumber, k + 26].Style.Font.Color.SetColor(Color.White);
                     break;
                 }
               }
 
             }
+            #endregion
 
             #endregion Simple con Agrupados
           }
-          else
-          {
-            #region Simple
 
-            rowNumber++;
-            //Recorremos los datarows del datatable.
-            dtTable.AsEnumerable().ToList().ForEach(dr =>
-            {
-              var drColumn = 1;
-              //Recorremos las columnas.
-              formatTableColumns.ForEach(row =>
-              {
-                //Asignamos el valor y formato a la celda. 
-                wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = ReportBuilder.GetFormat(row.Format);
-                drColumn++;
-              });
-              rowNumber++;
-            });
-
-            if (blnRowGrandTotal)
-            {
-              //Obtenemos la fila inicial.
-              var dataIniRow = rowNumber - dtTable.Rows.Count;
-              //Recorremos las columnas.
-              formatTableColumns.ForEach(format =>
-              {
-                //Si es una columna No Visible continuamos el ciclo.
-                if (!format.IsVisible) return;
-                if (format.Function == DataFieldFunctions.None && string.IsNullOrWhiteSpace(format.Formula)) return;
-                var subtotalFormat = format.Format;
-                if (format.SubtotalWithCero)
-                {
-                  switch (format.Format)
-                  {
-                    case EnumFormatTypeExcel.Number:
-                      subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
-                      break;
-
-                    case EnumFormatTypeExcel.DecimalNumber:
-                      subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
-                      break;
-
-                    case EnumFormatTypeExcel.Percent:
-                      subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
-                      break;
-                  }
-                }
-
-                //Le aplicacamos el formato a la celda.
-                wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = ReportBuilder.GetFormat(subtotalFormat);
-                //S no es una columna calculada.
-                if (!format.IsCalculated)
-                {
-                  //Aplicamos la funcion configurada.
-                  switch (format.Function)
-                  {
-                    case DataFieldFunctions.Sum:
-                      wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
-
-                    case DataFieldFunctions.Average:
-                      wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
-
-                    case DataFieldFunctions.Count:
-                      if (format.Format == EnumFormatTypeExcel.General)
-                        wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
-                  }
-                }
-                else
-                  //Aplicamos la formula configurada.
-                  wsData.Cells[rowNumber, format.Order].Formula = ReportBuilder.GetFormula(formatTable, format.Formula, rowNumber);
-              });
-            }
-
-            #endregion Simple
-          }
-          ReportBuilder.AutoFitColumns(ref wsData);
+          #region Guardamos el archivo de Excel
 
           if (fileFullPath == null)
           {
             var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-            pathFinalFile = ReportBuilder.SaveExcel(pk, suggestedName: suggestedFilaName); 
+            pathFinalFile = ReportBuilder.SaveExcel(pk, suggestedName: suggestedFilaName);
           }
           else
-            pathFinalFile = ReportBuilder.SaveExcel(pk, filePath:fileFullPath);
+          {
+            pathFinalFile = ReportBuilder.SaveExcel(pk, filePath: fileFullPath);
+          }
+          #endregion
         }
         return pathFinalFile;
       });
@@ -1665,14 +1654,14 @@ namespace IM.Base.Helpers
     /// Método que siver para ordenar la lista de ExcelFormat dependiedo de la posicion de las columnas de su grid
     /// </summary>
     /// <param name="lstColumns">Lista de columnas del grid</param>
-    /// <param name="lstExcelFormatTable">Lista de excelformattable</param>
+    /// <param name="lstExcelFormatTable">Lista de ExcelFormatColumn</param>
     /// <history>
     /// [emoguel] created 06/07/2016
-    /// [edgrodriguez] Modified. 05/09/2016 Se agrega el uso del ExcelFormatItemsList
+    /// [edgrodriguez] Modified. 05/09/2016 Se agrega el uso del ExcelFormatColumnsList
     /// </history>
-    public static ExcelFormatItemsList OrderColumns(List<DataGridColumn> lstColumns, List<ExcelFormatTable> lstExcelFormatTable)
+    public static ColumnFormatList OrderColumns(List<DataGridColumn> lstColumns, ColumnFormatList lstExcelFormatTable)
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lstColumns.OrderBy(c => c.DisplayIndex).ToList().ForEach(cl =>
       {
         lst.Add(lstExcelFormatTable.FirstOrDefault(c => c.PropertyName == cl.SortMemberPath));
@@ -1681,6 +1670,6 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #endregion Public Methods
+    #endregion
   }
 }

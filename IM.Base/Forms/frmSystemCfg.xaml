@@ -4,64 +4,30 @@
         Title="System Configuration" Height="385" Width="365" ResizeMode="NoResize" Loaded="Window_Loaded" ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTabControl.xaml"/>
-
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <!--#region TabControl-->
-        <TabControl x:Name="tabControl" Style="{StaticResource TabControlStyle}" HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" Width="auto" Margin="5,5,5,5">
-            <!--#region Printer-->
-            <TabItem Name="Printer" Header="Printer" Style="{StaticResource ResourceKey=TabItemStyle}" Visibility="Collapsed">
-                <Grid Background="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <GroupBox Header="Printer for Invitations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Printer for Invitations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               Height="auto" Width="auto" Grid.Row="0" Margin="5,5,5,5">
-                        <ComboBox Name="cmbPrinterInvitation" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Height="25" Width="auto" Margin="5" />
-                    </GroupBox>
+                <ComboBox Name="cmbPrinterInvitation" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Height="25" Width="auto" Margin="5" />
+            </GroupBox>
 
-                    <GroupBox Header="Printer for Meal Ticket" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            <GroupBox Header="Printer for Meal Ticket" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               Height="auto" Width="auto" Grid.Row="1" Margin="5,5,5,5">
-                        <ComboBox Name="cmbPrinterMeal" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="auto" Height="25" Margin="5"/>
-                    </GroupBox>
-                    <StackPanel Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <!--<Label Content="\\ServerName\PrinterName" HorizontalAlignment="Center"  VerticalAlignment="Top"/>-->
-                        <StackPanel Orientation="Horizontal" Margin="0,50" HorizontalAlignment="Center">
-                            <Button Content="Save Changes" Name="btnOk" Click="btnOk_Click" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="auto" Margin="5,0"/>
-                            <Button Content="Cancel" Name="btnCancel" Click="btnCancel_Click" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="75"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Reports-->
-            <TabItem Name="Reports" Header="Reports" Style="{StaticResource ResourceKey=TabItemStyle}" Visibility="Collapsed">
-                <Grid Background="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="120"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <GroupBox x:Name="groupBox" Header="Save Path" HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" 
-                              Width="auto" Grid.Row="0" Margin="5,5,5,5">
-                        <StackPanel HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch">
-                            <Label x:Name="label" Content="Select Path:" HorizontalAlignment="Left" Height="24" VerticalAlignment="Stretch" Width="auto" Margin="5,0"/>
-                            <TextBox x:Name="txtPath" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Height="25" Width="auto" Margin="5" TextChanged="txtPath_TextChanged" IsEnabled="False"/>
-                            <Button x:Name="btnBrowser" Content="Browser" HorizontalAlignment="Right" Height="24" VerticalAlignment="Stretch" Width="59" Margin="5" Click="btnBrowser_Click"/>
-                        </StackPanel>
-                    </GroupBox>
-                    <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal" Margin="0,50" HorizontalAlignment="Center">
-                            <Button Content="Save Changes" x:Name="btnSaveChanges" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="auto" Margin="5,0" Click="btnSaveChanges_Click"/>
-                            <Button Content="Cancel" x:Name="btnCancelPath" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="75" Click="btnCancelPath_Click"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-            <!--#endregion-->
-        </TabControl>
-        <!--#endregion-->
-
+                <ComboBox Name="cmbPrinterMeal" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="auto" Height="25" Margin="5"/>
+            </GroupBox>
+            <StackPanel Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <!--<Label Content="\\ServerName\PrinterName" HorizontalAlignment="Center"  VerticalAlignment="Top"/>-->
+                <StackPanel Orientation="Horizontal" Margin="0,50" HorizontalAlignment="Center">
+                    <Button Content="Save Changes" Name="btnOk" Click="btnOk_Click" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="auto" Margin="5,0"/>
+                    <Button Content="Cancel" Name="btnCancel" Click="btnCancel_Click" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="75"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

@@ -10,13 +10,13 @@ namespace IM.Administrator.Classes
     /// <summary>
     /// Formato para el excel de GiftLog
     /// </summary>
-    /// <returns> List of ExcelFormatTable</returns>
+    /// <returns> List of ColumnFormat</returns>
     /// <history>
     /// [emoguel] modified 06/07/2016
     /// </history>
-    public static ExcelFormatItemsList RptGiftLog()
+    public static ColumnFormatList RptGiftLog()
     {
-      ExcelFormatItemsList lst = new ExcelFormatItemsList();
+      ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left);
       lst.Add("By", "ggChangedBy", aligment: ExcelHorizontalAlignment.Left);
       lst.Add("Update Date/Time", "ggID", aligment: ExcelHorizontalAlignment.Left, format: EnumFormatTypeExcel.DateTime);

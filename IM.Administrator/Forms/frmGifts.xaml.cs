@@ -42,6 +42,7 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = Context.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.Standard);
       LoadGifts();
+      dgrGifs.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 

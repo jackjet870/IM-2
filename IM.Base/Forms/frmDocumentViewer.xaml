@@ -18,8 +18,8 @@
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=ExportToPdf}" Key="P" Modifiers="Alt"/>
     </Window.InputBindings>
     <DockPanel LastChildFill="True" >        
-        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" KeyboardNavigation.TabNavigation="Continue" Height="32">
-            <Button Command="ApplicationCommands.Print"  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
+        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" KeyboardNavigation.TabNavigation="Continue" Height="32">            
+            <Button Click="print"   
                                                     ToolTip="Print (Ctrl + P)">
                 <Image Source="pack://application:,,,/IM.Styles;component/Images/32x32/BPrinter.png" />
             </Button>

@@ -47,7 +47,7 @@ namespace IM.Inhouse.Classes
         dt = TableHelper.GetDataTableFromList(arrivlas, true);
         rptName = "Arrivals ";
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        ExcelFormatItemsList format = new ExcelFormatItemsList();
+        ColumnFormatList format = new ColumnFormatList();
         format.Add("GUID", "guID");
         format.Add("Reserv.#", "guHReservID");
         format.Add("Room", "guRoomNum");
@@ -92,7 +92,7 @@ namespace IM.Inhouse.Classes
         dt = TableHelper.GetDataTableFromList(aviables, true);
         rptName = "Aviables ";
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        ExcelFormatItemsList format = new ExcelFormatItemsList();
+        ColumnFormatList format = new ColumnFormatList();
 
         format.Add("GUID", "guID");
         format.Add("Reserv.#", "guHReservID");
