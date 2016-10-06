@@ -547,7 +547,6 @@ namespace IM.Base.Forms
         {
           //Consultamos los horarios disponibles
           dbContext.TourTimesReschedule = await LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
-          //await LoadTourTimes(cmbSalesRooms.SelectedValue.ToString(), dtpRescheduleDate.Value.Value, false);
         }
       }
       catch (Exception ex)

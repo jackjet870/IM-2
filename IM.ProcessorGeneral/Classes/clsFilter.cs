@@ -39,6 +39,5 @@ namespace IM.ProcessorGeneral.Classes
     public bool AllRateTypes { get; set; }
     public bool AllSalesRooms { get; set; }
     public bool AllWarehouses { get; set; }
-    
   }
 }

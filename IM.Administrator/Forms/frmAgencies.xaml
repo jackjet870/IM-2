@@ -45,7 +45,7 @@
         <!--#endregion-->
         <!--#region DataGrid de Agencies-->
         <DataGrid x:Name="dtgAgencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAgencies}" IsReadOnly="True"
-                 SelectionMode="Single" Focusable="True"  >
+                 SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>

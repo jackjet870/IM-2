@@ -71,7 +71,6 @@
                         <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
                     </StackPanel>
                 </StatusBarItem>
-                <!--<TextBox Width="200" Name="txtFilter" Grid.Column="4" TextChanged="TextBox_TextChanged"/>-->
                 <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Items." HorizontalAlignment="Right" Width="85"/>
             </StatusBar>
             <!--#endregion-->

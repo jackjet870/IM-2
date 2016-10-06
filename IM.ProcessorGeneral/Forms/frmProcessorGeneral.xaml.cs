@@ -440,7 +440,6 @@ namespace IM.ProcessorGeneral.Forms
         case "Meal Tickets Cancelled":
         case "Meal Tickets with Cost":
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnRatetypes: true, blnAllRatetypes: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
-
           break;
         default:
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
