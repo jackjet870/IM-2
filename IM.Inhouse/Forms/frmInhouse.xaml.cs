@@ -106,7 +106,7 @@ namespace IM.Inhouse.Forms
           ccAvailables.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccPremanifest.Visibility = Visibility.Hidden;
           var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
-          _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate));
+          _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate)).ToList();
           break;
 
         case EnumScreen.Premanifest: //GuestPremanifest
@@ -1109,7 +1109,7 @@ namespace IM.Inhouse.Forms
         prnote.ShowDialog();
         if (prnote.SaveNote)
         {
-          dgGuestAvailable.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestAvailable.SelectedItems.OfType<ObjGuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
           dgGuestAvailable.Items.Refresh();
         }
       }

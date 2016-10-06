@@ -561,7 +561,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
+                        <DataGridTemplateColumn  Header="Comments"  Width="auto" IsReadOnly="False" SortMemberPath="guComments" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding guComments}" />
