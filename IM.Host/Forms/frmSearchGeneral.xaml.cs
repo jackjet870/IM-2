@@ -83,7 +83,7 @@ namespace IM.Host.Forms
           // Ocultamos las fechas
           stkStartDate.Visibility = stkEndDate.Visibility = Visibility.Collapsed;
           // Lead Sources
-          dsLeadSource.Source = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID);
+          dsLeadSource.Source = await BRLeadSources.GetLeadSourcesByUser(Context.User.User.peID, EnumProgram.Inhouse);
           break;
       }
       cboLeadSource.SelectedIndex = -1;
