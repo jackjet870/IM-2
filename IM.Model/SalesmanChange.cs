@@ -15,13 +15,16 @@ namespace IM.Model
     public partial class SalesmanChange
     {
         public System.DateTime schDT { get; set; }
-        public int schsa { get; set; }
+        public Nullable<int> schsa { get; set; }
         public string schAuthorizedBy { get; set; }
         public string schMadeBy { get; set; }
         public string schro { get; set; }
         public byte schPosition { get; set; }
         public string schOldSalesman { get; set; }
         public string schNewSalesman { get; set; }
+        public Nullable<int> schgu { get; set; }
+        public string schmt { get; set; }
+        public int schID { get; set; }
     
         public virtual Personnel Personnel_AuthorizedBy { internal get; set; }
         public virtual Personnel Personnel_MadeBy { internal get; set; }
@@ -29,5 +32,7 @@ namespace IM.Model
         public virtual Personnel Personnel_OldSalesman { internal get; set; }
         public virtual Role Role { internal get; set; }
         public virtual Sale Sale { internal get; set; }
+        public virtual Guest Guest { get; set; }
+        public virtual GuestMovementType GuestsMovementsType { get; set; }
     }
 }

@@ -234,6 +234,19 @@ namespace IM.Model.Classes
       set { SetField(ref _personnelVLO, value); }
     }
 
+    private List<PersonnelShort> _personnelFRONTTOBACK;
+    public List<PersonnelShort> PersonnelFRONTTOBACK
+    {
+      get { return _personnelFRONTTOBACK; }
+      set { SetField(ref _personnelFRONTTOBACK, value); }
+    }
+
+    private List<PersonnelShort> _personnelFRONTTOMIDDLE;
+    public List<PersonnelShort> PersonnelFRONTTOMIDDLE
+    {
+      get { return _personnelFRONTTOMIDDLE; }
+      set { SetField(ref _personnelFRONTTOMIDDLE, value); }
+    }
     #endregion Catalogos
 
     #region Listas
