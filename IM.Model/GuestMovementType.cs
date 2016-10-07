@@ -18,6 +18,7 @@ namespace IM.Model
         public GuestMovementType()
         {
             this.GuestsMovements = new HashSet<GuestMovement>();
+            this.SalesmenChanges = new HashSet<SalesmanChange>();
         }
     
         public string gnID { get; set; }
@@ -26,5 +27,7 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GuestMovement> GuestsMovements { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalesmanChange> SalesmenChanges { get; set; }
     }
 }

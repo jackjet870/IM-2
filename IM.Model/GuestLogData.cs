@@ -69,5 +69,19 @@ namespace IM.Model
         public bool glCTour { get; set; }
         public Nullable<byte> glReimpresion { get; set; }
         public string rmN { get; set; }
+        public string glLiner3 { get; set; }
+        public string Liner3N { get; set; }
+        public string glCloser4 { get; set; }
+        public string Closer4N { get; set; }
+        public string glExit3 { get; set; }
+        public string Exit3N { get; set; }
+        public string glFTB1 { get; set; }
+        public string FTB1N { get; set; }
+        public string glFTB2 { get; set; }
+        public string FTB2N { get; set; }
+        public string glFTM1 { get; set; }
+        public string FTM1N { get; set; }
+        public string glFTM2 { get; set; }
+        public string FTM2N { get; set; }
     }
 }

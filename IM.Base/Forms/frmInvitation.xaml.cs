@@ -1989,7 +1989,7 @@ namespace IM.Base.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID))
+        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID))
         {
           if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
