@@ -707,7 +707,7 @@ namespace IM.Inhouse.Forms
         win.Activate();
         return;
       }
-      win = new frmNotices { Owner = this };
+      win = new frmNotices();
       win.Show();
     }
 
@@ -1831,6 +1831,22 @@ namespace IM.Inhouse.Forms
         default:
           throw new ArgumentOutOfRangeException("EnumScreen Not found or DataGrid Not found");
       }
+    }
+
+
+    #endregion
+
+    #region btnNotice_Click
+    /// <summary>
+    /// Muestra el formulario de Noticias 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 07/10/2016 
+    /// </history>
+    private void btnNotice_Click(object sender, RoutedEventArgs e)
+    {
+      frmNotices frmNotices = new frmNotices();
+      frmNotices.ShowDialog();
     } 
     #endregion
 

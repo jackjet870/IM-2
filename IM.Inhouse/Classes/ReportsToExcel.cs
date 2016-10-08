@@ -89,7 +89,7 @@ namespace IM.Inhouse.Classes
       if (aviables.Count > 0)
       {
         dt = TableHelper.GetDataTableFromList(aviables, true);
-        rptName = "Aviables ";
+        rptName = "Availables";
         string dateRange = DateHelper.DateRangeFileName(date, date);
         ColumnFormatList format = new ColumnFormatList();
 

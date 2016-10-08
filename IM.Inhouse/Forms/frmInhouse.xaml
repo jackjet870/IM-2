@@ -74,6 +74,7 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" x:Name="colGifts" />
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click">
@@ -124,7 +125,13 @@
                             <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}" />
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnWithGifts" Grid.Column="9"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2">
+                    <Button x:Name="btnNotice" Grid.Column="9" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnNotice_Click" HorizontalAlignment="Left" Margin="0,2">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Notice.png" Style="{StaticResource ResourceKey=ImageOptions}" />
+                            <TextBlock Text="Notice" Style="{StaticResource ResourceKey=txtOptions}" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnWithGifts" Grid.Column="10"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}" />
                             <TextBlock Text="Gift/Reprt" Style="{StaticResource ResourceKey=txtOptions}" />
@@ -415,10 +422,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
+                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments"  CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -564,7 +571,7 @@
                         <DataGridTemplateColumn  Header="Comments"  Width="auto" IsReadOnly="False" SortMemberPath="guComments" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -714,7 +721,7 @@
                         <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -863,7 +870,7 @@
                         <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
