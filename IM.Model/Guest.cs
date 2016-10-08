@@ -32,6 +32,7 @@ namespace IM.Model
             this.GuestMain = new HashSet<Guest>();
             this.GuestsAdditional = new HashSet<Guest>();
             this.GuestsGroups = new HashSet<GuestsGroup>();
+            this.SalesmenChanges = new HashSet<SalesmanChange>();
         }
     
         public int guID { get; set; }
@@ -313,5 +314,7 @@ namespace IM.Model
         public virtual Personnel Personnel_FTM1 { get; set; }
         public virtual Personnel Personnel_FTM2 { get; set; }
         public virtual Personnel Personnel_Liner3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalesmanChange> SalesmenChanges { get; set; }
     }
 }

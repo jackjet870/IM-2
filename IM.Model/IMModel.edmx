@@ -689,6 +689,13 @@
           <Property Name="glFirstName1" Type="varchar" MaxLength="40" />
           <Property Name="glLastName2" Type="varchar" MaxLength="25" />
           <Property Name="glFirstName2" Type="varchar" MaxLength="40" />
+          <Property Name="glLiner3" Type="varchar" MaxLength="10" />
+          <Property Name="glCloser4" Type="varchar" MaxLength="10" />
+          <Property Name="glExit3" Type="varchar" MaxLength="10" />
+          <Property Name="glFTB1" Type="varchar" MaxLength="10" />
+          <Property Name="glFTB2" Type="varchar" MaxLength="10" />
+          <Property Name="glFTM1" Type="varchar" MaxLength="10" />
+          <Property Name="glFTM2" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Guests">
           <Key>
@@ -1830,19 +1837,19 @@
         </EntityType>
         <EntityType Name="SalesmenChanges">
           <Key>
-            <PropertyRef Name="schDT" />
-            <PropertyRef Name="schsa" />
-            <PropertyRef Name="schro" />
-            <PropertyRef Name="schPosition" />
+            <PropertyRef Name="schID" />
           </Key>
           <Property Name="schDT" Type="datetime" Nullable="false" />
-          <Property Name="schsa" Type="int" Nullable="false" />
+          <Property Name="schsa" Type="int" />
           <Property Name="schAuthorizedBy" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="schMadeBy" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="schro" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="schPosition" Type="tinyint" Nullable="false" />
           <Property Name="schOldSalesman" Type="varchar" MaxLength="10" />
           <Property Name="schNewSalesman" Type="varchar" MaxLength="10" />
+          <Property Name="schgu" Type="int" />
+          <Property Name="schmt" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="schID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="SalesRooms">
           <Key>
@@ -3249,6 +3256,90 @@
             </Principal>
             <Dependent Role="Groups">
               <PropertyRef Name="gbgu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_Closer4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_ExitCloser4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToBack1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToBack2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToMiddle1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToMiddle2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_Liner3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5448,6 +5539,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalesmenChanges_GuestMovementsType">
+          <End Role="GuestsMovementsTypes" Type="Self.GuestsMovementsTypes" Multiplicity="1" />
+          <End Role="SalesmenChanges" Type="Self.SalesmenChanges" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuestsMovementsTypes">
+              <PropertyRef Name="gnID" />
+            </Principal>
+            <Dependent Role="SalesmenChanges">
+              <PropertyRef Name="schmt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesmenChanges_Guests">
+          <End Role="Guests" Type="Self.Guests" Multiplicity="0..1" />
+          <End Role="SalesmenChanges" Type="Self.SalesmenChanges" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guests">
+              <PropertyRef Name="guID" />
+            </Principal>
+            <Dependent Role="SalesmenChanges">
+              <PropertyRef Name="schgu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SalesmenChanges_Personnel_AuthorizedBy">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
           <End Role="SalesmenChanges" Type="Self.SalesmenChanges" Multiplicity="*" />
@@ -5509,7 +5624,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SalesmenChanges_Sales">
-          <End Role="Sales" Type="Self.Sales" Multiplicity="1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="0..1" />
           <End Role="SalesmenChanges" Type="Self.SalesmenChanges" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sales">
@@ -8256,6 +8371,34 @@
             <End Role="Guests" EntitySet="Guests" />
             <End Role="Groups" EntitySet="Groups" />
           </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_Closer4" Association="Self.FK_GuestLg_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_ExitCloser4" Association="Self.FK_GuestLg_Personnel_ExitCloser4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack1" Association="Self.FK_GuestLg_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack2" Association="Self.FK_GuestLg_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle1" Association="Self.FK_GuestLg_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle2" Association="Self.FK_GuestLg_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_Liner3" Association="Self.FK_GuestLg_Personnel_Liner3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_GuestLog_Personnel_ChangedBy" Association="Self.FK_GuestLog_Personnel_ChangedBy">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
@@ -8987,6 +9130,14 @@
           <AssociationSet Name="FK_SalesLog_SaleTypes" Association="Self.FK_SalesLog_SaleTypes">
             <End Role="SaleTypes" EntitySet="SaleTypes" />
             <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesmenChanges_GuestMovementsType" Association="Self.FK_SalesmenChanges_GuestMovementsType">
+            <End Role="GuestsMovementsTypes" EntitySet="GuestsMovementsTypes" />
+            <End Role="SalesmenChanges" EntitySet="SalesmenChanges" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesmenChanges_Guests" Association="Self.FK_SalesmenChanges_Guests">
+            <End Role="Guests" EntitySet="Guests" />
+            <End Role="SalesmenChanges" EntitySet="SalesmenChanges" />
           </AssociationSet>
           <AssociationSet Name="FK_SalesmenChanges_Personnel_AuthorizedBy" Association="Self.FK_SalesmenChanges_Personnel_AuthorizedBy">
             <End Role="Personnel" EntitySet="Personnel" />
@@ -9948,6 +10099,20 @@
           <NavigationProperty Name="Personnel_VLO" Relationship="Self.FK_GuestLog_Personnel_VLO" FromRole="GuestLog" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ReimpresionMotive" Relationship="Self.FK_GuestLog_ReimpresionMotives" FromRole="GuestLog" ToRole="ReimpresionMotives" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="UnavailableMotive" Relationship="Self.FK_GuestLog_UnavailMots" FromRole="GuestLog" ToRole="UnavailMots" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="glLiner3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glCloser4" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glExit3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glFTM1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glFTM2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_GuestLg_Personnel_Closer4" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel1" Relationship="IMModel.FK_GuestLg_Personnel_ExitCloser4" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel2" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack1" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel3" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack2" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel4" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle1" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel5" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle2" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel6" Relationship="IMModel.FK_GuestLg_Personnel_Liner3" FromRole="GuestLog" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="Guest">
           <Key>
@@ -10218,6 +10383,7 @@
           <NavigationProperty Name="Personnel_FTM2" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle2" FromRole="Guest" ToRole="Personnel" />
           <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_Guests_Personnel_Liner3" FromRole="Guest" ToRole="Personnel" />
           <Property Name="guNotifiedEmailShowNotInvited" Type="Boolean" />
+          <NavigationProperty Name="SalesmenChanges" Relationship="IMModel.FK_SalesmenChanges_Guests" FromRole="Guest" ToRole="SalesmanChange" />
         </EntityType>
         <EntityType Name="GuestCreditCard">
           <Key>
@@ -10260,6 +10426,7 @@
           <Property Name="gnN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="gnA" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="GuestsMovements" Relationship="Self.FK_GuestsMovements_GuestsMovementsTypes" FromRole="GuestsMovementsTypes" ToRole="GuestsMovements" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SalesmenChanges" Relationship="IMModel.FK_SalesmenChanges_GuestMovementsType" FromRole="GuestMovementType" ToRole="SalesmanChange" />
         </EntityType>
         <EntityType Name="GuestPromotion">
           <Key>
@@ -10957,6 +11124,13 @@
           <NavigationProperty Name="Sales_FTM2" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="Sales_Liner3" Relationship="IMModel.FK_Sales_Personnel_Liner3" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="MealTickets_AuthorizedBy" Relationship="IMModel.FK_MealTickets_Personnel_AuthorizedBy" FromRole="Personnel" ToRole="MealTicket" />
+          <NavigationProperty Name="GuestLogs" Relationship="IMModel.FK_GuestLg_Personnel_Closer4" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs1" Relationship="IMModel.FK_GuestLg_Personnel_ExitCloser4" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs2" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack1" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs3" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack2" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs4" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs5" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs6" Relationship="IMModel.FK_GuestLg_Personnel_Liner3" FromRole="Personnel" ToRole="GuestLog" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -11351,13 +11525,10 @@
         </EntityType>
         <EntityType Name="SalesmanChange">
           <Key>
-            <PropertyRef Name="schDT" />
-            <PropertyRef Name="schsa" />
-            <PropertyRef Name="schro" />
-            <PropertyRef Name="schPosition" />
+            <PropertyRef Name="schID" />
           </Key>
           <Property Name="schDT" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="schsa" Type="Int32" Nullable="false" />
+          <Property Name="schsa" Type="Int32" />
           <Property Name="schAuthorizedBy" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="schMadeBy" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="schro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
@@ -11370,6 +11541,11 @@
           <NavigationProperty Name="Personnel_OldSalesman" Relationship="Self.FK_SalesmenChanges_Personnel_OldSalesman" FromRole="SalesmenChanges" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Role" Relationship="Self.FK_SalesmenChanges_Roles" FromRole="SalesmenChanges" ToRole="Roles" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Sale" Relationship="Self.FK_SalesmenChanges_Sales" FromRole="SalesmenChanges" ToRole="Sales" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="schgu" Type="Int32" />
+          <Property Name="schmt" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="schID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Guest" Relationship="IMModel.FK_SalesmenChanges_Guests" FromRole="SalesmanChange" ToRole="Guest" />
+          <NavigationProperty Name="GuestsMovementsType" Relationship="IMModel.FK_SalesmenChanges_GuestMovementsType" FromRole="SalesmanChange" ToRole="GuestMovementType" />
         </EntityType>
         <EntityType Name="SalesRoom">
           <Key>
@@ -14847,7 +15023,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SalesmenChanges_Sales">
-          <End Role="Sales" Type="Self.Sale" Multiplicity="1" />
+          <End Role="Sales" Type="Self.Sale" Multiplicity="0..1" />
           <End Role="SalesmenChanges" Type="IMModel.SalesmanChange" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sales">
@@ -18314,6 +18490,42 @@
             <End Role="SegmentCategory" EntitySet="SegmentsCategories" />
             <End Role="SegmentByLeadSource" EntitySet="SegmentsByLeadSources" />
           </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_Closer4" Association="IMModel.FK_GuestLg_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_ExitCloser4" Association="IMModel.FK_GuestLg_Personnel_ExitCloser4">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack1" Association="IMModel.FK_GuestLg_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack2" Association="IMModel.FK_GuestLg_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle1" Association="IMModel.FK_GuestLg_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle2" Association="IMModel.FK_GuestLg_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLg_Personnel_Liner3" Association="IMModel.FK_GuestLg_Personnel_Liner3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="GuestLog" EntitySet="GuestsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesmenChanges_Guests" Association="IMModel.FK_SalesmenChanges_Guests">
+            <End Role="Guest" EntitySet="Guests" />
+            <End Role="SalesmanChange" EntitySet="SalesmenChanges" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesmenChanges_GuestMovementsType" Association="IMModel.FK_SalesmenChanges_GuestMovementsType">
+            <End Role="GuestMovementType" EntitySet="GuestsMovementsTypes" />
+            <End Role="SalesmanChange" EntitySet="SalesmenChanges" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -18800,6 +19012,20 @@
           <Property Type="Boolean" Name="glCTour" Nullable="false" />
           <Property Type="Byte" Name="glReimpresion" Nullable="true" />
           <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="glLiner3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glCloser4" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer4N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glExit3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glFTB1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTB1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glFTB2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTB2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glFTM1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTM1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glFTM2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTM2N" Nullable="true" MaxLength="40" />
         </ComplexType>
         <ComplexType Name="GuestAssigned">
           <Property Type="Int32" Name="guID" Nullable="false" />
@@ -23307,6 +23533,114 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GuestLg_Personnel_Closer4">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_ExitCloser4">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToBack1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToBack2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToMiddle1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_FrontToMiddle2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLg_Personnel_Liner3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glLiner3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesmenChanges_Guests">
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="0..1" />
+          <End Type="IMModel.SalesmanChange" Role="SalesmanChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guest">
+              <PropertyRef Name="guID" />
+            </Principal>
+            <Dependent Role="SalesmanChange">
+              <PropertyRef Name="schgu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesmenChanges_GuestMovementsType">
+          <End Type="IMModel.GuestMovementType" Role="GuestMovementType" Multiplicity="1" />
+          <End Type="IMModel.SalesmanChange" Role="SalesmanChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuestMovementType">
+              <PropertyRef Name="gnID" />
+            </Principal>
+            <Dependent Role="SalesmanChange">
+              <PropertyRef Name="schmt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23934,6 +24268,13 @@
           <EntitySetMapping Name="GuestsLogs">
             <EntityTypeMapping TypeName="IMModel.GuestLog">
               <MappingFragment StoreEntitySet="GuestLog">
+                <ScalarProperty Name="glFTM2" ColumnName="glFTM2" />
+                <ScalarProperty Name="glFTM1" ColumnName="glFTM1" />
+                <ScalarProperty Name="glFTB2" ColumnName="glFTB2" />
+                <ScalarProperty Name="glFTB1" ColumnName="glFTB1" />
+                <ScalarProperty Name="glExit3" ColumnName="glExit3" />
+                <ScalarProperty Name="glCloser4" ColumnName="glCloser4" />
+                <ScalarProperty Name="glLiner3" ColumnName="glLiner3" />
                 <ScalarProperty Name="glID" ColumnName="glID" />
                 <ScalarProperty Name="glgu" ColumnName="glgu" />
                 <ScalarProperty Name="glsr" ColumnName="glsr" />
@@ -25047,6 +25388,9 @@
           <EntitySetMapping Name="SalesmenChanges">
             <EntityTypeMapping TypeName="IMModel.SalesmanChange">
               <MappingFragment StoreEntitySet="SalesmenChanges">
+                <ScalarProperty Name="schID" ColumnName="schID" />
+                <ScalarProperty Name="schmt" ColumnName="schmt" />
+                <ScalarProperty Name="schgu" ColumnName="schgu" />
                 <ScalarProperty Name="schDT" ColumnName="schDT" />
                 <ScalarProperty Name="schsa" ColumnName="schsa" />
                 <ScalarProperty Name="schAuthorizedBy" ColumnName="schAuthorizedBy" />
@@ -26109,6 +26453,20 @@
                 <ScalarProperty Name="glCTour" ColumnName="glCTour" />
                 <ScalarProperty Name="glReimpresion" ColumnName="glReimpresion" />
                 <ScalarProperty Name="rmN" ColumnName="rmN" />
+                <ScalarProperty Name="glLiner3" ColumnName="glLiner3" />
+                <ScalarProperty Name="Liner3N" ColumnName="Liner3N" />
+                <ScalarProperty Name="glCloser4" ColumnName="glCloser4" />
+                <ScalarProperty Name="Closer4N" ColumnName="Closer4N" />
+                <ScalarProperty Name="glExit3" ColumnName="glExit3" />
+                <ScalarProperty Name="Exit3N" ColumnName="Exit3N" />
+                <ScalarProperty Name="glFTB1" ColumnName="glFTB1" />
+                <ScalarProperty Name="FTB1N" ColumnName="FTB1N" />
+                <ScalarProperty Name="glFTB2" ColumnName="glFTB2" />
+                <ScalarProperty Name="FTB2N" ColumnName="FTB2N" />
+                <ScalarProperty Name="glFTM1" ColumnName="glFTM1" />
+                <ScalarProperty Name="FTM1N" ColumnName="FTM1N" />
+                <ScalarProperty Name="glFTM2" ColumnName="glFTM2" />
+                <ScalarProperty Name="FTM2N" ColumnName="FTM2N" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

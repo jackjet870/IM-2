@@ -60,6 +60,13 @@ namespace IM.Model
         public string glFirstName1 { get; set; }
         public string glLastName2 { get; set; }
         public string glFirstName2 { get; set; }
+        public string glLiner3 { get; set; }
+        public string glCloser4 { get; set; }
+        public string glExit3 { get; set; }
+        public string glFTB1 { get; set; }
+        public string glFTB2 { get; set; }
+        public string glFTM1 { get; set; }
+        public string glFTM2 { get; set; }
     
         public virtual Personnel Personnel_ChangedBy { internal get; set; }
         public virtual Personnel Personnel_Closer1 { internal get; set; }
@@ -78,5 +85,12 @@ namespace IM.Model
         public virtual Personnel Personnel_VLO { internal get; set; }
         public virtual ReimpresionMotive ReimpresionMotive { internal get; set; }
         public virtual UnavailableMotive UnavailableMotive { internal get; set; }
+        public virtual Personnel Personnel { get; set; }
+        public virtual Personnel Personnel1 { get; set; }
+        public virtual Personnel Personnel2 { get; set; }
+        public virtual Personnel Personnel3 { get; set; }
+        public virtual Personnel Personnel4 { get; set; }
+        public virtual Personnel Personnel5 { get; set; }
+        public virtual Personnel Personnel6 { get; set; }
     }
 }
