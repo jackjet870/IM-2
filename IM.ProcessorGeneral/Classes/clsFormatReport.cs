@@ -1046,7 +1046,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
       lst.Add("Liner Name", "guLiner1N");
       lst.Add("Comments", "meComments");
       lst.Add("Personnel ID", "mepe");
-      lst.Add("Presonnel Name", "peN");
+      lst.Add("Personnel Name", "peN");
       lst.Add("# Collaborator", "peCollaboratorID");
       lst.Add("Agency", "agN");
       lst.Add("Representative", "merep");
