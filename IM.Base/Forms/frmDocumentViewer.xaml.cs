@@ -573,15 +573,13 @@ namespace IM.Base.Forms
       #region PageSize      
       int indexSize = cmbPageSize.SelectedIndex;
       List<dynamic> lstPaperSize = cmbPageSize.ItemsSource as List<dynamic>;
-      lstPaperSize[0] = new { name = "Paper Letter", description = "21.59 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperLetter, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[1] = new { name = "Paper Letter Small", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLetterSmall, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[2] = new { name = "Paper Ledger", description = "43.18 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperLedger, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[3] = new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[4] = new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[5] = new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[6] = new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[7] = new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
-      lstPaperSize[8] = new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[0] = new { name = "Paper Letter", description = "21.59 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperLetter, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };      
+      lstPaperSize[1] = new { name = "Paper Legal", description = "21.59 cm x 35.56 cm", paperSize = XlPaperSize.xlPaperLegal, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[2] = new { name = "Paper A3", description = "29.7 cm x 42 cm", paperSize = XlPaperSize.xlPaperA3, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[3] = new { name = "Paper A4", description = "21 cm x 29.7 cm", paperSize = XlPaperSize.xlPaperA4, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[4] = new { name = "Paper A5", description = "14.8 cm x 21 cm", paperSize = XlPaperSize.xlPaperA5, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[5] = new { name = "Paper 11x17", description = "27.94 cm x 43.18 cm", paperSize = XlPaperSize.xlPaper11x17, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
+      lstPaperSize[6] = new { name = "Paper Note", description = "21.59 cm x 27.94 cm", paperSize = XlPaperSize.xlPaperNote, img = $"pack://application:,,,/IM.Styles;component/Images/32x32/BPage{Orientation}.png" };
       cmbPageSize.SelectedItem = lstPaperSize[indexSize];
       cmbPageSize.SelectedIndex = indexSize;
       #endregion

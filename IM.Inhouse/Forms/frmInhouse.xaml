@@ -385,7 +385,7 @@
                         <DataGridTemplateColumn x:Name="guBookCancColumn" SortMemberPath="guBookCanc" CanUserSort="True" IsReadOnly="false"  Header="C.Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancArrival_Click"   HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancel_Click"   HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -530,7 +530,7 @@
                         <DataGridTemplateColumn x:Name="guBookCancColumn1" SortMemberPath="guBookCanc" CanUserSort="True" IsReadOnly="True"  Header="C. Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancAvailable_Click"   HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancel_Click"   HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -560,7 +560,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
+                        <DataGridTemplateColumn  Header="Comments"  Width="auto" IsReadOnly="False" SortMemberPath="guComments" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding guComments}" />
@@ -680,7 +680,7 @@
                         <DataGridTemplateColumn x:Name="guBookCancColumn2" SortMemberPath="guBookCanc" CanUserSort="True" IsReadOnly="false" Header="C.Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancPremanifest_Click"   HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancel_Click"   HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -828,7 +828,7 @@
                         <DataGridTemplateColumn x:Name="guBookCancColumn3" SortMemberPath="guBookCanc" CanUserSort="True" Header="C.Bk" Width="auto" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancSearched_Click"   HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancel_Click"   HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

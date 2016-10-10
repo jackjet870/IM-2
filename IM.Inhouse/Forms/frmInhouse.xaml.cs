@@ -106,7 +106,7 @@ namespace IM.Inhouse.Forms
           ccAvailables.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccPremanifest.Visibility = Visibility.Hidden;
           var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
-          _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate));
+          _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate)).ToList();
           break;
 
         case EnumScreen.Premanifest: //GuestPremanifest
@@ -740,6 +740,8 @@ namespace IM.Inhouse.Forms
       LoadGrid();
     }
 
+    #endregion listMarkets_SelectionChanged
+
     #region rb_Checked
 
     /// <summary>
@@ -902,42 +904,6 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion NotesArrival_MouseLeftButtonDown
-
-    #region ChkBookCancArrival_Click
-
-    /// <summary>
-    /// Abre el formulario de frmBookingCancel
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 16/08/2016
-    /// </history>
-    private void ChkBookCancArrival_Click(object sender, RoutedEventArgs e)
-    {
-      var chk = sender as CheckBox;
-      var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
-
-      if (guest == null || chk?.IsChecked == null) return;
-
-      chk.IsChecked = !chk.IsChecked.Value;
-      if (!ValidateCancelInvitation(guest.guCheckIn, guest.guCheckOutD, guest.guInvit, guest.guShow)) return;
-      var log = ValidateLogin();
-      if (log == null) return;
-      var bc = new frmBookingCancel(guest.guID, log.UserData.User)
-      {
-        Owner = this
-      };
-      bc.ShowDialog();
-
-      dgGuestArrival.SelectedItems.OfType<GuestArrival>()
-        .ToList()
-        .ForEach(item =>
-        {
-          if (bc.Cancelado != null) item.guBookCanc = bc.Cancelado.Value;
-        });
-      dgGuestArrival.Items.Refresh();
-    }
-
-    #endregion ChkBookCancArrival_Click
 
     #region chkGuestsGroupsArrivals_Clic
 
@@ -1109,43 +1075,13 @@ namespace IM.Inhouse.Forms
         prnote.ShowDialog();
         if (prnote.SaveNote)
         {
-          dgGuestAvailable.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestAvailable.SelectedItems.OfType<ObjGuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
           dgGuestAvailable.Items.Refresh();
         }
       }
     }
 
-    #endregion NotesAvailable_MouseLeftButtonUp
-
-    #region ChkBookCancAvailable_Click
-
-    private void ChkBookCancAvailable_Click(object sender, RoutedEventArgs e)
-    {
-      var Available = dgGuestAvailable.Items[dgGuestAvailable.Items.CurrentPosition] as GuestAvailable;
-      var chk = sender as CheckBox;
-      chk.IsChecked = !chk.IsChecked.Value;
-      if (ValidateCancelInvitation(Available.guCheckIn, Available.guCheckOutD, Available.guInvit, Available.guShow))
-      {
-        var log = ValidateLogin();
-        if (log != null)
-        {
-          StaStart("loading Cancel invitation screen...");
-          frmBookingCancel bc = new frmBookingCancel(Available.guID, log.UserData.User);
-          bc.Owner = this;
-          bc.ShowInTaskbar = false;
-          StaEnd();
-          if (!bc.ShowDialog().Value)
-          {
-            dgGuestAvailable.SelectedItems.OfType<GuestAvailable>()
-              .ToList()
-              .ForEach(item => item.guBookCanc = bc.Cancelado.Value);
-            dgGuestAvailable.Items.Refresh();
-          }
-        }
-      }
-    }
-
-    #endregion ChkBookCancAvailable_Click
+    #endregion NotesAvailable_MouseLeftButtonUp    
 
     #region chkGuestsGroupsAviables
 
@@ -1293,32 +1229,7 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion NotesPremanifest_MouseLeftButtonUp
-
-    #region ChkBookCancPremanifest_Click
-
-    private void ChkBookCancPremanifest_Click(object sender, RoutedEventArgs e)
-    {
-      var Premanifest = dgGuestPremanifest.Items[dgGuestPremanifest.Items.CurrentPosition] as GuestPremanifest;
-      var chk = sender as CheckBox;
-      chk.IsChecked = !chk.IsChecked.Value;
-      if (ValidateCancelInvitation(Premanifest.guCheckIn, Premanifest.guCheckOutD, Premanifest.guInvit, Premanifest.guShow))
-      {
-        StaStart("loading Cancel invitation screen...");
-        var log = ValidateLogin();
-        if (log != null)
-        {
-          frmBookingCancel bc = new frmBookingCancel(Premanifest.guID, log.UserData.User);
-          bc.Owner = this;
-          bc.ShowInTaskbar = false;
-          bc.ShowDialog();
-          dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guBookCanc = bc.Cancelado.Value);
-          dgGuestPremanifest.Items.Refresh();
-        }
-      }
-    }
-
-    #endregion ChkBookCancPremanifest_Click
+    #endregion NotesPremanifest_MouseLeftButtonUp  
 
     #region chkGuestsGroupsPremanifest
 
@@ -1468,32 +1379,6 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion NotesSearched_MouseLeftButtonUp
-
-    #region ChkBookCancSearched_Click
-
-    private void ChkBookCancSearched_Click(object sender, RoutedEventArgs e)
-    {
-      var Searched = guestSearchedDataGrid.Items[guestSearchedDataGrid.Items.CurrentPosition] as GuestSearched;
-      var chk = sender as CheckBox;
-      chk.IsChecked = !chk.IsChecked.Value;
-      if (ValidateCancelInvitation(Searched.guCheckIn, Searched.guCheckOutD, Searched.guInvit, Searched.guShow))
-      {
-        var log = ValidateLogin();
-        if (log != null)
-        {
-          StaStart("loading Cancel invitation screen...");
-          frmBookingCancel bc = new frmBookingCancel(Searched.guID, log.UserData.User);
-          bc.Owner = this;
-          bc.ShowInTaskbar = false;
-          StaEnd();
-          bc.ShowDialog();
-          guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guBookCanc = bc.Cancelado.Value);
-          guestSearchedDataGrid.Items.Refresh();
-        }
-      }
-    }
-
-    #endregion ChkBookCancSearched_Click
 
     #region GetGuestEquity_MouseLeftButtonUp
 
@@ -1772,8 +1657,6 @@ namespace IM.Inhouse.Forms
 
     #endregion btnWithGifts_Click
 
-    #endregion listMarkets_SelectionChanged
-
     #region btnArrivals_Clicked
 
     /// <summary>
@@ -1881,6 +1764,76 @@ namespace IM.Inhouse.Forms
 
     #endregion btnSearchGuest_Click
 
+    #region ChkBookCancel_Click
+    /// <summary>
+    /// Cancela una Booking 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 06/10/2016 created 
+    /// </history>
+    private void ChkBookCancel_Click(object sender, RoutedEventArgs e)
+    {
+      StaStart("Loading Cancel invitation screen...");
+      var chk = sender as CheckBox;
+      DataGrid dg = GetDataGrid();
+
+      var item = dg.SelectedItem;
+      var t = item.GetType();
+      var guCheckIn = t.GetProperty("guCheckIn").GetValue(item);
+      var guCheckOutD = t.GetProperty("guCheckOutD").GetValue(item);
+      var guInvit = t.GetProperty("guInvit").GetValue(item);
+      var guShow = t.GetProperty("guShow").GetValue(item);
+      var guID = t.GetProperty("guID").GetValue(item);
+
+      //Validamos los valores nulos 
+      if (chk?.IsChecked == null) return;
+
+      //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
+      chk.IsChecked = !chk.IsChecked.Value;
+      StaEnd();
+      if (!ValidateCancelInvitation((bool)guCheckIn, (DateTime)guCheckOutD, (bool)guInvit, (bool)guShow)) return;
+      var log = ValidateLogin();
+      if (log == null) return;
+      var bc = new frmBookingCancel((int)guID, log.UserData.User)
+      {
+        Owner = this
+      };
+      bc.ShowDialog();
+      var lstProperties = t.GetProperties().ToList();
+
+      if (lstProperties.Any(c => c.Name == "guBookCanc"))
+      {
+        t.GetProperty("guBookCanc").SetValue(item, bc.Cancelado != null && bc.Cancelado.Value);
+      }
+      dg.Items.Refresh();
+    } 
+    #endregion
+
+    #region GetDataGrid
+    /// <summary>
+    /// Devuelve el datagrid que este actualmente visualizandose 
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  06/10/2016 created
+    /// </history>
+    private DataGrid GetDataGrid()
+    {
+      switch (_screen)
+      {
+        case EnumScreen.Arrivals:
+          return dgGuestArrival;
+        case EnumScreen.Availables:
+          return dgGuestAvailable;          
+        case EnumScreen.Premanifest:
+          return dgGuestPremanifest;
+        case EnumScreen.Search:
+          return guestSearchedDataGrid;
+        default:
+          throw new ArgumentOutOfRangeException("EnumScreen Not found or DataGrid Not found");
+      }
+    } 
+    #endregion
+
     #region btnAssistance_Click
 
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
@@ -1904,28 +1857,8 @@ namespace IM.Inhouse.Forms
     private void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
       var chk = sender as CheckBox;
-      DataGrid dg;
-      switch (_screen)
-      {
-        case EnumScreen.Arrivals:
-          dg = dgGuestArrival;
-          break;
-
-        case EnumScreen.Availables:
-          dg = dgGuestAvailable;
-          break;
-
-        case EnumScreen.Premanifest:
-          dg = dgGuestPremanifest;
-          break;
-
-        case EnumScreen.Search:
-          dg = guestSearchedDataGrid;
-          break;
-
-        default:
-          throw new ArgumentOutOfRangeException();
-      }
+      DataGrid dg = GetDataGrid();
+     
       var item = dg.SelectedItem;
       var t = item.GetType();
       var guAvail = t.GetProperty("guAvail").GetValue(item);

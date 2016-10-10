@@ -21,6 +21,11 @@ namespace IM.Inhouse.Classes
 
       Status  = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail,guInvit, guBookCanc, guBookD, guShow, guInfo, serverDate);
     }
+    //Atributo que se utiliza para mostrar el tooltip
+    public string toolTip
+    {
+      get { return HelperToObjGuest.toolTip(Status); }
+    }
     //Atributo que se utiliza cuando se cargan el DataGrid, me  agrega el estatus
     public int StatusColumn
     {
@@ -36,11 +41,7 @@ namespace IM.Inhouse.Classes
     {
       get { return (guPRNote ? "pack://application:,,,/IM.Styles;component/Images/Note.ico" : string.Empty); }
     }
-    //Atributo que se utiliza para mostrar el tooltip
-    public string toolTip
-    {
-      get { return HelperToObjGuest.toolTip(Status); }
-    }
+   
     public string EquityColumn
     {
       get { return (string.IsNullOrEmpty(guMembershipNum)? string.Empty:"pack://application:,,,/IM.Styles;component/Images/Report.ico" ); }
