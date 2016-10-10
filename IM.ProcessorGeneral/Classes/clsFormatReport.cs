@@ -23,7 +23,7 @@ namespace IM.ProcessorGeneral.Classes
     public static ColumnFormatList RptBookingsBySalesRoomProgramTime()
     {
       ColumnFormatList lst = new ColumnFormatList();
-      lst.Add("Sales Room", "SalesRoom", axis: ePivotFieldAxis.Row, isGroup:true, isVisible:false);
+      lst.Add("Sales Room", "SalesRoom", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Book Type", "BookType", axis: ePivotFieldAxis.Row);
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
@@ -48,7 +48,7 @@ namespace IM.ProcessorGeneral.Classes
       lst.Add("Program", "Program", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Lead Source", "LeadSource", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
       lst.Add("Book Type", "BookType", axis: ePivotFieldAxis.Row);
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum,aggregateFunction:DataFieldFunctions.Sum);
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Time", "Time", axis: ePivotFieldAxis.Column);
       return lst;
     }
@@ -85,7 +85,7 @@ namespace IM.ProcessorGeneral.Classes
       lst.Add("Folios", "geFolios");
       lst.Add("CxC Comments", "grCxCComments");
       lst.Add("Receipt Comments", "grComments");
-      lst.Add("Total Gifts", "TotalGift", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
+      lst.Add("Total Gifts", "TotalGift", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("CxC Gift", "grCxCGifts", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("CxC Adj", "grCxCAdj", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("CxC Deposit", "grCxCPRDeposit", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
@@ -416,8 +416,8 @@ namespace IM.ProcessorGeneral.Classes
       lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
       lst.Add("Deposit", "grDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
-      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
-      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
+      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
       lst.Add("PR Name", "peN", axis: ePivotFieldAxis.Row, isVisible: false);
       return lst;
     }
@@ -501,7 +501,7 @@ namespace IM.ProcessorGeneral.Classes
       lst.Add("Total Qty", "TotalQty", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
       lst.Add("Unit Cost", "UnitCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row);
       lst.Add("Total Cost", "TotalCost", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Row, function: DataFieldFunctions.Sum);
-      lst.Add("Day", "Day", axis: ePivotFieldAxis.Column, sort:eSortType.Ascending);
+      lst.Add("Day", "Day", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
       lst.Add("Category", "Category", axis: ePivotFieldAxis.Row, isVisible: false);
       return lst;
     }
@@ -1033,10 +1033,10 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
       lst.Add("Qty", "meQty", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Type", "myN");
       lst.Add("Folios", "meFolios");
-      lst.Add("Adults", "meAdults", format: EnumFormatTypeExcel.Number, function:DataFieldFunctions.Sum);
+      lst.Add("Adults", "meAdults", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Minors", "meMinors", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Show", "guShow");
-      lst.Add("Total", "Total", format: EnumFormatTypeExcel.Currency, function:DataFieldFunctions.Sum);
+      lst.Add("Total", "Total", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum);
       lst.Add("Loc", "guloInfo");
       lst.Add("PR", "guPRInvit1");
       lst.Add("PR Name", "guPRInvit1N");
@@ -1045,12 +1045,12 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
       lst.Add("Liner", "guLiner1");
       lst.Add("Liner Name", "guLiner1N");
       lst.Add("Comments", "meComments");
+      lst.Add("Personnel ID", "mepe");
+      lst.Add("Presonnel Name", "peN");
       lst.Add("# Collaborator", "peCollaboratorID");
-      lst.Add("Collaborator Name", "peN");
       lst.Add("Agency", "agN");
       lst.Add("Representative", "merep");
       lst.Add("mera", "mera", isVisible: false);
-      lst.Add("mepe", "mepe", isVisible: false);
       return lst;
     }
 
@@ -1110,7 +1110,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     {
       ColumnFormatList lst = new ColumnFormatList();
       lst.Add("Date", "Date", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
-      lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function:DataFieldFunctions.Sum);
+      lst.Add("Adults", "Adults", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
       lst.Add("Minors", "Minors", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
       lst.Add("$ Adults", "AdultsAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
       lst.Add("$ Minors", "MinorsAmount", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum);
@@ -1491,7 +1491,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
       lst.Add("LS", "guls", isGroup: true, isVisible: false);
       lst.Add("PR Name", "guPRInvitN", axis: ePivotFieldAxis.Row);
       lst.Add("PR", "guPRInvit", axis: ePivotFieldAxis.Row);
-      lst.Add("D", "guDirect", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction:DataFieldFunctions.Sum);
+      lst.Add("D", "guDirect", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("IO", "guInOut", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("WO", "guWalkOut", format: EnumFormatTypeExcel.Number, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
       lst.Add("Type", "Type", axis: ePivotFieldAxis.Column);
@@ -1730,20 +1730,20 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     {
       ColumnFormatList lst = new ColumnFormatList();
       lst.Add("PR", "grpe", axis: ePivotFieldAxis.Row, isGroup: true, isVisible: false);
-      lst.Add("Ch B",  "grID", axis: ePivotFieldAxis.Row);
-      lst.Add("Chb PP",  "grNum", axis: ePivotFieldAxis.Row);
-      lst.Add("Date",  "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
-      lst.Add("Guest ID",  "grgu", axis: ePivotFieldAxis.Row);
-      lst.Add("Book D",  "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
-      lst.Add("Guest Name",  "grGuest", axis: ePivotFieldAxis.Row);
-      lst.Add("Hotel",  "grHotel", axis: ePivotFieldAxis.Row);
-      lst.Add("LS",  "grls", axis: ePivotFieldAxis.Row);
-      lst.Add("SR",  "grsr", axis: ePivotFieldAxis.Row);
-      lst.Add("Host",  "grHost", axis: ePivotFieldAxis.Row);
-      lst.Add("Deposit",  "grDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
-      lst.Add("Burned",  "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
-      lst.Add("Currency",  "cuN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
-      lst.Add("Payment Type",  "ptN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Ch B", "grID", axis: ePivotFieldAxis.Row);
+      lst.Add("Chb PP", "grNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Date", "grD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest ID", "grgu", axis: ePivotFieldAxis.Row);
+      lst.Add("Book D", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Guest Name", "grGuest", axis: ePivotFieldAxis.Row);
+      lst.Add("Hotel", "grHotel", axis: ePivotFieldAxis.Row);
+      lst.Add("LS", "grls", axis: ePivotFieldAxis.Row);
+      lst.Add("SR", "grsr", axis: ePivotFieldAxis.Row);
+      lst.Add("Host", "grHost", axis: ePivotFieldAxis.Row);
+      lst.Add("Deposit", "grDeposit", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Burned", "grDepositTwisted", format: EnumFormatTypeExcel.Currency, axis: ePivotFieldAxis.Values, function: DataFieldFunctions.Sum, aggregateFunction: DataFieldFunctions.Sum);
+      lst.Add("Currency", "cuN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
+      lst.Add("Payment Type", "ptN", axis: ePivotFieldAxis.Column, sort: eSortType.Ascending);
       lst.Add("PR Name", "peN", isVisible: false);
       return lst;
     }
@@ -1917,7 +1917,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     public static ColumnFormatList RptLoginsLog()
     {
       ColumnFormatList lst = new ColumnFormatList();
-      lst.Add("Date Time", "Date_Time", format:EnumFormatTypeExcel.DateTime);
+      lst.Add("Date Time", "Date_Time", format: EnumFormatTypeExcel.DateTime);
       lst.Add("Location", "Location");
       lst.Add("Code", "Code");
       lst.Add("Name", "Name");
@@ -2102,7 +2102,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     {
       ColumnFormatList lst = new ColumnFormatList();
 
-      lst.Add("Date", "wmD", format:EnumFormatTypeExcel.Date);
+      lst.Add("Date", "wmD", format: EnumFormatTypeExcel.Date);
       lst.Add("Qty", "wmQty", format: EnumFormatTypeExcel.Number);
       lst.Add("Gift", "giN");
       lst.Add("Code", "wmpe");
@@ -2113,7 +2113,7 @@ new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePi
     }
 
     #endregion RptWarehouseMovements
-    
+
     #endregion General Reports
   }
 }
