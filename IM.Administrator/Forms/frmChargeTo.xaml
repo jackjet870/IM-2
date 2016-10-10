@@ -44,7 +44,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de ChargeTo-->
-        <DataGrid x:Name="dgrChargeTo" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstChargeTo}" IsReadOnly="True"
+        <DataGrid x:Name="dtgChargeTo" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">

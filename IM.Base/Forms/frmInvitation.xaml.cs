@@ -148,6 +148,8 @@ namespace IM.Base.Forms
         if (isValid)
         {
           isValid = InvitationValidationRules.ValidateInformationGrids(this, dbContext);
+          //Validamos el GuestAdditional
+          isValid = ValidateAdditionalGuest();
         }
 
         //Validamos que la informacion exista
@@ -156,6 +158,7 @@ namespace IM.Base.Forms
           //Validamos si existen los datos
           isValid = await ValidateExist();
         }
+                
         //Guardamos la informacion
         if (isValid)
         {
@@ -778,7 +781,7 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
-      btnAddGuestAdditional.IsEnabled = false;
+      btnAddGuestAdditional.IsEnabled = _invitationType == EnumInvitationType.newExternal;
       btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
       brdSearchButton.IsEnabled = string.IsNullOrWhiteSpace(dbContext.Guest.guHReservID);
       #endregion Enable false
@@ -836,8 +839,8 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = dbContext.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
-      btnAddGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
-      btnSearchGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
+      btnAddGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
+      btnSearchGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
 
       #endregion Enable false
 
@@ -849,7 +852,7 @@ namespace IM.Base.Forms
       txtguIdProfileOpera.IsReadOnly = true;
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
-      dtgGuestAdditional.IsReadOnly = dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal;
+      dtgGuestAdditional.IsReadOnly = !(dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
       #endregion IsReadOnly
 
       //Si OutHouse y es una invitacion existente
@@ -960,19 +963,23 @@ namespace IM.Base.Forms
         //Si la fecha de booking original es antes de hoy
         if (dbContext.CloneGuest.guBookD < serverDate)
         {
-          dtgGuestAdditional.IsReadOnly = true;
+          //dtgGuestAdditional.IsReadOnly = true;
+          //guestFormMode = EnumMode.ReadOnly;
+          //btnAddGuestAdditional.IsEnabled = false;
+          //btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
+          brdAdditionalGuest.IsEnabled = false;
           guestFormMode = EnumMode.ReadOnly;
-          btnAddGuestAdditional.IsEnabled = false;
-          btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
         }
       }
-      else if (_module == EnumModule.OutHouse)
+      else //if (_module == EnumModule.OutHouse)
       {
-        dtgGuestAdditional.IsReadOnly = false;
+        //dtgGuestAdditional.IsReadOnly = false;
+        //btnAddGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
+        //btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
+        brdAdditionalGuest.IsEnabled = true;
         guestFormMode = EnumMode.Edit;
-        btnAddGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
-        btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
       }
+      
 
       //Other Info
       if (_module == EnumModule.InHouse)
@@ -1043,9 +1050,7 @@ namespace IM.Base.Forms
       txtguCCType.IsEnabled = false;
       dtgCCCompany.IsReadOnly = true;
       //Additional Guest
-      dtgGuestAdditional.IsReadOnly = true;
-      btnAddGuestAdditional.IsEnabled = false;
-      btnSearchGuestAdditional.IsEnabled = false;
+      brdAdditionalGuest.IsEnabled = false;
       brdRoomsQtyAndElectronicPurse.IsEnabled = false;
     }
 
@@ -1791,7 +1796,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [edgrodriguez] 02/08/2016  Created.
     /// </history>
-    private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    public void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
@@ -1819,6 +1824,41 @@ namespace IM.Base.Forms
     }
 
     #endregion RowEditEnding
+
+    #region ValidateAdditionalGuest
+    /// <summary>
+    /// Valida el grid de GuestAdditional antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <param name="form">Formulario de invitación</param>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [edgrodriguez] 07/10/2016 created
+    /// </history>
+    private bool ValidateAdditionalGuest()
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(dtgGuestAdditional);
+      if (row != null)
+      {
+        bool gridvalid = AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(dbContext.Guest, row.Item as Guest, dbContext.Program, true)).Item1;
+        if (gridvalid)
+        {
+          dtgGuestAdditional.RowEditEnding -= dtgGuestAdditional_RowEditEnding;
+          dtgGuestAdditional.CommitEdit();
+          dtgGuestAdditional.RowEditEnding += dtgGuestAdditional_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          GridHelper.SelectRow(dtgGuestAdditional, row.GetIndex(), 0, true);
+          tabStatusGiftsOthers.IsSelected = true;
+        }
+      }
+      return isValid;
+    }
+    #endregion
 
     #endregion Eventos del GRID GuestAdditional
 
@@ -1989,7 +2029,7 @@ namespace IM.Base.Forms
       if (e.EditAction == DataGridEditAction.Commit)
       {
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.validateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID))
+        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID))
         {
           if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {

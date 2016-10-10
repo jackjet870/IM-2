@@ -428,12 +428,12 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Agregamos el timeout de la consulta
-          dbContext.Database.CommandTimeout = 180;
-
+          dbContext.Database.CommandTimeout = 180;         
           var query = from gu in dbContext.Guests
                       join ls in dbContext.LeadSources on gu.guls equals ls.lsID
-                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))     
+                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))
                       select gu; 
+                    
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -900,6 +900,7 @@ namespace IM.BusinessRules.BR
     /// <returns>  Huesped principal.</returns>
     /// <history>
     /// [edgrodriguez] 18/08/2016  Created.
+    /// [edgrodriguez] 10/10/2016 Modified. Se agrega una validacion al proceso de Guest Additional
     /// </history>
     public static async Task<int> SaveGuestShow(GuestShow guestShow, UserData user, string changedBy, string machineName, string ipAddress)
     {
@@ -1025,12 +1026,18 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Guest Additional
-              dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", guestShow.AdditionalGuestList.Where(c=>c.guID > 0).Select(c => c.guID).ToList()));
+              var additionalGuests = guestShow.AdditionalGuestList.Cast<Guest>().ToList();
+              additionalGuests.RemoveAll(c => c.guID == 0);
+              if (additionalGuests.Any())
+              {
+                dbContext.USP_IM_SaveGuestAdditional(guestShow.Guest.guID, string.Join(",", additionalGuests.Select(c => c.guID).ToList()));
+              }
               #endregion
 
               #region Proceso Guest Movements
               dbContext.USP_OR_SaveGuestMovement(guestShow.Guest.guID, EnumToListHelper.GetEnumDescription(EnumGuestsMovementsType.Show), changedBy, machineName, ipAddress);
               result += dbContext.SaveChanges();
+
               #endregion
 
               //Confirmammos la transaccion
@@ -1064,8 +1071,9 @@ namespace IM.BusinessRules.BR
     /// <param name="hoursDiff"></param>
     /// <returns>0. No se guardó | >0. Los datos se guardaron correctamente</returns>
     /// <history>
-    /// [emoguel] 18/08/2016 created
-    /// [emoguel] 23/09/2016 Modified--- Se cambio la validacion de GuestSattus
+    /// [emoguel]      18/08/2016 created
+    /// [emoguel]      23/09/2016 Modified. Se cambio la validacion de GuestStatus
+    /// [edgrodriguez] 10/10/2016 Modified. Se agrega una validacion al proceso de Guest Additional
     /// </history>
     public async static Task<int> SaveGuestInvitation(GuestInvitation guestInvitation, EnumProgram enumProgram, EnumModule enumModule, UserData user, EnumMode enumMode,
       string computerName, string iPAddress, EnumGuestsMovementsType guestMovementType, short hoursDiff)
@@ -1295,9 +1303,10 @@ namespace IM.BusinessRules.BR
               }
 
               //Si se agregaron nuevos GuestCreditCards los guardamos.
-              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
-                dbContext.Entry(gcc).State = EntityState.Added
-              );
+              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc => {
+                gcc.gdgu = guestInvitation.Guest.guID;
+                dbContext.Entry(gcc).State = EntityState.Added;
+              });
 
               //Creamos la variable en donde se van a concatenar 
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
@@ -1329,7 +1338,10 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Guest Additional
-              if (guestInvitation.AdditionalGuestList.Any())
+              //Eliminamos los registros con guID=0
+              var additionalGuests = guestInvitation.AdditionalGuestList.Cast<Guest>().ToList();
+              additionalGuests.RemoveAll(c => c.guID == 0);
+              if (additionalGuests.Any())
               {
                 dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Where(c => c.guID > 0).Select(c => c.guID).ToList()));
                 if (enumProgram == EnumProgram.Inhouse)

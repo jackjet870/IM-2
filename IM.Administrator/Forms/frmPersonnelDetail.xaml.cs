@@ -910,8 +910,7 @@ namespace IM.Administrator.Forms
         {
           _lstOldAccesLeadSource = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.LeadSource);          
         }
-        
-        dtgLeadSources.ItemsSource = _lstOldAccesLeadSource.ToList();
+        dtgLeadSources.ItemsSource=_lstOldAccesLeadSource.Select(pa => ObjectHelper.CopyProperties(pa)).ToList();        
         cmbLeadSource.Header = $"Lead Sources ({_lstOldAccesLeadSource.Count})";
         
       }
@@ -940,7 +939,7 @@ namespace IM.Administrator.Forms
         {
           _lstOldAccesSalesRoom = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.SalesRoom);                    
         }
-        dtgSalesRoom.ItemsSource = _lstOldAccesSalesRoom.ToList();
+        dtgSalesRoom.ItemsSource = _lstOldAccesSalesRoom.Select(pa=>ObjectHelper.CopyProperties(pa)).ToList();
         cmbSalesRoom.Header = $"Sales Rooms ({_lstOldAccesSalesRoom.Count})";
       }
       catch (Exception ex)
@@ -968,7 +967,7 @@ namespace IM.Administrator.Forms
         {
           _lstOldAccesWH = await BRPersonnelAcces.getPersonnelAcces(personnel.peID, EnumPlaceType.Warehouse);                    
         }
-        dtgWarehouses.ItemsSource = _lstOldAccesWH.ToList();
+        dtgWarehouses.ItemsSource = _lstOldAccesWH.Select(pa=>ObjectHelper.CopyProperties(pa)).ToList();
         cmbWarehouses.Header = $"Warehouses ({_lstOldAccesWH.Count})";
       }
       catch (Exception ex)

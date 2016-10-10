@@ -25,10 +25,12 @@ namespace IM.Base.Classes
     /// Valida que el folio de reservacion InHouse no haya sido utilizado anteriormente
     /// Valida que el folio de reservacion OutHouse ingresado en el control txtguOutInvitNum sea valido.
     /// </summary>
-    /// <param name="guest"></param>
-    /// <param name="enumProgram"></param>
-    /// <param name="txtFolio"></param>
-    /// <param name="btnSearchReservation"></param>
+    /// <param name="guest">Objeto Guest</param>
+    /// <param name="enumProgram">Program</param>
+    /// <param name="txtFolio">Folio de invitacion</param>
+    /// <param name="btnSearchReservation">Boton search de invitacion</param>
+    /// <param name="tabItem">TabItem donde se encuentra el folio de invitacion</param>
+    /// <param name="cloneGuest">Objecto Guest Clone </param>
     /// <returns>True is valid | False No</returns>
     /// <history>
     /// [erosado]  08/08/2016  Created.
@@ -153,9 +155,8 @@ namespace IM.Base.Classes
     /// <summary>
     /// Validamos informacion general del formulario
     /// </summary>
-    /// <param name="form">Ref frmInvitation</param>
-    /// <param name="guest">GuestObj</param>
-    /// <param name="program">Program</param>
+    /// <param name="form">frmInvitation</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is valid | False No</returns>
     public static bool ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
     {
@@ -184,11 +185,11 @@ namespace IM.Base.Classes
     /// Valida la informacion de los grids antes de guardad
     /// </summary>
     /// <param name="form">frmInvitation</param>
-    /// <param name="dbContext">GuestInvitation</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns></returns>
     public static bool ValidateInformationGrids(frmInvitation form, GuestInvitation dbContext)
     {
-      bool _isValid = true;
+      bool isValid = true;
 
       if (dbContext.Program != EnumProgram.Outhouse)
       {
@@ -197,44 +198,44 @@ namespace IM.Base.Classes
         {
           UIHelper.ShowMessage("Specify the Guest Status");
           form.cmbGuestStatus.Focus();
-          _isValid = false;
+          isValid = false;
         }
       }
 
       //Validamos los regalos de la invitacion
-      if (!InvitationGiftValidation(ref form, dbContext)) _isValid = false;
-      else if (!ValidateBookingDeposits(form)) _isValid = false;
+      if (!InvitationGiftValidation(ref form, dbContext)) isValid = false;
+      else if (!ValidateBookingDeposits(form)) isValid = false;
       //Validamos las Tarjetas de credito
-      else if (!ValidateGuestCreditCard(dbContext.GuestCreditCardList.ToList())) _isValid = false;
+      else if (!ValidateGuestCreditCard(dbContext.GuestCreditCardList.ToList())) isValid = false;
       //Burned Hotel
       else if (string.IsNullOrEmpty(dbContext.Guest.guHotelB) && dbContext.Guest.guDepositTwisted > 0)
       {
         UIHelper.ShowMessage("Specify the Resorts");
         form.cmbResorts.Focus();
-        _isValid = false;
+        isValid = false;
       }
 
-      return _isValid;
+      return isValid;
     }
     #endregion
 
     #region ValidateCloseDate
 
     /// <summary>
-    //Valida que la fecha de Arrival se encuentre y que la fecha de Booking NO se encuentre en fecha cerrada
+    /// Valida que la fecha de Arrival se encuentre y que la fecha de Booking NO se encuentre en fecha cerrada
     /// </summary>
-    /// <param name="dbContext">CommonCatObject</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is Valid | False No</returns>
     private static bool ValidateBookingCloseDate(GuestInvitation dbContext)
     {
-      bool _isValid = true;
+      bool isValid = true;
       //Si la fecha de Booking esta en fecha Cerrada
       if (dbContext.Guest.guBookD != null && dbContext.Guest.guBookD < dbContext.CloseDate)
       {
         UIHelper.ShowMessage("It's not allowed to make Invitations for a closed date.");
-        _isValid = false;
+        isValid = false;
       }
-      return _isValid;
+      return isValid;
     }
 
     #endregion ValidateCloseDate
@@ -245,7 +246,7 @@ namespace IM.Base.Classes
     /// Valida el booking y el reschedule
     /// </summary>
     /// <param name="form">ref frmInvitation</param>
-    /// <param name="dbContext">CommonCatObject</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is valid | False No</returns>
     /// <history>
     /// [erosado] 06/08/2016  Created.
@@ -268,14 +269,14 @@ namespace IM.Base.Classes
     /// Valida la fecha y hora de reschedule
     /// </summary>
     /// <param name="form">ref frmInvitation</param>
-    /// <param name="dbContext">CommonCatObject</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is valid | False No</returns>
     /// <history>
     /// [erosado] 08/08/2016  Created.
     /// </history>
     private static bool ValidateRescheduleDateTime(ref frmInvitation form, GuestInvitation dbContext)
     {
-      bool _isValid = true;
+      bool isValid = true;
       //Si se permite reschedule
       if (dbContext.AllowReschedule)
       {
@@ -287,37 +288,37 @@ namespace IM.Base.Classes
           {
             UIHelper.ShowMessage("Specify a valid reschedule date.");
             form.dtpRescheduleDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           //validamos que la fecha de reschedule no sea despues de la fecha de salida
           else if (dbContext.Guest.guReschD > dbContext.Guest.guCheckOutD)
           {
             UIHelper.ShowMessage("Reschedule date can not be after check out date.");
             form.dtpRescheduleDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           //validamos que la fecha de reschedule no sea antes de la fecha de llegada
           else if (dbContext.Guest.guReschD < dbContext.Guest.guCheckInD)
           {
             UIHelper.ShowMessage("Reschedule date can not be before Check-in date.");
             form.dtpRescheduleDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           else if (dbContext.Guest.guReschD < dbContext.Guest.guBookD)
           {
             UIHelper.ShowMessage("Reschedule date can not be before booking date.");
             form.dtpRescheduleDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           else if (dbContext.Guest.guReschD < BRHelpers.GetServerDate())
           {
             UIHelper.ShowMessage("Reschedule date can not be before today.");
             form.dtpRescheduleDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           else if (!ValidateHelper.ValidateRequired(form.cmbReschT, "Reschedule Time"))
           {
-            _isValid = false;
+            isValid = false;
           }
           //Si la fecha del Reschedule es la misma que BookinD
           else if (dbContext.Guest.guReschD == dbContext.Guest.guBookD)
@@ -327,12 +328,12 @@ namespace IM.Base.Classes
             {
               UIHelper.ShowMessage("Reschedule time can not be before booking time.");
               form.cmbReschT.Focus();
-              _isValid = false;
+              isValid = false;
             }
           }
         }
       }
-      return _isValid;
+      return isValid;
     }
 
     #endregion ValidateRescheduleDateTime
@@ -343,15 +344,15 @@ namespace IM.Base.Classes
     /// Valida la fecha y hora de booking
     /// </summary>
     /// <param name="form">ref frmInvitation</param>
-    /// <param name="dbContext">CommonCatObject</param>
+    /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is Valid | False No</returns>
     /// <history>
     /// [erosado] 08/08/2016  Created.
     /// </history>
     private static bool ValidateBookingDateTime(ref frmInvitation form, GuestInvitation dbContext)
     {
-      bool _isValid = true;
-      EnumPermission _permission = EnumPermission.PRInvitations;
+      bool isValid = true;
+      EnumPermission permission = EnumPermission.PRInvitations;
 
       //Si el control dtpBookDate esta disponible podemos editar la fecha si no retornamos True
       if (form.dtpBookDate.IsEnabled)
@@ -362,7 +363,7 @@ namespace IM.Base.Classes
           //Si el tipo de invitacion viene de host se cambia el permiso a HostInvitation
           if (form._module == EnumModule.Host)
           {
-            _permission = EnumPermission.HostInvitations;
+            permission = EnumPermission.HostInvitations;
           }
 
           #region Validaciones Comunes CON y SIN permisos
@@ -372,14 +373,14 @@ namespace IM.Base.Classes
           {
             UIHelper.ShowMessage("Booking date can not be after Check Out date.");
             form.dtpBookDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
           //validamos que la fecha de booking no sea antes de la fecha de llegada
           else if (dbContext.Guest.guBookD < dbContext.Guest.guCheckInD)
           {
             UIHelper.ShowMessage("Booking date can not be before Check In date.");
             form.dtpBookDate.Focus();
-            _isValid = false;
+            isValid = false;
           }
 
           #endregion Validaciones Comunes CON y SIN permisos
@@ -388,14 +389,14 @@ namespace IM.Base.Classes
            * y su permiso es de PRInvitation o HostInvitation dependiendo del tipo
            * y La invitacion es Nueva (InvitationMode.modAdd)
            * */
-          if (form._user.HasPermission(_permission, EnumPermisionLevel.SuperSpecial) && form._invitationType != EnumInvitationType.existing)
+          if (form._user.HasPermission(permission, EnumPermisionLevel.SuperSpecial) && form._invitationType != EnumInvitationType.existing)
           {
             //Valida que el invitado no tenga un mes de haber salido
             if (BRHelpers.GetServerDate() >= dbContext.Guest.guCheckOutD.AddDays(30))
             {
               UIHelper.ShowMessage("Guest already made check out.");
               form.dtpOtherInfoDepartureD.Focus();
-              _isValid = false;
+              isValid = false;
             }
           }
           //Si NO tiene permiso
@@ -406,7 +407,7 @@ namespace IM.Base.Classes
             {
               UIHelper.ShowMessage("Booking date can not be before today.");
               form.dtpOtherInfoDepartureD.Focus();
-              _isValid = false;
+              isValid = false;
             }
           }
         }
@@ -414,61 +415,23 @@ namespace IM.Base.Classes
         {
           UIHelper.ShowMessage("Specify a valid booking date.");
           form.dtpOtherInfoDepartureD.Focus();
-          _isValid = false;
+          isValid = false;
         }
 
-        if (_isValid)
+        if (isValid)
         {
-          if (!ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { _isValid = false; }
+          if (!ValidateHelper.ValidateRequired(form.cmbBookT, "Booking Time")) { isValid = false; }
         }
       }
 
-      if (!_isValid)
+      if (!isValid)
       {
         form.tabGeneral.IsSelected = true;
       }
-      return _isValid;
+      return isValid;
     }
 
     #endregion ValidateBookingDateTime
-
-    #region ValidateFolioOuthouseFormat
-
-    /// <summary>
-    /// Validamos que el formato del folio sea Letra(s)-Numeros
-    /// </summary>
-    /// <param name="form">frmInvitation</param>
-    /// <param name="serie">Serie</param>
-    /// <param name="numero">Numero</param>
-    /// <returns>True is valid | False No</returns>
-    /// <history>
-    /// [erosado] 05/08/2016  Created.
-    /// </history>
-    private static bool ValidateFolioOuthouseFormat(ref frmInvitation form, ref string serie, ref int numero)
-    {
-      try
-      {
-        bool _isValid = true;
-        //creamos un arreglo apartir del guión.
-        var array = form.txtguOutInvitNum.Text.Split('-');
-        if (array.Length != 2) //Revisamos que sea un arreglo de 2 exclusivamente
-          return false;
-
-        if (!Regex.IsMatch(array[0], @"^[a-zA-Z]+$"))//Revisamos que la serie solo contenga letras
-          return false;
-
-        serie = array[0]; //Asignamos la serie
-        numero = int.Parse(array[1]); //Asignamos el número, en caso de crear una excepción se retornará false
-
-        return _isValid;
-      }
-      catch (Exception)
-      {
-        return false;
-      }
-    }
-
-    #endregion ValidateFolioOuthouseFormat
 
     #region DataGrid Invitation Gifts
     #region StartEdit
@@ -479,8 +442,8 @@ namespace IM.Base.Classes
     /// <param name="invitationGift">Objeto enlazado al Row que se esta modificando</param>
     /// <param name="currentCellInfo">Celda que se esta editando</param>
     /// <param name="dtg">El datagrid que se esta modificando</param>
-    /// <param name="_hasError">True tiene error | False No tiene</param>
-    public static void StartEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
+    /// <param name="hasError">True tiene error | False No tiene</param>
+    public static void StartEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool hasError)
     {
       //Index del Row en edicion
       int rowIndex = dtg.SelectedIndex != -1 ? dtg.SelectedIndex : 0;
@@ -494,7 +457,7 @@ namespace IM.Base.Classes
             if (invitationGift.igQty == 0)
             {
               UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-              _hasError = true;
+              hasError = true;
               //Asignamos la cantidad minima
               invitationGift.igQty = 1;
               //Mandamos el foco a la columna igQty index[0].
@@ -509,7 +472,7 @@ namespace IM.Base.Classes
             if (string.IsNullOrEmpty(invitationGift.iggi))
             {
               UIHelper.ShowMessage("Enter the gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
-              _hasError = true;
+              hasError = true;
               //Mandamos el foco a la columna iggi index[1].
               GridHelper.SelectRow(dtg, rowIndex, 1, true);
             }
@@ -529,7 +492,7 @@ namespace IM.Base.Classes
       //Si el regalo ya fue entregado (No necesita validar las columnas)
       else
       {
-        _hasError = false;
+        hasError = false;
       }
     }
 
@@ -550,7 +513,7 @@ namespace IM.Base.Classes
     /// </history>
     public static bool ValidateEdit(ref InvitationGift invitationGift, ref DataGridCellInfo currentCellInfo)
     {
-      bool _hasError = false;
+      bool hasError = false;
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "igQty":
@@ -560,29 +523,29 @@ namespace IM.Base.Classes
             //Buscamos el Gift
             var gift = BRGifts.GetGiftId(invitationGift.iggi);
             //Validacion cantidad máxima del regalo
-            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, gift, false, 1, ref _hasError, nameof(invitationGift.igQty));
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, gift, false, 1, ref hasError, nameof(invitationGift.igQty));
           }//Si no ha seleccionado el Gift
           else
           {
             //Validacion cantidad máxima del regalo
-            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref _hasError, nameof(invitationGift.igQty));
+            Gifts.ValidateMaxQuantityOnEntryQuantity(ref invitationGift, null, false, 1, ref hasError, nameof(invitationGift.igQty));
           }
-          return _hasError;
+          return hasError;
 
         case "igAdults":
           //Validacion Numero de Adultos
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
-          return _hasError;
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Adults, invitationGift, ref hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return hasError;
 
         case "igMinors":
           //Validacion Numero de menores
-          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref _hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
-          return _hasError;
+          Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
+          return hasError;
 
         default:
           break;
       }
-      return _hasError;
+      return hasError;
     }
 
     #endregion ValidateEdit
@@ -592,12 +555,15 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida la informacion de la celda.
     /// </summary>
+    /// <param name="guestId">GuestID</param>
     /// <param name="dtg">DataGrid que estamos validando</param>
     /// <param name="invitationGift">Objeto enlazado a la fila que estamos validando</param>
     /// <param name="currentCell">Celda que estamos validando</param>
     /// <param name="txtTotalCost">Caja de texto donde se pondrá el resultado del calculo de Costos</param>
     /// <param name="txtTotalPrice">Caja de texto donde se pondrá el resultado del calculo de Precios</param>
     /// <param name="txtgrMaxAuthGifts">Caja de texto donde se pondrá el resultado del calculo de costos</param>
+    /// <param name="guestStatusType">GuestStatusType</param>
+    /// <param name="program">program</param>
     public static void AfterEdit(int guestId, DataGrid dtg, ref InvitationGift invitationGift, DataGridCellInfo currentCell,
       ref TextBox txtTotalCost, ref TextBox txtTotalPrice, ref TextBox txtgrMaxAuthGifts, GuestStatusType guestStatusType, EnumProgram program)
     {
@@ -735,10 +701,10 @@ namespace IM.Base.Classes
         foreach (PropertyInfo pi in properties)
         {
           //Si encontro algun valor incorrecto buscamos en que columna fue y le asignamos al columnIndex.
-          if (!ValidateEditBeforeSave(pi.Name,row.Item as InvitationGift,ref columnIndex))
+          if (!ValidateEditBeforeSave(pi.Name, row.Item as InvitationGift, ref columnIndex))
           {
-            var column = form.dtgGifts.Columns.Where(cl => cl.SortMemberPath == pi.Name).FirstOrDefault();
-            columnIndex = (column != null) ? column.DisplayIndex : 0;
+            var column = form.dtgGifts.Columns.FirstOrDefault(cl => cl.SortMemberPath == pi.Name);
+            columnIndex = column?.DisplayIndex ?? 0;
             isValid = false;
           }
         }
@@ -789,6 +755,13 @@ namespace IM.Base.Classes
     #endregion
 
     #region ValidateEdit BeforeSave
+    /// <summary>
+    /// Se encarga de validar la informacion antes de ser guardada
+    /// </summary>
+    /// <param name="propertyName">Propiedad que se va a validar</param>
+    /// <param name="invitationGift">Objeto que se esta validando</param>
+    /// <param name="columnIndex">ref column Index</param>
+    /// <returns></returns>
     public static bool ValidateEditBeforeSave(string propertyName, InvitationGift invitationGift, ref int columnIndex)
     {
       bool hasError = false;
@@ -819,15 +792,11 @@ namespace IM.Base.Classes
           //Validacion Numero de menores
           Gifts.ValidateAdultsMinors(EnumAdultsMinors.Minors, invitationGift, ref hasError, nameof(invitationGift.igAdults), nameof(invitationGift.igMinors));
           return hasError;
-
-        default:
-          break;
       }
       return hasError;
     }
 
     #endregion
-
 
     #endregion
 
@@ -837,7 +806,6 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida la celda que se quiere editar
     /// </summary>
-    /// <param name="dtgDeposits">Datagrid a validar</param>
     /// <param name="strColumn">Columna que se quiere editar</param>
     /// <param name="bookingDeposit">Objeto bindeado</param>
     /// <param name="blnModifyPaymentPlace">unicamente se debe enviar como false cuando sea desde el formulario show</param>
@@ -889,11 +857,13 @@ namespace IM.Base.Classes
     /// <param name="bookingDeposit">Objeto que se está editando(e.row.Item)</param>
     /// <param name="dtgBookingDeposits">Datagrid de deposits que se está editando</param>
     /// <param name="editElement">control que se está editando</param>
+    /// <param name="lstBookingDeposits"></param>
+    /// <param name="guestID"></param>
     /// <history>
     /// [emoguel] 11/08/2016 created
     /// </history>
     /// <returns> false. no es valido | true. es valido</returns>
-    public static bool validateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement, List<BookingDeposit> lstBookingDeposits, int guestID)
+    public static bool ValidateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement, List<BookingDeposit> lstBookingDeposits, int guestID)
     {
       switch (strColumn)
       {
@@ -901,7 +871,7 @@ namespace IM.Base.Classes
 
         case "bdAmount":
           {
-            return validateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
+            return ValidateEditNumber(bookingDeposit.bdAmount.ToString(), "Deposit", 999999, 1);
           }
 
         #endregion Amount
@@ -910,7 +880,7 @@ namespace IM.Base.Classes
 
         case "bdReceived":
           {
-            if (validateEditNumber(bookingDeposit.bdReceived.ToString(), "Received", 999999, 0))
+            if (ValidateEditNumber(bookingDeposit.bdReceived.ToString(), "Received", 999999, 0))
             {
               if (bookingDeposit.bdReceived > bookingDeposit.bdAmount)
               {
@@ -940,12 +910,12 @@ namespace IM.Base.Classes
                 return false;
               }
               //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
-              if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+              if (IsRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
               {
                 UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
                 return false;
               }
-              return validateEditNumber(bookingDeposit.bdCardNum.ToString(), "Card Number", 999999, 0);
+              return ValidateEditNumber(bookingDeposit.bdCardNum.ToString(), "Card Number", 999999, 0);
             }
             break;
           }
@@ -964,7 +934,7 @@ namespace IM.Base.Classes
             }
 
             //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
-            if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+            if (IsRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
             {
               UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
               return false;
@@ -1020,7 +990,7 @@ namespace IM.Base.Classes
               return false;
             }
             //validamos que no este repetida la moneda, forma de pago, tipo de tarjeta de credito y numero de tarjeta
-            if (isRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
+            if (IsRepeatCreditCardInfo(dtgBookingDeposits, bookingDeposit))
             {
               UIHelper.ShowMessage("A currency and type of payment can not be specified twice.");
               return false;
@@ -1092,7 +1062,7 @@ namespace IM.Base.Classes
     /// [emoguel] 11/08/2016 created
     /// </history>
     /// <returns> false. no es valido | true. es valido</returns>
-    public static bool validateEditNumber(string number, string strTitle, int maxNumber, int minNumber, bool blnValidateBounds = true)
+    public static bool ValidateEditNumber(string number, string strTitle, int maxNumber, int minNumber, bool blnValidateBounds = true)
     {
       if (!string.IsNullOrWhiteSpace(number))
       {
@@ -1124,22 +1094,27 @@ namespace IM.Base.Classes
     #endregion validateEditNumber
 
     #region EndingEditBookingDeposits
+
     /// <summary>
-    ///
+    /// 
     /// </summary>
-    /// <param name="bookingDeposits"></param>
-    /// <returns>True. Son campos validos | False. Hay un campo invalido</returns>
+    /// <param name="bookingDeposit"></param>
+    /// <param name="dtgBookingDeposits"></param>
+    /// <param name="lstBookingsDeposits"></param>
+    /// <param name="guestId"></param>
+    /// <param name="columnIndex"></param>
+    /// <returns></returns>
     /// <history>
-    /// [emoguel] 11/08/2016 created
+    ///  [emoguel] 11/08/2016 created
     /// </history>
-    public static bool EndingEditBookingDeposits(BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, List<BookingDeposit> lstBookingsDeposits, int guestID, ref int columnIndex)
+    public static bool EndingEditBookingDeposits(BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, List<BookingDeposit> lstBookingsDeposits, int guestId, ref int columnIndex)
     {
       PropertyInfo[] properties = bookingDeposit.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
       foreach (PropertyInfo pi in properties)
       {
-        if (!validateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestID))
+        if (!ValidateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestId))
         {
-          var column = dtgBookingDeposits.Columns.Where(cl => cl.SortMemberPath == pi.Name).FirstOrDefault();
+          var column = dtgBookingDeposits.Columns.FirstOrDefault(cl => cl.SortMemberPath == pi.Name);
           columnIndex = (column != null) ? column.DisplayIndex : 0;
           return false;
         }
@@ -1154,11 +1129,12 @@ namespace IM.Base.Classes
     /// Validaciones del creditcard info
     /// </summary>
     /// <param name="dtgBookingDeposits">datagrid de deposits</param>
+    /// <param name="bookingDeposits"></param>
     /// <history>
     /// [emoguel] 12/08/2016 created
     /// </history>
     /// <returns>True. existe otro item con los mismos datos | False. no existe otro item con los mismo datos</returns>
-    public static bool isRepeatCreditCardInfo(DataGrid dtgBookingDeposits, BookingDeposit bookingDeposits)
+    public static bool IsRepeatCreditCardInfo(DataGrid dtgBookingDeposits, BookingDeposit bookingDeposits)
     {
       GridHelper.UpdateSourceFromARow(dtgBookingDeposits);//Actualizamos el source
       List<BookingDeposit> lstItemsGrid = dtgBookingDeposits.Items.OfType<BookingDeposit>().ToList();
@@ -1220,20 +1196,20 @@ namespace IM.Base.Classes
     /// </summary>
     /// <param name="currentCellInfo">Celda que se esta editando</param>
     /// <param name="dtg">El datagrid que se esta modificando</param>
-    /// <param name="_hasError">True tiene error | False No tiene</param>
-    public static bool dtgGuestAdditional_StartEdit(ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool _hasError)
+    /// <param name="hasError">True tiene error | False No tiene</param>
+    public static bool dtgGuestAdditional_StartEdit(ref DataGridCellInfo currentCellInfo, DataGrid dtg, ref bool hasError)
     {
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guFirstName1":
-          _hasError = true;
+          hasError = true;
           break;
 
         case "guLastName1":
-          _hasError = true;
+          hasError = true;
           break;
       }
-      return _hasError;
+      return hasError;
     }
 
     #endregion StartEdit
@@ -1243,8 +1219,10 @@ namespace IM.Base.Classes
     /// <summary>
     /// Valida la informacion del Grid
     /// </summary>
+    /// <param name="guestParent"></param>
     /// <param name="guestAdditional">Objeto enlazada a la fila que se esta editando</param>
     /// <param name="currentCellInfo">Celda que se esta editando</param>
+    /// <param name="program"></param>
     /// <returns>
     /// True  si tiene error| False si NO tiene
     /// </returns>
@@ -1253,48 +1231,51 @@ namespace IM.Base.Classes
     /// </history>
     public static async System.Threading.Tasks.Task<bool> dtgGuestAdditional_ValidateEdit(Guest guestParent, Guest guestAdditional, DataGridCellInfo currentCellInfo, EnumProgram program)
     {
-      bool _hasError = false;
+      bool hasError = false;
       switch (currentCellInfo.Column.SortMemberPath)
       {
         case "guID":
-          _hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, program, true)).Item1;
+          hasError = !(await ValidateAdditionalGuest(guestParent, guestAdditional, program, true)).Item1;
           break;
       }
-      return _hasError;
+      return hasError;
     }
 
     #endregion ValidateEdit
 
-    #endregion Grid Guest Additional
+   #endregion Grid Guest Additional
 
+    #region ValidateAdditionalGuest
     /// <summary>
     /// Valida  que el guest adicional.
     /// </summary>
     /// <param name="parent"></param>
     /// <param name="additional"></param>
+    /// <param name="program"></param>
+    /// <param name="showMsg"></param>
     /// <returns> True | False </returns>
     /// <history>
     /// [edgrodriguez] 16/08/2016  Created.
     /// </history>
-    public static async System.Threading.Tasks.Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, EnumProgram program, bool showMsg = false)
+    public static async Task<Tuple<bool, string>> ValidateAdditionalGuest(Guest parent, Guest additional, EnumProgram program, bool showMsg = false)
     {
-      bool IsValid = true;
+      bool isValid = true;
       string msg = "";
 
       if (additional == null || (additional != null && additional.guID == 0))
       {
         msg = "Guest ID doesn't exists.";
-        IsValid = false;
+        isValid = false;
       }
       else if (parent.guID > 0 && additional.guID == parent.guID)
       {
         msg = "The main guest can't be an additional guest.";
-        IsValid = false;
+        isValid = false;
       }
       else if (!additional.guCheckIn && program == EnumProgram.Inhouse)
       {
         msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} has not made Check-In.";
-        IsValid = false;
+        isValid = false;
       }
       else if (!(parent.guID > 0 && parent.guRef != null))
       {
@@ -1305,23 +1286,24 @@ namespace IM.Base.Classes
         if (guestAux != null && guestAux.guID > 0)
         {
           msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already belongs to the invitation {guestAux.guID} - {guestAux.guLastName1} {guestAux.guFirstName1}.";
-          IsValid = false;
+          isValid = false;
         }
       }
       else if (additional.guInvit)
       {
         msg = $"The additional guest {((showMsg) ? additional.guID.ToString() : "")} already has an invitation.";
-        IsValid = false;
-      }            
-        
+        isValid = false;
+      }
+
 
       if (showMsg && !string.IsNullOrWhiteSpace(msg))
       {
         UIHelper.ShowMessage(msg, MessageBoxImage.Exclamation, "Intelligence Marketing");
       }
 
-      return Tuple.Create(IsValid, msg);
+      return Tuple.Create(isValid, msg);
     }
+    #endregion
 
     #endregion Validate Guest Additional
 

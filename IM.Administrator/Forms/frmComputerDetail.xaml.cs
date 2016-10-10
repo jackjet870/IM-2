@@ -49,24 +49,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region window keydown
-    /// <summary>
-    /// Cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 16/03/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
-
     #region Accept
     /// <summary>
     /// agregar|guarda en el catalogo Computers
@@ -118,39 +100,30 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region Cancel
+    #region Window_Closing
     /// <summary>
-    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// Verifica que no haya cambios pendientes antes de cerrar
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
-    /// [emoguel] created 29/03/2016
+    /// [emoguel] 04/10/2016 created
     /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      btnCancel.Focus();
-      if (mode != EnumMode.ReadOnly)
+      if (!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(computer, oldComputer))
+        btnCancel.Focus();
+        if (mode != EnumMode.ReadOnly)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(computer, oldComputer))
           {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          {
-            _isClosing = false;
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result == MessageBoxResult.No)
+            {
+              _isClosing = false;
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
@@ -179,7 +152,8 @@ namespace IM.Administrator.Forms
         UIHelper.ShowMessage(ex);
       }
     }
-    #endregion    
+    #endregion
+
     #endregion
   }
 }

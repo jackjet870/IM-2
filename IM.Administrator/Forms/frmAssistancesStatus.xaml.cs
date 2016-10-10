@@ -41,6 +41,7 @@ namespace IM.Administrator.Forms
       _blnEdit = Context.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadAssitance();
+      dtgAssitances.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
 
     #endregion
@@ -119,14 +120,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      AssistanceStatus assistance = (AssistanceStatus)dgrAssitances.SelectedItem;
+      AssistanceStatus assistance = (AssistanceStatus)dtgAssitances.SelectedItem;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.oldAssistance = assistance;
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if (frmAssistanceDetail.ShowDialog() == true)
       {
-        List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
+        List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dtgAssitances.ItemsSource;
         int nIndex = 0;
         if(!ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
         {
@@ -137,9 +138,9 @@ namespace IM.Administrator.Forms
           ObjectHelper.CopyProperties(assistance, frmAssistanceDetail.assistance);
           lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista        
           nIndex = lstAssistancesStatus.IndexOf(assistance);
-        }        
-        dgrAssitances.Items.Refresh();//regrescamos el grid
-        GridHelper.SelectRow(dgrAssitances, nIndex);
+        }
+        dtgAssitances.Items.Refresh();//regrescamos el grid
+        GridHelper.SelectRow(dtgAssitances, nIndex);
         StatusBarReg.Content = lstAssistancesStatus.Count + " Assistances Status.";//Actualizamos el contador
       }
 
@@ -158,7 +159,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      AssistanceStatus assitanceStatus = (AssistanceStatus)dgrAssitances.SelectedItem;
+      AssistanceStatus assitanceStatus = (AssistanceStatus)dtgAssitances.SelectedItem;
       LoadAssitance(assitanceStatus);
     }
     #endregion
@@ -180,12 +181,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
         {
-          List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
+          List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dtgAssitances.ItemsSource;
           lstAssistancesStatus.Add(frmAssistanceDetail.assistance);//Agregamos el registro nuevo
           lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista
           int nIndex = lstAssistancesStatus.IndexOf(frmAssistanceDetail.assistance);//Obtenemos el index del registro nuevo
-          dgrAssitances.Items.Refresh();//regrescamos el grid
-          GridHelper.SelectRow(dgrAssitances, nIndex);
+          dtgAssitances.Items.Refresh();//regrescamos el grid
+          GridHelper.SelectRow(dtgAssitances, nIndex);
           StatusBarReg.Content = lstAssistancesStatus.Count + " Assistances Status.";//Actualizamos el contador
         }
       }
@@ -238,13 +239,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<AssistanceStatus> lstAssistance =await BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
-        dgrAssitances.ItemsSource = lstAssistance;
+        dtgAssitances.ItemsSource = lstAssistance;
         if (assistanceStatus != null && lstAssistance.Count > 0)
         {
           assistanceStatus = lstAssistance.Where(ass => ass.atID == assistanceStatus.atID).FirstOrDefault();
           nIndex = lstAssistance.IndexOf(assistanceStatus);
         }
-        GridHelper.SelectRow(dgrAssitances, nIndex);
+        GridHelper.SelectRow(dtgAssitances, nIndex);
         StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
         status.Visibility = Visibility.Collapsed;
       }

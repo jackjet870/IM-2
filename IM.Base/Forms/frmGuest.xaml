@@ -109,18 +109,18 @@
                     <!--#endregion-->
 
                     <!--#region PAX-->
-                    <Label Grid.Column="2" Grid.Row="0" x:Name="lblPax" HorizontalAlignment="Center" Content="Pax" />
+                    <TextBlock Grid.Column="2" Grid.Row="0" x:Name="lblPax" HorizontalAlignment="Center" Text="Pax" />
                     <TextBox Grid.Column="2" Grid.Row="1" x:Name="txtguPax" IsReadOnly="True" VerticalAlignment="Center" Text="{Binding Guest.guPax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <!--#endregion-->
 
                     <!--#region ARRIVAL-->
-                    <Label Grid.Column="3" Grid.Row="0" x:Name="lblArrival" HorizontalAlignment="Center" Content="Arrival" />
+                    <TextBlock Grid.Column="3" Grid.Row="0" x:Name="lblArrival" HorizontalAlignment="Center" Text="Arrival" />
                     <!--<DatePicker Grid.Column="5" Grid.Row="1" x:Name="txtArrival" />-->
                     <xctk:DateTimePicker Name="dtpArrival" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding Guest.guCheckInD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Width="Auto" />
                     <!--#endregion-->
 
                     <!--#region DEPARTURE-->
-                    <Label Grid.Column="4" Grid.Row="0" x:Name="lblDeparture" HorizontalAlignment="Center" Content="Departure" />
+                    <TextBlock Grid.Column="4" Grid.Row="0" x:Name="lblDeparture" HorizontalAlignment="Center" Text="Departure" />
                     <!--<DatePicker Grid.Column="6" Grid.Row="1" x:Name="txtDeparture" />-->
                     <xctk:DateTimePicker Name="dtpDeparture" Grid.Column="4" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource dtp-DateRange-TK}" Value="{Binding Guest.guCheckOutD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Width="Auto"/>
                     <!--#endregion-->

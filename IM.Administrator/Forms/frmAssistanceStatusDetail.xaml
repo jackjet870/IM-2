@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
-        mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner"
-        Title="Assistance Status Detail" DataContext="{Binding Assistance}" Height="208" Width="338" Loaded="Window_Loaded" Closing="Window_Closing">
+        mc:Ignorable="d"  WindowStartupLocation="CenterOwner"
+        Title="Assistance Status Detail" Height="208" Width="338" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -29,7 +29,7 @@
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding atA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click" Visibility="Hidden" HorizontalAlignment="Right" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
 
         <!--#endregion-->
 

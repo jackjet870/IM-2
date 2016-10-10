@@ -70,6 +70,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadComputers();
+      dtgComputers.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 
@@ -102,7 +103,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Computer computer = (Computer)dgrComputers.SelectedItem;
+      Computer computer = (Computer)dtgComputers.SelectedItem;
       LoadComputers(computer);
     }
     #endregion
@@ -125,12 +126,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
         {
-          List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+          List<Computer> lstComputers = (List<Computer>)dtgComputers.ItemsSource;
           lstComputers.Add(frmComputerDetail.computer);//Agregamos el registro nuevo
           lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista        
           int nIndex = lstComputers.IndexOf(frmComputerDetail.computer);//obtenemos el index del registro nuevo
-          dgrComputers.Items.Refresh();//refrescamos la lista        
-          GridHelper.SelectRow(dgrComputers, nIndex);
+          dtgComputers.Items.Refresh();//refrescamos la lista        
+          GridHelper.SelectRow(dtgComputers, nIndex);
           StatusBarReg.Content = lstComputers.Count + " Computers.";
         }
       }
@@ -174,7 +175,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Computer computer = (Computer)dgrComputers.SelectedItem;
+      Computer computer = (Computer)dtgComputers.SelectedItem;
       frmComputerDetail frmComDetail = new frmComputerDetail();
       frmComDetail.Owner = this;
       frmComDetail.mode = EnumMode.Edit;
@@ -182,7 +183,7 @@ namespace IM.Administrator.Forms
       frmComDetail.ShowDialog();
       if ( frmComDetail.DialogResult== true)
       {        
-        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+        List<Computer> lstComputers = (List<Computer>)dtgComputers.ItemsSource;
         int nIndex = 0;        
         if (!ValidateFilters(frmComDetail.computer))//Validamos que cumpla con los filtros
         {
@@ -194,8 +195,8 @@ namespace IM.Administrator.Forms
           lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista     
           nIndex = lstComputers.IndexOf(computer);
         }                   
-        dgrComputers.Items.Refresh();//refrescamos la lista        
-        GridHelper.SelectRow(dgrComputers, nIndex);
+        dtgComputers.Items.Refresh();//refrescamos la lista        
+        GridHelper.SelectRow(dtgComputers, nIndex);
         StatusBarReg.Content = lstComputers.Count + " Computers.";
       }
 
@@ -246,13 +247,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Computer> lstComputers =await BRComputers.GetComputers(_computerFilter);
-        dgrComputers.ItemsSource = lstComputers;
+        dtgComputers.ItemsSource = lstComputers;
         if (computer != null && lstComputers.Count > 0)
         {
           computer = lstComputers.Where(co => co.cpID == computer.cpID).FirstOrDefault();
           nIndex = lstComputers.IndexOf(computer);
         }
-        GridHelper.SelectRow(dgrComputers, nIndex);
+        GridHelper.SelectRow(dtgComputers, nIndex);
         StatusBarReg.Content = lstComputers.Count + " Computers.";
         status.Visibility = Visibility.Collapsed;
       }
