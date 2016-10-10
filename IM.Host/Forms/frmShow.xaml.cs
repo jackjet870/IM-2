@@ -917,6 +917,7 @@ namespace IM.Host.Forms
       // checamos si los datos de Self Gen estan correctamente llenados
       await CheckSelfGen();
 
+     
       //// si es una invitacion outside y esta habilitado el uso de perfiles de Opera
       //if (_enumProgram == EnumProgram.Outhouse && ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
       //{
@@ -1948,6 +1949,41 @@ namespace IM.Host.Forms
     }
 
     #endregion RowEditEnding
+
+    #region ValidateAdditionalGuest
+    /// <summary>
+    /// Valida el grid de GuestAdditional antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <param name="form">Formulario de invitación</param>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [edgrodriguez] 07/10/2016 created
+    /// </history>
+    private bool ValidateAdditionalGuest()
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(dtgGuestAdditional);
+      if (row != null)
+      {
+        bool gridvalid = AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, row.Item as Guest, GuestShow.Program,true)).Item1;
+        if (gridvalid)
+        {
+          dtgGuestAdditional.RowEditEnding -= dtgGuestAdditional_RowEditEnding;
+          dtgGuestAdditional.CommitEdit();
+          dtgGuestAdditional.RowEditEnding += dtgGuestAdditional_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          GridHelper.SelectRow(dtgGuestAdditional, row.GetIndex(), 0, true);
+          tabGeneral.IsSelected = true;
+        }
+      }
+      return isValid;
+    }
+    #endregion
 
     #endregion Eventos del GRID GuestAdditional
 
