@@ -77,6 +77,12 @@
       <!--#endregion-->
       <!--#region DataGrid-->
       <DataGrid x:Name="grdGuest" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Margin="5,16,5,10" Grid.Row="1" VerticalAlignment="Stretch" IsReadOnly="True" SelectionChanged="grdGuest_SelectionChanged" SelectionUnit="FullRow" SelectionMode="Single">
+        <DataGrid.Resources>
+          <Style TargetType="DataGridRow">
+            <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+            <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+          </Style>
+        </DataGrid.Resources>
         <DataGrid.Columns>
           <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="Auto" >
             <DataGridTextColumn.HeaderStyle>
@@ -158,7 +164,6 @@
           <DataGridTextColumn x:Name="guCheckOutDColumn" Width="*" Header="Check Out Date" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" />
           <DataGridTextColumn x:Name="guBookD" Width="*" Header="Book Date" Binding="{Binding guBookD, StringFormat= dd/MM/yyyy}"/>
         </DataGrid.Columns>
-
       </DataGrid>
       <!--#endregion -->
       <!--#region Botones-->

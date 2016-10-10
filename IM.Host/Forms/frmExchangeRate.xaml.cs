@@ -273,7 +273,6 @@ namespace IM.Host.Forms
     }
     #endregion
 
-
     #region grdReceipts_KeyDown
     /// <summary>
     /// abre la ventana detalle con el boton enter

@@ -756,22 +756,12 @@ namespace IM.BusinessRules.BR
 
           IQueryable<Guest> query = Enumerable.Empty<Guest>().AsQueryable();
 
-          if (module == EnumSearchHostType.General)
-          {
             // Busqueda por Guest ID
             if (guestID > 0)
             {
               return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
             }
-          }
-          else
-          {
-            // Busqueda por Guest ID
-            if (guestID > 0)
-            {
-              query = dbContext.Guests.Where(x => x.guID == guestID);
-            }
-          }
+
           // Busqueda por nombre o apellido
           if (guestName != "")
           {
