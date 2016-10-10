@@ -45,7 +45,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Areas-->
-        <DataGrid x:Name="dgrAreas" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAreas}" IsReadOnly="True"
+        <DataGrid x:Name="dtgAreas" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAreas}" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True">
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">

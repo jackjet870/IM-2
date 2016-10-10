@@ -44,7 +44,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region -->
-        <DataGrid Name="dgrContracts" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstContracts}" IsReadOnly="True" SelectionMode="Single">
+        <DataGrid Name="dtgContracts" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>

@@ -427,12 +427,12 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Agregamos el timeout de la consulta
-          dbContext.Database.CommandTimeout = 180;
-
+          dbContext.Database.CommandTimeout = 180;         
           var query = from gu in dbContext.Guests
                       join ls in dbContext.LeadSources on gu.guls equals ls.lsID
-                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))     
+                      where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))
                       select gu; 
+                    
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -1342,9 +1342,10 @@ namespace IM.BusinessRules.BR
               }
 
               //Si se agregaron nuevos GuestCreditCards los guardamos.
-              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc =>
-                dbContext.Entry(gcc).State = EntityState.Added
-              );
+              guestInvitation.GuestCreditCardList.ToList().ForEach(gcc => {
+                gcc.gdgu = guestInvitation.Guest.guID;
+                dbContext.Entry(gcc).State = EntityState.Added;
+              });
 
               //Creamos la variable en donde se van a concatenar 
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1

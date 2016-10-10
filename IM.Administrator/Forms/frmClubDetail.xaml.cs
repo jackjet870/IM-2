@@ -48,7 +48,8 @@ namespace IM.Administrator.Forms
       DataContext = club;
       LoadAgencies(club.clID);
       txtclID.IsEnabled = (enumMode == EnumMode.Add);
-      dgrAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgAgencies.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgAgencies.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 
@@ -67,7 +68,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        List<Agency> lstAgencies = (List<Agency>)dtgAgencies.ItemsSource;
         if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(club, oldClub) && ObjectHelper.IsListEquals(_oldLstAgencies, lstAgencies))
         {
           blnClosing = true;
@@ -121,12 +122,12 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 03/05/2016
     /// [emoguel] modified se agregó la validación de editAction
     /// </history>
-    private void dgrAgencies_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    private void dtgAgencies_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
-        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dtgAgencies);
         e.Cancel = isRepeat;
       }
       else
@@ -137,7 +138,7 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region dgrAgencies_RowEditEnding
+    #region dtgAgencies_RowEditEnding
     /// <summary>
     /// No repite registros vacios
     /// </summary>
@@ -145,13 +146,13 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 25/05/2016
     /// [emoguel] modified se agregó la validación de editAction
     /// </history>
-    private void dgrAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    private void dtgAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if(e.EditAction==DataGridEditAction.Commit && isCellCancel)
       { 
-        dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
-        dgrAgencies.CancelEdit();
-        dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
+        dtgAgencies.RowEditEnding -= dtgAgencies_RowEditEnding;
+        dtgAgencies.CancelEdit();
+        dtgAgencies.RowEditEnding += dtgAgencies_RowEditEnding;
       }
     }
     #endregion
@@ -170,7 +171,7 @@ namespace IM.Administrator.Forms
       if (!blnClosing)
       {
         btnCancel.Focus();
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        List<Agency> lstAgencies = (List<Agency>)dtgAgencies.ItemsSource;
         if (!ObjectHelper.IsEquals(club, oldClub) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
@@ -180,7 +181,7 @@ namespace IM.Administrator.Forms
           }
           else
           {
-            dgrAgencies.CancelEdit();
+            dtgAgencies.CancelEdit();
           }
         }
       }
@@ -203,7 +204,7 @@ namespace IM.Administrator.Forms
       {
         List<Agency> lstAllAgencies = await BRAgencies.GetAgencies();
         List<Agency> lstAgencies = lstAllAgencies.Where(ag => ag.agcl == clubId).ToList();
-        dgrAgencies.ItemsSource = lstAgencies;
+        dtgAgencies.ItemsSource = lstAgencies;
         cmbAgencies.ItemsSource = lstAllAgencies;
         _oldLstAgencies = lstAgencies.ToList();        
         btnAccept.Visibility = Visibility.Visible;

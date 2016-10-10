@@ -40,6 +40,7 @@ namespace IM.Administrator.Forms
       _blnEdit = Context.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadChargeTo();
+      dtgChargeTo.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
 
     #endregion
@@ -81,14 +82,14 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
+      ChargeTo chargeTo = (ChargeTo)dtgChargeTo.SelectedItem;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmChargeToDetail.oldChargeTo = chargeTo;
       if(frmChargeToDetail.ShowDialog()==true)
       {
-        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dtgChargeTo.ItemsSource;
         int nIndex = 0;
         if(!ValidateFilters(frmChargeToDetail.chargeTo))
         {
@@ -100,8 +101,8 @@ namespace IM.Administrator.Forms
           lstCargeTos.Sort((x, y) => string.Compare(x.ctID, y.ctID));//Ordenamos la lista   
           nIndex = lstCargeTos.IndexOf(chargeTo);
         }             
-        dgrChargeTo.Items.Refresh();//Refrescamos el grid
-        GridHelper.SelectRow(dgrChargeTo, nIndex);
+        dtgChargeTo.Items.Refresh();//Refrescamos el grid
+        GridHelper.SelectRow(dtgChargeTo, nIndex);
         StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
       }
     }
@@ -115,7 +116,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
+      ChargeTo chargeTo = (ChargeTo)dtgChargeTo.SelectedItem;
       LoadChargeTo( chargeTo);
     }
     #endregion
@@ -177,12 +178,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmChargeToDetail.chargeTo))//Valida si cumple con los filtros actuales
         {
-          List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+          List<ChargeTo> lstCargeTos = (List<ChargeTo>)dtgChargeTo.ItemsSource;
           lstCargeTos.Add(frmChargeToDetail.chargeTo);//Agregamos el nuevo registro
           lstCargeTos.Sort((x, y) => string.Compare(x.ctID, y.ctID));//Ordenamos la lista
           int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
-          dgrChargeTo.Items.Refresh();//Refrescamos el grid
-          GridHelper.SelectRow(dgrChargeTo, nIndex);
+          dtgChargeTo.Items.Refresh();//Refrescamos el grid
+          GridHelper.SelectRow(dtgChargeTo, nIndex);
           StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
         }
       }
@@ -228,13 +229,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<ChargeTo> lstChargeTo = await BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
-        dgrChargeTo.ItemsSource = lstChargeTo;
+        dtgChargeTo.ItemsSource = lstChargeTo;
         if (chargeTo != null && lstChargeTo.Count > 0)
         {
           chargeTo = lstChargeTo.FirstOrDefault(ch => ch.ctID == chargeTo.ctID);
           nIndex = lstChargeTo.IndexOf(chargeTo);
         }
-        GridHelper.SelectRow(dgrChargeTo, nIndex);
+        GridHelper.SelectRow(dtgChargeTo, nIndex);
         StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
         status.Visibility = Visibility.Collapsed;
       }

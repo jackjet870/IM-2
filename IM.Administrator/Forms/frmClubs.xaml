@@ -44,7 +44,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Clubs-->
-        <DataGrid x:Name="dgrClubs" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dtgClubs" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True" CanUserResizeColumns="False" CanUserResizeRows="False"  >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">

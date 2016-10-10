@@ -37,7 +37,7 @@
         <!--#endregion-->
         
         <!--#region Grid Agencies-->
-        <DataGrid Name="dgrAgencies" Margin="79,0,14,0" RowEditEnding="dgrAgencies_RowEditEnding" CellEditEnding="dgrAgencies_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+        <DataGrid Name="dtgAgencies" Margin="79,0,14,0" RowEditEnding="dtgAgencies_RowEditEnding" CellEditEnding="dtgAgencies_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                   CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="True" >
             <DataGrid.Columns>
                 <DataGridComboBoxColumn  Width="100*" x:Name="cmbAgencies" DisplayMemberPath="agN" SelectedValuePath="agID" SelectedValueBinding="{Binding agID}" Header="Agencies" >

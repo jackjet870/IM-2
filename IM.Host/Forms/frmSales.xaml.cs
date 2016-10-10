@@ -1341,7 +1341,7 @@ namespace IM.Host.Forms
       var authorizedBy = string.Empty;
       //Validamos los datos     
       if (!await Validate()) return;
-      //obtenermos los cambios de vendedores
+      //obtenemos los cambios de vendedores
       if (!GetSalesmenChanges(ref salesmenChanges, ref authorizedBy)) return;
       //Guardamos la venta
       Save(salesmenChanges, authorizedBy);

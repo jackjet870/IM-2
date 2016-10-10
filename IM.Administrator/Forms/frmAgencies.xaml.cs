@@ -42,6 +42,7 @@ namespace IM.Administrator.Forms
       _blnEdit = Context.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
+      dtgAgencies.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 

@@ -39,6 +39,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadClubs();
+      dtgClubs.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 
@@ -130,14 +131,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Club club = (Club)dgrClubs.SelectedItem;
+      Club club = (Club)dtgClubs.SelectedItem;
       frmClubDetail frmClubDetail = new frmClubDetail();
       frmClubDetail.Owner = this;
       frmClubDetail.enumMode = EnumMode.Edit;
       frmClubDetail.oldClub = club;
       if(frmClubDetail.ShowDialog()==true)
       {
-        List<Club> lstClubs = (List<Club>)dgrClubs.ItemsSource;
+        List<Club> lstClubs = (List<Club>)dtgClubs.ItemsSource;
         int nIndex = 0;
         if(ValidateFilter(frmClubDetail.club))//Validamos que cumpla con los filtros
         {
@@ -149,8 +150,8 @@ namespace IM.Administrator.Forms
         {
           lstClubs.Remove(club);//Quitamos el registro
         }
-        dgrClubs.Items.Refresh();//Actualizamos la vista
-        GridHelper.SelectRow(dgrClubs, nIndex);//Seleccionamos el registro
+        dtgClubs.Items.Refresh();//Actualizamos la vista
+        GridHelper.SelectRow(dtgClubs, nIndex);//Seleccionamos el registro
         StatusBarReg.Content = lstClubs.Count + " Clubs.";//Actualizamos el contador
       }
     }
@@ -201,12 +202,12 @@ namespace IM.Administrator.Forms
       {
         if(ValidateFilter(frmClubDetail.club))//Verificar que cumpla con los filtros
         {
-          List<Club> lstClubs = (List<Club>)dgrClubs.ItemsSource;
+          List<Club> lstClubs = (List<Club>)dtgClubs.ItemsSource;
           lstClubs.Add(frmClubDetail.club);//Agregamos el registro
           lstClubs.Sort((x, y) => string.Compare(x.clN, y.clN));//Ordenamos la lista
           int nIndex = lstClubs.IndexOf(frmClubDetail.club);//Ordenamos lal ista
-          dgrClubs.Items.Refresh();//Actualizamos la vista
-          GridHelper.SelectRow(dgrClubs, nIndex);//Seleccionamos el registro
+          dtgClubs.Items.Refresh();//Actualizamos la vista
+          GridHelper.SelectRow(dtgClubs, nIndex);//Seleccionamos el registro
           StatusBarReg.Content = lstClubs.Count + " Clubs.";//Actualizamos el contador
         }
       }
@@ -224,7 +225,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Club club = (Club)dgrClubs.SelectedItem;
+      Club club = (Club)dtgClubs.SelectedItem;
       LoadClubs(club);
     }
     #endregion
@@ -246,13 +247,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Club> lstClubs = await BRClubs.GetClubs(_clubFilter, _nStatus);
-        dgrClubs.ItemsSource = lstClubs;
+        dtgClubs.ItemsSource = lstClubs;
         if (lstClubs.Count > 0 && club != null)
         {
           club = lstClubs.FirstOrDefault(cl => cl.clID == club.clID);
           nIndex = lstClubs.IndexOf(club);
         }
-        GridHelper.SelectRow(dgrClubs, nIndex);
+        GridHelper.SelectRow(dtgClubs, nIndex);
         StatusBarReg.Content = lstClubs.Count + " Clubs.";
         status.Visibility = Visibility.Collapsed;
       }

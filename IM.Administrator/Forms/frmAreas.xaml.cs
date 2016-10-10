@@ -102,14 +102,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Area Area = (Area)dgrAreas.SelectedItem;
+      Area Area = (Area)dtgAreas.SelectedItem;
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
       frmAreaDetalle.oldArea = Area;
       frmAreaDetalle.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       if (frmAreaDetalle.ShowDialog() == true)
       { 
-        List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
+        List<Area> lstAreas = (List<Area>)dtgAreas.ItemsSource;
         int nIndex = 0;
         if (!ValidateFilters(frmAreaDetalle.area))//VAlidamos si cumple con los filtros
         {
@@ -122,8 +122,8 @@ namespace IM.Administrator.Forms
           nIndex = lstAreas.IndexOf(Area);
         }
             
-        dgrAreas.Items.Refresh();//Refrescamos la lista
-        GridHelper.SelectRow(dgrAreas, nIndex);
+        dtgAreas.Items.Refresh();//Refrescamos la lista
+        GridHelper.SelectRow(dtgAreas, nIndex);
         StatusBarReg.Content = lstAreas.Count + " Areas.";//Actualizamos el contador
       }
     }
@@ -147,12 +147,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmAreaDetalle.area))//Validamos si cumple con los filtros
         {
-          List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
+          List<Area> lstAreas = (List<Area>)dtgAreas.ItemsSource;
           lstAreas.Add(frmAreaDetalle.area);//Agregamos el registro nuevo
           lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista
           int nIndex = lstAreas.IndexOf(frmAreaDetalle.area);//Obetenemos el index nuevo
-          dgrAreas.Items.Refresh();//Refrescamos la lista
-          GridHelper.SelectRow(dgrAreas, nIndex);
+          dtgAreas.Items.Refresh();//Refrescamos la lista
+          GridHelper.SelectRow(dtgAreas, nIndex);
           StatusBarReg.Content = lstAreas.Count + " Areas.";//Actualizamos el contador
         }
       }
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Area area = (Area)dgrAreas.SelectedItem;
+      Area area = (Area)dtgAreas.SelectedItem;
       LoadAreas(area);
     }
     #endregion
@@ -245,13 +245,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Area> lstAreas =await BRAreas.GetAreas(_areaFiltro, _nStatus);
-        dgrAreas.ItemsSource = lstAreas;
+        dtgAreas.ItemsSource = lstAreas;
         if (area != null && lstAreas.Count > 0)
         {
           area = lstAreas.Where(ar => ar.arID == area.arID).FirstOrDefault();
           nIndex = lstAreas.IndexOf(area);
         }
-        GridHelper.SelectRow(dgrAreas, nIndex);
+        GridHelper.SelectRow(dtgAreas, nIndex);
         StatusBarReg.Content = lstAreas.Count + " Areas.";
         status.Visibility = Visibility.Collapsed;
       }

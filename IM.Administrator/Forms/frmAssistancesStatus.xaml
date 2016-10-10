@@ -45,7 +45,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Assiatnce Status-->
-        <DataGrid x:Name="dgrAssitances" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAssistance}" IsReadOnly="True"
+        <DataGrid x:Name="dtgAssitances" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAssistance}" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
