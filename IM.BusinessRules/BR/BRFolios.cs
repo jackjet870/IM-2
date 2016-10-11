@@ -3,6 +3,7 @@ using IM.Model;
 using IM.Model.Helpers;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,14 +20,18 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     /// <history>
     /// [lchairez] 16/03/2016 Created
+    /// [erosado] 10/10/2016  Modified. Se agrego Async Await
     /// </history>
-    public static bool ValidateFolioReservation(string leadSource, string folio, int guestId)
+    public static async Task<bool> ValidateFolioReservation(string leadSource, string folio, int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        var res = dbContext.USP_OR_ValidateFolioReservation(leadSource, folio, guestId).SingleOrDefault();
-        return String.IsNullOrEmpty(res);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var res = dbContext.USP_OR_ValidateFolioReservation(leadSource, folio, guestId).SingleOrDefault();
+          return string.IsNullOrEmpty(res);
+        }
+      });
     }
 
     #endregion ValidateFolioReservation
