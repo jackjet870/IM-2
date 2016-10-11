@@ -19,6 +19,7 @@ namespace IM.Model
         {
             this.gigc = "ITEMS";
             this.giInven = true;
+            this.giA = true;
             this.giO = 10000;
             this.giCountInPackage = true;
             this.giCountInCancelledReceipts = true;

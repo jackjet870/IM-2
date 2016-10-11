@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class ScoreRuleType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ScoreRuleType()
+        {
+            this.syA = true;
+        }
+    
         public string syID { get; set; }
         public string syN { get; set; }
         public bool syA { get; set; }

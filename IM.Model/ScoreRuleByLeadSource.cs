@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class ScoreRuleByLeadSource
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ScoreRuleByLeadSource()
+        {
+            this.sbA = true;
+        }
+    
         public string sbls { get; set; }
         public bool sbA { get; set; }
     

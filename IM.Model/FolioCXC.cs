@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class FolioCXC
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public FolioCXC()
+        {
+            this.fiA = true;
+        }
+    
         public int fiID { get; set; }
         public int fiFrom { get; set; }
         public int fiTo { get; set; }

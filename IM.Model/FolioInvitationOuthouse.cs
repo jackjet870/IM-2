@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class FolioInvitationOuthouse
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public FolioInvitationOuthouse()
+        {
+            this.fiA = true;
+        }
+    
         public int fiID { get; set; }
         public string fiSerie { get; set; }
         public int fiFrom { get; set; }

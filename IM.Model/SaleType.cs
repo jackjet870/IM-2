@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SaleType()
         {
+            this.stA = true;
             this.Sales = new HashSet<Sale>();
             this.SalesLogs = new HashSet<SaleLog>();
         }

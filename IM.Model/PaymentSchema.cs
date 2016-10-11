@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class PaymentSchema
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PaymentSchema()
+        {
+            this.pasA = true;
+        }
+    
         public int pasID { get; set; }
         public string pasN { get; set; }
         public int pasCoupleFrom { get; set; }

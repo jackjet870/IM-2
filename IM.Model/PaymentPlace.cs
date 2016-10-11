@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PaymentPlace()
         {
+            this.pcA = true;
             this.BookingDeposits = new HashSet<BookingDeposit>();
         }
     

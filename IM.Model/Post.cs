@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Post()
         {
+            this.poA = true;
             this.PostsLogs = new HashSet<PostLog>();
         }
     

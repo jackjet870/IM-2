@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Personnel()
         {
+            this.peA = true;
             this.Assistances = new HashSet<Assistance>();
             this.CxCPayments = new HashSet<CxCPayment>();
             this.ExchangeRateLogs = new HashSet<ExchangeRateLog>();
@@ -150,6 +151,13 @@ namespace IM.Model
             this.Sales_FTM2 = new HashSet<Sale>();
             this.Sales_Liner3 = new HashSet<Sale>();
             this.MealTickets_AuthorizedBy = new HashSet<MealTicket>();
+            this.GuestLogs = new HashSet<GuestLog>();
+            this.GuestLogs1 = new HashSet<GuestLog>();
+            this.GuestLogs2 = new HashSet<GuestLog>();
+            this.GuestLogs3 = new HashSet<GuestLog>();
+            this.GuestLogs4 = new HashSet<GuestLog>();
+            this.GuestLogs5 = new HashSet<GuestLog>();
+            this.GuestLogs6 = new HashSet<GuestLog>();
         }
     
         public string peID { get; set; }
@@ -438,5 +446,19 @@ namespace IM.Model
         public virtual ICollection<Sale> Sales_Liner3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MealTicket> MealTickets_AuthorizedBy { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs5 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestLog> GuestLogs6 { get; set; }
     }
 }

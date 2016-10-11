@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class MaritalStatus
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MaritalStatus()
+        {
+            this.msA = true;
+        }
+    
         public string msID { get; set; }
         public string msN { get; set; }
         public bool msA { get; set; }
