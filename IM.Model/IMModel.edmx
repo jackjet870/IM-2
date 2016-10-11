@@ -747,7 +747,7 @@
           <Property Name="gumoA" Type="bit" Nullable="false" />
           <Property Name="guComments" Type="nvarchar" MaxLength="100" />
           <Property Name="guQuinella" Type="bit" Nullable="false" />
-          <Property Name="guOutInvitNum" Type="varchar" MaxLength="8" />
+          <Property Name="guOutInvitNum" Type="varchar" MaxLength="15" />
           <Property Name="guCity" Type="varchar" MaxLength="40" />
           <Property Name="guState" Type="varchar" MaxLength="40" />
           <Property Name="guInvitD" Type="datetime" />
@@ -10164,7 +10164,7 @@
           <Property Name="gumoA" Type="Boolean" Nullable="false" />
           <Property Name="guComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="guQuinella" Type="Boolean" Nullable="false" />
-          <Property Name="guOutInvitNum" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="guOutInvitNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="guCity" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guState" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guInvitD" Type="DateTime" Precision="3" />
