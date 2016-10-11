@@ -64,7 +64,7 @@ namespace IM.Inhouse.Classes
         format.Add("Comments", "guComments", width: 40, wordWrap: true);
         format.Add("County ID", "guco", isVisible: false);
         format.Add("Agency ID", "guag", isVisible:  false);
-        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true, autoFit:false), window);
+        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, format, addEnumeration: true, autoFit:false), window);
       }
     }
 
@@ -110,7 +110,7 @@ namespace IM.Inhouse.Classes
         format.Add("PR B", "guPRInvit1");
         format.Add("Comments", "guComments");
 
-        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, format, addEnumeration: true), window);
+        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, format, addEnumeration: true), window);
       }
     }
 
@@ -141,7 +141,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest ";
         int j = dt.Columns.Count;
         string dateRange = DateHelper.DateRangeFileName(date, date);
-        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()), window);
+        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifest()), window);
       }
     }
 
@@ -169,7 +169,7 @@ namespace IM.Inhouse.Classes
         rptName = "Premanifest with gifts";
         string dateRange = DateHelper.DateRangeFileName(date, date);
 
-        OpenFile(await ReportBuilder.CreateCustomExcel(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()), window);
+        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, clsFormatReports.RptPremanifestWithGifts()), window);
       }
     }
 

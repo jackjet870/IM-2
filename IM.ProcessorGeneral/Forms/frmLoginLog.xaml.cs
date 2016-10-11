@@ -108,7 +108,7 @@ namespace IM.ProcessorGeneral.Forms
       try
       {
         
-        var finfo = await ReportBuilder.CreateCustomExcel(dtRptLoginsLog, filters, strReportName, string.Empty, clsFormatReport.RptLoginsLog(), isRptQueue:true, filePath: fileFullPath, addEnumeration: true);
+        var finfo = await ReportBuilder.CreateCustomExcelAsync(dtRptLoginsLog, filters, strReportName, string.Empty, clsFormatReport.RptLoginsLog(), isRptQueue:true, filePath: fileFullPath, addEnumeration: true);
 
         if (finfo == null)
         {
