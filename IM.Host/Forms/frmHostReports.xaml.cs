@@ -69,7 +69,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
-            fileinfo= await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
+            fileinfo= await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -80,7 +80,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", Context.User.SalesRoom.srID));
-            fileinfo=await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
+            fileinfo=await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -104,7 +104,7 @@ namespace IM.Host.Forms
                 });
             });
 
-            fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
+            fileinfo = await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -140,7 +140,7 @@ namespace IM.Host.Forms
               });
             });
 
-            fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
+            fileinfo = await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList(), isPivot: true, addEnumeration: true);
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");

@@ -76,7 +76,7 @@ namespace IM.Host.Forms
           return;
         }
         Mouse.OverrideCursor = Cursors.Wait;
-        FileInfo fileInfo = await ReportBuilder.CreateCustomExcel(
+        FileInfo fileInfo = await ReportBuilder.CreateCustomExcelAsync(
           TableHelper.GetDataTableFromList((List<SaleLogData>)saleLogDataDataGrid.ItemsSource, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
           "Sale Log",

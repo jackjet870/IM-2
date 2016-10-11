@@ -114,7 +114,7 @@ namespace IM.Host.Forms
     {
       if (((List<SalesRoomLogData>)_salesRoomLog.Source).Any())
       {
-        var fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
+        var fileinfo = await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Sales Room ID", Context.User.SalesRoom.srID) },
           "Sales Rooms Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(dtgSalesRoomLog.Columns.ToList(), clsFormatReport.RptCloseSalesRoomLog()));
 

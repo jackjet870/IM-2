@@ -86,7 +86,7 @@ namespace IM.Host.Forms
     {
       if (((List<ExchangeRateLogData>)_cvsExchangeRate.Source).Any())
       {
-        var fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList((List<ExchangeRateLogData>)_cvsExchangeRate.Source, true, true, true),
+        var fileinfo = await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList((List<ExchangeRateLogData>)_cvsExchangeRate.Source, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift ID", string.Join(",", ((List<ExchangeRateLogData>)_cvsExchangeRate.Source).Select(c => c.elcu).Distinct().ToList())) },
           "Exchange Rates Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), EpplusHelper.OrderColumns(getExchangeRateLogDataGrid.Columns.ToList(), clsFormatReport.RptExchangeRatesLog()));
 

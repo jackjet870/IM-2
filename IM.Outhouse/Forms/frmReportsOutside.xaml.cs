@@ -126,7 +126,7 @@ namespace IM.Outhouse.Forms
               c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
             });
 
-            fileinfo = await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false),
+            fileinfo = await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstDepPr, true, false),
               filters, "Deposits by PR", dateFileName, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isPivot: true, addEnumeration: true);
           }
           else

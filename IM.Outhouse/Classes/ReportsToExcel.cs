@@ -73,7 +73,7 @@ namespace IM.Outhouse.Classes
         format.Add("Sale", "guSale", axis: ePivotFieldAxis.Values, aligment: ExcelHorizontalAlignment.Center, function: DataFieldFunctions.Count);
         format.Add("Deposits / Comments", "guComments");
 
-        var info = await ReportBuilder.CreateCustomExcel(dt, _filters, _rptName, dateRange, format, blnShowSubtotal: true, blnRowGrandTotal: true, addEnumeration: true);
+        var info = await ReportBuilder.CreateCustomExcelAsync(dt, _filters, _rptName, dateRange, format, blnShowSubtotal: true, blnRowGrandTotal: true, addEnumeration: true);
         if (info != null)
         {
           frmDocumentViewer documentViewer = new frmDocumentViewer(info, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
