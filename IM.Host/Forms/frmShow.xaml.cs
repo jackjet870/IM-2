@@ -434,11 +434,11 @@ namespace IM.Host.Forms
         blnValid = false;
 
       //validamos que el folio de la invitacion outhouse exista y que no haya sido usada
-      else if (_enumProgram == EnumProgram.Outhouse && !InvitationValidationRules.ValidateFolio(GuestShow.Guest, _enumProgram, txtguOutInvitNum, brdSearchReservation, tabGeneral))
+      else if (_enumProgram == EnumProgram.Outhouse && !await InvitationValidationRules.ValidateFolio(GuestShow.Guest, _enumProgram, txtguOutInvitNum, brdSearchReservation, tabGeneral))
         blnValid = false;
 
       // validamos el folio de la reservacion inhouse
-      else if (_enumProgram == EnumProgram.Inhouse && !InvitationValidationRules.ValidateFolio(GuestShow.Guest, _enumProgram, txtguHReservID, brdSearchReservation, tabGeneral))
+      else if (_enumProgram == EnumProgram.Inhouse && !await InvitationValidationRules.ValidateFolio(GuestShow.Guest, _enumProgram, txtguHReservID, brdSearchReservation, tabGeneral))
         blnValid = false;
 
       // validamos la fecha de llegada y la fecha de salida

@@ -37,7 +37,7 @@ namespace IM.Base.Classes
     /// [aalcocer] 11/08/2016 Modified.  Se hizo generico
     /// [erosado] 31/08/2016  Modfied. Ahora el Store te devuelve el mensaje de error.
     /// </history>
-    public static bool ValidateFolio(Guest guest, EnumProgram enumProgram, Control txtFolio, FrameworkElement btnSearchReservation, TabItem tabItem, Guest cloneGuest = null)
+    public static async Task<bool> ValidateFolio(Guest guest, EnumProgram enumProgram, Control txtFolio, FrameworkElement btnSearchReservation, TabItem tabItem, Guest cloneGuest = null)
     {
       bool isValid = true;
       string serie = string.Empty;
@@ -49,7 +49,7 @@ namespace IM.Base.Classes
         if (btnSearchReservation.IsEnabled)
         {
           //Validamos que el folio no haya sido utilizado por otra invitacion
-          isValid = BRFolios.ValidateFolioReservation(guest.guls, guest.guHReservID, guest.guID);
+          isValid = await BRFolios.ValidateFolioReservation(guest.guls, guest.guHReservID, guest.guID);
 
           //Si el folio de reservacion NO es valido hay que escoger otro
           if (!isValid)
@@ -62,7 +62,7 @@ namespace IM.Base.Classes
       }
       else
       {
-        //Validamos que se ingrese el folio
+        //Validamos que se ingrese el folio en el control txtFolio
         if (!ValidateHelper.ValidateRequired(txtFolio, "Outhouse Invitation Folio"))
         {
           isValid = false;
@@ -88,7 +88,6 @@ namespace IM.Base.Classes
               isValid = false;
             }
           }
-
         }
         if (!isValid)
         {
@@ -97,8 +96,6 @@ namespace IM.Base.Classes
         }
 
       }
-
-
       return isValid;
     }
 
@@ -107,46 +104,28 @@ namespace IM.Base.Classes
     #region ValidateFolioOuthouseFormat
 
     /// <summary>
-    /// Validamos que el formato del folio sea Letra(s)-Numeros
+    /// Validamos el formato de el folio de invitacion
     /// </summary>
     /// <param name="folio">folio</param>
-    /// <param name="serie">Serie</param>
-    /// <param name="numero">Numero</param>
+    /// <param name="serie">ref Serie</param>
+    /// <param name="numero">ref Numero</param>
     /// <returns>True is valid | False No</returns>
     /// <history>
     /// [erosado] 05/08/2016  Created.
     /// [aalcocer] 11/08/2016 Modified. Se modifica los parametros y es movido a la clase Invitation
+    /// [erosado] 10/10/2016  Modified. Se cambio a una expresion regular que valide el folio completo
     /// </history>
     private static bool ValidateFolioOuthouseFormat(string folio, ref string serie, ref int numero)
     {
-      try
-      {
-        //creamos un arreglo apartir del guión.
-        var array = folio.Split('-');
-        if (array.Length != 2) //Revisamos que sea un arreglo de 2 exclusivamente
-          return false;
-
-        if (!Regex.IsMatch(array[0], @"^[a-zA-Z]+$"))//Revisamos que la serie solo contenga letras
-          return false;
-
-        serie = array[0]; //Asignamos la serie
-        numero = int.Parse(array[1]); //Asignamos el número, en caso de crear una excepción se retornará false
-
-        return true;
-      }
-      catch (Exception)
-      {
-        return false;
-      }
+      //Evaluamos la expression regular con el folio  si NO cumple retorna False
+      if (!Regex.IsMatch(folio, @"^([a-zA-Z])+(\d)*?(\-)+(\d)+")) return false;
+      var array = folio.Split('-');
+      serie = array[0];
+      numero = Convert.ToInt32(array[1]);
+      return true;
     }
 
     #endregion ValidateFolioOuthouseFormat
-
-    #region Grid Invitation Gift
-
-
-
-    #endregion Grid Invitation Gift
 
     #region Save Validation
 
@@ -158,11 +137,10 @@ namespace IM.Base.Classes
     /// <param name="form">frmInvitation</param>
     /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is valid | False No</returns>
-    public static bool ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
+    public static async Task<bool> ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
     {
-      string _res = string.Empty;
       //Validamos el folio de reservacion (InHouse & OutHouse)
-      if (!ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.brdSearchButton, form.tabGeneral, dbContext.CloneGuest)) return false;
+      if (!await ValidateFolio(dbContext.Guest, dbContext.Program, form.txtguOutInvitNum, form.btnSearchButton, form.tabGeneral, dbContext.CloneGuest)) return false;
       //Si la fecha de un booking no este en fecha cerrada
       if (!ValidateBookingCloseDate(dbContext)) return false;
       //Validamos que el Numero de habitaciones este en el rango permitido
