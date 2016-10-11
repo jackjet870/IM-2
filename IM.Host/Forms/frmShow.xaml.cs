@@ -56,7 +56,7 @@ namespace IM.Host.Forms
     private bool _isCellCommitCC;//Valida si el commit se hace desde la celda de credit cards
     private bool _isCellCommitGuestAdditional;//Valida si el commit se hace desde la celda de GuestAdditional
 
-  
+
 
     #endregion Atributos
 
@@ -426,7 +426,8 @@ namespace IM.Host.Forms
 
       // validamos que indique si presento invitacion
       else if (GuestShow.Guest.guShow && _enumProgram == EnumProgram.Outhouse
-        && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPresentedInvitation, string.Empty, showMessage: true)))
+               && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkPresentedInvitation, string.Empty,
+                 showMessage: true, strMessage: "Please specify if the guest presented invitation")))
         blnValid = false;
 
       // validamos el tipo de show
@@ -442,15 +443,15 @@ namespace IM.Host.Forms
         blnValid = false;
 
       // validamos la fecha de llegada y la fecha de salida
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkCheckInOut, string.Empty, showMessage: true)))
+      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(stkCheckInOut, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el estado civil, apellido y nombre
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest1, string.Empty, showMessage: true)))
+      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest1, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos el estado civil de su acompañante
-      if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest2, string.Empty, showMessage: true)))
+      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuest2, string.Empty, showMessage: true)))
         blnValid = false;
 
       // validamos la locacion
@@ -510,7 +511,7 @@ namespace IM.Host.Forms
         blnValid = false;
 
       // validamos los estatus de invitados
-      else if (!string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, showMessage: true)))
+      else if (_enumProgram == EnumProgram.Inhouse && !string.IsNullOrWhiteSpace(ValidateHelper.ValidateForm(brdGuestStatus, string.Empty, showMessage: true)))
         blnValid = false;
 
       return blnValid;
@@ -572,7 +573,7 @@ namespace IM.Host.Forms
         if (location != null)
         {
           // establecemos el Lead Source de la locacion
-          cmbguls.SelectedValuePath = location.lols;
+          cmbguls.SelectedValue = location.lols;
 
           // habilitamos / deshabilitamos la invitacion externa
           EnableOutsideInvitation();
@@ -1176,7 +1177,7 @@ namespace IM.Host.Forms
         chkguNotifiedEmailShowNotInvited.IsChecked = false;
 
       //Si es el program es Inhouse, el grid quedara en modo Lectura, y no se podran agregar nuevos guest.
-     btnAddGuestAdditional.IsEnabled = !(_enumProgram == EnumProgram.Inhouse);
+      btnAddGuestAdditional.IsEnabled = !(_enumProgram == EnumProgram.Inhouse);
       guestFormMode = (dtgGuestAdditional.IsReadOnly) ? EnumMode.ReadOnly : EnumMode.Edit;
     }
 
@@ -1286,34 +1287,41 @@ namespace IM.Host.Forms
     /// </history>
     private async void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      imgButtonPrint.Focus();
-      if (!await Validate()) return;
-      if (GuestShow.Guest.guReimpresion > 0)
+      try
       {
-        frmReimpresionMotives _frmReimpresion = new frmReimpresionMotives()
+        //Ponemos el cursor en modo espera
+        Mouse.OverrideCursor = Cursors.Wait;
+        imgButtonSave.IsEnabled = false;
+        imgButtonPrint.IsEnabled = false;
+
+        imgButtonPrint.Focus();
+        if (!await Validate()) return;
+        if (GuestShow.Guest.guReimpresion > 0)
         {
-          ShowInTaskbar = false,
-          Owner = this
-        };
-        if (!(_frmReimpresion.ShowDialog() ?? false)) return;
+          frmReimpresionMotives _frmReimpresion = new frmReimpresionMotives()
+          {
+            ShowInTaskbar = false,
+            Owner = this
+          };
+          if (!(_frmReimpresion.ShowDialog() ?? false)) return;
 
-        var iMotive = (byte)_frmReimpresion.LstMotives.SelectedValue;
+          var iMotive = (byte)_frmReimpresion.LstMotives.SelectedValue;
 
-        //Actualizamos el motivo de reimpresion.
-        await BRReimpresionMotives.UpdateGuestReimpresionMotive(GuestShow.Guest.guID, iMotive);
-      }
-      else
-      //Actualizamos el contador de reimpresion.
-      {
-        await BRReimpresionMotives.UpdateGuestReimpresionNumber(GuestShow.Guest.guID);
-      }
-      //Salvamos la informacion del show.
-      await Save();
+          //Actualizamos el motivo de reimpresion.
+          await BRReimpresionMotives.UpdateGuestReimpresionMotive(GuestShow.Guest.guID, iMotive);
+        }
+        else
+        //Actualizamos el contador de reimpresion.
+        {
+          await BRReimpresionMotives.UpdateGuestReimpresionNumber(GuestShow.Guest.guID);
+        }
+        //Salvamos la informacion del show.
+        await Save();
 
-      //Se imprime el reporte.
-      var lstRptGuestRegistration = await BRGuests.GetGuestRegistration(_guestId);
-      if (lstRptGuestRegistration.Any())
-      {
+        //Se imprime el reporte.
+        var lstRptGuestRegistration = await BRGuests.GetGuestRegistration(_guestId);
+        if (lstRptGuestRegistration.Any())
+        {
         var guestRegistration = (lstRptGuestRegistration[0] as List<RptGuestRegistration>).Select(c => new objRptGuestRegistrationIM(c)).FirstOrDefault();
         var guReg_Guest = (lstRptGuestRegistration[1] as List<RptGuestRegistration_Guests>)?.Select(c => new objRptGuestRegistrationGuestIM(c)).ToList() ?? new List<objRptGuestRegistrationGuestIM>();
         var guReg_Deposits = (lstRptGuestRegistration[2] as List<RptGuestRegistration_Deposits>)?.Select(c => new objRptGuestRegistrationDepositsIM(c)).ToList() ?? new List<objRptGuestRegistrationDepositsIM>();
@@ -1321,7 +1329,7 @@ namespace IM.Host.Forms
         var guReg_Salesmen = (lstRptGuestRegistration[4] as List<RptGuestRegistration_Salesmen>)?.Select(c => new objRptGuestRegistrationSalesmenIM(c)).ToList() ?? new List<objRptGuestRegistrationSalesmenIM>();
         var guReg_CreditCard = (lstRptGuestRegistration[5] as List<RptGuestRegistration_CreditCards>)?.Select(c => new objRptGuestRegistrationCreditCardsIM(c)).ToList() ?? new List<objRptGuestRegistrationCreditCardsIM>();
         var guReg_Comments = (lstRptGuestRegistration[6] as List<RptGuestRegistration_Comments>)?.Select(c => new objRptGuestRegistrationCommentsIM(c)).ToList() ?? new List<objRptGuestRegistrationCommentsIM>();
-        var rptGuestRegistration = new Reports.rptGuestRegistration();
+          var rptGuestRegistration = new Reports.rptGuestRegistration();
 
         rptGuestRegistration.Database.Tables[0].SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(guestRegistration)));
         rptGuestRegistration.Subreports["rptGuestRegistration_Guests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Guest));
@@ -1331,20 +1339,32 @@ namespace IM.Host.Forms
         rptGuestRegistration.Subreports["rptGuestRegistration_Salesmen.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Salesmen));
         rptGuestRegistration.Subreports["rptGuestRegistration_Comments.rpt"].SetDataSource(TableHelper.GetDataTableFromList(guReg_Comments));
 
-        CrystalReportHelper.SetLanguage(rptGuestRegistration, guestRegistration.gula);
+          CrystalReportHelper.SetLanguage(rptGuestRegistration, guestRegistration.gula);
 
-        //Si es reimpresion reemplazamos los campos clave.
-        if (guestRegistration.guReimpresion > 1)
-        {
-          var msgReimpresion = LanguageHelper.GetMessage(EnumMessage.msglblReimpresion);
+          //Si es reimpresion reemplazamos los campos clave.
+          if (guestRegistration.guReimpresion > 1)
+          {
+            var msgReimpresion = LanguageHelper.GetMessage(EnumMessage.msglblReimpresion);
           msgReimpresion = (string.IsNullOrEmpty(msgReimpresion)) ? "" : msgReimpresion.Replace("[grReimpresion]", guestRegistration.guReimpresion.ToString()).Replace("[rmN]", guestRegistration.rmN ?? "");
-          (rptGuestRegistration.ReportDefinition.ReportObjects["lblReimpresion"] as TextObject).Text = msgReimpresion;
-        }
+            (rptGuestRegistration.ReportDefinition.ReportObjects["lblReimpresion"] as TextObject).Text = msgReimpresion;
+          }
 
         CrystalReportHelper.ShowReport(rptGuestRegistration, $"Guest Registration {GuestShow.Guest.guID}", PrintDevice: EnumPrintDevice.pdScreen, numCopies: GuestShow.OcWelcomeCopies);
 
-        //Cerramos el Formulario.
-        Close();
+          //Cerramos el Formulario.
+          Close();
+        }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        busyIndicator.IsBusy = false;
+        Mouse.OverrideCursor = null;
+        imgButtonPrint.IsEnabled = true;
+        imgButtonSave.IsEnabled = true;
       }
     }
 
@@ -1388,10 +1408,17 @@ namespace IM.Host.Forms
     /// </history>
     private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      imgButtonSave.Focus();
-      if (!await Validate()) return;
+
       try
       {
+        //Ponemos el cursor en modo espera
+        Mouse.OverrideCursor = Cursors.Wait;
+        imgButtonSave.IsEnabled = false;
+        imgButtonPrint.IsEnabled = false;
+
+        imgButtonSave.Focus();
+        if (!await Validate()) return;
+     
         await Save();
         SendEmail();
 
@@ -1401,9 +1428,16 @@ namespace IM.Host.Forms
       }
       catch (Exception ex)
       {
-        busyIndicator.IsBusy = false;
         UIHelper.ShowMessage(ex);
       }
+      finally
+      {
+        busyIndicator.IsBusy = false;
+        Mouse.OverrideCursor = null;
+        imgButtonPrint.IsEnabled = true;
+        imgButtonSave.IsEnabled = true;
+      }
+
     }
 
     #endregion imgButtonSave_MouseLeftButtonDown
@@ -1787,7 +1821,7 @@ namespace IM.Host.Forms
           //Si Paso las validaciones
           if (!InvitationValidationRules.ValidateEdit(ref invitationGift, ref _IGCurrentCell))
           {
-            InvitationValidationRules.AfterEdit(_guestId,dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, GuestShow.Program);
+            InvitationValidationRules.AfterEdit(_guestId, dtgGifts, ref invitationGift, _IGCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, GuestShow.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.
           else
@@ -1945,7 +1979,7 @@ namespace IM.Host.Forms
         {
           e.Cancel = true;
         }
-      }      
+      }
     }
 
     #endregion RowEditEnding
@@ -1967,7 +2001,7 @@ namespace IM.Host.Forms
       DataGridRow row = GridHelper.GetRowEditing(dtgGuestAdditional);
       if (row != null)
       {
-        bool gridvalid = AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, row.Item as Guest, GuestShow.Program,true)).Item1;
+        bool gridvalid = AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(GuestShow.Guest, row.Item as Guest, GuestShow.Program, true)).Item1;
         if (gridvalid)
         {
           dtgGuestAdditional.RowEditEnding -= dtgGuestAdditional_RowEditEnding;
@@ -2064,7 +2098,7 @@ namespace IM.Host.Forms
       if (_user.Permissions.Exists(c => c.pppm == IM.Model.Helpers.EnumToListHelper.GetEnumDescription(EnumPermission.HostInvitations) && c.pppl <= 0))
         guestFormMode = EnumMode.ReadOnly;
 
-      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host,_enumProgram, guestFormMode,false) { GuestParent = GuestShow?.Guest,Owner = this };
+      frmGuest frmGuest = new frmGuest(_user, guest.guID, EnumModule.Host, _enumProgram, guestFormMode, false) { GuestParent = GuestShow?.Guest, Owner = this };
       frmGuest.ShowDialog();
     }
 
