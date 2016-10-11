@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RateType()
         {
+            this.raA = true;
             this.MealTicketFolios = new HashSet<MealTicketFolio>();
             this.MealTickets = new HashSet<MealTicket>();
         }

@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Dept()
         {
+            this.deA = true;
             this.Personnels = new HashSet<Personnel>();
         }
     

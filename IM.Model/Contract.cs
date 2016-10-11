@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class Contract
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Contract()
+        {
+            this.cnA = true;
+        }
+    
         public string cnID { get; set; }
         public string cnN { get; set; }
         public bool cnA { get; set; }

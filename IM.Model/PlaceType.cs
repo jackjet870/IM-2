@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PlaceType()
         {
+            this.pyA = true;
             this.Goals = new HashSet<Goal>();
             this.PersonnelAccess = new HashSet<PersonnelAccess>();
         }

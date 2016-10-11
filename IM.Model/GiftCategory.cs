@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class GiftCategory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public GiftCategory()
+        {
+            this.gcA = true;
+        }
+    
         public string gcID { get; set; }
         public string gcN { get; set; }
         public bool gcA { get; set; }

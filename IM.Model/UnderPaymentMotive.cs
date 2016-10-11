@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UnderPaymentMotive()
         {
+            this.upA = true;
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.GiftsReceiptsLogs = new HashSet<GiftsReceiptLog>();
         }

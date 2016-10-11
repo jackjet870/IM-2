@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Period()
         {
+            this.pdA = true;
             this.Efficiencies = new HashSet<Efficiency>();
             this.Goals = new HashSet<Goal>();
         }

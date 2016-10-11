@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Personnel()
         {
+            this.peA = true;
             this.Assistances = new HashSet<Assistance>();
             this.CxCPayments = new HashSet<CxCPayment>();
             this.ExchangeRateLogs = new HashSet<ExchangeRateLog>();

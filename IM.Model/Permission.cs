@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Permission()
         {
+            this.pmA = true;
             this.PersonnelPermissions = new HashSet<PersonnelPermission>();
         }
     

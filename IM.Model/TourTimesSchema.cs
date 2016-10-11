@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TourTimesSchema()
         {
+            this.tcA = true;
             this.Configuration = new HashSet<Configuration>();
         }
     

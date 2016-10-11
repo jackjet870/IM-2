@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public HotelGroup()
         {
+            this.hgA = true;
             this.Hotels = new HashSet<Hotel>();
         }
     
