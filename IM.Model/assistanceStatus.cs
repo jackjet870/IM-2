@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class AssistanceStatus
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AssistanceStatus()
+        {
+            this.atA = true;
+        }
+    
         public string atID { get; set; }
         public string atN { get; set; }
         public bool atA { get; set; }

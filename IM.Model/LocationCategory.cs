@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class LocationCategory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public LocationCategory()
+        {
+            this.lcA = true;
+        }
+    
         public string lcID { get; set; }
         public string lcN { get; set; }
         public bool lcA { get; set; }

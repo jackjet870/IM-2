@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PaymentType()
         {
+            this.ptA = true;
             this.BookingDeposits = new HashSet<BookingDeposit>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.GiftsReceiptsLogs = new HashSet<GiftsReceiptLog>();

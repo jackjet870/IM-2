@@ -21,6 +21,7 @@ namespace IM.Model
             this.lsShowFactorTh = 0.6m;
             this.lsBookFactorTh = 55m;
             this.lsShowsTh = 10;
+            this.lsA = true;
             this.lsProcesar = true;
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.InvitationsTexts = new HashSet<InvitationText>();

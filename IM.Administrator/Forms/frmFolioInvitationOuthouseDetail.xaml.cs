@@ -57,8 +57,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(folioInvOut, oldFolioInvOut);
-      DataContext = folioInvOut;
-      txtfiSerie.PreviewTextInput += TextBoxHelper.LetterTextInput;
+      DataContext = folioInvOut;      
       if (enumMode != EnumMode.ReadOnly)
       {
         txtfiSerie.IsEnabled = true;

@@ -898,5 +898,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_IM_RptWeeklyMonthlyHostess_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_RptGiftsUsedBySistur {
+            get {
+                return ((int)(this["USP_OR_RptGiftsUsedBySistur"]));
+            }
+            set {
+                this["USP_OR_RptGiftsUsedBySistur"] = value;
+            }
+        }
     }
 }

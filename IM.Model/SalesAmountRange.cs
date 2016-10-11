@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class SalesAmountRange
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SalesAmountRange()
+        {
+            this.snA = true;
+        }
+    
         public int snID { get; set; }
         public string snN { get; set; }
         public decimal snFrom { get; set; }

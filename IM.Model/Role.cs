@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Role()
         {
+            this.roA = true;
             this.SalesmenChanges = new HashSet<SalesmanChange>();
             this.Personnels = new HashSet<Personnel>();
         }

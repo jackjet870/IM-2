@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Region()
         {
+            this.rgA = true;
             this.Areas = new HashSet<Area>();
             this.LeadSources = new HashSet<LeadSource>();
         }

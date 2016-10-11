@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class GuestStatusType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public GuestStatusType()
+        {
+            this.gsA = true;
+        }
+    
         public string gsID { get; set; }
         public string gsN { get; set; }
         public bool gsA { get; set; }

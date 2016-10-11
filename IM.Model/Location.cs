@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Location()
         {
+            this.loA = true;
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.LoginsLogs = new HashSet<LoginLog>();
             this.Sales = new HashSet<Sale>();

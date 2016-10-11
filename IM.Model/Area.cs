@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Area()
         {
+            this.arA = true;
             this.Hotels = new HashSet<Hotel>();
             this.LeadSources = new HashSet<LeadSource>();
             this.SalesRooms = new HashSet<SalesRoom>();

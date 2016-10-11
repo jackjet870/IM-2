@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Warehouse()
         {
+            this.whA = true;
             this.GiftsInventories = new HashSet<GiftInventory>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.SalesRooms = new HashSet<SalesRoom>();

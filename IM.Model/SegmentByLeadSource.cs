@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SegmentByLeadSource()
         {
+            this.soA = true;
             this.LeadSources = new HashSet<LeadSource>();
         }
     
