@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ScoreRuleConcept()
         {
+            this.spA = true;
             this.ScoreRulesByLeadSourceDetails = new HashSet<ScoreRuleByLeadSourceDetail>();
             this.ScoreRulesDetails = new HashSet<ScoreRuleDetail>();
         }

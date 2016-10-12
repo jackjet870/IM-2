@@ -125,21 +125,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region KeyDown
-    /// <summary>
-    /// Cierra la ventada detalle con el boton escape dependiendo del modo en que fue abierto
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null, null);
-      }
-    }
-    #endregion
-
     #region Cancel
     /// <summary>
     /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
@@ -191,15 +176,18 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        btnCancel.Focus();
+        if (mode != EnumMode.ReadOnly)
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          if (!ObjectHelper.IsEquals(area, oldArea))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result == MessageBoxResult.No)
+            {
+              e.Cancel=true;
+              _isClosing = false;
+            }
+          }
         }
       }
     }

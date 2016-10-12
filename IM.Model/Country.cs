@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Country()
         {
+            this.coA = true;
             this.Agencies = new HashSet<Agency>();
             this.Guests = new HashSet<Guest>();
         }

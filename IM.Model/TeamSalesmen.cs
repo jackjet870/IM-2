@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class TeamSalesmen
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TeamSalesmen()
+        {
+            this.tsA = true;
+        }
+    
         public string tssr { get; set; }
         public string tsID { get; set; }
         public string tsN { get; set; }

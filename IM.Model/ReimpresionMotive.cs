@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ReimpresionMotive()
         {
+            this.rmA = true;
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.GiftsReceiptsLogs = new HashSet<GiftsReceiptLog>();
             this.GuestLogs = new HashSet<GuestLog>();

@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Closing="Window_Closing"
-        Title="Area Detail" Height="238" DataContext="{Binding Area}" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded">
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Closing="Window_Closing"
+        Title="Area Detail" Height="238" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -36,7 +36,7 @@
             <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
         </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>    
 </Window>

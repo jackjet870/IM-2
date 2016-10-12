@@ -127,7 +127,7 @@ namespace IM.ProcessorOuthouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu.OrderBy(c => c.SalesRoom).ThenBy(c => c.GiftN).ToList());
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion ExportRptGiftsReceivedBySR
 
@@ -146,7 +146,7 @@ namespace IM.ProcessorOuthouse.Classes
     public static async Task<FileInfo> ExportRptGuestsShowNoPresentedInvitation(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptGuestsShowNoPresentedInvitation);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptGuestsShowNoPresentedInvitation(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptGuestsShowNoPresentedInvitation(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
 
     }
 
@@ -371,7 +371,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: false);
-        return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+        return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
       }
     }
     #endregion ExportRptProductionByAgencyOuthouse
@@ -461,7 +461,7 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: false);
-        return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+        return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByAgencySalesRoomSalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
       }
     }
 
@@ -1237,7 +1237,7 @@ namespace IM.ProcessorOuthouse.Classes
     public static async Task<FileInfo> ExportRptFoliosInvitationByDateFolio(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationByDateFolio);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosInvitationByDateFolio(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosInvitationByDateFolio(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptFoliosInvitationByDateFolio
@@ -1343,7 +1343,7 @@ namespace IM.ProcessorOuthouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCXCAux);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosCXC(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptFoliosCXC(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
   }

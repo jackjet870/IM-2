@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class ShowProgram
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ShowProgram()
+        {
+            this.skA = true;
+        }
+    
         public string skID { get; set; }
         public string skN { get; set; }
         public bool skA { get; set; }

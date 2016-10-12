@@ -99,7 +99,7 @@ namespace IM.SalesCloser.Forms
         //Obtenemos el dataTable con la lista formateada
         DataTable dt = TableHelper.GetDataTableFromList(listaSaleByCloser, true);
         //Creamos el reporte
-        FileInfo fi = await ReportBuilder.CreateCustomExcel(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
+        FileInfo fi = await ReportBuilder.CreateCustomExcelAsync(dt, filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(), addEnumeration: true);
 
 
         if (fi != null)

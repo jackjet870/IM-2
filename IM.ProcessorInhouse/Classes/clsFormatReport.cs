@@ -147,7 +147,7 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[GrossBooks]/[Arrivals])");
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
@@ -190,7 +190,7 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[GrossBooks]/[Arrivals])");
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
@@ -234,7 +234,7 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[GrossBooks]/[Arrivals])");
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
@@ -280,7 +280,7 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[GrossBooks]/[Arrivals])");
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
@@ -311,35 +311,34 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByCoupleTypeInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByCoupleTypeInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Couple Type",Order = 0, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Couple Type", "CoupleType");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetRptProductionByCoupleTypeInhouseFormat
@@ -353,34 +352,32 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByDeskInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByDeskInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Desk",Order = 0, Axis = ePivotFieldAxis.Row},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Desk", "Desk");
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Conts", Order = 0,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 8, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 11, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
-
-        new ColumnFormat {Title = "A%",Order = 2 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 6 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 9 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 17, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 16, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetRptProductionByDeskInhouseFormat
@@ -396,35 +393,34 @@ namespace IM.ProcessorInhouse.Classes
     /// </history>
     internal static List<ColumnFormat> GetRptProductionByGroupInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Groups",Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat{Title = "Rooms",Order = 0, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat{Title = "T Rooms",Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Arrivs", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 3,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 8, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 11, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Groups", "Groups", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Rooms", "Integrants", format: EnumFormatTypeExcel.Number);
+      lst.Add("T Rooms", "TotalIntegrants", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 18, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 19, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 4,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 6 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 10 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 13 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 21, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 22, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetRptProductionByGroupInhouseFormat
@@ -438,36 +434,35 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByGuestStatusInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByGuestStatusInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Guest Status",Order = 1, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat{Title = "Lead Source",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true, InsertBlankRow = true},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Lead Source", "LeadSource", isGroup: true, isVisible: false);
+      lst.Add("Guest Status", "GuestStatus");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetRptProductionByGuestStatusInhouseFormat
@@ -481,36 +476,36 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByMemberTypeAgencyInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByMemberTypeAgencyInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Agency",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Member Type",Order = 1, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("AgencyN", "AgencyN", isGroup: true, isVisible: false);
+      lst.Add("Member Type", "MemberType");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      lst.Add("Agency", "Agency", isVisible: false);
+      return lst;
     }
 
     #endregion GetRptProductionByMemberTypeAgencyInhouseFormat
@@ -526,36 +521,36 @@ namespace IM.ProcessorInhouse.Classes
     /// </history>
     internal static List<ColumnFormat> GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Agency",Order = 2, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Member Type",Order = 3, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Originally Available", "OriginallyAvailable", isGroup: true, isVisible: false);
+      lst.Add("Market", "Market", isGroup: true, isVisible: false);
+      lst.Add("AgencyN", "AgencyN", isGroup: true, isVisible: false);
+      lst.Add("Member Type", "MemberType");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      lst.Add("Agency", "Agency", isVisible: false);
+      return lst;
     }
 
     #endregion GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat
@@ -569,44 +564,45 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByPRInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByPRInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Status",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, Compact = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "PR ID",Order = 1, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat{Title = "PR Name",Order = 2, Axis = ePivotFieldAxis.Row},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Status", "Status", isGroup: true, isVisible: false);
+      lst.Add("PR ID", "PRID");
+      lst.Add("PR Name", "PRN");
+      lst.Add("Assigns", "Assigns", format: EnumFormatTypeExcel.Number, function:DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Assigns] =0,0,[Contacts]/[Assigns])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "BooksNoDirects", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[BooksNoDirects]/[Availables])");
+      lst.Add("Sh-D", "ShowsNoDirects", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("IO", "InOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("WO", "WalkOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("TR", "Tours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("CT", "CourtesyTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Save", "SaveTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Tours", "TotalTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("UPS", "UPS", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sales", "Sales_PROC", format: EnumFormatTypeExcel.Number, superHeader: "PROCESSABLE");
+      lst.Add("Amount", "SalesAmount_PROC", format: EnumFormatTypeExcel.Currency, superHeader: "PROCESSABLE");
+      lst.Add("Sales ", "Sales_PEND", format: EnumFormatTypeExcel.Number, superHeader: "PENDING");
+      lst.Add("Amount ", "SalesAmount_PEND", format: EnumFormatTypeExcel.Currency, superHeader: "PENDING");
+      lst.Add("Sales  ", "Sales_OOP", format: EnumFormatTypeExcel.Number, superHeader: "OUT OF PENDING");
+      lst.Add("Amount  ", "SalesAmount_OOP", format: EnumFormatTypeExcel.Currency, superHeader: "OUT OF PENDING");
 
-        new ColumnFormat {Title = "Assigns", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Sh-D", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 11, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "IO", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "WO", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "RT", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "CT", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Save", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Tours", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "UPS", Order = 18, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Proc", Order = 19, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PROCESSABLE"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Proc", Order = 20, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="PROCESSABLE"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales Pend", Order = 21, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PENDING"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount Pend", Order = 22, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PENDING"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Out Pend", Order = 23, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="OUT OF PENDING"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Out Pend", Order = 24, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="OUT OF PENDING"},
-
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Assigns =0,0,Conts/Assigns)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 10 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 26, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF(UPS =0,0,'Sales Proc'/UPS)" },
-        new ColumnFormat { Title = "Eff", Order = 25, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF(UPS =0,0,'Amount Proc'/UPS)" },
-        new ColumnFormat { Title = "Avg Sale", Order = 27, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Proc' = 0,0,'Amount Proc'/'Sales Proc')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([UPS] =0,0,[SalesAmount_PROC]/[UPS])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([UPS] =0,0,[Sales_PROC]/[UPS])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_PROC]= 0,0,[SalesAmount_PROC]/[Sales_PROC])");
+      lst.Add("Location", "Location", isVisible:false);
+      lst.Add("Team", "Team", isVisible: false);
+      lst.Add("Leader", "Leader", isVisible: false);
+      return lst;
     }
 
     #endregion GetRptProductionByPRInhouseFormat
@@ -629,7 +625,7 @@ namespace IM.ProcessorInhouse.Classes
         new ColumnFormat{Title = "Groups",Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ColumnFormat{Title = "Rooms",Order = 3, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.Number},
         new ColumnFormat{Title = "T Rooms",Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Assing", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ColumnFormat {Title = "Assign", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ColumnFormat {Title = "Conts", Order = 3,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ColumnFormat {Title = "Avails",Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ColumnFormat {Title = "Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -645,7 +641,7 @@ namespace IM.ProcessorInhouse.Classes
         new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 18, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
         new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 19, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
 
-        new ColumnFormat {Title = "C%",Order = 4,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Assing =0,0,Conts/Assing)" },
+        new ColumnFormat {Title = "C%",Order = 4,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Assign =0,0,Conts/Assign)" },
         new ColumnFormat {Title = "A%",Order = 6 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
         new ColumnFormat {Title = "Bk%",Order = 10 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
        new ColumnFormat {Title = "Sh%",Order = 13 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
@@ -770,35 +766,34 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetRptProductionByNationalityInhouseFormat()
+    internal static ColumnFormatList GetRptProductionByNationalityInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Nationality",Order = 0, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Nationality", "Nationality");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetRptProductionByNationalityInhouseFormat
@@ -812,37 +807,36 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/04/2016 Created
     /// </history>
-    internal static List<ColumnFormat> GetProductionByNationalityMarketOriginallyAvailableInhouseFormat()
+    internal static ColumnFormatList GetProductionByNationalityMarketOriginallyAvailableInhouseFormat()
     {
-      return new List<ColumnFormat>
-      {
-        new ColumnFormat{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true, InsertBlankRow = true},
-        new ColumnFormat{Title = "Nationality",Order = 2, Axis = ePivotFieldAxis.Row},
-        new ColumnFormat {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-        new ColumnFormat {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Originally Available", "OriginallyAvailable", isGroup: true, isVisible: false);
+      lst.Add("Market", "Market", isGroup: true, isVisible: false);
+      lst.Add("Nationality", "Nationality");
+      lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
+      lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
+      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
 
-        new ColumnFormat {Title = "Sales", PropertyName = "Sales Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Amount",  PropertyName = "Amount Total", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
-        new ColumnFormat {Title = "Sales ", PropertyName = "Sales PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
-        new ColumnFormat {Title = "Amount ", PropertyName = "Amount PR", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
-        new ColumnFormat {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
-        new ColumnFormat {Title = "Amount  ", PropertyName = "Amount Self Gen", Order = 17, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
+      lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
+      lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-        new ColumnFormat {Title = "C%",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Arrivs =0,0,Conts/Arrivs)" },
-        new ColumnFormat {Title = "A%",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Conts =0,0,Avails/Conts)" },
-        new ColumnFormat {Title = "Bk%",Order = 8 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Avails =0,0,'T Books'/Avails)" },
-       new ColumnFormat {Title = "Sh%",Order = 11 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-        new ColumnFormat { Title = "Cl%", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
-        new ColumnFormat { Title = "Eff", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
-        new ColumnFormat { Title = "Avg Sale", Order = 20, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
-      };
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion GetProductionByNationalityMarketOriginallyAvailableInhouseFormat

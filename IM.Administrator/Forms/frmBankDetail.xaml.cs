@@ -50,13 +50,14 @@ namespace IM.Administrator.Forms
         ObjectHelper.CopyProperties(srm, sr);
         lstSalesRoom.Add(srm);
       });
-      dgrSalesRoom.ItemsSource = lstSalesRoom;
+      dtgSalesRoom.ItemsSource = lstSalesRoom;
       ObjectHelper.CopyProperties(bank, oldBank);            
       UIHelper.SetUpControls(bank, this);      
       txtbkID.IsEnabled = (enumMode == EnumMode.Add);
       LoadSalesRoom();
       DataContext = bank;
-      dgrSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgSalesRoom.BeginningEdit += GridHelper.dgr_BeginningEdit;
+      dtgSalesRoom.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion    
 
@@ -74,7 +75,7 @@ namespace IM.Administrator.Forms
       if (!blnClosing)
       {
         btnCancel.Focus();        
-        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
+        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dtgSalesRoom.ItemsSource;
         if (!ObjectHelper.IsEquals(bank, oldBank) || !ObjectHelper.IsListEquals(lstSalesRoom, _oldLstSalesRoom))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
@@ -84,7 +85,7 @@ namespace IM.Administrator.Forms
           }
           else
           {
-            dgrSalesRoom.CancelEdit();
+            dtgSalesRoom.CancelEdit();
           }
         }
       }
@@ -106,9 +107,9 @@ namespace IM.Administrator.Forms
       {
         if (isCellCancel)
         {
-          dgrSalesRoom.RowEditEnding -= dgrSalesRoom_RowEditEnding;
-          dgrSalesRoom.CancelEdit();
-          dgrSalesRoom.RowEditEnding += dgrSalesRoom_RowEditEnding;
+          dtgSalesRoom.RowEditEnding -= dgrSalesRoom_RowEditEnding;
+          dtgSalesRoom.CancelEdit();
+          dtgSalesRoom.RowEditEnding += dgrSalesRoom_RowEditEnding;
         }
       }
     }
@@ -129,7 +130,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
+        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dtgSalesRoom.ItemsSource;
         if (enumMode != EnumMode.Add && ObjectHelper.IsEquals(bank, oldBank) && ObjectHelper.IsListEquals(_oldLstSalesRoom, lstSalesRoom))
         {
           blnClosing = true;
@@ -145,7 +146,7 @@ namespace IM.Administrator.Forms
           {
             List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
             List<SalesRoom> lstDel = _oldLstSalesRoom.Where(sr => !lstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
-            var grid = dgrSalesRoom;
+            var grid = dtgSalesRoom;
             int nRes = await BRBanks.SaveBank(bank, (enumMode == EnumMode.Edit), lstAdd, lstDel);
             var banks = await BRBanks.GetBanks(bank: bank,blnInclude:true);
             bank = banks.FirstOrDefault();
@@ -186,7 +187,7 @@ namespace IM.Administrator.Forms
       if (e.EditAction==DataGridEditAction.Commit)//Verificar si se está cancelando la edición
       {      
         isCellCancel = false;
-        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrSalesRoom);
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dtgSalesRoom);
         e.Cancel = isRepeat;
       }
       else

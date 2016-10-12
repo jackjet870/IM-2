@@ -519,6 +519,12 @@ namespace IM.Host
       _busyIndicator.BusyContent = "Updating seasons's dates...";
       await BRSeasons.UpdateSeasonDates(dtpServerDate.Year);
 
+      // Reiniciamos la variable
+      _dtpCurrent = null;
+      // Actualizamos el grid principal
+      dtpDate.Value = null;
+      dtpDate.Value = dtpServerDate;
+
       _busyIndicator.IsBusy = false;
     }
     #endregion
@@ -831,28 +837,35 @@ namespace IM.Host
     {
       try
       {
-        frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumSearchHostType.Transfer) { Owner = this };
-        bool blnResult = (bool)frmSearch.ShowDialog();
-
-        // Verificamos si se debe realizar alguna tranferencia
-        if (blnResult == true)
+        if (Context.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly))
         {
-          Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
-          guest.gusr = Context.User.SalesRoom.srID;
-          guest.guBookCanc = false;
+          frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumSearchHostType.Transfer) { Owner = this };
+          bool blnResult = (bool)frmSearch.ShowDialog();
 
-          if (await BRGuests.SaveChangedOfGuest(guest, Context.User.SalesRoom.srHoursDif, Context.User.User.peID) == 0)
+          // Verificamos si se debe realizar alguna tranferencia
+          if (blnResult == true)
           {
-            //De no ser así informamos que no se guardo la información por algun motivo
-            UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-              MessageBoxImage.Error, "Information can not keep");
+            Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
+            guest.gusr = Context.User.SalesRoom.srID;
+            guest.guBookCanc = false;
 
-            // TODO: Falta implemetar la creacion de cebes y cecos, esta en fase de prueba actualmente 09/Agosto/2016
-            //With mAccountingCode
-            //  .Load CStr(lngGuestID)
-            //  .SetAccountingCode "MK"
-            //End With
+            if (await BRGuests.SaveChangedOfGuest(guest, Context.User.SalesRoom.srHoursDif, Context.User.User.peID) == 0)
+            {
+              //De no ser así informamos que no se guardo la información por algun motivo
+              UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+                MessageBoxImage.Error, "Information can not keep");
+
+              // TODO: Falta implemetar la creacion de cebes y cecos, esta en fase de prueba actualmente 09/Agosto/2016
+              //With mAccountingCode
+              //  .Load CStr(lngGuestID)
+              //  .SetAccountingCode "MK"
+              //End With
+            }
           }
+        }
+        else
+        {
+          UIHelper.ShowMessage("Access Denied", MessageBoxImage.Information);
         }
       }
       catch (Exception ex)
@@ -927,7 +940,7 @@ namespace IM.Host
       frmSearchGeneral frmSearch = new frmSearchGeneral(dtpDate.Value.Value, EnumSearchHostType.Invit) { Owner = this };
       bool blnResult = (bool)frmSearch.ShowDialog();
 
-      // Verificamos si se debe realizar alguna tranferencia
+      // Verificamos si se debe realizar alguna invitacion
       if (blnResult == true)
       {
         Guest guest = frmSearch.grdGuest.SelectedItem as Guest;
@@ -984,7 +997,7 @@ namespace IM.Host
     /// </history>
     private async void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
                                permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.SalesRoom.srID,
                                windowStartupLocation: WindowStartupLocation.CenterScreen);
 

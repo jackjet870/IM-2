@@ -417,6 +417,56 @@ namespace IM.Host.Forms
     /// </history>
     private void btnOk_Click(object sender, RoutedEventArgs e)
     {
+      TransferGuests();
+    }
+    #endregion
+
+    #region Row_DoubleClick    
+    /// <summary>
+    /// Despliega el formulario de Invitaciones
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 03/Oct/2016 Created
+    /// </history>
+    private void Row_DoubleClick(object sender, RoutedEventArgs e)
+    {
+      TransferGuests();
+    }
+    #endregion
+
+    #region grdReceipts_KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Oct/2016 Created
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            TransferGuests();
+            blnHandled = true;
+            break;
+          }
+      }
+      e.Handled = blnHandled;
+    }
+    #endregion
+
+    #region TransferGuest
+    /// <summary>
+    /// Permite transferir invitaciones o invitar a huespedes inhouse
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 10/Oct/2016 Created 
+    /// </history>
+    private void TransferGuests()
+    {
       if (grdGuest.SelectedItems.Count < 1)
       {
         UIHelper.ShowMessage("Select at least one Guest.", MessageBoxImage.Information);
@@ -436,7 +486,7 @@ namespace IM.Host.Forms
           Close();
         }
       }
-    }
+    } 
     #endregion
 
   }

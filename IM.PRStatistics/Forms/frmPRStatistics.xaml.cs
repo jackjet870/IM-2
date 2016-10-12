@@ -112,7 +112,7 @@ namespace IM.PRStatistics.Forms
 
 
 
-        FileInfo finfo = await ReportBuilder.CreateCustomExcel(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal: true, blnRowGrandTotal: true);
+        FileInfo finfo = await ReportBuilder.CreateCustomExcelAsync(dt, filterTuple, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable(), addEnumeration: true, blnShowSubtotal: true, blnRowGrandTotal: true);
 
         if (finfo != null)
         {

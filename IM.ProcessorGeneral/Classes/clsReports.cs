@@ -38,7 +38,7 @@ namespace IM.ProcessorGeneral.Classes
 
       lstRptBbSalesRoom = lstRptBbSalesRoom.orderListBy("SalesRoom asc,Program asc, BookType asc, Time asc");
       var dtData = TableHelper.GetDataTableFromList(lstRptBbSalesRoom);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptBookingsBySalesRoomProgramTime(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptBookingsBySalesRoomProgramTime(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -57,7 +57,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptBookingsBySalesRoomProgramLeadSourceTime(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBOokingsSalesRoomLeadSource)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptBOokingsSalesRoomLeadSource);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptBookingsBySalesRoomProgramLeadSourceTime(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptBookingsBySalesRoomProgramLeadSourceTime(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -80,7 +80,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCxc(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxC> lstRptCxC)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptCxC, true, false, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxc(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxc(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -100,7 +100,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCxcByType(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxCExcel> lstRptCxC)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptCxC, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcByType(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcByType(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
     }
     #endregion
 
@@ -141,7 +141,7 @@ namespace IM.ProcessorGeneral.Classes
                                                        curr.cuN
                                                      }).ToList(), true, false);
 
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcDeposits(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcDeposits(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -198,7 +198,7 @@ namespace IM.ProcessorGeneral.Classes
                               })
                               .ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters, strReport, string.Empty, clsFormatReport.RptCxcGifts(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters, strReport, string.Empty, clsFormatReport.RptCxcGifts(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -218,7 +218,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCxCNotAuthorized(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxCNotAuthorized> lstRptCxCNotAuthorized)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptCxCNotAuthorized, true, false, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcNotAuthorized(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcNotAuthorized(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -238,7 +238,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCxCPayments(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCxCPayments> lstRptCxCPayments)
     {
       var dtData = TableHelper.GetDataTableFromList(lstRptCxCPayments, true, false, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcPayments(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.RptCxcPayments(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -299,7 +299,7 @@ namespace IM.ProcessorGeneral.Classes
                       .ThenBy(c => c.grID)
                       .ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true), filters, strReport, string.Empty, clsFormatReport.RptDeposits(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDeps, true), filters, strReport, string.Empty, clsFormatReport.RptDeposits(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -358,7 +358,7 @@ namespace IM.ProcessorGeneral.Classes
                         ).OrderBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDeposits(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDeposits(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion 
 
@@ -423,7 +423,7 @@ namespace IM.ProcessorGeneral.Classes
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -478,7 +478,7 @@ namespace IM.ProcessorGeneral.Classes
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDeps, true, false), filters, strReport, string.Empty, (byPr) ? clsFormatReport.RptPaidDepositsByPr() : clsFormatReport.RptPaidDeposits(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
 
     }
     #endregion
@@ -631,7 +631,7 @@ namespace IM.ProcessorGeneral.Classes
 
       //Obtenemos el segudo pivot.
       var secondPivotdt = ReportBuilder.GetPivotTable(formatPivot2, firstPivotdt);
-      return await ReportBuilder.CreateCustomExcel(null, filters, strReport, string.Empty, clsFormatReport.RptCancelledGiftsManifest(), blnRowGrandTotal: true, pivotedTable: secondPivotdt, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(null, filters, strReport, string.Empty, clsFormatReport.RptCancelledGiftsManifest(), blnRowGrandTotal: true, pivotedTable: secondPivotdt, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -650,7 +650,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptDailyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDailyGiftSimple> lstRptDailyGiftSimples)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDailyGiftSimples, true, false), filters, strReport, string.Empty, clsFormatReport.RptDailyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDailyGiftSimples, true, false), filters, strReport, string.Empty, clsFormatReport.RptDailyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -682,7 +682,7 @@ namespace IM.ProcessorGeneral.Classes
 
 
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategory(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategory(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -713,7 +713,7 @@ namespace IM.ProcessorGeneral.Classes
         c.Program
       }).ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategoryProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsByCategoryProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -758,7 +758,7 @@ namespace IM.ProcessorGeneral.Classes
         c.Refund,
         c.Comments
       }).ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(certificates, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsCertificates(), blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(certificates, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsCertificates(), blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -892,7 +892,7 @@ namespace IM.ProcessorGeneral.Classes
       //Obtenemos el segudo pivot.
       var secondPivotdt = ReportBuilder.GetPivotTable(formatPivot2, firstPivotdt);
 
-      return await ReportBuilder.CreateCustomExcel(null, filters, strReport, string.Empty, format, pivotedTable: secondPivotdt, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
+      return await ReportBuilder.CreateCustomExcelAsync(null, filters, strReport, string.Empty, format, pivotedTable: secondPivotdt, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -1032,7 +1032,7 @@ namespace IM.ProcessorGeneral.Classes
 
       //Obtenemos el segudo pivot.
       var secondPivotdt = ReportBuilder.GetPivotTable(formatPivot2, firstPivotdt);
-      return await ReportBuilder.CreateCustomExcel(null, filters, strReport, string.Empty, format, blnRowGrandTotal: true, pivotedTable: secondPivotdt, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
+      return await ReportBuilder.CreateCustomExcelAsync(null, filters, strReport, string.Empty, format, blnRowGrandTotal: true, pivotedTable: secondPivotdt, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -1067,7 +1067,7 @@ namespace IM.ProcessorGeneral.Classes
         GroupSource2 = (c.Source == "MK") ? "MARKETING" : (c.Source == "CXC") ? "CXC" : "SUBTOTAL INCOME"
       }).ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(receipts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsReceiptsPayments(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(receipts, true, false), filters, strReport, string.Empty, clsFormatReport.RptGiftsReceiptsPayments(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1226,7 +1226,7 @@ namespace IM.ProcessorGeneral.Classes
                       PaymentType = (py != null) ? py.Item3.PaymentType : ""
                     }
         ).ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(source, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsSale(), isPivot: true, blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(source, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsSale(), isPivot: true, blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1245,7 +1245,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptGiftsUsedBySistur(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsUsedBySistur> lstRptGiftsSistur)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGiftsSistur, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsUsedBySistur(), blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGiftsSistur, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsUsedBySistur(), blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1265,7 +1265,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptWeeklyGiftSimple(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWeeklyGiftsItemsSimple> lstRptWeeklyGiftsSimple)
     {
       lstRptWeeklyGiftsSimple = lstRptWeeklyGiftsSimple.orderListBy("grD asc, ShortN asc, Gift asc");
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptWeeklyGiftsSimple, true, false), filters, strReport, string.Empty, clsFormatReport.RptWeeklyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptWeeklyGiftsSimple, true, false), filters, strReport, string.Empty, clsFormatReport.RptWeeklyGiftSimple(), true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1312,7 +1312,7 @@ namespace IM.ProcessorGeneral.Classes
         .ThenBy(c => c.LeadSource)
         .ThenBy(c => c.GuestID)
         .ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGuestNoBuyers, true, false), filters, strReport, string.Empty, clsFormatReport.RptGuestNoBuyers(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGuestNoBuyers, true, false), filters, strReport, string.Empty, clsFormatReport.RptGuestNoBuyers(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1338,7 +1338,7 @@ namespace IM.ProcessorGeneral.Classes
         .ThenBy(c => c.GUID)
         .ThenBy(c => c.ShowDate)
         .ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptInOutNew, true), filters, strReport, string.Empty, clsFormatReport.RptInOut(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptInOutNew, true), filters, strReport, string.Empty, clsFormatReport.RptInOut(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1357,7 +1357,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptManifestRange(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptManifestRange> lstRptManifestRange)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptManifestRange, true, false), filters, strReport, string.Empty, clsFormatReport.RptManifestRange(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptManifestRange, true, false), filters, strReport, string.Empty, clsFormatReport.RptManifestRange(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1411,7 +1411,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptGuestNoShows(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestsNoShows> lstRptGuestNoShows)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGuestNoShows, true), filters, strReport, string.Empty, clsFormatReport.RptGuestNoShow(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGuestNoShows, true), filters, strReport, string.Empty, clsFormatReport.RptGuestNoShow(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1435,7 +1435,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptMealTickets(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMealTickets> lstRptMealTickets, bool groupByHost = false)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptMealTickets, true, true, true), filters, strReport, string.Empty, groupByHost ? clsFormatReport.RptMealTicketsByHost() : clsFormatReport.RptMealTickets(), true, isRptQueue: true, blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptMealTickets, true, true, true), filters, strReport, string.Empty, groupByHost ? clsFormatReport.RptMealTicketsByHost() : clsFormatReport.RptMealTickets(), true, isRptQueue: true, blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion
@@ -1470,7 +1470,7 @@ namespace IM.ProcessorGeneral.Classes
              TotalAmount = lstRptMealTicketsCost.Where(d => d.Date == c.Date).Sum(d => d.TotalAmount)
            });
          });
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstMealTicketCost, true, false, true), filters, strReport, string.Empty, clsFormatReport.RptMealTicketsCost(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstMealTicketCost, true, false, true), filters, strReport, string.Empty, clsFormatReport.RptMealTicketsCost(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1492,7 +1492,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptMemberships(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMemberships> lstRptMemberships)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptMemberships, true, false), filters, strReport, string.Empty, clsFormatReport.RptMemberships(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptMemberships, true, false), filters, strReport, string.Empty, clsFormatReport.RptMemberships(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1510,7 +1510,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptMembershipsByAgencyMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMembershipsByAgencyMarket> lstRptMembershipsAgencyM)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptMembershipsAgencyM, true, false), filters, strReport, string.Empty, clsFormatReport.RptMembershipsByAgencyMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptMembershipsAgencyM, true, false), filters, strReport, string.Empty, clsFormatReport.RptMembershipsByAgencyMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1529,7 +1529,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptMembershipsByHost(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptMembershipsByHost> lstRptMembershipsHost)
     {
       lstRptMembershipsHost.ForEach(c => c.guEntryHost = $"{c.guEntryHost} {c.guEntryHostN}");
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptMembershipsHost, true, false), filters, strReport, string.Empty, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptMembershipsHost, true, false), filters, strReport, string.Empty, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1551,7 +1551,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionBySalesRoom(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionBySalesRoom> lstRptProductionBySr)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionBySr, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoom(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionBySr, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoom(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1569,7 +1569,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionBySalesRoomMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomMarket> lstRptProductionBySrm)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionBySrm, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionBySrm, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1587,7 +1587,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionBySalesRoomMarketSubMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomProgramMarketSubmarket> lstRptProductionBySrmSm)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionBySrmSm, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarketSubMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionBySrmSm, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionBySalesRoomMarketSubMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1605,7 +1605,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionByShowProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByShowProgram> lstRptProductionByShowProgram)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionByShowProgram, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionByShowProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionByShowProgram, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionByShowProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1623,7 +1623,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionByShowProgramProgram(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByShowProgramProgram> lstRptProductionByShowProgramProgram)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionByShowProgramProgram, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionByShowProgramProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionByShowProgramProgram, true, false), filters, strReport, string.Empty, clsFormatReport.RptProductionByShowProgramProgram(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1647,7 +1647,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptCloserStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptCloserStatistics> lstRptCloserStatistic)
     {
       lstRptCloserStatistic=lstRptCloserStatistic.OrderBy(c => c.saCloserps).ThenByDescending(c => c.TotalProcAmount).ThenByDescending(c => c.Efficiency).ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptCloserStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1667,7 +1667,7 @@ namespace IM.ProcessorGeneral.Classes
     public static async Task<FileInfo> ExportRptLinerStatistics(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptLinerStatistics> lstRptCloserStatistic)
     {
       lstRptCloserStatistic = lstRptCloserStatistic.OrderBy(c => c.saLinerps).ThenByDescending(c => c.TotalProcAmount).ThenByDescending(c => c.Efficiency).ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptCloserStatistic, true, false), filters, strReport, string.Empty, clsFormatReport.RptLinerStatistic(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1736,7 +1736,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptTaxiIn(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisIn> lstRptTaxiIn)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1754,7 +1754,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptTaxiOut(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptTaxisOut> lstRptTaxiOut)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptTaxiOut, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisOut(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptTaxiOut, true, false), filters, strReport, string.Empty, clsFormatReport.RptTaxisOut(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1788,7 +1788,7 @@ namespace IM.ProcessorGeneral.Classes
         c.gupt = payType.First(pt => pt.ptID == c.gupt).ptN ?? "";
       });
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstGiftsR, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsBurnedGuests(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstGiftsR, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsBurnedGuests(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1806,7 +1806,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptDepositRefunds(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptDepositRefund> lstRptDepRef)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptDepRef, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositRefunds(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptDepRef, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositRefunds(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1836,7 +1836,7 @@ namespace IM.ProcessorGeneral.Classes
       });
 
       lstDepPr = lstDepPr.OrderBy(c=>c.guPRInvit1).ThenBy(c => c.guID).ToList();
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstDepPr, true, false), filters, strReport, string.Empty, clsFormatReports.RptDepositByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1867,7 +1867,7 @@ namespace IM.ProcessorGeneral.Classes
 
       lstDepPrNoShow = lstDepPrNoShow.OrderBy(c => c.guPRInvit1).ThenBy(c => c.guID).ToList();
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsNoShow(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstDepPrNoShow, true, false), filters, strReport, string.Empty, clsFormatReport.RptDepositsNoShow(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -1891,7 +1891,7 @@ namespace IM.ProcessorGeneral.Classes
         c.PR1 = $"{c.PR1} {c.PR1N}";
       });
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters, strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptInOutPr, true), filters, strReport, string.Empty, clsFormatReport.RptInOutByPr(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1909,7 +1909,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptPersonnelAccess(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnelAccess> lstRptPersonnelAccess)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptPersonnelAccess, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnelAccess(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -1992,7 +1992,7 @@ namespace IM.ProcessorGeneral.Classes
         .ThenByDescending(c => c.TotalProcAmount).ToList();
 
 
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptSelfGen.Distinct().ToList(), true, false), filters, strReport, string.Empty, clsFormatReport.RptSelfGen(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptSelfGen.Distinct().ToList(), true, false), filters, strReport, string.Empty, clsFormatReport.RptSelfGen(), blnRowGrandTotal: true, blnShowSubtotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2014,7 +2014,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public async static Task<FileInfo> ExportRptAgencies(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAgencies> lstRptAgencies)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptAgencies, true), filters, strReport, string.Empty, clsFormatReport.RptAgencies(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptAgencies, true), filters, strReport, string.Empty, clsFormatReport.RptAgencies(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2032,7 +2032,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public async static Task<FileInfo> ExportRptPersonnel(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptPersonnel> lstRptPersonnel)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptPersonnel, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnel(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptPersonnel, true), filters, strReport, string.Empty, clsFormatReport.RptPersonnel(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2051,7 +2051,7 @@ namespace IM.ProcessorGeneral.Classes
     public async static Task<FileInfo> ExportRptGifts(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGifts> lstRptGifts)
     {
       
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGifts, true), filters, strReport, string.Empty, clsFormatReport.RptGifts(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGifts, true), filters, strReport, string.Empty, clsFormatReport.RptGifts(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2069,7 +2069,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptGiftsKardex(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGiftsKardex> lstRptGiftsKardex)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptGiftsKardex, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsKardex(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGiftsKardex, true), filters, strReport, string.Empty, clsFormatReport.RptGiftsKardex(), blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, isPivot: true);
     }
     #endregion
 
@@ -2088,7 +2088,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionByLeadSourceMarketMonthly(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByLeadSourceMarketMonthly> lstRptProdLsmMonthly)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProdLsmMonthly, true), filters, strReport, string.Empty, clsFormatReport.RptProductionByLeadSourceMarketMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProdLsmMonthly, true), filters, strReport, string.Empty, clsFormatReport.RptProductionByLeadSourceMarketMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2107,7 +2107,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptProductionReferral(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionReferral> lstRptProductionReferrals)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptProductionReferrals, true), filters, strReport, string.Empty, clsFormatReport.RptProductionReferral(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptProductionReferrals, true), filters, strReport, string.Empty, clsFormatReport.RptProductionReferral(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
     }
     #endregion
 
@@ -2126,7 +2126,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public async static Task<FileInfo> ExportRptReps(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<Rep> lstRptReps)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptReps, true), filters, strReport, string.Empty, clsFormatReport.RptReps(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptReps, true), filters, strReport, string.Empty, clsFormatReport.RptReps(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -2145,7 +2145,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static async Task<FileInfo> ExportRptSalesByProgramLeadSourceMarket(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptSalesByProgramLeadSourceMarket> lstRptSalesByProgramLeadSourceMarkets)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true), filters, strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptSalesByProgramLeadSourceMarkets, true), filters, strReport, string.Empty, clsFormatReport.RptSalesByProgramLeadSourceMarket(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
     }
     #endregion
 
@@ -2164,7 +2164,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public async static Task<FileInfo> ExportRptWarehouseMovements(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptWarehouseMovements> lstRptWarehouseMovements)
     {
-      return await ReportBuilder.CreateCustomExcel(TableHelper.GetDataTableFromList(lstRptWarehouseMovements), filters, strReport, string.Empty, clsFormatReport.RptWarehouseMovements(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptWarehouseMovements), filters, strReport, string.Empty, clsFormatReport.RptWarehouseMovements(), isRptQueue:true ,filePath:fileFullPath, addEnumeration: true);
       
     }
     #endregion

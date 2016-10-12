@@ -33,7 +33,7 @@ namespace IM.ProcessorSales.Classes
       List<Tuple<string, string>> filters, List<RptStatisticsByLocation> lstReport)
     {
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, false);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByLocation(), blnRowGrandTotal: true, isRptQueue:true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByLocation(), blnRowGrandTotal: true, isRptQueue:true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion
@@ -54,7 +54,7 @@ namespace IM.ProcessorSales.Classes
       List<Tuple<string, string>> filters, List<RptStatisticsBySalesRoomLocation> lstReport)
     {
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, false);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsBySalesRoomLocation(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath:fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsBySalesRoomLocation(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath:fileFullPath, addEnumeration: true);
     }
 
     #endregion
@@ -74,7 +74,7 @@ namespace IM.ProcessorSales.Classes
       List<Tuple<string, string>> filters, List<RptStatisticsByLocationMonthly> lstReport)
     {      
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, false);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByLocationMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByLocationMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion
@@ -99,7 +99,7 @@ namespace IM.ProcessorSales.Classes
             new { c.Location, c.Year, c.MonthN, c.Shows, c.Sales, c.SalesAmountTotal, c.SalesAmountCancel, c.SalesAmount, c.AverageSale, c.ClosingFactor, c.Efficiency })
           .ToList();
       var dtData = TableHelper.GetDataTableFromList(customList, true, false);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty,
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty,
         FormatReport.RptSalesByLocationMonthly(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
@@ -178,7 +178,7 @@ namespace IM.ProcessorSales.Classes
       };
       #endregion
 
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty,
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty,
         FormatReport.RptConcentrateDailySales(), true, extraFieldHeader: extraHeader, numRows: 3, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
@@ -264,7 +264,7 @@ namespace IM.ProcessorSales.Classes
 
       #endregion
 
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty,
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty,
         FormatReport.RptDailySales(), true, extraFieldHeader: extraHeader, numRows: 4, blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
@@ -286,7 +286,7 @@ namespace IM.ProcessorSales.Classes
       List<RptManifest> lstReport, DateTime dtStartm, DateTime dtEnd)
     {
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -344,7 +344,7 @@ namespace IM.ProcessorSales.Classes
         AVS = c.TTotal != 0 ? c.TSalesAmount / c.TTotal : 0
       }).ToList();
       var data = TableHelper.GetDataTableFromList(nlist, true, true);
-      return await ReportBuilder.CreateCustomExcel(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(),
+      return await ReportBuilder.CreateCustomExcelAsync(data, filters, report, string.Empty, FormatReport.RptFTMInOutHouse(),
         blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
@@ -399,7 +399,7 @@ namespace IM.ProcessorSales.Classes
       }
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsBySegmentsGroupedByTeams() : FormatReport.RptStatisticsBySegments(), true, true, true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsBySegmentsGroupedByTeams() : FormatReport.RptStatisticsBySegments(), true, true, true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion
 
@@ -420,7 +420,7 @@ namespace IM.ProcessorSales.Classes
     internal static async Task<FileInfo> RptStatisticsByCloser(string report, string fileFullPath, List<Tuple<string, string>> filters, List<RptStatisticsByCloser> lstReport, bool groupedByTeams)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(lstReport);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByCloser(groupedByTeams),
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByCloser(groupedByTeams),
         blnRowGrandTotal: true, blnShowSubtotal: groupedByTeams, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByCloser
@@ -481,7 +481,7 @@ namespace IM.ProcessorSales.Classes
       }
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstReportAux);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByExitCloserGroupedByTeams() : FormatReport.RptStatisticsByExitCloser(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, groupedByTeams ? FormatReport.RptStatisticsByExitCloserGroupedByTeams() : FormatReport.RptStatisticsByExitCloser(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
     #endregion RptStatisticsByExitCloser
 
@@ -523,7 +523,7 @@ namespace IM.ProcessorSales.Classes
         AVS = c.TSales != 0 ? c.TVol / c.TSales : 0
       }).ToList();
       var dtData = TableHelper.GetDataTableFromList(data, true, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptSelfGenAndSelfGenTeam(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
 
@@ -544,7 +544,7 @@ namespace IM.ProcessorSales.Classes
     {
       lstReport = lstReport.orderListBy("Team asc, SalesmanStatus asc,PostName asc,TSales desc,TClosingFactor desc,TEfficiency desc,TUPS desc,SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTB(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTB(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTB
 
@@ -565,7 +565,7 @@ namespace IM.ProcessorSales.Classes
     {
       lstReport = lstReport.orderListBy("Team asc, Locations asc, Total desc, ClosingFactor desc, Efficiency desc, UPS desc, SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByLocations(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByLocations(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTBByLocations
 
@@ -586,7 +586,7 @@ namespace IM.ProcessorSales.Classes
     {
       lstReport = lstReport.orderListBy("Team asc, Locations asc, Total desc, ClosingFactor desc, Efficiency desc, UPS desc, SalemanID desc");
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByCategories(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptStatisticsByFTBByCategories(groupedByTeams), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion RptStatisticsByFTB
 
@@ -623,7 +623,7 @@ namespace IM.ProcessorSales.Classes
         UIHelper.ShowMessage(str.ToString(), System.Windows.MessageBoxImage.Exclamation, "Front To Backs without Assistance");
       }
 
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, report, string.Empty, FormatReport.RptEfficiencyWeekly(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion
 

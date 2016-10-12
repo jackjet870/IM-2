@@ -41,6 +41,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadBanks();
+      dtgBanks.CurrentCellChanged += GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
 
@@ -132,14 +133,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Bank bank = (Bank)dgrBanks.SelectedItem;
+      Bank bank = (Bank)dtgBanks.SelectedItem;
       frmBankDetail frmBankDetail = new frmBankDetail();
       frmBankDetail.Owner = this;
       frmBankDetail.enumMode = EnumMode.Edit;
       frmBankDetail.oldBank = bank;
       if(frmBankDetail.ShowDialog()==true)
       {
-        List<Bank> lstBanks = (List<Bank>)dgrBanks.ItemsSource;
+        List<Bank> lstBanks = (List<Bank>)dtgBanks.ItemsSource;
         int nIndex = 0;
         if(ValidateFilter(frmBankDetail.bank))//Verificamos que cumpla con los filtros
         {
@@ -151,8 +152,8 @@ namespace IM.Administrator.Forms
         {
           lstBanks.Remove(bank);//Quitamos de la lista
         }
-        dgrBanks.Items.Refresh();//Actualizamos la vista
-        GridHelper.SelectRow(dgrBanks, nIndex);//Seleccionamos el registro
+        dtgBanks.Items.Refresh();//Actualizamos la vista
+        GridHelper.SelectRow(dtgBanks, nIndex);//Seleccionamos el registro
         StatusBarReg.Content = lstBanks.Count + " Banks.";//Actualizamos el contador
       }
     }
@@ -169,7 +170,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Bank bank = (Bank)dgrBanks.SelectedItem;
+      Bank bank = (Bank)dtgBanks.SelectedItem;
       LoadBanks(bank);
     }
     #endregion
@@ -192,12 +193,12 @@ namespace IM.Administrator.Forms
       {
         if(ValidateFilter(frmBankDetail.bank))//Validamos que cumpla con los filtros actuales
         {
-          List<Bank> lstBanks = (List<Bank>)dgrBanks.ItemsSource;
+          List<Bank> lstBanks = (List<Bank>)dtgBanks.ItemsSource;
           lstBanks.Add(frmBankDetail.bank);//Agregamos el registro a la lista
           lstBanks.Sort((x, y) => string.Compare(x.bkN, y.bkN));//Ordenamos la lista
           int nIndex = lstBanks.IndexOf(frmBankDetail.bank);//BUscamos la posicion del registro
-          dgrBanks.Items.Refresh();//Actualizamos la vista
-          GridHelper.SelectRow(dgrBanks, nIndex);//Seleccionamos el registro
+          dtgBanks.Items.Refresh();//Actualizamos la vista
+          GridHelper.SelectRow(dtgBanks, nIndex);//Seleccionamos el registro
           StatusBarReg.Content = lstBanks.Count + " Banks.";//Actualizamos el contador
         }
       }
@@ -249,13 +250,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Bank> lstBanks = await BRBanks.GetBanks(_nStatus, _bankFilter, true);
-        dgrBanks.ItemsSource = lstBanks;
+        dtgBanks.ItemsSource = lstBanks;
         if (lstBanks.Count > 0 && bank != null)
         {
           bank = lstBanks.Where(bk => bk.bkID == bank.bkID).FirstOrDefault();
           nIndex = lstBanks.IndexOf(bank);
         }
-        GridHelper.SelectRow(dgrBanks, nIndex);
+        GridHelper.SelectRow(dtgBanks, nIndex);
         StatusBarReg.Content = lstBanks.Count + " Banks.";
         status.Visibility = Visibility.Collapsed;
       }

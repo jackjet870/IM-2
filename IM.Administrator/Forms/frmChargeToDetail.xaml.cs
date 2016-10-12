@@ -143,60 +143,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
-
-    #region WindowKeyDown
-    /// <summary>
-    /// Cierra la ventana detalle con la tecla escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.Key == Key.Escape)
-      {
-        btnCancel_Click(null,null);
-      }
-    }
-    #endregion
-
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 29/03/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      btnCancel.Focus();
-      if(mode!=EnumMode.ReadOnly)
-      {
-        if (!ObjectHelper.IsEquals(chargeTo, oldChargeTo))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            if (!_isClosing) { _isClosing = true; Close(); }
-          }
-          else
-          {
-            _isClosing = false;
-          }
-        }
-        else
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
-    }
-    #endregion
-
+    
     #region Window_Closing
     /// <summary>
     /// Cierra la ventana
@@ -208,17 +155,20 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+      btnCancel.Focus();
       if (!_isClosing)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        if (mode != EnumMode.ReadOnly)
         {
-          e.Cancel = true;
-        }
-        else
-        {
-          _isClosing = false;
+          if (!ObjectHelper.IsEquals(chargeTo, oldChargeTo))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result == MessageBoxResult.No)
+            {
+              e.Cancel = true;
+              _isClosing = false;
+            }
+          }
         }
       }
     }

@@ -347,17 +347,8 @@
                             </StackPanel>
                             <Border BorderBrush="Black" BorderThickness="2"  Margin="7"  Style="{StaticResource brd-Catalogs}">
                                 <StackPanel Margin="5">
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                        <RadioButton x:Name="optsaLiner1Type1" GroupName="LinertType" Content="Liner" Margin="10,0,0,0"  
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC},  UpdateSourceTrigger=PropertyChanged, ConverterParameter= 0}"/>
-                                        <RadioButton x:Name="optsaLiner1Type2" GroupName="LinertType" Content="Front to Middle" Margin="15,0,15,0" 
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueC}, UpdateSourceTrigger=PropertyChanged,ConverterParameter=1}"/>
-                                        <RadioButton x:Name="optsaLiner1Type3" GroupName="LinertType" Content="Front to Back"
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC},  UpdateSourceTrigger=PropertyChanged, ConverterParameter=2}"/>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <TextBlock x:Name="lblsaLiner1" Text="Liner 1" Margin="0,0,3,0" />
-                                        <!--    <TextBox x:Name="txtsaLiner1" Tag="Liner 1" Text="{Binding saLiner1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" Width="100" LostFocus="txt_LostFocus"/>-->
                                         <ComboBox x:Name="cmbsaLiner1"  SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"  SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
                                          TextSearch.TextPath="peID"
                                                ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"

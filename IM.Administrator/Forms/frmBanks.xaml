@@ -44,7 +44,7 @@
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Banks-->
-        <DataGrid x:Name="dgrBanks" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dtgBanks" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True"
                  SelectionMode="Single" Focusable="True" CanUserResizeColumns="False" CanUserResizeRows="False"  >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">

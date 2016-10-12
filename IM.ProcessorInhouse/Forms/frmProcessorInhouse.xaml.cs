@@ -893,7 +893,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas, basedOnArrival: clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
             break;
 
           #endregion Production by Couple Type
@@ -907,7 +907,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByDeskInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByDeskInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByDeskInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByDeskInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByDeskInhouse>().ToList());
             break;
 
           #endregion Production by Desk
@@ -936,7 +936,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByGroupInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByGroupInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGroupInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByGroupInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGroupInhouse>().ToList());
             break;
 
           #endregion Production by Group
@@ -950,7 +950,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByGuestStatusInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByGuestStatusInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGuestStatusInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByGuestStatusInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGuestStatusInhouse>().ToList());
             break;
 
           #endregion Production by Guest Status
@@ -968,7 +968,7 @@ namespace IM.ProcessorInhouse.Forms
               clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets,
               clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies, clsFilter.EnumQuinellas));
             //, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByMemberTypeAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByMemberTypeAgencyInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByMemberTypeAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByMemberTypeAgencyInhouse>().ToList());
             break;
 
           #endregion Production by Member Type & Agency
@@ -989,7 +989,7 @@ namespace IM.ProcessorInhouse.Forms
                   clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies, clsFilter.EnumQuinellas));
             //, clsFilter.EnumBasedOnArrival));
             if (list.Any())
-              finfo = clsReports.ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
                 list.Cast<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>().ToList());
             break;
 
@@ -1006,7 +1006,7 @@ namespace IM.ProcessorInhouse.Forms
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas,
               filterSaveCourtesyTours: clsFilter.EnumSaveCourtesyTours, basedOnArrival: clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
             break;
 
           #endregion Production by Nationality
@@ -1023,7 +1023,7 @@ namespace IM.ProcessorInhouse.Forms
               clsFilter.DtmEnd, clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas,
               filterSaveCourtesyTours: clsFilter.EnumSaveCourtesyTours, basedOnArrival: clsFilter.EnumBasedOnArrival));
             if (list.Any())
-              finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
                 list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
             break;
 
@@ -1039,7 +1039,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
               clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival, clsFilter.EnumBasedOnPRLocation));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByPRInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByPRInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByPRInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByPRInhouse>().ToList());
             break;
 
           #endregion Production by PR
@@ -1201,7 +1201,7 @@ namespace IM.ProcessorInhouse.Forms
               await
                 BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, new[] { GetSettings.StrAll },
                   clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
             break;
 
           #endregion Production by Couple Type
@@ -1215,7 +1215,7 @@ namespace IM.ProcessorInhouse.Forms
 
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, new[] { GetSettings.StrAll },
               clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumSaveCourtesyTours, clsFilter.EnumBasedOnArrival));
-            if (list.Any()) finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
+            if (list.Any()) finfo = await clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
             break;
 
           #endregion Production by Nationality
@@ -1230,7 +1230,7 @@ namespace IM.ProcessorInhouse.Forms
             list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
               new[] { GetSettings.StrAll }, clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumSaveCourtesyTours, clsFilter.EnumBasedOnArrival));
             if (list.Any())
-              finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              finfo = await clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
                 list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
             break;
 

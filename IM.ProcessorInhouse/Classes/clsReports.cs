@@ -30,7 +30,7 @@ namespace IM.ProcessorInhouse.Classes
     internal async static Task<FileInfo> ExportRptCostByPR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrs, replaceStringNullOrWhiteSpace: true);
-      return  await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return  await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
       
     }
 
@@ -63,7 +63,7 @@ namespace IM.ProcessorInhouse.Classes
         AverageCost = c.Shows == 0 ? 0 : c.TotalCost / c.Shows
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPRWithDetailGiftsAux, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath);
     }
 
     #endregion ExportRptCostByPRWithDetailGifts
@@ -84,7 +84,7 @@ namespace IM.ProcessorInhouse.Classes
     internal static async Task<FileInfo> ExportRptFollowUpByAgencies(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptFollowUpByAgency> listRptFollowUpByAgencies)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByAgencies, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptFollowUpByAgencyFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptFollowUpByAgencyFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptFollowUpByAgencies
@@ -105,7 +105,7 @@ namespace IM.ProcessorInhouse.Classes
     internal static async Task<FileInfo> ExportRptFollowUpByPRs(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptFollowUpByPR> listRptFollowUpByPR)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByPR, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptFollowUpByPRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptFollowUpByPRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptFollowUpByPRs
@@ -127,7 +127,7 @@ namespace IM.ProcessorInhouse.Classes
       List<RptProductionByAgeInhouse> listRptProductionByAgeInhouses)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgeInhouses, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByAgeInhouseFormat(), blnRowGrandTotal:true, isRptQueue: true, filePath: fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByAgeInhouseFormat(), blnRowGrandTotal:true, isRptQueue: true, filePath: fileFullPath);
     }
 
     #endregion ExportProductionByAgeInhouses
@@ -149,7 +149,7 @@ namespace IM.ProcessorInhouse.Classes
       List<RptProductionByAgeMarketOriginallyAvailableInhouse> listProductionByAgeMarketOriginallyAvailableInhouses)
     {
       DataTable dtData = TableHelper.GetDataTableFromList(listProductionByAgeMarketOriginallyAvailableInhouses, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportProductionByAgeMarketOriginallyAvailableInhouses
@@ -174,7 +174,7 @@ namespace IM.ProcessorInhouse.Classes
         c.AgencyN = $"{c.Agency} {c.AgencyN}";
       });
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhouses, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByContractAgencyInhouses
@@ -199,7 +199,7 @@ namespace IM.ProcessorInhouse.Classes
         c.AgencyN = $"{c.Agency} {c.AgencyN}";
       });
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyMarketOriginallyAvailableInhouses, replaceStringNullOrWhiteSpace: true);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses
@@ -217,28 +217,10 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByCoupleTypeInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByCoupleTypeInhouse> listRptProductionByCoupleTypeInhouses)
+    internal static async Task<FileInfo> ExportRptProductionByCoupleTypeInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByCoupleTypeInhouse> listRptProductionByCoupleTypeInhouses)
     {
-      var listRptProductionByCoupleTypeInhousesAux = listRptProductionByCoupleTypeInhouses.Select(c => new
-      {
-        c.CoupleType,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByCoupleTypeInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByCoupleTypeInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByCoupleTypeInhouses
@@ -256,29 +238,12 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByNationalityInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByNationalityInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByNationalityInhouse> listRptProductionByNationalityInhouses)
     {
-      var listRptProductionByNationalityInhousesAux = listRptProductionByNationalityInhouses.Select(c => new
-      {
-        c.Nationality,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
+
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByNationalityInhouses
@@ -296,31 +261,11 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
+    internal static async Task<FileInfo> ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
       List<Tuple<string, string>> filters, List<RptProductionByNationalityMarketOriginallyAvailableInhouse> listRptProductionByNationalityMarketOriginallyAvailableInhouses)
     {
-      var listRptProductionByNationalityMarketOriginallyAvailableInhousesAux = listRptProductionByNationalityMarketOriginallyAvailableInhouses.Select(c => new
-      {
-        c.OriginallyAvailable,
-        c.Market,
-        c.Nationality,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityMarketOriginallyAvailableInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByNationalityMarketOriginallyAvailableInhouses
@@ -338,28 +283,11 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByDeskInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByDeskInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByDeskInhouse> listRptProductionByDeskInhouses)
     {
-      var listRptProductionByDeskInhousesAux = listRptProductionByDeskInhouses.Select(c => new
-      {
-        c.Desk,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByDeskInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByDeskInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByDeskInhouses
@@ -417,31 +345,12 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByGroupInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByGroupInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByGroupInhouse> listRptProductionByGroupInhouses)
     {
-      var listRptProductionByGroupInhousesAux = listRptProductionByGroupInhouses.Select(c => new
-      {
-        c.Groups,
-        c.Integrants,
-        c.TotalIntegrants,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGroupInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGroupInhouseFormat(), true, isRptQueue:true ,filePath:fileFullPath);
+
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGroupInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByGroupInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByGroupInhouses
@@ -503,30 +412,11 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByGuestStatusInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByGuestStatusInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByGuestStatusInhouse> listRptProductionByGuestStatusInhouses)
     {
-      var listRptProductionByGuestStatusInhousesAux = listRptProductionByGuestStatusInhouses.Select(c => new
-      {
-        c.GuestStatus,
-        c.LeadSource,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGuestStatusInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGuestStatusInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByGuestStatusInhouses
@@ -544,30 +434,15 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMemberTypeAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByMemberTypeAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByMemberTypeAgencyInhouse> listRptProductionByMemberTypeAgencyInhouses)
     {
-      var listRptProductionByMemberTypeAgencyInhousesAux = listRptProductionByMemberTypeAgencyInhouses.Select(c => new
+      listRptProductionByMemberTypeAgencyInhouses.ForEach(c =>
       {
-        Agency = c.Agency + "  " + c.AgencyN,
-        c.MemberType,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
+        c.AgencyN = $"{c.Agency} {c.AgencyN}";
+      });
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyInhouses
@@ -585,32 +460,16 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
+    internal static async Task<FileInfo> ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
       List<Tuple<string, string>> filters, List<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse> listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses)
-    {
-      var listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhousesAux = listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses.Select(c => new
+    {      
+      listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses.ForEach(c =>
       {
-        c.OriginallyAvailable,
-        c.Market,
-        Agency = c.Agency + "  " + c.AgencyN,
-        c.MemberType,
-        c.Arrivals,
-        c.Contacts,
-        c.Availables,
-        c.GrossBooks,
-        c.Directs,
-        TBooks = c.Books,
-        c.GrossShows,
-        TShows = c.Shows,
-        c.Sales_TOTAL,
-        c.SalesAmount_TOTAL,
-        c.Sales_PR,
-        c.SalesAmount_PR,
-        c.Sales_SELFGEN,
-        c.SalesAmount_SELFGEN
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
+        c.AgencyN = $"{c.Agency} {c.AgencyN}";
+      });
+
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses
@@ -628,38 +487,11 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByPRInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
+    internal static async Task<FileInfo> ExportRptProductionByPRInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByPRInhouse> listRptProductionByPRInhouses)
     {
-      var listRptProductionByPRInhousesAux = listRptProductionByPRInhouses.Select(c => new
-      {
-        c.Status,
-        c.PRID,
-        c.PRN,
-        c.Assigns,
-        c.Contacts,
-        c.Availables,
-        c.BooksNoDirects,
-        c.Directs,
-        TBooks = c.Books,
-        c.ShowsNoDirects,
-        c.Shows,
-        c.InOuts,
-        c.WalkOuts,
-        c.Tours,
-        c.CourtesyTours,
-        c.SaveTours,
-        c.TotalTours,
-        c.UPS,
-        c.Sales_PROC,
-        c.SalesAmount_PROC,
-        c.Sales_PEND,
-        c.SalesAmount_PEND,
-        c.Sales_OOP,
-        c.SalesAmount_OOP
-      }).ToList();
-      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRInhouseFormat(), true, showRowHeaders: true, isRptQueue:true ,filePath:fileFullPath);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRInhouses, replaceStringNullOrWhiteSpace: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptProductionByPRInhouseFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByPRInhouses
@@ -777,7 +609,7 @@ namespace IM.ProcessorInhouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentSummariesAux, replaceStringNullOrWhiteSpace: true);
 
 
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true, blnRowGrandTotal: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), isRptQueue: true, filePath: fileFullPath, addEnumeration: true, blnRowGrandTotal: true);
     }
 
     #endregion ExportRptRepsPaymentSummaries
@@ -835,7 +667,7 @@ namespace IM.ProcessorInhouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptGiftsReceivedBySR
@@ -1217,7 +1049,7 @@ namespace IM.ProcessorInhouse.Classes
         }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(productionByAgencyInhouses);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), blnShowSubtotal: true, blnRowGrandTotal: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportProductionByAgencyInhouses
@@ -1290,7 +1122,7 @@ namespace IM.ProcessorInhouse.Classes
                           }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(scoreByPRAux);
-      return await ReportBuilder.CreateCustomExcel(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, isPivot: true, addEnumeration: true);
     }
 
     #endregion ExportRptScoreByPrs

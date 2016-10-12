@@ -29,6 +29,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataErrorInfo.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDateTimePicker-TK.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTimePicker-TK.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -73,54 +74,54 @@
                     <TextBlock Text="Option Menu" Margin="10,0,0,0" />
 
                     <StackPanel Orientation="Horizontal" Height="40">
-                        <Border x:Name="imgButtonEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonEdit_MouseLeftButtonDown">
+                        <Button x:Name="btnEdit" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnEdit_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png" />
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png" />
                                 </Viewbox>
                                 <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
-                        <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
+                        </Button>
+                        <Button x:Name="btnPrint" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnPrint_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png" />
                                 </Viewbox>
                                 <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
-                        <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
+                        </Button>
+                        <Button x:Name="btnSave" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnSave_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png" />
                                 </Viewbox>
                                 <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
-                        <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonCancel_MouseLeftButtonDown">
+                        </Button>
+                        <Button x:Name="btnCancel" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnCancel_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png" />
                                 </Viewbox>
                                 <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
-                        <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonLog_MouseLeftButtonDown">
+                        </Button>
+                        <Button x:Name="btnLog" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnLog_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png" />
                                 </Viewbox>
                                 <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
-                        <Border x:Name="imgButtonReLogin" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonReLogin_MouseLeftButtonDown">
+                        </Button>
+                        <Button x:Name="btnReLogin" Margin="5,0,0,0" Width="64" Height="32"  Click="BtnReLogin_OnClick" Style="{StaticResource ButtonBig}">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image Source="pack://application:,,,/IM.Styles;component/Images/BKey.png" />
                                 </Viewbox>
                                 <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                             </StackPanel>
-                        </Border>
+                        </Button>
                         <StackPanel Margin="2">
 
                             <TextBlock Name="txbMode" Text="{Binding InvitationInfo}" VerticalAlignment="Center" FontSize="14" Foreground="#147F79" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
@@ -170,14 +171,14 @@
                                                         <TextBlock Text="Rsrv. Num." TextAlignment="Center"/>
                                                         <TextBox Name="txtguHReservID" Width="100" Text="{Binding Guest.guHReservID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
-                                                    <Border x:Name="brdSearchButton" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0" MouseLeftButtonDown="brdSearchButton_MouseLeftButtonDown">
+                                                    <Button x:Name="btnSearchButton" Width="75" Height="25" VerticalAlignment="Center" Margin="3,0" Click="BtnSearchButton_OnClick" Style="{StaticResource ButtonBig}">
                                                         <StackPanel Orientation="Horizontal">
                                                             <Viewbox Stretch="Uniform" Width="20">
                                                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" />
                                                             </Viewbox>
                                                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                                                         </StackPanel>
-                                                    </Border>
+                                                    </Button>
                                                     <StackPanel Name="stkOutInvitation" VerticalAlignment="Center">
                                                         <TextBlock Text="Out Invit." TextAlignment="Center"/>
                                                         <TextBox Name="txtguOutInvitNum" Width="100" Text="{Binding Guest.guOutInvitNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -355,9 +356,9 @@
                                             </Grid.RowDefinitions>
 
                                             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0">
-                                                <Button Name="btnChange" Content="Change" Width="100" Click="btnChange_Click"/>
-                                                <Button Name="btnReschedule" Content="Reschedule" Width="100" Margin="5,0" Click="btnReschedule_Click"/>
-                                                <Button Name="btnRebook" Content="Rebook" Width="100" Click="btnRebook_Click"/>
+                                                <Button Name="btnChange" Content="Change" Style="{StaticResource ButtonBig}" Width="100" Click="btnChange_Click"/>
+                                                <Button Name="btnReschedule" Content="Reschedule" Style="{StaticResource ButtonBig}" Width="100" Margin="5,0" Click="btnReschedule_Click"/>
+                                                <Button Name="btnRebook" Content="Rebook" Style="{StaticResource ButtonBig}" Width="100" Click="btnRebook_Click"/>
                                             </StackPanel>
 
                                             <StackPanel Name="stkPRContactAndPR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Margin="0,5,10,10">
@@ -689,7 +690,7 @@
                                                                             SelectedValueBinding="{Binding bdcu,UpdateSourceTrigger=PropertyChanged}"
                                                                             DisplayMemberPath="cuN"
                                                                             SelectedValuePath="cuID"
-                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" >               
+                                                                            ItemsSource="{Binding Source={StaticResource currencyList}}" >
                                                         </DataGridComboBoxColumn>
                                                         <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposits"  Header="Payment Type" Width="90"
                                                                             SelectedValueBinding="{Binding bdpt,UpdateSourceTrigger=PropertyChanged}"
@@ -795,16 +796,20 @@
                                     <StackPanel>
                                         <TextBlock Text="Additional Guest" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Button x:Name="btnSearchGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="btnSearchGuestAdditional_Click">
+                                            <Button x:Name="btnSearchGuestAdditional"   Margin="5 5" Style="{StaticResource ButtonBig}" Width="80" Height="25" Click="btnSearchGuestAdditional_Click">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" Width="15" Height="15" HorizontalAlignment="Left" />
-                                                    <TextBlock Text="Search" HorizontalAlignment="Right" />
+                                                    <Viewbox Stretch="Uniform" Width="20">
+                                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" />
+                                                    </Viewbox>
+                                                    <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                                                 </StackPanel>
                                             </Button>
-                                            <Button x:Name="btnAddGuestAdditional" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Width="80" Click="BtnAddGuestAdditional_OnClick">
+                                            <Button x:Name="btnAddGuestAdditional"  Margin="5 5" Style="{StaticResource ButtonBig}" Width="80" Height="25" Click="BtnAddGuestAdditional_OnClick">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png" Width="15" Height="15" HorizontalAlignment="Left" />
-                                                    <TextBlock Text="Add" HorizontalAlignment="Right" />
+                                                    <Viewbox Stretch="Uniform" Width="20">
+                                                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png"/>
+                                                    </Viewbox>
+                                                    <TextBlock Text="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"  />
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
@@ -878,7 +883,7 @@
                 <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-                        <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                        <TextBlock x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />

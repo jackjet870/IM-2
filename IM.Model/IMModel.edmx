@@ -747,7 +747,7 @@
           <Property Name="gumoA" Type="bit" Nullable="false" />
           <Property Name="guComments" Type="nvarchar" MaxLength="100" />
           <Property Name="guQuinella" Type="bit" Nullable="false" />
-          <Property Name="guOutInvitNum" Type="varchar" MaxLength="8" />
+          <Property Name="guOutInvitNum" Type="varchar" MaxLength="15" />
           <Property Name="guCity" Type="varchar" MaxLength="40" />
           <Property Name="guState" Type="varchar" MaxLength="40" />
           <Property Name="guInvitD" Type="datetime" />
@@ -9339,7 +9339,7 @@
           </Key>
           <Property Name="arID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="arN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="arA" Type="Boolean" Nullable="false" />
+          <Property Name="arA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="arrg" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Region" Relationship="Self.FK_Areas_Regions" FromRole="Areas" ToRole="Regions" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Hotels" Relationship="Self.FK_Hotels_Areas" FromRole="Areas" ToRole="Hotels" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -9376,7 +9376,7 @@
           </Key>
           <Property Name="atID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="atN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="atA" Type="Boolean" Nullable="false" />
+          <Property Name="atA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="Bank">
           <Key>
@@ -9384,7 +9384,7 @@
           </Key>
           <Property Name="bkID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="bkN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="bkA" Type="Boolean" Nullable="false" />
+          <Property Name="bkA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="GiftsReceiptsPayments" Relationship="Self.FK_GiftsReceiptsPayments_Banks" FromRole="Banks" ToRole="GiftsReceiptsPayments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRooms" Relationship="Self.BanksBySalesRooms" FromRole="Banks" ToRole="SalesRooms" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -9446,7 +9446,7 @@
           </Key>
           <Property Name="clID" Type="Int32" Nullable="false" />
           <Property Name="clN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="clA" Type="Boolean" Nullable="false" />
+          <Property Name="clA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_Clubs" FromRole="Clubs" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_Clubs" FromRole="Clubs" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Wholesalers" Relationship="Self.FK_Wholesalers_Clubs" FromRole="Clubs" ToRole="Wholesalers" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -9469,7 +9469,7 @@
           </Key>
           <Property Name="cnID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="cnN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="cnA" Type="Boolean" Nullable="false" />
+          <Property Name="cnA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="cnMinDaysTours" Type="Int32" Nullable="false" />
           <Property Name="cnum" Type="Byte" Nullable="false" />
           <NavigationProperty Name="UnavailableMotive" Relationship="Self.FK_Contracts_UnavailMots" FromRole="Contracts" ToRole="UnavailMots" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -9481,7 +9481,7 @@
           <Property Name="coID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="coum" Type="Byte" Nullable="false" />
           <Property Name="cola" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="coA" Type="Boolean" Nullable="false" />
+          <Property Name="coA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="coNationality" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="coList" Type="Boolean" Nullable="false" />
           <Property Name="coN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
@@ -9496,7 +9496,7 @@
           </Key>
           <Property Name="ccID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ccN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ccA" Type="Boolean" Nullable="false" />
+          <Property Name="ccA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="ccIsCreditCard" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="BookingDeposits" Relationship="Self.fk_bookingdeposit_credittype" FromRole="CreditCardTypes" ToRole="BookingDeposits" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -9506,7 +9506,7 @@
           </Key>
           <Property Name="cuID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="cuN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="cuA" Type="Boolean" Nullable="false" />
+          <Property Name="cuA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="ExchangeRateLogs" Relationship="Self.FK_ExchangeRateLog_Currencies" FromRole="Currencies" ToRole="ExchangeRateLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceipts_CxC" Relationship="Self.FK_GiftsReceipts_Currencies_CxCDeposit" FromRole="Currencies" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_Currencies_Deposit" FromRole="Currencies" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -9574,7 +9574,7 @@
           </Key>
           <Property Name="deID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="deN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="deA" Type="Boolean" Nullable="false" />
+          <Property Name="deA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Personnels" Relationship="Self.FK_Personnel_Depts" FromRole="Depts" ToRole="Personnel" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Internal" />
         </EntityType>
         <EntityType Name="Desk">
@@ -9583,7 +9583,7 @@
           </Key>
           <Property Name="dkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="dkN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="dkA" Type="Boolean" Nullable="false" />
+          <Property Name="dkA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Computers" Relationship="Self.FK_Computers_Desks" FromRole="Desks" ToRole="Computers" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Efficiency">
@@ -9607,7 +9607,7 @@
           </Key>
           <Property Name="etID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="etN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="etA" Type="Boolean" Nullable="false" />
+          <Property Name="etA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.FK_Efficiency_EfficiencyTypes" FromRole="EfficiencyTypes" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="ExchangeRate">
@@ -9640,7 +9640,7 @@
           <Property Name="fiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fiFrom" Type="Int32" Nullable="false" />
           <Property Name="fiTo" Type="Int32" Nullable="false" />
-          <Property Name="fiA" Type="Boolean" Nullable="false" />
+          <Property Name="fiA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="FolioCxCCancellation">
           <Key>
@@ -9672,7 +9672,7 @@
           <Property Name="fiSerie" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="fiFrom" Type="Int32" Nullable="false" />
           <Property Name="fiTo" Type="Int32" Nullable="false" />
-          <Property Name="fiA" Type="Boolean" Nullable="false" />
+          <Property Name="fiA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="FolioInvitationOuthousePR">
           <Key>
@@ -9712,7 +9712,7 @@
           <Property Name="giPack" Type="Boolean" Nullable="false" />
           <Property Name="gigc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="ITEMS" />
           <Property Name="giInven" Type="Boolean" Nullable="false" DefaultValue="True" />
-          <Property Name="giA" Type="Boolean" Nullable="false" />
+          <Property Name="giA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="giWFolio" Type="Boolean" Nullable="false" />
           <Property Name="giWPax" Type="Boolean" Nullable="false" />
           <Property Name="giO" Type="Int32" Nullable="false" DefaultValue="10000" />
@@ -9755,7 +9755,7 @@
           </Key>
           <Property Name="gcID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="gcN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="gcA" Type="Boolean" Nullable="false" />
+          <Property Name="gcA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="GiftInventory">
           <Key>
@@ -10164,7 +10164,7 @@
           <Property Name="gumoA" Type="Boolean" Nullable="false" />
           <Property Name="guComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="guQuinella" Type="Boolean" Nullable="false" />
-          <Property Name="guOutInvitNum" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="guOutInvitNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="guCity" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guState" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guInvitD" Type="DateTime" Precision="3" />
@@ -10480,7 +10480,7 @@
           </Key>
           <Property Name="gsID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="gsN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="gsA" Type="Boolean" Nullable="false" />
+          <Property Name="gsA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="gsAgeStart" Type="Byte" Nullable="false" />
           <Property Name="gsAgeEnd" Type="Byte" Nullable="false" />
           <Property Name="gsMaxAuthGifts" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
@@ -10493,7 +10493,7 @@
           </Key>
           <Property Name="hgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="hgN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="hgA" Type="Boolean" Nullable="false" />
+          <Property Name="hgA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Hotels" Relationship="Self.FK_Hotels_HotelGroups" FromRole="HotelGroups" ToRole="Hotels" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Hotel">
@@ -10503,7 +10503,7 @@
           <Property Name="hoID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="hoGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="hoar" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="hoA" Type="Boolean" Nullable="false" />
+          <Property Name="hoA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Area" Relationship="Self.FK_Hotels_Areas" FromRole="Hotels" ToRole="Areas" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="HotelGroup" Relationship="Self.FK_Hotels_HotelGroups" FromRole="Hotels" ToRole="HotelGroups" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_Hotels" FromRole="Hotels" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -10554,7 +10554,7 @@
           </Key>
           <Property Name="laID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="laN" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="laA" Type="Boolean" Nullable="false" />
+          <Property Name="laA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="laMrMrs" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
           <Property Name="laRoom" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
           <Property Name="laMember" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
@@ -10601,7 +10601,7 @@
           <Property Name="lsBookFactorTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="55" />
           <Property Name="lsShowsTh" Type="Int32" Nullable="false" DefaultValue="10" />
           <Property Name="lsDBMaint" Type="Boolean" Nullable="false" />
-          <Property Name="lsA" Type="Boolean" Nullable="false" />
+          <Property Name="lsA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="lsStartD" Type="DateTime" Precision="3" />
           <Property Name="lsFTPServer" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="lsFTPPath" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
@@ -10654,7 +10654,7 @@
           <Property Name="loN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lols" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="losr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="loA" Type="Boolean" Nullable="false" />
+          <Property Name="loA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="loPRCaptain" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="loRegen" Type="Boolean" Nullable="false" />
           <Property Name="loAnimacion" Type="Boolean" Nullable="false" />
@@ -10673,7 +10673,7 @@
           </Key>
           <Property Name="lcID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lcN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lcA" Type="Boolean" Nullable="false" />
+          <Property Name="lcA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="LoginLog">
           <Key>
@@ -10737,7 +10737,7 @@
           </Key>
           <Property Name="mkID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mkN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mkA" Type="Boolean" Nullable="false" />
+          <Property Name="mkA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_Markets" FromRole="Markets" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="MealTicketFolio" Abstract="false">
@@ -10804,7 +10804,7 @@
           </Key>
           <Property Name="mgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mgN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mgA" Type="Boolean" Nullable="false" />
+          <Property Name="mgA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="MembershipTypes" Relationship="Self.FK_MembershipTypes_MembershipGroups" FromRole="MembershipGroups" ToRole="MembershipTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="MembershipType">
@@ -10814,7 +10814,7 @@
           <Property Name="mtID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mtN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mtGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mtA" Type="Boolean" Nullable="false" />
+          <Property Name="mtA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="mtLevel" Type="Byte" />
           <Property Name="mtFrom" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="mtTo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
@@ -10829,7 +10829,7 @@
           </Key>
           <Property Name="msID" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="msN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="msA" Type="Boolean" Nullable="false" />
+          <Property Name="msA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="NotBookingMotive">
           <Key>
@@ -10837,7 +10837,7 @@
           </Key>
           <Property Name="nbID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nbN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="nbA" Type="Boolean" Nullable="false" />
+          <Property Name="nbA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_NotBookingMotives" FromRole="NotBookingMotives" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Notice">
@@ -10846,7 +10846,7 @@
           </Key>
           <Property Name="noID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="noTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="noA" Type="Boolean" Nullable="false" />
+          <Property Name="noA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="noText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="noStartD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="noEndD" Type="DateTime" Nullable="false" Precision="3" />
@@ -10890,7 +10890,7 @@
           </Key>
           <Property Name="pcID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pcN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="pcA" Type="Boolean" Nullable="false" />
+          <Property Name="pcA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="BookingDeposits" Relationship="Self.FK_BookingDeposits_PaymentPlaces" FromRole="PaymentPlaces" ToRole="BookingDeposits" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Payment">
@@ -10912,7 +10912,7 @@
           <Property Name="pasCoupleFrom" Type="Int32" Nullable="false" />
           <Property Name="pasCoupleTo" Type="Int32" Nullable="false" />
           <Property Name="pasShowFactor" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="pasA" Type="Boolean" Nullable="false" />
+          <Property Name="pasA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="PaymentType">
           <Key>
@@ -10920,7 +10920,7 @@
           </Key>
           <Property Name="ptID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ptN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ptA" Type="Boolean" Nullable="false" />
+          <Property Name="ptA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="BookingDeposits" Relationship="Self.FK_BookingDeposits_PaymentTypes" FromRole="PaymentTypes" ToRole="BookingDeposits" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_PaymentTypes" FromRole="PaymentTypes" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceiptsLogs" Relationship="Self.FK_GiftsReceiptsLog_PaymentTypes" FromRole="PaymentTypes" ToRole="GiftsReceiptsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -10933,7 +10933,7 @@
           </Key>
           <Property Name="pdID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pdN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="pdA" Type="Boolean" Nullable="false" />
+          <Property Name="pdA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.FK_Efficiency_Periods" FromRole="Periods" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Goals" Relationship="Self.FK_Goals_Periods" FromRole="Periods" ToRole="Goals" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -10943,7 +10943,7 @@
           </Key>
           <Property Name="pmID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pmN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="pmA" Type="Boolean" Nullable="false" />
+          <Property Name="pmA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="pmToolTipText" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PersonnelPermissions" Relationship="Self.FK_PersonnelPermissions_Permissions" FromRole="Permissions" ToRole="PersonnelPermissions" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -10953,7 +10953,7 @@
           </Key>
           <Property Name="plID" Type="Int32" Nullable="false" />
           <Property Name="plN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="plA" Type="Boolean" Nullable="false" />
+          <Property Name="plA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="PersonnelPermissions" Relationship="Self.FK_PersonnelPermissions_PermissionsLevels" FromRole="PermissionsLevels" ToRole="PersonnelPermissions" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="PersonnelAccess">
@@ -10976,7 +10976,7 @@
           <Property Name="peN" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="pePwd" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="peCaptain" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="peA" Type="Boolean" Nullable="false" />
+          <Property Name="peA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="peps" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pePwdD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="pePwdDays" Type="Int32" Nullable="false" />
@@ -11157,7 +11157,7 @@
           </Key>
           <Property Name="pyID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pyN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="pyA" Type="Boolean" Nullable="false" />
+          <Property Name="pyA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Goals" Relationship="Self.FK_Goals_PlaceTypes" FromRole="PlaceTypes" ToRole="Goals" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PersonnelAccess" Relationship="Self.FK_PersLSSR_PlaceTypes" FromRole="PlaceTypes" ToRole="PersLSSR" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11167,7 +11167,7 @@
           </Key>
           <Property Name="poID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="poN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="poA" Type="Boolean" Nullable="false" />
+          <Property Name="poA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="PostsLogs" Relationship="Self.FK_PostsLog_Posts" FromRole="Posts" ToRole="PostsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="PostLog">
@@ -11201,7 +11201,7 @@
           </Key>
           <Property Name="prID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="prN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="prA" Type="Boolean" Nullable="false" />
+          <Property Name="prA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Gifts" Relationship="Self.FK_Gifts_Products" FromRole="Products" ToRole="Gifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ProductsLegends" Relationship="Self.FK_ProductsLegends_Products" FromRole="Products" ToRole="ProductsLegends" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11230,7 +11230,7 @@
           </Key>
           <Property Name="raID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="raN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="raA" Type="Boolean" Nullable="false" />
+          <Property Name="raA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="MealTicketFolios" Relationship="Self.FK_MealTicketFolios_RateTypes" FromRole="RateTypes" ToRole="MealTicketFolios" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="MealTickets" Relationship="Self.FK_MealTickets_RateTypes" FromRole="RateTypes" ToRole="MealTickets" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11240,7 +11240,7 @@
           </Key>
           <Property Name="rcfID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="rcfN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rcfA" Type="Boolean" Nullable="false" />
+          <Property Name="rcfA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="FoliosCxCCancellations" Relationship="Self.FK_FolioCxCCancellation_ReasonCancellationFolios" FromRole="ReasonCancellationFolios" ToRole="FolioCxCCancellation" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="FoliosInvitationsOuthouseByPRCancellations" Relationship="Self.fk_FolioCnxReason" FromRole="ReasonCancellationFolios" ToRole="FolioInvitationsOutsidePRCancellation" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11250,7 +11250,7 @@
           </Key>
           <Property Name="rfID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="rfN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="rfA" Type="Boolean" />
+          <Property Name="rfA" Type="Boolean" DefaultValue="True" />
           <NavigationProperty Name="DepositsRefunds" Relationship="Self.fk_drrf" FromRole="RefundTypes" ToRole="DepositsRefund" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="RefundTypeFolios" Relationship="IMModel.FK_RefundTypeFolios_RefundTypes" FromRole="RefundType" ToRole="RefundTypeFolio" />
         </EntityType>
@@ -11260,7 +11260,7 @@
           </Key>
           <Property Name="rgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="rgN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rgA" Type="Boolean" Nullable="false" />
+          <Property Name="rgA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Areas" Relationship="Self.FK_Areas_Regions" FromRole="Regions" ToRole="Areas" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_Regions" FromRole="Regions" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11270,7 +11270,7 @@
           </Key>
           <Property Name="rmID" Type="Byte" Nullable="false" />
           <Property Name="rmN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rmA" Type="Boolean" Nullable="false" />
+          <Property Name="rmA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_ReimpresionMotives" FromRole="ReimpresionMotives" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceiptsLogs" Relationship="Self.FK_GiftsReceiptsLog_ReimpresionMotives" FromRole="ReimpresionMotives" ToRole="GiftsReceiptsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GuestLogs" Relationship="Self.FK_GuestLog_ReimpresionMotives" FromRole="ReimpresionMotives" ToRole="GuestLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11295,7 +11295,7 @@
             <PropertyRef Name="rpID" />
           </Key>
           <Property Name="rpID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rpA" Type="Boolean" Nullable="false" />
+          <Property Name="rpA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_Reps" FromRole="Reps" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Role">
@@ -11304,7 +11304,7 @@
           </Key>
           <Property Name="roID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="roN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="roA" Type="Boolean" Nullable="false" />
+          <Property Name="roA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="roToolTipText" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SalesmenChanges" Relationship="Self.FK_SalesmenChanges_Roles" FromRole="Roles" ToRole="SalesmenChanges" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnels" Relationship="Self.PersonnelRoles" FromRole="Roles" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11325,7 +11325,7 @@
           </Key>
           <Property Name="rtID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="rtN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rtA" Type="Boolean" Nullable="false" />
+          <Property Name="rtA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_RoomTypes" FromRole="RoomTypes" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Sale">
@@ -11449,7 +11449,7 @@
           <Property Name="snN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="snFrom" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="snTo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="snA" Type="Boolean" Nullable="false" />
+          <Property Name="snA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="SaleLog">
           <Key>
@@ -11624,7 +11624,7 @@
           <Property Name="stID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="stN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="stUpdate" Type="Boolean" Nullable="false" />
-          <Property Name="stA" Type="Boolean" Nullable="false" />
+          <Property Name="stA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="ststc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_SaleTypes" FromRole="SaleTypes" ToRole="Sales" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesLogs" Relationship="Self.FK_SalesLog_SaleTypes" FromRole="SaleTypes" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11636,7 +11636,7 @@
           </Key>
           <Property Name="stcID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="stcN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="stcA" Type="Boolean" Nullable="false" />
+          <Property Name="stcA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="SaleTypes" Relationship="Self.FK_SaleTypes_SaleTypesCategories" FromRole="SaleTypesCategories" ToRole="SaleTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="ScoreRule">
@@ -11645,7 +11645,7 @@
           </Key>
           <Property Name="suID" Type="Byte" Nullable="false" />
           <Property Name="suN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="suA" Type="Boolean" Nullable="false" />
+          <Property Name="suA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="ScoreRulesDetails" Relationship="Self.FK_ScoreRulesDetail_ScoreRules" FromRole="ScoreRules" ToRole="ScoreRulesDetail" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="ScoreRuleByLeadSource">
@@ -11653,7 +11653,7 @@
             <PropertyRef Name="sbls" />
           </Key>
           <Property Name="sbls" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="sbA" Type="Boolean" Nullable="false" />
+          <Property Name="sbA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="LeadSource" Relationship="Self.FK_ScoreRulesByLeadSource_LeadSources" FromRole="ScoreRulesByLeadSource" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="ScoreRuleByLeadSourceDetail">
@@ -11673,7 +11673,7 @@
           </Key>
           <Property Name="spID" Type="Byte" Nullable="false" />
           <Property Name="spN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="spA" Type="Boolean" Nullable="false" />
+          <Property Name="spA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="ScoreRulesByLeadSourceDetails" Relationship="Self.FK_ScoreRulesByLeadSourceDetail_ScoreRulesConcepts" FromRole="ScoreRulesConcepts" ToRole="ScoreRulesByLeadSourceDetail" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ScoreRulesDetails" Relationship="Self.FK_ScoreRulesDetail_ScoreRulesConcepts" FromRole="ScoreRulesConcepts" ToRole="ScoreRulesDetail" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11694,7 +11694,7 @@
           </Key>
           <Property Name="syID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="syN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="syA" Type="Boolean" Nullable="false" />
+          <Property Name="syA" Type="Boolean" Nullable="false" DefaultValue="True" />
         </EntityType>
         <EntityType Name="Season">
           <Key>
@@ -11702,7 +11702,7 @@
           </Key>
           <Property Name="ssID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ssN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ssA" Type="Boolean" Nullable="false" />
+          <Property Name="ssA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="ssClosingFactor" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
           <NavigationProperty Name="SeasonsDates" Relationship="Self.FK_SeasonsDates_Seasons" FromRole="Seasons" ToRole="SeasonsDates" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11723,7 +11723,7 @@
           </Key>
           <Property Name="seID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="seN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="seA" Type="Boolean" Nullable="false" />
+          <Property Name="seA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="seO" Type="Int32" Nullable="false" DefaultValue="9999" />
           <Property Name="sesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_SegmentsByAgency" FromRole="SegmentsByAgency" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11735,7 +11735,7 @@
           </Key>
           <Property Name="soID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="soN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="soA" Type="Boolean" Nullable="false" />
+          <Property Name="soA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="soO" Type="Int32" Nullable="false" />
           <Property Name="sosc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_SegmentsByLeadSource" FromRole="SegmentsByLeadSource" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11747,7 +11747,7 @@
           </Key>
           <Property Name="scID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="scN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="scA" Type="Boolean" Nullable="false" />
+          <Property Name="scA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="scO" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SegmentsByAgencies" Relationship="IMModel.FK_SegmentsByAgency_SegmentsCategories" FromRole="SegmentCategory" ToRole="SegmentByAgency" />
           <NavigationProperty Name="SegmentsByLeadSources" Relationship="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" FromRole="SegmentCategory" ToRole="SegmentByLeadSource" />
@@ -11758,7 +11758,7 @@
           </Key>
           <Property Name="skID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="skN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="skA" Type="Boolean" Nullable="false" />
+          <Property Name="skA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="sksg" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ShowProgramCategory" Relationship="Self.FK_ShowPrograms_ShowProgramsCategories" FromRole="ShowPrograms" ToRole="ShowProgramsCategories" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11768,7 +11768,7 @@
           </Key>
           <Property Name="sgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="sgN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="sgA" Type="Boolean" Nullable="false" />
+          <Property Name="sgA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="ShowPrograms" Relationship="Self.FK_ShowPrograms_ShowProgramsCategories" FromRole="ShowProgramsCategories" ToRole="ShowPrograms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="ShowSalesman">
@@ -11788,7 +11788,7 @@
           </Key>
           <Property Name="sbID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="sbN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="sbA" Type="Boolean" Nullable="false" />
+          <Property Name="sbA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="GiftsReceiptsPayments" Relationship="Self.FK_GiftsReceiptsPayments_SourcePayments" FromRole="SourcePayments" ToRole="GiftsReceiptsPayments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="TeamGuestServices">
@@ -11800,7 +11800,7 @@
           <Property Name="tgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tgN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tgLeader" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tgA" Type="Boolean" Nullable="false" />
+          <Property Name="tgA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Location" Relationship="Self.FK_TeamsGuestServices_Locations" FromRole="TeamsGuestServices" ToRole="Locations" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnel" Relationship="Self.FK_TeamsGuestServices_Personnel" FromRole="TeamsGuestServices" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11828,7 +11828,7 @@
           <Property Name="tsID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tsN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tsLeader" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tsA" Type="Boolean" Nullable="false" />
+          <Property Name="tsA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Personnel" Relationship="Self.FK_TeamsSalesmen_Personnel" FromRole="TeamsSalesmen" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRoom" Relationship="Self.FK_TeamsSalesmen_SalesRooms" FromRole="TeamsSalesmen" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11886,7 +11886,7 @@
           </Key>
           <Property Name="tcID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="tcN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="tcA" Type="Boolean" Nullable="false" />
+          <Property Name="tcA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Configuration" Relationship="Self.FK_osConfig_TourTimesSchemas" FromRole="TourTimesSchemas" ToRole="osConfig" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="UnavailableMotive">
@@ -11895,7 +11895,7 @@
           </Key>
           <Property Name="umID" Type="Byte" Nullable="false" />
           <Property Name="umN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="umA" Type="Boolean" Nullable="false" />
+          <Property Name="umA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_UnavailMots" FromRole="UnavailMots" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Contracts" Relationship="Self.FK_Contracts_UnavailMots" FromRole="UnavailMots" ToRole="Contracts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Countries" Relationship="Self.FK_Countries_UnavailMots" FromRole="UnavailMots" ToRole="Countries" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11907,7 +11907,7 @@
           </Key>
           <Property Name="upID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="upN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="upA" Type="Boolean" Nullable="false" />
+          <Property Name="upA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_UnderPaymentMotives" FromRole="UnderPaymentMotives" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceiptsLogs" Relationship="Self.FK_GiftsReceiptsLog_UnderPaymentMotives" FromRole="UnderPaymentMotives" ToRole="GiftsReceiptsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
@@ -11917,7 +11917,7 @@
           </Key>
           <Property Name="whID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="whN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="whA" Type="Boolean" Nullable="false" />
+          <Property Name="whA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="whar" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Area" Relationship="Self.FK_Warehouses_Areas" FromRole="Warehouses" ToRole="Areas" />
           <NavigationProperty Name="GiftsInventories" Relationship="Self.FK_GiftsInventory_Warehouses" FromRole="Warehouses" ToRole="GiftsInventory" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -11966,7 +11966,7 @@
           </Key>
           <Property Name="znID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="znN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="znA" Type="Boolean" Nullable="false" />
+          <Property Name="znA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="znZoneHotel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="znRunTrans" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_Zones" FromRole="Zones" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -22814,7 +22814,7 @@
           </Key>
           <Property Name="dsID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="dsN" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="dsA" Type="Boolean" Nullable="false" />
+          <Property Name="dsA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_bdds" FromRole="DisputeStatu" ToRole="BookingDeposit" />
         </EntityType>
         <Association Name="FK_BookingDeposits_bdds">

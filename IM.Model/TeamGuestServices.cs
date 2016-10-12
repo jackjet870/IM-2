@@ -14,6 +14,12 @@ namespace IM.Model
     
     public partial class TeamGuestServices
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TeamGuestServices()
+        {
+            this.tgA = true;
+        }
+    
         public string tglo { get; set; }
         public string tgID { get; set; }
         public string tgN { get; set; }

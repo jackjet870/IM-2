@@ -102,7 +102,7 @@ namespace IM.SalesPR.Forms
           //Obtenemos el dataTable con la lista formateada 
           var dt = TableHelper.GetDataTableFromList(listaSaleByPr, true);
           //Creamos el reporte
-          var fileInfo = await ReportBuilder.CreateCustomExcel(dt, _filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(),
+          var fileInfo = await ReportBuilder.CreateCustomExcelAsync(dt, _filtersReport, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable(),
             addEnumeration: true, blnRowGrandTotal: true);
 
           if (fileInfo != null)

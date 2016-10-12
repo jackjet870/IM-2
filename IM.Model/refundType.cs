@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RefundType()
         {
+            this.rfA = true;
             this.DepositsRefunds = new HashSet<DepositRefund>();
             this.RefundTypeFolios = new HashSet<RefundTypeFolio>();
         }

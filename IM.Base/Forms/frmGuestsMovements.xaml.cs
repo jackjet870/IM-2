@@ -62,7 +62,7 @@ namespace IM.Base.Forms
           return;
         }
         Mouse.OverrideCursor = Cursors.Wait;
-        FileInfo fileInfo = await ReportBuilder.CreateCustomExcel(
+        FileInfo fileInfo = await ReportBuilder.CreateCustomExcelAsync(
           TableHelper.GetDataTableFromList((List<GuestMovements>)guestMovementsDataGrid.ItemsSource, true, true, true),
           new List<Tuple<string, string>> { Tuple.Create("Guest Id", _guestID.ToString()) },
           "Guest Movements",

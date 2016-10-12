@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Season()
         {
+            this.ssA = true;
             this.SeasonsDates = new HashSet<SeasonDate>();
         }
     

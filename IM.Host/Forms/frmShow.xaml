@@ -154,7 +154,7 @@
                                                             <RowDefinition />
                                                         </Grid.RowDefinitions>
                                                         <StackPanel x:Name="stkShows" Orientation="Horizontal"  Margin="3,0">
-                                                            <CheckBox x:Name="chkguShow" Content="Shows" IsChecked="{Binding Guest.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Margin="3"  Checked ="chkguShow_Checked"  Unchecked ="chkguShow_Checked"/>
+                                                            <CheckBox x:Name="chkguShow" Content="Show" IsChecked="{Binding Guest.guShow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Margin="3"  Checked ="chkguShow_Checked"  Unchecked ="chkguShow_Checked"/>
                                                             <xctk:DateTimePicker x:Name="dtpguShowD" Tag="Show Date" Value="{Binding Guest.guShowD, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource dtp-DateRange-TK}" KeyDown="Control_KeyDown" DefaultValue="" DisplayDefaultValueOnEmptyText="False" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="3,0" Grid.Column="1">
@@ -165,7 +165,7 @@
                                                             <CheckBox x:Name="chkguPresentedInvitation" Tag="if the guest presented invitation" Content="Presented Invitation" HorizontalAlignment="Center" IsChecked="{Binding Guest.guPresentedInvitation, Mode=TwoWay}" Margin="3" />
                                                         </StackPanel>
                                                         <StackPanel  Orientation="Horizontal" Margin="3,0" Grid.Row="1" Grid.Column="1">
-                                                            <CheckBox x:Name="chkguNotifiedEmailShowNotInvited" Content="Notified" HorizontalAlignment="Center" IsChecked="{Binding Guest.guNotifiedEmailShowNotInvited, Mode=TwoWay}" Margin="3" />
+                                                            <CheckBox x:Name="chkguNotifiedEmailShowNotInvited" Content="Notified" HorizontalAlignment="Center" IsChecked="{Binding Guest.guNotifiedEmailShowNotInvited, Mode=TwoWay}" Margin="3" IsEnabled="False" />
                                                         </StackPanel>
                                                     </Grid>
                                                     <Separator Height="7" />

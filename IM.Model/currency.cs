@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Currency()
         {
+            this.cuA = true;
             this.ExchangeRateLogs = new HashSet<ExchangeRateLog>();
             this.GiftsReceipts_CxC = new HashSet<GiftsReceipt>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();

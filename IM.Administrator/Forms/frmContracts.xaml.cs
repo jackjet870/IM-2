@@ -73,6 +73,7 @@ namespace IM.Administrator.Forms
       _blnEdit = Context.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadContracts();
+      dtgContracts.CurrentCellChanged+=GridHelper.dtg_CurrentCellChanged;
     }
     #endregion
     #region KeyBoardFocusChange
@@ -99,7 +100,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      Contract contract = (Contract)dgrContracts.SelectedItem;
+      Contract contract = (Contract)dtgContracts.SelectedItem;
       LoadContracts(contract);
     }
     #endregion
@@ -115,14 +116,14 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      Contract contract = (Contract)dgrContracts.SelectedItem;
+      Contract contract = (Contract)dtgContracts.SelectedItem;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
       frmContractDetail.mode = ((_blnEdit == true) ? EnumMode.Edit : EnumMode.ReadOnly);
       frmContractDetail.oldContract = contract;
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
       {
-        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+        List<Contract> lstContracts = (List<Contract>)dtgContracts.ItemsSource;
         int nIndex = 0;
         if (!ValidateFilters(frmContractDetail.contract))//Validamos si cumple con los filtros
         {
@@ -134,8 +135,8 @@ namespace IM.Administrator.Forms
           lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
           nIndex = lstContracts.IndexOf(contract);
         }
-        dgrContracts.Items.Refresh();
-        GridHelper.SelectRow(dgrContracts, nIndex);
+        dtgContracts.Items.Refresh();
+        GridHelper.SelectRow(dtgContracts, nIndex);
         StatusBarReg.Content = lstContracts.Count + " Contracts.";
       }
     }
@@ -159,12 +160,12 @@ namespace IM.Administrator.Forms
       {
         if (ValidateFilters(frmContractDetail.contract))//Validamos que cumpla con los filtros actuales
         {
-          List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+          List<Contract> lstContracts = (List<Contract>)dtgContracts.ItemsSource;
           lstContracts.Add(frmContractDetail.contract);//Agregamos el registro nuevo
           lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
           int nIndex = lstContracts.IndexOf(frmContractDetail.contract);//obtenemos el index del registro nuevo
-          dgrContracts.Items.Refresh();//refrescamos la lista
-          GridHelper.SelectRow(dgrContracts, nIndex);
+          dtgContracts.Items.Refresh();//refrescamos la lista
+          GridHelper.SelectRow(dtgContracts, nIndex);
           StatusBarReg.Content = lstContracts.Count + " Contracts.";
         }
       }
@@ -235,13 +236,13 @@ namespace IM.Administrator.Forms
         status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Contract> lstContracts =await BRContracts.getContracts(_contractFilter, _nStatus);
-        dgrContracts.ItemsSource = lstContracts;
+        dtgContracts.ItemsSource = lstContracts;
         if (contract != null && lstContracts.Count > 0)
         {
           contract = lstContracts.Where(co => co.cnID == contract.cnID).FirstOrDefault();
           nIndex = lstContracts.IndexOf(contract);
         }
-        GridHelper.SelectRow(dgrContracts, nIndex);
+        GridHelper.SelectRow(dtgContracts, nIndex);
         StatusBarReg.Content = lstContracts.Count + " Contracts.";
         status.Visibility = Visibility.Collapsed;
       }

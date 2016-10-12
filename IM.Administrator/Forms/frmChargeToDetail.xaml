@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" ResizeMode="NoResize" ShowInTaskbar="False" Closing="Window_Closing"
-        Title="Charge To Detail" Height="238" DataContext="{Binding _chargeTo}" KeyDown="Window_KeyDown" Width="338" Loaded="Window_Loaded">
+        Title="Charge To Detail" Height="238" Width="338" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -50,7 +50,7 @@
         <CheckBox Name="chkCxC" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding ctIsCxC}" Height="13" IsEnabled="False">Is CxC</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right"  Click="btnCancel_Click" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right"  IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

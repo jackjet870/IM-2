@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
+            this.prA = true;
             this.Gifts = new HashSet<Gift>();
             this.ProductsLegends = new HashSet<ProductLegend>();
         }

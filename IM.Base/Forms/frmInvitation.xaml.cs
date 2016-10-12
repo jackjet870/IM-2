@@ -42,6 +42,11 @@ namespace IM.Base.Forms
     public GuestInvitationRules dbContext { get; set; }
     public bool SaveGuestInvitation { get; set; }
 
+    public delegate void statusBarInfo(bool show, string message = "");
+    public event statusBarInfo _statusBarInfo;
+
+    private bool _saveStatus;
+
     #endregion Propiedades, Atributos
 
     /// <summary>
@@ -63,7 +68,8 @@ namespace IM.Base.Forms
       _invitationType = invitationType;
       DataContext = dbContext;
       InitializeComponent();
-
+      
+      _statusBarInfo += StatusBarInfo;
       #region Inicializar Grids
 
       #region dtgGift
@@ -109,113 +115,14 @@ namespace IM.Base.Forms
     }
     #endregion Window_Loaded
 
-    #region imgButtonSave_MouseLeftButtonDown
-    /// <summary>
-    /// Evento que se genera al presionar el boton Save
-    /// </summary>
-    ///<history>
-    ///[erosado]  17/08/2016  Created.
-    /// </history>
-    private async void imgButtonSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (imgButtonSave.IsEnabled)
-      {
-        //Invocamos el metodo Guardar Invitacion y esperamos que termine
-        await SaveInvitation();
-      }
-    }
-
-    private async Task SaveInvitation()
-    {
-      try
-      {
-        //Ponemos el cursor en modo espera
-        Mouse.OverrideCursor = Cursors.Wait;
-        imgButtonSave.IsEnabled = false;
-        
-        
-        bool isValid = true;
-
-        //Asignamos el focus al boton
-        imgButtonSave.Focus();
-
-        //Validamos controles comunes y validaciones basicas
-        if (!InvitationValidationRules.ValidateGeneral(this, dbContext))
-        {
-          isValid = false;
-        }
-        //Si paso la primer validacion, validamos los grids invitsGift, bookingDeposits, creditCard, additionalGuest
-        if (isValid)
-        {
-          isValid = InvitationValidationRules.ValidateInformationGrids(this, dbContext);
-        }
-
-        //Validamos que la informacion exista
-        if (isValid)
-        {
-          //Validamos si existen los datos
-          isValid = await ValidateExist();
-        }
-        //Guardamos la informacion
-        if (isValid)
-        {
-          _busyIndicator.IsBusy = true;
-          _busyIndicator.BusyContent = "Saving invitation...";
-
-          var guestInvitation = dbContext as GuestInvitation;
-
-          var hoursDiff = _module != EnumModule.Host ? _user.LeadSource.lsHoursDif : _user.SalesRoom.srHoursDif;
-
-          await
-            BRGuests.SaveGuestInvitation(guestInvitation, dbContext.Program, _module, _user, dbContext.InvitationMode,
-              ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
-
-          _busyIndicator.IsBusy = false;
-          UIHelper.ShowMessage("The data was saved successfully");
-
-          //Si es del modulo OutHouse y el tipo de invitacion es NewOutHouse, NO cerramos la ventana, solo la reiniciamos
-          if (_module == EnumModule.OutHouse && _invitationType == EnumInvitationType.newOutHouse)
-          {
-            _busyIndicator.IsBusy = true;
-            _busyIndicator.BusyContent = "Please wait, we are preparing the invitation form...";
-            //Volvemos a cargar la invitacion
-            DataContext = null;
-            UpdateLayout();
-            dbContext = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
-            DataContext = dbContext;
-            await dbContext.LoadAll();
-            _busyIndicator.IsBusy = false;
-          }
-          else
-          {
-            _busyIndicator.IsBusy = false;
-            SaveGuestInvitation = true;
-            Close();
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        UIHelper.ShowMessage(ex);
-      }
-      finally
-      {
-        _busyIndicator.IsBusy = false;
-        Mouse.OverrideCursor = null;
-        imgButtonSave.IsEnabled = true;
-      }
-    }
-
-    #endregion imgButtonSave_MouseLeftButtonDown
-
-    #region imgButtonEdit_MouseLeftButtonDown
+    #region BtnEdit_OnClick
     /// <summary>
     /// Evento que se genera al presionar el boton Edit
     /// </summary>
     ///<history>
     ///[erosado]  17/08/2016  Created.
     /// </history>
-    private void imgButtonEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
     {
       //Si el Guest ya hizo Show No podemos editar nada.
       if (dbContext.Guest.guShow)
@@ -237,24 +144,64 @@ namespace IM.Base.Forms
       }
     }
 
-    #endregion imgButtonEdit_MouseLeftButtonDown
+    #endregion BtnEdit_OnClick
 
-    #region imgButtonPrint_MouseLeftButtonDown
+    #region BtnPrint_OnClick
     /// <summary>
     /// Evento que se genera al presionar el boton Print
     /// </summary>
     ///<history>
     ///[erosado]  17/08/2016  Created.
     /// </history>
-    private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
     {
       //Generamos Reporte
       RptInvitationHelper.RptInvitation(_guestId, _user.User.peID);
     }
+    #endregion BtnPrint_OnClick
 
-    #endregion imgButtonPrint_MouseLeftButtonDown
+    #region BtnSave_OnClick
+    /// <summary>
+    /// Evento que se genera al presionar el boton Save
+    /// </summary>
+    ///<history>
+    ///[erosado]  17/08/2016  Created.
+    /// </history>
+    private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
+    {
+      try
+      {
+        if (_saveStatus) return;
+        _saveStatus = true;
+        //Desactivamos el boton de guardar
+        btnSave.IsEnabled = false;
+        //Forzamos LostFocus de Pax para tener su valor real
+        var element = Keyboard.FocusedElement as UIElement;
+        element?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+        //Validamos la informacion de la invitacion Antes de guardar
+        if (await InfoValidation())
+        {
+          //Si la informacion es valida guardamos la invitacion
+          await SaveInvitation();
+        }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex);
+      }
+      finally
+      {
+        //Desactiva mensajes en la barra de estado y regresa el cursos del usuario
+        _statusBarInfo?.Invoke(false);
+        //Volvemos activar el boton de guardar
+        btnSave.IsEnabled = true;
+        //Regresamos _saveStatus a false
+        _saveStatus = false;
+      }
+    }
+    #endregion BtnSave_OnClick
 
-    #region imgButtonCancel_MouseLeftButtonDown
+    #region BtnCancel_OnClick
 
     /// <summary>
     /// Sirve para cancelar la edicion, y si no esta en modo edicion cierra el formulario de invitacion
@@ -262,7 +209,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 11/08/2016  Created.
     /// </history>
-    private async void imgButtonCancel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void BtnCancel_OnClick(object sender, RoutedEventArgs e)
     {
       //Si estamos cancelando la edicion de una invitacion
       if (_isEditing)
@@ -283,13 +230,11 @@ namespace IM.Base.Forms
         //Configuramos nuevamente el formulario
         ControlsConfiguration();
 
-        //Habilitamos los botones editar e imprimir
-        imgButtonEdit.IsEnabled = true;
-        imgButtonPrint.IsEnabled = true;
-        imgButtonSave.IsEnabled = false;
+        //Habilitamos los botones editar, imprimir, guardar
+        btnEdit.IsEnabled = true;
+        btnPrint.IsEnabled = true;
+        btnSave.IsEnabled = false;
         _busyIndicator.IsBusy = false;
-
-
       }
       //Si no estabamos editando cerramos la aplicacion
       else
@@ -297,27 +242,24 @@ namespace IM.Base.Forms
         Close();
       }
     }
+    #endregion BtnCancel_OnClick
 
-    #endregion imgButtonCancel_MouseLeftButtonDown
-
-    #region imgButtonLog_MouseLeftButtonDown
-
+    #region BtnLog_OnClick
     /// <summary>
     /// Abre el formulario de GuestLog se la pasa el guID, sirve para mostrar los movimientos que ha tenido el guID
     /// </summary>
     /// <history>
     /// [erosado] 11/08/2016  Created.
     /// </history>
-    private void imgButtonLog_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void BtnLog_OnClick(object sender, RoutedEventArgs e)
     {
       //Si viene de Host la invitacion le mandamos el SalesRoom, en lugar del leadsource, es solo informativo.
       frmGuestLog frmGuestLog = new frmGuestLog(_guestId) { Owner = this };
       frmGuestLog.ShowDialog();
     }
+    #endregion BtnLog_OnClick
 
-    #endregion imgButtonLog_MouseLeftButtonDown
-
-    #region imgButtonReLogin_MouseLeftButtonDown
+    #region BtnReLogin_OnClick
 
     /// <summary>
     /// Permite Re-Login en la invitacion
@@ -325,9 +267,8 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 15/08/2016  Modified
     /// </history>
-    private async void imgButtonReLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void BtnReLogin_OnClick(object sender, RoutedEventArgs e)
     {
-
       var login = new frmLogin(loginType: EnumLoginType.Location, program: dbContext.Program,
       validatePermission: true, permission: _module != EnumModule.Host ? EnumPermission.PRInvitations : EnumPermission.HostInvitations,
       permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: _user.Location.loID);
@@ -353,8 +294,9 @@ namespace IM.Base.Forms
         await LoadInvitationForm();
       }
     }
+    #endregion BtnReLogin_OnClick
 
-    #region brdSearchButton_MouseLeftButtonDown
+    #region BtnSearchButton_OnClick
     /// <summary>
     /// Obtiene un Folio de Reservacion
     /// </summary>
@@ -362,7 +304,7 @@ namespace IM.Base.Forms
     /// [erosado] 17/08/2016  Created.
     /// [vipacheco] 18/08/2016 Modified -> Se agregó la invocacion para la busqueda de huespedes por # de reservacion.
     /// </history>
-    private void brdSearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void BtnSearchButton_OnClick(object sender, RoutedEventArgs e)
     {
       frmSearchReservation search = new frmSearchReservation(_user) { Owner = this };
 
@@ -375,7 +317,7 @@ namespace IM.Base.Forms
         dbContext.SetRervationOrigosInfo(search._reservationInfo);
       }
     }
-    #endregion
+    #endregion BtnSearchButton_OnClick
 
     #region btnChange_Click
 
@@ -421,8 +363,6 @@ namespace IM.Base.Forms
     }
 
     #endregion btnRebook_Click
-
-    #endregion imgButtonReLogin_MouseLeftButtonDown
 
     #region cmbGuestStatus_SelectionChanged
 
@@ -610,27 +550,27 @@ namespace IM.Base.Forms
     {
       if (dbContext.InvitationMode == EnumMode.Add)
       {
-        imgButtonEdit.IsEnabled = false;
-        imgButtonPrint.IsEnabled = false;
-        imgButtonSave.IsEnabled = true;
-        imgButtonCancel.IsEnabled = true;
-        imgButtonLog.IsEnabled = _guestId != 0;
+        btnEdit.IsEnabled = false;
+        btnPrint.IsEnabled = false;
+        btnSave.IsEnabled = true;
+        btnCancel.IsEnabled = true;
+        btnLog.IsEnabled = _guestId != 0;
       }
       else if (dbContext.InvitationMode == EnumMode.Edit)
       {
-        imgButtonEdit.IsEnabled = true;
-        imgButtonPrint.IsEnabled = true;
-        imgButtonSave.IsEnabled = false;
-        imgButtonCancel.IsEnabled = true;
-        imgButtonLog.IsEnabled = true;
+        btnEdit.IsEnabled = true;
+        btnPrint.IsEnabled = true;
+        btnSave.IsEnabled = false;
+        btnCancel.IsEnabled = true;
+        btnLog.IsEnabled = true;
       }
       else if (dbContext.InvitationMode == EnumMode.ReadOnly)
       {
-        imgButtonEdit.IsEnabled = false;
-        imgButtonPrint.IsEnabled = true;
-        imgButtonSave.IsEnabled = false;
-        imgButtonCancel.IsEnabled = false;
-        imgButtonLog.IsEnabled = true;
+        btnEdit.IsEnabled = false;
+        btnPrint.IsEnabled = true;
+        btnSave.IsEnabled = false;
+        btnCancel.IsEnabled = false;
+        btnLog.IsEnabled = true;
       }
     }
 
@@ -707,7 +647,7 @@ namespace IM.Base.Forms
     private void OutHouseCollapsed()
     {
       stkRsrvNum.Visibility = Visibility.Collapsed;
-      brdSearchButton.Visibility = Visibility.Collapsed;
+      btnSearchButton.Visibility = Visibility.Collapsed;
       stkRebookRef.Visibility = Visibility.Collapsed;
       btnReschedule.Visibility = Visibility.Collapsed;
       btnRebook.Visibility = Visibility.Collapsed;
@@ -778,9 +718,9 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = false;
       btnReschedule.IsEnabled = false;
       btnRebook.IsEnabled = false;
-      btnAddGuestAdditional.IsEnabled = false;
+      btnAddGuestAdditional.IsEnabled = _invitationType == EnumInvitationType.newExternal;
       btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
-      brdSearchButton.IsEnabled = string.IsNullOrWhiteSpace(dbContext.Guest.guHReservID);
+      btnSearchButton.IsEnabled = string.IsNullOrWhiteSpace(dbContext.Guest.guHReservID);
       #endregion Enable false
 
       #region IsReadOnly
@@ -836,8 +776,10 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = dbContext.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
-      btnAddGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
-      btnSearchGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal);
+      //Si viene del modulo Host, se valida que la invitacion es NewOuthouse y tenga el modo Add.
+      //Si viene del modulo Outhouse el modo ReadOnly se desactiva.
+      btnAddGuestAdditional.IsEnabled = (_module == EnumModule.Host) ? _invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode==EnumMode.Add : true; //!(dbContext.InvitationMode == EnumMode.ReadOnly && _invitationType == EnumInvitationType.existing);
+      btnSearchGuestAdditional.IsEnabled = (_module == EnumModule.Host) ? _invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode == EnumMode.Add : true;//!(dbContext.InvitationMode == EnumMode.ReadOnly && _invitationType == EnumInvitationType.existing);
 
       #endregion Enable false
 
@@ -849,7 +791,9 @@ namespace IM.Base.Forms
       txtguIdProfileOpera.IsReadOnly = true;
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
-      dtgGuestAdditional.IsReadOnly = dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType == EnumInvitationType.newExternal;
+      //Si viene del modulo Host, se valida que la invitacion se NewOuthouse y tenga el modo Add.
+      //Si viene del modulo Outhouse el modo ReadOnly se desactiva.
+      dtgGuestAdditional.IsReadOnly = (_module == EnumModule.Host) ? !(_invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode == EnumMode.Add) : false;
       #endregion IsReadOnly
 
       //Si OutHouse y es una invitacion existente
@@ -873,9 +817,9 @@ namespace IM.Base.Forms
     private void StarModeControls()
     {
       //Barra Menu
-      imgButtonEdit.IsEnabled = imgButtonPrint.IsEnabled = imgButtonSave.IsEnabled = imgButtonCancel.IsEnabled = imgButtonLog.IsEnabled = imgButtonReLogin.IsEnabled = true;
+      btnEdit.IsEnabled = btnPrint.IsEnabled = btnSave.IsEnabled = btnCancel.IsEnabled = btnLog.IsEnabled = btnReLogin.IsEnabled = true;
       //Guest Information
-      brdGuestInfo.IsEnabled = stkGuestInfo.IsEnabled = stkGuid.IsEnabled = stkRsrvNum.IsEnabled = brdSearchButton.IsEnabled = stkOutInvitation.IsEnabled = stkRebookRef.IsEnabled = stkInvitationTypeAndLenguage.IsEnabled = chkguQuinella.IsEnabled = chkguShow.IsEnabled = chkguInterval.IsEnabled = cmbLanguage.IsEnabled = true;
+      brdGuestInfo.IsEnabled = stkGuestInfo.IsEnabled = stkGuid.IsEnabled = stkRsrvNum.IsEnabled = btnSearchButton.IsEnabled = stkOutInvitation.IsEnabled = stkRebookRef.IsEnabled = stkInvitationTypeAndLenguage.IsEnabled = chkguQuinella.IsEnabled = chkguShow.IsEnabled = chkguInterval.IsEnabled = cmbLanguage.IsEnabled = true;
       //Guest Profile Opera
       brdProfileOpera.IsEnabled = stkProfileOpera.IsEnabled = true;
       //Guest 1
@@ -960,19 +904,21 @@ namespace IM.Base.Forms
         //Si la fecha de booking original es antes de hoy
         if (dbContext.CloneGuest.guBookD < serverDate)
         {
-          dtgGuestAdditional.IsReadOnly = true;
+          brdAdditionalGuest.IsEnabled = false;
           guestFormMode = EnumMode.ReadOnly;
-          btnAddGuestAdditional.IsEnabled = false;
-          btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
+        }
+        else
+        {
+          brdAdditionalGuest.IsEnabled = true;
+          guestFormMode = EnumMode.Edit;
         }
       }
-      else if (_module == EnumModule.OutHouse)
+      else
       {
-        dtgGuestAdditional.IsReadOnly = false;
+        brdAdditionalGuest.IsEnabled = true;
         guestFormMode = EnumMode.Edit;
-        btnAddGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
-        btnSearchGuestAdditional.IsEnabled = dbContext.InvitationMode != EnumMode.ReadOnly;
       }
+
 
       //Other Info
       if (_module == EnumModule.InHouse)
@@ -1043,9 +989,7 @@ namespace IM.Base.Forms
       txtguCCType.IsEnabled = false;
       dtgCCCompany.IsReadOnly = true;
       //Additional Guest
-      dtgGuestAdditional.IsReadOnly = true;
-      btnAddGuestAdditional.IsEnabled = false;
-      btnSearchGuestAdditional.IsEnabled = false;
+      brdAdditionalGuest.IsEnabled = false;
       brdRoomsQtyAndElectronicPurse.IsEnabled = false;
     }
 
@@ -1087,9 +1031,9 @@ namespace IM.Base.Forms
       //Si esta iniciando una edicion de invitacion desactivamos los siguientes controles
       if (_isEditing)
       {
-        imgButtonEdit.IsEnabled = false;
-        imgButtonPrint.IsEnabled = false;
-        imgButtonSave.IsEnabled = true;
+        btnEdit.IsEnabled = false;
+        btnPrint.IsEnabled = false;
+        btnSave.IsEnabled = true;
       }
     }
 
@@ -1550,7 +1494,98 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #endregion   
+    #region InfoValidation
+    /// <summary>
+    /// Valida la informacion completa de la invitacion antesde de guardar la invitacion
+    /// </summary>
+    /// <returns>True Valido | False No</returns>
+    /// <history>
+    /// [erosado] 10/10/2016  Created.
+    /// </history>
+    private async Task<bool> InfoValidation()
+    {
+      //Mensaje en la barra de estado
+      _statusBarInfo?.Invoke(true, "Validating Data...");
+      //Validamos controles comunes y validaciones basicas
+      if (!await InvitationValidationRules.ValidateGeneral(this, dbContext)) return false;
+      //Validamos Grids
+      if (!InvitationValidationRules.ValidateInformationGrids(this, dbContext)) return false;
+      //Validamos Grid Guest
+      if (!ValidateAdditionalGuest()) return false;
+      //Validamos que la informacion exista
+      return await ValidateExist();
+    }
+    #endregion
+
+    #region SaveInvitation
+    /// <summary>
+    /// Guarda la invitacion
+    /// </summary>
+    /// <history>
+    /// [erosado] 10/10/2016  Created.
+    /// </history>
+    private async Task SaveInvitation()
+    {
+      //Mensaje en la barra de estado 
+      //WaitMessage(true, "Saving data ...");
+      _statusBarInfo?.Invoke(true, "Saving Data...");
+      //Obtenemos la informacion completa de la invitacion 
+      var guestInvitation = dbContext as GuestInvitation;
+      //Obtenemos el atributo hoursDiff
+      var hoursDiff = _module != EnumModule.Host ? _user.LeadSource.lsHoursDif : _user.SalesRoom.srHoursDif;
+      //Mandamos a guardar la informacion
+      await BRGuests.SaveGuestInvitation(guestInvitation, dbContext.Program, _module, _user, dbContext.InvitationMode,
+          ComputerHelper.GetMachineName(), ComputerHelper.GetIpMachine(), EnumGuestsMovementsType.Booking, hoursDiff);
+      //Si la informacion se guardo correctamente enviamos un mensaje
+      UIHelper.ShowMessage("The data was saved successfully");
+      //Si es del modulo OutHouse y el tipo de invitacion es NewOutHouse, NO cerramos la ventana, solo la reiniciamos
+      if (_module == EnumModule.OutHouse && _invitationType == EnumInvitationType.newOutHouse)
+      {
+        //WaitMessage(true, "Please wait, we are preparing the invitation form...");
+        _statusBarInfo?.Invoke(true, "Please wait, we are preparing the invitation form...");
+        //Volvemos a cargar la invitacion
+        DataContext = null;
+        UpdateLayout();
+        dbContext = new GuestInvitationRules(_module, _invitationType, _user, _guestId);
+        DataContext = dbContext;
+        await dbContext.LoadAll();
+      }
+      else
+      {
+        SaveGuestInvitation = true;
+        Close();
+      }
+    }
+    #endregion
+
+    #region StatusBarInfo
+    /// <summary>
+    /// Se encarga de actualizar la informacion del status Bar
+    /// </summary>
+    /// <param name="show">true Muestra el icono</param>
+    /// <param name="message">Mensaje que aparecera en la barra de estado</param>
+    /// <history>
+    /// [erosado] 10/10/2016  Created.
+    /// </history>
+    private void StatusBarInfo(bool show, string message = "")
+    {
+      if (!Dispatcher.CheckAccess())
+      {
+        Dispatcher.Invoke(new statusBarInfo(StatusBarInfo), show, message);
+      }
+      else
+      {
+        lblStatusBarMessage.Text = message;
+        imgStatusBarMessage.Visibility = (show) ? Visibility.Visible : Visibility.Hidden;
+        Mouse.OverrideCursor = (show) ? Cursors.Wait : null;
+        lblStatusBarMessage.UpdateLayout();
+        imgStatusBarMessage.UpdateLayout();
+        UIHelper.ForceUIToUpdate();
+      }
+    }
+    #endregion
+
+    #endregion 
 
     #region Eventos del GRID Invitation Gift
 
@@ -1791,7 +1826,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [edgrodriguez] 02/08/2016  Created.
     /// </history>
-    private void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    public void dtgGuestAdditional_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
@@ -1819,6 +1854,41 @@ namespace IM.Base.Forms
     }
 
     #endregion RowEditEnding
+
+    #region ValidateAdditionalGuest
+    /// <summary>
+    /// Valida el grid de GuestAdditional antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <param name="form">Formulario de invitación</param>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [edgrodriguez] 07/10/2016 created
+    /// </history>
+    private bool ValidateAdditionalGuest()
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(dtgGuestAdditional);
+      if (row != null)
+      {
+        bool gridvalid = AsyncHelper.RunSync(() => InvitationValidationRules.ValidateAdditionalGuest(dbContext.Guest, row.Item as Guest, dbContext.Program, true)).Item1;
+        if (gridvalid)
+        {
+          dtgGuestAdditional.RowEditEnding -= dtgGuestAdditional_RowEditEnding;
+          dtgGuestAdditional.CommitEdit();
+          dtgGuestAdditional.RowEditEnding += dtgGuestAdditional_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          GridHelper.SelectRow(dtgGuestAdditional, row.GetIndex(), 0, true);
+          tabStatusGiftsOthers.IsSelected = true;
+        }
+      }
+      return isValid;
+    }
+    #endregion
 
     #endregion Eventos del GRID GuestAdditional
 
@@ -2193,7 +2263,6 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #endregion
-
+    #endregion   
   }
 }
