@@ -313,7 +313,7 @@ namespace IM.Host
       _lstTasks.Add(Task.Run(async () =>
       {
         // Team Sales Men
-        _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1);
+        _lstTeamSalesMen = await BRTeamsSalesMen.GetTeamsSalesMen(1,new TeamSalesmen {tssr = _salesRoom});
       }));
       _lstTasks.Add(Task.Run(async () =>
       {
