@@ -1619,8 +1619,11 @@ namespace IM.Inhouse.Forms
       if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;
       StaStart($"Loading {_screen}...");
       _serverDate = dtpDate.Value.Value;
+      GetDataGrid().IsReadOnly = true;
       txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, Context.User.Location.loID);
       LoadGrid();
+      GetDataGrid().IsReadOnly = false;
+
     }
 
     #endregion dtpDate_ValueChanged
@@ -1646,11 +1649,11 @@ namespace IM.Inhouse.Forms
           Owner = this
         };
         invitacion.ShowDialog();
-        
+
         //Si se guardó la información
         if (invitacion.SaveGuestInvitation)
         {
-         
+          LoadGrid();
         }
       }
     }

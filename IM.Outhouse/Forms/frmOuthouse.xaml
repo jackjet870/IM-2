@@ -6,11 +6,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Outhouse.Forms"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"  
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"  
         xmlns:Classes="clr-namespace:IM.Model.Classes;assembly=IM.Model" 
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
         Width="1100"  Height="700" Title="Outhouse" WindowState="Maximized" 
-     IsKeyboardFocusWithinChanged="OnIsKeyboardFocusWithinChanged">
+        IsKeyboardFocusWithinChanged="OnIsKeyboardFocusWithinChanged">
     <Window.Resources>
         <CollectionViewSource x:Key="outPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:GuestPremanifestOuthouse}, CreateList=True}"/>
         <Style TargetType="{x:Type Button}" x:Key="btnOptions">
@@ -34,7 +34,6 @@
         <Style TargetType="{x:Type GroupBox}">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="Bisque"/>
         </Style>
     </Window.Resources>
     <xctk:BusyIndicator x:Name="BusyIndicator" >
@@ -46,14 +45,14 @@
                 <RowDefinition Height="AUTO"/>
             </Grid.RowDefinitions>
             <!--#endregion-->
-            <Grid Grid.Row="0" Background="Beige">
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="86*"/>
                 </Grid.ColumnDefinitions>
                 <!--#region Botones-->
-                <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options">
+                <GroupBox  BorderBrush="#147F79" x:Name="grbMenu" Grid.Column="0" Header="Options">
                     <StackPanel Orientation="Horizontal" >
                         <Button x:Name="btnLogin"  Style="{StaticResource ResourceKey=btnOptions}" Click="btnLogin_Click" >
                             <StackPanel >
@@ -106,7 +105,7 @@
                     </StackPanel>
                 </GroupBox>
                 <!--#endregion-->
-                <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Information User">
+                <GroupBox x:Name="grbInfUser" Grid.Column="2" Header="Information User"  BorderBrush="#147F79">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -122,7 +121,7 @@
                     </Grid>
                 </GroupBox>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" >
-                    <GroupBox x:Name="grpDate" Header="Date" Width="auto" >
+                    <GroupBox x:Name="grpDate" Header="Date" Width="auto"  BorderBrush="#147F79" >
                         <StackPanel VerticalAlignment="Center" Margin="5,0,5,0">
                             <xctk:DateTimePicker Width="150"  Style="{StaticResource dtp-DateRange-TK}"  x:Name="dtpDate" ValueChanged="dtpDate_ValueChanged" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
                             <Button x:Name="btnRefresh" Click="btnRefresh_Click" Height="20" Margin="0,4,0,0">
@@ -133,7 +132,7 @@
                             </Button>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="grpView" Header="View" Width="90">
+                    <GroupBox x:Name="grpView" Header="View" Width="90"  BorderBrush="#147F79">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <RadioButton x:Name="rbtBookD" TabIndex="1" Content="Book D" FontSize="13" IsChecked="True" Checked="rbt_Checked"  Margin="0,5"/>
                             <RadioButton x:Name="rbtInvitD" TabIndex="0" Content=" Invit D" FontSize="13" Checked="rbt_Checked"  Margin="0,5"/>
@@ -141,8 +140,8 @@
                     </GroupBox>
                 </StackPanel>
             </Grid>
-            <DataGrid DataContext="{StaticResource outPremanifestViewSource}" 
-                  Grid.Row="1" Background="#FFF4F5E2" x:Name="dgGuestPremanifest" SelectionUnit ="FullRow"  
+            <DataGrid DataContext="{StaticResource outPremanifestViewSource}"   BorderBrush="#147F79" BorderThickness="2"
+                  Grid.Row="1" x:Name="dgGuestPremanifest" SelectionUnit ="FullRow"  
                   SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"
                   AlternationCount="2" ItemsSource="{Binding}" Margin="7,0"  AutoGenerateColumns="False" CanUserDeleteRows="true" FontSize="14" FontWeight="Medium"
                   EnableRowVirtualization="True"  SelectionChanged="dgGuestPremanifest_SelectionChanged" >
@@ -237,7 +236,7 @@
             </DataGrid>
             <!--#endregion-->
             <!--#region StatusBar -->
-            <StatusBar Grid.Row="2" Background="Gray"  x:Name="stbStatusBar" VerticalAlignment="Bottom" Height="22">
+            <StatusBar Grid.Row="2" x:Name="stbStatusBar" VerticalAlignment="Bottom" Height="22">
                 <StatusBarItem  x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
                 <StatusBarItem  x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
                 <StatusBarItem  x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>

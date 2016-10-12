@@ -160,7 +160,7 @@
                     <RowDefinition Height="50*" />
                 </Grid.RowDefinitions>
                 <!-- <GroupBox Grid.Row="0" x:Name="grbDate" Header="Date" FontWeight="Bold" Margin="2,0,2,0">-->
-                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"  Style="{StaticResource dtp-DateRange-TK}"  Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged" />
+                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"  Style="{StaticResource dtp-DateRange-TK}"  Margin="2,21,2,0" VerticalAlignment="Top"  ValueChanged="dtpDate_ValueChanged" />
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
                 <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99">
@@ -211,7 +211,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4" SelectionMode="Multiple" VerticalAlignment="Center" Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4" SelectionMode="Extended" VerticalAlignment="Center" Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
@@ -310,7 +310,7 @@
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>                            
+                            </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guRoomNumColumn" IsReadOnly="True"  Binding="{Binding guRoomNum}" Header="Room" Width="auto" />
                         <DataGridTextColumn x:Name="guLastName1Column" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto" />
