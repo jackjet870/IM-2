@@ -519,7 +519,10 @@ namespace IM.Host
       _busyIndicator.BusyContent = "Updating seasons's dates...";
       await BRSeasons.UpdateSeasonDates(dtpServerDate.Year);
 
+      // Reiniciamos la variable
+      _dtpCurrent = null;
       // Actualizamos el grid principal
+      dtpDate.Value = null;
       dtpDate.Value = dtpServerDate;
 
       _busyIndicator.IsBusy = false;
@@ -994,7 +997,7 @@ namespace IM.Host
     /// </history>
     private async void btnInvitationExternal_Click(object sender, RoutedEventArgs e)
     {
-      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Outhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
+      var login = new frmLogin(loginType: EnumLoginType.SalesRoom, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.HostInvitations,
                                permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceId: Context.User.SalesRoom.srID,
                                windowStartupLocation: WindowStartupLocation.CenterScreen);
 
