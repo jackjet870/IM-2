@@ -738,15 +738,17 @@ namespace IM.Host.Forms
       else if (!ValidateDepositsSalesmen())
       {
         blnValid = false;
-        tabDepositsSalesmen.IsSelected = true;
+        
       }
       //validamos que los datos del show existan
       else if (!await ValidateExist())
         blnValid = false;
-
+      //Validamos los booking Deposits
+      else if (!ValidateBookingDeposits())
+        blnValid = false;
       //Validamos los cambios de vendedores
       else if (!GetSalesMenChanges())
-        return false;
+        blnValid = false;
 
       return blnValid;
     }
@@ -1289,7 +1291,7 @@ namespace IM.Host.Forms
         SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTM1, 1, _lstSalesmenChanges, "FTM");
         SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTM2, 2, _lstSalesmenChanges, "FTM");
 
-        if (GuestShow.Guest.guShow=false && GuestShow.CloneGuest.guShow==true && GuestShow.CloneGuest.guShowD != GuestShow.Guest.guShowD)
+        if (!GuestShow.Guest.guShow && GuestShow.CloneGuest.guShow && GuestShow.CloneGuest.guShowD != GuestShow.Guest.guShowD)
         {
           _lstSalesmenChanges.ForEach(sc => sc.schNewSalesman = string.Empty);
         }
@@ -1528,6 +1530,41 @@ namespace IM.Host.Forms
     }
 
     #endregion GetSearchReservationInfo
+
+    #region ValidateBookingDeposits
+    /// <summary>
+    /// Valida el grid de deposits antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [emoguel] 13/13/2016 created
+    /// </history>
+    private bool ValidateBookingDeposits()
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(dtgBookingDeposits);
+      if (row != null)
+      {
+        int columnIndex = 0;
+        bool gridvalid = InvitationValidationRules.EndingEditBookingDeposits(row.Item as BookingDeposit, dtgBookingDeposits, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID, ref columnIndex);
+        if (gridvalid)
+        {
+          dtgBookingDeposits.RowEditEnding -= dtgBookingDeposits_RowEditEnding;
+          dtgBookingDeposits.CommitEdit();
+          dtgBookingDeposits.RowEditEnding += dtgBookingDeposits_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          tabDepositsSalesmen.IsSelected = true;
+          GridHelper.SelectRow(dtgBookingDeposits, row.GetIndex(), columnIndex, true);          
+        }
+      }
+      return isValid;
+    }
+    #endregion
 
     #endregion Metodos
 
@@ -2608,8 +2645,9 @@ namespace IM.Host.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
+        string otherColumn = string.Empty;
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID))
+        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID,ref otherColumn))
         {
           if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
@@ -2661,6 +2699,14 @@ namespace IM.Host.Forms
         else//Cancela el commit de la fila
         {
           e.Cancel = true;
+        }
+      }
+      else
+      {
+        BookingDeposit bookingDeposit = e.Row.Item as BookingDeposit;
+        if(bookingDeposit.bdID>0)
+        {
+          ObjectHelper.CopyProperties(bookingDeposit, GuestShow.CloneBookingDepositList.FirstOrDefault(bd => bd.bdID == bookingDeposit.bdID));
         }
       }
     }

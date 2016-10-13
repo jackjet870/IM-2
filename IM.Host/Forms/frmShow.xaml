@@ -823,9 +823,9 @@
                                                                             DisplayMemberPath="ccN"
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
-                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}" styClasses:FormatInputPropertyClass.FormatInput="Number"/>
                                                         <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}" styClasses:FormatInputPropertyClass.FormatInput="Number"/>
                                                         <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC,UpdateSourceTrigger=PropertyChanged}"/>
                                                         <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
