@@ -594,7 +594,7 @@ namespace IM.BusinessRules.BR
                   {
                     dbContext.USP_OR_SaveSalesmenChanges
                        (saleNew.saID, authorizedBy, user, salesmenChange.roN, salesmenChange.schPosition,
-                        salesmenChange.schOldSalesman, salesmenChange.schNewSalesman);
+                        salesmenChange.schOldSalesman, salesmenChange.schNewSalesman,null,"SL");
                   }
                 }
 

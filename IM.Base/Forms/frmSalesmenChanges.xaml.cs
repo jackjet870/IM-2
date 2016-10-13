@@ -20,7 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace IM.Host.Forms
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Formulario que muestra los moviemientos de los Salesmen
@@ -31,13 +31,15 @@ namespace IM.Host.Forms
   public partial class frmSalesmenChanges : Window
   {
     private string _membership;
-    int _sale;
+    int ID;
+    private string _movementType;
 
-    public frmSalesmenChanges(int sale, string membership)
+    public frmSalesmenChanges(int sale, string membership,string movementType="SL")
     {
       InitializeComponent();
-      _sale = sale;
+      ID = sale;
       _membership = membership;
+      _movementType = movementType;
     }
 
     /// <summary>
@@ -49,8 +51,15 @@ namespace IM.Host.Forms
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Mouse.OverrideCursor = Cursors.Wait;
-      Title = $"Salesmen Changes - Sale ID {_sale} / Membership Number {_membership}";
-      var salesSalesMan = await BRSalesSalesmen.GetSalesmenChanges(_sale);
+      if (_movementType == "SL")
+      {
+        Title = $"Salesmen Changes - Sale ID {ID} / Membership Number {_membership}";
+      }
+      else
+      {
+        Title = $"Salesmen Changes - Sale ID {ID}";
+      }
+      var salesSalesMan = await BRSalesSalesmen.GetSalesmenChanges(ID,_movementType);
       salesmenChangesDataGrid.ItemsSource = salesSalesMan;
       Mouse.OverrideCursor = null;
     }
@@ -74,10 +83,10 @@ namespace IM.Host.Forms
         Mouse.OverrideCursor = Cursors.Wait;
         FileInfo fileInfo = await ReportBuilder.CreateCustomExcelAsync(
           TableHelper.GetDataTableFromList((List<SalesmenChanges>)salesmenChangesDataGrid.ItemsSource, true, true, true),
-          new List<Tuple<string, string>> { Tuple.Create("Sale Id", _sale.ToString()) },
+          new List<Tuple<string, string>> { Tuple.Create((_movementType == "SL") ?  "Sale Id" : "Guest Id", ID.ToString()) },
           "Salesmen Changes",
           DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
-          EpplusHelper.OrderColumns(salesmenChangesDataGrid.Columns.ToList(), Classes.clsFormatReport.RptSalesmenChanges()));
+          EpplusHelper.OrderColumns(salesmenChangesDataGrid.Columns.ToList(), ExportReports.RptSalesmenChanges()));
         if (fileInfo != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);

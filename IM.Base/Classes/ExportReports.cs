@@ -1,16 +1,14 @@
 ﻿using IM.Base.Helpers;
 using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using PalaceResorts.Common.PalaceTools.Epplus.Enums;
+using OfficeOpenXml.Style;
 
 namespace IM.Base.Classes
 {
@@ -130,7 +128,32 @@ namespace IM.Base.Classes
       format.Add("Sunday", "asSunday");
       format.Add("#Assistence", "asNum");
       return format;
-    } 
+    }
+    #endregion
+
+    #region RptSalesmenChanges
+    /// <summary>
+    /// Formato para el reporte de Sales Log
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created  03102016
+    /// </history>    
+    public static ColumnFormatList RptSalesmenChanges()
+    {
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Date / Time", "schDT", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Authorized By", "schAuthorizedBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Authorized By Name", "AuthorizedByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Made By", "schMadeBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Made By Name", "MadeByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Role", "roN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Position", "schPosition", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Old Salesman", "schOldSalesman", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Old Salesman Name", "OldSalesmanN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("New Salesman", "schNewSalesman", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("New Salesman Name", "NewSalesmanN", aligment: ExcelHorizontalAlignment.Left);
+      return lst;
+    }
     #endregion
   }
 }

@@ -6675,7 +6675,8 @@
           <Parameter Name="SearchBySalePR" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetSalesmenChanges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Sale" Type="int" Mode="In" />
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="MovementType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -7600,6 +7601,8 @@
           <Parameter Name="Position" Type="tinyint" Mode="In" />
           <Parameter Name="OldSalesman" Type="varchar" Mode="In" />
           <Parameter Name="NewSalesman" Type="varchar" Mode="In" />
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="TypeMovement" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_SaveSalesRoomLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -17955,6 +17958,8 @@
             <Parameter Name="Position" Mode="In" Type="Byte" />
             <Parameter Name="OldSalesman" Mode="In" Type="String" />
             <Parameter Name="NewSalesman" Mode="In" Type="String" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="TypeMovement" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateGuestSale">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
@@ -18195,7 +18200,8 @@
             <End Role="BookingDeposit" EntitySet="BookingDeposits" />
           </AssociationSet>
           <FunctionImport Name="USP_OR_GetSalesmenChanges" ReturnType="Collection(IMModel.SalesmenChanges)">
-          <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="MovementType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestMovements" ReturnType="Collection(IMModel.GuestMovements)">
           <Parameter Name="Guest" Mode="In" Type="Int32" />

@@ -170,20 +170,52 @@ namespace IM.Model.Classes
       set { SetField(ref _personnelHOSTENTRY, value); }
     }
 
-    private List<PersonnelShort> _personnelPR;
+    private List<PersonnelShort> _personnelPR1;
 
-    public List<PersonnelShort> PersonnelPR
+    public List<PersonnelShort> PersonnelPR1
     {
-      get { return _personnelPR; }
-      set { SetField(ref _personnelPR, value); }
+      get { return _personnelPR1; }
+      set { SetField(ref _personnelPR1, value); }
     }
 
-    private List<PersonnelShort> _personnelLINER;
+    private List<PersonnelShort> _personnelPR2;
 
-    public List<PersonnelShort> PersonnelLINER
+    public List<PersonnelShort> PersonnelPR2
     {
-      get { return _personnelLINER; }
-      set { SetField(ref _personnelLINER, value); }
+      get { return _personnelPR2; }
+      set { SetField(ref _personnelPR2, value); }
+    }
+
+    private List<PersonnelShort> _personnelPR3;
+
+    public List<PersonnelShort> PersonnelPR3
+    {
+      get { return _personnelPR3; }
+      set { SetField(ref _personnelPR3  , value); }
+    }
+
+    private List<PersonnelShort> _personnelLINER1;
+
+    public List<PersonnelShort> PersonnelLINER1
+    {
+      get { return _personnelLINER1; }
+      set { SetField(ref _personnelLINER1, value); }
+    }
+
+    private List<PersonnelShort> _personnelLINER2;
+
+    public List<PersonnelShort> PersonnelLINER2
+    {
+      get { return _personnelLINER2; }
+      set { SetField(ref _personnelLINER2, value); }
+    }
+
+    private List<PersonnelShort> _personnelLINER3;
+
+    public List<PersonnelShort> PersonnelLINER3
+    {
+      get { return _personnelLINER3; }
+      set { SetField(ref _personnelLINER3, value); }
     }
 
     private List<PersonnelShort> _personnelPODIUM;
@@ -194,20 +226,60 @@ namespace IM.Model.Classes
       set { SetField(ref _personnelPODIUM, value); }
     }
 
-    private List<PersonnelShort> _personnelCLOSER;
+    private List<PersonnelShort> _personnelCLOSER1;
 
-    public List<PersonnelShort> PersonnelCLOSER
+    public List<PersonnelShort> PersonnelCLOSER1
     {
-      get { return _personnelCLOSER; }
-      set { SetField(ref _personnelCLOSER, value); }
+      get { return _personnelCLOSER1; }
+      set { SetField(ref _personnelCLOSER1, value); }
     }
 
-    private List<PersonnelShort> _personnelCLOSEREXIT;
+    private List<PersonnelShort> _personnelCLOSER2;
 
-    public List<PersonnelShort> PersonnelCLOSEREXIT
+    public List<PersonnelShort> PersonnelCLOSER2
     {
-      get { return _personnelCLOSEREXIT; }
-      set { SetField(ref _personnelCLOSEREXIT, value); }
+      get { return _personnelCLOSER2; }
+      set { SetField(ref _personnelCLOSER2, value); }
+    }
+
+    private List<PersonnelShort> _personnelCLOSER3;
+
+    public List<PersonnelShort> PersonnelCLOSER3
+    {
+      get { return _personnelCLOSER3; }
+      set { SetField(ref _personnelCLOSER3, value); }
+    }
+
+    private List<PersonnelShort> _personnelCLOSER4;
+
+    public List<PersonnelShort> PersonnelCLOSER4
+    {
+      get { return _personnelCLOSER4; }
+      set { SetField(ref _personnelCLOSER4, value); }
+    }
+
+    private List<PersonnelShort> _personnelCLOSEREXIT1;
+
+    public List<PersonnelShort> PersonnelCLOSEREXIT1
+    {
+      get { return _personnelCLOSEREXIT1; }
+      set { SetField(ref _personnelCLOSEREXIT1, value); }
+    }
+
+    private List<PersonnelShort> _personnelCLOSEREXIT2;
+
+    public List<PersonnelShort> PersonnelCLOSEREXIT2
+    {
+      get { return _personnelCLOSEREXIT2; }
+      set { SetField(ref _personnelCLOSEREXIT2, value); }
+    }
+
+    private List<PersonnelShort> _personnelCLOSEREXIT3;
+
+    public List<PersonnelShort> PersonnelCLOSEREXIT3
+    {
+      get { return _personnelCLOSEREXIT3; }
+      set { SetField(ref _personnelCLOSEREXIT3, value); }
     }
 
     private List<PersonnelShort> _personnelHOSTGIFTS;
@@ -234,18 +306,32 @@ namespace IM.Model.Classes
       set { SetField(ref _personnelVLO, value); }
     }
 
-    private List<PersonnelShort> _personnelFRONTTOBACK;
-    public List<PersonnelShort> PersonnelFRONTTOBACK
+    private List<PersonnelShort> _personnelFRONTTOBACK1;
+    public List<PersonnelShort> PersonnelFRONTTOBACK1
     {
-      get { return _personnelFRONTTOBACK; }
-      set { SetField(ref _personnelFRONTTOBACK, value); }
+      get { return _personnelFRONTTOBACK1; }
+      set { SetField(ref _personnelFRONTTOBACK1, value); }
     }
 
-    private List<PersonnelShort> _personnelFRONTTOMIDDLE;
-    public List<PersonnelShort> PersonnelFRONTTOMIDDLE
+    private List<PersonnelShort> _personnelFRONTTOBACK2;
+    public List<PersonnelShort> PersonnelFRONTTOBACK2
     {
-      get { return _personnelFRONTTOMIDDLE; }
-      set { SetField(ref _personnelFRONTTOMIDDLE, value); }
+      get { return _personnelFRONTTOBACK2; }
+      set { SetField(ref _personnelFRONTTOBACK2, value); }
+    }
+
+    private List<PersonnelShort> _personnelFRONTTOMIDDLE1;
+    public List<PersonnelShort> PersonnelFRONTTOMIDDLE1
+    {
+      get { return _personnelFRONTTOMIDDLE1; }
+      set { SetField(ref _personnelFRONTTOMIDDLE1, value); }
+    }
+
+    private List<PersonnelShort> _personnelFRONTTOMIDDLE2;
+    public List<PersonnelShort> PersonnelFRONTTOMIDDLE2
+    {
+      get { return _personnelFRONTTOMIDDLE2; }
+      set { SetField(ref _personnelFRONTTOMIDDLE2, value); }
     }
     #endregion Catalogos
 

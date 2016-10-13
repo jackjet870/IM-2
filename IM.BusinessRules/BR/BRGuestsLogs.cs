@@ -7,28 +7,7 @@ using System.Threading.Tasks;
 namespace IM.BusinessRules.BR
 {
   public class BRGuestsLogs
-  {
-    #region SetLogGuest
-    /// <summary>
-    /// Guarda el log de un guest
-    /// </summary>
-    /// <param name="Guest">Id del Guest</param>
-    /// <param name="HoursDif"></param>
-    /// <param name="ChangedBy"></param>
-    /// <history>
-    /// [jorcanche] 09/03/2016
-    /// </history>
-    public static async Task<int> SetLogGuest(int Guest, short HoursDif, string ChangedBy)
-    {
-      return await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-         return  dbContext.USP_OR_SaveGuestLog(Guest, HoursDif, ChangedBy);
-        }
-      });
-    } 
-    #endregion
+  { 
 
     #region GetGuestLog
 

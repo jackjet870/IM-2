@@ -201,6 +201,7 @@ namespace IM.Base.Reports
     /// </summary>
     /// <history>
     /// [jorcanche]  created 07072016 
+    /// [emoguel] 08/10/2016 Modified--->Se agregaron las columnas para Liner3,Closer4, Exit 3, Front To back 1 y 2, Front To Middle 1 y 2
     /// </history>    
     public static ColumnFormatList RptGuestLog()
     {
@@ -239,16 +240,30 @@ namespace IM.Base.Reports
       lst.Add("Liner 1 Name", "Liner1N");
       lst.Add("Liner 2", "glLiner2");
       lst.Add("Liner 2 Name", "Liner2N");
+      lst.Add("Liner 3", "glLiner3");
+      lst.Add("Liner 3 Name", "Liner3N");
+      lst.Add("Front To Middle 1", "glFTM1");
+      lst.Add("Frint To Middle 1 Name", "FTM1N");
+      lst.Add("Front To Middle 2", "glFTM2");
+      lst.Add("Frint To Middle 2 Name", "FTM2N");
+      lst.Add("Front To Back 1", "glFTB1");
+      lst.Add("Frint To Back 1 Name", "FTB1N");
+      lst.Add("Front To Back 2", "glFTB2");
+      lst.Add("Frint To Back 2 Name", "FTB2N");
       lst.Add("Closer 1", "glCloser1");
       lst.Add("Closer 1 Name", "Closer1N");
       lst.Add("Closer 2", "glCloser2");
       lst.Add("Closer 2 Name", "Closer2N");
       lst.Add("Closer 3'", "glCloser3");
       lst.Add("Closer 3 Name", "Closer3N");
+      lst.Add("Closer 4'", "glCloser4");
+      lst.Add("Closer 4 Name", "Closer4N");
       lst.Add("Exit1", "glExit1");
       lst.Add("Exit 1 Name", "Exit1N");
       lst.Add("Exit2", "glExit2");
       lst.Add("Exit 2 Name", "Exit2N");
+      lst.Add("Exit 3", "glExit3");
+      lst.Add("Exit 3 Name", "Exit3N");
       lst.Add("Podium", "glPodium");
       lst.Add("Podium Name", "PodiumN");
       lst.Add("VLO", "glVLO");

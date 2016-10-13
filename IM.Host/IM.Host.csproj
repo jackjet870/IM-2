@@ -169,9 +169,6 @@
     <Compile Include="Forms\frmReimpresionMotives.xaml.cs">
       <DependentUpon>frmReimpresionMotives.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmSalesmenChanges.xaml.cs">
-      <DependentUpon>frmSalesmenChanges.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmSearchDepositRefund.xaml.cs">
       <DependentUpon>frmSearchDepositRefund.xaml</DependentUpon>
     </Compile>
@@ -338,10 +335,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmSalesLog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmSalesmenChanges.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

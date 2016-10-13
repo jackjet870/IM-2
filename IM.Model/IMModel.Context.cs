@@ -5030,7 +5030,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSaleLog", saleParameter, hoursDifParameter, changedByParameter);
         }
     
-        public virtual int USP_OR_SaveSalesmenChanges(Nullable<int> sale, string authorizedBy, string madeBy, string role, Nullable<byte> position, string oldSalesman, string newSalesman)
+        public virtual int USP_OR_SaveSalesmenChanges(Nullable<int> sale, string authorizedBy, string madeBy, string role, Nullable<byte> position, string oldSalesman, string newSalesman, Nullable<int> guest, string typeMovement)
         {
             var saleParameter = sale.HasValue ?
                 new ObjectParameter("Sale", sale) :
@@ -5060,7 +5060,15 @@ namespace IM.Model
                 new ObjectParameter("NewSalesman", newSalesman) :
                 new ObjectParameter("NewSalesman", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesmenChanges", saleParameter, authorizedByParameter, madeByParameter, roleParameter, positionParameter, oldSalesmanParameter, newSalesmanParameter);
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var typeMovementParameter = typeMovement != null ?
+                new ObjectParameter("TypeMovement", typeMovement) :
+                new ObjectParameter("TypeMovement", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesmenChanges", saleParameter, authorizedByParameter, madeByParameter, roleParameter, positionParameter, oldSalesmanParameter, newSalesmanParameter, guestParameter, typeMovementParameter);
         }
     
         public virtual int USP_OR_UpdateGuestSale(Nullable<int> guestID, Nullable<bool> sale)
@@ -5871,13 +5879,17 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleLogData>("USP_OR_GetSaleLog", saleParameter);
         }
     
-        public virtual ObjectResult<SalesmenChanges> USP_OR_GetSalesmenChanges(Nullable<int> sale)
+        public virtual ObjectResult<SalesmenChanges> USP_OR_GetSalesmenChanges(Nullable<int> iD, string movementType)
         {
-            var saleParameter = sale.HasValue ?
-                new ObjectParameter("Sale", sale) :
-                new ObjectParameter("Sale", typeof(int));
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesmenChanges>("USP_OR_GetSalesmenChanges", saleParameter);
+            var movementTypeParameter = movementType != null ?
+                new ObjectParameter("MovementType", movementType) :
+                new ObjectParameter("MovementType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesmenChanges>("USP_OR_GetSalesmenChanges", iDParameter, movementTypeParameter);
         }
     
         public virtual ObjectResult<GuestMovements> USP_OR_GetGuestMovements(Nullable<int> guest)

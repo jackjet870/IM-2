@@ -71,6 +71,18 @@ namespace IM.Base.Forms
     }
     #endregion
 
+    #region btnSalesChanges_Click
+    /// <summary>
+    /// Abre la ventana de salesmenChanges
+    /// </summary>
+    /// <history>
+    /// [emoguel] 12/10/2016 created
+    /// </history>
+    private void btnSalesChanges_Click(object sender, RoutedEventArgs e)
+    {
+      frmSalesmenChanges frmSalesmenChages = new frmSalesmenChanges(_idGuest, "", "SH");
+      frmSalesmenChages.ShowDialog();
+    }
     #endregion
 
     #region btnPrintSaleLog_Click
@@ -114,6 +126,8 @@ namespace IM.Base.Forms
         Mouse.OverrideCursor = null;
       }
     }
+    #endregion
+
     #endregion
   }
 }

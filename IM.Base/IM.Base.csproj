@@ -124,6 +124,7 @@
     <Compile Include="Classes\InvitationValidationRules.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Classes\ObjReports.cs" />
+    <Compile Include="Classes\SalesmenChangesRules.cs" />
     <Compile Include="Classes\Transaction.cs" />
     <Compile Include="Converters\ByteToBooleanConverter.cs" />
     <Compile Include="Converters\DateAndTimeConverter.cs" />
@@ -140,6 +141,9 @@
     </Compile>
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesmenChanges.xaml.cs">
+      <DependentUpon>frmSalesmenChanges.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearchReservation.xaml.cs">
       <DependentUpon>frmSearchReservation.xaml</DependentUpon>
@@ -304,6 +308,10 @@
     <Page Include="Forms\frmReportQueue.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSalesmenChanges.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\frmSearchGuest.xaml">
       <Generator>MSBuild:Compile</Generator>

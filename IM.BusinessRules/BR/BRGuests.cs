@@ -427,12 +427,12 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Agregamos el timeout de la consulta
-          dbContext.Database.CommandTimeout = 180;         
+          dbContext.Database.CommandTimeout = 180;
           var query = from gu in dbContext.Guests
                       join ls in dbContext.LeadSources on gu.guls equals ls.lsID
                       where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))
-                      select gu; 
-                    
+                      select gu;
+
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -692,13 +692,13 @@ namespace IM.BusinessRules.BR
                     }).ToList();
           }
           catch (Exception)
-          {           
+          {
             throw;
           }
         }
       });
     }
-        
+
     #endregion GetGuestPremanifestOuthouse
 
     #region DeleteGuest
@@ -756,11 +756,11 @@ namespace IM.BusinessRules.BR
 
           IQueryable<Guest> query = Enumerable.Empty<Guest>().AsQueryable();
 
-            // Busqueda por Guest ID
-            if (guestID > 0)
-            {
-              return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
-            }
+          // Busqueda por Guest ID
+          if (guestID > 0)
+          {
+            return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
+          }
 
           // Busqueda por nombre o apellido
           if (guestName != "")
@@ -891,7 +891,7 @@ namespace IM.BusinessRules.BR
     /// [edgrodriguez] 18/08/2016  Created.
     /// [edgrodriguez] 10/10/2016 Modified. Se agrega una validacion al proceso de Guest Additional
     /// </history>
-    public static async Task<int> SaveGuestShow(GuestShow guestShow, UserData user, string changedBy, string machineName, string ipAddress)
+    public static async Task<int> SaveGuestShow(GuestShow guestShow, UserData user, string changedBy, string machineName, string ipAddress, List<SalesmenChanges> lstSalesmenChanges,string authorizedBy)
     {
       return await Task.Run(() =>
       {
@@ -914,6 +914,19 @@ namespace IM.BusinessRules.BR
 
               //Guardamos el Log del guest
               dbContext.USP_OR_SaveGuestLog(guestShow.Guest.guID, user.SalesRoom.srHoursDif, changedBy);
+
+              #region Guardamos los cambios de vendedores y la persona que autorizo los cambios
+              //*****************************************************************************************************
+              //               Guardamos los cambios de vendedores y la persona que autorizo los cambios
+              //*****************************************************************************************************              
+              if (lstSalesmenChanges.Count>0)
+              {
+                lstSalesmenChanges.ForEach(sc =>
+                {
+                  dbContext.USP_OR_SaveSalesmenChanges(null, authorizedBy, changedBy, sc.roN, sc.schPosition, sc.schOldSalesman, sc.schNewSalesman,guestShow.Guest.guID,"SH");
+                });
+              }
+              #endregion
 
               #region Proceso Invitation Gifts
               //Invitation Gift a Eliminar
@@ -994,7 +1007,7 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Credit Cards
-              var lstGuestCreditCards = dbContext.GuestsCreditCards.Where(cc => cc.gdgu == guestShow.Guest.guID);
+              var lstGuestCreditCards = dbContext.GuestsCreditCards.Where(cc => cc.gdgu == guestShow.Guest.guID).ToList();
 
               //Si se encontro alguno los eliminamos 
               if (lstGuestCreditCards.Any())
@@ -1004,8 +1017,10 @@ namespace IM.BusinessRules.BR
 
               //Si se agregaron nuevos GuestCreditCards los guardamos.
               guestShow.GuestCreditCardList.ToList().ForEach(gcc =>
-                dbContext.Entry(gcc).State = EntityState.Added
-              );
+              {
+                gcc.gdgu = guestShow.Guest.guID;
+                dbContext.Entry(gcc).State = EntityState.Added;
+              });
 
               //Creamos la variable en donde se van a concatenar 
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
