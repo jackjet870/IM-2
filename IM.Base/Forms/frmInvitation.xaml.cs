@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using IM.Model.Helpers;
 
 namespace IM.Base.Forms
 {
@@ -87,6 +88,7 @@ namespace IM.Base.Forms
 
       GridHelper.SetUpGrid(dtgGuestAdditional, new Guest());
 
+      GridHelper.SetUpGrid(dtgBookingDeposits, new BookingDeposit());
       #endregion
       #endregion dtgGift
     }
@@ -2049,8 +2051,9 @@ namespace IM.Base.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
+        string otherColumn = string.Empty;
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID))
+        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, dbContext.CloneBookingDepositList, dbContext.Guest.guID,ref otherColumn))
         {
           if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
@@ -2100,6 +2103,14 @@ namespace IM.Base.Forms
         else//Cancela el commit de la fila
         {
           e.Cancel = true;
+        }
+      }
+      else
+      {
+        BookingDeposit bookingDeposit = e.Row.Item as BookingDeposit;
+        if (bookingDeposit.bdID > 0)
+        {          
+          ObjectHelper.CopyProperties(bookingDeposit, dbContext.CloneBookingDepositList.FirstOrDefault(bd => bd.bdID == bookingDeposit.bdID));
         }
       }
     }

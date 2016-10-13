@@ -2,13 +2,13 @@
 {
   public enum EnumFormatInput
   {
+    Text,
     Number,
     NumberNegative,
     Decimal,
     DecimalNegative,
     Email,
-    NotSpecialCharacters,
-    Text,
+    NotSpecialCharacters,    
     Url,
     Phone
   }
