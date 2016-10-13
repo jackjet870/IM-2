@@ -32,7 +32,7 @@ namespace IM.Model
         public string bdpt { get; set; }
         public string bdpc { get; set; }
         public string bdcc { get; set; }
-        public Nullable<int> bdCardNum { get; set; }
+        public string bdCardNum { get; set; }
         public string bdAuth { get; set; }
         public Nullable<bool> bdRefund { get; set; }
         public Nullable<int> bddr { get; set; }
