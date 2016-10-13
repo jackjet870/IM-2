@@ -305,6 +305,7 @@ namespace IM.Inhouse.Forms
         if (guum.Equals(0))
         {
           t.GetProperty("guAvail").SetValue(items, true);
+          dg.CommitEdit();
           dg.Items.Refresh();
         }
 
@@ -462,6 +463,7 @@ namespace IM.Inhouse.Forms
           t.GetProperty("guCheckIn").SetValue(item, true);
           t.GetProperty("guInfo").SetValue(item, true);
           if (t.Name != "ObjGuestPremanifest") t.GetProperty("guInfoD").SetValue(item, frmCont.InfoD);
+          dg.CommitEdit();
           dg.Items.Refresh();
           GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
 
@@ -507,6 +509,7 @@ namespace IM.Inhouse.Forms
             t.GetProperty("guum").SetValue(item, frmAvail.Guum);
           }
           t.GetProperty("guAvail").SetValue(item, frmAvail.Avail);
+          dg.CommitEdit();
           dg.Items.Refresh();
           GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
 
@@ -545,6 +548,7 @@ namespace IM.Inhouse.Forms
           t.GetProperty("guFollow").SetValue(item, true);
           t.GetProperty("guAvail").SetValue(item, true);
           t.GetProperty("guInfo").SetValue(item, true);
+          dg.CommitEdit();
           dg.Items.Refresh();
           GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
 
@@ -898,6 +902,7 @@ namespace IM.Inhouse.Forms
         if (prnote.SaveNote)
         {
           dgGuestArrival.SelectedItems.OfType<ObjGuestArrival>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestArrival.CommitEdit();
           dgGuestArrival.Items.Refresh();
         }
       }
@@ -1076,6 +1081,7 @@ namespace IM.Inhouse.Forms
         if (prnote.SaveNote)
         {
           dgGuestAvailable.SelectedItems.OfType<ObjGuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestAvailable.CommitEdit();
           dgGuestAvailable.Items.Refresh();
         }
       }
@@ -1224,6 +1230,7 @@ namespace IM.Inhouse.Forms
         if (prnote.SaveNote)
         {
           dgGuestPremanifest.SelectedItems.OfType<ObjGuestPremanifest>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestPremanifest.CommitEdit();
           dgGuestPremanifest.Items.Refresh();
         }
       }
@@ -1373,6 +1380,7 @@ namespace IM.Inhouse.Forms
         if (prnote.SaveNote)
         {
           guestSearchedDataGrid.SelectedItems.OfType<ObjGuestSearched>().ToList().ForEach(item => item.guPRNote = true);
+          guestSearchedDataGrid.CommitEdit();
           guestSearchedDataGrid.Items.Refresh();
         }
       }
@@ -1808,6 +1816,7 @@ namespace IM.Inhouse.Forms
       {
         t.GetProperty("guBookCanc").SetValue(item, bc.Cancelado != null && bc.Cancelado.Value);
       }
+      dg.CommitEdit();
       dg.Items.Refresh();
     } 
     #endregion
@@ -2075,7 +2084,7 @@ namespace IM.Inhouse.Forms
       {
         t.GetProperty("guQuinella").SetValue(item, invitacion.guQuinella);
       }
-
+      dg.CommitEdit();
       dg.Items.Refresh();      
     }
 
@@ -2163,6 +2172,7 @@ namespace IM.Inhouse.Forms
             //Motivo de no booking
             t.GetProperty("gunb").SetValue(item, frmNotBookingMotive.cbmgunb.SelectedValue);
 
+            dg.CommitEdit();
             dg.Items.Refresh();
             GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex);
           }
