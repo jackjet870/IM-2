@@ -91,7 +91,7 @@
           <Property Name="bdpt" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="bdpc" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="bdcc" Type="varchar" MaxLength="10" />
-          <Property Name="bdCardNum" Type="int" />
+          <Property Name="bdCardNum" Type="varchar" MaxLength="4" />
           <Property Name="bdExpD" Type="varchar" MaxLength="5" />
           <Property Name="bdAuth" Type="varchar" MaxLength="7" />
           <Property Name="bdRefund" Type="bit" />
@@ -9403,7 +9403,7 @@
           <Property Name="bdpt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="CS" />
           <Property Name="bdpc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="NR" />
           <Property Name="bdcc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="bdCardNum" Type="Int32" />
+          <Property Name="bdCardNum" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="true" />
           <Property Name="bdAuth" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="true"/>
           <Property Name="bdRefund" Type="Boolean" />
           <Property Name="bddr" Type="Int32" />
@@ -18706,7 +18706,7 @@
           <Property Type="String" Name="guloInvit" Nullable="true" MaxLength="10" />
           <Property Type="Boolean" Name="guQuinella" Nullable="false" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="DateTime" Name="guBookT" Nullable="true" Precision="23" />
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="guLastName2" Nullable="true" MaxLength="25" />
@@ -19500,7 +19500,7 @@
         <ComplexType Name="RptDeposits">
           <Property Type="Int32" Name="grID" Nullable="false" />
           <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="Int32" Name="grgu" Nullable="true" />
           <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
           <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
@@ -19863,7 +19863,7 @@
         <ComplexType Name="GuestShowNoPresentedInvitation">
           <Property Type="Int32" Name="GuestID" Nullable="false" />
           <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="OutInvit" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="OutInvit" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
           <Property Type="DateTime" Name="ShowDate" Nullable="true" Precision="23" />
@@ -20832,7 +20832,7 @@
           <Property Type="Decimal" Name="BalanceMXN" Nullable="false" Precision="19" />
           <Property Type="Int32" Name="grgu" Nullable="true" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="DateTime" Name="cxD" Nullable="false" Precision="23" />
           <Property Type="String" Name="cxReceivedBy" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="ReceivedByName" Nullable="false" MaxLength="40" />
@@ -21063,7 +21063,7 @@
         <ComplexType Name="RptPremanifestOuthouse">
           <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
           <Property Type="Int32" Name="guID" Nullable="false" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="Deposit" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
@@ -21122,7 +21122,7 @@
           <Property Type="Int32" Name="drFolio" Nullable="false" />
           <Property Type="DateTime" Name="drD" Nullable="false" Precision="23" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="GuestName" Nullable="false" MaxLength="106" />
           <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
           <Property Type="String" Name="peID" Nullable="true" MaxLength="10" />
@@ -21130,7 +21130,7 @@
           <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
           <Property Type="String" Name="cuN" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="ccN" Nullable="false" MaxLength="30" />
-          <Property Type="Int32" Name="bdCardNum" Nullable="true" />
+          <Property Type="String" Name="bdCardNum" Nullable="true" MaxLength="4" />
           <Property Type="String" Name="bdExpD" Nullable="true" MaxLength="5" />
           <Property Type="String" Name="bdAuth" Nullable="true" MaxLength="7" />
         </ComplexType>
@@ -21145,7 +21145,7 @@
           <Property Type="Boolean" Name="grExchange" Nullable="false" />
           <Property Type="Int32" Name="guID" Nullable="true" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
           <Property Type="Int32" Name="geQty" Nullable="false" />
@@ -21228,7 +21228,7 @@
           <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="OutInvit" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="OutInvit" Nullable="true" MaxLength="15" />
           <Property Type="Int32" Name="GuestID" Nullable="true" />
           <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
@@ -21273,7 +21273,7 @@
           <Property Type="String" Name="guls" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="gucu" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gupt" Nullable="false" MaxLength="10" />
@@ -21288,7 +21288,7 @@
           <Property Type="String" Name="guls" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="gucu" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gupt" Nullable="false" MaxLength="10" />
@@ -21305,7 +21305,7 @@
           <Property Type="String" Name="guls" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="gucu" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gupt" Nullable="false" MaxLength="10" />
@@ -21660,7 +21660,7 @@
           <Property Type="Int32" Name="bdFolioCXC" Nullable="true" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
@@ -21695,7 +21695,7 @@
           <Property Type="String" Name="guStatus" Nullable="false" MaxLength="9" />
         </ComplexType>
         <ComplexType Name="RptFoliosInvitationByDateFolio">
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
@@ -22196,7 +22196,7 @@
           <Property Type="String" Name="GiftComments" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="guID" Nullable="false" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="AuthSts" Nullable="false" MaxLength="4" />
           <Property Type="DateTime" Name="grCxCAppD" Nullable="true" Precision="23" />
           <Property Type="String" Name="grAuthorizedBy" Nullable="true" MaxLength="10" />
@@ -22453,7 +22453,7 @@
           <Property Type="Byte" Name="guAge1" Nullable="true" />
           <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="guShowD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="guls" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
@@ -22645,7 +22645,7 @@
           <Property Type="Int32" Name="guID" Nullable="false" />
           <Property Type="String" Name="GuestName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="peID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="Int32" Name="bdID" Nullable="false" />
@@ -23116,7 +23116,7 @@
           <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="grRoomNum" Nullable="true" MaxLength="6" />
           <Property Type="String" Name="grpe" Nullable="true" MaxLength="53" />
           <Property Type="String" Name="loN" Nullable="true" MaxLength="30" />
@@ -23182,14 +23182,14 @@
           <Property Type="Int32" Name="RefundFolio" Nullable="false" />
           <Property Type="Decimal" Name="TotalAmount" Nullable="false" Precision="19" />
           <Property Type="DateTime" Name="RefundDate" Nullable="false" Precision="23" />
-          <Property Type="String" Name="OutInvt" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="OutInvt" Nullable="false" MaxLength="15" />
         </ComplexType>
         <ComplexType Name="RptRefundLetter_BookingDeposit">
           <Property Type="Decimal" Name="Amount" Nullable="false" Precision="19" />
           <Property Type="String" Name="AmountLetter" Nullable="false" />
           <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="CCType" Nullable="false" MaxLength="30" />
-          <Property Type="Int32" Name="CardNum" Nullable="true" />
+          <Property Type="String" Name="CardNum" Nullable="false" MaxLength="4" />
           <Property Type="String" Name="ExpDate" Nullable="false" MaxLength="5" />
           <Property Type="String" Name="Auth" Nullable="false" MaxLength="7" />
         </ComplexType>
@@ -23359,7 +23359,7 @@
           <Property Type="Decimal" Name="guDepositTwisted" Nullable="false" Precision="19" />
           <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="guHotelB" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="15" />
           <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
           <Property Type="Byte" Name="guChildren" Nullable="false" />
           <Property Type="String" Name="guChildrenAges" Nullable="true" MaxLength="20" />
