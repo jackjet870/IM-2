@@ -158,6 +158,13 @@ namespace IM.Model
             this.GuestLogs4 = new HashSet<GuestLog>();
             this.GuestLogs5 = new HashSet<GuestLog>();
             this.GuestLogs6 = new HashSet<GuestLog>();
+            this.SalesLogs_Liner3 = new HashSet<SaleLog>();
+            this.SalesLogs_Closer4 = new HashSet<SaleLog>();
+            this.SalesLogs_Exit3 = new HashSet<SaleLog>();
+            this.SalesLogs_FTB1 = new HashSet<SaleLog>();
+            this.SalesLogs_FTB2 = new HashSet<SaleLog>();
+            this.SalesLogs_FTM1 = new HashSet<SaleLog>();
+            this.SalesLogs_FTM2 = new HashSet<SaleLog>();
         }
     
         public string peID { get; set; }
@@ -460,5 +467,19 @@ namespace IM.Model
         public virtual ICollection<GuestLog> GuestLogs5 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GuestLog> GuestLogs6 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_Liner3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_Closer4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_Exit3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_FTB1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_FTB2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_FTM1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs_FTM2 { get; set; }
     }
 }

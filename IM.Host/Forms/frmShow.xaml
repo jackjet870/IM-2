@@ -823,9 +823,9 @@
                                                                             DisplayMemberPath="ccN"
                                                                             SelectedValuePath="ccID"
                                                                             ItemsSource="{Binding Source={StaticResource crediCardTypesList}}"/>
-                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum,UpdateSourceTrigger=PropertyChanged}" styClasses:FormatInputPropertyClass.FormatInput="Number"/>
                                                         <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD,UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth,UpdateSourceTrigger=PropertyChanged}" styClasses:FormatInputPropertyClass.FormatInput="Number"/>
                                                         <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC,UpdateSourceTrigger=PropertyChanged}"/>
                                                         <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                                         <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
@@ -919,7 +919,7 @@
                                                     <StackPanel x:Name="stkPR1"  VerticalAlignment="Center" Margin="5">
                                                         <TextBlock Text="PR 1" TextAlignment="Center" />
                                                         <ComboBox x:Name="cmbguPRInvit1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelPR}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelPR1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guPRInvit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -927,7 +927,7 @@
                                                     <StackPanel  VerticalAlignment="Center" Margin="5">
                                                         <TextBlock Text="PR 2" TextAlignment="Center" />
                                                         <ComboBox x:Name="cmbguPRInvit2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelPR}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelPR2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guPRInvit2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -935,7 +935,7 @@
                                                     <StackPanel  VerticalAlignment="Center" Margin="5">
                                                         <TextBlock Text="PR 3" TextAlignment="Center" />
                                                         <ComboBox x:Name="cmbguPRInvit3" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelPR}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelPR3}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guPRInvit3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -956,7 +956,7 @@
                                                             <StackPanel Margin="5,0,0,0">
                                                                 <TextBlock Text="Liner 1"  TextAlignment="Center" Margin="3" />
                                                                 <ComboBox x:Name="cmbguLiner1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelLINER}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelLINER1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guLiner1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -966,18 +966,68 @@
                                                     <StackPanel  Margin="5,0,0,0">
                                                         <TextBlock Text="Liner 2" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguLiner2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelLINER}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelLINER2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guLiner2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
+                                                    <StackPanel Margin="5,0,0,0">
+                                                    <TextBlock Text="Liner 3" TextAlignment="Center" Margin="3" />
+                                                    <ComboBox x:Name="cmbguLiner3" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelLINER3}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guLiner3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
                                                 </StackPanel>
+                                                <!--#region FrontToMiddle-->
+                                                <Separator Height="7" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Front To Middle 1" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguFTM1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelFRONTTOMIDDLE1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guFTM1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Front To Middle 2" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguFTM2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelFRONTTOMIDDLE2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guFTM2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <!--#endregion-->
+                                                <!--#region FrontToBack-->
+                                                <Separator Height="7" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Front To Back 1" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguFTB1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelFRONTTOBACK1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guFTB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Front To Back 2" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguFTB2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelFRONTTOBACK2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guFTB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <!--#endregion-->
                                                 <Separator Height="7" />
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Closer 1" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguCloser1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelCLOSER}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelCLOSER1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guCloser1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -985,7 +1035,7 @@
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Closer 2" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguCloser2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelCLOSER}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelCLOSER2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guCloser2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -993,10 +1043,18 @@
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Closer 3" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguCloser3" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelCLOSER}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelCLOSER3}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guCloser3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Closer 4" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguCloser4" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelCLOSER4}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guCloser4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
                                                 </StackPanel>
                                                 <Separator Height="7" />
@@ -1004,7 +1062,7 @@
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Exit 1" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguExit1" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelCLOSEREXIT}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelCLOSEREXIT1}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guExit1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1012,10 +1070,18 @@
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Exit 2" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguExit2" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
-                                                                  ItemsSource="{Binding PersonnelCLOSEREXIT}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ItemsSource="{Binding PersonnelCLOSEREXIT2}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
                                                                    ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
                                                                   SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
                                                                   SelectedValue="{Binding Guest.guExit2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                                        <TextBlock Text="Exit 3" TextAlignment="Center" Margin="3" />
+                                                        <ComboBox x:Name="cmbguExit3" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"
+                                                                  ItemsSource="{Binding PersonnelCLOSEREXIT3}" Style="{StaticResource cbx-General}" ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                   ToolTip="{Binding Path=SelectedItem.(Model:PersonnelShort.peN), RelativeSource={RelativeSource Self}}"
+                                                                  SelectedValuePath="peID" IsSynchronizedWithCurrentItem="False"
+                                                                  SelectedValue="{Binding Guest.guExit3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Podium" TextAlignment="Center" Margin="3" />
@@ -1036,7 +1102,6 @@
                                                 </StackPanel>
                                                 <Separator Height="7" />
                                                 <StackPanel Orientation="Horizontal">
-
                                                     <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                         <TextBlock Text="Hostess" TextAlignment="Center" Margin="3" />
                                                         <ComboBox x:Name="cmbguEntryHost" Width="200" TextSearch.TextPath="peID" SelectionChanged="cmb_SelectionChanged" KeyDown="Control_KeyDown"

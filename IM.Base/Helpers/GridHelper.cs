@@ -499,6 +499,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] 28/07/2016  Created.
     /// [erosado] 29/07/2016  Modified. Se agregó el Tag para definir el Maxlength desde la columna.
+    /// [emoguel] 13/10/2016 Modified. Se agrego en los strings que puedan recibir unicamente números
     /// </history>
     public static void SetUpGrid<T>(DataGrid dtgGrid, T objBinding,
       EnumDatabase database = EnumDatabase.IntelligentMarketing) where T : class
@@ -539,11 +540,24 @@ namespace IM.Base.Helpers
               {
                 style.Setters.Add(new Setter(TextBox.MaxLengthProperty,
                   (maxLengthProp > 0) ? maxLengthProp : columnDefinition.maxLength)); //Asignamos el maxLength 
-                if (formatInput == EnumFormatInput.NotSpecialCharacters) //Bloquea caracteres especiales
-                {
-                  style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
-                    new TextCompositionEventHandler(TextBoxHelper.TextInputSpecialCharacters)));
-                }
+                  switch(formatInput)
+                  {
+                    case EnumFormatInput.NotSpecialCharacters: //Bloquea caracteres especiales
+                      {
+                        style.Setters.Add(new EventSetter(UIElement.PreviewTextInputEvent,
+                          new TextCompositionEventHandler(TextBoxHelper.TextInputSpecialCharacters)));
+                        break;
+                      }
+                    case EnumFormatInput.Number://Cuando un String requiera guardar números enteros
+                      {
+                        style.Setters.Add(new EventSetter()
+                        {
+                          Event = UIElement.PreviewTextInputEvent,
+                          Handler = new TextCompositionEventHandler(TextBoxHelper.IntTextInput)
+                        });
+                        break;
+                      }
+                  }                
                 dgc.EditingElementStyle = style;
                 break;
               }
@@ -622,7 +636,7 @@ namespace IM.Base.Helpers
                 style.Setters.Add(new EventSetter()
                 {
                   Event = UIElement.PreviewKeyDownEvent,
-                  Handler = new System.Windows.Input.KeyEventHandler(TextBoxHelper.ValidateSpace)
+                  Handler = new KeyEventHandler(TextBoxHelper.ValidateSpace)
                 });
                 break;
               }

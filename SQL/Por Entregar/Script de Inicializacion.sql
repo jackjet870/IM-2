@@ -10,7 +10,8 @@
 use OrigosVCPalace
 
 -- I. CATALOGOS
---		1.Roles
+--		1. Roles
+--		2. Gifts
 
 -- =============================================
 --					CATALOGOS
@@ -30,4 +31,3 @@ GO
 -- [emoguel]	10/10/2016 Se Asigno el Amount y Monetary para todos los gifts que contengas el signo de $
 -- =============================================
 UPDATE Gifts SET giMonetary=1,giAmount=SUBSTRING(giN,2,CHARINDEX(' ',giN,1)-2) WHERE giID IN (SELECT giID from Gifts WHERE giN LIKE '$%')
-GO

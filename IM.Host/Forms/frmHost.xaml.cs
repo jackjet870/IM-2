@@ -62,6 +62,8 @@ namespace IM.Host
     public static List<PersonnelShort> _lstPersonnelPRCAPT;
     public static List<PersonnelShort> _lstPersonnelLINERCAPT;
     public static List<PersonnelShort> _lstPersonnelCLOSERCAPT;
+    public static List<PersonnelShort> _lstPersonnelFRONTTOMIDDLE;
+    public static List<PersonnelShort> _lstPersonnelFRONTTOBACK;
     public static List<Gift> _lstGifts;
     public static List<Program> _lstPrograms;
     public static List<LeadSource> _lstLeadSources;
@@ -464,6 +466,18 @@ namespace IM.Host
       {
         // Configuracion
         _configuration = (await BRConfiguration.GetConfigurations()).FirstOrDefault();
+      }));
+
+      _lstTasks.Add(Task.Run(async () =>
+        {
+          //Front To Middle
+          _lstPersonnelFRONTTOMIDDLE= await BRPersonnel.GetPersonnel("ALL", _salesRoom, "FTM", 1);
+        }));
+
+      _lstTasks.Add(Task.Run(async () =>
+      {
+        //Front To Back
+        _lstPersonnelFRONTTOBACK = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "FTB", 1);
       }));
 
       await Task.WhenAll(_lstTasks);

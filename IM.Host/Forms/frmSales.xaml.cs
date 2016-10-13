@@ -1703,7 +1703,7 @@ namespace IM.Host.Forms
     private bool GetSalesmenChanges(ref List<SalesmenChanges> salesmenChanges, ref string authorizedBy)
     {
       //PR´s
-      SalesmanChanged(cmbsaPR1, cmbsaPR1.Text, 1, "PR", ref salesmenChanges);
+      SalesmanChanged(cmbsaPR1, cmbsaPR1.Text, 1, "PR", ref salesmenChanges);      
       SalesmanChanged(cmbsaPR2, cmbsaPR2.Text, 2, "PR", ref salesmenChanges);
       SalesmanChanged(cmbsaPR3, cmbsaPR3.Text, 3, "PR", ref salesmenChanges);
       //Liners
@@ -1750,9 +1750,9 @@ namespace IM.Host.Forms
       ref List<SalesmenChanges> salesmenChanges)
     {
       var salesSalesmenOld = _saleOld.GetType().GetProperty(txt.Name.Substring(3)).GetValue(_saleOld);
-      var strSalesSalesmen = salesSalesmenOld?.ToString() ?? string.Empty;
+      var strSalesSalesmen = salesSalesmenOld?.ToString() ?? string.Empty;      
       if (txt.Text != strSalesSalesmen)
-      {
+      {        
         salesmenChanges.Add(new SalesmenChanges
         {
           NewSalesmanN = txt.Text,

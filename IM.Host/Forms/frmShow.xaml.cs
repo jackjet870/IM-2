@@ -47,6 +47,11 @@ namespace IM.Host.Forms
 
     public readonly GuestShow GuestShow;
 
+    //Lista de SalesmenChanged
+    private List<SalesmenChanges> _lstSalesmenChanges = new List<SalesmenChanges>();
+    //AuthorizedBy
+    private string _authorizedBy = string.Empty;
+
     //Grids Banderas
     private DataGridCellInfo _IGCurrentCell;//Celda que se esta modificando
     private bool _hasError; //Sirve para las validaciones True hubo Error | False NO
@@ -174,15 +179,276 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 02/Mayo/2016 Created
     /// </history>
-    private void LoadCombos()
+    private async void LoadCombos()
     {
       // Cargamos los catalogs en los combos correspondientes
       GuestShow.Currencies = frmHost._lstCurrencies; // Monedas
       GuestShow.PaymentTypes = frmHost._lstPaymentsType; // Formas de Pago
-      GuestShow.PersonnelPR = frmHost._lstPersonnelPR; // PR's
-      GuestShow.PersonnelLINER = frmHost._lstPersonnelLINER; // Liner's
-      GuestShow.PersonnelCLOSER = frmHost._lstPersonnelCLOSER; // Closer's
-      GuestShow.PersonnelCLOSEREXIT = frmHost._lstPersonnelCLOSEREXIT; // Exit Closer's
+      //PR's
+      #region PR1
+      if (GuestShow.Guest.guPRInvit1 == null || frmHost._lstPersonnelPR.Any(pe => pe.peID == GuestShow.Guest.guPRInvit1))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelPR1 = frmHost._lstPersonnelPR; // PR's
+      }
+      else//Si no existe el PR en el combobox
+      {
+        PersonnelShort pr1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guPRInvit1)).FirstOrDefault();//Buscamos el PR en la BD
+        if (pr1 != null)
+        {
+          List<PersonnelShort> lstPRs1 = frmHost._lstPersonnelPR.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstPRs1.Add(pr1);//Agregamos el PR al combobox
+          GuestShow.PersonnelPR1 = lstPRs1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Pr inicial
+        {
+          GuestShow.PersonnelPR1 = frmHost._lstPersonnelPR; // PR's
+        }
+      }
+      #endregion
+      #region PR2
+      if (GuestShow.Guest.guPRInvit2 == null || frmHost._lstPersonnelPR.Any(pe => pe.peID == GuestShow.Guest.guPRInvit2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelPR2 = frmHost._lstPersonnelPR; // PR's
+      }
+      else//Si no existe el PR en el combobox
+      {
+        PersonnelShort pr2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guPRInvit2)).FirstOrDefault();//Buscamos el PR en la BD
+        if (pr2 != null)
+        {
+          List<PersonnelShort> lstPRs2 = frmHost._lstPersonnelPR.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstPRs2.Add(pr2);//Agregamos el PR al combobox
+          GuestShow.PersonnelPR2 = lstPRs2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Pr inicial
+        {
+          GuestShow.PersonnelPR2 = frmHost._lstPersonnelPR; // PR's
+        }
+      }
+      #endregion
+      #region PR3
+      if (GuestShow.Guest.guPRInvit3 == null || frmHost._lstPersonnelPR.Any(pe => pe.peID == GuestShow.Guest.guPRInvit3))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelPR3 = frmHost._lstPersonnelPR; // PR's
+      }
+      else//Si no existe el PR en el combobox
+      {
+        PersonnelShort pr3 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guPRInvit3)).FirstOrDefault();//Buscamos el PR en la BD
+        if (pr3 != null)
+        {
+          List<PersonnelShort> lstPRs3 = frmHost._lstPersonnelPR.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstPRs3.Add(pr3);//Agregamos el PR al combobox
+          GuestShow.PersonnelPR3 = lstPRs3;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Pr inicial
+        {
+          GuestShow.PersonnelPR3 = frmHost._lstPersonnelPR; // PR's
+        }
+      }
+      #endregion
+      //Liners
+      #region Liner1
+      if (GuestShow.Guest.guLiner1 == null || frmHost._lstPersonnelLINER.Any(pe => pe.peID == GuestShow.Guest.guLiner1))//Verificamos si el registro existe en el combobox
+      {        
+        GuestShow.PersonnelLINER1 = frmHost._lstPersonnelLINER; // Liner's
+      }
+      else//Si no existe el Liner en el combobox
+      {
+        PersonnelShort Liner1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guLiner1)).FirstOrDefault();//Buscamos el Liner en la BD
+        if (Liner1 != null)
+        {
+          List<PersonnelShort> lstLiners1 = frmHost._lstPersonnelLINER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstLiners1.Add(Liner1);//Agregamos el Liner al combobox
+          GuestShow.PersonnelLINER1 = lstLiners1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Liner inicial
+        {
+          GuestShow.PersonnelLINER1 = frmHost._lstPersonnelLINER; // Liners
+        }
+      }
+      #endregion      
+      #region Liner2
+      if (GuestShow.Guest.guLiner2 == null || frmHost._lstPersonnelLINER.Any(pe => pe.peID == GuestShow.Guest.guLiner2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelLINER2 = frmHost._lstPersonnelLINER; // Liner's
+      }
+      else//Si no existe el Liner en el combobox
+      {
+        PersonnelShort Liner2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guLiner2)).FirstOrDefault();//Buscamos el Liner en la BD
+        if (Liner2 != null)
+        {
+          List<PersonnelShort> lstLiners2 = frmHost._lstPersonnelLINER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstLiners2.Add(Liner2);//Agregamos el Liner al combobox
+          GuestShow.PersonnelLINER2 = lstLiners2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Liner inicial
+        {
+          GuestShow.PersonnelLINER2 = frmHost._lstPersonnelLINER; // Liners
+        }
+      }
+      #endregion      
+      #region Liner3
+      if (GuestShow.Guest.guLiner3 == null || frmHost._lstPersonnelLINER.Any(pe => pe.peID == GuestShow.Guest.guLiner3))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelLINER3 = frmHost._lstPersonnelLINER; // Liner's
+      }
+      else//Si no existe el Liner en el combobox
+      {
+        PersonnelShort Liner3 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guLiner3)).FirstOrDefault();//Buscamos el Liner en la BD
+        if (Liner3 != null)
+        {
+          List<PersonnelShort> lstLiners3 = frmHost._lstPersonnelLINER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstLiners3.Add(Liner3);//Agregamos el Liner al combobox
+          GuestShow.PersonnelLINER3 = lstLiners3;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Liner inicial
+        {
+          GuestShow.PersonnelLINER3 = frmHost._lstPersonnelLINER; // Liners
+        }
+      }
+      #endregion      
+      //Closers
+      #region Closer1
+      if (GuestShow.Guest.guCloser1 == null || frmHost._lstPersonnelCLOSER.Any(pe => pe.peID == GuestShow.Guest.guCloser1))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSER1 = frmHost._lstPersonnelCLOSER; // Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort Closer1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guCloser1)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (Closer1 != null)
+        {
+          List<PersonnelShort> lstClosers1 = frmHost._lstPersonnelCLOSER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstClosers1.Add(Closer1);//Agregamos el Closer al combobox
+          GuestShow.PersonnelCLOSER1 = lstClosers1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Closer inicial
+        {
+          GuestShow.PersonnelCLOSER1 = frmHost._lstPersonnelCLOSER; // Closers
+        }
+      }
+      #endregion      
+      #region Closer2
+      if (GuestShow.Guest.guCloser2 == null || frmHost._lstPersonnelCLOSER.Any(pe => pe.peID == GuestShow.Guest.guCloser2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSER2 = frmHost._lstPersonnelCLOSER; // Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort Closer2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guCloser2)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (Closer2 != null)
+        {
+          List<PersonnelShort> lstClosers2 = frmHost._lstPersonnelCLOSER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstClosers2.Add(Closer2);//Agregamos el Closer al combobox
+          GuestShow.PersonnelCLOSER2 = lstClosers2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Closer inicial
+        {
+          GuestShow.PersonnelCLOSER2 = frmHost._lstPersonnelCLOSER; // Closers
+        }
+      }
+      #endregion
+      #region Closer3
+      if (GuestShow.Guest.guCloser3 == null || frmHost._lstPersonnelCLOSER.Any(pe => pe.peID == GuestShow.Guest.guCloser3))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSER3 = frmHost._lstPersonnelCLOSER; // Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort Closer3 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guCloser3)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (Closer3 != null)
+        {
+          List<PersonnelShort> lstClosers3 = frmHost._lstPersonnelCLOSER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstClosers3.Add(Closer3);//Agregamos el Closer al combobox
+          GuestShow.PersonnelCLOSER3 = lstClosers3;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Closer inicial
+        {
+          GuestShow.PersonnelCLOSER3 = frmHost._lstPersonnelCLOSER; // Closers
+        }
+      }
+      #endregion
+      #region Closer4
+      if (GuestShow.Guest.guCloser4 == null || frmHost._lstPersonnelCLOSER.Any(pe => pe.peID == GuestShow.Guest.guCloser4))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSER4 = frmHost._lstPersonnelCLOSER; // Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort Closer4 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guCloser4)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (Closer4 != null)
+        {
+          List<PersonnelShort> lstClosers4 = frmHost._lstPersonnelCLOSER.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstClosers4.Add(Closer4);//Agregamos el Closer al combobox
+          GuestShow.PersonnelCLOSER4 = lstClosers4;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Closer inicial
+        {
+          GuestShow.PersonnelCLOSER4 = frmHost._lstPersonnelCLOSER; // Closers
+        }
+      }
+      #endregion
+      //CloserExit
+      #region ExitCloser1
+      if (GuestShow.Guest.guExit1 == null || frmHost._lstPersonnelCLOSEREXIT.Any(pe => pe.peID == GuestShow.Guest.guExit1))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSEREXIT1 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort exitCloser1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guExit1)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (exitCloser1 != null)
+        {
+          List<PersonnelShort> lstExit1 = frmHost._lstPersonnelCLOSEREXIT.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstExit1.Add(exitCloser1);//Agregamos el Liner al combobox
+          GuestShow.PersonnelCLOSEREXIT1 = lstExit1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Exit Closer inicial
+        {
+          GuestShow.PersonnelCLOSEREXIT1 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closers
+        }
+      }
+      #endregion
+      #region ExitCloser2
+      if (GuestShow.Guest.guExit2 == null || frmHost._lstPersonnelCLOSEREXIT.Any(pe => pe.peID == GuestShow.Guest.guExit2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSEREXIT2 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort exitCloser2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guExit2)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (exitCloser2 != null)
+        {
+          List<PersonnelShort> lstExit2 = frmHost._lstPersonnelCLOSEREXIT.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstExit2.Add(exitCloser2);//Agregamos el Exit Closer al combobox
+          GuestShow.PersonnelCLOSEREXIT2 = lstExit2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Exit Closer inicial
+        {
+          GuestShow.PersonnelCLOSEREXIT2 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closers
+        }
+      }
+      #endregion
+      #region ExitCloser3
+      if (GuestShow.Guest.guExit3 == null || frmHost._lstPersonnelCLOSEREXIT.Any(pe => pe.peID == GuestShow.Guest.guExit3))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelCLOSEREXIT3 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closer
+      }
+      else//Si no existe el Closer en el combobox
+      {
+        PersonnelShort exitCloser3 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guExit3)).FirstOrDefault();//Buscamos el Closer en la BD
+        if (exitCloser3 != null)
+        {
+          List<PersonnelShort> lstExit3 = frmHost._lstPersonnelCLOSEREXIT.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstExit3.Add(exitCloser3);//Agregamos el Exit Closer al combobox
+          GuestShow.PersonnelCLOSEREXIT3 = lstExit3;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Exit Closer inicial
+        {
+          GuestShow.PersonnelCLOSEREXIT3 = frmHost._lstPersonnelCLOSEREXIT; // Exit Closers
+        }
+      }
+      #endregion
+
       GuestShow.PersonnelPODIUM = frmHost._lstPersonnelPODIUM; // Podium
       GuestShow.PersonnelVLO = frmHost._lstPersonnelVLO; // Verificador Legal
       GuestShow.PersonnelHOSTENTRY = frmHost._lstPersonnelHOSTENTRY; // Host de llegada
@@ -202,11 +468,93 @@ namespace IM.Host.Forms
       GuestShow.SalesRoom = frmHost._lstSalesRoom; //Sales Room
       GuestShow.Locations = frmHost._lstLocations;
       GuestShow.LeadSources = frmHost._lstLeadSources;
-
+      //Front To Middle
+      #region FrontToMiddle1
+      if (GuestShow.Guest.guFTM1 == null || frmHost._lstPersonnelFRONTTOMIDDLE.Any(pe => pe.peID == GuestShow.Guest.guFTM1))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelFRONTTOMIDDLE1 = frmHost._lstPersonnelFRONTTOMIDDLE; // Front To Middle
+      }
+      else//Si no existe el Front To Middle en el combobox
+      {
+        PersonnelShort frontToMiddle1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guFTM1)).FirstOrDefault();//Buscamos el FTM en la BD
+        if (frontToMiddle1 != null)
+        {
+          List<PersonnelShort> lstFtm1 = frmHost._lstPersonnelFRONTTOMIDDLE.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstFtm1.Add(frontToMiddle1);//Agregamos el Front To Middle al combobox
+          GuestShow.PersonnelFRONTTOMIDDLE1 = lstFtm1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Front To Middle inicial
+        {
+          GuestShow.PersonnelFRONTTOMIDDLE1 = frmHost._lstPersonnelFRONTTOMIDDLE; // Front To Middle
+        }
+      }
+      #endregion
+      #region FrontToMiddle2
+      if (GuestShow.Guest.guFTM2 == null || frmHost._lstPersonnelFRONTTOMIDDLE.Any(pe => pe.peID == GuestShow.Guest.guFTM2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelFRONTTOMIDDLE2 = frmHost._lstPersonnelFRONTTOMIDDLE; // Front To Middle
+      }
+      else//Si no existe el Front To Middle en el combobox
+      {
+        PersonnelShort frontToMiddle2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guFTM2)).FirstOrDefault();//Buscamos el FTM en la BD
+        if (frontToMiddle2 != null)
+        {
+          List<PersonnelShort> lstFtm2 = frmHost._lstPersonnelFRONTTOMIDDLE.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstFtm2.Add(frontToMiddle2);//Agregamos el Front To Middle al combobox
+          GuestShow.PersonnelFRONTTOMIDDLE1 = lstFtm2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Front To Middle inicial
+        {
+          GuestShow.PersonnelFRONTTOMIDDLE2 = frmHost._lstPersonnelFRONTTOMIDDLE; // Front To Middle
+        }
+      }
+      #endregion
+      //Front To Back
+      #region FrontToBack1
+      if (GuestShow.Guest.guFTB1 == null || frmHost._lstPersonnelFRONTTOBACK.Any(pe => pe.peID == GuestShow.Guest.guFTB1))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelFRONTTOBACK1 = frmHost._lstPersonnelFRONTTOBACK; // Front To Back
+      }
+      else//Si no existe el Front To Back en el combobox
+      {
+        PersonnelShort frontToBack1 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guFTB1)).FirstOrDefault();//Buscamos el Front To Back en la BD
+        if (frontToBack1 != null)
+        {
+          List<PersonnelShort> lstFtb1 = frmHost._lstPersonnelFRONTTOBACK.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstFtb1.Add(frontToBack1);//Agregamos el Front To Back al combobox
+          GuestShow.PersonnelFRONTTOBACK1 = lstFtb1;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Front To Middle inicial
+        {
+          GuestShow.PersonnelFRONTTOBACK1 = frmHost._lstPersonnelFRONTTOBACK; // Front To Back
+        }
+      }
+      #endregion
+      #region FrontToBack2
+      if (GuestShow.Guest.guFTB2 == null || frmHost._lstPersonnelFRONTTOBACK.Any(pe => pe.peID == GuestShow.Guest.guFTB2))//Verificamos si el registro existe en el combobox
+      {
+        GuestShow.PersonnelFRONTTOBACK2 = frmHost._lstPersonnelFRONTTOBACK; // Front To Back
+      }
+      else//Si no existe el Front To Back en el combobox
+      {
+        PersonnelShort frontToBack2 = (await BRPersonnel.GetPersonnel(status: 0, idPersonnel: GuestShow.Guest.guFTB2)).FirstOrDefault();//Buscamos el Front To Back en la BD
+        if (frontToBack2 != null)
+        {
+          List<PersonnelShort> lstFtb2 = frmHost._lstPersonnelFRONTTOBACK.Select(pe => ObjectHelper.CopyProperties(pe)).ToList();//Creamos una nueva lista para no modificar la lista original
+          lstFtb2.Add(frontToBack2);//Agregamos el Front To Back al combobox
+          GuestShow.PersonnelFRONTTOBACK1 = lstFtb2;//Asignamos la lista a la propiedad que se Bidea al Combobox
+        }
+        else//Si no se encuentra en la BD Se agrega la lista de Front To Middle inicial
+        {
+          GuestShow.PersonnelFRONTTOBACK2 = frmHost._lstPersonnelFRONTTOBACK; // Front To Back
+        }
+      }
+      #endregion
       GuestShow.Personnel = frmHost._lstPersonnel;
     }
 
     #endregion LoadCombos
+
 
     #region LoadRecord
 
@@ -390,10 +738,16 @@ namespace IM.Host.Forms
       else if (!ValidateDepositsSalesmen())
       {
         blnValid = false;
-        tabDepositsSalesmen.IsSelected = true;
+        
       }
       //validamos que los datos del show existan
       else if (!await ValidateExist())
+        blnValid = false;
+      //Validamos los booking Deposits
+      else if (!ValidateBookingDeposits())
+        blnValid = false;
+      //Validamos los cambios de vendedores
+      else if (!GetSalesMenChanges())
         blnValid = false;
 
       return blnValid;
@@ -899,6 +1253,71 @@ namespace IM.Host.Forms
 
     #endregion ValidateShowType
 
+    #region GetSalesMenChanges
+    /// <summary>
+    /// Obtiene los cambios que se hicieron en los Salesmen y valida que se puedan guardar
+    /// </summary>
+    /// <returns>True.Si se puede guardar | False. No se puede guardar </returns>
+    /// <history>
+    /// [emoguel] 11/10/2016 created
+    /// </history>
+    private bool GetSalesMenChanges()
+    {
+      if (GuestShow.Guest.guShowD < BRHelpers.GetServerDate())
+      {
+        //PR´s
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguPRInvit1, 1, _lstSalesmenChanges, "PR");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguPRInvit2, 2, _lstSalesmenChanges, "PR");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguPRInvit3, 3, _lstSalesmenChanges, "PR");
+        //Liners
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguLiner1, 1, _lstSalesmenChanges, "LINER");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguLiner2, 2, _lstSalesmenChanges, "LINER");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguLiner3, 3, _lstSalesmenChanges, "LINER");
+        //Closers
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguCloser1, 1, _lstSalesmenChanges, "CLOSER");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguCloser2, 2, _lstSalesmenChanges, "CLOSER");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguCloser3, 3, _lstSalesmenChanges, "CLOSER");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguCloser4, 4, _lstSalesmenChanges, "CLOSER");
+        //Exit Closers
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguExit1, 1, _lstSalesmenChanges, "EXIT");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguExit2, 2, _lstSalesmenChanges, "EXIT");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguExit3, 3, _lstSalesmenChanges, "EXIT");
+
+        //Front To Back
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTB1, 1, _lstSalesmenChanges, "FTB");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTB2, 2, _lstSalesmenChanges, "FTB");
+
+        //Front To Middle
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTM1, 1, _lstSalesmenChanges, "FTM");
+        SalesmenChangesRules.GetSalesmenChanges(GuestShow.CloneGuest, cmbguFTM2, 2, _lstSalesmenChanges, "FTM");
+
+        if (!GuestShow.Guest.guShow && GuestShow.CloneGuest.guShow && GuestShow.CloneGuest.guShowD != GuestShow.Guest.guShowD)
+        {
+          _lstSalesmenChanges.ForEach(sc => sc.schNewSalesman = string.Empty);
+        }
+
+      }
+      if (_lstSalesmenChanges.Count > 0)
+      {
+        //Desplegamos el formulario para solicitar la persona que autorizo los cambios
+        var frmEntryFieldData = new frmEntryFieldsData(_lstSalesmenChanges) { Owner = this };
+        Mouse.OverrideCursor = null;
+        frmEntryFieldData.ShowDialog();        
+        _authorizedBy = frmEntryFieldData.AuthorizedBy;
+
+        //si se presiono el boton de cancelar 
+        if (!frmEntryFieldData.cancel || string.IsNullOrWhiteSpace(_authorizedBy))
+        {
+          _lstSalesmenChanges = new List<SalesmenChanges>();
+          return false;
+        }
+        Mouse.OverrideCursor = Cursors.Wait;
+      }
+
+      return true;
+    } 
+    #endregion
+
     #region Save
 
     /// <summary>
@@ -918,19 +1337,19 @@ namespace IM.Host.Forms
       // checamos si los datos de Self Gen estan correctamente llenados
       await CheckSelfGen();
 
-     
+
       //// si es una invitacion outside y esta habilitado el uso de perfiles de Opera
       //if (_enumProgram == EnumProgram.Outhouse && ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
       //{
       //  //WirePRHelper.SaveProfileOpera Me, mData
       //}
       // guardar
-      if (await BRGuests.SaveGuestShow(GuestShow, Context.User, txtChangedBy.Text, Environment.MachineName, ComputerHelper.GetIpMachine()) == 0)
+      if (await BRGuests.SaveGuestShow(GuestShow, Context.User, txtChangedBy.Text, Environment.MachineName, ComputerHelper.GetIpMachine(), _lstSalesmenChanges, _authorizedBy) == 0)
       {
         UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
           MessageBoxImage.Error, "Information can not keep");
       }
-      await LoadRecord();
+      await LoadRecord();      
       busyIndicator.IsBusy = false;
     }
 
@@ -1112,6 +1531,41 @@ namespace IM.Host.Forms
 
     #endregion GetSearchReservationInfo
 
+    #region ValidateBookingDeposits
+    /// <summary>
+    /// Valida el grid de deposits antes de guardar
+    /// Verifica que no haya ni un registro en modo edición
+    /// </summary>
+    /// <returns>True. Es valido | false. No es valido</returns>
+    /// <history>
+    /// [emoguel] 13/13/2016 created
+    /// </history>
+    private bool ValidateBookingDeposits()
+    {
+      bool isValid = true;
+      //Validar que ya se haya salido del modo edición del Grid de Booking Deposits
+      DataGridRow row = GridHelper.GetRowEditing(dtgBookingDeposits);
+      if (row != null)
+      {
+        int columnIndex = 0;
+        bool gridvalid = InvitationValidationRules.EndingEditBookingDeposits(row.Item as BookingDeposit, dtgBookingDeposits, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID, ref columnIndex);
+        if (gridvalid)
+        {
+          dtgBookingDeposits.RowEditEnding -= dtgBookingDeposits_RowEditEnding;
+          dtgBookingDeposits.CommitEdit();
+          dtgBookingDeposits.RowEditEnding += dtgBookingDeposits_RowEditEnding;
+        }
+        else
+        {
+          isValid = false;
+          tabDepositsSalesmen.IsSelected = true;
+          GridHelper.SelectRow(dtgBookingDeposits, row.GetIndex(), columnIndex, true);          
+        }
+      }
+      return isValid;
+    }
+    #endregion
+
     #endregion Metodos
 
     #region Eventos del formulario
@@ -1122,6 +1576,9 @@ namespace IM.Host.Forms
     {
       // Obtenemos la fecha actual
       _dateCurrent = frmHost.dtpServerDate;
+
+      //cargamos los datos del show
+      await LoadRecord();
 
       //cargamos los combos
       LoadCombos();
@@ -1148,9 +1605,6 @@ namespace IM.Host.Forms
 
       //obtenemos la fechas de cierre
       _salesRoom = BRSalesRooms.GetSalesRoom(Context.User.SalesRoom.srID);
-
-      //cargamos los datos del show
-      await LoadRecord();
 
       // establecemos el numero de copias
       GuestShow.OcWelcomeCopies = frmHost._configuration.ocWelcomeCopies;
@@ -1427,7 +1881,7 @@ namespace IM.Host.Forms
         Close();
       }
       catch (Exception ex)
-      {
+      {        
         UIHelper.ShowMessage(ex);
       }
       finally
@@ -2191,8 +2645,9 @@ namespace IM.Host.Forms
     {
       if (e.EditAction == DataGridEditAction.Commit)
       {
+        string otherColumn = string.Empty;
         _isCellCommitDeposit = (Keyboard.IsKeyDown(Key.Enter));
-        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID))
+        if (!InvitationValidationRules.ValidateEditBookingDeposit(e.Column.SortMemberPath, e.Row.Item as BookingDeposit, dtgBookingDeposits, e.EditingElement as Control, GuestShow.CloneBookingDepositList, GuestShow.Guest.guID,ref otherColumn))
         {
           if (dtgBookingDeposits.CurrentColumn != null && e.Column.DisplayIndex != dtgBookingDeposits.CurrentColumn.DisplayIndex)//Validamos si la columna validada es diferente a la seleccionada
           {
@@ -2244,6 +2699,14 @@ namespace IM.Host.Forms
         else//Cancela el commit de la fila
         {
           e.Cancel = true;
+        }
+      }
+      else
+      {
+        BookingDeposit bookingDeposit = e.Row.Item as BookingDeposit;
+        if(bookingDeposit.bdID>0)
+        {
+          ObjectHelper.CopyProperties(bookingDeposit, GuestShow.CloneBookingDepositList.FirstOrDefault(bd => bd.bdID == bookingDeposit.bdID));
         }
       }
     }

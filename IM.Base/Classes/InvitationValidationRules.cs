@@ -841,7 +841,7 @@ namespace IM.Base.Classes
     /// [emoguel] 11/08/2016 created
     /// </history>
     /// <returns> false. no es valido | true. es valido</returns>
-    public static bool ValidateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement, List<BookingDeposit> lstBookingDeposits, int guestID)
+    public static bool ValidateEditBookingDeposit(string strColumn, BookingDeposit bookingDeposit, DataGrid dtgBookingDeposits, Control editElement, List<BookingDeposit> lstBookingDeposits, int guestID,ref string strOtheColum)
     {
       switch (strColumn)
       {
@@ -946,7 +946,7 @@ namespace IM.Base.Classes
               bool blnIsValid = Regex.IsMatch(bookingDeposit.bdExpD, @"^(0[1-9]|1[0-2])\/?([0-9]{2})$");
               if (!blnIsValid)
               {
-                UIHelper.ShowMessage("Expiration Date is not valid");
+                UIHelper.ShowMessage("Expiration Date is not valid");                
               }
               return blnIsValid;
             }
@@ -964,6 +964,7 @@ namespace IM.Base.Classes
             if (bookingDeposit.bdpt == "CC" && string.IsNullOrWhiteSpace(bookingDeposit.bdcc))
             {
               UIHelper.ShowMessage("Specify a credit card type");
+              strOtheColum = "bdcc";
               return false;
             }
 
@@ -1153,9 +1154,10 @@ namespace IM.Base.Classes
       PropertyInfo[] properties = bookingDeposit.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
       foreach (PropertyInfo pi in properties)
       {
-        if (!ValidateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestId))
+        string otherColumn = string.Empty;
+        if (!ValidateEditBookingDeposit(pi.Name, bookingDeposit, dtgBookingDeposits, null, lstBookingsDeposits, guestId, ref otherColumn))
         {
-          var column = dtgBookingDeposits.Columns.FirstOrDefault(cl => cl.SortMemberPath == pi.Name);
+          var column = dtgBookingDeposits.Columns.FirstOrDefault(cl => cl.SortMemberPath == ((!string.IsNullOrWhiteSpace(otherColumn))?otherColumn: pi.Name));
           columnIndex = (column != null) ? column.DisplayIndex : 0;
           return false;
         }
@@ -1222,7 +1224,7 @@ namespace IM.Base.Classes
       }
       return isValid;
     }
-    #endregion
+    #endregion    
 
     #endregion
 

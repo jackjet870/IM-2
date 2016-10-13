@@ -72,5 +72,19 @@ namespace IM.Model
         public Nullable<byte> slExit2P { get; set; }
         public Nullable<decimal> slClosingCost { get; set; }
         public Nullable<decimal> slOverPack { get; set; }
+        public string slLiner3 { get; set; }
+        public string Liner3N { get; set; }
+        public string slFTM1 { get; set; }
+        public string FTM1N { get; set; }
+        public string slFTM2 { get; set; }
+        public string FTM2N { get; set; }
+        public string slFTB1 { get; set; }
+        public string FTB1N { get; set; }
+        public string slFTB2 { get; set; }
+        public string FTB2N { get; set; }
+        public string slCloser4 { get; set; }
+        public string Closer4N { get; set; }
+        public string slExit3 { get; set; }
+        public string Exit3N { get; set; }
     }
 }
