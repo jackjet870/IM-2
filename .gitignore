@@ -255,5 +255,3 @@ obj/
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*
 bin/
-/IM.ProcessorGeneral/Reports
-/IM.ProcessorGeneral/Classes/DynamicReport.cs
