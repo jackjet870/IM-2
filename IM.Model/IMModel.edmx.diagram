@@ -466,6 +466,13 @@
         <AssociationConnector Association="IMModel.FK_LeadSources_SalesRooms" />
         <AssociationConnector Association="IMModel.FK_SegmentsByAgency_SegmentsCategories" />
         <AssociationConnector Association="IMModel.FK_SegmentsByLeadSource_SegmentsCategories" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Closer4" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_ExitCloser3" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToBack1" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToBack2" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle1" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle2" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Liner3" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

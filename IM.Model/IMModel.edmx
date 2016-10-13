@@ -1834,6 +1834,13 @@
           <Property Name="slClosingCost" Type="money" />
           <Property Name="slOverPack" Type="money" />
           <Property Name="slChangedBy" Type="varchar" MaxLength="10" />
+          <Property Name="slLiner3" Type="varchar" MaxLength="10" />
+          <Property Name="slCloser4" Type="varchar" MaxLength="10" />
+          <Property Name="slExit3" Type="varchar" MaxLength="10" />
+          <Property Name="slFTB1" Type="varchar" MaxLength="10" />
+          <Property Name="slFTB2" Type="varchar" MaxLength="10" />
+          <Property Name="slFTM1" Type="varchar" MaxLength="10" />
+          <Property Name="slFTM2" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="SalesmenChanges">
           <Key>
@@ -5335,6 +5342,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalesLog_Personnel_Closer4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SalesLog_Personnel_CloserCaptain1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
@@ -5371,6 +5390,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalesLog_Personnel_ExitCloser3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToBack1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToBack2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToMiddle1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToMiddle2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SalesLog_Personnel_Liner1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
@@ -5392,6 +5471,18 @@
             </Principal>
             <Dependent Role="SalesLog">
               <PropertyRef Name="slLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_Liner3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesLog" Type="Self.SalesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesLog">
+              <PropertyRef Name="slLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9066,6 +9157,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesLog" EntitySet="SalesLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_Closer4" Association="Self.FK_SalesLog_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_SalesLog_Personnel_CloserCaptain1" Association="Self.FK_SalesLog_Personnel_CloserCaptain1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesLog" EntitySet="SalesLog" />
@@ -9078,11 +9173,35 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesLog" EntitySet="SalesLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_ExitCloser3" Association="Self.FK_SalesLog_Personnel_ExitCloser3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToBack1" Association="Self.FK_SalesLog_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToBack2" Association="Self.FK_SalesLog_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToMiddle1" Association="Self.FK_SalesLog_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToMiddle2" Association="Self.FK_SalesLog_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_SalesLog_Personnel_Liner1" Association="Self.FK_SalesLog_Personnel_Liner1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesLog" EntitySet="SalesLog" />
           </AssociationSet>
           <AssociationSet Name="FK_SalesLog_Personnel_Liner2" Association="Self.FK_SalesLog_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesLog" EntitySet="SalesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_Liner3" Association="Self.FK_SalesLog_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="SalesLog" EntitySet="SalesLog" />
           </AssociationSet>
@@ -11134,6 +11253,13 @@
           <NavigationProperty Name="GuestLogs4" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="GuestLog" />
           <NavigationProperty Name="GuestLogs5" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="GuestLog" />
           <NavigationProperty Name="GuestLogs6" Relationship="IMModel.FK_GuestLg_Personnel_Liner3" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="SalesLogs_Closer4" Relationship="IMModel.FK_SalesLog_Personnel_Closer4" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_Exit3" Relationship="IMModel.FK_SalesLog_Personnel_ExitCloser3" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_FTB1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToBack1" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_FTB2" Relationship="IMModel.FK_SalesLog_Personnel_FrontToBack2" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_FTM1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_FTM2" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="SalesLogs_Liner3" Relationship="IMModel.FK_SalesLog_Personnel_Liner3" FromRole="Personnel" ToRole="SaleLog" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -11525,6 +11651,20 @@
           <NavigationProperty Name="Sale_Reference" Relationship="Self.FK_SalesLog_Sales_Reference" FromRole="SalesLog" ToRole="Sales" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRoom" Relationship="Self.FK_SalesLog_SalesRooms" FromRole="SalesLog" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SaleType" Relationship="Self.FK_SalesLog_SaleTypes" FromRole="SalesLog" ToRole="SaleTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="slLiner3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slCloser4" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slExit3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slFTM1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="slFTM2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel_Closer4" Relationship="IMModel.FK_SalesLog_Personnel_Closer4" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Exit3" Relationship="IMModel.FK_SalesLog_Personnel_ExitCloser3" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToBack1" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB2" Relationship="IMModel.FK_SalesLog_Personnel_FrontToBack2" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle1" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM2" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle2" FromRole="SaleLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_SalesLog_Personnel_Liner3" FromRole="SaleLog" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="SalesmanChange">
           <Key>
@@ -18532,6 +18672,34 @@
             <End Role="GuestMovementType" EntitySet="GuestsMovementsTypes" />
             <End Role="SalesmanChange" EntitySet="SalesmenChanges" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_Closer4" Association="IMModel.FK_SalesLog_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_ExitCloser3" Association="IMModel.FK_SalesLog_Personnel_ExitCloser3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToBack1" Association="IMModel.FK_SalesLog_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToBack2" Association="IMModel.FK_SalesLog_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToMiddle1" Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_FrontToMiddle2" Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLog_Personnel_Liner3" Association="IMModel.FK_SalesLog_Personnel_Liner3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22813,6 +22981,20 @@
           <Property Type="Byte" Name="slExit2P" Nullable="true" />
           <Property Type="Decimal" Name="slClosingCost" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="slOverPack" Nullable="true" Precision="19" />
+          <Property Type="String" Name="slLiner3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slFTM1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTM1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slFTM2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTM2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slFTB1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTB1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slFTB2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FTB2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slCloser4" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer4N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slExit3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit3N" Nullable="true" MaxLength="40" />
         </ComplexType>
         <EntityType Name="DisputeStatus">
           <Key>
@@ -23644,6 +23826,90 @@
             </Principal>
             <Dependent Role="SalesmanChange">
               <PropertyRef Name="schmt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_Closer4">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_ExitCloser3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToBack1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToBack2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToMiddle1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_FrontToMiddle2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLog_Personnel_Liner3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SaleLog" Role="SaleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SaleLog">
+              <PropertyRef Name="slLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -25346,6 +25612,13 @@
           <EntitySetMapping Name="SalesLogs">
             <EntityTypeMapping TypeName="IMModel.SaleLog">
               <MappingFragment StoreEntitySet="SalesLog">
+                <ScalarProperty Name="slFTM2" ColumnName="slFTM2" />
+                <ScalarProperty Name="slFTM1" ColumnName="slFTM1" />
+                <ScalarProperty Name="slFTB2" ColumnName="slFTB2" />
+                <ScalarProperty Name="slFTB1" ColumnName="slFTB1" />
+                <ScalarProperty Name="slExit3" ColumnName="slExit3" />
+                <ScalarProperty Name="slCloser4" ColumnName="slCloser4" />
+                <ScalarProperty Name="slLiner3" ColumnName="slLiner3" />
                 <ScalarProperty Name="slID" ColumnName="slID" />
                 <ScalarProperty Name="slsa" ColumnName="slsa" />
                 <ScalarProperty Name="slMembershipNum" ColumnName="slMembershipNum" />
@@ -31209,6 +31482,20 @@
                 <ScalarProperty Name="slExit2P" ColumnName="slExit2P" />
                 <ScalarProperty Name="slClosingCost" ColumnName="slClosingCost" />
                 <ScalarProperty Name="slOverPack" ColumnName="slOverPack" />
+                <ScalarProperty Name="slLiner3" ColumnName="slLiner3" />
+                <ScalarProperty Name="Liner3N" ColumnName="Liner3N" />
+                <ScalarProperty Name="slFTM1" ColumnName="slFTM1" />
+                <ScalarProperty Name="FTM1N" ColumnName="FTM1N" />
+                <ScalarProperty Name="slFTM2" ColumnName="slFTM2" />
+                <ScalarProperty Name="FTM2N" ColumnName="FTM2N" />
+                <ScalarProperty Name="slFTB1" ColumnName="slFTB1" />
+                <ScalarProperty Name="FTB1N" ColumnName="FTB1N" />
+                <ScalarProperty Name="slFTB2" ColumnName="slFTB2" />
+                <ScalarProperty Name="FTB2N" ColumnName="FTB2N" />
+                <ScalarProperty Name="slCloser4" ColumnName="slCloser4" />
+                <ScalarProperty Name="Closer4N" ColumnName="Closer4N" />
+                <ScalarProperty Name="slExit3" ColumnName="slExit3" />
+                <ScalarProperty Name="Exit3N" ColumnName="Exit3N" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
