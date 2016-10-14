@@ -24,6 +24,7 @@ namespace IM.Model
             this.SalesLogs = new HashSet<SaleLog>();
             this.TeamsGuestServices = new HashSet<TeamGuestServices>();
             this.Gifts = new HashSet<Gift>();
+            this.PersonnelLogs = new HashSet<PersonnelLog>();
         }
     
         public string loID { get; set; }
@@ -49,5 +50,7 @@ namespace IM.Model
         public virtual ICollection<TeamGuestServices> TeamsGuestServices { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Gift> Gifts { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs { get; set; }
     }
 }

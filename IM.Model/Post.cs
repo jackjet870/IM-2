@@ -19,6 +19,7 @@ namespace IM.Model
         {
             this.poA = true;
             this.PostsLogs = new HashSet<PostLog>();
+            this.PersonnelLogs = new HashSet<PersonnelLog>();
         }
     
         public string poID { get; set; }
@@ -27,5 +28,7 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostLog> PostsLogs { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs { get; set; }
     }
 }

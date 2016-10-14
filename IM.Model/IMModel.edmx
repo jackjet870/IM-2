@@ -1524,6 +1524,27 @@
           <Property Name="peSalesmanID" Type="varchar" MaxLength="15" />
           <Property Name="peCollaboratorID" Type="varchar" MaxLength="11" />
         </EntityType>
+        <EntityType Name="PersonnelLeadSourcesLog">
+          <Key>
+            <PropertyRef Name="pllplg" />
+            <PropertyRef Name="pllls" />
+          </Key>
+          <Property Name="pllplg" Type="int" Nullable="false" />
+          <Property Name="pllls" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PersonnelLog">
+          <Key>
+            <PropertyRef Name="plgID" />
+          </Key>
+          <Property Name="plgID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="plgpe" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="plgDT" Type="datetime" Nullable="false" />
+          <Property Name="plgChangedBy" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="plgde" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="plgpo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="plgsr" Type="varchar" MaxLength="10" />
+          <Property Name="plglo" Type="varchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="PersonnelPermissions">
           <Key>
             <PropertyRef Name="pppe" />
@@ -1540,6 +1561,22 @@
           </Key>
           <Property Name="prpe" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="prro" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PersonnelRolesLog">
+          <Key>
+            <PropertyRef Name="prlplg" />
+            <PropertyRef Name="prlro" />
+          </Key>
+          <Property Name="prlplg" Type="int" Nullable="false" />
+          <Property Name="prlro" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PersonnelSalesRoomsLog">
+          <Key>
+            <PropertyRef Name="pslplg" />
+            <PropertyRef Name="pslsr" />
+          </Key>
+          <Property Name="pslplg" Type="int" Nullable="false" />
+          <Property Name="pslsr" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="PersStatus">
           <Key>
@@ -3266,90 +3303,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_Closer4">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glCloser4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_ExitCloser4">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glExit3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToBack1">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glFTB1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToBack2">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glFTB2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToMiddle1">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glFTM1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToMiddle2">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glFTM2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GuestLg_Personnel_Liner3">
-          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
-          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="GuestLog">
-              <PropertyRef Name="glLiner3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_GuestLog_Personnel_ChangedBy">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
@@ -3398,6 +3351,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GuestLog_Personnel_Closer4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GuestLog_Personnel_Exit1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
@@ -3422,6 +3387,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GuestLog_Personnel_Exit3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLog_Personnel_FrontToBack1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLog_Personnel_FrontToBack2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLog_Personnel_FrontToMiddle1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLog_Personnel_FrontToMiddle2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GuestLog_Personnel_Liner1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
@@ -3443,6 +3468,18 @@
             </Principal>
             <Dependent Role="GuestLog">
               <PropertyRef Name="glLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuestLog_Personnel_Liner3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="GuestLog" Type="Self.GuestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="GuestLog">
+              <PropertyRef Name="glLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4682,6 +4719,102 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PersonnelLeadSourcesLog_LeadSources">
+          <End Role="LeadSources" Type="Self.LeadSources" Multiplicity="1" />
+          <End Role="PersonnelLeadSourcesLog" Type="Self.PersonnelLeadSourcesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LeadSources">
+              <PropertyRef Name="lsID" />
+            </Principal>
+            <Dependent Role="PersonnelLeadSourcesLog">
+              <PropertyRef Name="pllls" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLeadSourcesLog_PersonnelLog">
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="1" />
+          <End Role="PersonnelLeadSourcesLog" Type="Self.PersonnelLeadSourcesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PersonnelLog">
+              <PropertyRef Name="plgID" />
+            </Principal>
+            <Dependent Role="PersonnelLeadSourcesLog">
+              <PropertyRef Name="pllplg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Depts">
+          <End Role="Depts" Type="Self.Depts" Multiplicity="1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Depts">
+              <PropertyRef Name="deID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Locations">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="0..1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="loID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plglo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Personnel">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgpe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Personnel_ChangedBy">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgChangedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Posts">
+          <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="poID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgpo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_SalesRooms">
+          <End Role="SalesRooms" Type="Self.SalesRooms" Multiplicity="0..1" />
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesRooms">
+              <PropertyRef Name="srID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgsr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PersonnelPermissions_Permissions">
           <End Role="Permissions" Type="Self.Permissions" Multiplicity="1" />
           <End Role="PersonnelPermissions" Type="Self.PersonnelPermissions" Multiplicity="*" />
@@ -4739,6 +4872,54 @@
             </Principal>
             <Dependent Role="PersonnelRoles">
               <PropertyRef Name="prro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelRolesLog_PersonnelLog">
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="1" />
+          <End Role="PersonnelRolesLog" Type="Self.PersonnelRolesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PersonnelLog">
+              <PropertyRef Name="plgID" />
+            </Principal>
+            <Dependent Role="PersonnelRolesLog">
+              <PropertyRef Name="prlplg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelRolesLog_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="PersonnelRolesLog" Type="Self.PersonnelRolesLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roID" />
+            </Principal>
+            <Dependent Role="PersonnelRolesLog">
+              <PropertyRef Name="prlro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelSalesRoomsLog_PersonnelLog">
+          <End Role="PersonnelLog" Type="Self.PersonnelLog" Multiplicity="1" />
+          <End Role="PersonnelSalesRoomsLog" Type="Self.PersonnelSalesRoomsLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PersonnelLog">
+              <PropertyRef Name="plgID" />
+            </Principal>
+            <Dependent Role="PersonnelSalesRoomsLog">
+              <PropertyRef Name="pslplg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelSalesRoomsLog_SalesRooms">
+          <End Role="SalesRooms" Type="Self.SalesRooms" Multiplicity="1" />
+          <End Role="PersonnelSalesRoomsLog" Type="Self.PersonnelSalesRoomsLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesRooms">
+              <PropertyRef Name="srID" />
+            </Principal>
+            <Dependent Role="PersonnelSalesRoomsLog">
+              <PropertyRef Name="pslsr" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8053,8 +8234,12 @@
           <EntitySet Name="PermissionsLevels" EntityType="Self.PermissionsLevels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersLSSR" EntityType="Self.PersLSSR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Personnel" EntityType="Self.Personnel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonnelLeadSourcesLog" EntityType="Self.PersonnelLeadSourcesLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonnelLog" EntityType="Self.PersonnelLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonnelPermissions" EntityType="Self.PersonnelPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonnelRoles" EntityType="Self.PersonnelRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonnelRolesLog" EntityType="Self.PersonnelRolesLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonnelSalesRoomsLog" EntityType="Self.PersonnelSalesRoomsLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersStatus" EntityType="Self.PersStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlaceTypes" EntityType="Self.PlaceTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
@@ -8465,34 +8650,6 @@
             <End Role="Guests" EntitySet="Guests" />
             <End Role="Groups" EntitySet="Groups" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_Closer4" Association="Self.FK_GuestLg_Personnel_Closer4">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_ExitCloser4" Association="Self.FK_GuestLg_Personnel_ExitCloser4">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack1" Association="Self.FK_GuestLg_Personnel_FrontToBack1">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack2" Association="Self.FK_GuestLg_Personnel_FrontToBack2">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle1" Association="Self.FK_GuestLg_Personnel_FrontToMiddle1">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle2" Association="Self.FK_GuestLg_Personnel_FrontToMiddle2">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_Liner3" Association="Self.FK_GuestLg_Personnel_Liner3">
-            <End Role="Personnel" EntitySet="Personnel" />
-            <End Role="GuestLog" EntitySet="GuestLog" />
-          </AssociationSet>
           <AssociationSet Name="FK_GuestLog_Personnel_ChangedBy" Association="Self.FK_GuestLog_Personnel_ChangedBy">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
@@ -8509,6 +8666,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_Closer4" Association="Self.FK_GuestLog_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_GuestLog_Personnel_Exit1" Association="Self.FK_GuestLog_Personnel_Exit1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
@@ -8517,11 +8678,35 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_Exit3" Association="Self.FK_GuestLog_Personnel_Exit3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToBack1" Association="Self.FK_GuestLog_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToBack2" Association="Self.FK_GuestLog_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToMiddle1" Association="Self.FK_GuestLog_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToMiddle2" Association="Self.FK_GuestLog_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_GuestLog_Personnel_Liner1" Association="Self.FK_GuestLog_Personnel_Liner1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
           </AssociationSet>
           <AssociationSet Name="FK_GuestLog_Personnel_Liner2" Association="Self.FK_GuestLog_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="GuestLog" EntitySet="GuestLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuestLog_Personnel_Liner3" Association="Self.FK_GuestLog_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="GuestLog" EntitySet="GuestLog" />
           </AssociationSet>
@@ -8937,6 +9122,38 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Personnel1" EntitySet="Personnel" />
           </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLeadSourcesLog_LeadSources" Association="Self.FK_PersonnelLeadSourcesLog_LeadSources">
+            <End Role="LeadSources" EntitySet="LeadSources" />
+            <End Role="PersonnelLeadSourcesLog" EntitySet="PersonnelLeadSourcesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLeadSourcesLog_PersonnelLog" Association="Self.FK_PersonnelLeadSourcesLog_PersonnelLog">
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+            <End Role="PersonnelLeadSourcesLog" EntitySet="PersonnelLeadSourcesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Depts" Association="Self.FK_PersonnelLog_Depts">
+            <End Role="Depts" EntitySet="Depts" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Locations" Association="Self.FK_PersonnelLog_Locations">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Personnel" Association="Self.FK_PersonnelLog_Personnel">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Personnel_ChangedBy" Association="Self.FK_PersonnelLog_Personnel_ChangedBy">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Posts" Association="Self.FK_PersonnelLog_Posts">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_SalesRooms" Association="Self.FK_PersonnelLog_SalesRooms">
+            <End Role="SalesRooms" EntitySet="SalesRooms" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_PersonnelPermissions_Permissions" Association="Self.FK_PersonnelPermissions_Permissions">
             <End Role="Permissions" EntitySet="Permissions" />
             <End Role="PersonnelPermissions" EntitySet="PersonnelPermissions" />
@@ -8956,6 +9173,22 @@
           <AssociationSet Name="FK_PersonnelRoles_Roles" Association="Self.FK_PersonnelRoles_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="PersonnelRoles" EntitySet="PersonnelRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelRolesLog_PersonnelLog" Association="Self.FK_PersonnelRolesLog_PersonnelLog">
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+            <End Role="PersonnelRolesLog" EntitySet="PersonnelRolesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelRolesLog_Roles" Association="Self.FK_PersonnelRolesLog_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="PersonnelRolesLog" EntitySet="PersonnelRolesLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelSalesRoomsLog_PersonnelLog" Association="Self.FK_PersonnelSalesRoomsLog_PersonnelLog">
+            <End Role="PersonnelLog" EntitySet="PersonnelLog" />
+            <End Role="PersonnelSalesRoomsLog" EntitySet="PersonnelSalesRoomsLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelSalesRoomsLog_SalesRooms" Association="Self.FK_PersonnelSalesRoomsLog_SalesRooms">
+            <End Role="SalesRooms" EntitySet="SalesRooms" />
+            <End Role="PersonnelSalesRoomsLog" EntitySet="PersonnelSalesRoomsLog" />
           </AssociationSet>
           <AssociationSet Name="FK_PostsLog_Personnel" Association="Self.FK_PostsLog_Personnel">
             <End Role="Personnel" EntitySet="Personnel" />
@@ -9698,6 +9931,7 @@
           <Property Name="deN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="deA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="Personnels" Relationship="Self.FK_Personnel_Depts" FromRole="Depts" ToRole="Personnel" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Internal" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.FK_PersonnelLog_Depts" FromRole="Dept" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="Desk">
           <Key>
@@ -10228,13 +10462,13 @@
           <Property Name="glFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="glFTM1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="glFTM2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_GuestLg_Personnel_Closer4" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel1" Relationship="IMModel.FK_GuestLg_Personnel_ExitCloser4" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel2" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack1" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel3" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack2" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel4" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle1" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel5" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle2" FromRole="GuestLog" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel6" Relationship="IMModel.FK_GuestLg_Personnel_Liner3" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Closer4" Relationship="IMModel.FK_GuestLog_Personnel_Closer4" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Exit3" Relationship="IMModel.FK_GuestLog_Personnel_Exit3" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FrontToBack1" Relationship="IMModel.FK_GuestLog_Personnel_FrontToBack1" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FrontToBack2" Relationship="IMModel.FK_GuestLog_Personnel_FrontToBack2" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FrontToMiddle1" Relationship="IMModel.FK_GuestLog_Personnel_FrontToMiddle1" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FrontToMiddle2" Relationship="IMModel.FK_GuestLog_Personnel_FrontToMiddle2" FromRole="GuestLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_GuestLog_Personnel_Liner3" FromRole="GuestLog" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="Guest">
           <Key>
@@ -10767,6 +11001,7 @@
           <NavigationProperty Name="Agencies" Relationship="Self.LeadSourcesByAgencies" FromRole="LeadSources" ToRole="Agencies" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Notices" Relationship="Self.NoticesByLeadSource" FromRole="LeadSources" ToRole="Notices" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesRoom" Relationship="IMModel.FK_LeadSources_SalesRooms" FromRole="LeadSource" ToRole="SalesRoom" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.PersonnelLeadSourcesLog" FromRole="LeadSource" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -10788,6 +11023,7 @@
           <NavigationProperty Name="SalesLogs" Relationship="Self.FK_SalesLog_Locations" FromRole="Locations" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="TeamsGuestServices" Relationship="Self.FK_TeamsGuestServices_Locations" FromRole="Locations" ToRole="TeamsGuestServices" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Gifts" Relationship="Self.GiftsByLoc" FromRole="Locations" ToRole="Gifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.FK_PersonnelLog_Locations" FromRole="Location" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="LocationCategory">
           <Key>
@@ -11246,13 +11482,13 @@
           <NavigationProperty Name="Sales_FTM2" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="Sales_Liner3" Relationship="IMModel.FK_Sales_Personnel_Liner3" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="MealTickets_AuthorizedBy" Relationship="IMModel.FK_MealTickets_Personnel_AuthorizedBy" FromRole="Personnel" ToRole="MealTicket" />
-          <NavigationProperty Name="GuestLogs" Relationship="IMModel.FK_GuestLg_Personnel_Closer4" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs1" Relationship="IMModel.FK_GuestLg_Personnel_ExitCloser4" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs2" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack1" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs3" Relationship="IMModel.FK_GuestLg_Personnel_FrontToBack2" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs4" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs5" Relationship="IMModel.FK_GuestLg_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="GuestLog" />
-          <NavigationProperty Name="GuestLogs6" Relationship="IMModel.FK_GuestLg_Personnel_Liner3" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_Closer4" Relationship="IMModel.FK_GuestLog_Personnel_Closer4" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_Exit3" Relationship="IMModel.FK_GuestLog_Personnel_Exit3" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_FrontToBack1" Relationship="IMModel.FK_GuestLog_Personnel_FrontToBack1" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_FrontToBack2" Relationship="IMModel.FK_GuestLog_Personnel_FrontToBack2" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_FrontToMiddle1" Relationship="IMModel.FK_GuestLog_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_FrontToMiddle2" Relationship="IMModel.FK_GuestLog_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="GuestLog" />
+          <NavigationProperty Name="GuestLogs_Liner3" Relationship="IMModel.FK_GuestLog_Personnel_Liner3" FromRole="Personnel" ToRole="GuestLog" />
           <NavigationProperty Name="SalesLogs_Closer4" Relationship="IMModel.FK_SalesLog_Personnel_Closer4" FromRole="Personnel" ToRole="SaleLog" />
           <NavigationProperty Name="SalesLogs_Exit3" Relationship="IMModel.FK_SalesLog_Personnel_ExitCloser3" FromRole="Personnel" ToRole="SaleLog" />
           <NavigationProperty Name="SalesLogs_FTB1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToBack1" FromRole="Personnel" ToRole="SaleLog" />
@@ -11260,6 +11496,8 @@
           <NavigationProperty Name="SalesLogs_FTM1" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="SaleLog" />
           <NavigationProperty Name="SalesLogs_FTM2" Relationship="IMModel.FK_SalesLog_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="SaleLog" />
           <NavigationProperty Name="SalesLogs_Liner3" Relationship="IMModel.FK_SalesLog_Personnel_Liner3" FromRole="Personnel" ToRole="SaleLog" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.FK_PersonnelLog_Personnel" FromRole="Personnel" ToRole="PersonnelLog" />
+          <NavigationProperty Name="PersonnelLogs1" Relationship="IMModel.FK_PersonnelLog_Personnel_ChangedBy" FromRole="Personnel" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -11298,6 +11536,7 @@
           <Property Name="poN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="poA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="PostsLogs" Relationship="Self.FK_PostsLog_Posts" FromRole="Posts" ToRole="PostsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.FK_PersonnelLog_Posts" FromRole="Post" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="PostLog">
           <Key>
@@ -11437,6 +11676,7 @@
           <Property Name="roToolTipText" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SalesmenChanges" Relationship="Self.FK_SalesmenChanges_Roles" FromRole="Roles" ToRole="SalesmenChanges" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnels" Relationship="Self.PersonnelRoles" FromRole="Roles" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.PersonnelRolesLog" FromRole="Role" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="RoomCharge">
           <Key>
@@ -11730,6 +11970,8 @@
           <Property Name="srzn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Zone" Relationship="IMModel.FK_SalesRooms_Zones" FromRole="SalesRoom" ToRole="Zone" />
           <NavigationProperty Name="LeadSources" Relationship="IMModel.FK_LeadSources_SalesRooms" FromRole="SalesRoom" ToRole="LeadSource" />
+          <NavigationProperty Name="PersonnelLogs" Relationship="IMModel.FK_PersonnelLog_SalesRooms" FromRole="SalesRoom" ToRole="PersonnelLog" />
+          <NavigationProperty Name="PersonnelLogs1" Relationship="IMModel.PersonnelSalesRoomsLog" FromRole="SalesRoom" ToRole="PersonnelLog" />
         </EntityType>
         <EntityType Name="SalesRoomLog">
           <Key>
@@ -18636,31 +18878,31 @@
             <End Role="SegmentCategory" EntitySet="SegmentsCategories" />
             <End Role="SegmentByLeadSource" EntitySet="SegmentsByLeadSources" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_Closer4" Association="IMModel.FK_GuestLg_Personnel_Closer4">
+          <AssociationSet Name="FK_GuestLog_Personnel_Closer4" Association="IMModel.FK_GuestLog_Personnel_Closer4">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_ExitCloser4" Association="IMModel.FK_GuestLg_Personnel_ExitCloser4">
+          <AssociationSet Name="FK_GuestLog_Personnel_Exit3" Association="IMModel.FK_GuestLog_Personnel_Exit3">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack1" Association="IMModel.FK_GuestLg_Personnel_FrontToBack1">
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToBack1" Association="IMModel.FK_GuestLog_Personnel_FrontToBack1">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToBack2" Association="IMModel.FK_GuestLg_Personnel_FrontToBack2">
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToBack2" Association="IMModel.FK_GuestLog_Personnel_FrontToBack2">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle1" Association="IMModel.FK_GuestLg_Personnel_FrontToMiddle1">
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToMiddle1" Association="IMModel.FK_GuestLog_Personnel_FrontToMiddle1">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_FrontToMiddle2" Association="IMModel.FK_GuestLg_Personnel_FrontToMiddle2">
+          <AssociationSet Name="FK_GuestLog_Personnel_FrontToMiddle2" Association="IMModel.FK_GuestLog_Personnel_FrontToMiddle2">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_GuestLg_Personnel_Liner3" Association="IMModel.FK_GuestLg_Personnel_Liner3">
+          <AssociationSet Name="FK_GuestLog_Personnel_Liner3" Association="IMModel.FK_GuestLog_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="GuestLog" EntitySet="GuestsLogs" />
           </AssociationSet>
@@ -18699,6 +18941,43 @@
           <AssociationSet Name="FK_SalesLog_Personnel_Liner3" Association="IMModel.FK_SalesLog_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="SaleLog" EntitySet="SalesLogs" />
+          </AssociationSet>
+          <EntitySet Name="PersonnelLogs" EntityType="IMModel.PersonnelLog" />
+          <AssociationSet Name="FK_PersonnelLog_Depts" Association="IMModel.FK_PersonnelLog_Depts">
+            <End Role="Dept" EntitySet="Depts" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Locations" Association="IMModel.FK_PersonnelLog_Locations">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Personnel" Association="IMModel.FK_PersonnelLog_Personnel">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Personnel_ChangedBy" Association="IMModel.FK_PersonnelLog_Personnel_ChangedBy">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_Posts" Association="IMModel.FK_PersonnelLog_Posts">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelLog_SalesRooms" Association="IMModel.FK_PersonnelLog_SalesRooms">
+            <End Role="SalesRoom" EntitySet="SalesRooms" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="PersonnelLeadSourcesLog" Association="IMModel.PersonnelLeadSourcesLog">
+            <End Role="LeadSource" EntitySet="LeadSources" />
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+          </AssociationSet>
+          <AssociationSet Name="PersonnelRolesLog" Association="IMModel.PersonnelRolesLog">
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+          <AssociationSet Name="PersonnelSalesRoomsLog" Association="IMModel.PersonnelSalesRoomsLog">
+            <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
+            <End Role="SalesRoom" EntitySet="SalesRooms" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -23721,7 +24000,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_Closer4">
+        <Association Name="FK_GuestLog_Personnel_Closer4">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23733,7 +24012,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_ExitCloser4">
+        <Association Name="FK_GuestLog_Personnel_Exit3">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23745,7 +24024,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToBack1">
+        <Association Name="FK_GuestLog_Personnel_FrontToBack1">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23757,7 +24036,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToBack2">
+        <Association Name="FK_GuestLog_Personnel_FrontToBack2">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23769,7 +24048,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToMiddle1">
+        <Association Name="FK_GuestLog_Personnel_FrontToMiddle1">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23781,7 +24060,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_FrontToMiddle2">
+        <Association Name="FK_GuestLog_Personnel_FrontToMiddle2">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23793,7 +24072,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GuestLg_Personnel_Liner3">
+        <Association Name="FK_GuestLog_Personnel_Liner3">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.GuestLog" Role="GuestLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -23912,6 +24191,112 @@
               <PropertyRef Name="slLiner3" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PersonnelLog">
+          <Key>
+            <PropertyRef Name="plgID" />
+          </Key>
+          <Property Name="plgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="plgpe" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="plgDT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="plgChangedBy" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="plgde" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="plgpo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="plgsr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="plglo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Dept" Relationship="IMModel.FK_PersonnelLog_Depts" FromRole="PersonnelLog" ToRole="Dept" />
+          <NavigationProperty Name="Location" Relationship="IMModel.FK_PersonnelLog_Locations" FromRole="PersonnelLog" ToRole="Location" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_PersonnelLog_Personnel" FromRole="PersonnelLog" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel1" Relationship="IMModel.FK_PersonnelLog_Personnel_ChangedBy" FromRole="PersonnelLog" ToRole="Personnel" />
+          <NavigationProperty Name="Post" Relationship="IMModel.FK_PersonnelLog_Posts" FromRole="PersonnelLog" ToRole="Post" />
+          <NavigationProperty Name="SalesRoom" Relationship="IMModel.FK_PersonnelLog_SalesRooms" FromRole="PersonnelLog" ToRole="SalesRoom" />
+          <NavigationProperty Name="LeadSources" Relationship="IMModel.PersonnelLeadSourcesLog" FromRole="PersonnelLog" ToRole="LeadSource" />
+          <NavigationProperty Name="Roles" Relationship="IMModel.PersonnelRolesLog" FromRole="PersonnelLog" ToRole="Role" />
+          <NavigationProperty Name="SalesRooms" Relationship="IMModel.PersonnelSalesRoomsLog" FromRole="PersonnelLog" ToRole="SalesRoom" />
+        </EntityType>
+        <Association Name="FK_PersonnelLog_Depts">
+          <End Type="IMModel.Dept" Role="Dept" Multiplicity="1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dept">
+              <PropertyRef Name="deID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Locations">
+          <End Type="IMModel.Location" Role="Location" Multiplicity="0..1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="loID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plglo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Personnel">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgpe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Personnel_ChangedBy">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgChangedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_Posts">
+          <End Type="IMModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="poID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgpo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelLog_SalesRooms">
+          <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="0..1" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesRoom">
+              <PropertyRef Name="srID" />
+            </Principal>
+            <Dependent Role="PersonnelLog">
+              <PropertyRef Name="plgsr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonnelLeadSourcesLog">
+          <End Type="IMModel.LeadSource" Role="LeadSource" Multiplicity="*" />
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+        </Association>
+        <Association Name="PersonnelRolesLog">
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <End Type="IMModel.Role" Role="Role" Multiplicity="*" />
+        </Association>
+        <Association Name="PersonnelSalesRoomsLog">
+          <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
+          <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -32151,6 +32536,44 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PersonnelLogs">
+            <EntityTypeMapping TypeName="IMModel.PersonnelLog">
+              <MappingFragment StoreEntitySet="PersonnelLog">
+                <ScalarProperty Name="plglo" ColumnName="plglo" />
+                <ScalarProperty Name="plgsr" ColumnName="plgsr" />
+                <ScalarProperty Name="plgpo" ColumnName="plgpo" />
+                <ScalarProperty Name="plgde" ColumnName="plgde" />
+                <ScalarProperty Name="plgChangedBy" ColumnName="plgChangedBy" />
+                <ScalarProperty Name="plgDT" ColumnName="plgDT" />
+                <ScalarProperty Name="plgpe" ColumnName="plgpe" />
+                <ScalarProperty Name="plgID" ColumnName="plgID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PersonnelLeadSourcesLog" TypeName="IMModel.PersonnelLeadSourcesLog" StoreEntitySet="PersonnelLeadSourcesLog">
+            <EndProperty Name="PersonnelLog">
+              <ScalarProperty Name="plgID" ColumnName="pllplg" />
+            </EndProperty>
+            <EndProperty Name="LeadSource">
+              <ScalarProperty Name="lsID" ColumnName="pllls" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="PersonnelRolesLog" TypeName="IMModel.PersonnelRolesLog" StoreEntitySet="PersonnelRolesLog">
+            <EndProperty Name="Role">
+              <ScalarProperty Name="roID" ColumnName="prlro" />
+            </EndProperty>
+            <EndProperty Name="PersonnelLog">
+              <ScalarProperty Name="plgID" ColumnName="prlplg" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="PersonnelSalesRoomsLog" TypeName="IMModel.PersonnelSalesRoomsLog" StoreEntitySet="PersonnelSalesRoomsLog">
+            <EndProperty Name="SalesRoom">
+              <ScalarProperty Name="srID" ColumnName="pslsr" />
+            </EndProperty>
+            <EndProperty Name="PersonnelLog">
+              <ScalarProperty Name="plgID" ColumnName="pslplg" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

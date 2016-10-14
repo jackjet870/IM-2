@@ -33,6 +33,7 @@ namespace IM.Model
             this.ScoreRulesByLeadSourceDetails = new HashSet<ScoreRuleByLeadSourceDetail>();
             this.Agencies = new HashSet<Agency>();
             this.Notices = new HashSet<Notice>();
+            this.PersonnelLogs = new HashSet<PersonnelLog>();
         }
     
         public string lsID { get; set; }
@@ -107,5 +108,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Notice> Notices { internal get; set; }
         public virtual SalesRoom SalesRoom { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs { get; set; }
     }
 }

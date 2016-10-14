@@ -647,6 +647,9 @@
     <Compile Include="PersonnelDayOff.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PersonnelLog.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PersonnelPermission.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

@@ -33,6 +33,8 @@ namespace IM.Model
             this.TourTimesBySalesRoomWeekDay = new HashSet<TourTimeBySalesRoomWeekDay>();
             this.Banks = new HashSet<Bank>();
             this.LeadSources = new HashSet<LeadSource>();
+            this.PersonnelLogs = new HashSet<PersonnelLog>();
+            this.PersonnelLogs1 = new HashSet<PersonnelLog>();
         }
     
         public string srID { get; set; }
@@ -82,5 +84,9 @@ namespace IM.Model
         public virtual Zone Zone { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LeadSource> LeadSources { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs1 { get; set; }
     }
 }

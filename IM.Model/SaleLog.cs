@@ -89,12 +89,12 @@ namespace IM.Model
         public virtual Sale Sale_Reference { internal get; set; }
         public virtual SalesRoom SalesRoom { internal get; set; }
         public virtual SaleType SaleType { internal get; set; }
-        public virtual Personnel Personnel_Liner3 { get; set; }
         public virtual Personnel Personnel_Closer4 { get; set; }
         public virtual Personnel Personnel_Exit3 { get; set; }
         public virtual Personnel Personnel_FTB1 { get; set; }
         public virtual Personnel Personnel_FTB2 { get; set; }
         public virtual Personnel Personnel_FTM1 { get; set; }
         public virtual Personnel Personnel_FTM2 { get; set; }
+        public virtual Personnel Personnel_Liner3 { get; set; }
     }
 }

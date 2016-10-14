@@ -19,6 +19,7 @@ namespace IM.Model
         {
             this.deA = true;
             this.Personnels = new HashSet<Personnel>();
+            this.PersonnelLogs = new HashSet<PersonnelLog>();
         }
     
         public string deID { get; set; }
@@ -27,5 +28,7 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Personnel> Personnels { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PersonnelLog> PersonnelLogs { get; set; }
     }
 }

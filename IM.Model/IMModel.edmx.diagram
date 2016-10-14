@@ -473,6 +473,16 @@
         <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle1" />
         <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_FrontToMiddle2" />
         <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Liner3" />
+        <EntityTypeShape EntityType="IMModel.PersonnelLog" Width="1.5" PointX="39" PointY="92.25" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_Depts" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_Locations" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_Personnel" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_Personnel_ChangedBy" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_Posts" />
+        <AssociationConnector Association="IMModel.FK_PersonnelLog_SalesRooms" />
+        <AssociationConnector Association="IMModel.PersonnelLeadSourcesLog" />
+        <AssociationConnector Association="IMModel.PersonnelRolesLog" />
+        <AssociationConnector Association="IMModel.PersonnelSalesRoomsLog" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

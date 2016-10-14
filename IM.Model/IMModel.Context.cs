@@ -170,6 +170,7 @@ namespace IM.Model
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
         public virtual DbSet<RefundTypeFolio> RefundTypesFolios { get; set; }
+        public virtual DbSet<PersonnelLog> PersonnelLogs { get; set; }
     
         public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
         {

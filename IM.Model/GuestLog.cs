@@ -85,12 +85,12 @@ namespace IM.Model
         public virtual Personnel Personnel_VLO { internal get; set; }
         public virtual ReimpresionMotive ReimpresionMotive { internal get; set; }
         public virtual UnavailableMotive UnavailableMotive { internal get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
+        public virtual Personnel Personnel_Closer4 { get; set; }
+        public virtual Personnel Personnel_Exit3 { get; set; }
+        public virtual Personnel Personnel_FrontToBack1 { get; set; }
+        public virtual Personnel Personnel_FrontToBack2 { get; set; }
+        public virtual Personnel Personnel_FrontToMiddle1 { get; set; }
+        public virtual Personnel Personnel_FrontToMiddle2 { get; set; }
+        public virtual Personnel Personnel_Liner3 { get; set; }
     }
 }

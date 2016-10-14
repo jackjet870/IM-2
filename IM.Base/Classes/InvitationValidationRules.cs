@@ -928,8 +928,6 @@ namespace IM.Base.Classes
               bookingDeposit.bdCardNum = null;
               bookingDeposit.bdExpD = "";
               bookingDeposit.bdAuth = null;
-              bookingDeposit.bdds = null;
-              bookingDeposit.bdD = DateTime.Now;
               GridHelper.UpdateCellsFromARow(dtgBookingDeposits);
             }
             break;
@@ -946,7 +944,7 @@ namespace IM.Base.Classes
               bool blnIsValid = Regex.IsMatch(bookingDeposit.bdExpD, @"^(0[1-9]|1[0-2])\/?([0-9]{2})$");
               if (!blnIsValid)
               {
-                UIHelper.ShowMessage("Expiration Date is not valid");                
+                UIHelper.ShowMessage("Expiration Date is not valid");
               }
               return blnIsValid;
             }
@@ -1224,7 +1222,7 @@ namespace IM.Base.Classes
       }
       return isValid;
     }
-    #endregion    
+    #endregion
 
     #endregion
 
