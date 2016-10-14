@@ -27,6 +27,9 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=Exit}" Key="E" Modifiers="Alt" />
+    </Window.InputBindings>
     <!--#endregion-->
 
     <Grid>
@@ -187,7 +190,7 @@
         <!--#endregion-->
 
         <!--#region btnExit, btnReportQueue-->
-        <Button x:Name="btnExit" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click"/>
+        <Button x:Name="btnExit" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click"/>
         <Button x:Name="btnReportQueue" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Report Queue" Width="100" HorizontalAlignment="Left" Margin="10 0 10 0" Click="btnReportQueue_Click"/>
         <!--#endregion-->
        
