@@ -3,494 +3,661 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"  
         xmlns:Converters="clr-namespace:IM.Base.Converters;assembly=IM.Base"
         Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
-        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
+        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="FontWeight" Value="Black"/>
-            <Setter Property="Margin" Value="0,0,15,5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="Black" />
+            <Setter Property="Margin" Value="0,0,15,5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="{x:Type TextBox}">
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Margin" Value="0,0,0,5" />
         </Style>
-        <Style TargetType="{x:Type StackPanel}" >
-            <Setter Property="Margin" Value="3,0,3,0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+        <Style TargetType="{x:Type StackPanel}">
+            <Setter Property="Margin" Value="3,0,3,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Converters:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueC"/>
+        <Converters:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueC" />
     </Window.Resources>
     <Window.Style>
         <Style TargetType="{x:Type Window}">
-            <Setter Property="MaxHeight" Value="745"/>
-            <Setter Property="MaxWidth" Value="1100"/>
+            <Setter Property="MaxHeight" Value="745" />
+            <Setter Property="MaxWidth" Value="1100" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Visibility, ElementName=gprCriteria}" Value="Collapsed">
-                    <Setter Property="MaxHeight" Value="685"/>
-                    <Setter Property="MaxWidth" Value="1000"/>
+                    <Setter Property="MaxHeight" Value="685" />
+                    <Setter Property="MaxWidth" Value="1000" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
     </Window.Style>
-    <xctk:BusyIndicator x:Name="BusyIndicator" >
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="674"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <DataGrid x:Name="dtgSale" BorderThickness="2"  CanUserAddRows="False" BorderBrush="#147F79" 
-				IsReadOnly="True" Grid.Column="0" Grid.Row="1"  Grid.RowSpan="1" Margin="5" Height="567" Width="278"
-				RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" EnableRowVirtualization="True"  
-				AutoGenerateColumns="False" SelectionUnit ="FullRow" SelectionMode="Single" SelectionChanged="dtgSale_SelectionChanged">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="saIDColumn" Visibility="Collapsed" Width="auto" Header="sa ID" Binding="{Binding saID}"/>
-                        <DataGridTextColumn x:Name="saMembershipNumColumn" Width="auto" Header="Memb. #" Binding="{Binding saMembershipNum}"/>
-                        <DataGridTextColumn x:Name="saDColumn" Binding="{Binding saD, StringFormat=dd/MM/yyyy}" Width="AUTO" Header="Date"/>
-                        <DataGridTextColumn x:Name="stNColumn" Width="auto" Header="Type" Binding="{Binding stN}"/>
-                        <DataGridCheckBoxColumn x:Name="saCancelColumn" Width="*" Header="Cancel" Binding="{Binding saCancel}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <GroupBox Grid.ColumnSpan="3" Grid.Row="0" BorderBrush="#147F79" x:Name="gprCriteria"  Header="Search Criteria" Margin="5" Background="White" FontWeight="Black" >
-                    <StackPanel x:Name="grdCriteria" Orientation="Horizontal" >
-                        <StackPanel >
-                            <TextBlock x:Name="lblCsaID" Text="Sale ID" Width="70" />
-                            <TextBox x:Name="txtCsaID" KeyDown="txt_KeyDown" Text="{Binding saID}" MaxLength="9" Tag="Sale ID" PreviewTextInput="txt_PreviewTextInput"/>
-                        </StackPanel>
-                        <StackPanel  >
-                            <TextBlock x:Name="lblCsaMembershipNum" Text="Membership #"/>
-                            <TextBox x:Name="txtCsaMembershipNum" KeyDown="txt_KeyDown" MaxLength="10" Width="80" Tag="Membership Num" Text="{Binding saMembershipNum}" PreviewTextInput="txt_PreviewTextInput"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCsagu" Text="GUID"/>
-                            <TextBox x:Name="txtCsagu" MaxLength="8" KeyDown="txt_KeyDown" Width="85" Tag="Guest ID" Text="{Binding sagu}" PreviewTextInput="txt_PreviewTextInput"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCName" Text="Name"/>
-                            <TextBox x:Name="txtCName" Width="120" KeyDown="txt_KeyDown" MaxLength="20"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCsals" Text="Lead Source"/>
-                            <TextBox x:Name="txtCsals" Width="105" KeyDown="txt_KeyDown" MaxLength="15" />
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCsasr" Text="Sales Room"/>
-                            <TextBox x:Name="txtCsasr" Width="105" Tag="Sales Room" KeyDown="txt_KeyDown" MaxLength="15" Text="{Binding sasr}"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCStartD" Text="From"/>
-                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDFrom" Width="110"  DefaultValue="2012/01/01" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock x:Name="lblCEndD" Text="To"/>
-                            <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" DefaultValue="{x:Static sys:DateTime.Today}" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown"/>
-                        </StackPanel>
-                        <Button  x:Name="btnSearch" Content="Search" VerticalAlignment="Center" Click="btnSearch_Click" Width="60" FontSize="12" FontWeight="Black" Margin="5,0,5,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+    <xctk:BusyIndicator x:Name="BusyIndicator">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="239" />
+                <ColumnDefinition Width="Auto" MinWidth="721" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <!-- GroupBox  Columnas 0-3 Fila 0 -->
+            <GroupBox Grid.ColumnSpan="2" Grid.Row="0" BorderBrush="#147F79" x:Name="gprCriteria"  Header="Search Criteria" Margin="5" Background="White" FontWeight="Black">
+                <StackPanel x:Name="grdCriteria" Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock x:Name="lblCsaID" Text="Sale ID*" Width="70" />
+                        <TextBox x:Name="txtCsaID" KeyDown="txt_KeyDown" Text="{Binding saID}" MaxLength="9" Tag="Sale ID" PreviewTextInput="txt_PreviewTextInput" />
                     </StackPanel>
-                </GroupBox>
-                <Grid Grid.Column="1" Grid.Row="1" Margin="0,5,0,0" Name="grdSaleGeneral" Grid.ColumnSpan="2" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Button x:Name="btnGeneral" Content="General" Grid.Column="0" Grid.Row="0" Click="btnGeneral_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                    <Button x:Name="btnSalesmen" Content="Salesmen" Grid.Column="1" Grid.Row="0" Click="btnSalesmen_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                    <Grid Background="White" Grid.Row="1"  Grid.ColumnSpan="2" Grid.Column="0" Panel.ZIndex="1" x:Name="gGeneral">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition  />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1" Margin="5">
-                            <StackPanel>
-                                <TextBlock x:Name="lblsaID" Text="Sale ID"/>
-                                <TextBox x:Name="txtsaID" Tag="Sale ID" MaxLength="8" Text="{Binding saID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsaMembershipNum" Text="Membership #" />
-                                <TextBox x:Name="txtsaMembershipNum" Tag="Membership" Text="{Binding saMembershipNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsaD" Text="Sale Date"/>
-                                <TextBox x:Name="txtsaD" Width="70"  Text="{Binding saD, StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                            <Border  Style="{StaticResource brd-Catalogs}" x:Name="fraProcessable" BorderBrush="Black" BorderThickness="2" Margin="5"  >
-                                <StackPanel>
-                                    <CheckBox x:Name="chksaProc" IsChecked="{Binding saProc}" Content="Processable" Margin="5" FontSize="12" />
-                                    <TextBox x:Name="txtsaProcD" Margin="5" Width="70" Text="{Binding saProcD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </Border>
-                            <Border BorderBrush="Black" x:Name="fraCancelled"  BorderThickness="2" Margin="5"  Style="{StaticResource brd-Catalogs}">
-                                <StackPanel>
-                                    <CheckBox x:Name="chksaCancel" Content="Cancelled" Margin="5" Checked="chksaCancel_Checked" IsChecked="{Binding saCancel}" Unchecked="chksaCancel_Checked" />
-                                    <TextBox x:Name="txtsaCancelD" Margin="5" Width="70" Text="{Binding saCancelD,StringFormat=dd/MM/yyyy}" />
-                                </StackPanel>
-                            </Border>
-                            <Border BorderBrush="Black" BorderThickness="2" Margin="5"  Style="{StaticResource brd-Catalogs}">
-                                <CheckBox x:Name="chksaByPhone" IsChecked="{Binding saByPhone, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Phone Sale" Margin="5" VerticalAlignment="Center" />
-                            </Border>
-                            <TextBlock x:Name="lblOutOfPending" Text="Out of Pending" VerticalAlignment="Center" />
+                    <StackPanel>
+                        <TextBlock x:Name="lblCsaMembershipNum" Text="Membership #*" />
+                        <TextBox x:Name="txtCsaMembershipNum" KeyDown="txt_KeyDown" MaxLength="10" Width="80" Tag="Membership Num" Text="{Binding saMembershipNum}" PreviewTextInput="txt_PreviewTextInput" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCsagu" Text="GUID*" />
+                        <TextBox x:Name="txtCsagu" MaxLength="8" KeyDown="txt_KeyDown" Width="85" Tag="Guest ID" Text="{Binding sagu}" PreviewTextInput="txt_PreviewTextInput" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCName" Text="Name" />
+                        <TextBox x:Name="txtCName" Width="120" KeyDown="txt_KeyDown" MaxLength="20" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCsals" Text="Lead Source" />
+                        <TextBox x:Name="txtCsals" Width="105" KeyDown="txt_KeyDown" MaxLength="15" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCsasr" Text="Sales Room*" />
+                        <TextBox x:Name="txtCsasr" Width="105" Tag="Sales Room" KeyDown="txt_KeyDown" MaxLength="15" Text="{Binding sasr}" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCStartD" Text="From" />
+                        <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDFrom" Width="110"  DefaultValue="2012/01/01" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="lblCEndD" Text="To" />
+                        <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" DefaultValue="{x:Static sys:DateTime.Today}" DisplayDefaultValueOnEmptyText="True" KeyDown="txt_KeyDown" />
+                    </StackPanel>
+                    <Button  x:Name="btnSearch" VerticalAlignment="Center" Click="btnSearch_Click" Width="70" Height="32" FontWeight="Black" Margin="5,0,5,0"  Style="{StaticResource ButtonBig}">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Stretch="Uniform" Width="20">
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png" />
+                            </Viewbox>
+                            <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Margin="5">
-                            <StackPanel>
-                                <TextBlock x:Name="lblsagu" Text="GUID" />
-                                <TextBox x:Name="txtsagu" Tag="Guest ID" Text="{Binding sagu, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" LostFocus="Txtsagu_OnLostFocus" />
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblGuestNameCaption" Text="Guest Name" />
-                                <TextBox x:Name="lblGuestName" Width="150" />
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsals"  Text="Lead Source" />
-                                <TextBox x:Name="txtsals" Text="{Binding sals, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsalo" Text="Location" />
-                                <TextBox x:Name="txtsalo" Tag="Location" Text="{Binding salo, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsasr" Text="Sales Room" />
-                                <TextBox x:Name="txtsasr" Tag="Sales Room" Text="{Binding sasr, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" Margin="5">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock x:Name="lblsast"  Text="Sale Type" />
-                                    <CheckBox x:Name="chksaUpdated" IsChecked="{Binding saUpdated, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Updated"/>
-                                </StackPanel>
-                                <ComboBox x:Name="cbosast" Tag="Sale Type" Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="stN" SelectionChanged="cbosast_SelectionChanged" />
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsaRefMember" Text="Prev Member #" />
-                                <TextBox x:Name="txtsaRefMember"  Text="{Binding saRefMember , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsaProcRD" Text="Prev Proc Date" />
-                                <TextBox x:Name="txtsaProcRD" Text="{Binding saProcRD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="85"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Grid.ColumnSpan="2" Grid.Row="4" Orientation="Horizontal" Margin="5">
-                            <StackPanel>
-                                <TextBlock x:Name="lblsamt" Text="Membership Type" />
-                                <ComboBox x:Name="cbosamt" Tag="Membership Type" SelectedValue="{Binding samt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" SelectionChanged="cbo_SelectionChanged"/>
-                            </StackPanel>
-                            <StackPanel>
-                                <TextBlock x:Name="lblsamtGlobal" Text="Membership Type Global"  />
-                                <ComboBox x:Name="cbosamtGlobal" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding samtGlobal, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" />
-                            </StackPanel>
-                            <StackPanel Width="150">
-                                <TextBlock x:Name="lblLastName" Text="Last Name"/>
-                                <TextBox x:Name="txtsaLastName1" Tag="Last Name" Margin="0,0,0,5" Text="{Binding saLastName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaLastName2" Text="{Binding saLastName2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                            <StackPanel Width="150">
-                                <TextBlock x:Name="lblsaFirstName" Text="First Name" />
-                                <TextBox x:Name="txtsaFirstName1" Tag="Fist Name"  Margin="0,0,0,5" Text="{Binding saFirstName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaFirstName2" Text="{Binding saFirstName2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="6,0,0,5">
-                            <GroupBox x:Name="grbAmounts" Header="Amounts (Exclude VAT)" BorderBrush="#147F79">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="83"/>
-                                        <ColumnDefinition Width="80"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" >
-                                        <TextBlock x:Name="lblsaOriginalAmount" Text="Original"/>
-                                        <TextBlock x:Name="lblsaNewAmount" Text="New" />
-                                        <TextBlock x:Name="lblsaGrossAmount"  Text="Gross" />
-                                    </StackPanel>
-                                    <StackPanel  Grid.Column="1">
-                                        <TextBox x:Name="txtsaOriginalAmount" Tag="asxa" Text="{Binding saOriginalAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBox x:Name="txtsaNewAmount" Tag="new amount" Text="{Binding saNewAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBox x:Name="txtsaGrossAmount" Tag="adxasass" Text="{Binding saGrossAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-                            <StackPanel Margin="40,0,0,0">
-                                <TextBlock x:Name="lblsaClosingCost" Text="Closing Cost" />
-                                <TextBox x:Name="txtsaClosingCost" Text="{Binding saClosingCost, StringFormat='{}{0:C2}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock x:Name="lblsaOverPack" Text="Over Pack"/>
-                                <TextBox x:Name="txtsaOverPack" Text="{Binding saOverPack, StringFormat='{}{0:C2}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                            <GroupBox x:Name="grbPayments" Header="Payments"  Margin="40,0,0,0" Background="White" BorderBrush="#147F79">
-                                <DataGrid LostKeyboardFocus="Dgpayment_OnLostKeyboardFocus"            
-                                      RowEditEnding="Dgpayment_OnRowEditEnding"                                     
-                                      CanUserReorderColumns="False" 
+                    </Button>
+                </StackPanel>
+            </GroupBox>
+            <!-- DataGrid dtgSale  Columna 0 Fila 1 -->
+            <DataGrid x:Name="dtgSale" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="5,28,0,0" Height="515" Width="250"
+                      BorderThickness="2"  CanUserAddRows="False" BorderBrush="#147F79" IsReadOnly="True"
+                      RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" EnableRowVirtualization="True"
+                      AutoGenerateColumns="False" SelectionUnit ="FullRow" SelectionMode="Single" SelectionChanged="dtgSale_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="saIDColumn" Visibility="Collapsed" Width="auto" Header="sa ID" Binding="{Binding saID}" />
+                    <DataGridTextColumn x:Name="saMembershipNumColumn" Width="auto" Header="Memb. #" Binding="{Binding saMembershipNum}" />
+                    <DataGridTextColumn x:Name="saDColumn" Binding="{Binding saD, StringFormat=dd/MM/yyyy}" Width="AUTO" Header="Date" />
+                    <DataGridTextColumn x:Name="stNColumn" Width="auto" Header="Type" Binding="{Binding stN}" />
+                    <DataGridCheckBoxColumn x:Name="saCancelColumn" Width="*" Header="Cancel" Binding="{Binding saCancel}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <!-- DataGrid grdSaleGeneral  Columna 0 Fila 1 -->
+            <Grid Grid.Column="1" Grid.Row="1" Margin="0" Name="grdSaleGeneral">
+                <Border CornerRadius="5" Padding="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <StackPanel VerticalAlignment="Top">
+                        <TextBlock x:Name="lblOutOfPending" Text="Out of Pending" FontSize="14" HorizontalAlignment="Right" />
+                        <TabControl Style="{StaticResource TabControlStyle}" MaxWidth="700" >
+                            <TabItem Name="tabGeneral" Style="{StaticResource TabItemStyle}" Header="General">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="480">
+                                    <Grid x:Name="gGeneral"  Background="White">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition  Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="2">
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsaID" Text="Sale ID*" />
+                                                <TextBox x:Name="txtsaID" Tag="Sale ID" MaxLength="8" Text="{Binding saID, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsaMembershipNum" Text="Membership #*" />
+                                                <TextBox x:Name="txtsaMembershipNum" Tag="Membership" Text="{Binding saMembershipNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsaD" Text="Sale Date" />
+                                                <TextBox x:Name="txtsaD" Width="70"  Text="{Binding saD, StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                            <Border  Style="{StaticResource brd-Catalogs}" x:Name="fraProcessable" BorderBrush="Black" BorderThickness="1" Margin="5">
+                                                <StackPanel Margin="0">
+                                                    <CheckBox x:Name="chksaProc" IsChecked="{Binding saProc}" Content="Processable" Margin="2" FontSize="12" />
+                                                    <TextBox x:Name="txtsaProcD" Margin="5" Width="70" Text="{Binding saProcD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                </StackPanel>
+                                            </Border>
+                                            <Border x:Name="fraCancelled"  BorderThickness="1" Margin="5"  Style="{StaticResource brd-Catalogs}">
+                                                <StackPanel>
+                                                    <CheckBox x:Name="chksaCancel" Content="Cancelled" Margin="5" Checked="chksaCancel_Checked" IsChecked="{Binding saCancel}" Unchecked="chksaCancel_Checked" />
+                                                    <TextBox x:Name="txtsaCancelD" Margin="5" Width="70" Text="{Binding saCancelD,StringFormat=dd/MM/yyyy}" />
+                                                </StackPanel>
+                                            </Border>
+                                            <Border BorderBrush="Black" Margin="5"  Style="{StaticResource brd-Catalogs}">
+                                                <CheckBox x:Name="chksaByPhone" IsChecked="{Binding saByPhone, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Phone Sale" Margin="5" VerticalAlignment="Center" />
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="2">
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsagu" Text="GUID*" />
+                                                <TextBox x:Name="txtsagu" Tag="Guest ID" Text="{Binding sagu, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" LostFocus="Txtsagu_OnLostFocus" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblGuestNameCaption" Text="Guest Name" />
+                                                <TextBox x:Name="lblGuestName" Width="150" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsals"  Text="Lead Source" />
+                                                <TextBox x:Name="txtsals" Text="{Binding sals, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsalo" Text="Location*" />
+                                                <TextBox x:Name="txtsalo" Tag="Location" Text="{Binding salo, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsasr" Text="Sales Room*" />
+                                                <TextBox x:Name="txtsasr" Tag="Sales Room" Text="{Binding sasr, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Name="lblsast"  Text="Sale Type" />
+                                                    <CheckBox x:Name="chksaUpdated" IsChecked="{Binding saUpdated, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Updated" />
+                                                </StackPanel>
+                                                <ComboBox x:Name="cbosast" Tag="Sale Type" Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="stN" SelectionChanged="cbosast_SelectionChanged" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsaRefMember" Text="Prev Member #" />
+                                                <TextBox x:Name="txtsaRefMember"  Text="{Binding saRefMember , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsaProcRD" Text="Prev Proc Date" />
+                                                <TextBox x:Name="txtsaProcRD" Text="{Binding saProcRD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="85" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="2">
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsamt" Text="Membership Type*" />
+                                                <ComboBox x:Name="cbosamt" Tag="Membership Type" SelectedValue="{Binding samt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" SelectionChanged="cbo_SelectionChanged" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock x:Name="lblsamtGlobal" Text="Membership Type Global" />
+                                                <ComboBox x:Name="cbosamtGlobal" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding samtGlobal, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" />
+                                            </StackPanel>
+                                            <StackPanel Width="150">
+                                                <TextBlock x:Name="lblLastName" Text="Last Name*" />
+                                                <TextBox x:Name="txtsaLastName1" Tag="Last Name" Margin="0,0,0,5" Text="{Binding saLastName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                <TextBox x:Name="txtsaLastName2" Text="{Binding saLastName2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                            <StackPanel Width="150">
+                                                <TextBlock x:Name="lblsaFirstName" Text="First Name*" />
+                                                <TextBox x:Name="txtsaFirstName1" Tag="Fist Name"  Margin="0,0,0,5" Text="{Binding saFirstName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                <TextBox x:Name="txtsaFirstName2" Text="{Binding saFirstName2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="2">
+                                            <GroupBox x:Name="grbAmounts" Header="Amounts (Exclude VAT)" BorderBrush="#147F79">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="83" />
+                                                        <ColumnDefinition Width="80" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock x:Name="lblsaOriginalAmount" Text="Original*" />
+                                                        <TextBlock x:Name="lblsaNewAmount" Text="New*" />
+                                                        <TextBlock x:Name="lblsaGrossAmount"  Text="Gross*" />
+                                                    </StackPanel>
+                                                    <StackPanel  Grid.Column="1">
+                                                        <TextBox x:Name="txtsaOriginalAmount" Tag="asxa" Text="{Binding saOriginalAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox x:Name="txtsaNewAmount" Tag="new amount" Text="{Binding saNewAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox x:Name="txtsaGrossAmount" Tag="adxasass" Text="{Binding saGrossAmount,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </GroupBox>
+                                            <StackPanel Margin="40,0,0,0">
+                                                <TextBlock x:Name="lblsaClosingCost" Text="Closing Cost" />
+                                                <TextBox x:Name="txtsaClosingCost" Text="{Binding saClosingCost, StringFormat='{}{0:C2}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                <TextBlock x:Name="lblsaOverPack" Text="Over Pack" />
+                                                <TextBox x:Name="txtsaOverPack" Text="{Binding saOverPack, StringFormat='{}{0:C2}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                            <GroupBox x:Name="grbPayments" Header="Payments"  Margin="40,0,0,0" Background="White" BorderBrush="#147F79">
+                                                <DataGrid LostKeyboardFocus="Dgpayment_OnLostKeyboardFocus"
+                                      RowEditEnding="Dgpayment_OnRowEditEnding"
+                                      CanUserReorderColumns="False"
                                       CanUserResizeColumns="False"
                                       CanUserResizeRows="False"
                                       CanUserAddRows="True"
-                                      CanUserDeleteRows="true" 
+                                      CanUserDeleteRows="true"
                                       ItemsSource="{Binding}"
-                                      x:Name="dgpayment" Margin="5" Height="90" VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False" Width="220" 
-                                      BorderBrush="Black" RowHeaderWidth="0" >
-                                    <DataGrid.Columns>
-                                        <DataGridComboBoxColumn x:Name="paptColumn" Width="*" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged }">
-                                            <DataGridComboBoxColumn.EditingElementStyle>
-                                                <Style TargetType="ComboBox">
-                                                    <EventSetter Event="SelectionChanged" Handler="SelectionChangedPaptColumn_OnHandler"/>
-                                                </Style>
-                                            </DataGridComboBoxColumn.EditingElementStyle>
-                                        </DataGridComboBoxColumn>
-                                        <DataGridComboBoxColumn x:Name="paccColumn" Width="*" Header="Credit Card"  SelectedValuePath="ccID"  DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc,  Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" >
-                                            <DataGridComboBoxColumn.EditingElementStyle>
-                                                <Style TargetType="ComboBox">
-                                                    <EventSetter Event="Loaded" Handler="LoadedPaccColumn_OnHandler" />
-                                                </Style>
-                                            </DataGridComboBoxColumn.EditingElementStyle>
-                                        </DataGridComboBoxColumn>
-                                        <DataGridTextColumn x:Name="pasaColumn" Visibility="Collapsed" Header="pasa" Binding="{Binding pasa}"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </GroupBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="6,5,0,5">
-                            <GroupBox Background="white" x:Name="grbAmounts_Copy" Header="Amounts (Exclude VAT)" BorderBrush="#147F79" >
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock x:Name="lblsaOriginalAmount1" Text="Original" Margin="5"/>
-                                        <TextBlock x:Name="lblsaNewAmount1" Text="New" Margin="5"/>
-                                        <TextBlock x:Name="lblsaGrossAmount1" Text="Gross" Margin="5"/>
-                                        <TextBlock x:Name="lblsaDownPayment" Text="Down Payment Required" Margin="5"/>
-                                        <TextBlock x:Name="lblsaDownPaymentPaid2" Text="Down Payment Paid" Margin="5"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1">
-                                        <TextBox x:Name="txtsaOriginalAmountWithVAT" Text="{Binding saOriginalAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBox x:Name="txtsaNewAmountWithVAT" Text="{Binding saNewAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBox x:Name="txtsaGrossAmountWithVAT" Text="{Binding saGrossAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
-                                        <StackPanel Orientation="Horizontal" Margin="0">
-                                            <TextBox x:Name="txtsaDownPaymentPercentage" Text="{Binding saDownPaymentPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Width="70"/>
-                                            <TextBox x:Name="txtsaDownPayment" Text="{Binding saDownPayment,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                                      x:Name="dtgPayment" Margin="5" Height="70" VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False" Width="220"
+                                      BorderBrush="Black" RowHeaderWidth="0">
+                                                    <DataGrid.Columns>
+                                                        <DataGridComboBoxColumn x:Name="paptColumn" Width="*" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged }">
+                                                            <DataGridComboBoxColumn.EditingElementStyle>
+                                                                <Style TargetType="ComboBox">
+                                                                    <EventSetter Event="SelectionChanged" Handler="SelectionChangedPaptColumn_OnHandler" />
+                                                                </Style>
+                                                            </DataGridComboBoxColumn.EditingElementStyle>
+                                                        </DataGridComboBoxColumn>
+                                                        <DataGridComboBoxColumn x:Name="paccColumn" Width="*" Header="Credit Card"  SelectedValuePath="ccID"  DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc,  Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}">
+                                                            <DataGridComboBoxColumn.EditingElementStyle>
+                                                                <Style TargetType="ComboBox">
+                                                                    <EventSetter Event="Loaded" Handler="LoadedPaccColumn_OnHandler" />
+                                                                </Style>
+                                                            </DataGridComboBoxColumn.EditingElementStyle>
+                                                        </DataGridComboBoxColumn>
+                                                        <DataGridTextColumn x:Name="pasaColumn" Visibility="Collapsed" Header="pasa" Binding="{Binding pasa}" />
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </GroupBox>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="0">
-                                            <TextBox x:Name="txtsaDownPaymentPaidPercentage" Text="{Binding saDownPaymentPaidPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="70"/>
-                                            <TextBox x:Name="txtsaDownPaymentPaid" Text="{Binding saDownPaymentPaid, StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                                        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="2">
+                                            <GroupBox Background="white" x:Name="grbAmounts_Copy" Header="Amounts (Exclude VAT)" BorderBrush="#147F79">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock x:Name="lblsaOriginalAmount1" Text="Original" Margin="5" />
+                                                        <TextBlock x:Name="lblsaNewAmount1" Text="New" Margin="5" />
+                                                        <TextBlock x:Name="lblsaGrossAmount1" Text="Gross" Margin="5" />
+                                                        <TextBlock x:Name="lblsaDownPayment" Text="Down Payment Required" Margin="5" />
+                                                        <TextBlock x:Name="lblsaDownPaymentPaid2" Text="Down Payment Paid" Margin="5" />
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1">
+                                                        <TextBox x:Name="txtsaOriginalAmountWithVAT" Text="{Binding saOriginalAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox x:Name="txtsaNewAmountWithVAT" Text="{Binding saNewAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox x:Name="txtsaGrossAmountWithVAT" Text="{Binding saGrossAmountWithVAT,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                                        <StackPanel Orientation="Horizontal" Margin="0">
+                                                            <TextBox x:Name="txtsaDownPaymentPercentage" Text="{Binding saDownPaymentPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Width="70" />
+                                                            <TextBox x:Name="txtsaDownPayment" Text="{Binding saDownPayment,StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0">
+                                                            <TextBox x:Name="txtsaDownPaymentPaidPercentage" Text="{Binding saDownPaymentPaidPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="70" />
+                                                            <TextBox x:Name="txtsaDownPaymentPaid" Text="{Binding saDownPaymentPaid, StringFormat={}{0:C2} , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </GroupBox>
+                                            <StackPanel Margin="30,0,0,0">
+                                                <TextBlock x:Name="lblsaComments" Text="Comments" />
+                                                <TextBox x:Name="txtsaComments" Text="{Binding saComments , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="280" Height="105" />
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-                            <StackPanel Margin="30,0,0,0">
-                                <TextBlock x:Name="lblsaComments" Text="Comments" />
-                                <TextBox x:Name="txtsaComments" Text="{Binding saComments , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="280" Height="105"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                    <Grid Background="White" Grid.Row="1" Grid.ColumnSpan="2" Panel.ZIndex="0" x:Name="grdSalesmen">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0">
-                            <CheckBox   x:Name="chksaSelfGen" Margin="20,5,5,5" HorizontalAlignment="Left" IsChecked="{Binding saSelfGen , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Content="SELF GEN"  />
-                            <StackPanel Orientation="Horizontal" Margin="11,0,0,0">
-                                <StackPanel>
-                                    <TextBlock x:Name="lblsaPR1" Text="PR 1" Margin="0,0,12,15"/>
-                                    <TextBlock x:Name="lblsaPR2" Text="PR 2" Margin="0,0,0,10"/>
-                                    <TextBlock x:Name="lblsaPR3" Text="PR 3" Margin="0,0,0,10"/>
-                                </StackPanel>
-                                <!--      <StackPanel Width="100">
-                                <TextBox x:Name="txtsaPR1" Tag="PR 1" LostFocus="txt_LostFocus" Text="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaPR2" LostFocus="txt_LostFocus" Text="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaPR3" LostFocus="txt_LostFocus" Text="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>-->
-                                <StackPanel Width="Auto">
-                                    <ComboBox x:Name="cmbsaPR1" Margin="0,0,0,4" SelectedValue="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <ComboBox x:Name="cmbsaPR2" Margin="0,0,0,3" SelectedValue="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    <!-- DisplayMemberPath="peN"/>-->
-                                    <ComboBox x:Name="cmbsaPR3" Margin="0,0,0,5" SelectedValue="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                </StackPanel>
-                            </StackPanel>
-                            <Border BorderBrush="Black" BorderThickness="2"  Margin="7"  Style="{StaticResource brd-Catalogs}">
-                                <StackPanel Margin="5">
-                                    <StackPanel Orientation="Horizontal" >
-                                        <TextBlock x:Name="lblsaLiner1" Text="Liner 1" Margin="0,0,3,0" />
-                                        <ComboBox x:Name="cmbsaLiner1"  SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"  SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                         TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                            <StackPanel Orientation="Horizontal"  Margin="0,0,0,0">
-                                <StackPanel>
-                                    <TextBlock x:Name="lblsaLiner2" Text="Liner 2" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaCloser1" Text="Closer 1" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaCloser2" Text="Closer 2" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaCloser3" Text="Closer 3" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaExit1" Text="Exit 1" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaExit2" Text="Exit 2" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaPodium" Text="Podium" Margin="12,0,0,13"/>
-                                    <TextBlock x:Name="lblsaVLO" Text="VLO" Margin="12,0,0,8"/>
-                                </StackPanel>
-                                <!--       <StackPanel Width="100">
-                          <TextBox x:Name="txtsaLiner2" LostFocus="txt_LostFocus" Text="{Binding saLiner2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaCloser1" LostFocus="txt_LostFocus" Text="{Binding saCloser1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaCloser2" LostFocus="txt_LostFocus" Text="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaCloser3" LostFocus="txt_LostFocus" Text="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaExit1" LostFocus="txt_LostFocus" Text="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaExit2"  LostFocus="txt_LostFocus" Text="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaPodium"  LostFocus="txt_LostFocus" Text="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBox x:Name="txtsaVLO" LostFocus="txt_LostFocus" Text="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>-->
-                                <StackPanel Width="auto">
-                                    <ComboBox  x:Name="cmbsaLiner2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saLiner2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                             TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaCloser1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaCloser2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaCloser3" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                             TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaExit1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                           TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged"
-                                              SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                            TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaPodium" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                         TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                    <ComboBox x:Name="cmbsaVLO" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                          TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21" />
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="0"  VerticalAlignment="Top" Margin="4">
-                            <GroupBox x:Name="grbCaptains" Header="Captains" BorderBrush="#147F79">
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel>
-                                        <TextBlock x:Name="lblsaPRCaptain1" Text="PR Capt 1" Margin="0,0,0,13"/>
-                                        <TextBlock x:Name="lblsaPRCaptain2" Text="PR Capt 2" Margin="0,0,0,13"/>
-                                        <TextBlock x:Name="lblsaPRCaptain3" Text="PR Capt 3" Margin="0,0,0,13"/>
-                                        <TextBlock x:Name="lblsaLinerCaptain1" Text="Liner Capt" Margin="0,0,0,13"/>
-                                        <TextBlock x:Name="lblsaCloserCaptain1" Text="Sales Capt" Margin="0,0,0,10"/>
-                                    </StackPanel>
-                                    <!--  <StackPanel Width="100">
-                                    <TextBox x:Name="txtsaPRCaptain1" Text="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaPRCaptain2" Text="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaPRCaptain3" Text="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaLinerCaptain1" Text="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaCloserCaptain1" Text="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
-                                </StackPanel>-->
-                                    <StackPanel Width="auto">
-                                        <ComboBox x:Name="cmbsaPRCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                               TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaPRCaptain2" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                               TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaPRCaptain3" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                               TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaLinerCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                                TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                        <ComboBox x:Name="cmbsaCloserCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID" 
-                                               TextSearch.TextPath="peID"
-                                               ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                               Style="{StaticResource cbx-Personnel-ValidatePermission}"
-                                               ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="240" Height="Auto" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </GroupBox>
-                            <Button x:Name="btnSalesSalesmen" Margin="20" Height="20" HorizontalAlignment="Center" Click="btnSalesSalesmen_Click" Content="Salesmen" Width="100"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-                <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2">
-                    <GroupBox  HorizontalAlignment="Left" Margin="5" x:Name="grbChangedBy" Header="Chnaged By" BorderBrush="#147F79">
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBox x:Name="txtChangedBy" Tag="User making changes"  Width="100" Margin="0,0,5,0"/>
-                            <PasswordBox x:Name="txtPwd" Tag="password" Width="100" Margin="0,0,5,0"/>
-                            <Button x:Name="btnLog" Content="Log" Width="50" Click="btnLog_Click" Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        </StackPanel>
-                    </GroupBox>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btnEdit" Content="Edit" Width="70" Margin="0,0,5,0" Click="btnEdit_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        <Button x:Name="btnDelete" Content="Delete" Width="70" Margin="0,0,5,0" Click="btnDelete_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        <Button x:Name="btnSave" Content="Save"  Width="70" Margin="0,0,5,0" Click="btnSave_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        <Button x:Name="btnUndo" Content="Undo" Width="70" Margin="0,0,5,0" Click="btnUndo_Click" PreviewMouseLeftButtonDown="btnUndo_PreviewMouseLeftButtonDown"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-                        <Button x:Name="btnClose" Content="Close" Width="70" Margin="0,0,5,0" Click="btnClose_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem Name="tabSalesmen" Style="{StaticResource TabItemStyle}" Header="Salesmen">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="480">
+                                    <Grid x:Name="grdSalesmen" Background="White">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Row="0" Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="270" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Columna 0  Filas 0 - 17 -->
+                                            
+                                            <CheckBox   x:Name="chksaSelfGen" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                                                        Content="SELF GEN" Margin="0 2"
+                                                        IsChecked="{Binding saSelfGen , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                            
+                                            <TextBlock Text="PRs" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="lblsaPR1"  Grid.Column="0" Grid.Row="3" Text="PR 1" />
+                                            <TextBlock x:Name="lblsaPR2"  Grid.Column="0" Grid.Row="4" Text="PR 2" />
+                                            <TextBlock x:Name="lblsaPR3"  Grid.Column="0" Grid.Row="5" Text="PR 3" />
+                                            
+                                            <TextBlock Text="Liners" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="lblsaLiner1" Grid.Column="0" Grid.Row="7" Text="Liner 1" />
+                                            <TextBlock x:Name="lblsaLiner2" Grid.Column="0" Grid.Row="8" Text="Liner 2" />
+                                            <TextBlock x:Name="lblsaLiner3" Grid.Column="0" Grid.Row="9" Text="Liner 3" />
+                                            
+                                            <TextBlock Text="Front To Middle" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="10"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="txtbFTM1" Grid.Column="0" Grid.Row="11"  Text="Front To Middle 1" TextWrapping="Wrap" />
+                                            <TextBlock x:Name="txtbFTM2" Grid.Column="0" Grid.Row="12"  Text="Front To Middle 2" TextWrapping="Wrap" />
+
+                                            <TextBlock Text="Front To Back" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="13"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="txtbFTB1" Grid.Column="0" Grid.Row="14" Text="Front To Back 1" TextWrapping="Wrap" />
+                                            <TextBlock x:Name="txtbFTB2" Grid.Column="0" Grid.Row="15" Text="Front To Back 2"  TextWrapping="Wrap" />
+                                            
+                                            <TextBlock Text="Podium" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="16"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="lblsaPodium"  Grid.Column="0" Grid.Row="17" Text="Podium" />
+
+                                            <TextBlock Text="VLO" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="18"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                            <TextBlock x:Name="lblsaVLO" Grid.Column="0" Grid.Row="19" Text="VLO" />
+                                            
+                                            <ComboBox x:Name="cmbsaPR1" Grid.Column="1" Grid.Row="3"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID"
+                                                      TextSearch.TextPath="peID" ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox x:Name="cmbsaPR2" Grid.Column="1" Grid.Row="4"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID"
+                                                      TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox x:Name="cmbsaPR3" Grid.Column="1" Grid.Row="5"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID"
+                                                      TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox x:Name="cmbsaLiner1" Grid.Column="1" Grid.Row="7"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown" SelectedValuePath="peID"
+                                                      TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaLiner2" Grid.Column="1" Grid.Row="8"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saLiner2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaLiner3" Grid.Column="1" Grid.Row="9"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saLiner3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaFTM1" Grid.Column="1" Grid.Row="11"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saFTM1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaFTM2" Grid.Column="1" Grid.Row="12"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saFTM2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaFTB1" Grid.Column="1" Grid.Row="14"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saFTB1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox  x:Name="cmbsaFTB2" Grid.Column="1" Grid.Row="15"
+                                                       Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                       ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                       SelectedValue="{Binding saFTB2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                       SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                       ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox x:Name="cmbsaPodium" Grid.Column="1" Grid.Row="17"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                            <ComboBox x:Name="cmbsaVLO" Grid.Column="1" Grid.Row="19"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+                                        </Grid>
+                                        <!-- Columna 1 -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
+                                            
+                                            
+                                            <Grid x:Name="grdCaptains">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="65" />
+                                                    <ColumnDefinition Width="270" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="Closers" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0,18 ,0,0" />
+                                                <TextBlock x:Name="lblsaCloser1" Grid.Column="0" Grid.Row="1" Text="Closer 1" />
+                                                <TextBlock x:Name="lblsaCloser2" Grid.Column="0" Grid.Row="2" Text="Closer 2" />
+                                                <TextBlock x:Name="lblsaCloser3" Grid.Column="0" Grid.Row="3" Text="Closer 3" />
+                                                <TextBlock x:Name="lblsaCloser4" Grid.Column="0" Grid.Row="4" Text="Closer 4" />
+                                                
+                                                <TextBlock Text="Exits" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                                <TextBlock x:Name="lblsaExit1"  Grid.Column="0" Grid.Row="6"  Text="Exit 1" />
+                                                <TextBlock x:Name="lblsaExit2"  Grid.Column="0" Grid.Row="7"  Text="Exit 2" />
+                                                <TextBlock x:Name="lblsaExit3"  Grid.Column="0" Grid.Row="8"  Text="Exit 3" />
+
+                                                <TextBlock Text="Captains" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9"
+                                                       Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" TextAlignment="Center" Margin="0" />
+                                                <TextBlock x:Name="lblsaPRCaptain1" Grid.Column="0" Grid.Row="10" Text="PR Capt 1" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="lblsaPRCaptain2" Grid.Column="0" Grid.Row="11" Text="PR Capt 2" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="lblsaPRCaptain3" Grid.Column="0" Grid.Row="12" Text="PR Capt 3" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="lblsaLinerCaptain1" Grid.Column="0" Grid.Row="13" Text="Liner Capt" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="lblsaCloserCaptain1" Grid.Column="0" Grid.Row="14" Text="Sales Capt" TextWrapping="Wrap" />
+
+                                               
+
+                                                <ComboBox x:Name="cmbsaCloser1" Grid.Column="1" Grid.Row="1"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saCloser1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaCloser2" Grid.Column="1" Grid.Row="2"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValuePath="peID"
+                                                      SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" KeyDown="txt_KeyDown"
+                                                      TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaCloser3" Grid.Column="1" Grid.Row="3"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaCloser4" Grid.Column="1" Grid.Row="4"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saCloser4, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaExit1" Grid.Column="1" Grid.Row="6"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaExit2" Grid.Column="1" Grid.Row="7"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+                                                
+                                                <ComboBox x:Name="cmbsaExit3" Grid.Column="1" Grid.Row="8"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saExit3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaPRCaptain1" Grid.Column="1" Grid.Row="10"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaPRCaptain2" Grid.Column="1" Grid.Row="11"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}" Width="260" Height="21"
+                                                      SelectedValue="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaPRCaptain3" Grid.Column="1" Grid.Row="12"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaLinerCaptain1" Grid.Column="1" Grid.Row="13"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="21"
+                                                      SelectedValue="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                <ComboBox x:Name="cmbsaCloserCaptain1" Grid.Column="1" Grid.Row="14"
+                                                      Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                                                      ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}" Width="260" Height="21"
+                                                      SelectedValue="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectionChanged="cbo_SelectionChanged" KeyDown="txt_KeyDown"
+                                                      SelectedValuePath="peID" TextSearch.TextPath="peID"
+                                                      ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}" />
+
+                                                
+                                            </Grid>
+                                            <Button x:Name="btnSalesSalesmen" Content="Salesmen" Width="100" Height="32" Margin="0 5"
+                                                    Style="{StaticResource ButtonBig}"
+                                                    Click="btnSalesSalesmen_Click" />
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+                        </TabControl>
                     </StackPanel>
-                </StackPanel>
+                </Border>
             </Grid>
-        </ScrollViewer>
+
+            <!-- Region Barra Inferior Menu  -->
+            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2" Height="58">
+                <GroupBox  HorizontalAlignment="Left" Margin="5" x:Name="grbChangedBy" Header="Changed By" BorderBrush="#147F79">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBox x:Name="txtChangedBy" Tag="User making changes"  Width="100" Margin="0,0,5,0" />
+                        <PasswordBox x:Name="txtPwd" Tag="password" Width="100" Margin="0,0,5,0" />
+                        <Button x:Name="btnLog" Content="Log" Width="50" Click="btnLog_Click" Style="{StaticResource ButtonBig}" />
+                    </StackPanel>
+                </GroupBox>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnEdit" Content="Edit" Width="70" Margin="0,0,5,0" Click="btnEdit_Click"  Style="{StaticResource ButtonBig}" />
+                    <Button x:Name="btnDelete" Content="Delete" Width="70" Margin="0,0,5,0" Click="btnDelete_Click" Style="{StaticResource ButtonBig}" />
+                    <Button x:Name="btnSave" Content="Save"  Width="70" Margin="0,0,5,0" Click="btnSave_Click"  Style="{StaticResource ButtonBig}" />
+                    <Button x:Name="btnUndo" Content="Undo" Width="70" Margin="0,0,5,0" Click="btnUndo_Click" PreviewMouseLeftButtonDown="btnUndo_PreviewMouseLeftButtonDown"  Style="{StaticResource ButtonBig}" />
+                    <Button x:Name="btnClose" Content="Close" Width="70" Margin="0,0,5,0" Click="btnClose_Click"  Style="{StaticResource ButtonBig}" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </xctk:BusyIndicator>
 </Window>
-

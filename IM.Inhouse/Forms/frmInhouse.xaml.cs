@@ -316,7 +316,7 @@ namespace IM.Inhouse.Forms
         var editGuest = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         editGuest.guCheckIn = true;
         editGuest.guAvail = guum.Equals(0);
-        await BREntities.OperationEntity(editGuest,EnumMode.Edit);
+        await BREntities.OperationEntity(editGuest, EnumMode.Edit);
 
         #endregion Save DataBase
 
@@ -581,7 +581,7 @@ namespace IM.Inhouse.Forms
           {
             List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.Value.Value, Context.User.LeadSource.lsID,
               _markets, _available, _info, _invited, _onGroup);
-            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value,this);
+            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value, this);
             hasData = true;
           }
           break;
@@ -591,7 +591,7 @@ namespace IM.Inhouse.Forms
           {
             List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate(),
               Context.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
-            ReportsToExcel.AvailablesToExcel(aviables,this);
+            ReportsToExcel.AvailablesToExcel(aviables, this);
             hasData = true;
           }
           break;
@@ -603,14 +603,14 @@ namespace IM.Inhouse.Forms
             {
               List<RptPremanifest> premanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value,
                 Context.User.LeadSource.lsID, _markets, _onGroup);
-              ReportsToExcel.PremanifestToExcel(premanifest,this);
+              ReportsToExcel.PremanifestToExcel(premanifest, this);
               hasData = true;
             }
             else
             {
               List<RptPremanifestWithGifts> withGifts = await BRGeneralReports.GetRptPremanifestWithGifts(
                 dtpDate.Value.Value, Context.User.LeadSource.lsID);
-              ReportsToExcel.PremanifestWithGiftsToExcel(withGifts,this);
+              ReportsToExcel.PremanifestWithGiftsToExcel(withGifts, this);
               hasData = true;
             }
           }
@@ -831,9 +831,9 @@ namespace IM.Inhouse.Forms
       //Y cuando el valor esta en True quiere decir que originalmente estaba en False
       var chk = sender as CheckBox;
       //Es decir cuando es true entra en el metodo CheckIn por que en la interfaz mostraba que estaba deseleccionado
-      // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest 
-      //ya que un Guest con Check In ya no se le puede quitar 
-      chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;   
+      // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest
+      //ya que un Guest con Check In ya no se le puede quitar
+      chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;
     }
 
     #endregion ChkguCheckInArrival_Click
@@ -921,7 +921,7 @@ namespace IM.Inhouse.Forms
       int guID, guIDToAdd = 0;
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
-      
+
       if (!chk.IsChecked.Value)
         chk.IsChecked = true;
 
@@ -1087,7 +1087,9 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion NotesAvailable_MouseLeftButtonUp    
+    #endregion NotesAvailable_MouseLeftButtonUp
+
+
 
     #region chkGuestsGroupsAviables
 
@@ -1236,7 +1238,9 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    #endregion NotesPremanifest_MouseLeftButtonUp  
+    #endregion NotesPremanifest_MouseLeftButtonUp
+
+
 
     #region chkGuestsGroupsPremanifest
 
@@ -1330,7 +1334,7 @@ namespace IM.Inhouse.Forms
     #region ChkguCheckInGetGuest_Click
 
     private async void ChkguCheckInGetGuest_Click(object sender, RoutedEventArgs e)
-    {      
+    {
       var chk = sender as CheckBox;
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(guestSearchedDataGrid) : true;
     }
@@ -1517,7 +1521,7 @@ namespace IM.Inhouse.Forms
           guest = await BRGuests.GetGuest(row.guID);
         }
         guest.guComments = txt.Text;
-        await BREntities.OperationEntity(guest,EnumMode.Edit);
+        await BREntities.OperationEntity(guest, EnumMode.Edit);
       }
     }
 
@@ -1562,7 +1566,7 @@ namespace IM.Inhouse.Forms
       if (Context.User.AutoSign)
       {
         log.UserData = Context.User;
-      } 
+      }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
@@ -1748,7 +1752,7 @@ namespace IM.Inhouse.Forms
     /// [jorcanche] 17/03/2016
     /// </history>
     private void btnSearchGuest_Click(object sender, RoutedEventArgs e)
-    {           
+    {
       StaStart("loading Searched...");
       //StaStart("loading Searched...");
       var searchGuests = new frmSearchGuests { Owner = this };
@@ -1776,11 +1780,12 @@ namespace IM.Inhouse.Forms
     #endregion btnSearchGuest_Click
 
     #region ChkBookCancel_Click
+
     /// <summary>
-    /// Cancela una Booking 
+    /// Cancela una Booking
     /// </summary>
     /// <history>
-    /// [jorcanche] 06/10/2016 created 
+    /// [jorcanche] 06/10/2016 created
     /// </history>
     private void ChkBookCancel_Click(object sender, RoutedEventArgs e)
     {
@@ -1796,7 +1801,7 @@ namespace IM.Inhouse.Forms
       var guShow = t.GetProperty("guShow").GetValue(item);
       var guID = t.GetProperty("guID").GetValue(item);
 
-      //Validamos los valores nulos 
+      //Validamos los valores nulos
       if (chk?.IsChecked == null) return;
 
       //Invertimos el valor del Check para que no se modifique. El formulario Invitación definira si hubo invitación o no
@@ -1818,12 +1823,14 @@ namespace IM.Inhouse.Forms
       }
       dg.CommitEdit();
       dg.Items.Refresh();
-    } 
-    #endregion
+    }
+
+    #endregion ChkBookCancel_Click
 
     #region GetDataGrid
+
     /// <summary>
-    /// Devuelve el datagrid que este actualmente visualizandose 
+    /// Devuelve el datagrid que este actualmente visualizandose
     /// </summary>
     /// <history>
     /// [jorcanche]  06/10/2016 created
@@ -1834,19 +1841,22 @@ namespace IM.Inhouse.Forms
       {
         case EnumScreen.Arrivals:
           return dgGuestArrival;
+
         case EnumScreen.Availables:
-          return dgGuestAvailable;          
+          return dgGuestAvailable;
+
         case EnumScreen.Premanifest:
           return dgGuestPremanifest;
+
         case EnumScreen.Search:
           return guestSearchedDataGrid;
+
         default:
           throw new ArgumentOutOfRangeException("EnumScreen Not found or DataGrid Not found");
       }
     }
 
-
-    #endregion
+    #endregion GetDataGrid
 
     #region btnNotice_Click
     /// <summary>
@@ -1859,8 +1869,8 @@ namespace IM.Inhouse.Forms
     {
       frmNotices frmNotices = new frmNotices();
       frmNotices.ShowDialog();
-    } 
-    #endregion
+    }
+    #endregion btnNotice_Click
 
     #region btnAssistance_Click
 
@@ -1886,7 +1896,7 @@ namespace IM.Inhouse.Forms
     {
       var chk = sender as CheckBox;
       DataGrid dg = GetDataGrid();
-     
+
       var item = dg.SelectedItem;
       var t = item.GetType();
       var guAvail = t.GetProperty("guAvail").GetValue(item);
@@ -1907,7 +1917,6 @@ namespace IM.Inhouse.Forms
       {
         //Despliega el formulario de Invitación
         ShowInvitation((bool)guCheckIn, (int?)gagu, (int)guId, chk.IsChecked.Value, dg);
-
       }
     }
 
@@ -1928,25 +1937,24 @@ namespace IM.Inhouse.Forms
     /// </history>
     private async void ShowInvitation(bool guCheckIn, int? gagu, int guId, bool isInvit, DataGrid dg)
     {
-      //Validamos, Si la persona logeada en el modulo tiene permisos redonly de PRInvitation pordra entrar 
+      //Validamos, Si la persona logeada en el modulo tiene permisos redonly de PRInvitation pordra entrar
       if (ValidateInvitation(guCheckIn, gagu))
       {
         //Incializamos el Login
         frmLogin login = login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true,
             permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true,
             invitationMode: true, invitationPlaceId: Context.User.Location.loID);
-        //Si no esta invitado mostramos el login 
+        //Si no esta invitado mostramos el login
         if (!isInvit)
         {
           if (Context.User.AutoSign)
-            login.UserData = Context.User;           
+            login.UserData = Context.User;
           else
-          { 
+          {
             await login.getAllPlaces();
             login.ShowDialog();
             if (!login.IsAuthenticated) return;
           }
-      
         }
         else if (Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard) && !Context.User.AutoSign)
         {
@@ -1963,21 +1971,20 @@ namespace IM.Inhouse.Forms
         {
           login.UserData = Context.User;
         }
-      
 
         if (isInvit || login.IsAuthenticated || Context.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
         {
           var invitacion = new frmInvitation
-            (EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId) { Owner = this };
+            (EnumModule.InHouse, EnumInvitationType.existing, login != null ? login.UserData : Context.User, guId)
+          { Owner = this };
           invitacion.ShowDialog();
           //Si se guardó la información
           if (invitacion.SaveGuestInvitation)
           {
-            //actualizamos los datos del grid            
+            //actualizamos los datos del grid
             UpdateGridInvitation(invitacion.dbContext.Guest, invitacion._module, dg);
           }
         }
-       
       }
     }
 
@@ -1995,7 +2002,7 @@ namespace IM.Inhouse.Forms
     {
       var item = dg.SelectedItem;
       var t = item.GetType();
-      var  lstProperties = t.GetProperties().ToList();
+      var lstProperties = t.GetProperties().ToList();
 
       //***********************************************Disponible ***********************************************
       if (lstProperties.Any(c => c.Name == "guInvit"))
@@ -2003,14 +2010,14 @@ namespace IM.Inhouse.Forms
         t.GetProperty("guInvit").SetValue(item, true);
       }
 
-      //***********************************************Seguimiento*********************************************** 
+      //***********************************************Seguimiento***********************************************
       if (lstProperties.Any(c => c.Name == "guFollow"))
       {
-        //Si estaba contactado y no como invitado 
-        if ((bool) t.GetProperty("guInfo").GetValue(item) &&
-            (bool) t.GetProperty("guInvit").GetValue(item) == false)
+        //Si estaba contactado y no como invitado
+        if ((bool)t.GetProperty("guInfo").GetValue(item) &&
+            (bool)t.GetProperty("guInvit").GetValue(item) == false)
         {
-          //Con seguimiento 
+          //Con seguimiento
           t.GetProperty("guFollow").SetValue(item, true);
 
           //PR y Fecha de seguimiento
@@ -2023,7 +2030,7 @@ namespace IM.Inhouse.Forms
       }
       //***********************************************Contactacion ***********************************************
       if (lstProperties.Any(c => c.Name == "guInfo"))
-      {        
+      {
         //Contactado
         t.GetProperty("guInfo").SetValue(item, true);
 
@@ -2085,10 +2092,10 @@ namespace IM.Inhouse.Forms
         t.GetProperty("guQuinella").SetValue(item, invitacion.guQuinella);
       }
       dg.CommitEdit();
-      dg.Items.Refresh();      
+      dg.Items.Refresh();
     }
 
-    #endregion
+    #endregion UpdateGridInvitation
 
     #region ValidateInvitation
 

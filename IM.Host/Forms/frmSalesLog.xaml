@@ -47,16 +47,30 @@
                 <DataGridTextColumn x:Name="liner1NColumn" Binding="{Binding Liner1N}" Header="Liner 1 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slLiner2Column" Binding="{Binding slLiner2}" Header="Liner 2" Width="auto"/>
                 <DataGridTextColumn x:Name="liner2NColumn" Binding="{Binding Liner2N}" Header="Liner 2 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slLiner3Column" Binding="{Binding slLiner3}" Header="Liner 3" Width="auto"/>
+                <DataGridTextColumn x:Name="liner3NColumn" Binding="{Binding Liner3N}" Header="Liner 3 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTM1" Binding="{Binding slFTM1}" Header="FTM1" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTM1N" Binding="{Binding FTM1N}" Header="FTM1 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTM2" Binding="{Binding slFTM2}" Header="FTM2" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTM2N" Binding="{Binding FTM2N}" Header="FTM2 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTB1" Binding="{Binding slFTB1}" Header="FTB1" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTB1N" Binding="{Binding FTB1N}" Header="FTB1 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTB2" Binding="{Binding slFTB2}" Header="FTB2" Width="auto"/>
+                <DataGridTextColumn x:Name="slFTB2N" Binding="{Binding FTB2N}" Header="FTB2 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slCloser1Column" Binding="{Binding slCloser1}" Header="Closer 1" Width="auto"/>
                 <DataGridTextColumn x:Name="closer1NColumn" Binding="{Binding Closer1N}" Header="Closer 1 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slCloser2Column" Binding="{Binding slCloser2}" Header="Closer 2" Width="auto"/>
                 <DataGridTextColumn x:Name="closer2NColumn" Binding="{Binding Closer2N}" Header="Closer 2 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slCloser3Column" Binding="{Binding slCloser3}" Header="Closer 3" Width="auto"/>
                 <DataGridTextColumn x:Name="closer3NColumn" Binding="{Binding Closer3N}" Header="Closer 3 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slCloser4Column" Binding="{Binding slCloser4}" Header="Closer 4" Width="auto"/>
+                <DataGridTextColumn x:Name="closer4NColumn" Binding="{Binding Closer4N}" Header="Closer 4 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slExit1Column" Binding="{Binding slExit1}" Header="Exit 1" Width="auto"/>
                 <DataGridTextColumn x:Name="exit1NColumn" Binding="{Binding Exit1N}" Header="Exit 1 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slExit2Column" Binding="{Binding slExit2}" Header="Exit 2" Width="auto"/>
                 <DataGridTextColumn x:Name="exit2NColumn" Binding="{Binding Exit2N}" Header="Exit 2 Name" Width="auto"/>
+                <DataGridTextColumn x:Name="slExit3Column" Binding="{Binding slExit3}" Header="Exit 3" Width="auto"/>
+                <DataGridTextColumn x:Name="exit3NColumn" Binding="{Binding Exit3N}" Header="Exit 3 Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slPodiumColumn" Binding="{Binding slPodium}" Header="Podium" Width="auto"/>
                 <DataGridTextColumn x:Name="podiumNColumn" Binding="{Binding PodiumN}" Header="Podium Name" Width="auto"/>
                 <DataGridTextColumn x:Name="slVLOColumn" Binding="{Binding slVLO}" Header="VLO" Width="auto"/>
@@ -79,8 +93,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Name="btnSalesmenChanges" Content="Salesmen Changes" Margin="0,10,15,5" Width="150" Click="btnSalesMenChanges_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-            <Button  Name="btnPrintSalelog" Content="Print Sale Log" Width="150" Margin="0,10,0,5" Click="btnPrintSaleLog_Click"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button Name="btnSalesmenChanges" Content="Salesmen Changes" Margin="0,10,15,5" Width="150" Click="btnSalesMenChanges_Click"  Style="{StaticResource ButtonBig}"/>
+            <Button  Name="btnPrintSalelog" Content="Print Sale Log" Width="150" Margin="0,10,0,5" Click="btnPrintSaleLog_Click"  Style="{StaticResource ButtonBig}"/>
         </StackPanel>
             
     </Grid>

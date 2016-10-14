@@ -26,8 +26,8 @@
                                                Style="{StaticResource cbx-Personnel-ValidatePermission}"
                                                ItemTemplate="{StaticResource ResourceKey=cbx-Personnel-Concat}"  Width="260" Height="Auto" />
         <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Name="btnOk" Click="btnOk_Click" Content="OK" Width="60" Margin="10,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
-            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Grid.ColumnSpan="2" Grid.Row="3" Width="60" Margin="10,0"  Template="{Binding Source={StaticResource ButtonTemplate}}"/>
+            <Button Name="btnOk" Click="btnOk_Click" Content="OK" Width="60" Margin="10,0"  Style="{StaticResource ButtonBig}"/>
+            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Grid.ColumnSpan="2" Grid.Row="3" Width="60" Margin="10,0" Style="{StaticResource ButtonBig}"/>
         </StackPanel>
     </Grid>
 </Window>
