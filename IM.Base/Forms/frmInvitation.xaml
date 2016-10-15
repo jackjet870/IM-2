@@ -146,10 +146,6 @@
                     <TabItem Name="tabGeneral" Style="{StaticResource TabItemStyle}" Header="General">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="207*"/>
-                                    <ColumnDefinition Width="769*"/>
-                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -160,7 +156,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!--#region Guest Info  Row 0-->
-                                <Border x:Name="brdGuestInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1,0,8" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                <Border x:Name="brdGuestInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Grid.Row="0"  Padding="2" Margin="0,1">
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel Name="stkGuestInfo">
@@ -237,7 +233,7 @@
                                 <!--#endregion-->
 
                                 <!--#region Profile Opera Row 1-->
-                                <Border x:Name="brdProfileOpera" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,41,0,17" Grid.ColumnSpan="2" Grid.RowSpan="3">
+                                <Border x:Name="brdProfileOpera" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Padding="2" Margin="0,1">
                                     <StackPanel>
                                         <TextBlock Text="Profile Opera" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
@@ -261,7 +257,7 @@
                                 <!--#endregion-->
 
                                 <!--#region Guest1 Row 2-->
-                                <Border x:Name="brdGuest1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,20,0,8" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                <Border x:Name="brdGuest1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Padding="2" Margin="0,1">
                                     <StackPanel>
                                         <TextBlock Text="Guest 1" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
@@ -302,7 +298,7 @@
                                 <!--#endregion-->
 
                                 <!--#region Guest2 Row 3-->
-                                <Border x:Name="brdGuest2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,42,0,-4" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                <Border x:Name="brdGuest2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Padding="2" Margin="0,1">
                                     <StackPanel>
                                         <TextBlock Text="Guest 2" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
@@ -343,7 +339,7 @@
                                 <!--#endregion-->
 
                                 <!--#region PR Row 4-->
-                                <Border x:Name="brdPRInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,51,0,-172" Grid.ColumnSpan="2">
+                                <Border x:Name="brdPRInfo" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Padding="2" Margin="0,1">
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -473,7 +469,7 @@
                                 <!--#endregion-->
 
                                 <!--#region Other Information Row 5-->
-                                <Border x:Name="brdOtherInformation" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,219,0,-299" Grid.ColumnSpan="2">
+                                <Border x:Name="brdOtherInformation" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Padding="2" Margin="0,1">
                                     <StackPanel>
                                         <TextBlock Text="Other Information" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold" />
                                         <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
