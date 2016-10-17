@@ -131,7 +131,7 @@
         <EntityTypeShape EntityType="IMModel.SegmentByLeadSource" Width="1.5" PointX="28.5" PointY="135" IsExpanded="true" />
         <EntityTypeShape EntityType="IMModel.SegmentCategory" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="IMModel.ShowProgram" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMModel.ShowProgramCategory" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ShowProgramCategory" Width="1.5" PointX="0.875" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="IMModel.ShowSalesman" Width="1.5" PointX="33" PointY="94.625" IsExpanded="true" />
         <EntityTypeShape EntityType="IMModel.Society" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="IMModel.SourcePayment" Width="1.5" PointX="9" PointY="101.75" IsExpanded="true" />

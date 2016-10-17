@@ -2036,23 +2036,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptWeeklyGiftsItemsSimple>("USP_IM_RptWeeklyGiftsItemsSimple", startDateParameter, endDateParameter, salesRoomsParameter);
         }
     
-        public virtual ObjectResult<RptGuestCeco> USP_OR_RptGuestCeco(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGuestCeco>("USP_OR_RptGuestCeco", dateFromParameter, dateToParameter, salesRoomsParameter);
-        }
-    
         public virtual ObjectResult<RptGuestsNoBuyers> USP_OR_RptGuestsNoBuyers(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -6626,6 +6609,23 @@ namespace IM.Model
                 new ObjectParameter("Country", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateInvitation", changedByParameter, pRParameter, locationParameter, leadSourceParameter, salesRoomParameter, agencyParameter, countryParameter);
+        }
+    
+        public virtual ObjectResult<RptAccountingCodes> USP_IM_RptAccountingCodes(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAccountingCodes>("USP_IM_RptAccountingCodes", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
     }
 }
