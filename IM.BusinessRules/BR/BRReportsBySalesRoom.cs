@@ -726,6 +726,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
+          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptGiftsUsedBySistur;
           //Obtenemos los certificados de regalo.
           var lstGiftSist = dbContext.USP_OR_RptGiftsUsedBySistur(dtmStart, dtmEnd, salesRooms, programs, leadsources).ToList();
 

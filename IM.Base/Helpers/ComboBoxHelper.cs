@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Linq;
-using System;
 
 namespace IM.Base.Helpers
 {
@@ -21,7 +20,7 @@ namespace IM.Base.Helpers
       List<object> lstOptions = new List<object>();
       lstOptions.Add(new { sName = "ALL", sValue = -1 });
       lstOptions.Add(new { sName = "Yes", sValue = 1 });
-      lstOptions.Add(new { sName = "No", sValue = 0 });      
+      lstOptions.Add(new { sName = "No", sValue = 0 });
       comboBox.ItemsSource = lstOptions;
     }
 
@@ -75,7 +74,7 @@ namespace IM.Base.Helpers
           break;
       }
       cboDate.SelectedIndex = 0;
-     // return cboDate;
+      // return cboDate;
     }
 
     #endregion
@@ -130,7 +129,7 @@ namespace IM.Base.Helpers
           break;
       }
       cmbDate.SelectedIndex = selectedCmb;
-    } 
+    }
     #endregion
   }
 }

@@ -46,6 +46,7 @@ namespace IM.GuestsPR.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadPersonnel();
+
       //Seleccionamos los días en el datapicker 
       dtpkFrom.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.Value = DateTime.Now;

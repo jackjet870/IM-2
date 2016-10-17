@@ -357,16 +357,14 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<GuestByPR>> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
     {
-      List<GuestByPR> result = new List<GuestByPR>();
-      await Task.Run(() =>
+      return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuestsByPR;
-          result = dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
+          return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
         }
       });
-      return result;
     }
 
     #endregion GetGuestByPR
@@ -428,12 +426,12 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Agregamos el timeout de la consulta
-          dbContext.Database.CommandTimeout = 180;         
+          dbContext.Database.CommandTimeout = 180;
           var query = from gu in dbContext.Guests
                       join ls in dbContext.LeadSources on gu.guls equals ls.lsID
                       where (ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro))
-                      select gu; 
-                    
+                      select gu;
+
           //Busqueda por clave de huesped
           if (guid != 0)
           {
@@ -693,13 +691,13 @@ namespace IM.BusinessRules.BR
                     }).ToList();
           }
           catch (Exception)
-          {           
+          {
             throw;
           }
         }
       });
     }
-        
+
     #endregion GetGuestPremanifestOuthouse
 
     #region DeleteGuest
@@ -757,22 +755,12 @@ namespace IM.BusinessRules.BR
 
           IQueryable<Guest> query = Enumerable.Empty<Guest>().AsQueryable();
 
-          if (module == EnumSearchHostType.General)
+          // Busqueda por Guest ID
+          if (guestID > 0)
           {
-            // Busqueda por Guest ID
-            if (guestID > 0)
-            {
-              return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
-            }
+            return dbContext.Guests.Where(x => x.guID == guestID).OrderBy(x => x.gusr).ToList();
           }
-          else
-          {
-            // Busqueda por Guest ID
-            if (guestID > 0)
-            {
-              query = dbContext.Guests.Where(x => x.guID == guestID);
-            }
-          }
+
           // Busqueda por nombre o apellido
           if (guestName != "")
           {
@@ -985,7 +973,7 @@ namespace IM.BusinessRules.BR
               #endregion
 
               #region Proceso Credit Cards
-              var lstGuestCreditCards = dbContext.GuestsCreditCards.Where(cc => cc.gdgu == guestShow.Guest.guID);
+              var lstGuestCreditCards = dbContext.GuestsCreditCards.Where(cc => cc.gdgu == guestShow.Guest.guID).ToList();
 
               //Si se encontro alguno los eliminamos 
               if (lstGuestCreditCards.Any())
@@ -995,8 +983,10 @@ namespace IM.BusinessRules.BR
 
               //Si se agregaron nuevos GuestCreditCards los guardamos.
               guestShow.GuestCreditCardList.ToList().ForEach(gcc =>
-                dbContext.Entry(gcc).State = EntityState.Added
-              );
+              {
+                gcc.gdgu = guestShow.Guest.guID;
+                dbContext.Entry(gcc).State = EntityState.Added;
+              });
 
               //Creamos la variable en donde se van a concatenar 
               //Recorremos el Listado y concatenamos con la condicion de que Quantity sea mayor que 1
@@ -1343,7 +1333,7 @@ namespace IM.BusinessRules.BR
               additionalGuests.RemoveAll(c => c.guID == 0);
               if (additionalGuests.Any())
               {
-                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", guestInvitation.AdditionalGuestList.Where(c => c.guID > 0).Select(c => c.guID).ToList()));
+                dbContext.USP_IM_SaveGuestAdditional(guestInvitation.Guest.guID, string.Join(",", additionalGuests.Select(c => c.guID).ToList()));
                 if (enumProgram == EnumProgram.Inhouse)
                 {
                   //Actualizamos los datos de los huespedes adicionales.

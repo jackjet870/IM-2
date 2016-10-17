@@ -125,31 +125,5 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
-    #region SaveSalesmenChanges
-    /// <summary>
-    /// Guarda un cambio de vendedor
-    /// </summary>
-    /// <param name="sale">Venta </param>
-    /// <param name="authorizedBy">Autorizado por </param>
-    /// <param name="madeBy">hecho por</param>
-    /// <param name="role">rol</param>
-    /// <param name="position">posicion</param>
-    /// <param name="oldSalesman">Anterior Vendedor </param>
-    /// <param name="newSalesman">nuevo vendedor</param>
-    ///<history>
-    /// [jorcanche] created 01072016
-    /// </history>
-    public static async Task<int> SaveSalesmenChanges(int? sale, string authorizedBy, string madeBy, string role, byte? position, string oldSalesman, string newSalesman)
-    {
-      return await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          return dbContext.USP_OR_SaveSalesmenChanges(sale, authorizedBy, madeBy, role, position, oldSalesman, newSalesman);
-        }
-      });
-    }
-    #endregion
-
   }
 }

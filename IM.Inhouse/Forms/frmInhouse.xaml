@@ -74,6 +74,7 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" x:Name="colGifts" />
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click">
@@ -124,7 +125,13 @@
                             <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}" />
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnWithGifts" Grid.Column="9"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2">
+                    <Button x:Name="btnNotice" Grid.Column="9" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnNotice_Click" HorizontalAlignment="Left" Margin="0,2">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Styles;component/Images/Notice.png" Style="{StaticResource ResourceKey=ImageOptions}" />
+                            <TextBlock Text="Notice" Style="{StaticResource ResourceKey=txtOptions}" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnWithGifts" Grid.Column="10"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Styles;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}" />
                             <TextBlock Text="Gift/Reprt" Style="{StaticResource ResourceKey=txtOptions}" />
@@ -153,7 +160,7 @@
                     <RowDefinition Height="50*" />
                 </Grid.RowDefinitions>
                 <!-- <GroupBox Grid.Row="0" x:Name="grbDate" Header="Date" FontWeight="Bold" Margin="2,0,2,0">-->
-                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"  Style="{StaticResource dtp-DateRange-TK}"  Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged" />
+                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"  Style="{StaticResource dtp-DateRange-TK}"  Margin="2,21,2,0" VerticalAlignment="Top"  ValueChanged="dtpDate_ValueChanged" />
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
                 <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99">
@@ -204,7 +211,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4" SelectionMode="Multiple" VerticalAlignment="Center" Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4" SelectionMode="Extended" VerticalAlignment="Center" Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
@@ -303,7 +310,7 @@
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>                            
+                            </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guRoomNumColumn" IsReadOnly="True"  Binding="{Binding guRoomNum}" Header="Room" Width="auto" />
                         <DataGridTextColumn x:Name="guLastName1Column" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto" />
@@ -414,10 +421,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
+                        <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments"  CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -563,7 +570,7 @@
                         <DataGridTemplateColumn  Header="Comments"  Width="auto" IsReadOnly="False" SortMemberPath="guComments" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -713,7 +720,7 @@
                         <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -862,7 +869,7 @@
                         <DataGridTemplateColumn  Header="Comments" SortMemberPath="guComments" CanUserSort="True" Width="auto" IsReadOnly="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding guComments}" />
+                                    <TextBlock ToolTip="{Binding guComments}" Text="{Binding guComments}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>

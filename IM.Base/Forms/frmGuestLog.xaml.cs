@@ -71,9 +71,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #endregion
-
-    #region btnPrintSaleLog_Click
+    #region btnPrintGuestLog_Click
     /// <summary>
     /// Imprime el el Log del Guest
     /// </summary>
@@ -114,6 +112,8 @@ namespace IM.Base.Forms
         Mouse.OverrideCursor = null;
       }
     }
+    #endregion
+
     #endregion
   }
 }

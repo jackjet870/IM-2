@@ -177,6 +177,7 @@ namespace IM.Base.Helpers
     /// <param name="strForm">Nombre del formulario</param>
     /// <param name="blnValidateVisibility">valida la visibilidad de los controles (TRUE - Para validar solo los controles visibles | FALSE - Para validar todos los controles) </param>
     /// <param name="blnDatagrids">Valida que los datagrids ya eno estén en modo edición</param>
+    /// <param name="strMessage">Opcional, mensaje que se mostrara en vez del que se autogenera</param>
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
@@ -187,8 +188,9 @@ namespace IM.Base.Helpers
     /// [emoguel] modified 01/08/2016-->Se le quitan los espacios a los que sean tipo Texto
     /// [erosado] 05/08/2016  Modified. Se corrigió la validacion del DateTimePicker, y se agrego una bandera para que el metodo se encargue de mandar el ShowMessage
     /// [erosado] 23/08/2016  Modified. Se optimizo el codigo, se agregó switch case en lugar de if-else, se corrigio que mande el focus a el primer elmento que falle.
+    /// [aalcocer] 10/11/2016 Modified. Se agrego el parametro opcional strMessage. Se agrega que tambien valide el control CheckBox
     /// </history>
-    public static string ValidateForm(UIElement container, string strForm, bool blnDatagrids = false, bool showMessage = false)
+    public static string ValidateForm(UIElement container, string strForm, bool blnDatagrids = false, bool showMessage = false, string strMessage = null)
     {
       var strMsj = "";
       var lstControls = UIHelper.GetChildParentCollection<Control>(container);
@@ -231,7 +233,7 @@ namespace IM.Base.Helpers
             if (!string.IsNullOrWhiteSpace(txt.Text)) continue;
             if (txt.Visibility == Visibility.Visible)
             {
-              strMsj += $"Specify the {strForm}  { txt.Tag }. \n";
+              strMsj += (string.IsNullOrWhiteSpace(strMessage) ? $"Specify the {strForm} {txt.Tag}." : strMessage) + " \n";
               listInvalid.Add(control);
             }
             break;
@@ -242,7 +244,7 @@ namespace IM.Base.Helpers
             if (cmb.SelectedIndex > -1) continue;
             if (cmb.Visibility == Visibility.Visible)
             {
-              strMsj += $"Specify the {strForm } {cmb.Tag}. \n";
+              strMsj += (string.IsNullOrWhiteSpace(strMessage) ? $"Specify the {strForm} {cmb.Tag}." : strMessage) + " \n";
               listInvalid.Add(control);
             }
             break;
@@ -255,7 +257,7 @@ namespace IM.Base.Helpers
             if (!string.IsNullOrWhiteSpace(pwd.Password.Trim())) continue;
             if (pwd.Visibility == Visibility.Visible)
             {
-              strMsj += $"Specify the {strForm } {pwd.Tag}. \n";
+              strMsj += (string.IsNullOrWhiteSpace(strMessage) ? $"Specify the {strForm} {pwd.Tag}." : strMessage) + " \n";
               listInvalid.Add(control);
             }
             break;
@@ -266,7 +268,17 @@ namespace IM.Base.Helpers
             if (dtp.Value.HasValue && !dtp.Value.Equals(DateTime.MinValue)) continue;
             if (dtp.Visibility == Visibility.Visible)
             {
-              strMsj += $"Specify the {strForm} {dtp.Tag}. \n";
+              strMsj += (string.IsNullOrWhiteSpace(strMessage) ? $"Specify the {strForm} {dtp.Tag}." : strMessage) + " \n";
+              listInvalid.Add(control);
+            }
+            break;
+
+          case nameof(CheckBox):
+            var cb = (CheckBox)control;
+            if (cb.IsChecked.HasValue) continue;
+            if (cb.Visibility == Visibility.Visible)
+            {
+              strMsj += (string.IsNullOrWhiteSpace(strMessage) ? $"Specify the {strForm} {cb.Tag}." : strMessage) + " \n";
               listInvalid.Add(control);
             }
             break;

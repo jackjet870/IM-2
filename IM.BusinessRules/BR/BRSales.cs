@@ -535,8 +535,7 @@ namespace IM.BusinessRules.BR
                   }
                 }
                 #endregion
-
-             
+                
               }
 
               #region Guarda los movimientos de los SalesSalesmen
@@ -611,7 +610,7 @@ namespace IM.BusinessRules.BR
                 //                               Guardamos el historico de la venta
                 //*****************************************************************************************************
                 //6.1.- Guardamos SaleLog
-                dbContext.USP_OR_SaveSaleLog(saleNew.sagu, hoursDifSalesRoom, user);
+                dbContext.USP_OR_SaveSaleLog(saleNew.saID, hoursDifSalesRoom, user);
 
                 #endregion
               }

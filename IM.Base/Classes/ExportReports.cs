@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 using PalaceResorts.Common.PalaceTools.Epplus.Enums;
+using OfficeOpenXml.Style;
 
 namespace IM.Base.Classes
 {
@@ -130,7 +130,7 @@ namespace IM.Base.Classes
       format.Add("Sunday", "asSunday");
       format.Add("#Assistence", "asNum");
       return format;
-    } 
+    }
     #endregion
   }
 }

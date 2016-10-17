@@ -778,8 +778,10 @@ namespace IM.Base.Forms
       btnChange.IsEnabled = dbContext.InvitationMode != EnumMode.Add;
       cmbLocation.IsEnabled = _module == EnumModule.Host;
       cmbSalesRooms.IsEnabled = _module != EnumModule.Host;
-      btnAddGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
-      btnSearchGuestAdditional.IsEnabled = (dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
+      //Si viene del modulo Host, se valida que la invitacion es NewOuthouse y tenga el modo Add.
+      //Si viene del modulo Outhouse el modo ReadOnly se desactiva.
+      btnAddGuestAdditional.IsEnabled = (_module == EnumModule.Host) ? _invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode==EnumMode.Add : true; //!(dbContext.InvitationMode == EnumMode.ReadOnly && _invitationType == EnumInvitationType.existing);
+      btnSearchGuestAdditional.IsEnabled = (_module == EnumModule.Host) ? _invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode == EnumMode.Add : true;//!(dbContext.InvitationMode == EnumMode.ReadOnly && _invitationType == EnumInvitationType.existing);
 
       #endregion Enable false
 
@@ -791,7 +793,9 @@ namespace IM.Base.Forms
       txtguIdProfileOpera.IsReadOnly = true;
       txtguLastNameOriginal.IsReadOnly = true;
       txtguFirstNameOriginal.IsReadOnly = true;
-      dtgGuestAdditional.IsReadOnly = !(dbContext.InvitationMode != EnumMode.ReadOnly && _invitationType != EnumInvitationType.existing);
+      //Si viene del modulo Host, se valida que la invitacion se NewOuthouse y tenga el modo Add.
+      //Si viene del modulo Outhouse el modo ReadOnly se desactiva.
+      dtgGuestAdditional.IsReadOnly = (_module == EnumModule.Host) ? !(_invitationType == EnumInvitationType.newOutHouse && dbContext.InvitationMode == EnumMode.Add) : false;
       #endregion IsReadOnly
 
       //Si OutHouse y es una invitacion existente
@@ -904,6 +908,11 @@ namespace IM.Base.Forms
         {
           brdAdditionalGuest.IsEnabled = false;
           guestFormMode = EnumMode.ReadOnly;
+        }
+        else
+        {
+          brdAdditionalGuest.IsEnabled = true;
+          guestFormMode = EnumMode.Edit;
         }
       }
       else
@@ -2265,8 +2274,6 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #endregion
-
-   
+    #endregion   
   }
 }

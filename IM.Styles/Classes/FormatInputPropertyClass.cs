@@ -29,8 +29,7 @@ namespace IM.Styles.Classes
     /// [erosado] 30/07/2016
     /// </history>
     public static Enums.EnumFormatInput GetFormatInput(DependencyObject dependencyObject)
-    {
-      var xd = dependencyObject.GetValue(FormatInputProperty);
+    {      
       return (dependencyObject.GetValue(FormatInputProperty) == null) ? Enums.EnumFormatInput.Text : (Enums.EnumFormatInput)dependencyObject.GetValue(FormatInputProperty);
     }
     /// <summary>
