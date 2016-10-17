@@ -37,6 +37,7 @@ namespace IM.ProcessorOuthouse.Forms
       GetFirstDayValue();
       lblUserName.Content = Context.User.User.peN;
       _frmReportQueue = new frmReportQueue(Context.User.HasPermission(EnumPermission.RptExcel,EnumPermisionLevel.ReadOnly));
+      Exit = new ExecuteCommandHelper(c => btnExit_Click(null , null));
     }
     #endregion Constructor
 
@@ -66,6 +67,8 @@ namespace IM.ProcessorOuthouse.Forms
     public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
     public string _folFrom;
     public string _folTo;
+
+    public ExecuteCommandHelper Exit { get; set; }
 
     #endregion Atributos
 
