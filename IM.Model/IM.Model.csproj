@@ -726,6 +726,9 @@
     <Compile Include="RoomType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptAccountingCodes.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptAgencies.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -895,9 +898,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsUsedBySistur.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RptGuestCeco.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGuestRegistration.cs">

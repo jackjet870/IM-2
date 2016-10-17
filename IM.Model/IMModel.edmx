@@ -6339,6 +6339,14 @@
           <Parameter Name="endD" Type="datetime" Mode="In" />
           <Parameter Name="WH0" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="UFN_OR_GetAccountingCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Activity" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UFN_OR_GetMissingAccountInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Activity" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_IM_ADDEfficiencySalesmen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EfficiencyID" Type="int" Mode="In" />
           <Parameter Name="SalemanID" Type="varchar" Mode="In" />
@@ -6359,6 +6367,11 @@
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptAccountingCodes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_IM_RptCloserStatistics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -7297,11 +7310,6 @@
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="DateBasedOn" Type="int" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_RptGuestCeco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptGuestRegistration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
@@ -17452,11 +17460,6 @@
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_RptGuestCeco" ReturnType="Collection(IMModel.RptGuestCeco)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="SalesRooms" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="USP_OR_RptGuestsNoBuyers" ReturnType="Collection(IMModel.RptGuestsNoBuyers)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -18979,6 +18982,11 @@
             <End Role="PersonnelLog" EntitySet="PersonnelLogs" />
             <End Role="SalesRoom" EntitySet="SalesRooms" />
           </AssociationSet>
+          <FunctionImport Name="USP_IM_RptAccountingCodes" ReturnType="Collection(IMModel.RptAccountingCodes)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20398,15 +20406,6 @@
           <Property Type="String" Name="Gift" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="ShortN" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="Qty" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="RptGuestCeco">
-          <Property Type="String" Name="soccecoid" Nullable="false" MaxLength="2" />
-          <Property Type="Int32" Name="guID" Nullable="false" />
-          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="acn" Nullable="false" MaxLength="60" />
-          <Property Type="String" Name="ceco" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="mksN" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="RptGuestsNoBuyers">
           <Property Type="String" Name="Program" Nullable="false" MaxLength="20" />
@@ -24298,6 +24297,19 @@
           <End Type="IMModel.PersonnelLog" Role="PersonnelLog" Multiplicity="*" />
           <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="*" />
         </Association>
+        <ComplexType Name="RptAccountingCodes">
+          <Property Type="String" Name="soccecoid" Nullable="false" MaxLength="4" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="actN" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="ceco" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="pgN" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="mkN" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="asgSegment" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="saMembershipNum" Nullable="true" MaxLength="10" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -28346,19 +28358,6 @@
                 <ScalarProperty Name="Gift" ColumnName="Gift" />
                 <ScalarProperty Name="ShortN" ColumnName="ShortN" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestCeco" FunctionName="IMModel.Store.USP_OR_RptGuestCeco">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptGuestCeco">
-                <ScalarProperty Name="soccecoid" ColumnName="soccecoid" />
-                <ScalarProperty Name="guID" ColumnName="guID" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="srN" ColumnName="srN" />
-                <ScalarProperty Name="acn" ColumnName="acn" />
-                <ScalarProperty Name="ceco" ColumnName="ceco" />
-                <ScalarProperty Name="mksN" ColumnName="mksN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -32574,6 +32573,23 @@
               <ScalarProperty Name="plgID" ColumnName="pslplg" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptAccountingCodes" FunctionName="IMModel.Store.USP_IM_RptAccountingCodes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptAccountingCodes">
+                <ScalarProperty Name="soccecoid" ColumnName="soccecoid" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+                <ScalarProperty Name="actN" ColumnName="actN" />
+                <ScalarProperty Name="ceco" ColumnName="ceco" />
+                <ScalarProperty Name="pgN" ColumnName="pgN" />
+                <ScalarProperty Name="mkN" ColumnName="mkN" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+                <ScalarProperty Name="asgSegment" ColumnName="asgSegment" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

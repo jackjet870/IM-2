@@ -11,14 +11,18 @@ namespace IM.Model
 {
     using System;
     
-    public partial class RptGuestCeco
+    public partial class RptAccountingCodes
     {
         public string soccecoid { get; set; }
         public int guID { get; set; }
         public Nullable<System.DateTime> guBookD { get; set; }
         public string srN { get; set; }
-        public string acn { get; set; }
+        public string actN { get; set; }
         public string ceco { get; set; }
-        public string mksN { get; set; }
+        public string pgN { get; set; }
+        public string mkN { get; set; }
+        public string lsN { get; set; }
+        public string asgSegment { get; set; }
+        public string saMembershipNum { get; set; }
     }
 }

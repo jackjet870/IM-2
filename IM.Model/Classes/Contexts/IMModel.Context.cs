@@ -1,4 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 
 namespace IM.Model
 {
@@ -18,6 +22,60 @@ namespace IM.Model
     {
       Configuration.ProxyCreationEnabled = false;
     }
+
+    #endregion
+
+    #region Funciones
+
+    #region UFN_OR_GetAccountingCode
+    /// <summary>
+    /// Funcion para recalcular los codigos de cecos y cebes
+    /// </summary>
+    /// <param name="guestId">ID del huesped</param>
+    /// <param name="activity"> Actividad </param>
+    /// <returns>String</returns>
+    /// <history>
+    /// [edgrodriguez]  14/Oct/2016 Created
+    /// </history>
+    [DbFunction("IMModel.Store", "UFN_OR_GetAccountingCode")]
+    public string UFN_OR_GetAccountingCode(int guestId, string activity)
+    {
+      var objectContext = ((IObjectContextAdapter)this).ObjectContext;
+
+      var parameters = new List<ObjectParameter>();
+      parameters.Add(new ObjectParameter("GuestID", guestId));
+      parameters.Add(new ObjectParameter("Activity", activity));
+
+      return objectContext.CreateQuery<string>("IMModel.Store.UFN_OR_GetAccountingCode(@GuestID, @Activity)", parameters.ToArray())
+           .Execute(MergeOption.NoTracking)
+           .FirstOrDefault();
+    }
+    #endregion
+
+    #region UFN_OR_GetMissingAccountInfo
+    /// <summary>
+    /// Funcion para obtener la razon de falta de codigo contable
+    /// </summary>
+    /// <param name="guestId">ID del huesped</param>
+    /// <param name="activity"> Actividad </param>
+    /// <returns>String</returns>
+    /// <history>
+    /// [edgrodriguez]  14/Oct/2016 Created
+    /// </history>
+    [DbFunction("IMModel.Store", "UFN_OR_GetMissingAccountInfo")]
+    public string UFN_OR_GetMissingAccountInfo(int guestId, string activity)
+    {
+      var objectContext = ((IObjectContextAdapter)this).ObjectContext;
+
+      var parameters = new List<ObjectParameter>();
+      parameters.Add(new ObjectParameter("GuestID", guestId));
+      parameters.Add(new ObjectParameter("Activity", activity));
+
+      return objectContext.CreateQuery<string>("IMModel.Store.UFN_OR_GetMissingAccountInfo(@GuestID, @Activity)", parameters.ToArray())
+           .Execute(MergeOption.NoTracking)
+           .FirstOrDefault();
+    }
+    #endregion 
 
     #endregion
   }
