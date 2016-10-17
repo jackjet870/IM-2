@@ -85,7 +85,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region btnPrintSaleLog_Click
+    #region btnPrintGuestLog_Click
     /// <summary>
     /// Imprime el el Log del Guest
     /// </summary>

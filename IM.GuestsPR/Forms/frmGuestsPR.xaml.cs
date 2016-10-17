@@ -154,7 +154,7 @@ namespace IM.GuestsPR.Forms
 
       if (frmlogin.IsAuthenticated)
       {
-        Context.User = frmlogin.UserData;        
+        Context.User = frmlogin.UserData;
         LoadProgram();
         LoadLeadSources();
         LoadPersonnel();
@@ -691,6 +691,7 @@ namespace IM.GuestsPR.Forms
       DoGetLeadSource();
     }
     #endregion
+
     #endregion
   }
 }

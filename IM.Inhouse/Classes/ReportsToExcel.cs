@@ -49,14 +49,14 @@ namespace IM.Inhouse.Classes
         string dateRange = DateHelper.DateRangeFileName(date, date);
         ColumnFormatList format = new ColumnFormatList();
         format.Add("GUID", "guID", width: 7);
-        format.Add("Reserv.#", "guHReservID", width: 7);
+        format.Add("Reserv.#", "guHReservID", width: 8);
         format.Add("Room", "guRoomNum", width: 7);
         format.Add("LastName", "guLastName1", width: 20);
         format.Add("In", "guCheckIn", format: EnumFormatTypeExcel.Boolean, width: 4, aligment: OfficeOpenXml.Style.ExcelHorizontalAlignment.Center);
         format.Add("Pax", "guPax", format: EnumFormatTypeExcel.DecimalNumber, width: 6, aligment: OfficeOpenXml.Style.ExcelHorizontalAlignment.Center);
         format.Add("Check-Out", "guCheckOutD", format: EnumFormatTypeExcel.Date, width: 10);        
-        format.Add("County", "coN", width: 13);        
-        format.Add("Agency", "agN", width: 13);
+        format.Add("Country", "coN", width: 13);        
+        format.Add("Agency", "agN", width: 15, wordWrap: true);
         format.Add("Av", "guAvail",  format: EnumFormatTypeExcel.Boolean, width:  4, aligment: OfficeOpenXml.Style.ExcelHorizontalAlignment.Center);
         format.Add("Info", "guInfo", format: EnumFormatTypeExcel.Boolean, width: 4, aligment: OfficeOpenXml.Style.ExcelHorizontalAlignment.Center);
         format.Add("Inv", "guInvit", format: EnumFormatTypeExcel.Boolean, width: 4, aligment: OfficeOpenXml.Style.ExcelHorizontalAlignment.Center);
@@ -64,7 +64,7 @@ namespace IM.Inhouse.Classes
         format.Add("Comments", "guComments", width: 40, wordWrap: true);
         format.Add("County ID", "guco", isVisible: false);
         format.Add("Agency ID", "guag", isVisible:  false);
-        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, format, addEnumeration: true, autoFit:false), window);
+        OpenFile(await ReportBuilder.CreateCustomExcelAsync(dt, filters, rptName, dateRange, format, addEnumeration: true, autoFit:false, numColumnsForApplicationName: 4), window);
       }
     }
 

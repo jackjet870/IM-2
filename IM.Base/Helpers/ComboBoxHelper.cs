@@ -3,8 +3,6 @@ using System.Windows.Controls;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Linq;
-using IM.Model;
-using IM.BusinessRules.BR;
 
 namespace IM.Base.Helpers
 {
