@@ -277,6 +277,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmPersonnelLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSaleTypeCategoryDetail.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -767,6 +771,9 @@
     </Compile>
     <Compile Include="Forms\frmNotices.xaml.cs">
       <DependentUpon>frmNotices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPersonnelLog.xaml.cs">
+      <DependentUpon>frmPersonnelLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSaleTypeCategoryDetail.xaml.cs">
       <DependentUpon>frmSaleTypeCategoryDetail.xaml</DependentUpon>

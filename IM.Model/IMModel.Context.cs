@@ -6627,5 +6627,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAccountingCodes>("USP_IM_RptAccountingCodes", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
+    
+        public virtual ObjectResult<GetPersonnelLog> USP_IM_GetPersonnelLog(string personnel, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var personnelParameter = personnel != null ?
+                new ObjectParameter("Personnel", personnel) :
+                new ObjectParameter("Personnel", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPersonnelLog>("USP_IM_GetPersonnelLog", personnelParameter, dateFromParameter, dateToParameter);
+        }
     }
 }

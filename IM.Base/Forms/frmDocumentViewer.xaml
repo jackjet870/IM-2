@@ -80,7 +80,7 @@
             </ComboBox>
             <ComboBox SelectedIndex="2" Name="cmbScale" ToolTip="Scaling" TextSearch.TextPath="name" SelectedValuePath="scale" ItemTemplate="{StaticResource ResourceKey=cbx-PageScaling-img}"/>
         </ToolBar>
-        <DocumentViewer x:Name="documentViewer"  >
+        <DocumentViewer x:Name="documentViewer">
             <DocumentViewer.Resources>                
                     <!-- Ocultar the toolbar -->
                     <Style TargetType="ToolBar">

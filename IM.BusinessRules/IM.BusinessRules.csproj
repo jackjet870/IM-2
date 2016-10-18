@@ -128,6 +128,7 @@
     <Compile Include="BR\BRPermissionsLevels.cs" />
     <Compile Include="BR\BRPersonnelAcces.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
+    <Compile Include="BR\BRPersonnelLog.cs" />
     <Compile Include="BR\BRPersonnelStatus.cs" />
     <Compile Include="BR\BRPlaceTypes.cs" />
     <Compile Include="BR\BRPosts.cs" />

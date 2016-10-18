@@ -303,6 +303,9 @@
     <Compile Include="GetGiftsReceiptsAdditional.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetPersonnelLog.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Gift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

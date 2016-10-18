@@ -323,7 +323,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<int> SavePersonnel(string idUser, Personnel personnel, bool blnUpdate, List<PersonnelPermission> lstPermissionAdd, List<PersonnelPermission> lstPermissionDel, List<PersonnelPermission> lstPermissionUpd,
       List<PersonnelAccess> lstLeadSourceDel, List<PersonnelAccess> lstLeadSourceAdd, List<PersonnelAccess> lstWarehouseDel, List<PersonnelAccess> lstWarehousesAdd, List<PersonnelAccess> lstSalesRoomDel,
-      List<PersonnelAccess> lstSalesRoomAdd, List<Role> lstRoleDel, List<Role> lstRoleAdd, bool blnPostLog, bool blnTeamsLog)
+      List<PersonnelAccess> lstSalesRoomAdd, List<Role> lstRoleDel, List<Role> lstRoleAdd, bool blnPostLog, bool blnTeamsLog,bool blnSaveLog,List<string> lstRolesLog,bool blnLocation,List<string> lsLeadSourcesLog,List<string>lstSalesRoomLog)
     {
       int nRes = await Task.Run(() =>
         {
@@ -333,6 +333,7 @@ namespace IM.BusinessRules.BR
             {
               try
               {
+                int nSave = 0;
                 Personnel personnelSave = new Personnel();
                 #region Personnel
                 if (blnUpdate)//Actualizar
@@ -474,7 +475,34 @@ namespace IM.BusinessRules.BR
                 }
                 #endregion
 
-                int nSave = dbContext.SaveChanges();
+                #region PersonnelLog
+                if (blnSaveLog)
+                {
+                  PersonnelLog personnelLog = new PersonnelLog { plgpe = personnel.peID, plgDT = dtmServerDate, plgChangedBy = idUser, plgde = personnel.pede, plgpo = personnel.pepo, plglo = (blnLocation) ? personnel.pePlaceID : null, plgsr = (!blnLocation) ? personnel.pePlaceID : null };
+                  dbContext.PersonnelLogs.Add(personnelLog);
+                  nSave = dbContext.SaveChanges();
+                  #region Roles
+                  //Roles a ligar al log
+                  var lstRolesSave = dbContext.Roles.Where(ro => lstRolesLog.Contains(ro.roID)).ToList();
+                  lstRolesSave.ForEach(ro => personnelLog.Roles.Add(ro));
+                  #endregion
+
+                  #region LeadSources
+                  //leadSource a ligar al log
+                  List<LeadSource> lstLS = dbContext.LeadSources.Where(ls => lsLeadSourcesLog.Contains(ls.lsID)).ToList();
+                  lstLS.ForEach(ls => personnelLog.LeadSources.Add(ls));
+                  #endregion
+
+                  #region SalesRoom
+                  //SalesRooms a ligar al log
+                  List<SalesRoom> lstSr = dbContext.SalesRooms.Where(sr => lstSalesRoomLog.Contains(sr.srID)).ToList();
+                  lstSr.ForEach(sr => personnelLog.SalesRooms.Add(sr));
+                  #endregion
+
+                } 
+                #endregion
+
+                nSave += dbContext.SaveChanges();
                 transacction.Commit();
                 return nSave;
               }

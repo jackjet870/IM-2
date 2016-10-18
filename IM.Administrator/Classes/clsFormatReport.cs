@@ -37,5 +37,36 @@ namespace IM.Administrator.Classes
       return lst;
     }
     #endregion
+
+    #region RptPersonnelLog
+    /// <summary>
+    /// Formato para el excel de Personnel Log
+    /// </summary>
+    /// <returns> List of ColumnFormat</returns>
+    /// <history>
+    /// [emoguel] 17/10/2016 created
+    /// </history>
+    public static ColumnFormatList RptPersonnelLog()
+    {
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Changed By", "plgChangedBy", aligment: ExcelHorizontalAlignment.Left,width:15);
+      lst.Add("Changed By Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left, width: 20);
+      lst.Add("Update Date/Time", "plgDT", aligment: ExcelHorizontalAlignment.Left,width: 15);
+      lst.Add("Personnel", "plgpe", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Personnel Name", "peN", aligment: ExcelHorizontalAlignment.Left, width: 20);
+      lst.Add("Department", "plgde", aligment: ExcelHorizontalAlignment.Left, width: 20);
+      lst.Add("Department Name", "deN", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Post", "plgpo", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Post Name", "poN", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Sales Room", "plgsr", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Sales Room Name", "srN", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Location", "plglo", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Location Name", "loN", aligment: ExcelHorizontalAlignment.Left, width: 15);
+      lst.Add("Roles", "Roles", aligment: ExcelHorizontalAlignment.Left,wordWrap:true,width:50);
+      lst.Add("Sales Rooms", "SalesRooms", aligment: ExcelHorizontalAlignment.Left, wordWrap: true,width:50);
+      lst.Add("Lead Sources", "LeadSources", aligment: ExcelHorizontalAlignment.Left, wordWrap: true,width:50);
+      return lst;
+    }
+    #endregion
   }
 }

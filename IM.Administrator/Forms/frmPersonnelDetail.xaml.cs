@@ -31,6 +31,9 @@ namespace IM.Administrator.Forms
     private List<PersonnelAccess> _lstOldAccesWH = new List<PersonnelAccess>();//PersonnelWH
     private List<PersonnelAccess> _lstOldAccesLeadSource = new List<PersonnelAccess>();//PersonnelLS
     private List<PersonnelPermission> _lstOldPersonnelPermission = new List<PersonnelPermission>();//PersonnelPermission
+    //Para guardar el Log de PersonnelLog para FTM,FTB,LINER,CLOSER,EXIT    
+    private List<string> lstRolesLog = new List<string>();
+    private bool blnLocation = false;
     #endregion
     public frmPersonnelDetail()
     {
@@ -84,6 +87,11 @@ namespace IM.Administrator.Forms
         personnel.peA = true;
         personnel.pePwdD = DateTime.Today;
         personnel.peps = "ACTIVE";
+      }
+      string[] depts = { "GS", "OPC", "SALES" };
+      if (depts.Contains(personnel.pede))//Verificamos que cuente con uno de los puestos
+      {
+        btnLog.Visibility = Visibility.Visible;
       }
       DataContext = personnel;
       dtgRoles.BeginningEdit += GridHelper.dgr_BeginningEdit;
@@ -210,7 +218,8 @@ namespace IM.Administrator.Forms
 
             int nRes = await BRPersonnel.SavePersonnel(Context.User.User.peID, personnel, (enumMode == EnumMode.Edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
               lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo),
-              (personnel.peTeamType != oldPersonnel.peTeamType || personnel.pePlaceID != oldPersonnel.pePlaceID || personnel.peTeam != oldPersonnel.peTeam));
+              (personnel.peTeamType != oldPersonnel.peTeamType || personnel.pePlaceID != oldPersonnel.pePlaceID || personnel.peTeam != oldPersonnel.peTeam),
+              GetSalesMenChanges(lstSalesRoomAcces,lstLeadSourcesAcces,lstRoles),lstRolesLog,blnLocation,lstLeadSourcesAcces.Select(ls=>ls.plLSSRID).ToList(),lstSalesRoomAcces.Select(sr=>sr.plLSSRID).ToList());
             UIHelper.ShowMessageResult("Personnel", nRes);
             if (nRes > 0)
             {
@@ -779,6 +788,20 @@ namespace IM.Administrator.Forms
             }
         }        
       }
+    }
+    #endregion
+
+    #region btnLog_Click
+    /// <summary>
+    /// Muestra el log del personal que se está editando
+    /// </summary>
+    /// <history>
+    /// [emoguel] 17/10/2016 created
+    /// </history>
+    private void btnLog_Click(object sender, RoutedEventArgs e)
+    {
+      frmPersonnelLog frmPersonnelLog = new frmPersonnelLog(personnel.peID);
+      frmPersonnelLog.ShowDialog();
     }
     #endregion
     #endregion
@@ -1366,6 +1389,7 @@ namespace IM.Administrator.Forms
             txtLocSal.Text = "Location";
             cmbpeLinerID.IsEnabled = true;
             personnel.peTeamType = "GS";
+            blnLocation = true;
             break;
           }
         case "FTM":
@@ -1388,6 +1412,7 @@ namespace IM.Administrator.Forms
             cmbpeLinerID.IsEnabled = false;
             txtLocSal.Text = "Sales Room";
             personnel.peTeamType = "SA";
+            blnLocation = false;
             break;
           }
         default:
@@ -1412,7 +1437,51 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
+    #region GetSalesMenChanges
+    /// <summary>
+    /// Verifica si hubo cambio de salesMen para cambiar en el log
+    /// </summary>
+    /// <returns>True. Hubo cambios | False. No hubo cambios</returns>
+    private bool GetSalesMenChanges(List<PersonnelAccess> lstSalesRoom, List<PersonnelAccess> lstLeadSources,List<Role> lstNewRoles)
+    {      
+      bool blnChange = false;
+      //      1.Guest Services
+      //2.OPC Outhouse
+      //3.Salesmen
+      string[] depts = {"GS","OPC","SALES" };      
+      string[] roles = { "PR", "FTM", "FTB", "LINER", "CLOSER", "EXIT" };
+      if (depts.Contains(personnel.pede))//Verificamos que cuente con uno de los puestos
+      {
+        #region Post
+        if (roles.Contains(personnel.pepo) && oldPersonnel.pepo != personnel.pepo)
+        {
+          blnChange = true;
+        } 
+        #endregion
+        #region Roles
+        List<string> lstOldRoles = new List<string>();
+        lstRolesLog = new List<string>();
+        lstOldRoles = _lstOldRoles.Where(ro => roles.Contains(ro.roID)).Select(ro => ro.roID).ToList();//Buscamos los roles en la lista antigua
+        lstRolesLog = lstNewRoles.Where(ro => roles.Contains(ro.roID)).Select(ro => ro.roID).ToList();//Buscamos los roles en la lista nueva
+
+        if (lstOldRoles.Equals(lstRolesLog))//Verificamos si hubo cambio en los roles
+        {
+          blnChange = true;//Hubo cambios de roles
+        }
+
+        #endregion
+        #region LeadSouces y SalesRoom        
+        if (!ObjectHelper.IsListEquals(_lstOldAccesLeadSource, lstLeadSources) || !ObjectHelper.IsListEquals(_lstOldAccesSalesRoom, lstSalesRoom))
+        {
+          blnChange = true;
+        }
+        #endregion
+      }
+      return blnChange;
+    }
     #endregion
 
+    #endregion
   }
 }

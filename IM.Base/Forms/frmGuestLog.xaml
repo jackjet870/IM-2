@@ -83,7 +83,7 @@
                     <DataGridTextColumn x:Name="glExit2Column" Binding="{Binding glExit2}" Header="Exit 2" Width="auto"/>
                     <DataGridTextColumn x:Name="exit2NColumn" Binding="{Binding Exit2N}" Header="Exit 2 Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glExit3Column" Binding="{Binding glExit3}" Header="Exit 3" Width="auto"/>
-                    <DataGridTextColumn x:Name="exit3NColumn" Binding="{Binding Exit3N}" Header="Exit 3 Name" Width="auto"/>                    
+                    <DataGridTextColumn x:Name="exit3NColumn" Binding="{Binding Exit3N}" Header="Exit 3 Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glPodiumColumn" Binding="{Binding glPodium}" Header="Podium" Width="auto"/>
                     <DataGridTextColumn x:Name="podiumNColumn" Binding="{Binding PodiumN}" Header="Podium Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glVLOColumn" Binding="{Binding glVLO}" Header="VLO" Width="auto"/>
@@ -95,13 +95,13 @@
                     <DataGridCheckBoxColumn x:Name="glWalkOutColumn" Binding="{Binding glWalkOut}" Header="WO" Width="auto"/>
                     <DataGridCheckBoxColumn x:Name="glCTourColumn" Binding="{Binding glCTour}" Header="CT" Width="auto"/>
                     <DataGridTextColumn x:Name="glReimpresion" Binding="{Binding glReimpresion}" Header="Re-Printed" Width="auto"/>
-                    <DataGridTextColumn x:Name="rmNColumn" Binding="{Binding rmN}" Header="Re-Print Motive" Width="auto"/>                    
+                    <DataGridTextColumn x:Name="rmNColumn" Binding="{Binding rmN}" Header="Re-Print Motive" Width="auto"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Center">
-            <Button  Name="btnGuestMovents" Content="Movements" Width="85" Margin="0,10,25,0" Click="btnGuestMovents_Click" Style="{StaticResource ButtonBig}"/>
-            <Button  Name="btnSalesChanges" Content="Salesmen Changes" Margin="0,10,25,0" Click="btnSalesChanges_Click" Style="{StaticResource ButtonBig}"/>
-            <Button  Name="btnPrintGuestlog" Content="Print Guest Log" Margin="0,10,0,0" Click="btnPrintGuestLog_Click" Style="{StaticResource ButtonBig}"/>                
+                <Button  Name="btnGuestMovents" Content="Movements" Width="85" Margin="0,10,25,0" Click="btnGuestMovents_Click" Style="{StaticResource ButtonBig}"/>
+                <Button  Name="btnPrintGuestlog" Content="Print Guest Log" Margin="0,10,25,0" Click="btnPrintGuestLog_Click" Style="{StaticResource ButtonBig}"/>
+                <Button  x:Name="btnSalesChanges" Content="Salesmen Changes" Margin="0,10,25,0" Click="btnSalesChanges_Click" Style="{StaticResource ButtonBig}"/>
             </StackPanel>
         </Grid>
     </Border>

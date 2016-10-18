@@ -68,15 +68,15 @@ namespace IM.Base.Forms
     /// [emoguel] 05/09/2016 created
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
+    {      
       string name = _excelFile.Name.Replace(_excelFile.Extension, string.Empty);
       Title = $"Report Viewer - {name}";
       Uid = name;      
       LoadCombobox();
       UpdateLayout();
       LoadXps();
-      documentViewer.Focus();//para que se activen los controles del toolbar
-      documentViewer.FitToWidth();//Default para mostrar la pagina
+      documentViewer.Focus();//para que se activen los controles del toolbar  
+      documentViewer.Zoom = 127;//Zoom default para el viewer          
       #region Agregarle los eventos a los combobox
       cmbOrientation.SelectionChanged += cmb_SelectionChanged;
       cmbPageSize.SelectionChanged += cmb_SelectionChanged;
@@ -280,7 +280,7 @@ namespace IM.Base.Forms
           if (File.Exists($"{_fullPathAndName}.xps"))
           {
             xps = new XpsDocument($"{_fullPathAndName}.xps", FileAccess.Read);//Cargamos el xps
-            documentViewer.Document = xps.GetFixedDocumentSequence();
+            documentViewer.Document = xps.GetFixedDocumentSequence();            
           }
         }
       }

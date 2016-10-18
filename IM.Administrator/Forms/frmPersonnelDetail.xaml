@@ -9,12 +9,19 @@
         Title="Personnel Detail" Height="480" Width="490">
     <DockPanel LastChildFill="True">        
         <Grid Height="40" DockPanel.Dock="Bottom" Background="Transparent">
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
                 <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Styles;component/Images/Time.ico" Width="16" Height="16"/>
                 <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
             </StackPanel>
-            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" Visibility="Collapsed" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
-            <Button Name="btnCancel" Width="60" Height="30" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+            <Button Name="btnLog" Width="60" Height="30" Grid.Column="1" Click="btnLog_Click" Visibility="Collapsed" Margin="0,4,14,4" HorizontalAlignment="Right" Content="_Log"/>
+            <Button Name="btnAccept" Width="60" Height="30" Grid.Column="2" Click="btnAccept_Click" Visibility="Collapsed" Margin="0,4,14,4" HorizontalAlignment="Right" Content="_Accept"/>
+            <Button Name="btnCancel" Width="60" Height="30" Grid.Column="3" IsCancel="True" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
         <TabControl Background="Transparent" BorderThickness="0">
             <!--#region General-->
