@@ -780,13 +780,13 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static async Task<List<RptGuestCeco>> GetRptGuestCeco(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    public static async Task<List<RptAccountingCodes>> GetRptGuestCeco(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          var lstGuestCeco = dbContext.USP_OR_RptGuestCeco(dtmStart, dtmEnd, salesRooms).ToList();
+          var lstGuestCeco = dbContext.USP_IM_RptAccountingCodes(dtmStart, dtmEnd, salesRooms).ToList();
           return lstGuestCeco;
         }
       });

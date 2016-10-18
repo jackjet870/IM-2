@@ -1286,7 +1286,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGuestCeco(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptGuestCeco> lstRptGuestCeco)
+    public static FileInfo ExportRptGuestCeco(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAccountingCodes> lstRptGuestCeco)
     {
       return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestCeco, true, false),strReport, string.Empty, clsFormatReport.RptGuestCeco(), isRptQueue:true ,filePath:fileFullPath);
     }
