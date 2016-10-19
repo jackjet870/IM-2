@@ -868,12 +868,6 @@ namespace IM.Host
               //De no ser así informamos que no se guardo la información por algun motivo
               UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
                 MessageBoxImage.Error, "Information can not keep");
-
-              // TODO: Falta implemetar la creacion de cebes y cecos, esta en fase de prueba actualmente 09/Agosto/2016
-              //With mAccountingCode
-              //  .Load CStr(lngGuestID)
-              //  .SetAccountingCode "MK"
-              //End With
             }
           }
         }

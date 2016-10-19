@@ -1512,7 +1512,7 @@ namespace IM.Base.Forms
       if (!await InvitationValidationRules.ValidateGeneral(this, dbContext)) return false;
       //Validamos Grids
       if (!InvitationValidationRules.ValidateInformationGrids(this, dbContext)) return false;
-      //Validamos Grid Guest
+      //Validamos Grid AdditionalGuest
       if (!ValidateAdditionalGuest()) return false;
       //Validamos que la informacion exista
       return await ValidateExist();

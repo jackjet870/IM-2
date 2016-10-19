@@ -164,7 +164,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///  [vku] 14/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByPROuthouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByPROuthouse> lstRptProductionByPROuthouse)
+    public static async Task<FileInfo> ExportRptProductionByPROuthouse(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByPROuthouse> lstRptProductionByPROuthouse)
     {
       var lstRptProductionByPROuthouseAux = lstRptProductionByPROuthouse.Select(c => new
       {
@@ -198,7 +198,7 @@ namespace IM.ProcessorOuthouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPROuthouseAux, replaceStringNullOrWhiteSpace: true);
-      return ReportBuilder.CreatePivotRptExcel(false, filters, dtData, strReport, string.Empty, clsFormatReport.rptProductionByPR(), showRowGrandTotal: true, isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(dtData, filters, strReport, string.Empty, clsFormatReport.rptProductionByPR(), blnShowSubtotal: true, blnRowGrandTotal: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
 
     #endregion ExportRptProductionByPROuthouse

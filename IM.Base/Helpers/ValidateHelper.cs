@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
+using IM.BusinessRules.BR;
 
 
 namespace IM.Base.Helpers
@@ -419,6 +420,42 @@ namespace IM.Base.Helpers
         _isValid = false;
       }
       return _isValid;
+    }
+    #endregion
+
+    #region ValidateAccountingCode
+    /// <summary>
+    /// Valida la si el guest tiene o no un codigo contable.
+    /// </summary>
+    /// <param name="guestId">Guest ID</param>
+    /// <param name="activity">Actividad</param>
+    /// <returns></returns>
+    /// <history>
+    /// [edgrodriguez] 15/10/2016 Created.
+    /// </history>
+    public static async System.Threading.Tasks.Task<bool> ValidateAccountingCode(int guestId, string activity)
+    {
+      //Si el guestId es 0 retorna true,
+      if (guestId == 0) return true;
+
+      //Obtenemos el codigo contable.
+      var AccountingCode = await BRAccountingCodes.GetAccountingCode(guestId, activity);
+      //Si la consulta no devuelve datos, retornamos true
+      if (!string.IsNullOrWhiteSpace(AccountingCode)) return true;
+
+      //Obtenemos la razon de la falta de codigo contable.
+      var MissingAccountInfo = await BRAccountingCodes.GetMissingAccountInfo(guestId, activity);
+      //Si existe algun motivo por el cual no se pueda calcular el código contable lo desplegamos.
+      if (!string.IsNullOrWhiteSpace(MissingAccountInfo))
+      {
+        UIHelper.ShowMessage($"The Accounting Code cannot be calculated, verify Guest Information.\nDetails: {MissingAccountInfo}");
+        return false;
+      }
+      else
+      {
+        UIHelper.ShowMessage($"The Accounting Code cannot be calculated, verify Guest Information.");
+        return false;
+      }
     }
     #endregion
   }

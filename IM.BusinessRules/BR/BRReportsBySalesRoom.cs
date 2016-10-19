@@ -770,9 +770,9 @@ namespace IM.BusinessRules.BR
 
     #region Guests
 
-    #region GetRptGuestCeco
+    #region GetRptAccountingCodes
     /// <summary>
-    /// Obtiene el reporte de Weekly Gift Simple por Sala de ventas.
+    /// Obtiene el reporte de Codigos contables por Sala de ventas.
     /// </summary>
     /// <param name="dtmStart"></param>
     /// <param name="salesRooms"></param>
@@ -780,7 +780,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static async Task<List<RptAccountingCodes>> GetRptGuestCeco(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    public static async Task<List<RptAccountingCodes>> GetRptAccountingCodes(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
     {
       return await Task.Run(() =>
       {

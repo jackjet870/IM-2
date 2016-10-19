@@ -765,11 +765,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Accounting Codes
 
           case "Accounting Codes":
-            var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptGuestCeco(filter.StartDate,
+            var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptAccountingCodes(filter.StartDate,
               filter.EndDate,
               string.Join(",", filter.LstSalesRooms));
             if (lstRptGuestCeco.Any())
-              finfo = clsReports.ExportRptGuestCeco(strReportName, fileFullPath, filters, lstRptGuestCeco);
+              finfo = await clsReports.ExportRptAccountingCodes(strReportName, fileFullPath, filters, lstRptGuestCeco);
             break;
 
           #endregion
@@ -1662,7 +1662,7 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "No Shows", rptGroup = "Guests"},
           new {rptNombre = "Guests No Buyers", rptGroup = "Guests"},
           new {rptNombre = "In & Out", rptGroup = "Guests"},
-          //new {rptNombre = "Accounting Codes", rptGroup = "Guests"},
+          new {rptNombre = "Accounting Codes", rptGroup = "Guests"},
 
           new {rptNombre = "Meal Tickets", rptGroup = "Meal Tickets"},
           new {rptNombre = "Meal Tickets by Host", rptGroup = "Meal Tickets"},

@@ -272,9 +272,6 @@ namespace IM.Base.Forms
           if (!_hasErrorValidateEdit)
           {
             //Obtenemos el program
-            //TODO: Revisar el program Edgar
-            //var program = await BRLeadSources.GetLeadSourceProgram(_user.LeadSource.lsID);
-
             InvitationValidationRules.AfterEdit(_guestId,dtgGifts, ref invitationGift, _igCurrentCell, ref txtGiftTotalCost, ref txtGiftTotalPrice, ref txtGiftMaxAuth, cmbGuestStatus.SelectedItem as GuestStatusType, _catObj.Program);
           }
           //Si fallaron las validaciones del AfterEdit se cancela la edicion de la celda.

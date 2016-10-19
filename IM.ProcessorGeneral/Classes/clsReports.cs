@@ -1285,10 +1285,12 @@ namespace IM.ProcessorGeneral.Classes
     /// <returns> FileInfo </returns>
     ///  <history>
     /// [edgrodriguez] 08/Abr/2016 Created
+    /// [edgrodriguez] 14/Oct/2016 Modified. Se cambio el método CreateRptExcelPivot---> CreateCustomExcelAsync
+    ///                                      Se renombrom el método de ExportRptGuestCecos ---> ExportRptAccountingCodes
     /// </history>
-    public static FileInfo ExportRptGuestCeco(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAccountingCodes> lstRptGuestCeco)
+    public static async Task<FileInfo> ExportRptAccountingCodes(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<RptAccountingCodes> lstRptGuestCeco)
     {
-      return ReportBuilder.CreatePivotRptExcel(false, filters, TableHelper.GetDataTableFromList(lstRptGuestCeco, true, false),strReport, string.Empty, clsFormatReport.RptGuestCeco(), isRptQueue:true ,filePath:fileFullPath);
+      return await ReportBuilder.CreateCustomExcelAsync(TableHelper.GetDataTableFromList(lstRptGuestCeco, true, false), filters, strReport, string.Empty, clsFormatReport.RptAccountingCodes(), isPivot: true, isRptQueue: true, filePath: fileFullPath, addEnumeration: true);
     }
     #endregion 
 

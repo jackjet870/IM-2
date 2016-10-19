@@ -500,7 +500,8 @@ namespace IM.BusinessRules.BR
     /// <param name="lsHoursDif">Hours dif para guardar el Log</param>
     /// <param name="changedBy">Usuario quien modifico el Guest y Log</param>
     /// <history>
-    /// [jorcanche] 07/04/2016 Created
+    /// [jorcanche]     07/04/2016 Created
+    /// [edgrodriguez]  15/10/2016 Modified. Se agrego el proceso de guardado del código contable(AccountingCode).
     /// </history>
     public static async Task<int> SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
     {
@@ -518,6 +519,9 @@ namespace IM.BusinessRules.BR
 
               //Guardamos el Log del guest
               dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
+
+              //Recargamos el codigo contable
+              dbContext.USP_OR_SetAccountingCode(guest.guID, "MK");
 
               //Confirmammos la transaccion
               transaction.Commit();
@@ -1098,6 +1102,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel]      18/08/2016 created
     /// [emoguel]      23/09/2016 Modified. Se cambio la validacion de GuestStatus
     /// [edgrodriguez] 10/10/2016 Modified. Se agrega una validacion al proceso de Guest Additional
+    /// [edgrodriguez] 15/10/2016 Modified. Se agrega el proceso de cálculo de Codigo contable(AccountingCode).
     /// </history>
     public async static Task<int> SaveGuestInvitation(GuestInvitation guestInvitation, EnumProgram enumProgram, EnumModule enumModule, UserData user, EnumMode enumMode,
       string computerName, string iPAddress, EnumGuestsMovementsType guestMovementType, short hoursDiff)
@@ -1249,8 +1254,7 @@ namespace IM.BusinessRules.BR
               nSave = dbContext.SaveChanges();//Para que se le agregué el Id al guest
 
               //Recargamos el codigo contable
-              //TODO:Se comento esta linea por que actualmente se esta desarrollando el codigo contable
-              //dbContext.USP_OR_SetAccountingCode(guestInvitation.Guest.guID, "MK");
+              dbContext.USP_OR_SetAccountingCode(guestInvitation.Guest.guID, "MK");
 
               //Guardamos el historico del huesped
               dbContext.USP_OR_SaveGuestLog(guestInvitation.Guest.guID, hoursDiff, user.User.peID);

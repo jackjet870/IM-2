@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BRAsistencia\BRCollaborator.cs" />
     <Compile Include="BRIC\BRMemberSalesman.cs" />
+    <Compile Include="BR\BRAccountingCodes.cs" />
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRAreas.cs" />
     <Compile Include="BR\BRAssignment.cs" />

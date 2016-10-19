@@ -137,6 +137,9 @@ namespace IM.Base.Classes
     /// <param name="form">frmInvitation</param>
     /// <param name="dbContext">Objeto enlazado a la invitacion GuestInvitation</param>
     /// <returns>True is valid | False No</returns>
+    /// <history>
+    /// [edgrodriguez] 15/10/2016 Modified. Se agrega la validacion de AccountingCode.
+    /// </history>
     public static async Task<bool> ValidateGeneral(frmInvitation form, GuestInvitation dbContext)
     {
       //Validamos el folio de reservacion (InHouse & OutHouse)
@@ -152,7 +155,8 @@ namespace IM.Base.Classes
       //Validamos Pax
       if (!ValidateHelper.ValidateNumber(dbContext.Guest.guPax, 0.1M, 1000, "Pax number")) return false;
       //Validamos el codigo contable
-      //TODO: esta validacion no se hizo por que aun esta en desarrollo
+      if (!(await ValidateHelper.ValidateAccountingCode(dbContext.Guest.guID, "MK"))) return false;
+
       return true;
     }
 

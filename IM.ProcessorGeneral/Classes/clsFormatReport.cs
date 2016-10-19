@@ -809,25 +809,31 @@ namespace IM.ProcessorGeneral.Classes
 
     #region Guests
 
-    #region RptGuestCeco
+    #region RptAccountingCodes
 
     /// <summary>
-    /// Formato para el reporte Guest CECO
+    /// Formato para el reporte Accounting Codes
     /// </summary>
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
+    /// [edgrodriguez] 14/Oct/2016 Modified. Se actualizo el formato
+    ///                                      Se renombró el método de RptGuestCeco a RptAccountingCodes
     /// </history>
-    public static List<ColumnFormat> RptGuestCeco()
+    public static ColumnFormatList RptAccountingCodes()
     {
-      return new List<ColumnFormat>() {
-new ColumnFormat() { Title = "Society", PropertyName = "soccecoid", Axis = ePivotFieldAxis.Row, Order = 6 },
-new ColumnFormat() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 4 },
-new ColumnFormat() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 7 },
-new ColumnFormat() { Title = "Sales Room", PropertyName = "srN", Axis = ePivotFieldAxis.Row, Order = 1, Outline = true },
-new ColumnFormat() { Title = "Activity", PropertyName = "acn", Axis = ePivotFieldAxis.Row, Order = 2, Outline = true },
-new ColumnFormat() { Title = "CECO", PropertyName = "ceco", Axis = ePivotFieldAxis.Row, Order = 5 },
-new ColumnFormat() { Title = "Market Segment", PropertyName = "mksN", Axis = ePivotFieldAxis.Row, Order = 3, Outline = true }
-      };
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("GUID", "guID", axis: ePivotFieldAxis.Row);
+      lst.Add("Society", "soccecoid", axis: ePivotFieldAxis.Row);
+      lst.Add("Book Date", "guBookD", format: EnumFormatTypeExcel.Date, axis: ePivotFieldAxis.Row);
+      lst.Add("Sales Room", "srN", axis: ePivotFieldAxis.Row);
+      lst.Add("Program", "pgN", axis: ePivotFieldAxis.Row);
+      lst.Add("Market", "mkN", axis: ePivotFieldAxis.Row);
+      lst.Add("Lead Source", "lsN", axis: ePivotFieldAxis.Row);
+      lst.Add("Segment", "asgSegment", axis: ePivotFieldAxis.Row);
+      lst.Add("Membership", "saMembershipNum", axis: ePivotFieldAxis.Row);
+      lst.Add("Code", "ceco", axis: ePivotFieldAxis.Values, sort: eSortType.Ascending, aggregateFunction: DataFieldFunctions.None);
+      lst.Add("actN", "actN", axis:ePivotFieldAxis.Column);
+      return lst;
     }
 
     #endregion RptGuestCeco

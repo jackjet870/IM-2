@@ -482,7 +482,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumFilterDeposit.fdDepositShowsNoDeposit,
               _enumBasedOnBooking);
             if (lstRptProductionByPROuthouseComm.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouseComm);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouseComm);
             break;
 
           #endregion PR Payment Commissions
@@ -787,7 +787,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumFilterDeposit.fdAll,
                _enumBasedOnBooking);
             if (lstRptProductionByPROuthouse.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
             break;
 
           #endregion Production by PR
@@ -877,7 +877,7 @@ namespace IM.ProcessorOuthouse.Forms
                EnumFilterDeposit.fdDepositShowsNoDeposit,
                _enumBasedOnBooking);
             if (lstRptProductionByPRDepositsFlyersShowOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsFlyersShowOuthouse);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsFlyersShowOuthouse);
             break;
 
           #endregion Production by PR (Deposits & Flyers Show)
@@ -895,7 +895,7 @@ namespace IM.ProcessorOuthouse.Forms
                  EnumFilterDeposit.fdDeposit,
                  _enumBasedOnBooking);
             if (lstRptProductionByPRDepositsOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsOuthouse);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRDepositsOuthouse);
             break;
 
           #endregion Production by PR (Deposits)
@@ -913,7 +913,7 @@ namespace IM.ProcessorOuthouse.Forms
                  EnumFilterDeposit.fdNoDeposit,
                  _enumBasedOnBooking);
             if (lstRptProductionByPRFlyersOuthouse.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRFlyersOuthouse);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPRFlyersOuthouse);
             break;
 
           #endregion Production by PR (Flyers)
@@ -1348,7 +1348,7 @@ namespace IM.ProcessorOuthouse.Forms
               EnumProgram.Outhouse,
               EnumFilterDeposit.fdDepositShowsNoDeposit);
             if (lstRptProductionByPROuthouse.Any())
-              finfo = clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
+              finfo = await clsReports.ExportRptProductionByPROuthouse(strReport, fileFullPath, filters, lstRptProductionByPROuthouse);
             break;
           #endregion
 

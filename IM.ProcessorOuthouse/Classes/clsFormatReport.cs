@@ -118,40 +118,39 @@ namespace IM.ProcessorOuthouse.Classes
     /// <histotory>
     ///   [vku] 14/Abr/2016 Created
     /// </histotory>
-    public static List<ColumnFormat> rptProductionByPR()
+    public static ColumnFormatList rptProductionByPR()
     {
-      return new List<ColumnFormat>()
-      {
-      new ColumnFormat() { Title = "Status", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 0,  Outline = true, SubTotalFunctions = eSubTotalFunctions.Default  },
-      new ColumnFormat() { Title = "PR ID",  Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 1  },
-      new ColumnFormat() { Title = "PR Name", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 2  },
-      new ColumnFormat() { Title = "Books",Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 0 },
-      new ColumnFormat() { Title = "IO",  Format = EnumFormatTypeExcel.Number,  Axis = ePivotFieldAxis.Values, Order = 1 },
-      new ColumnFormat() { Title = "T Bk",  Format=EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 2 },
-      new ColumnFormat() { Title = "Shows ", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 3 },
-      new ColumnFormat() { Title = "Dir", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 5 },
-      new ColumnFormat() { Title = "WO", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 6 },
-      new ColumnFormat() { Title = "CT", Format = EnumFormatTypeExcel.Number,  Axis = ePivotFieldAxis.Values, Order = 7 },
-      new ColumnFormat() { Title = "Save", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 8 },
-      new ColumnFormat() { Title = "T Sh", Format = EnumFormatTypeExcel.Number,  Axis = ePivotFieldAxis.Values, Order = 9 },
+      ColumnFormatList lst = new ColumnFormatList();
+      lst.Add("Status", "Status", format: EnumFormatTypeExcel.General, isGroup: true, isVisible: false);
+      lst.Add("PR ID", "PR", format: EnumFormatTypeExcel.General);
+      lst.Add("PR Name", "PRN", format: EnumFormatTypeExcel.General);
+      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function:DataFieldFunctions.Sum);
+      lst.Add("IO", "InOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Bk", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
+      lst.Add("Dir", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("WO", "WalkOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("CT", "CourtesyTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Save", "SaveTours", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Sh", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
 
-      new ColumnFormat() { Title = "Sales", PropertyName = "Sales_PROC" ,Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 10, SuperHeader="PROCESSABLE"},
-      new ColumnFormat() { Title = "Amount", PropertyName = "SalesAmount_PROC", Format=EnumFormatTypeExcel.Currency,  Axis = ePivotFieldAxis.Values, Order = 11, SuperHeader="PROCESSABLE" },
-      new ColumnFormat() { Title = "Sales ", PropertyName = "Sales_OOP", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 12, SuperHeader="OUT OF PENDING"},
-      new ColumnFormat() { Title = "Amount ", PropertyName = "SalesAmount_OOP", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 13, SuperHeader="OUT OF PENDING"},
-      new ColumnFormat() { Title = "Sales  ", PropertyName = "Sales_PEND", Format = EnumFormatTypeExcel.Number,  Axis = ePivotFieldAxis.Values, Order = 14, SuperHeader="PENDING"   },
-      new ColumnFormat() { Title = "Amount  ", PropertyName = "SalesAmount_PEND", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 15, SuperHeader="PENDING" },
-      new ColumnFormat() { Title = "Sales   ", PropertyName = "Sales_CANCEL", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 16, SuperHeader="CANCELLED"},
-      new ColumnFormat() { Title = "Amount   ", PropertyName = "SalesAmount_CANCEL", Format = EnumFormatTypeExcel.Currency,  Axis = ePivotFieldAxis.Values, Order = 17, SuperHeader="CANCELLED" },
-      new ColumnFormat() { Title = "Sales    ", PropertyName = "Sales_TOTAL", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 18, SuperHeader="TOTAL"  },
-      new ColumnFormat() { Title = "Amount    ", PropertyName = "SalesAmount_TOTAL" , Format = EnumFormatTypeExcel.Currency,  Axis = ePivotFieldAxis.Values, Order = 19, SuperHeader="TOTAL"  },
+      lst.Add("Sales", "Sales_PROC", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PROCESSABLE");
+      lst.Add("Amount", "SalesAmount_PROC", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PROCESSABLE");
+      lst.Add("Sales", "Sales_OOP", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "OUT OF PENDING");
+      lst.Add("Amount", "SalesAmount_OOP", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "OUT OF PENDING");
+      lst.Add("Sales", "Sales_PEND", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PENDING");
+      lst.Add("Amount", "SalesAmount_PEND", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PENDING");
+      lst.Add("Sales", "Sales_CANCEL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "CANCELLED");
+      lst.Add("Amount", "SalesAmount_CANCEL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "CANCELLED");
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
 
-      new ColumnFormat() { Title = "Sh%", Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Values, Order = 4, Formula = "IF('T Bk' =0,0,'Shows '/'T Bk')" },
-      new ColumnFormat() { Title = "Ca%", Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Values, Order = 20, Formula = "IF(('SalesAmount_TOTAL'+'SalesAmount_CANCEL') =0,0,'SalesAmount_CANCEL'/('SalesAmount_TOTAL'+'SalesAmount_CANCEL'))"},
-      new ColumnFormat() { Title = "Eff", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 21, Formula = "IF('Shows ' =0,0,'SalesAmount_TOTAL'/'Shows ')"},
-      new ColumnFormat() { Title = "Cl%", Format = EnumFormatTypeExcel.Percent,  Axis = ePivotFieldAxis.Values, Order = 22, Formula = "IF('Shows ' =0,0,'Sales_TOTAL'/'Shows ')"},
-      new ColumnFormat() { Title = "Avg Sale", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Values, Order = 23, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
-      };
+      lst.Add("Ca%", "CancelFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF(([SalesAmount_TOTAL]+[SalesAmount_CANCEL]) =0,0,[SalesAmount_CANCEL]/([SalesAmount_TOTAL]+[SalesAmount_CANCEL]))");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
+      lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] =0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
+      return lst;
     }
 
     #endregion rptProductionByPROuthouse
