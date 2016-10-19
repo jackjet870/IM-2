@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -18,7 +10,6 @@ using IM.Base.Forms;
 using IM.Base.Classes;
 using IM.Model.Enums;
 using System.IO;
-using IM.Base.Reports;
 using IM.Administrator.Classes;
 using PalaceResorts.Common.PalaceTools.Epplus.Classes;
 
@@ -36,6 +27,7 @@ namespace IM.Administrator.Forms
       _idPersonnelLog = idPersonnelLog;
     }
 
+    #region Methods Form
     #region Window_Loaded
     /// <summary>
     /// Carga el log del personal
@@ -48,9 +40,9 @@ namespace IM.Administrator.Forms
       Title = $"{Title} - {_idPersonnelLog}";
       List<GetPersonnelLog> lstPersonnelLog = await BRPersonnelLog.GetPersonnelLog(_idPersonnelLog);
       dtgPersonnelLog.ItemsSource = lstPersonnelLog;
-      if(lstPersonnelLog.Count>0)
+      if (lstPersonnelLog.Count > 0)
       {
-        btnPrintlog.IsEnabled = true;
+        btnPrint.IsEnabled = true;
       }
     }
     #endregion
@@ -74,7 +66,7 @@ namespace IM.Administrator.Forms
           new List<Tuple<string, string>> { Tuple.Create("Personnel ID", _idPersonnelLog) },
           "Personnel Log",
           DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today),
-          EpplusHelper.OrderColumns(dtgPersonnelLog.Columns.ToList(), clsFormatReport.RptPersonnelLog()),autoFit:false);
+          EpplusHelper.OrderColumns(dtgPersonnelLog.Columns.ToList(), clsFormatReport.RptPersonnelLog()));
         if (fileInfo != null)
         {
           frmDocumentViewer documentViewver = new frmDocumentViewer(fileInfo, Context.User.HasPermission(EnumPermission.RptExcel, EnumPermisionLevel.ReadOnly), false);
@@ -91,7 +83,53 @@ namespace IM.Administrator.Forms
       {
         Mouse.OverrideCursor = null;
       }
-    } 
+    }
+    #endregion
+
+    #region keyboardFocusChage
+    /// <summary>
+    /// Verifica que teclas están presionadas
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 19/10/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
+    #endregion
+
+    #region window keyDown
+    /// <summary>
+    /// Valida las teclas INS|MAYSU|LOCKNUM
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 19/10/2016
+    /// </history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.Key)
+      {
+        case Key.Capital:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+            break;
+          }
+        case Key.Insert:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+            break;
+          }
+        case Key.NumLock:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+            break;
+          }
+      }
+    }
+    #endregion 
     #endregion
   }
 }

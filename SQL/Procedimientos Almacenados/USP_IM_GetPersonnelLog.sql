@@ -60,7 +60,7 @@ LEFT JOIN Posts po on po.poID=plg.plgpo
 LEFT JOIN SalesRooms sr on sr.srID=plg.plgsr
 LEFT JOIN Locations lo on lo.loID=plg.plglo
 where (@personnel=NULL or plg.plgpe=@Personnel)
-AND (@DateFrom IS NULL or plg.plgDT BETWEEN @DateFrom and ISNULL(@DateTo,@DateFrom) )
+OR (@DateFrom IS NULL or plg.plgDT BETWEEN @DateFrom and ISNULL(@DateTo,@DateFrom) )
 
 GO
 SET QUOTED_IDENTIFIER OFF 

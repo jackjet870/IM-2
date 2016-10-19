@@ -49,22 +49,22 @@ namespace IM.Administrator.Classes
     public static ColumnFormatList RptPersonnelLog()
     {
       ColumnFormatList lst = new ColumnFormatList();
-      lst.Add("Changed By", "plgChangedBy", aligment: ExcelHorizontalAlignment.Left,width:15);
-      lst.Add("Changed By Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left, width: 20);
-      lst.Add("Update Date/Time", "plgDT", aligment: ExcelHorizontalAlignment.Left,width: 15);
-      lst.Add("Personnel", "plgpe", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Personnel Name", "peN", aligment: ExcelHorizontalAlignment.Left, width: 20);
-      lst.Add("Department", "plgde", aligment: ExcelHorizontalAlignment.Left, width: 20);
-      lst.Add("Department Name", "deN", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Post", "plgpo", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Post Name", "poN", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Sales Room", "plgsr", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Sales Room Name", "srN", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Location", "plglo", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Location Name", "loN", aligment: ExcelHorizontalAlignment.Left, width: 15);
-      lst.Add("Roles", "Roles", aligment: ExcelHorizontalAlignment.Left,wordWrap:true,width:50);
-      lst.Add("Sales Rooms", "SalesRooms", aligment: ExcelHorizontalAlignment.Left, wordWrap: true,width:50);
-      lst.Add("Lead Sources", "LeadSources", aligment: ExcelHorizontalAlignment.Left, wordWrap: true,width:50);
+      lst.Add("Changed By", "plgChangedBy", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Changed By Name", "ChangedByN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Update Date/Time", "plgDT", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Personnel", "plgpe", aligment: ExcelHorizontalAlignment.Left );
+      lst.Add("Personnel Name", "peN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Department", "plgde", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Department Name", "deN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Post", "plgpo", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Post Name", "poN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sales Room", "plgsr", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sales Room Name", "srN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Location", "plglo", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Location Name", "loN", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Roles", "Roles", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Sales Rooms", "SalesRooms", aligment: ExcelHorizontalAlignment.Left);
+      lst.Add("Lead Sources", "LeadSources", aligment: ExcelHorizontalAlignment.Left);
       return lst;
     }
     #endregion
