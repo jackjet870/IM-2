@@ -144,13 +144,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated:true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -159,8 +159,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -182,18 +182,19 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("OriginallyAvailable", "OriginallyAvailable", isGroup: true, isVisible: false);
       lst.Add("Market", "Market", isGroup: true, isVisible: false);
       lst.Add("Age Range", "Age");
+
       lst.Add("Arrivs", "Arrivals", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -202,8 +203,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -231,13 +232,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -246,8 +247,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       lst.Add("Agency", "Agency", isVisible: false);
       return lst;
@@ -277,13 +278,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -292,8 +293,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       lst.Add("Agency", "Agency", isVisible: false);
 
@@ -320,23 +321,23 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
-      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
-      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
+      lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL GENERAL TOTAL");
+      lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL GENERAL TOTAL");
       lst.Add("Sales", "Sales_PR", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "PR");
       lst.Add("Amount", "SalesAmount_PR", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "PR");
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -359,13 +360,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Conts", "Contacts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -374,8 +375,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -402,13 +403,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -417,8 +418,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -444,13 +445,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -459,8 +460,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       return lst;
     }
@@ -486,13 +487,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -501,8 +502,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       lst.Add("Agency", "Agency", isVisible: false);
       return lst;
@@ -531,13 +532,13 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Arrivals] =0,0,[Contacts]/[Arrivals])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "GrossBooks", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[GrossBooks]/[Availables])");
-      lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
+      lst.Add("Shows", "GrossShows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("T Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossBooks] =0,0,[GrossShows]/[GrossBooks])");
 
       lst.Add("Sales", "Sales_TOTAL", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
       lst.Add("Amount", "SalesAmount_TOTAL", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "TOTAL");
@@ -546,8 +547,8 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("Sales", "Sales_SELFGEN", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
       lst.Add("Amount", "SalesAmount_SELFGEN", format: EnumFormatTypeExcel.Currency, function: DataFieldFunctions.Sum, superHeader: "SELF GEN");
 
-      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([GrossShows] =0,0,[SalesAmount_TOTAL]/[GrossShows])");
-      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([GrossShows] =0,0,[Sales_TOTAL]/[GrossShows])");
+      lst.Add("Eff", "Efficiency", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Shows] =0,0,[SalesAmount_TOTAL]/[Shows])");
+      lst.Add("Cl%", "ClosingFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Shows] =0,0,[Sales_TOTAL]/[Shows])");
       lst.Add("Avg Sale", "AverageSale", format: EnumFormatTypeExcel.Currency, isCalculated: true, formula: "IF([Sales_TOTAL] = 0,0,[SalesAmount_TOTAL]/[Sales_TOTAL])");
       lst.Add("Agency", "Agency", isVisible: false);
       return lst;
@@ -575,12 +576,12 @@ namespace IM.ProcessorInhouse.Classes
       lst.Add("C%", "ContactsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Assigns] =0,0,[Contacts]/[Assigns])");
       lst.Add("Avails", "Availables", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("A%", "AvailablesFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Contacts] =0,0,[Availables]/[Contacts])");
-      lst.Add("Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Books", "BooksNoDirects", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("Directs", "Directs", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("T Books", "BooksNoDirects", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[BooksNoDirects]/[Availables])");
+      lst.Add("T Books", "Books", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
+      lst.Add("Bk%", "BooksFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Availables] =0,0,[Books]/[Availables])");
       lst.Add("Sh-D", "ShowsNoDirects", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
-      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([Books] =0,0,[Shows]/[Books])");
+      lst.Add("Sh%", "ShowsFactor", format: EnumFormatTypeExcel.Percent, isCalculated: true, formula: "IF([BooksNoDirects] =0,0,[ShowsNoDirects]/[BooksNoDirects])");
       lst.Add("Shows", "Shows", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("IO", "InOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
       lst.Add("WO", "WalkOuts", format: EnumFormatTypeExcel.Number, function: DataFieldFunctions.Sum);
