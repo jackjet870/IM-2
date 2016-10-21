@@ -147,7 +147,7 @@ namespace IM.Inhouse.Classes
           header.IsElite = (club == EnumClub.PalaceElite);
 
           var equity = new rptEquity();
-          //datos generales de equityM:\PalaceResorts\Client4.6\Win\IntelligenceMarketing\IM.Inhouse\Classes\EquityHelpers.cs
+          //datos generales de equity
           equity.Database.Tables["Membership"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Membership));
           equity.Database.Tables["Member"].SetDataSource(ObjectHelper.ObjectToList(rptCallCenter.Membership));
           //Si no tiene un Salesman  con OPC no se envia nada
