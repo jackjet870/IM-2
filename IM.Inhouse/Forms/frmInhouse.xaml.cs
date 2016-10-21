@@ -834,6 +834,7 @@ namespace IM.Inhouse.Forms
       // y cuando esté seleccionado aqui en el evento estara en false y le regresaremos el valor a true para que no se pueda editar el guest
       //ya que un Guest con Check In ya no se le puede quitar
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestArrival) : true;
+      LoadGrid();
     }
 
     #endregion ChkguCheckInArrival_Click
@@ -850,6 +851,7 @@ namespace IM.Inhouse.Forms
     {
       var Arrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
       OpenAvail(dgGuestArrival, Arrival.guID, Arrival.guCheckIn, sender);
+      LoadGrid();
     }
 
     #endregion ChkguAvailArrival_Click
@@ -867,6 +869,7 @@ namespace IM.Inhouse.Forms
       var Arrival =
         dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
       OpenInfo(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guCheckOutD, Arrival.guID, sender);
+      LoadGrid();
     }
 
     #endregion ChkguInfoArrival_Click
@@ -985,14 +988,14 @@ namespace IM.Inhouse.Forms
 
     #region ReservationArrival_MouseLeftButtonUp
 
-    private void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    private async void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
       try
       {
         var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
         if (string.IsNullOrEmpty(guest?.gulsOriginal) || string.IsNullOrEmpty(guest.guHReservID)) return;
         //obtenemos los datos del reporte del servicio de Wire PR
-        var reservation = WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
+        var reservation = await WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
         if (reservation == null)
           UIHelper.ShowMessage("Reservation not found", MessageBoxImage.Error);
         else
@@ -1041,6 +1044,7 @@ namespace IM.Inhouse.Forms
     {
       var Avilable = dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
       OpenAvail(dgGuestAvailable, Avilable.guID, Avilable.guCheckIn, sender);
+      LoadGrid();
     }
 
     #endregion ChkguAvailAvailable_Click
@@ -1052,6 +1056,7 @@ namespace IM.Inhouse.Forms
       var Available =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
       OpenInfo(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guCheckOutD, Available.guID, sender);
+      LoadGrid();
     }
 
     #endregion ChkguInfoAvailable_Click
@@ -1185,6 +1190,7 @@ namespace IM.Inhouse.Forms
     {
       var chk = sender as CheckBox;
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(dgGuestPremanifest) : true;
+      LoadGrid();
     }
 
     #endregion ChkguCheckInPremanifest_Click
@@ -1195,6 +1201,7 @@ namespace IM.Inhouse.Forms
     {
       var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
       OpenAvail(dgGuestPremanifest, Premanifest.guID, Premanifest.guCheckIn, sender);
+      LoadGrid();
     }
 
     #endregion ChkguAvailPremanifest_Click
@@ -1205,6 +1212,7 @@ namespace IM.Inhouse.Forms
     {
       var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
       OpenInfo(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guCheckOutD, Premanifest.guID, sender);
+      LoadGrid();
     }
 
     #endregion ChkguInfoPremanifest_Click
@@ -1337,6 +1345,8 @@ namespace IM.Inhouse.Forms
     {
       var chk = sender as CheckBox;
       chk.IsChecked = chk.IsChecked.Value ? await CheckIn(guestSearchedDataGrid) : true;
+      LoadGrid();
+
     }
 
     #endregion ChkguCheckInGetGuest_Click
@@ -1347,6 +1357,7 @@ namespace IM.Inhouse.Forms
     {
       var Searched = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
       OpenAvail(guestSearchedDataGrid, Searched.guID, Searched.guCheckIn, sender);
+      LoadGrid();
     }
 
     #endregion ChkguAvailGetGuest_Click
@@ -1357,6 +1368,7 @@ namespace IM.Inhouse.Forms
     {
       var Searched = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
       OpenInfo(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guCheckOutD, Searched.guID, sender);
+      LoadGrid();
     }
 
     #endregion ChkguInfoGetGuest_Click
@@ -1823,6 +1835,7 @@ namespace IM.Inhouse.Forms
       }
       dg.CommitEdit();
       dg.Items.Refresh();
+      LoadGrid();
     }
 
     #endregion ChkBookCancel_Click
@@ -1983,6 +1996,7 @@ namespace IM.Inhouse.Forms
           {
             //actualizamos los datos del grid
             UpdateGridInvitation(invitacion.dbContext.Guest, invitacion._module, dg);
+            LoadGrid();
           }
         }
       }

@@ -62,31 +62,34 @@ namespace IM.Services.Helpers
     /// <history>
     /// [jorcanche] 31/03/2016  Created
     /// </history>
-    public static RptReservationOrigos GetRptReservationOrigos(string hotel, string folio)
+    public static async Task<RptReservationOrigos> GetRptReservationOrigos(string hotel, string folio)
     {
-      RptReservationOrigosRequest request = new RptReservationOrigosRequest();
-      RptReservationOrigosResponse response = null;
-      RptReservationOrigos report = null;
+      return await Task.Run(() =>
+      {      
+        RptReservationOrigosRequest request = new RptReservationOrigosRequest();
+        RptReservationOrigosResponse response = null;
+        RptReservationOrigos report = null;
 
-      //configuramos el Request
-      request.RptReservationOrigos = new RptReservationOrigos();
-      request.RptReservationOrigos.Hotel = hotel;
-      request.RptReservationOrigos.Folio = folio;
+        //configuramos el Request
+        request.RptReservationOrigos = new RptReservationOrigos();
+        request.RptReservationOrigos.Hotel = hotel;
+        request.RptReservationOrigos.Folio = folio;
 
-      //invocamos al servicio web
-      response = Current.GetRptReservationOrigos(request);
+        //invocamos al servicio web
+        response = Current.GetRptReservationOrigos(request);
 
-      //Si ocurrio un error 
-      if (response.HasErrors)
-        throw new Exception(response.ExceptionInfo.Message);
+        //Si ocurrio un error 
+        if (response.HasErrors)
+          throw new Exception(response.ExceptionInfo.Message);
 
-      var Data = response.Data;
-      if (Data.Length > 0)
-      {
-        report = Data[0];
-      }
+        var Data = response.Data;
+        if (Data.Length > 0)
+        {
+          report = Data[0];
+        }
 
-      return report;
+        return report;
+      });
     }
     #endregion
 

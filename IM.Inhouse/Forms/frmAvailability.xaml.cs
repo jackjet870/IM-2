@@ -25,7 +25,7 @@ namespace IM.Inhouse
     public bool WasSaved;
     public byte Guum => txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
 
-    public string GuPrAvail => cboguPRAvail.SelectedValue.ToString();
+    public string GuPrAvail => _guest.guPRAvail;
 
     public bool Avail => chkguAvail.IsChecked != null && chkguAvail.IsChecked.Value;
 
@@ -258,7 +258,7 @@ namespace IM.Inhouse
           _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
           _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
           _guest.guAvail = chkguAvail.IsChecked.Value;
-          _guest.guPRAvail = cboguPRAvail.SelectedValue.ToString();
+          _guest.guPRAvail = cboguPRAvail.SelectedValue == null ? _user.User.peID : cboguPRAvail.SelectedValue.ToString();
 
           //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
           //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
